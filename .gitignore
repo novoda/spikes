@@ -21,6 +21,7 @@ local.properties
 
 #Gradle working directory.
 .gradle
+*.iml
 
 # Android Studio files.
 .idea
