@@ -18,3 +18,13 @@ local.properties
 # Eclipse project files
 .classpath
 .project
+
+#Gradle working directory.
+.gradle
+*.iml
+
+# Android Studio files.
+.idea
+
+# Mac OS folder annotations.
+.DS_Store
