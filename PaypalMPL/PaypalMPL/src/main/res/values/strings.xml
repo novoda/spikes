@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string name="app_name">PaypalMPL</string>
+  <string name="intro">This is spike to demonstrate the use of the Paypal MPL library.</string>
+  <string name="action_settings">Settings</string>
+  <string name="unimplemented">This feature is not yet implemented</string>
+
+</resources>
