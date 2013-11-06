@@ -7,8 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.vending.billing.util.IabHelper;
-import com.android.vending.billing.util.IabResult;
+import com.android.vending.billing.util.*;
 
 public class MainFragment extends Fragment {
 
@@ -26,6 +25,22 @@ public class MainFragment extends Fragment {
         public void onIabSetupFinished(IabResult result) {
             if (result.isFailure()) {
                 Log.e("TAG", "Error setting up IAB");
+            }
+            iabHelper.queryInventoryAsync(queryInventoryFinishedListener);
+        }
+    };
+
+    private IabHelper.QueryInventoryFinishedListener queryInventoryFinishedListener = new IabHelper.QueryInventoryFinishedListener() {
+        @Override
+        public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+            if (result.isFailure()) {
+                Log.e("TAG", "Error retrieving inventory");
+            }
+            for (Purchase purchase : inv.getAllPurchases()) {
+                String sku = purchase.getSku();
+                SkuDetails skuDetails = inv.getSkuDetails(sku);
+                Log.d("TAG", "Owned item : " + skuDetails.getTitle());
+                Log.d("TAG", "and it cost : " + skuDetails.getPrice());
             }
         }
     };
