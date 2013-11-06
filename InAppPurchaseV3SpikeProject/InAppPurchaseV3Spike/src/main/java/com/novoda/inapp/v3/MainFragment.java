@@ -24,17 +24,50 @@ public class MainFragment extends Fragment {
         @Override
         public void onIabSetupFinished(IabResult result) {
             if (result.isFailure()) {
-                Log.e("TAG", "Error setting up IAB");
+                logError(result);
+                return;
             }
             iabHelper.queryInventoryAsync(queryInventoryFinishedListener);
         }
     };
 
+    private void logError(IabResult result) {
+        Log.e("TAG", "Error setting up IAB");
+        int responseCode = result.getResponse();
+        switch (responseCode) {
+            case IabHelper.BILLING_RESPONSE_RESULT_BILLING_UNAVAILABLE:
+                Log.e("TAG", "IAB not available on this device");
+                break;
+            case IabHelper.BILLING_RESPONSE_RESULT_DEVELOPER_ERROR:
+                Log.e("TAG", "IAB Developer Error");
+                break;
+            case IabHelper.BILLING_RESPONSE_RESULT_ERROR:
+                Log.e("TAG", "IAB Error");
+                break;
+            case IabHelper.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED:
+                Log.e("TAG", "IAB Item already owned error");
+                break;
+            case IabHelper.BILLING_RESPONSE_RESULT_ITEM_NOT_OWNED:
+                Log.e("TAG", "IAB item not owned error");
+                break;
+            case IabHelper.BILLING_RESPONSE_RESULT_ITEM_UNAVAILABLE:
+                Log.e("TAG", "IAB item unavailable");
+                break;
+            case IabHelper.BILLING_RESPONSE_RESULT_USER_CANCELED:
+                Log.e("TAG", "IAB user cancelled");
+                break;
+            default:
+                Log.e("TAG", "IAB Uncaught error code: " + responseCode);
+                break;
+        }
+    }
+
     private IabHelper.QueryInventoryFinishedListener queryInventoryFinishedListener = new IabHelper.QueryInventoryFinishedListener() {
         @Override
         public void onQueryInventoryFinished(IabResult result, Inventory inv) {
             if (result.isFailure()) {
-                Log.e("TAG", "Error retrieving inventory");
+                logError(result);
+                return;
             }
             for (Purchase purchase : inv.getAllPurchases()) {
                 String sku = purchase.getSku();
