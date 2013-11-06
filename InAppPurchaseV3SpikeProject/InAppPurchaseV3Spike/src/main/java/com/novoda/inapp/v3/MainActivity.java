@@ -5,6 +5,10 @@ import android.support.v7.app.ActionBarActivity;
 
 public class MainActivity extends ActionBarActivity {
 
+    /**
+     * I'm up to here : http://developer.android.com/training/in-app-billing/purchase-iab-products.html
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
