@@ -11,6 +11,7 @@ import com.android.vending.billing.util.*;
 
 public class MainFragment extends Fragment {
 
+    private static final String TAG = "IABEX";
     private IabHelper iabHelper;
 
     @Override
@@ -32,32 +33,32 @@ public class MainFragment extends Fragment {
     };
 
     private void logError(IabResult result) {
-        Log.e("TAG", "Error setting up IAB");
+        Log.e(TAG, "Error setting up IAB");
         int responseCode = result.getResponse();
         switch (responseCode) {
             case IabHelper.BILLING_RESPONSE_RESULT_BILLING_UNAVAILABLE:
-                Log.e("TAG", "IAB not available on this device");
+                Log.e(TAG, "IAB not available on this device");
                 break;
             case IabHelper.BILLING_RESPONSE_RESULT_DEVELOPER_ERROR:
-                Log.e("TAG", "IAB Developer Error");
+                Log.e(TAG, "IAB Developer Error");
                 break;
             case IabHelper.BILLING_RESPONSE_RESULT_ERROR:
-                Log.e("TAG", "IAB Error");
+                Log.e(TAG, "IAB Error");
                 break;
             case IabHelper.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED:
-                Log.e("TAG", "IAB Item already owned error");
+                Log.e(TAG, "IAB Item already owned error");
                 break;
             case IabHelper.BILLING_RESPONSE_RESULT_ITEM_NOT_OWNED:
-                Log.e("TAG", "IAB item not owned error");
+                Log.e(TAG, "IAB item not owned error");
                 break;
             case IabHelper.BILLING_RESPONSE_RESULT_ITEM_UNAVAILABLE:
-                Log.e("TAG", "IAB item unavailable");
+                Log.e(TAG, "IAB item unavailable");
                 break;
             case IabHelper.BILLING_RESPONSE_RESULT_USER_CANCELED:
-                Log.e("TAG", "IAB user cancelled");
+                Log.e(TAG, "IAB user cancelled");
                 break;
             default:
-                Log.e("TAG", "IAB Uncaught error code: " + responseCode);
+                Log.e(TAG, "IAB Uncaught error code: " + responseCode);
                 break;
         }
     }
@@ -72,9 +73,10 @@ public class MainFragment extends Fragment {
             for (Purchase purchase : inv.getAllPurchases()) {
                 String sku = purchase.getSku();
                 SkuDetails skuDetails = inv.getSkuDetails(sku);
-                Log.d("TAG", "Owned item : " + skuDetails.getTitle());
-                Log.d("TAG", "and it cost : " + skuDetails.getPrice());
+                Log.d(TAG, "Owned item : " + skuDetails.getTitle());
+                Log.d(TAG, "and it cost : " + skuDetails.getPrice());
             }
+            // If you have the SKU of an un-owned item, you can also query for price etc
         }
     };
 
