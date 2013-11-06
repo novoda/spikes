@@ -1,1 +1,1 @@
-include ':PaypalMPL'
+include ':PaypalMPL', ':PaypalMPL:libs:PayPal_MPL'
