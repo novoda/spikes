@@ -1,0 +1,83 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <ImageView android:src="@drawable/wait" android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:id="@+id/screen_wait" android:layout_gravity="center" android:visibility="gone" />
+    
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:id="@+id/screen_main"
+        android:visibility="visible"
+        android:orientation="vertical">
+    
+    	<ImageView
+    	    android:src="@drawable/title"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_marginBottom="10dp" />
+    	
+    	<ImageView
+    	    android:src="@drawable/free"
+    	    android:id="@+id/free_or_premium"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_marginBottom="40dp"  />
+    	
+    	<ImageView
+    	    android:src="@drawable/gas4"
+    	    android:id="@+id/gas_gauge"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_marginBottom="40dp" />
+    	
+    	
+    	<LinearLayout
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:orientation="horizontal"
+    	    android:layout_marginBottom="20dp">
+    	    
+            <ImageView
+    	       android:src="@drawable/drive"
+    	       android:onClick="onDriveButtonClicked"
+    	       android:layout_width="wrap_content"
+    	       android:layout_height="wrap_content" 
+    	       android:layout_marginRight="20dp"/>
+    	
+        	<ImageView
+        	   android:src="@drawable/buy_gas"
+    	       android:onClick="onBuyGasButtonClicked"
+    	       android:layout_width="wrap_content"
+    	       android:layout_height="wrap_content"
+    	       android:layout_marginBottom="20dp" />
+    	
+    	</LinearLayout>
+
+    	<LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp">
+    	
+    	   <ImageView
+    	       android:src="@drawable/upgrade_app"
+    	       android:id="@+id/upgrade_button"
+    	       android:onClick="onUpgradeAppButtonClicked"
+    	       android:layout_width="wrap_content"
+    	       android:layout_height="wrap_content" 
+               android:layout_marginRight="20dp" />
+    	   
+            <ImageView
+               android:id="@+id/infinite_gas_button"
+               android:src="@drawable/infinite_gas"
+               android:onClick="onInfiniteGasButtonClicked"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content" />
+    	   	
+    	</LinearLayout>
+    </LinearLayout>
+    
+</FrameLayout>
