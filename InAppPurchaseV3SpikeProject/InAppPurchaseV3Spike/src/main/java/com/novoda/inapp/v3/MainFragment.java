@@ -1,5 +1,6 @@
 package com.novoda.inapp.v3;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,6 +15,7 @@ import com.android.vending.billing.util.*;
 public class MainFragment extends Fragment {
 
     private static final String TAG = "IABEX";
+    public static final String FIVE_COINS_SKU = "android.test.purchased";
     private IabHelper iabHelper;
     private boolean purchasesAvailableOnThisDevice = false;
 
@@ -21,6 +23,7 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         iabHelper = new IabHelper(getActivity(), "todoGetBase64PublicKeyFromGooglePlayStore");
+        iabHelper.enableDebugLogging(BuildConfig.DEBUG);
         iabHelper.startSetup(onIabSetupFinished);
     }
 
@@ -90,7 +93,6 @@ public class MainFragment extends Fragment {
 
         Button purchaseFiveButton = (Button) rootView.findViewById(R.id.fragment_main_button_purchase_five_coins);
         purchaseFiveButton.setOnClickListener(onFiveButtonClicked);
-        Button purchaseTenButton = (Button) rootView.findViewById(R.id.fragment_main_button_purchase_ten_coins);
 
         return rootView;
     }
@@ -104,8 +106,39 @@ public class MainFragment extends Fragment {
             }
             Toast.makeText(v.getContext(), "Starting payment process", Toast.LENGTH_SHORT).show();
 
+            iabHelper.launchPurchaseFlow(getActivity(), FIVE_COINS_SKU, 100, onItemPurchased, "extra data identifing user & encoded");
 
+        }
+    };
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        iabHelper.handleActivityResult(requestCode, resultCode, data);
+    }
+
+    private IabHelper.OnIabPurchaseFinishedListener onItemPurchased = new IabHelper.OnIabPurchaseFinishedListener() {
+        @Override
+        public void onIabPurchaseFinished(IabResult result, Purchase info) {
+            if (result.isFailure()) {
+                logError(result);
+                return;
+            }
+            if (FIVE_COINS_SKU.equals(info.getSku())) {
+                Log.d(TAG, "Purchased five coins, consume the purchase");
+                iabHelper.consumeAsync(info, onItemConsumed);
+            }
+        }
+    };
+
+    private IabHelper.OnConsumeFinishedListener onItemConsumed = new IabHelper.OnConsumeFinishedListener() {
+        @Override
+        public void onConsumeFinished(Purchase purchase, IabResult result) {
+            if (result.isFailure()) {
+                logError(result);
+                return;
+            }
+            Log.d(TAG, "Consumed the purchase five coins, add them to the users total");
+            Toast.makeText(getActivity(), "You purchased 5 coins w00h00", Toast.LENGTH_LONG).show();
         }
     };
 
