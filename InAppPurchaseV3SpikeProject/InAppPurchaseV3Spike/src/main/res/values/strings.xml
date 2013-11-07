@@ -4,5 +4,7 @@
     <string name="app_name">InAppPurchaseV3Spike</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+  <string name="purchase_five_coins">Purchase Five Coins</string>
+  <string name="purchase_ten_coins">Purchase Ten Coins</string>
 
 </resources>

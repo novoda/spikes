@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.vending.billing.util.*;
 
@@ -13,6 +15,7 @@ public class MainFragment extends Fragment {
 
     private static final String TAG = "IABEX";
     private IabHelper iabHelper;
+    private boolean purchasesAvailableOnThisDevice = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,7 @@ public class MainFragment extends Fragment {
                 logError(result);
                 return;
             }
+            purchasesAvailableOnThisDevice = true;
             iabHelper.queryInventoryAsync(queryInventoryFinishedListener);
         }
     };
@@ -83,8 +87,27 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+        Button purchaseFiveButton = (Button) rootView.findViewById(R.id.fragment_main_button_purchase_five_coins);
+        purchaseFiveButton.setOnClickListener(onFiveButtonClicked);
+        Button purchaseTenButton = (Button) rootView.findViewById(R.id.fragment_main_button_purchase_ten_coins);
+
         return rootView;
     }
+
+    private View.OnClickListener onFiveButtonClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (!purchasesAvailableOnThisDevice) {
+                Toast.makeText(v.getContext(), "IAB not available on this device", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Toast.makeText(v.getContext(), "Starting payment process", Toast.LENGTH_SHORT).show();
+
+
+
+        }
+    };
 
     @Override
     public void onDestroy() {
