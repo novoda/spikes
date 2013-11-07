@@ -20,9 +20,18 @@ android {
         minSdkVersion 8
         targetSdkVersion 19
     }
+
+    signingConfigs {
+        release {
+            storeFile file("../../team-props/temp-novoda-key.keystore")
+            storePassword "novoda"
+            keyAlias "Novoda"
+            keyPassword "novoda"
+        }
+    }
 }
 
 dependencies {
-	compile 'com.android.support:support-v4:19.0.0'
-	compile 'com.android.support:appcompat-v7:19.0.0'
+    compile 'com.android.support:support-v4:19.0.0'
+    compile 'com.android.support:appcompat-v7:19.0.0'
 }
