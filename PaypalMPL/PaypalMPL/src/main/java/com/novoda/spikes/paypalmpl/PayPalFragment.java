@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +14,13 @@ import android.widget.Toast;
 import com.paypal.android.MEP.CheckoutButton;
 import com.paypal.android.MEP.PayPal;
 import com.paypal.android.MEP.PayPalActivity;
-import com.paypal.android.MEP.PayPalPreapproval;
 
 public class PayPalFragment extends Fragment {
 
-    private static final String PREAPPROVAL_KEY = "MY_PREAPPROVAL_KEY";
-    private static final String PAYPAL_APP_ID = "APP-80W284485P519543T";
-    private static final String PAYPAL_LANGUAGE = "en_US";
+    private static final String PREAPPROVAL_KEY = "PREAPPROVAL_KEY";
     private static final int PREAPPROVAL_REQUEST_CODE = 0;
+
+    private PayPalHelper payPalHelper;
 
     public PayPalFragment() {
     }
@@ -28,15 +28,8 @@ public class PayPalFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initialisePayPalLibrary();
-    }
-
-    private void initialisePayPalLibrary() {
-        PayPal payPal = PayPal.getInstance();
-        if (payPal == null) {
-            payPal = PayPal.initWithAppID(getActivity(), PAYPAL_APP_ID, PayPal.ENV_NONE);
-            payPal.setLanguage(PAYPAL_LANGUAGE);
-        }
+        payPalHelper = new PayPalHelper(getActivity());
+        payPalHelper.init();
     }
 
     @Override
@@ -57,21 +50,10 @@ public class PayPalFragment extends Fragment {
     private View.OnClickListener preapprovalClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            PayPalPreapproval preapproval = createPreapproval();
-            PayPal.getInstance().setPreapprovalKey(PREAPPROVAL_KEY);
-            Intent preapprovalIntent = PayPal.getInstance().preapprove(preapproval, getActivity());
+            Intent preapprovalIntent = payPalHelper.getPreapprovalIntent(PREAPPROVAL_KEY);
             startActivityForResult(preapprovalIntent, PREAPPROVAL_REQUEST_CODE);
         }
     };
-
-    private PayPalPreapproval createPreapproval() {
-        PayPalPreapproval preapproval = new PayPalPreapproval();
-        preapproval.setCurrencyType("USD");
-        preapproval.setIpnUrl("http://www.exampleapp.com/ipn");
-        preapproval.setMemo("Why hello, and welcome to the preapproval memo.");
-        preapproval.setMerchantName("Joe's Bear Emporium");
-        return preapproval;
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -79,9 +61,9 @@ public class PayPalFragment extends Fragment {
             return;
         }
 
-        String resultTitle = null;
-        String resultInfo = null;
-        String resultExtra;
+        String resultTitle = "";
+        String resultInfo = "";
+        String resultExtra = "";
         switch (resultCode) {
             case Activity.RESULT_OK:
                 resultTitle = "SUCCESS";
@@ -99,6 +81,7 @@ public class PayPalFragment extends Fragment {
                 resultExtra = "Error ID: " + data.getStringExtra(PayPalActivity.EXTRA_ERROR_ID);
         }
 
+        Log.v("PayPalFragment", resultTitle + " " + resultInfo + " " + resultExtra);
         Toast.makeText(getActivity(), resultTitle + " " + resultInfo, Toast.LENGTH_SHORT).show();
     }
 }
