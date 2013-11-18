@@ -1,0 +1,32 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.6.+'
+    }
+}
+apply plugin: 'android'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://github.com/novoda/public-mvn-repo/raw/master/releases"
+    }
+}
+
+dependencies {
+    instrumentTestCompile "com.google.android:android-espresso-bundled:1.0.0-SNAPSHOT"
+}
+
+android {
+    compileSdkVersion 17
+    buildToolsVersion "18.1.1"
+
+    defaultConfig {
+        minSdkVersion 17
+        targetSdkVersion 17
+        testPackageName "com.novoda.espressoemptylistview.test"
+        testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
+    }
+}
