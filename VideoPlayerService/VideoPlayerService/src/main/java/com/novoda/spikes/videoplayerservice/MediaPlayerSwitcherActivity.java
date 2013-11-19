@@ -33,6 +33,9 @@ public class MediaPlayerSwitcherActivity extends Activity {
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
                 Log.d(TAG, "First surface created!");
                 mFirstSurface = surfaceHolder;
+                if (service != null){
+                    service.setDisplay(mFirstSurface);
+                }
             }
 
             @Override
@@ -63,7 +66,9 @@ public class MediaPlayerSwitcherActivity extends Activity {
                 Log.d(TAG, "Second surface destroyed!");
             }
         });
+        startService();
     }
+
 
     @Override
     protected void onPause() {
@@ -81,12 +86,14 @@ public class MediaPlayerSwitcherActivity extends Activity {
         if (requestCode == PICK_VIDEO_REQUEST && resultCode == RESULT_OK) {
             Log.d(TAG, "Got video " + data.getData());
             mVideoUri = data.getData();
-            startService();
+            if (service != null){
+                service.setVideoData(mVideoUri.toString());
+            }
         }
     }
 
     public void doStartStop(View view) {
-        if (service == null) {
+        if (service == null || !service.isPlaying()) {
             Intent pickVideo = new Intent(Intent.ACTION_PICK);
             pickVideo.setType("video/*");
             startActivityForResult(pickVideo, PICK_VIDEO_REQUEST);
@@ -110,8 +117,10 @@ public class MediaPlayerSwitcherActivity extends Activity {
         ServiceConnection conn = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+
+                service = ((VideoPlayerService.Binder) iBinder).getService();
+
                 if (mVideoUri != null) {
-                    service = ((VideoPlayerService.Binder) iBinder).getService();
                     service.setVideoData(mVideoUri.toString());
                     service.setDisplay(mFirstSurface);
                 }

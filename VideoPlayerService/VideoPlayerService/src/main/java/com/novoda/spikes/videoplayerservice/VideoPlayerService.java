@@ -11,6 +11,7 @@ import java.io.IOException;
 public class VideoPlayerService extends Service implements MediaPlayer.OnPreparedListener {
 
     private MediaPlayer mediaPlayer;
+    private String currentUrl;
 
     @Override
     public void onCreate() {
@@ -25,6 +26,12 @@ public class VideoPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
     public void setVideoData(String videoUrl) {
+        if (currentUrl != null && currentUrl.equals(videoUrl)){
+            // continue playing
+            return;
+        }
+
+        currentUrl = videoUrl;
         try {
             mediaPlayer.reset();
             mediaPlayer.setDataSource(videoUrl);
