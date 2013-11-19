@@ -22,6 +22,7 @@ public class MediaPlayerSwitcherActivity extends Activity {
     private SurfaceHolder mActiveSurface;
     private Uri mVideoUri;
     private VideoPlayerService service;
+    private ServiceConnection conn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +72,16 @@ public class MediaPlayerSwitcherActivity extends Activity {
         super.onPause();
         mFirstSurface = null;
         mVideoUri = null;
+        if (service != null){
+            service.setDisplay(null);
+        }
     }
 
     @Override
     protected void onDestroy() {
+        unbindService(conn);
         super.onDestroy();
+
     }
 
     @Override
@@ -111,7 +117,7 @@ public class MediaPlayerSwitcherActivity extends Activity {
     public void startService(){
         startService(new Intent(this, VideoPlayerService.class));
 
-        ServiceConnection conn = new ServiceConnection() {
+        conn = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
 

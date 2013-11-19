@@ -1,5 +1,6 @@
 package com.novoda.spikes.videoplayerservice;
 
+import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -46,6 +47,7 @@ public class VideoPlayerService extends Service implements MediaPlayer.OnPrepare
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
        mediaPlayer.start();
+       startForeground(1, new Notification());
     }
 
     public void setDisplay(SurfaceHolder surfaceHolder) {
