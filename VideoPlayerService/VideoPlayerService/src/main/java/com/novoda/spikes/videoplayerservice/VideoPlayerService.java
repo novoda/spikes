@@ -26,7 +26,7 @@ public class VideoPlayerService extends Service implements MediaPlayer.OnPrepare
     }
 
     public void setVideoData(String videoUrl) {
-        if (currentUrl != null && currentUrl.equals(videoUrl)){
+        if (currentUrl != null && currentUrl.equals(videoUrl) && mediaPlayer.isPlaying()){
             // continue playing
             return;
         }
@@ -36,7 +36,7 @@ public class VideoPlayerService extends Service implements MediaPlayer.OnPrepare
             mediaPlayer.reset();
             mediaPlayer.setDataSource(videoUrl);
             mediaPlayer.prepareAsync();
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalStateException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();

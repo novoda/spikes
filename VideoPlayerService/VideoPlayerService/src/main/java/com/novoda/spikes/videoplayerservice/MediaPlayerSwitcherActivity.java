@@ -33,9 +33,6 @@ public class MediaPlayerSwitcherActivity extends Activity {
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
                 Log.d(TAG, "First surface created!");
                 mFirstSurface = surfaceHolder;
-                if (service != null){
-                    service.setDisplay(mFirstSurface);
-                }
             }
 
             @Override
@@ -69,10 +66,10 @@ public class MediaPlayerSwitcherActivity extends Activity {
         startService();
     }
 
-
     @Override
     protected void onPause() {
         super.onPause();
+        mFirstSurface = null;
         mVideoUri = null;
     }
 
@@ -122,7 +119,6 @@ public class MediaPlayerSwitcherActivity extends Activity {
 
                 if (mVideoUri != null) {
                     service.setVideoData(mVideoUri.toString());
-                    service.setDisplay(mFirstSurface);
                 }
             }
 
