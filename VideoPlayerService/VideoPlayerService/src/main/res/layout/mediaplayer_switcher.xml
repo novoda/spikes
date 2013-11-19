@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  tools:context="com.novoda.spikes.videoplayerservice.MediaPlayerSwitcher">
+
+  <Button
+    android:layout_weight="0.2"
+    android:layout_height="0dp"
+    android:layout_width="match_parent"
+    android:onClick="doStartStop"
+    android:text="Start/Stop" />
+
+  <Button
+    android:layout_weight="0.2"
+    android:layout_height="0dp"
+    android:layout_width="match_parent"
+    android:onClick="doSwitchSurface"
+    android:text="Switch surface" />
+
+  <SurfaceView
+    android:id="@+id/firstSurface"
+    android:layout_margin="3dp"
+    android:layout_height="0dp"
+    android:layout_width="match_parent"
+    android:layout_weight="1" />
+
+  <SurfaceView
+    android:id="@+id/secondSurface"
+    android:layout_margin="3dp"
+    android:layout_height="0dp"
+    android:layout_width="match_parent"
+    android:layout_weight="1" />
+
+</LinearLayout>
