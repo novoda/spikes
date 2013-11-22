@@ -68,6 +68,14 @@ public class VideoPlayerService extends Service implements MediaPlayer.OnPrepare
         return super.stopService(name);
     }
 
+    public void togglePauseResume() {
+        if (mediaPlayer.isPlaying()){
+            mediaPlayer.pause();
+        } else {
+            mediaPlayer.start();
+        }
+    }
+
     public class Binder extends android.os.Binder {
         public VideoPlayerService getService() {
             return VideoPlayerService.this;

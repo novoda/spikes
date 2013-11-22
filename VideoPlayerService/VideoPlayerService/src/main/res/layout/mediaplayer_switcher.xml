@@ -21,6 +21,30 @@
     android:onClick="doSwitchSurface"
     android:text="Switch surface" />
 
+  <Button
+    android:layout_weight="0.2"
+    android:layout_height="0dp"
+    android:layout_width="match_parent"
+    android:onClick="doStartVideo1"
+    android:text="Start video 1"
+    android:id="@+id/button" />
+
+  <Button
+    android:layout_weight="0.2"
+    android:layout_height="0dp"
+    android:layout_width="match_parent"
+    android:onClick="doStartVideo2"
+    android:text="Start video 2"
+    android:id="@+id/button" />
+
+  <Button
+    android:layout_weight="0.2"
+    android:layout_height="0dp"
+    android:layout_width="match_parent"
+    android:onClick="doPauseResume"
+    android:text="Pause/Resume"
+    android:id="@+id/button2" />
+
   <SurfaceView
     android:id="@+id/firstSurface"
     android:layout_margin="3dp"

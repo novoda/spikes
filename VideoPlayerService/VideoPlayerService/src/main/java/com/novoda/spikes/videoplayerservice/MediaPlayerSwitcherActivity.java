@@ -21,6 +21,7 @@ public class MediaPlayerSwitcherActivity extends Activity {
     private SurfaceHolder mSecondSurface;
     private SurfaceHolder mActiveSurface;
     private Uri mVideoUri;
+    private Uri mVideoUri2;
     private VideoPlayerService service;
     private ServiceConnection conn;
 
@@ -66,6 +67,10 @@ public class MediaPlayerSwitcherActivity extends Activity {
                 Log.d(TAG, "Second surface destroyed!");
             }
         });
+
+        mVideoUri = Uri.parse("http://www.w3schools.com/html/movie.mp4");
+        mVideoUri2 = Uri.parse("https://archive.org/download/Windows7WildlifeSampleVideo/Wildlife_512kb.mp4");
+
         startService();
     }
 
@@ -115,6 +120,21 @@ public class MediaPlayerSwitcherActivity extends Activity {
         }
     }
 
+    public void doStartVideo1(View view) {
+        service.setVideoData(mVideoUri.toString());
+    }
+
+
+    public void doStartVideo2(View view){
+        service.setVideoData(mVideoUri2.toString());
+    }
+
+
+    public void doPauseResume(View view){
+        if (service != null){
+            service.togglePauseResume();
+        }
+    }
 
     public void startService(){
         startService(new Intent(this, VideoPlayerService.class));
