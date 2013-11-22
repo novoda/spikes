@@ -34,6 +34,7 @@ public class MediaPlayerSwitcherActivity extends Activity {
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
                 Log.d(TAG, "First surface created!");
                 mFirstSurface = surfaceHolder;
+                playIfPossibleAfterSurfaceCreated();
             }
 
             @Override
@@ -44,6 +45,7 @@ public class MediaPlayerSwitcherActivity extends Activity {
             @Override
             public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
                 Log.d(TAG, "First surface destroyed!");
+                mFirstSurface = null;
             }
         });
         SurfaceView second = (SurfaceView) findViewById(R.id.secondSurface);
@@ -126,6 +128,8 @@ public class MediaPlayerSwitcherActivity extends Activity {
                 if (mVideoUri != null) {
                     service.setVideoData(mVideoUri.toString());
                 }
+
+                playIfPossibleAfterServiceConnected();
             }
 
             @Override
@@ -134,5 +138,17 @@ public class MediaPlayerSwitcherActivity extends Activity {
             }
         };
         bindService(new Intent(this, VideoPlayerService.class), conn, BIND_AUTO_CREATE);
+    }
+
+    private void playIfPossibleAfterServiceConnected() {
+        if (mFirstSurface != null && mSecondSurface != null){
+            service.setDisplay(mFirstSurface);
+        }
+    }
+
+    private void playIfPossibleAfterSurfaceCreated(){
+        if (service != null){
+            service.setDisplay(mFirstSurface);
+        }
     }
 }
