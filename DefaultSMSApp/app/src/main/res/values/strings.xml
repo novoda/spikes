@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string name="app_name">DefaultSMSApp</string>
+  <string name="set_as_default">Set this app as default</string>
+  <string name="restore_default">Resotre previous app as default</string>
+
+</resources>
