@@ -8,4 +8,5 @@ We generate an in-memory sqlite database, run the migrations on it and analyze t
 This model is then used to generate code.
 
 ### Libraries
-We use https://bitbucket.org/xerial/sqlite-jdbc to create and analyze the database and https://github.com/square/javawriter to generate java code. 
+We use [sqlite-jdbc](https://bitbucket.org/xerial/sqlite-jdbc) to create and analyze the database and 
+[javawriter](https://github.com/square/javawriter) to generate java code. 
