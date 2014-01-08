@@ -1,8 +1,9 @@
 package com.novoda.sqlite;
 
 import java.io.IOException;
-import java.io.Writer;
+
+import com.squareup.javawriter.JavaWriter;
 
 public interface Printer {
-	void print(Writer writer) throws IOException;
+	void print(JavaWriter writer) throws IOException;
 }

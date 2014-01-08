@@ -1,7 +1,6 @@
 package com.novoda.sqlite;
 
 import java.io.IOException;
-import java.io.Writer;
 import java.util.EnumSet;
 
 import javax.lang.model.element.Modifier;
@@ -25,25 +24,21 @@ public final class ColumnsPrinter implements Printer {
 	 * @throws IOException
 	 */
 	@Override
-	public void print(Writer writer) throws IOException {
-		JavaWriter javaWriter = new JavaWriter(writer);
-		emitClass(javaWriter);
+	public void print(JavaWriter writer) throws IOException {
+		emitClass(writer);
 
 	}
 
 	private void emitClass(JavaWriter javaWriter) throws IOException {
-		javaWriter.emitPackage("com.example").beginType("Columns", "class",
-				EnumSet.of(Modifier.PUBLIC, Modifier.FINAL));
+		javaWriter.beginType("Columns", "class", EnumSet.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL));
 		for (Table table : database.getTables()) {
 			emitTable(table, javaWriter);
 		}
 		javaWriter.endType();
 	}
 
-	private void emitTable(Table table, JavaWriter javaWriter)
-			throws IOException {
-		javaWriter.beginType(table.getName(), "enum",
-				EnumSet.of(Modifier.PUBLIC));
+	private void emitTable(Table table, JavaWriter javaWriter) throws IOException {
+		javaWriter.beginType(table.getName(), "enum", EnumSet.of(Modifier.PUBLIC));
 		for (String column : table.getColumns()) {
 			javaWriter.emitEnumValue(column);
 		}

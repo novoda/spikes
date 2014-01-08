@@ -39,9 +39,7 @@ public final class Analyzer {
 		ResultSet rs = statement
 				.executeQuery("select * from sqlite_master where type IN ('table', 'view') AND NOT name like 'sqlite/_%' ESCAPE '/';");
 		while (rs.next()) {
-			database.addTable(new Table(rs.getString("name")));
-			// other data in result
-			// set:"type","name","tbl_name","rootpage","sql"
+			database.addTable(new Table(rs.getString("name"), rs.getString("sql")));
 		}
 	}
 
@@ -52,11 +50,8 @@ public final class Analyzer {
 	 * @throws SQLException
 	 */
 	private void readTableInfo(Table table) throws SQLException {
-		ResultSet tableInfo = statement.executeQuery("PRAGMA table_info("
-				+ table.getName() + ");");
+		ResultSet tableInfo = statement.executeQuery("PRAGMA table_info(" + table.getName() + ");");
 		while (tableInfo.next()) {
-			// System.out.println(tableInfo.getString("name") + ", "
-			// + tableInfo.getString("type"));
 			table.addColumn(tableInfo.getString("name"));
 		}
 	}

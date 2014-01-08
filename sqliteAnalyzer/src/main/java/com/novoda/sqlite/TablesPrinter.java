@@ -1,7 +1,6 @@
 package com.novoda.sqlite;
 
 import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,14 +27,13 @@ public final class TablesPrinter implements Printer {
 	 * @throws IOException
 	 */
 	@Override
-	public void print(Writer writer) throws IOException {
-		JavaWriter javaWriter = new JavaWriter(writer);
-		emitClass(javaWriter);
+	public void print(JavaWriter writer) throws IOException {
+		emitClass(writer);
 
 	}
 
 	private void emitClass(JavaWriter javaWriter) throws IOException {
-		javaWriter.emitPackage("com.example").beginType("Tables", "enum",
+		javaWriter.beginType("Tables", "enum",
 				EnumSet.of(Modifier.PUBLIC));
 		for (Table table : lexSortedTables()) {
 			javaWriter.emitEnumValue(table.getName());

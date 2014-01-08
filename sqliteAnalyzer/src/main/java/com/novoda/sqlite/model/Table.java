@@ -7,9 +7,11 @@ import java.util.List;
 public class Table {
 	private final String name;
 	private final List<String> columns = new ArrayList<String>();
+	private final String sql;
 
-	public Table(String name) {
+	public Table(String name, String sql) {
 		this.name = name;
+		this.sql = sql;
 	}
 
 	public void addColumn(String column) {
@@ -18,6 +20,10 @@ public class Table {
 
 	public String getName() {
 		return name;
+	}
+	
+	public String getSql() {
+		return sql;
 	}
 
 	public Collection<String> getColumns() {
