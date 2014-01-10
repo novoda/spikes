@@ -23,6 +23,7 @@ public final class Generator {
 
 	public void print() throws IOException {
 		File targetFile = new File(targetDir, "DB.java");
+        targetFile.mkdirs();
 		PrintWriter printer = new PrintWriter(targetFile);
 		JavaWriter javaWriter = new JavaWriter(printer);
 		emitClass(javaWriter);
