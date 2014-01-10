@@ -21,9 +21,15 @@ public final class Generator {
 		this.printers = printers;
 	}
 
+    private File targetWithPackage() {
+        String packageAsDir = packageName.replaceAll("\\.", "/");
+        File file = new File(targetDir, packageAsDir);
+        file.mkdirs();
+        return file;
+    }
+
 	public void print() throws IOException {
-		File targetFile = new File(targetDir, "DB.java");
-        targetFile.mkdirs();
+		File targetFile = new File(targetWithPackage(), "DB.java");
 		PrintWriter printer = new PrintWriter(targetFile);
 		JavaWriter javaWriter = new JavaWriter(printer);
 		emitClass(javaWriter);

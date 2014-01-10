@@ -25,7 +25,7 @@ public class Main {
 	}
 
 	private static void generateJavaCode(Database database) throws IOException {
-		File targetDir = new File("src/main/gen/com/example/");
+		File targetDir = new File("src/main/gen/");
         targetDir.mkdirs();
 		Generator generator = new Generator(targetDir, "com.example", new ColumnsPrinter(database), new TablesPrinter(database));
 		generator.print();
