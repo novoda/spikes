@@ -1,0 +1,9 @@
+apply plugin: 'application'
+
+sourceCompatibility = 1.5
+version = '1.0'
+
+mainClassName = "com.novoda.sqlite.Main"
+dependencies {
+	compile fileTree(dir: 'libs', includes: ['*.jar'])
+}

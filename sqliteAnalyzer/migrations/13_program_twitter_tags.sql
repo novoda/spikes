@@ -1,0 +1,14 @@
+-- we want to join broadcasts and programs via PROGRAM_ID, so index them first in broadcasts
+CREATE INDEX INDEX_BROADCASTS_PROGRAM_ID ON BROADCASTS(PROGRAM_ID);
+
+-- get all the twitter hashes/tags for the program and the corresponding cluster
+-- (we find the cluster via the broadcasts corresponding to the program)
+CREATE VIEW PROGRAMS_WITH_TWITTER_TAGS AS
+    SELECT DISTINCT
+        PROGRAMS.*,
+        CLUSTER_ID,
+        (IFNULL(HASHTAG,'') || CASE WHEN HASHTAG IS NOT NULL AND TWITTER_HASHTAG IS NOT NULL THEN ' ' ELSE '' END || IFNULL(TWITTER_HASHTAG,'')) AS HASHES,
+        (IFNULL(CLUSTERS.AT,'') || CASE WHEN CLUSTERS.AT IS NOT NULL AND TWITTER_AT IS NOT NULL THEN ' ' ELSE '' END || IFNULL(TWITTER_AT, '')) AS HANDLES
+    FROM PROGRAMS
+        LEFT JOIN BROADCASTS INDEXED BY INDEX_BROADCASTS_PROGRAM_ID USING (PROGRAM_ID)
+        LEFT JOIN CLUSTERS ON BROADCASTS.MAIN_CLUSTER_ID = CLUSTERS.CLUSTER_ID;
