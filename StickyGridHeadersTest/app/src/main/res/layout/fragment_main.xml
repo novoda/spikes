@@ -1,0 +1,29 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <GridView
+    android:id="@+id/grid_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:numColumns="2" />
+
+  <LinearLayout
+    android:id="@+id/header_content"
+    android:layout_width="match_parent"
+    android:layout_height="500px"
+    android:orientation="vertical">
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="400px"
+      android:background="#66000000" />
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="100px"
+      android:background="#DD000000" />
+  </LinearLayout>
+
+</FrameLayout>
