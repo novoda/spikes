@@ -1,0 +1,1 @@
+CREATE TABLE numbers (one INTEGER, next INTEGER);

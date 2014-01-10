@@ -1,9 +1,22 @@
-apply plugin: 'application'
+apply plugin: 'java'
+apply plugin: 'idea'
 
-sourceCompatibility = 1.5
-version = '1.0'
-
-mainClassName = "com.novoda.sqlite.Main"
-dependencies {
-	compile fileTree(dir: 'libs', includes: ['*.jar'])
+repositories {
+    mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
 }
+
+dependencies {
+    compile 'com.squareup:javawriter:2.3.1'
+    compile 'org.xerial:sqlite-jdbc:3.7.15-SNAPSHOT'
+
+    testCompile 'junit:junit:4.+'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.9'
+}
+
+

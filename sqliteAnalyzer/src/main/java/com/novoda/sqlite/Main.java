@@ -15,7 +15,7 @@ public class Main {
 
 		Connection connection = null;
 		try {
-			connection = new Migrator(new MigrationsInDir("migrations")).runMigrations();
+			connection = new Migrator(new MigrationsInDir(new File("arte_migrations"))).runMigrations();
 			Database database = new Analyzer(connection).analyze();
 			generateJavaCode(database);
 		} finally {
@@ -26,8 +26,8 @@ public class Main {
 
 	private static void generateJavaCode(Database database) throws IOException {
 		File targetDir = new File("src/main/gen/com/example/");
-		Generator corePrinter = new Generator(targetDir, "com.example", new Printer[] {
-				new ColumnsPrinter(database), new TablesPrinter(database) });
-		corePrinter.print();
+        targetDir.mkdirs();
+		Generator generator = new Generator(targetDir, "com.example", new ColumnsPrinter(database), new TablesPrinter(database));
+		generator.print();
 	}
 }

@@ -10,13 +10,13 @@ public class MigrationsInDir implements Migrations {
 	private final File[] migrationFiles;
 	private final Comparator<File> comparator;
 
-	public MigrationsInDir(String directory) {
+	public MigrationsInDir(File directory) {
 		this(directory, new NumberedFilesComparator());
 	}
 
-	public MigrationsInDir(String directory, Comparator<File> comparator) {
+	public MigrationsInDir(File directory, Comparator<File> comparator) {
 		this.comparator = comparator;
-		migrationFiles = new File(directory).listFiles();
+		migrationFiles = directory.listFiles();
 	}
 
 	@Override
