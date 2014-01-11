@@ -1,5 +1,8 @@
 .settings
 .gradle
 /local.properties
-/.idea/workspace.xml
+/.idea
+/build
+/classes
 .DS_Store
+*.iml
