@@ -14,7 +14,7 @@ We use [sqlite-jdbc](https://bitbucket.org/xerial/sqlite-jdbc) to create and ana
 ### Integration
 To integrate sqliteAnalyzer into your project, let your master build depend on the sqliteAnalyzer project, either by
 referencing it in the buildDependencies section or by checking it out under the `buildSrc` sub-directory and using the
-following `build.gradle in `buildSrc`:
+following `build.gradle` in `buildSrc`:
 
 ```groovy
 repositories {
