@@ -1,5 +1,7 @@
 package com.novoda.sqlite;
 
+import com.novoda.sqlite.impl.SQLFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;

@@ -6,7 +6,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
+import java.util.List;
 
+import com.novoda.sqlite.impl.TableCreateStatementParser;
 import com.novoda.sqlite.model.Column;
 import com.novoda.sqlite.model.DataAffinity;
 import com.novoda.sqlite.model.Database;
@@ -27,8 +29,20 @@ public final class Analyzer {
         for (Table name : database.getTables()) {
             readTableInfo(name);
         }
+        addTableDependencies(database);
         statement.close();
         return database;
+    }
+
+    private void addTableDependencies(Database database) {
+        TableCreateStatementParser parser = new TableCreateStatementParser();
+        for (Table table : database.getTables()) {
+            List<String> dependsOnTables = parser.parseUsedTables(table.getSql());
+            for (String dependsOnTable : dependsOnTables) {
+                Table baseTable = database.findTableByName(dependsOnTable);
+                baseTable.addDependent(table);
+            }
+        }
     }
 
     /**

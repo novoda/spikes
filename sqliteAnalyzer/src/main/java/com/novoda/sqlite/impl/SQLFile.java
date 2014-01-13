@@ -1,4 +1,4 @@
-package com.novoda.sqlite;
+package com.novoda.sqlite.impl;
 
 import java.io.*;
 import java.util.ArrayList;
