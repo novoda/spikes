@@ -5,6 +5,7 @@ import java.util.EnumSet;
 
 import javax.lang.model.element.Modifier;
 
+import com.novoda.sqlite.model.Column;
 import com.novoda.sqlite.model.Database;
 import com.novoda.sqlite.model.Table;
 import com.squareup.javawriter.JavaWriter;
@@ -39,8 +40,8 @@ public final class ColumnsPrinter implements Printer {
 
 	private void emitTable(Table table, JavaWriter javaWriter) throws IOException {
 		javaWriter.beginType(table.getName(), "enum", EnumSet.of(Modifier.PUBLIC));
-		for (String column : table.getColumns()) {
-			javaWriter.emitEnumValue(column);
+		for (Column column : table.getColumns()) {
+			javaWriter.emitEnumValue(column.getName());
 		}
 		javaWriter.endType();
 	}

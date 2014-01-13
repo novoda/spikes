@@ -30,8 +30,7 @@ public class AnalyzerTest {
     }
 
     private void assertTableColumns(Database database, String tableName, String[] columnNames) {
-        Table table = findTableByName(database, tableName);
-        assertColumns(table, columnNames);
+        assertColumns(database.findTableByName(tableName), columnNames);
     }
 
     private void assertColumns(Table table, String[] columnNames) {
@@ -42,15 +41,7 @@ public class AnalyzerTest {
     }
 
     private void assertColumn(Table table, String columnName) {
-        assertTrue("no column '" + columnName + "' in table '" + table.getName() + "'", table.getColumns().contains(columnName));
-    }
-
-    private Table findTableByName(Database database, String tableName) {
-        for (Table table : database.getTables())
-            if (table.getName().equals(tableName)) {
-                return table;
-            }
-        return null;
+        assertTrue("no column '" + columnName + "' in table '" + table.getName() + "'", table.findColumnByName(columnName) != null);
     }
 
     private void assertTableNames(Database database, String... names) {
