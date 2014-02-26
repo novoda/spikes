@@ -21,7 +21,7 @@ Rotate the device twice.
                 
 Crash:
 
-```java
+```bash
 -26 11:55:10.747    6558-6558/com.what.strictmodebugspike.app W/System.err﹕ StrictMode VmPolicy violation with POLICY_DEATH; shutting down.
 02-26 11:56:35.067    6651-6651/com.what.strictmodebugspike.app D/StrictModeFail﹕ Rotate the device twice I will crash.
 02-26 11:56:36.317    6651-6651/com.what.strictmodebugspike.app D/dalvikvm﹕ GC_EXPLICIT freed 124K, 3% free 7693K/7884K, paused 2ms+2ms, total 59ms
