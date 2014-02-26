@@ -13,13 +13,13 @@ StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                 .penaltyLog()
                 .penaltyDeath()
                 .build());
-                ```
+```
                 
-                Create a blank activity that does nothing.
+Create a blank activity that does nothing.
                 
-                Rotate the device twice.
+Rotate the device twice.
                 
-                Crash:
+Crash:
 
 ```java
 -26 11:55:10.747    6558-6558/com.what.strictmodebugspike.app W/System.err﹕ StrictMode VmPolicy violation with POLICY_DEATH; shutting down.
