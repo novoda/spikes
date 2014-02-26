@@ -1,4 +1,4 @@
-The enclosed application highlights a bug with StrictMode.
+The enclosed application highlights a bug with [StrictMode](http://developer.android.com/reference/android/os/StrictMode.html).
 
 Have an application that enables strict mode with penalty death.
 
