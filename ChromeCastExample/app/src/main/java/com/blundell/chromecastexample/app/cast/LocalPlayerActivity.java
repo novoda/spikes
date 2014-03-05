@@ -103,8 +103,7 @@ public class LocalPlayerActivity extends ActionBarActivity {
             mVideoView.setVideoURI(Uri.parse(mSelectedMedia.getContentId()));
             Log.d(TAG, "Setting url of the VideoView to: " + mSelectedMedia.getContentId());
             if (mShouldStartPlayback) {
-                // this will be the case only if we are coming from the
-                // CastControllerActivity by disconnecting from a device
+                // this will be the case only if we are coming from the by disconnecting from a device
                 mPlaybackState = PlaybackState.PLAYING;
                 updatePlaybackLocation(PlaybackLocation.LOCAL);
                 updatePlayButton(mPlaybackState);
@@ -133,11 +132,9 @@ public class LocalPlayerActivity extends ActionBarActivity {
     private void setupCastListener() {
         mCastConsumer = new VideoCastConsumerImpl() {
             @Override
-            public void onApplicationConnected(ApplicationMetadata appMetadata,
-                                               String sessionId, boolean wasLaunched) {
+            public void onApplicationConnected(ApplicationMetadata appMetadata, String sessionId, boolean wasLaunched) {
                 Log.d(TAG, "onApplicationLaunched() is reached");
                 if (null != mSelectedMedia) {
-
                     if (mPlaybackState == PlaybackState.PLAYING) {
                         mVideoView.pause();
                         try {
@@ -200,21 +197,18 @@ public class LocalPlayerActivity extends ActionBarActivity {
     private void updatePlaybackLocation(PlaybackLocation location) {
         this.mLocation = location;
         if (location == PlaybackLocation.LOCAL) {
-            if (mPlaybackState == PlaybackState.PLAYING ||
-                    mPlaybackState == PlaybackState.BUFFERING) {
+            if (mPlaybackState == PlaybackState.PLAYING || mPlaybackState == PlaybackState.BUFFERING) {
                 setCoverArtStatus(null);
                 startControllersTimer();
             } else {
                 stopControllersTimer();
-                setCoverArtStatus(
-                        getImageUrl(mSelectedMedia, 0));
+                setCoverArtStatus(getImageUrl(mSelectedMedia, 0));
             }
 
             getActionBar().setTitle("");
         } else {
             stopControllersTimer();
-            setCoverArtStatus(
-                    getImageUrl(mSelectedMedia, 0));
+            setCoverArtStatus(getImageUrl(mSelectedMedia, 0));
             updateControlersVisibility(true);
         }
     }

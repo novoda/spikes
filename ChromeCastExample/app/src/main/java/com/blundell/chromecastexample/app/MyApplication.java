@@ -13,10 +13,9 @@ public class MyApplication extends Application {
     public static VideoCastManager getCastManager(Context context) {
         if (null == mCastMgr) {
             mCastMgr = VideoCastManager.initialize(context, BuildConfig.CAST_APP_ID, null, null);
-            mCastMgr.enableFeatures(VideoCastManager.FEATURE_NOTIFICATION |
-                    VideoCastManager.FEATURE_LOCKSCREEN |
-                    VideoCastManager.FEATURE_DEBUGGING);
-
+            mCastMgr.enableFeatures(VideoCastManager.FEATURE_NOTIFICATION
+                    | VideoCastManager.FEATURE_LOCKSCREEN
+                    | VideoCastManager.FEATURE_DEBUGGING);
         }
         mCastMgr.setContext(context);
         mCastMgr.setStopOnDisconnect(true);
