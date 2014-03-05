@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <PreferenceCategory
+    android:summary="@string/prefs_header_application_summary"
+    android:title="@string/prefs_header_application">
+    <ListPreference
+      android:defaultValue="@string/prefs_termination_policy_default"
+      android:dialogTitle="@string/prefs_termination_policy_dialog_title"
+      android:entries="@array/prefs_termination_policy_names"
+      android:entryValues="@array/prefs_termination_policy_values"
+      android:key="termination_policy"
+      android:title="@string/prefs_termination_policy_dialog_title" />
+    <ListPreference
+      android:defaultValue="@string/prefs_volume_default"
+      android:dialogTitle="@string/prefs_volume_dialog_title"
+      android:entries="@array/prefs_volume_names"
+      android:entryValues="@array/prefs_volume_values"
+      android:key="volume_target"
+      android:summary="@string/prefs_volume_title_summary"
+      android:title="@string/prefs_volume_title" />
+  </PreferenceCategory>
+  <PreferenceCategory android:title="@string/about_app">
+    <EditTextPreference
+      android:enabled="false"
+      android:key="app_version"
+      android:persistent="false"
+      android:selectable="false"
+      android:shouldDisableView="false"
+      android:title="@string/version" />
+  </PreferenceCategory>
+
+</PreferenceScreen>

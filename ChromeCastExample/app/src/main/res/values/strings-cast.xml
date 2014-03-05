@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string name="cast_app_name">GoogleCastPlayer</string>
+  <string name="media_route_menu_title">Play on&#8230;</string>
+  <string name="ok">OK</string>
+  <string name="error">Error</string>
+  <string name="about_app">About DemoCast Player</string>
+  <string name="version">Version: %1$s</string>
+
+  <!-- Error messages -->
+  <string name="video_error_media_load_timeout">Media loading timed out</string>
+  <string name="video_error_server_unaccessible">Media server was not reachable</string>
+  <string name="video_error_unknown_error">Failed to load video</string>
+  <string name="connection_temp_lost">Connection to the cast device is temporarily lost</string>
+  <string name="connection_recovered">Connection to the cast device is recovered</string>
+  <string name="connection_lost_retry">Connection to the cast device has been temporarily lost. Application is trying to reover connection, please try again later</string>
+  <string name="connection_lost">No connection to the cast device exist</string>
+  <string name="failed_to_perfrom_action">Sorry, ran into issues perfroming the task you wanted</string>
+  <string name="oops">Oops</string>
+
+  <!-- Preferences -->
+  <string name="prefs_header_application">Application Behavior</string>
+  <string name="prefs_header_application_summary">Control how the application behaves on the TV</string>
+  <string name="prefs_termination_policy_default">0</string>
+  <string name="prefs_termination_policy_dialog_title">When Disconnecting</string>
+  <string name="prefs_volume_title">Volume Assignment</string>
+  <string name="prefs_volume_title_summary">Controls %1$s</string>
+  <string name="prefs_volume_dialog_title">Volume Assignment</string>
+  <string name="prefs_volume_default">device</string>
+  <string name="title_activity_test">TestActivity</string>
+
+  <string-array name="prefs_volume_names">
+    <item>HDMI Out</item>
+    <item>Media Stream</item>
+  </string-array>
+  <string-array name="prefs_termination_policy_names">
+    <item>Continue application on TV</item>
+    <item>Stop application on TV</item>
+  </string-array>
+
+  <!-- Do not translate below this line -->
+  <string-array name="prefs_volume_values">
+    <item>device</item>
+    <item>stream</item>
+  </string-array>
+  <string-array name="prefs_termination_policy_values">
+    <item>0</item>
+    <item>1</item>
+  </string-array>
+
+</resources>
