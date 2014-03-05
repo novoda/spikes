@@ -24,5 +24,5 @@ Create the intent with all details about the Video you want to stream:
 
 https://github.com/novoda/Spikes/blob/master/ChromeCastExample/app/src/main/java/com/blundell/chromecastexample/app/MainActivity.java#L26
 
-Done!!
+Done!!(*may have missed minor steps like adding menu resources ;-)*)
 =====
