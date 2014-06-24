@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- From: file:/Volumes/Android/int/klp-dev/frameworks/support/v7/mediarouter/res/values-zh-rTW/strings.xml -->
+    <string name="mr_media_route_button_content_description" msgid="4271159405637008602">"媒體輸出"</string>
+    <string name="mr_media_route_chooser_searching" msgid="7553005460920830010">"正在搜尋裝置..."</string>
+    <string name="mr_media_route_chooser_title" msgid="7106830097177242655">"連線至裝置"</string>
+    <string name="mr_media_route_controller_disconnect" msgid="109793632378378069">"中斷連線"</string>
+    <string name="mr_system_route_name" msgid="5441529851481176817">"系統"</string>
+    <string name="mr_user_route_category_name" msgid="7498112907524977311">"裝置"</string>
+
+</resources>

@@ -23,7 +23,8 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                String videoUrl = "http://germany.dchdns.net/secure/1fbff034cf9cf06d0c7c53406ef21578531757ae/prog-films/50-jahre-philharmonie_sub-en_korr/h264_high_2500.mp4";
+//                String videoUrl = "http://artestras.vo.llnwd.net/o35/geo/arte7/ALL/tvguide/044049-000-A_HQ_1_VOA_01289521_MP4-2200_AMM-HLS/044049-000-A_HQ_1_VOA_01289521_MP4-2200_AMM-HLS.m3u8";
+                String videoUrl = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4#sthash.rJ5rPZy8.dpuf";
                 String title = "Jahre Philharmonie";
                 String description = "Awesome film you must watch!";
                 String author = "Blundell";

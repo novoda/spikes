@@ -21,9 +21,8 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.*;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-
-import com.blundell.chromecastexample.app.MyApplication;
 import com.blundell.chromecastexample.app.R;
+import com.blundell.chromecastexample.app.CastApplication;
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
@@ -89,7 +88,7 @@ public class LocalPlayerActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.player_activity);
         loadViews();
-        mCastManager = MyApplication.getCastManager(this);
+        mCastManager = CastApplication.getCastManager(this);
         setupActionBar();
         setupControlsCallbacks();
         setupMiniController();
@@ -407,7 +406,7 @@ public class LocalPlayerActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         Log.d(TAG, "onResume() was called");
-        mCastManager = MyApplication.getCastManager(this);
+        mCastManager = CastApplication.getCastManager(this);
         mCastManager.addVideoCastConsumer(mCastConsumer);
         mCastManager.incrementUiCounter();
         super.onResume();
@@ -542,9 +541,9 @@ public class LocalPlayerActivity extends ActionBarActivity {
         if (mLocation == PlaybackLocation.LOCAL) {
             return super.onKeyDown(keyCode, event);
         } else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-            onVolumeChange(MyApplication.VOLUME_INCREMENT);
+            onVolumeChange(CastApplication.VOLUME_INCREMENT);
         } else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
-            onVolumeChange(-MyApplication.VOLUME_INCREMENT);
+            onVolumeChange(-CastApplication.VOLUME_INCREMENT);
         } else {
             return super.onKeyDown(keyCode, event);
         }
@@ -647,6 +646,7 @@ public class LocalPlayerActivity extends ActionBarActivity {
             mVideoView.invalidate();
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
