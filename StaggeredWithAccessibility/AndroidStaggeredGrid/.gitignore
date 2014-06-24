@@ -1,0 +1,40 @@
+.metadata/
+
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+#DStore
+.DS_Store
+
+# generated files
+bin
+gen
+tmp/
+junit/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Local Eclipse settings files
+*.settings
+
+# Android Gradle build folders
+build/
+.gradle
+
+#IntelliJ IDEA
+.idea
+*.ipr
+*.iws
+*.iml
+out
+
+#Plugins and errata
+mirror/
