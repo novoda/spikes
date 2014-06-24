@@ -1,24 +1,30 @@
 StaggeredGridViewWithAccessibility
+======
 
 This example shows that the StaggeredGridView breaks the UiAutomator parser.
 
 What are we doing:
+-------
 
 Using StaggeredGridView to display items with more than one view and trying 
 to get UiAutomator running on it. 
 Use Android Device Monitor to have UiAutomator tool to dump View Hierachy. 
 
 What is the problem:
+-------
 
 UiAutomator will be able to find all layouts and identify their children during the very first pass.
 But after a couple of rotations of the screen, UiAutomator starts to have problem detecting the children
 of the layouts and it is even sometimes completely unable to dump anything at all. 
 
 Assumptions:
+-------
+
 Since UiAutomator is relying on the Accessibility framework of Android to find layouts and their children, it 
 looks like the StaggeredGridView is breaking that and therefore makes it impossible for UiAutomator to run.
 When UiAutomator fails to dump anything, the following stack trace is seen on the device:
 
+```java
 D/AndroidRuntime( 1348): Calling main entry com.android.commands.uiautomator.Launcher
 D/AndroidRuntime( 1348): Shutting down VM
 W/dalvikvm( 1348): threadid=1: thread exiting with uncaught exception (group=0xa4d65b20)
@@ -59,8 +65,11 @@ E/AndroidRuntime( 1348): 	at com.android.internal.os.RuntimeInit$UncaughtHandler
 E/AndroidRuntime( 1348): 	at java.lang.ThreadGroup.uncaughtException(ThreadGroup.java:693)
 E/AndroidRuntime( 1348): 	at java.lang.ThreadGroup.uncaughtException(ThreadGroup.java:690)
 E/AndroidRuntime( 1348): 	at dalvik.system.NativeStart.main(Native Method)
+```
 
 Pointers:
+-------
+
 StaggeredGridView being a custom view, adding the missing Accessibility stuff could/should be the solution. 
 https://developer.android.com/guide/topics/ui/accessibility/apps.html
 
