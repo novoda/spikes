@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+     <item android:drawable="@color/orange_transparent"
+          android:state_pressed="true" />
+    <item android:drawable="@color/orange_transparent"
+          android:state_focused="true" />
+    <item android:drawable="@color/orange" />
+
+</selector>
+<!-- From: file:/Users/malmstein/_dev/novoda/CastCompanionLibrary-android/res/drawable/text_selector.xml -->

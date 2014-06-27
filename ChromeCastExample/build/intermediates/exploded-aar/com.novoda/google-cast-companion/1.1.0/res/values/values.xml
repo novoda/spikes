@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- From: file:/Users/malmstein/_dev/novoda/CastCompanionLibrary-android/res/values/arrays.xml -->
+    <eat-comment />
+
+    <string-array name="prefs_volume_names">
+        <item>Device Volume</item>
+        <item>Stream Volume</item>
+    </string-array>
+    <string-array name="prefs_volume_values">
+        <item>device</item>
+        <item>stream</item>
+    </string-array>
+    <!-- From: file:/Users/malmstein/_dev/novoda/CastCompanionLibrary-android/res/values/colors.xml -->
+    <eat-comment />
+
+    <color name="black">#000000</color>
+    <color name="black_opaque">#AA000000</color>
+    <color name="casting_media_control_bg">#2c393d</color>
+    <color name="dark_grey">#2d3134</color>
+    <color name="mr_custom_line_1">#FFFFFF</color>
+    <color name="mr_custom_line_2">#AAFFFFFF</color>
+    <color name="mr_custom_title">#33b5e5</color>
+    <color name="orange">#FADCA7</color>
+    <color name="orange_transparent">#AAFADCA7</color>
+    <color name="soft_opaque">#30000000</color>
+    <color name="white">#FFFFFF</color>
+    <!-- From: file:/Users/malmstein/_dev/novoda/CastCompanionLibrary-android/res/values/dimens.xml -->
+    <eat-comment />
+
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="mini_controller_font_size_line1">15sp</dimen>
+    <dimen name="mini_controller_font_size_line2">13sp</dimen>
+    <dimen name="mini_controller_icon_height">50dp</dimen>
+    <dimen name="mini_controller_icon_width">89dp</dimen>
+    <!-- From: file:/Users/malmstein/_dev/novoda/CastCompanionLibrary-android/res/values/strings.xml -->
+    <eat-comment />
+
+    <string name="app_name">Cast Companion Library</string>
+    <string name="casting_to_device">Casting to %1$s</string>
+    <string name="ccl_version">1.8</string>
+    <string name="error">Error</string>
+    <string name="failed_app_launch_timeout">The request to launch the application has timed out!</string>
+    <string name="failed_authorization_timeout">Authorization timed out</string>
+    <string name="failed_load">Failed to load media on the cast device</string>
+    <string name="failed_no_connection">No connection to the cast device is present</string>
+    <string name="failed_no_connection_short">No connection</string>
+    <string name="failed_no_connection_trans">Connection to the cast device has been lost. Application is trying to re-establish the connection, if possible. Please wait for a few seconds and try again.</string>
+    <string name="failed_perform_action">Failed to perform the action</string>
+    <string name="failed_receiver_player_error">Receiver player has encountered a sever error</string>
+    <string name="failed_seek">Failed to seek to the new position on the cast device</string>
+    <string name="failed_setting_volume">Failed to set the volume</string>
+    <string name="failed_status_request">Failed to sync up with the cast device</string>
+    <string name="failed_to_connect">Could not connect to the device</string>
+    <string name="failed_to_find_app">The application you are trying to launch is not available on your Chromecast device</string>
+    <string name="failed_to_launch_app">Failed to launch application</string>
+    <string name="failed_to_pause">Failed to pause the playback of media</string>
+    <string name="failed_to_play">Failed to start the playback of media</string>
+    <string name="failed_to_stop">Failed to stop the playback of media</string>
+    <string name="failed_unknown">An unknown error was encountered</string>
+    <string name="live">Live</string>
+    <string name="loading">Loading…</string>
+    <string name="media_route_menu_title">Play on…</string>
+    <string name="no_media_info">No media information available</string>
+    <string name="ok">OK</string>
+    <string name="session_reconnection_attempt">Attempting to recover previous session…</string>
+    <!-- From: file:/Users/malmstein/_dev/novoda/CastCompanionLibrary-android/res/values/styles.xml -->
+    <eat-comment />
+
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+
+    <style name="CastDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowTitleStyle">@style/CastDialogWindowTitle</item>
+    </style>
+
+    <style name="CastDialogWindowTitle">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/mr_custom_title</item>
+    </style>
+
+</resources>

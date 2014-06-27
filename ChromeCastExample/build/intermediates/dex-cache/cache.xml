@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="/Users/malmstein/_dev/novoda/Spikes/ChromeCastExample/app/build/intermediates/pre-dexed/debug/classes-30fbc0c31523f29cf45fbfeb3b62b7bc651847e5.jar"
+        jar="/Users/malmstein/_dev/novoda/Spikes/ChromeCastExample/build/intermediates/exploded-aar/com.android.support/appcompat-v7/19.0.1/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="f71a6822470c9eb659d4f4a6cb57b780b35f058b"/>
+    <item
+        dex="/Users/malmstein/_dev/novoda/Spikes/ChromeCastExample/app/build/intermediates/pre-dexed/debug/classes-a43127b3ec6a4466a3b8334742645397705363f9.jar"
+        jar="/Users/malmstein/_dev/novoda/Spikes/ChromeCastExample/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/19.0.1/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="7f6ef78b879e271f8645b2f2c2702390305f0fa2"/>
+    <item
+        dex="/Users/malmstein/_dev/novoda/Spikes/ChromeCastExample/app/build/intermediates/pre-dexed/debug/classes-a37cc80efc157333ecf9cf39ff469b9f63ba7990.jar"
+        jar="/Users/malmstein/_dev/novoda/Spikes/ChromeCastExample/build/intermediates/exploded-aar/com.novoda/google-cast-companion/1.1.0/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="63ab1349ff16e9a05b4f65e38ec04d48d1923bb3"/>
+    <item
+        dex="/Users/malmstein/_dev/novoda/Spikes/ChromeCastExample/app/build/intermediates/pre-dexed/debug/classes-ca974d7b1d66777f7c47191579afd502b8726056.jar"
+        jar="/Users/malmstein/_dev/novoda/Spikes/ChromeCastExample/build/intermediates/exploded-aar/com.google.android.gms/play-services/4.4.52/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="3dfdf1db5ce5ea2999a5dcde8c8e650b02660059"/>
+    <item
+        dex="/Users/malmstein/_dev/novoda/Spikes/ChromeCastExample/app/build/intermediates/pre-dexed/debug/support-v4-19.0.1-3bf117e59e2e0f41bbf9219f2be90cdcf1dd583d.jar"
+        jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-v4/19.0.1/support-v4-19.0.1.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="587da9a481ffd341d2fa091704489b89845ddacd"/>
+    <item
+        dex="/Users/malmstein/_dev/novoda/Spikes/ChromeCastExample/app/build/intermediates/pre-dexed/debug/internal_impl-19.0.1-5604004545a86ed5c6523e4514bc74be638a1777.jar"
+        jar="/Users/malmstein/_dev/novoda/Spikes/ChromeCastExample/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/19.0.1/libs/internal_impl-19.0.1.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="e1323875349a4e9b64fe8692f137f92b22dddcef"/>
+
+</pre-dex-items>

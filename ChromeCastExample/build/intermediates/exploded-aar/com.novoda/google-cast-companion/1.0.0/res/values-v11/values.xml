@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- From: file:/Users/Blundell/Developer/git_repo/CastCompanionLibrary/library/src/main/res/values-v11/styles.xml -->
+    <eat-comment />
+
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
+        <!-- API 11 theme customizations can go here. -->
+    </style>
+
+    <style name="CastDialog" parent="@android:style/Theme.Holo.Dialog">
+        <item name="android:windowTitleStyle">@style/CastDialogWindowTitle</item>
+    </style>
+
+    <style name="CastDialogWindowTitle">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">#eeff41</item>
+    </style>
+
+</resources>

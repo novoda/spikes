@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <ImageView
+        android:id="@+id/iconView"
+        android:layout_width="68dp"
+        android:layout_height="68dp"
+        android:scaleType="fitXY"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/video_placeholder_200x200"/>
+
+    <ImageView
+        android:id="@+id/removeView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        android:src="@drawable/ic_av_close_sm_dark"/>
+
+    <ImageView
+        android:id="@+id/playPauseView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/removeView"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:src="@drawable/ic_av_pause_sm_dark"/>
+    
+    <ProgressBar
+        android:id="@+id/loadingView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/playPauseView"
+        android:layout_alignRight="@+id/playPauseView"
+        android:layout_alignTop="@+id/playPauseView"
+        android:layout_alignBottom="@+id/playPauseView"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/titleView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/iconView"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="12dp"
+        android:layout_toLeftOf="@+id/playPauseView"
+        android:layout_toRightOf="@+id/iconView"
+        android:ellipsize="marquee"
+    	android:fadingEdge="horizontal"
+        android:textAppearance="@style/android:TextAppearance.StatusBar.EventContent.Title"
+        android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/subTitleView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/iconView"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="5dp"
+        android:layout_toLeftOf="@+id/playPauseView"
+        android:layout_toRightOf="@+id/iconView"
+        android:ellipsize="marquee"
+    	android:fadingEdge="horizontal"
+        android:textAppearance="@style/android:TextAppearance.StatusBar.EventContent"
+        android:maxLines="1"/>
+
+</RelativeLayout><!-- From: file:/Users/Blundell/Developer/git_repo/CastCompanionLibrary/library/src/main/res/layout-v14/custom_notification.xml -->

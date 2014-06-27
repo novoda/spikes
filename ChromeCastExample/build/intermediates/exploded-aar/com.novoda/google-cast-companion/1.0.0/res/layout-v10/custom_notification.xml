@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <ImageView
+        android:id="@+id/iconView"
+        android:layout_width="68dp"
+        android:layout_height="68dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/video_placeholder_200x200" />
+
+    <TextView
+        android:id="@+id/titleView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/iconView"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="12dp"
+        android:layout_toRightOf="@+id/iconView"
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        android:maxLines="1"
+        android:textAppearance="@style/android:TextAppearance.StatusBar.EventContent.Title" />
+
+    <TextView
+        android:id="@+id/subTitleView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/iconView"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="5dp"
+        android:layout_toRightOf="@+id/iconView"
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        android:maxLines="1"
+        android:textAppearance="@style/android:TextAppearance.StatusBar.EventContent" />
+
+</RelativeLayout><!-- From: file:/Users/Blundell/Developer/git_repo/CastCompanionLibrary/library/src/main/res/layout-v10/custom_notification.xml -->
