@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="2" >
+
+    <dataSet config="main" >
+        <source path="/home/adam/dev/novoda/Spikes/SwipeableView/src/main/res" />
+        <source path="/home/adam/dev/novoda/Spikes/SwipeableView/build/generated/res/rs/debug" />
+        <source path="/home/adam/dev/novoda/Spikes/SwipeableView/build/generated/res/generated/debug" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="/home/adam/dev/novoda/Spikes/SwipeableView/src/debug/res" />
+    </dataSet>
+
+</merger>
