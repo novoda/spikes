@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/content" />
+    <include layout="@layout/content"/>
+
+    <include layout="@layout/swipe_page"/>
 
 </com.ouchadam.swipeableview.SwipeableView>
