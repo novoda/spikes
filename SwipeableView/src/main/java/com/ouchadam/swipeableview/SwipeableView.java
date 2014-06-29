@@ -6,14 +6,19 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-public class SwipeableView extends RelativeLayout implements View.OnClickListener, ValueAnimator.AnimatorUpdateListener {
+import javax.xml.transform.sax.TemplatesHandler;
+
+public class SwipeableView extends RelativeLayout implements View.OnClickListener {
 
     private ViewGroup firstPage;
+    private ViewGroup secondPage;
 
     public SwipeableView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -39,28 +44,37 @@ public class SwipeableView extends RelativeLayout implements View.OnClickListene
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        firstPage = (ViewGroup) getChildAt(1);
+        firstPage = (ViewGroup) getChildAt(0);
+        secondPage = (ViewGroup) getChildAt(1);
         setOnClickListener(this);
     }
 
     public void slide() {
         Toast.makeText(getContext(), "Sliding", Toast.LENGTH_SHORT).show();
-        ValueAnimator va = ValueAnimator.ofInt(getWidth() / 2, 0);
-        va.setDuration(500);
-        va.setStartDelay(0L);
-        va.addUpdateListener(this);
-        va.start();
+        Animation slide = new TranslateAnimation(
+                Animation.RELATIVE_TO_PARENT,
+                0.0f,
+                Animation.RELATIVE_TO_PARENT,
+                -1.0f,
+                Animation.RELATIVE_TO_PARENT,
+                0.0f,
+                Animation.RELATIVE_TO_PARENT,
+                -0.0f);
+
+        slide.setDuration(1000);
+        slide.setFillAfter(true);
+        firstPage.startAnimation(slide);
+        secondPage.startAnimation(slide);
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec * 2, heightMeasureSpec);
-        int wspec = MeasureSpec.makeMeasureSpec(getMeasuredWidth() / 2, MeasureSpec.EXACTLY);
-        int hspec = MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.EXACTLY);
-        for (int i = 0; i < getChildCount(); i++) {
-            View v = getChildAt(i);
-            v.measure(wspec, hspec);
-        }
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        int parentWidth = r - l;
+        View v = getChildAt(0);
+        v.layout(0, 0, parentWidth, b - t);
+
+        View v2 = getChildAt(1);
+        v2.layout(parentWidth, 0, parentWidth * 2, b - t);
     }
 
     @Override
@@ -68,11 +82,4 @@ public class SwipeableView extends RelativeLayout implements View.OnClickListene
         slide();
     }
 
-    @Override
-    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-        Integer value = (Integer) valueAnimator.getAnimatedValue();
-        int i = value.intValue();
-        firstPage.getLayoutParams().width = i;
-        requestLayout();
-    }
 }
