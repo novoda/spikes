@@ -1,3 +1,3 @@
 This is a spike to show a custom view which slides in hiding the previous focus.
 
-![example](https://cloud.githubusercontent.com/assets/1848238/3423295/a2cb1cbc-ff8d-11e3-8280-d3b0069e1125.gif)
+![example](https://cloud.githubusercontent.com/assets/1848238/3424395/1a38b5e4-ffce-11e3-9193-d710db154fd9.gif)
