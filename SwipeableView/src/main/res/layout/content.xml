@@ -1,22 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/content_second"
+<ScrollView
+  android:id="@+id/content_second"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="@android:color/holo_purple">
+
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_purple">
+    android:background="@android:color/holo_purple"
+    android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/holo_purple">
+    <TextView
+      android:layout_width="200dp"
+      android:layout_height="match_parent"
+      android:text="Second page"
+      android:textSize="50dp"/>
 
-        <TextView
-            android:layout_width="200dp"
-            android:layout_height="match_parent"
-            android:text="Second page"
-            android:textSize="50dp" />
+    <TextView
+      android:layout_width="200dp"
+      android:layout_height="match_parent"
+      android:text="Second page"
+      android:textSize="50dp"/>
 
-    </RelativeLayout>
+    <TextView
+      android:layout_width="200dp"
+      android:layout_height="match_parent"
+      android:text="Second page"
+      android:textSize="50dp"/>
 
-</FrameLayout>
+    <TextView
+      android:layout_width="200dp"
+      android:layout_height="match_parent"
+      android:text="Second page"
+      android:textSize="50dp"/>
+
+    <TextView
+      android:layout_width="200dp"
+      android:layout_height="match_parent"
+      android:text="Second page"
+      android:textSize="50dp"/>
+
+    <TextView
+      android:layout_width="200dp"
+      android:layout_height="match_parent"
+      android:text="Second page"
+      android:textSize="50dp"/>
+
+    <TextView
+      android:layout_width="200dp"
+      android:layout_height="match_parent"
+      android:text="Second page"
+      android:textSize="50dp"/>
+
+    <TextView
+      android:layout_width="200dp"
+      android:layout_height="match_parent"
+      android:text="Second page"
+      android:textSize="50dp"/>
+
+    <TextView
+      android:layout_width="200dp"
+      android:layout_height="match_parent"
+      android:text="Second page"
+      android:textSize="50dp"/>
+
+
+  </LinearLayout>
+
+</ScrollView>

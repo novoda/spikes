@@ -7,7 +7,12 @@ buildscript {
     }
 }
 
-apply plugin: 'android'
+apply plugin: 'com.android.application'
+
+
+dependencies {
+    compile 'com.android.support:support-v13:19.1.0'
+}
 
 android {
     compileSdkVersion 19
@@ -17,6 +22,5 @@ android {
         minSdkVersion 14
         targetSdkVersion 19
     }
-
 }
 

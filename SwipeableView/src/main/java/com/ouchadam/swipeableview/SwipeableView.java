@@ -1,85 +1,98 @@
 package com.ouchadam.swipeableview;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import javax.xml.transform.sax.TemplatesHandler;
+public class SwipeableView extends ViewPager {
 
-public class SwipeableView extends RelativeLayout implements View.OnClickListener {
+    private static final int VIEW_COUNT = 2;
+    private boolean canSwipe;
 
-    private ViewGroup firstPage;
-    private ViewGroup secondPage;
+    public SwipeableView(Context context) {
+        super(context);
+        init(LayoutInflater.from(context));
+    }
 
     public SwipeableView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(LayoutInflater.from(context));
     }
 
-    public SwipeableView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init();
+    private void init(LayoutInflater layoutInflater) {
+        canSwipe = true;
+        setOnPageChangeListener(onPageChangeListener);
+        setAdapter(new ViewAdapter(layoutInflater));
     }
 
-    private void init() {
-        validateUsage();
-    }
 
-    private void validateUsage() {
-        int childCount = getChildCount();
-        if (childCount > 2) {
-            throw new RuntimeException("Can only have two children at the moment");
+    private final OnPageChangeListener onPageChangeListener = new OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
         }
-    }
+
+        @Override
+        public void onPageSelected(int position) {
+            if (position == 1) {
+                canSwipe = false;
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
 
     @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        firstPage = (ViewGroup) getChildAt(0);
-        secondPage = (ViewGroup) getChildAt(1);
-        setOnClickListener(this);
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (canSwipe) {
+            return super.onInterceptTouchEvent(ev);
+        }
+        return false;
     }
 
-    public void slide() {
-        Toast.makeText(getContext(), "Sliding", Toast.LENGTH_SHORT).show();
-        Animation slide = new TranslateAnimation(
-                Animation.RELATIVE_TO_PARENT,
-                0.0f,
-                Animation.RELATIVE_TO_PARENT,
-                -1.0f,
-                Animation.RELATIVE_TO_PARENT,
-                0.0f,
-                Animation.RELATIVE_TO_PARENT,
-                -0.0f);
+    private static class ViewAdapter extends PagerAdapter {
 
-        slide.setDuration(1000);
-        slide.setFillAfter(true);
-        firstPage.startAnimation(slide);
-        secondPage.startAnimation(slide);
-    }
+        private final LayoutInflater layoutInflater;
 
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        int parentWidth = r - l;
-        View v = getChildAt(0);
-        v.layout(0, 0, parentWidth, b - t);
+        private ViewAdapter(LayoutInflater layoutInflater) {
+            this.layoutInflater = layoutInflater;
+        }
 
-        View v2 = getChildAt(1);
-        v2.layout(parentWidth, 0, parentWidth * 2, b - t);
-    }
+        @Override
+        public int getCount() {
+            return VIEW_COUNT;
+        }
 
-    @Override
-    public void onClick(View view) {
-        slide();
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            View inflate = getViewForPosition(container, position);
+            container.addView(inflate);
+            return inflate;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            super.destroyItem(container, position, object);
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view.equals(object);
+        }
+
+        private View getViewForPosition(ViewGroup container, int position) {
+            return layoutInflater.inflate(position == 0 ? R.layout.swipe_page : R.layout.content, container, false);
+        }
+
     }
 
 }
