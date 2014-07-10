@@ -1,0 +1,20 @@
+[EMMA v2.0.5312 report, generated Thu Jul 10 10:22:43 BST 2014]
+-------------------------------------------------------------------------------
+OVERALL COVERAGE SUMMARY:
+
+[class, %]	[method, %]	[block, %]	[line, %]	[name]
+82%  (9/11)!	20%  (3/15)!	27%  (17/63)!	29%  (6/21)!	all classes
+
+OVERALL STATS SUMMARY:
+
+total packages:	1
+total classes:	11
+total methods:	15
+total executable files:	3
+total executable lines:	21
+
+COVERAGE BREAKDOWN BY PACKAGE:
+
+[class, %]	[method, %]	[block, %]	[line, %]	[name]
+82%  (9/11)!	20%  (3/15)!	27%  (17/63)!	29%  (6/21)!	com.blundell.tests
+-------------------------------------------------------------------------------

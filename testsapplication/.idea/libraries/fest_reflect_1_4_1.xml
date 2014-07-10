@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="fest-reflect-1.4.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.easytesting/fest-reflect/1.4.1/2b92d5275e92a49e16c7ce6bd7e46b9080db0530/fest-reflect-1.4.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.easytesting/fest-reflect/1.4.1/22ddeee19a01561871ba1018bd8a3d39c099dfc4/fest-reflect-1.4.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

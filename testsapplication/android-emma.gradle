@@ -1,0 +1,80 @@
+configurations {
+    emmaCoverage
+}
+
+dependencies {
+    emmaCoverage "emma:emma:2.0.5312"
+    emmaCoverage "emma:emma_ant:2.0.5312"
+}
+
+task('emmaCoverage', description: 'Generates test coverage reports using Emma', type: Test) {
+    def emmaReportsFolder = "$buildDir/reports/emma"
+    def emmaMetaFolder = "$emmaReportsFolder/meta"
+    def configuration = configurations.emmaCoverage
+
+    jvmArgs "-Demma.coverage.out.file=$emmaMetaFolder/metadata.emma", "-Demma.coverage.out.merge=true"
+
+    doFirst {
+        def classesFolders = new ArrayList()
+        rootProject.allprojects.each { project ->
+            def variant = getVariant(project)
+            if (variant != null) {
+                def folder = "$project.buildDir/intermediates/classes/$variant.dirName"
+                if (new File(folder).exists()) {
+                    classesFolders.add folder
+                } else {
+                    println "$folder does not exist"
+                }
+            }
+        }
+
+        ant.taskdef(resource: "emma_ant.properties", classpath: configuration.asPath)
+        ant.path(id: "run.classpath") {
+            classesFolders.each { classDir ->
+                pathelement(location: classDir)
+            }
+        }
+        ant.emma(verbosity: 'info') {
+            instr(merge: "true", destdir: "$emmaMetaFolder/instr", instrpathref: "run.classpath", metadatafile: "$emmaMetaFolder/metadata.emma") {
+                instrpath {
+                    classesFolders.each { classDir ->
+                        fileset(dir: classDir, includes: "*.class")
+                    }
+                }
+            }
+        }
+        setClasspath(files("$emmaMetaFolder/instr") + configuration + getClasspath())
+    }
+
+    doLast {
+        def srcDir = sourceSets.main.java.srcDirs.toArray()[0]
+        ant.emma(enabled: "true", verbosity: 'info') {
+            report(sourcepath: srcDir) {
+                fileset(dir: "$emmaMetaFolder") {
+                    include(name: "**/*.emma")
+                }
+                txt(outfile: "$emmaReportsFolder/coverage.txt")
+                html(outfile: "$emmaReportsFolder/coverage.html")
+                xml(outfile: "$emmaReportsFolder/coverage.xml")
+            }
+        }
+
+        println "Generated code coverage reports successfully in $emmaReportsFolder"
+    }
+}
+
+def getVariant(Project project) {
+    if (project.plugins.hasPlugin("com.android.library")) {
+        def releaseVariants = project.android.libraryVariants.toList().findAll { variant ->
+            variant.name.toLowerCase().contains "release"
+        }
+        return releaseVariants.first()
+
+    } else if (project.plugins.hasPlugin("com.android.application")) {
+        def debugVariants = project.android.applicationVariants.toList().findAll { variant ->
+            variant.name.toLowerCase().contains "debug"
+        }
+        return debugVariants.first()
+    }
+    null
+}

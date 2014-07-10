@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.blundell.tests.MyClassTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2014-07-10T09:21:29" hostname="PaulsMBP.local" time="0.03">
+  <properties/>
+  <testcase name="testSomething" classname="com.blundell.tests.MyClassTest" time="0.03"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
