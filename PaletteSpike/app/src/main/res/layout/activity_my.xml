@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <ImageView
+    android:id="@+id/image_view"
+    android:layout_width="match_parent"
+    android:layout_height="250dp" />
+
+  <TextView
+    android:id="@+id/text_view_primary_accent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Primary accent" />
+
+  <TextView
+    android:id="@+id/text_view_secondary_accent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Secondary accent" />
+
+  <TextView
+    android:id="@+id/text_view_tertiary_accent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Tertiary accent" />
+
+</LinearLayout>

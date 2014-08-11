@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PaletteSpike</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+  <string name="action_get_colors">Get colors</string>
+  <string name="action_set_picture">Set picture</string>
+
+</resources>
