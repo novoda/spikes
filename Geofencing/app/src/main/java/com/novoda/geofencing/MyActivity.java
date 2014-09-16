@@ -12,14 +12,6 @@ import java.util.List;
 
 public class MyActivity extends Activity implements GeofenceManager.ConnectionStatusCallbacks {
 
-    private static final long SECONDS_PER_HOUR = 60;
-    private static final long MILLISECONDS_PER_SECOND = 1000;
-    private static final long GEOFENCE_EXPIRATION_IN_HOURS = 12;
-    private static final long GEOFENCE_EXPIRATION_TIME =
-            GEOFENCE_EXPIRATION_IN_HOURS *
-                    SECONDS_PER_HOUR *
-                    MILLISECONDS_PER_SECOND;
-
     private List<Geofence> mGeofenceList;
 
     private GeofenceManager geofenceManager;
@@ -79,11 +71,18 @@ public class MyActivity extends Activity implements GeofenceManager.ConnectionSt
 
     public List<Geofence> createGeofences() {
         List<Geofence> geofences = new ArrayList<Geofence>();
-        geofences.add(createGeofence("Novoda", 51.5415382, -0.0956768, (float) 30));
-        geofences.add(createGeofence("Home", 51.546683, -0.099088, (float) 30));
-        geofences.add(createGeofence("Pub", 51.5465749, -0.0991935, (float) 50));
-        geofences.add(createGeofence("Tesco", 51.543271, -0.091054, (float) 50));
-        geofences.add(createGeofence("Sainsbury", 51.544040, -0.089969, (float) 50));
+        geofences.add(createGeofence("Novoda", 51.5415382, -0.0956768, (float) 100));
+        geofences.add(createGeofence("Women In Prison", 51.541606, -0.095658, (float) 100));
+        geofences.add(createGeofence("Home", 51.546683, -0.099088, (float) 100));
+        geofences.add(createGeofence("Alwyn", 51.5465749, -0.0991935, (float) 100));
+        geofences.add(createGeofence("Tesco", 51.543271, -0.091054, (float) 100));
+        geofences.add(createGeofence("Sainsbury", 51.544040, -0.089969, (float) 100));
+        geofences.add(createGeofence("Marquess", 51.543139, -0.095534, (float) 100));
+        geofences.add(createGeofence("Old queen", 51.537309, -0.100578, (float) 100));
+        geofences.add(createGeofence("Wenlock", 51.536724, -0.101341, (float) 100));
+        geofences.add(createGeofence("Flashback", 51.537824, -0.099964, (float) 100));
+        geofences.add(createGeofence("Costa", 51.539137, -0.098368, (float) 100));
+        geofences.add(createGeofence("Stuffed", 51.537306, -0.100583, (float) 100));
         return geofences;
     }
 
@@ -92,7 +91,7 @@ public class MyActivity extends Activity implements GeofenceManager.ConnectionSt
                 .setRequestId(geofenceId)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
                 .setCircularRegion(latitude, longitude, radius)
-                .setExpirationDuration(GEOFENCE_EXPIRATION_TIME)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .build();
     }
 
