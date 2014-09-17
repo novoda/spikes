@@ -92,6 +92,10 @@ public class MyActivity extends Activity implements GeofenceManager.ConnectionSt
         geofences.add(createGeofence("London Event Photography", 51.535016, -0.069189, (float) 300));
         geofences.add(createGeofence("Lock 7", 51.535337, -0.062668, (float) 300));
         geofences.add(createGeofence("Home2", 51.537344, -0.064213, (float) 100));
+        geofences.add(createGeofence("212 Wandsworth Rd", 51.476125, -0.130692, (float) 100));
+        geofences.add(createGeofence("Clapham Rd", 51.472152, -0.122355, (float) 100));
+        geofences.add(createGeofence("1 London Bridge", 51.505049, -0.087499, (float) 100));
+        geofences.add(createGeofence("8 Southwark St", 51.504867, -0.094533, (float) 100));
         return geofences;
     }
 
