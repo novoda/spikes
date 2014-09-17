@@ -19,6 +19,8 @@ local.properties
 .classpath
 .project
 
-/.idea
-/local.properties
+.idea
+local.properties
 *.iml
+.gradle
+build
