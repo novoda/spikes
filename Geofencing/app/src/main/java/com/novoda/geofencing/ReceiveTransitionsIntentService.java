@@ -62,7 +62,7 @@ public class ReceiveTransitionsIntentService extends IntentService {
             int transition = LocationClient.getGeofenceTransition(intent);
 
             // Test that a valid transition was reported
-            if ((transition == Geofence.GEOFENCE_TRANSITION_ENTER) || (transition == Geofence.GEOFENCE_TRANSITION_EXIT)) {
+            if (isKnownTransitionType(transition)) {
 
                 // Post a notification
                 List<Geofence> geofences = LocationClient.getTriggeringGeofences(intent);
@@ -84,6 +84,10 @@ public class ReceiveTransitionsIntentService extends IntentService {
                 logger.logError(GeofenceUtils.APPTAG, "Unhandled transition type " + transition);
             }
         }
+    }
+
+    private boolean isKnownTransitionType(int transition) {
+        return (transition == Geofence.GEOFENCE_TRANSITION_ENTER) || (transition == Geofence.GEOFENCE_TRANSITION_EXIT) || (transition == Geofence.GEOFENCE_TRANSITION_DWELL);
     }
 
     /**
@@ -141,6 +145,9 @@ public class ReceiveTransitionsIntentService extends IntentService {
 
             case Geofence.GEOFENCE_TRANSITION_EXIT:
                 return "exit";
+
+            case Geofence.GEOFENCE_TRANSITION_DWELL:
+                return "dwell";
 
             default:
                 return "unkown";
