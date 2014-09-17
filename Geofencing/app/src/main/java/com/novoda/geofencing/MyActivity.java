@@ -74,7 +74,6 @@ public class MyActivity extends Activity implements GeofenceManager.ConnectionSt
     public List<Geofence> createGeofences() {
         List<Geofence> geofences = new ArrayList<Geofence>();
         geofences.add(createGeofence("Novoda", 51.5415382, -0.0956768, (float) 100));
-        geofences.add(createGeofence("Women In Prison", 51.541606, -0.095658, (float) 100));
         geofences.add(createGeofence("Home", 51.546683, -0.099088, (float) 100));
         geofences.add(createGeofence("Alwyn", 51.5465749, -0.0991935, (float) 100));
         geofences.add(createGeofence("Tesco", 51.543271, -0.091054, (float) 100));
@@ -85,13 +84,13 @@ public class MyActivity extends Activity implements GeofenceManager.ConnectionSt
         geofences.add(createGeofence("Flashback", 51.537824, -0.099964, (float) 100));
         geofences.add(createGeofence("Costa", 51.539137, -0.098368, (float) 100));
         geofences.add(createGeofence("Stuffed", 51.537306, -0.100583, (float) 100));
-        geofences.add(createGeofence("North Pole", 51.537635, -0.091399, (float) 500));
+        geofences.add(createGeofence("North Pole", 51.537635, -0.091399, (float) 300));
         geofences.add(createGeofence("Cortado", 51.535776, -0.089387, (float) 500));
         geofences.add(createGeofence("Hummingbird", 51.536137, -0.086218, (float) 300));
         geofences.add(createGeofence("Embassy East", 51.534777, -0.080914, (float) 200));
         geofences.add(createGeofence("Hackney Brewery", 51.534679, -0.075800, (float) 500));
         geofences.add(createGeofence("London Event Photography", 51.535016, -0.069189, (float) 300));
-        geofences.add(createGeofence("Lock 7", 51.535337, -0.062668, (float) 500));
+        geofences.add(createGeofence("Lock 7", 51.535337, -0.062668, (float) 300));
         geofences.add(createGeofence("Home2", 51.537344, -0.064213, (float) 100));
         return geofences;
     }
