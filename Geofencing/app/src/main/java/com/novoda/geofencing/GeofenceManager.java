@@ -158,7 +158,7 @@ public class GeofenceManager implements
              * You can log the error using Log.e() or update
              * the UI.
              */
-            logger.logError(GeofenceUtils.APPTAG, "Geofence add failed");
+            logger.logError(GeofenceUtils.APPTAG, "Geofence add failed with status code " + statusCode);
         }
         // Turn off the in progress flag
         mInProgress = false;
@@ -220,7 +220,7 @@ public class GeofenceManager implements
              * You can log the error using Log.e() or update
              * the UI.
              */
-            logger.logDebug(GeofenceUtils.APPTAG, "Geofence remove failed");
+            logger.logDebug(GeofenceUtils.APPTAG, "Geofence remove failed with status code " + statusCode);
         }
         /*
          * Indicate that a request is no
