@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">WearNotifications</string>
+    <string name="notify">Notify me!</string>
+    <string name="action_settings">Settings</string>
+    <string name="notification_action">Open Maps</string>
+    <string name="notification_one_title">Notification One</string>
+    <string name="notification_one_content">Content One</string>
+    <string name="notification_two_title">Notification Two</string>
+    <string name="notification_two_content">Content Two</string>
+    <string name="notification_page_title">Page Title</string>
+    <string name="notification_page_content">Page Text</string>
+
+</resources>
