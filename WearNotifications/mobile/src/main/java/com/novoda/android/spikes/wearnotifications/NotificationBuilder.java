@@ -20,8 +20,8 @@ public class NotificationBuilder {
     public static ArrayList<Notification> buildDemoNotifications(Context context) {
 
         ArrayList<Notification> notifications = new ArrayList<Notification>();
-        notifications.add(buildNotification(context, R.string.notification_one_title, R.string.notification_one_content));
-        notifications.add(buildNotification(context, R.string.notification_two_title, R.string.notification_two_content));
+        notifications.add(buildNotification(context, R.string.notification_one_title, R.string.notification_one_content, 1));
+        notifications.add(buildNotification(context, R.string.notification_two_title, R.string.notification_two_content, 2));
 
         notifications.add(buildSummaryNotification(context));
 
@@ -29,7 +29,7 @@ public class NotificationBuilder {
     }
 
     private static Notification buildSummaryNotification(Context context) {
-        PendingIntent contentIntent = createAppPendingIntent(context);
+        PendingIntent contentIntent = createAppPendingIntent(context, 0);
 
         return new NotificationCompat.Builder(context)
                 .setGroup(GROUP_KEY)
@@ -40,8 +40,8 @@ public class NotificationBuilder {
                 .build();
     }
 
-    private static Notification buildNotification(Context context, int title, int text) {
-        PendingIntent contentIntent = createAppPendingIntent(context);
+    private static Notification buildNotification(Context context, int title, int text, int requestCode) {
+        PendingIntent contentIntent = createAppPendingIntent(context, requestCode);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setContentTitle(context.getResources().getString(title))
@@ -69,9 +69,9 @@ public class NotificationBuilder {
                 .addPage(pageNotification);
     }
 
-    private static PendingIntent createAppPendingIntent(Context context) {
+    private static PendingIntent createAppPendingIntent(Context context, int requestCode) {
         Intent notificationIntent = createAppIntent(context);
-        return PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        return PendingIntent.getActivity(context, requestCode, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     public static Intent createAppIntent(Context context) {
