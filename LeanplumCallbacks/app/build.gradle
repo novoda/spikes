@@ -1,0 +1,28 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 20
+    buildToolsVersion "20.0.0"
+
+    defaultConfig {
+        applicationId "novoda.leanplumcallbacks"
+        minSdkVersion 19
+        targetSdkVersion 20
+        versionCode 1
+        versionName "1.0"
+        buildConfigField "String", "LEAN_PLUM_APP_ID", '"cY6YiQ0XYhNdpeCbiPx9wEzcjfvxEMBZjdkUbXVC5Zs"'
+        buildConfigField "String", "LEAN_PLUM_DEV_KEY", '"bCip85BhNZnXfMAptVka8qqJYoo85FgwUt5yzbdmSBU"'
+    }
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.leanplum:Leanplum:1.1.15'
+    compile 'com.android.support:support-v4:19.1.0'
+}
