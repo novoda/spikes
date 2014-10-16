@@ -22,9 +22,13 @@ public class MainActivity extends Activity {
         final TextView abText = (TextView) findViewById(R.id.ab_text);
         Leanplum.setAppIdForDevelopmentMode(BuildConfig.LEAN_PLUM_APP_ID, BuildConfig.LEAN_PLUM_DEV_KEY);
         Leanplum.enableVerboseLoggingInDevelopmentMode();
+
+        //tell Leanplum to inject the variables into this class
         Parser.parseVariablesForClasses(AyBe.class);
         Leanplum.start(this);
         final AyBe ayBe = new AyBe();
+
+        //attach the callback
         ayBe.start(new AbTestingParamsLoadedCallback() {
             @Override
             public void onParamsLoaded() {
