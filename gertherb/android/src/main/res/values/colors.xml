@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <color name="orange">#FCB033</color>
+  <color name="blue">#00B4CA</color>
+  <color name="light_grey">#C6C6C6</color>
+
+  <color name="app">@color/blue</color>
+  <color name="app_accent">@color/orange</color>
+  <color name="app_background">@android:color/white</color>
+
+  <color name="button_text">@android:color/white</color>
+  <color name="hint_text">@color/light_grey</color>
+
+</resources>

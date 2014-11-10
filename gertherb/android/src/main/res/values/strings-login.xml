@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string name="login">Login</string>
+  <string name="label_login">@string/login</string>
+  <string name="login_hint_password">Password</string>
+  <string name="login_hint_username">Username</string>
+
+</resources>

@@ -1,0 +1,27 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="Gertherb" parent="android:Theme.Holo.Light">
+    <item name="android:actionBarStyle">@style/Gertherb.Actionbar</item>
+    <item name="android:windowBackground">@color/app_background</item>
+    <item name="android:windowContentOverlay">@null</item>
+  </style>
+
+  <style name="Gertherb.Actionbar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+    <item name="android:background">@drawable/ab_background</item>
+  </style>
+
+  <style name="Gertherb.Button">
+    <item name="android:background">@drawable/button_background</item>
+    <item name="android:textColor">@color/button_text</item>
+    <item name="android:minHeight">@dimen/button_height</item>
+    <item name="android:textSize">@dimen/button_text</item>
+    <item name="font">robotoSlabBold</item>
+  </style>
+
+  <style name="Gertherb.EditText">
+    <item name="android:background">@drawable/edittext_background</item>
+    <item name="android:textColorHint">@color/hint_text</item>
+    <item name="font">robotoSlabRegular</item>
+  </style>
+
+</resources>

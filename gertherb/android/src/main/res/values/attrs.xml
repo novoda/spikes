@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <declare-styleable name="CustomTextAppearance">
+    <attr name="font" format="enum">
+      <enum name="none" value="-1" />
+      <enum name="robotoSlabRegular" value="0" />
+      <enum name="robotoSlabBold" value="1" />
+    </attr>
+  </declare-styleable>
+
+</resources>
