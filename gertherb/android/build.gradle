@@ -1,0 +1,55 @@
+apply plugin: 'android'
+apply plugin: 'android-command'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
+        }
+        maven {
+            url "http://ci.novoda.com/maven/releases"
+        }
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.10.+'
+        classpath 'com.novoda:gradle-android-command-plugin:1.2.1'
+    }
+}
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "19.1.0"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 19
+
+        buildConfigField "String", "GITHUB_CLIENT_ID", '"' + githubClientId + '"'
+        buildConfigField "String", "GITHUB_CLIENT_SECRET", '"' + githubClientSecret + '"'
+    }
+    buildTypes {
+        release {
+            runProguard false
+            proguardFile getDefaultProguardFile('proguard-android.txt')
+        }
+    }
+    productFlavors {
+        defaultFlavor {
+            proguardFile 'proguard-rules.txt'
+        }
+    }
+
+    lintOptions {
+        ignore 'InvalidPackage'
+    }
+}
+
+dependencies {
+    compile 'com.novoda:notils:2.2.+',
+            'com.novoda.rx:android:0.0.5-SNAPSHOT',
+            'com.novoda.rx:core:0.0.5-SNAPSHOT',
+            'com.netflix.rxjava:rxjava-android:0.19.0'
+    compile project(':core')
+}

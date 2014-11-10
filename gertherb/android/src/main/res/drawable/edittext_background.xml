@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+  <item android:state_window_focused="false" android:state_enabled="true" android:drawable="@drawable/edittext_default" />
+  <item android:state_window_focused="false" android:state_enabled="false" android:drawable="@drawable/edittext_disabled" />
+  <item android:state_enabled="true" android:state_focused="true" android:drawable="@drawable/edittext_activated" />
+  <item android:state_enabled="true" android:state_activated="true" android:drawable="@drawable/edittext_focused" />
+  <item android:state_enabled="true" android:drawable="@drawable/edittext_default" />
+  <item android:state_focused="true" android:drawable="@drawable/edittext_disabled_focused" />
+  <item android:drawable="@drawable/edittext_disabled" />
+</selector>

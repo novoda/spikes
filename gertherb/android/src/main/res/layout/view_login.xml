@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <com.gertherb.view.FontEditText
+    style="@style/Gertherb.Login.Username"
+    android:id="@+id/login_edit_username"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
+  <com.gertherb.view.FontEditText
+    style="@style/Gertherb.Login.Password"
+    android:id="@+id/login_edit_password"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
+  <com.gertherb.view.FontButton
+    style="@style/Gertherb.Login.LoginButton"
+    android:id="@+id/login_button"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
+</merge>

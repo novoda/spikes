@@ -1,0 +1,32 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="Gertherb.Login">
+    <item name="android:windowSoftInputMode">stateHidden|adjustResize</item>
+  </style>
+
+  <style name="Gertherb.Login.LoginView">
+    <item name="android:gravity">center</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:paddingLeft">@dimen/login_gutter</item>
+    <item name="android:paddingRight">@dimen/login_gutter</item>
+  </style>
+
+  <style name="Gertherb.Login.Username" parent="Gertherb.EditText">
+    <item name="android:imeOptions">actionNext</item>
+    <item name="android:inputType">textNoSuggestions</item>
+    <item name="android:hint">@string/login_hint_username</item>
+  </style>
+
+  <style name="Gertherb.Login.Password" parent="Gertherb.EditText">
+    <item name="android:imeOptions">actionGo</item>
+    <item name="android:inputType">textPassword</item>
+    <item name="android:singleLine">true</item>
+    <item name="android:hint">@string/login_hint_password</item>
+  </style>
+
+  <style name="Gertherb.Login.LoginButton" parent="Gertherb.Button">
+    <item name="android:text">@string/login</item>
+    <item name="android:textAllCaps">true</item>
+  </style>
+
+</resources>
