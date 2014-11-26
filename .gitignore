@@ -22,3 +22,6 @@ local.properties
 /.idea
 /local.properties
 *.iml
+
+# Mac OS
+.DS_Store
