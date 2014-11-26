@@ -1,0 +1,84 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.2.4'
+    }
+}
+
+apply plugin: 'scala'
+apply plugin: 'idea'
+apply plugin: 'bintray-release'
+
+targetCompatibility = 1.6
+sourceCompatibility = 1.6
+
+group = 'com.novoda'
+version = '0.0.3'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.1'
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    provided
+}
+
+dependencies {
+    provided 'com.google.android:android:4.1.1.4'
+    compile 'com.google.android:support-v4:r7'
+    testCompile 'org.scalatest:scalatest_2.10:1.9.1'
+    testCompile 'com.pivotallabs:robolectric:1.2'
+    testCompile 'org.scala-lang:scala-library:2.10.1'
+    testCompile 'org.scala-lang:scala-reflect:2.10.1'
+    testCompile 'org.mockito:mockito-core:1.9.0'
+    testCompile group: 'junit', name: 'junit', version: '4.10'
+}
+
+
+idea.module {
+    scopes.PROVIDED.plus += configurations.provided
+}
+
+gradle.taskGraph.beforeTask { task ->
+    if (task.name == 'javadoc')
+        task.options.classpath = task.options.classpath + configurations.provided.resolve()
+}
+
+sourceSets {
+    main.compileClasspath += configurations.provided
+    test.compileClasspath += configurations.provided
+    test.runtimeClasspath += configurations.provided
+    testScala.compileClasspath += configurations.provided
+    testScala.runtimeClasspath += configurations.provided
+}
+
+task test(overwrite: true, dependsOn: compileTestScala) << {
+    ant.taskdef(
+            name: 'scalatest',
+            classname: 'org.scalatest.tools.ScalaTestAntTask',
+            classpath: configurations.testRuntime.asPath + ':' + configurations.provided.asPath + ':' + compileScala.destinationDir + ":" + compileTestScala.destinationDir
+    )
+    ant.scalatest(
+            runpath: sourceSets.test.output.classesDir,
+            haltonfailure: 'true',
+            fork: 'false'
+    ) {
+        println sourceSets.test.output.classesDir
+        reporter(type: 'stderr')
+    }
+}
+
+publish {
+    userOrg = 'novoda'
+    groupId = project.group
+    artifactId = 'typewriter'
+    version = project.version
+    description = 'Minimal ORM for Android'
+    website = 'https://github.com/novoda/typewriter'
+}
