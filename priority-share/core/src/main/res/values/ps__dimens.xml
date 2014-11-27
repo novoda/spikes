@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <dimen name="ps__dialog_button_bar_height">48dip</dimen>
+  <dimen name="ps__dialog_button_text">14sp</dimen>
+
+  <dimen name="ps__grid_item_text">18sp</dimen>
+  <dimen name="ps__grid_item_drawable_padding">8dp</dimen>
+
+  <dimen name="ps__grid_vertical_spacing">16dp</dimen>
+  <dimen name="ps__grid_horizontal_spacing">16dp</dimen>
+  <dimen name="ps__grid_item_icon_size">64dp</dimen>
+
+</resources>

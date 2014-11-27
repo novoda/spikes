@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <style name="ps__dialog_style" parent="@android:style/Theme.Holo.Light.Dialog" />
+
+  <style name="ps__grid_item_style" parent="android:TextAppearance">
+    <item name="android:textSize">@dimen/ps__grid_item_text</item>
+    <item name="android:textColor">@color/ps__grid_item_text</item>
+    <item name="android:lines">2</item>
+    <item name="android:gravity">center</item>
+    <item name="android:drawablePadding">@dimen/ps__grid_item_drawable_padding</item>
+  </style>
+
+  <style name="ps__grid_style" parent="android:Widget.Holo.Light.GridView">
+    <item name="android:numColumns">@integer/ps__grid_columns_number</item>
+    <item name="android:verticalSpacing">@dimen/ps__grid_vertical_spacing</item>
+    <item name="android:horizontalSpacing">@dimen/ps__grid_horizontal_spacing</item>
+    <item name="android:stretchMode">columnWidth</item>
+    <item name="android:paddingLeft">@dimen/ps__grid_horizontal_spacing</item>
+    <item name="android:paddingTop">@dimen/ps__grid_vertical_spacing</item>
+    <item name="android:paddingRight">@dimen/ps__grid_horizontal_spacing</item>
+    <item name="android:paddingBottom">@dimen/ps__grid_vertical_spacing</item>
+    <item name="android:clipToPadding">false</item>
+  </style>
+
+</resources>

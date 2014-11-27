@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string name="ps__show_more_button">Show more</string>
+  <string name="ps__no_share_targets_available">No apps can perform this action.</string>
+
+</resources>

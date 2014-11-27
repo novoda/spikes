@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <FrameLayout
+    android:id="@android:id/empty"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:visibility="gone">
+
+    <TextView
+      style="?android:attr/textAppearanceMedium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:text="@string/ps__no_share_targets_available" />
+
+  </FrameLayout>
+
+  <GridView
+    android:id="@+id/ps__dialog_grid"
+    style="@style/ps__grid_style"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1" />
+
+  <FrameLayout
+    style="?android:attr/buttonBarStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:measureWithLargestChild="true">
+
+    <Button
+      android:id="@+id/ps__show_more_button"
+      style="?android:attr/buttonBarButtonStyle"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/ps__dialog_button_bar_height"
+      android:text="@string/ps__show_more_button"
+      android:textSize="@dimen/ps__dialog_button_text"
+      android:maxLines="1" />
+
+  </FrameLayout>
+
+</LinearLayout>
