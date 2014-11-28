@@ -12,3 +12,7 @@ allprojects {
         jcenter()
     }
 }
+
+task wrapper(type: Wrapper) {
+    version = '2.2.1'
+}
