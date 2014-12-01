@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <string name="app_name">priority-share Demo</string>
-  <string name="simple_demo">Simple Demo</string>
-  <string name="advanced_demo">Advanced Demo</string>
+  <string name="app_name">Priority Share</string>
+  <string name="simple_demo">Simple</string>
+  <string name="advanced_demo">Advanced</string>
   <string name="share">Share!</string>
   <string name="default_text">This is the text to share. priority-share is so easy to use!</string>
   <string name="share_title">Custom share title</string>
