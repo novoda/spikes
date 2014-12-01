@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <string name="app_name">Demo</string>
+  <string name="app_name">priority-share Demo</string>
   <string name="simple_demo">Simple Demo</string>
   <string name="advanced_demo">Advanced Demo</string>
   <string name="share">Share!</string>
