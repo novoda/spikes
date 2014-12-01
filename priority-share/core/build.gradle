@@ -1,4 +1,14 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.2.5'
+    }
+}
+
 apply plugin: 'com.android.library'
+apply plugin: 'bintray-release'
 
 android {
     compileSdkVersion 21
@@ -8,4 +18,14 @@ android {
         minSdkVersion 15
         targetSdkVersion 21
     }
+}
+
+publish {
+    userOrg = 'novoda'
+    groupId = 'com.novoda'
+    artifactId = 'priority-share'
+    repoName = 'maven-private'
+    version = '0.0.1-beta'
+    description = 'Probably the easiest way to share something in Android.'
+    website = 'https://github.com/novoda/spikes/tree/master/priority-share' // TODO: Use the proper one once it has its own repo
 }
