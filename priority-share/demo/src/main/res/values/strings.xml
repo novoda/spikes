@@ -8,7 +8,7 @@
   <string name="default_text">This is the text to share. priority-share is so easy to use!</string>
   <string name="share_title">Custom share title</string>
   <string name="subject">Subject for your emails…</string>
-  <string name="show_mru">Show MRU</string>
+  <string name="show_most_recently_used">Show Most Recently Used</string>
   <string name="text_hint">Text to share here</string>
   <string name="title_hint">The title for the share dialog</string>
   <string name="default_mime_type">text/plain</string>

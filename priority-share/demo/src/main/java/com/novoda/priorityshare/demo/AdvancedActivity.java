@@ -55,7 +55,7 @@ public class AdvancedActivity extends Activity {
         EditText title = (EditText) findViewById(R.id.title);
         EditText mimeType = (EditText) findViewById(R.id.mime_type);
         EditText dataUri = (EditText) findViewById(R.id.data_uri);
-        Switch showMru = (Switch) findViewById(R.id.show_mru);
+        Switch showMru = (Switch) findViewById(R.id.show_most_recently_used);
 
         new PrioritySharer.Builder()
                 .setTargets(TARGET_APPS[targetApps.getSelectedItemPosition()])

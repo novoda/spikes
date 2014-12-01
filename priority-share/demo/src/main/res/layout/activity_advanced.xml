@@ -55,8 +55,8 @@
     android:inputType="textUri" />
 
   <Switch
-    android:id="@+id/show_mru"
-    android:text="@string/show_mru"
+    android:id="@+id/show_most_recently_used"
+    android:text="@string/show_most_recently_used"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dip"
