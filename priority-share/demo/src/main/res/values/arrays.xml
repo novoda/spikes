@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="target_apps">
+    <item>Defaults</item>
+    <item>Facebook</item>
+    <item>Twitter</item>
+    <item>Google+</item>
+    <item>None</item>
+  </string-array>
+</resources>

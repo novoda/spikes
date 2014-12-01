@@ -5,7 +5,9 @@ Probably the easiest way to share something in Android.
 
 ## Description
 
-priority-share allows to show a custom "Share" dialog for Android without boilerplate.
+priority-share allows you to implement a priority share action, that is, presenting the user with a set of predefined apps that you can define
+to share to, as a first "quick dial" experience, and offering a "show more" to allow the user to choose other, non-prioritised apps to share to.
+
 The `PrioritySharer.Builder` class makes it really easy to customise the bits you want, such as give priority to a specific type of apps such as
 Twitter clients. You can also modify the mime type and add a (`Uri`)[https://developer.android.com/reference/android/net/Uri.html] that contains the
 data you want to send. In addition you can fine-tune the generated (`Intent`)[https://developer.android.com/reference/android/content/Intent.html]
