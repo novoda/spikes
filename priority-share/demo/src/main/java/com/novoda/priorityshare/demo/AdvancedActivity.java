@@ -32,15 +32,16 @@ public class AdvancedActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advanced);
+        findViewById(R.id.share).setOnClickListener(shareClickListener);
         populateTargetApps();
-
-        findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showShareDialog();
-            }
-        });
     }
+
+    private final View.OnClickListener shareClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            showShareDialog();
+        }
+    };
 
     private void populateTargetApps() {
         targetApps = (Spinner) findViewById(R.id.target_apps);
