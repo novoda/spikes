@@ -1,8 +1,5 @@
 apply plugin: 'com.android.application'
 
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
-
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.1"
@@ -25,4 +22,3 @@ repositories { jcenter() }
 dependencies {
     compile project(':core')
 }
-
