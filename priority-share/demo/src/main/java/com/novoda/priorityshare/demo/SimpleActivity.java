@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.novoda.priorityshare.PrioritySharer;
+import com.novoda.priorityshare.TargetApps;
 
 public class SimpleActivity extends Activity {
 
@@ -27,6 +28,7 @@ public class SimpleActivity extends Activity {
 
         new PrioritySharer.Builder()
                 .setText(text.getText().toString())
+                .setTargets(TargetApps.TWITTER) // Other options available: FACEBOOK, GOOGLE_PLUS or even a custom set of apps
                 .show(this);
     }
 

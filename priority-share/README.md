@@ -35,6 +35,7 @@ Sharing a string is as easy as this:
 ```java
 new PrioritySharer.Builder()
         .setText("PriorityShare allows you to share stuff in such an easy way!")
+        .setTargets(TargetApps.TWITTER) // Other options available: FACEBOOK, GOOGLE_PLUS or even a custom set of apps
         .show(context);
 ```
 
