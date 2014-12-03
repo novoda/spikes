@@ -16,6 +16,14 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
+
+    <activity
+      android:name="com.novoda.priorityshare.demo.SimpleActivity"
+      android:label="@string/simple_demo" />
+    <activity
+      android:name="com.novoda.priorityshare.demo.AdvancedActivity"
+      android:label="@string/advanced_demo" />
+
   </application>
 
 </manifest>

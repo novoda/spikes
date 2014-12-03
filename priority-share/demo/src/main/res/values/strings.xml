@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Demo</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+  <string name="app_name">Priority Share</string>
+  <string name="simple_demo">Simple</string>
+  <string name="advanced_demo">Advanced</string>
+  <string name="share">Share!</string>
+  <string name="default_text">This is the text to share. priority-share allows you to implement a priority share action super easily!</string>
+  <string name="share_title">Custom share title</string>
+  <string name="subject">Subject for your emails…</string>
+  <string name="show_most_recently_used">Show most recently used</string>
+  <string name="text_hint">Text to share here</string>
+  <string name="title_hint">The title for the share dialog</string>
+  <string name="default_mime_type" translatable="false">text/plain</string>
+  <string name="mime_type_hint">Mime type</string>
+  <string name="data_uri_hint">Data uri if you want</string>
 
 </resources>
