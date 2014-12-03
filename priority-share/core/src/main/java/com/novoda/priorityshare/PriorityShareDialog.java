@@ -354,8 +354,8 @@ public class PriorityShareDialog extends DialogFragment {
             return this;
         }
 
-        public Builder setShowMru(boolean showMru) {
-            this.showMru = showMru;
+        public Builder setShowMostRecentlyUsed(boolean showMostRecentlyUsed) {
+            this.showMru = showMostRecentlyUsed;
             return this;
         }
 

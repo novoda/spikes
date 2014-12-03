@@ -62,7 +62,7 @@ public class AdvancedActivity extends Activity {
                 .setText(text.getText().toString())
                 .setTitle(title.getText().toString())
                 .setMimeType(mimeType.getText().toString())
-                .showMru(showMostRecentlyUsed.isChecked())
+                .showMostRecentlyUsed(showMostRecentlyUsed.isChecked())
                 .setDataUri(getDataUriOrNull(dataUri))
                 .setOnPrepareSharingIntentListener(listener)
                 .show(this);

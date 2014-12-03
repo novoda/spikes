@@ -25,7 +25,7 @@ public class PrioritySharer {
     private CharSequence subject;
     private CharSequence text;
     private OnPrepareSharingIntentListener listener;
-    private boolean showMru;
+    private boolean showMostRecentlyUsed;
 
     PrioritySharer() {
     }
@@ -62,7 +62,7 @@ public class PrioritySharer {
                 .setTargetApps(targetApps)
                 .setSharingIntent(sharingIntent)
                 .setOnPrepareSharingIntentListener(listener)
-                .setShowMru(showMru)
+                .setShowMostRecentlyUsed(showMostRecentlyUsed)
                 .build();
 
         dialog.show(fragmentManager, PriorityShareDialog.TAG_PRIORITY_SHARE_DIALOG);
@@ -79,13 +79,13 @@ public class PrioritySharer {
         private CharSequence subject;
         private CharSequence text;
         private OnPrepareSharingIntentListener listener;
-        private boolean showMru;
+        private boolean showMostRecentlyUsed;
 
         public Builder() {
             this.mimeType = MIME_TYPE_TEXT_PLAIN;
             this.targetApps = TargetApps.NONE;
             this.listener = new SimpleOnPrepareSharingIntentListener();
-            this.showMru = true;
+            this.showMostRecentlyUsed = true;
         }
 
         public Builder setTitle(CharSequence title) {
@@ -123,8 +123,8 @@ public class PrioritySharer {
             return this;
         }
 
-        public Builder showMru(boolean showMru) {
-            this.showMru = showMru;
+        public Builder showMostRecentlyUsed(boolean showMostRecentlyUsed) {
+            this.showMostRecentlyUsed = showMostRecentlyUsed;
             return this;
         }
 
@@ -137,7 +137,7 @@ public class PrioritySharer {
             prioritySharer.subject = subject;
             prioritySharer.text = text;
             prioritySharer.listener = listener;
-            prioritySharer.showMru = showMru;
+            prioritySharer.showMostRecentlyUsed = showMostRecentlyUsed;
 
             return prioritySharer;
         }
