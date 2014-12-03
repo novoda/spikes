@@ -1,6 +1,6 @@
 # priority-share [![](https://raw.githubusercontent.com/novoda/novoda/master/assets/btn_apache_lisence.png)](LICENSE.txt)
 
-Probably the easiest way to share something in Android.
+Probably the easiest way to share something in Android. Also allows you to prioritise a certain type of apps.
 
 
 ## Description
