@@ -55,14 +55,14 @@ public class AdvancedActivity extends Activity {
         EditText title = (EditText) findViewById(R.id.title);
         EditText mimeType = (EditText) findViewById(R.id.mime_type);
         EditText dataUri = (EditText) findViewById(R.id.data_uri);
-        Switch showMru = (Switch) findViewById(R.id.show_most_recently_used);
+        Switch showMostRecentlyUsed = (Switch) findViewById(R.id.show_most_recently_used);
 
         new PrioritySharer.Builder()
                 .setTargets(TARGET_APPS[targetApps.getSelectedItemPosition()])
                 .setText(text.getText().toString())
                 .setTitle(title.getText().toString())
                 .setMimeType(mimeType.getText().toString())
-                .showMru(showMru.isChecked())
+                .showMru(showMostRecentlyUsed.isChecked())
                 .setDataUri(getDataUriOrNull(dataUri))
                 .setOnPrepareSharingIntentListener(listener)
                 .show(this);
