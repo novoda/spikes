@@ -11,7 +11,7 @@
   <string name="show_most_recently_used">Show most recently used</string>
   <string name="text_hint">Text to share here</string>
   <string name="title_hint">The title for the share dialog</string>
-  <string name="default_mime_type">text/plain</string>
+  <string name="default_mime_type" translatable="false">text/plain</string>
   <string name="mime_type_hint">Mime type</string>
   <string name="data_uri_hint">Data uri if you want</string>
 
