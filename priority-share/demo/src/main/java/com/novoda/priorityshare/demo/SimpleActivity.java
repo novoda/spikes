@@ -18,12 +18,12 @@ public class SimpleActivity extends Activity {
         findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showShareDialog();
+                showTwitterPriorityShareDialog();
             }
         });
     }
 
-    private void showShareDialog() {
+    private void showTwitterPriorityShareDialog() {
         EditText text = (EditText) findViewById(R.id.text);
 
         new PrioritySharer.Builder()
