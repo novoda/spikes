@@ -26,6 +26,6 @@ publish {
     artifactId = 'priority-share'
     repoName = 'maven-private'
     version = '0.0.1-beta'
-    description = 'Probably the easiest way to share something in Android.'
+    description = 'priority-share allows you to implement a priority share action, that is, presenting the user with a set of predefined apps that you can define.'
     website = 'https://github.com/novoda/spikes/tree/master/priority-share' // TODO: Use the proper one once it has its own repo
 }
