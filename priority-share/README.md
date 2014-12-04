@@ -1,4 +1,4 @@
-# priority-share [![](https://raw.githubusercontent.com/novoda/novoda/master/assets/btn_apache_lisence.png)](LICENSE.txt)
+# priority-share [![](http://ci.novoda.com/buildStatus/icon?job=priority-share)](http://ci.novoda.com/job/priority-share/lastBuild/console) [![](https://raw.githubusercontent.com/novoda/novoda/master/assets/btn_apache_lisence.png)](LICENSE.txt)
 
 Probably the easiest way to share something in Android. Also allows you to prioritise a certain type of apps.
 
@@ -20,10 +20,17 @@ To start using this library, add these lines to the `build.gradle` of your proje
 
 ```groovy
 repositories {
-    jcenter()
+    maven {
+        credentials {
+            username 'BINTRAY_USERNAME'
+            password 'BINTRAY_KEY'
+        }
+        url 'http://dl.bintray.com/novoda/maven-private'
+    }
 }
+
 dependencies {
-    // TODO: To be done once this is released.
+    compile 'com.novoda:priority-share:0.0.1-beta'
 }
 ```
 
