@@ -1,0 +1,20 @@
+apply plugin: 'groovy'
+apply plugin: 'application'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile gradleApi()
+    compile 'com.fasterxml.jackson.core:jackson-core:2.4.4'
+    compile 'org.codehaus.woodstox:woodstox-core-asl:4.1.4'
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.4.4'
+}
+
+compileGroovy {
+    sourceCompatibility = '1.6'
+    targetCompatibility = '1.6'
+}
+
+mainClassName = "com.novoda.comparereports.Main"
