@@ -4,27 +4,31 @@ class ReportIssue {
 
     final ReportFile file
     final Number line
+    final Number column
     final String severity
     final String message
     final String source
 
-    ReportIssue(ReportFile file, Number line, String severity, String message, String source) {
+    ReportIssue(ReportFile file, Number line, Number column, String severity, String message, String source) {
         this.file = file
         this.line = line
+        this.column = column
         this.severity = severity
         this.message = message
         this.source = source
     }
 
     Issue toIssue() {
-        new Issue(line, severity, message, source)
+        new Issue(line, column, severity, message, source)
     }
+
 
     @Override
     public String toString() {
         return "ReportIssue{" +
-                "file='" + file + '\'' +
-                ", line='" + line + '\'' +
+                "file=" + file +
+                ", line=" + line +
+                ", column=" + column +
                 ", severity='" + severity + '\'' +
                 ", message='" + message + '\'' +
                 ", source='" + source + '\'' +
@@ -37,6 +41,7 @@ class ReportIssue {
 
         ReportIssue that = (ReportIssue) o
 
+        if (column != that.column) return false
         if (file != that.file) return false
         if (line != that.line) return false
         if (message != that.message) return false
@@ -50,6 +55,7 @@ class ReportIssue {
         int result
         result = file.hashCode()
         result = 31 * result + line.hashCode()
+        result = 31 * result + column.hashCode()
         result = 31 * result + severity.hashCode()
         result = 31 * result + message.hashCode()
         result = 31 * result + source.hashCode()

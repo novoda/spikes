@@ -6,12 +6,14 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 class Issue {
 
     final Number line
+    final Number column
     final String severity
     final String message
     final String source
 
-    Issue(Number line, String severity, String message, String source) {
+    Issue(Number line, Number column, String severity, String message, String source) {
         this.line = line
+        this.column = column
         this.severity = severity
         this.message = message
         this.source = source
@@ -24,6 +26,7 @@ class Issue {
     public String toString() {
         return "Issue{" +
                 "line=" + line +
+                ", column=" + column + '\'' +
                 ", severity='" + severity + '\'' +
                 ", message='" + message + '\'' +
                 ", source='" + source + '\'' +
