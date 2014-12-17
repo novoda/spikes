@@ -24,7 +24,7 @@ public class CompareReportsTask extends DefaultTask {
     }
 
     @TaskAction
-    def shipIt() {
+    def compareReports() {
         def compareReportsDir = "$DESTINATION_PATH/$project.name"
 
         // TODO handle when I already have the repo cloned (i.e. if you don't clean)
@@ -68,7 +68,7 @@ public class CompareReportsTask extends DefaultTask {
         }
     }
 
-    private void compareReports(File mainBranchFile, File currentBranchFile) {
+    private void compare(File mainBranchFile, File currentBranchFile) {
         def oldCheckstyle = mapper.readValue(mainBranchFile, Checkstyle.class)
         def newCheckstyle = mapper.readValue(currentBranchFile, Checkstyle.class)
 
