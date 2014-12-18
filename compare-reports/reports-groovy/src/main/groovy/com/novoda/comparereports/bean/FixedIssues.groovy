@@ -18,13 +18,10 @@ class FixedIssues extends ArrayList<ReportIssue> {
         StringBuilder builder = new StringBuilder()
         builder.append("This is the list of things you've fixed so far:\n")
         builder.append("-----------------------------------------------\n")
-
         each { ReportIssue issue ->
-            builder.append(" > [${issue.severity}]: ${issue.message}\n")
-            builder.append("\tIn: ${issue.file.name}:${issue.line}:${issue.column}\n")
-            builder.append("\n")
+            builder.append(" > [${issue.severity}]: ${issue.message} | In: ${issue.file.name}:${issue.line}:${issue.column}\n")
         }
-        builder.append("-----------------------------------------------\n").toString()
+        builder.toString()
     }
 
 }

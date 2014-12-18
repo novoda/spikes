@@ -97,7 +97,6 @@ public class CompareReportsTask extends DefaultTask {
         println()
         println fixed.forHumans()
         println introduced.forHumans()
-        println()
     }
 
 
