@@ -38,7 +38,7 @@ public class CompareReportsTask extends DefaultTask {
         currentBranchFiles.each { File currentBranchFile ->
             String fileName = RelativePath.parse(true, currentBranchFile.absolutePath).lastName
             File mainBranchFile = mainBranchFiles.find { File mainBranchFile -> mainBranchFile.name.equals(fileName) }
-            compareReports(mainBranchFile, currentBranchFile)
+            compare(mainBranchFile, currentBranchFile)
         }
     }
 
