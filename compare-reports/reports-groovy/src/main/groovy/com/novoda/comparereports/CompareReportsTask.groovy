@@ -16,6 +16,7 @@ public class CompareReportsTask extends DefaultTask {
     // TODO: this class should be split into smaller separate gradle tasks
 
     private static final String DESTINATION_PATH = "build/reports"
+    public static final String PROPERTY_SHOW_FIXED = 'showFixed'
 
     final ObjectMapper mapper
 
@@ -97,7 +98,9 @@ public class CompareReportsTask extends DefaultTask {
         FixedIssues fixed = new FixedIssues(reports.collect { Report report -> report.fixedIssues }.flatten())
         IntroducedIssues introduced = new IntroducedIssues(reports.collect { Report report -> report.introducedIssues }.flatten())
         println()
-        println fixed.forHumans()
+        if (project.hasProperty(PROPERTY_SHOW_FIXED)) {
+            println fixed.forHumans()
+        }
         println introduced.forHumans()
     }
 
