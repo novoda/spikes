@@ -4,11 +4,12 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.novoda.comparereports.bean.Checkstyle
+import com.novoda.comparereports.bean.FixedIssues
+import com.novoda.comparereports.bean.IntroducedIssues
 import com.novoda.comparereports.bean.Report
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RelativePath
 import org.gradle.api.tasks.TaskAction
-import org.gradle.process.ExecResult
 
 public class CompareReportsTask extends DefaultTask {
 
@@ -25,24 +26,33 @@ public class CompareReportsTask extends DefaultTask {
 
     @TaskAction
     def compareReports() {
-        def compareReportsDir = "$DESTINATION_PATH/$project.name"
+        String compareReportsDir = "$DESTINATION_PATH/$project.name"
 
-        // TODO handle when I already have the repo cloned (i.e. if you don't clean)
         // TODO handle when the desired branch isn't the main branch
+        cleanOldMainReports(compareReportsDir)
         cloneRepo(compareReportsDir)
         generateMainBranchReports(compareReportsDir)
 
-        def mainBranchFiles = project.fileTree(project.projectDir).exclude(compareReportsDir).include(extension?.checkstyleFiles)
-        def currentBranchFiles = project.fileTree(compareReportsDir).include(extension?.checkstyleFiles)
+        def currentBranchFiles = project.fileTree(project.projectDir).exclude(compareReportsDir).include(extension?.checkstyleFiles)
+        def mainBranchFiles = project.fileTree(compareReportsDir).include(extension?.checkstyleFiles)
 
-        currentBranchFiles.each { File currentBranchFile ->
+        List<Report> reports = currentBranchFiles.collect { File currentBranchFile ->
             String fileName = RelativePath.parse(true, currentBranchFile.absolutePath).lastName
             File mainBranchFile = mainBranchFiles.find { File mainBranchFile -> mainBranchFile.name.equals(fileName) }
-            compare(mainBranchFile, currentBranchFile)
+            generateReport(mainBranchFile, currentBranchFile, compareReportsDir)
+        }
+        printHumanReadable(reports)
+    }
+
+    def cleanOldMainReports(compareReportsDir) {
+        // TODO This could be done in a better way. i.e. git pull instead of just dropping everything
+        project.exec {
+            commandLine "rm"
+            args '-rf', compareReportsDir
         }
     }
 
-    private ExecResult cloneRepo(compareReportsDir) {
+    def cloneRepo(compareReportsDir) {
         String remoteUri = getGitRemoteUri()
         project.exec {
             commandLine "git"
@@ -50,7 +60,7 @@ public class CompareReportsTask extends DefaultTask {
         }
     }
 
-    private String getGitRemoteUri() {
+    String getGitRemoteUri() {
         def stdout = new ByteArrayOutputStream()
         project.exec {
             commandLine "git"
@@ -60,7 +70,7 @@ public class CompareReportsTask extends DefaultTask {
         stdout.toString().readLines()[0]
     }
 
-    private ExecResult generateMainBranchReports(compareReportsDir) {
+    def generateMainBranchReports(compareReportsDir) {
         project.exec {
             workingDir compareReportsDir
             commandLine "./gradlew"
@@ -68,20 +78,23 @@ public class CompareReportsTask extends DefaultTask {
         }
     }
 
-    private void compare(File mainBranchFile, File currentBranchFile) {
-        def oldCheckstyle = mapper.readValue(mainBranchFile, Checkstyle.class)
-        def newCheckstyle = mapper.readValue(currentBranchFile, Checkstyle.class)
 
-        // TODO: Handle different file paths in the checkstyle report
+    Report generateReport(File mainBranchFile, File currentBranchFile, String compareReportsDir) {
+        def mainCheckstyle = mapper.readValue(mainBranchFile, Checkstyle.class)
+        def currentCheckstyle = mapper.readValue(currentBranchFile, Checkstyle.class)
 
-        Report report = Reporter.generate(oldCheckstyle, newCheckstyle)
+        String currentCheckstyleBaseDir = project.projectDir.absolutePath
+        String mainCheckstyleBaseDir = new File(project.projectDir, compareReportsDir).absolutePath
+
+        Reporter.generate(mainCheckstyle, currentCheckstyle, mainCheckstyleBaseDir, currentCheckstyleBaseDir)
+    }
+
+    def printHumanReadable(List<Report> reports) {
+        FixedIssues fixed = new FixedIssues(reports.collect { Report report -> report.fixedIssues }.flatten())
+        IntroducedIssues introduced = new IntroducedIssues(reports.collect { Report report -> report.introducedIssues }.flatten())
         println()
-        println()
-        println report.fixedIssues.forHumans()
-        println()
-        println()
-        println report.introducedIssues.forHumans()
-        println()
+        println fixed.forHumans()
+        println introduced.forHumans()
         println()
     }
 

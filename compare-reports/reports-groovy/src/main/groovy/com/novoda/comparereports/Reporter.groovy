@@ -4,11 +4,13 @@ import com.novoda.comparereports.bean.*
 
 class Reporter {
 
-    static Report generate(Checkstyle oldCheckstyle, Checkstyle newCheckstyle) {
-        List<ReportIssue> oldIssues = from(oldCheckstyle)
-        List<ReportIssue> newIssues = from(newCheckstyle)
-        FixedIssues fixedIssues = oldIssues.findAll { !newIssues.contains(it) } ?: new FixedIssues()
-        IntroducedIssues introducedIssues = newIssues.findAll { !oldIssues.contains(it) } ?: new IntroducedIssues()
+    static Report generate(Checkstyle mainCheckstyle, Checkstyle currentCheckstyle, String mainCheckstyleBaseDir, String currentCheckstyleBaseDir) {
+        List<ReportIssue> mainBranchIssues = new PathProcessor(mainCheckstyleBaseDir).process(from(mainCheckstyle))
+        List<ReportIssue> currentBranchIssues = new PathProcessor(currentCheckstyleBaseDir).process(from(currentCheckstyle))
+
+        FixedIssues fixedIssues = mainBranchIssues.findAll { !currentBranchIssues.contains(it) } ?: new FixedIssues()
+        IntroducedIssues introducedIssues = currentBranchIssues.findAll { !mainBranchIssues.contains(it) } ?: new IntroducedIssues()
+
         return new Report(fixedIssues, introducedIssues)
     }
 
