@@ -28,7 +28,6 @@ public class CompareReportsTask extends DefaultTask {
     def compareReports() {
         String compareReportsDir = "$DESTINATION_PATH/$project.name"
 
-        // TODO handle when the desired branch isn't the main branch
         cleanOldMainReports(compareReportsDir)
         cloneRepo(compareReportsDir)
         generateMainBranchReports(compareReportsDir)
@@ -57,6 +56,9 @@ public class CompareReportsTask extends DefaultTask {
         project.exec {
             commandLine "git"
             args 'clone', '-q', remoteUri, compareReportsDir
+            if (!extension.mainBranchName.isEmpty()) {
+                args '-b', extension.mainBranchName
+            }
         }
     }
 
