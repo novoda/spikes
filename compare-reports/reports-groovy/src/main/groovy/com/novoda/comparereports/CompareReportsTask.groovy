@@ -13,6 +13,8 @@ import org.gradle.api.tasks.TaskAction
 
 public class CompareReportsTask extends DefaultTask {
 
+    // TODO: this class should be split into smaller separate gradle tasks
+
     private static final String DESTINATION_PATH = "build/reports"
 
     final ObjectMapper mapper
