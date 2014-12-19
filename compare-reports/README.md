@@ -27,7 +27,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.novoda:compare-reports:0.0.1-beta'
+        classpath 'com.novoda:compare-reports:0.0.2-beta'
     }
 }
 ```
