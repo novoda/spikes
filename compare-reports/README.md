@@ -44,7 +44,7 @@ compareReports {
 }
 ```
 
-Now you can get the list of issues you've introduced by running `gradle compareReports`. You can also add a parameter to see the issues you've fixed `gradle compareReports --PshowFixed`.
+Now you can get the list of issues you've introduced by running `gradle compareReports`. You can also add a parameter to see the issues you've fixed `gradle compareReports -PshowFixed`.
 
 
 ## Links
