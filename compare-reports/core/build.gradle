@@ -1,6 +1,3 @@
-apply plugin: 'groovy'
-apply plugin: 'bintray-release'
-
 buildscript {
     repositories {
         jcenter()
@@ -10,14 +7,8 @@ buildscript {
     }
 }
 
-repositories {
-    jcenter()
-}
-
-dependencies {
-    compile gradleApi()
-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.4.4'
-}
+apply plugin: 'groovy'
+apply plugin: 'bintray-release'
 
 compileGroovy {
     sourceCompatibility = '1.6'
@@ -32,4 +23,13 @@ publish {
     version = project.version
     description = 'Tells you how many issues you\'ve introduced/fixed to the static analysis reports locally compared to the main branch of the project.'
     website = 'https://github.com/novoda/spikes/tree/master/compare-reports' // TODO: Use the proper one once it has its own repo
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile gradleApi()
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.4.4'
 }
