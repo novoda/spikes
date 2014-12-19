@@ -47,7 +47,7 @@ public class CompareReportsTask extends DefaultTask {
     }
 
     def cleanOldMainReports(compareReportsDir) {
-        // TODO This could be done in a better way. i.e. git pull instead of just dropping everything
+        // TODO: This could be done in a better way. i.e. git pull instead of just dropping everything
         project.exec {
             commandLine "rm"
             args '-rf', compareReportsDir
@@ -55,6 +55,7 @@ public class CompareReportsTask extends DefaultTask {
     }
 
     def cloneRepo(compareReportsDir) {
+        // TODO: I believe this could be done using a plugin or a lib
         String remoteUri = getGitRemoteUri()
         project.exec {
             commandLine "git"
@@ -76,6 +77,7 @@ public class CompareReportsTask extends DefaultTask {
     }
 
     def generateMainBranchReports(compareReportsDir) {
+        // TODO: This is ugly (running gradle from gradle) but is there another way of doing it?
         project.exec {
             workingDir compareReportsDir
             commandLine "./gradlew"
