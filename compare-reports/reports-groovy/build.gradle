@@ -1,6 +1,17 @@
 apply plugin: 'groovy'
 apply plugin: 'application'
 
+apply plugin: 'bintray-release'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.2.5'
+    }
+}
+
 repositories {
     jcenter()
 }
@@ -18,3 +29,13 @@ compileGroovy {
 }
 
 mainClassName = "com.novoda.comparereports.Main"
+
+publish {
+    userOrg = 'novoda'
+    groupId = 'com.novoda'
+    artifactId = 'compare-reports'
+    repoName = 'maven-private'
+    version = project.version
+    description = 'Tells you how many issues you\'ve introduced/fixed to the static analysis reports locally compared to the main branch of the project.'
+    website = 'https://github.com/novoda/spikes/tree/master/compare-reports' // TODO: Use the proper one once it has its own repo
+}

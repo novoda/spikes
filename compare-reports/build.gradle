@@ -1,0 +1,1 @@
+allprojects { Project p -> p.version = '0.0.1-beta' }
