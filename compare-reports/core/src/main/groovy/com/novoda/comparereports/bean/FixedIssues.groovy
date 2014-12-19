@@ -19,7 +19,7 @@ class FixedIssues extends ArrayList<ReportIssue> {
         builder.append("This is the list of things you've fixed so far:\n")
         builder.append("-----------------------------------------------\n")
         each { ReportIssue issue ->
-            builder.append(" > [${issue.severity}]: ${issue.message} | In: ${issue.file.name}:${issue.line}:${issue.column}\n")
+            builder.append(" > [${issue.severity}]: ${issue.message} | In: ${issue.file.name}:${issue.line}\n")
         }
         builder.toString()
     }
