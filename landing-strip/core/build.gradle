@@ -1,0 +1,27 @@
+apply plugin: 'com.android.library'
+apply plugin: 'bintray-release'
+
+dependencies {
+    compile 'com.android.support:support-v4:22.0.0'
+}
+
+android {
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 22
+    }
+
+    compileSdkVersion 22
+    buildToolsVersion "22.0.0"
+}
+
+publish {
+    userOrg = 'novoda'
+    groupId = 'com.novoda'
+    artifactId = 'landing-strip'
+    version = project.version
+
+    uploadName = 'landing-strip'
+    description = 'Lands on yo strip'
+    website = 'https://github.com/novoda/landing-strip'
+}

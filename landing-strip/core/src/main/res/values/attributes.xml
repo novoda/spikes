@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <declare-styleable name="LandingStrip">
+    <attr name="tabLayoutId" format="reference" />
+    <attr name="indicatorColour" format="color" />
+  </declare-styleable>
+
+</resources>
