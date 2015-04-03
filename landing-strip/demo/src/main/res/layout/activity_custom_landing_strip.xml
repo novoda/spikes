@@ -5,6 +5,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
+  <!-- Wrap content is not full supported yet so we need to wrap the tabs in a layout in order to get a full width background -->
   <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
