@@ -6,12 +6,12 @@ import android.support.v7.app.ActionBarActivity;
 
 import com.novoda.landing_strip.R;
 
-public class DemoActivity3 extends ActionBarActivity {
+public class BasicUsageActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_demo_3);
+        setContentView(R.layout.activity_basic_usage);
 
         LandingStrip landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);

@@ -9,21 +9,21 @@ import android.widget.TextView;
 
 import com.novoda.landing_strip.R;
 
-public class DemoActivity2 extends ActionBarActivity {
+public class CustomTabActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_demo_2);
+        setContentView(R.layout.activity_custom_tab);
 
         LandingStrip landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setAdapter(new DemoPagerAdapter(getSupportFragmentManager()));
 
-        landingStrip.setViewPager(viewPager, viewPager.getAdapter(), busyTabs);
+        landingStrip.setViewPager(viewPager, viewPager.getAdapter(), customTabs);
     }
 
-    private final LandingStrip.TabSetterUpper busyTabs = new LandingStrip.TabSetterUpper() {
+    private final LandingStrip.TabSetterUpper customTabs = new LandingStrip.TabSetterUpper() {
         @Override
         public View setUp(int position, CharSequence title, View inflatedTab) {
             ((TextView) inflatedTab.findViewById(R.id.tab_2_title)).setText("" + position);
