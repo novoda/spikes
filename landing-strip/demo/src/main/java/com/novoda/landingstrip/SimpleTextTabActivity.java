@@ -5,8 +5,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 
 import com.novoda.landing_strip.R;
+import com.novoda.landingstrip.setup.DemoPagerAdapter;
 
-public class BasicUsageActivity extends ActionBarActivity {
+public class SimpleTextTabActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

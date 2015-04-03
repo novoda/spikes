@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.novoda.landing_strip.R;
+import com.novoda.landingstrip.setup.Data;
+import com.novoda.landingstrip.setup.DemoPagerAdapter;
 
 public class CustomTabActivity extends ActionBarActivity {
 

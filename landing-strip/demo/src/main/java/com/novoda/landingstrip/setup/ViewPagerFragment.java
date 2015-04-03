@@ -1,4 +1,4 @@
-package com.novoda.landingstrip;
+package com.novoda.landingstrip.setup;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -1,4 +1,4 @@
-package com.novoda.landingstrip;
+package com.novoda.landingstrip.setup;
 
 public enum Data {
 

@@ -1,4 +1,4 @@
-package com.novoda.landingstrip;
+package com.novoda.landingstrip.setup;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
