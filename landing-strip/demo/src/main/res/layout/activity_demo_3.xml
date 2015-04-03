@@ -10,7 +10,7 @@
     android:layout_height="wrap_content"
     android:background="@android:color/holo_orange_dark">
 
-    <com.novoda.landingstrip.AdvancedLandingStrip
+    <com.novoda.landingstrip.ExampleRainbowLandingStrip
       android:id="@+id/landing_strip"
       android:layout_height="50dp"
       android:layout_width="wrap_content"
