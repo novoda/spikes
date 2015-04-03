@@ -28,7 +28,7 @@ public class ViewPagerFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((TextView) view).setText(getData().content);
+        ((TextView) view).setText(getData().getContent());
     }
 
     private Data getData() {

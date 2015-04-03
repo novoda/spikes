@@ -9,13 +9,25 @@ public enum Data {
     E("E", "bar", android.R.drawable.ic_media_pause),
     F("F", "bar", android.R.drawable.ic_media_pause);
 
-    final String title;
-    final String content;
-    final int resId;
+    private final String title;
+    private final String content;
+    private final int resId;
 
     Data(String title, String content, int resId) {
         this.title = title;
         this.content = content;
         this.resId = resId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public int getResId() {
+        return resId;
     }
 }

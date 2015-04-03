@@ -29,7 +29,7 @@ public class CustomTabActivity extends ActionBarActivity {
         @Override
         public View setUp(int position, CharSequence title, View inflatedTab) {
             ((TextView) inflatedTab.findViewById(R.id.tab_2_title)).setText("" + position);
-            ((ImageView) inflatedTab.findViewById(R.id.tab_2_content)).setImageResource(Data.values()[position].resId);
+            ((ImageView) inflatedTab.findViewById(R.id.tab_2_content)).setImageResource(Data.values()[position].getResId());
 
             return inflatedTab;
         }

@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-class DemoPagerAdapter extends FragmentPagerAdapter {
+public class DemoPagerAdapter extends FragmentPagerAdapter {
 
     public DemoPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -12,7 +12,7 @@ class DemoPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return Data.values()[position].title;
+        return Data.values()[position].getTitle();
     }
 
     @Override
