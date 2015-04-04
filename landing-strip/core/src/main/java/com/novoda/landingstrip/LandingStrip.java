@@ -228,16 +228,16 @@ public class LandingStrip extends HorizontalScrollView {
     }
 
     private void scrollToChild(int position, int offset) {
-        Coordinates lines = getIndicatorStartAndEndCoordinates();
-        float newScrollX = calculateScrollOffset(position, offset, lines);
+        Coordinates indicatorCoordinates = getIndicatorStartAndEndCoordinates();
+        float newScrollX = calculateScrollOffset(position, offset, indicatorCoordinates);
 
         scrollTo((int) newScrollX, 0);
     }
 
-    private float calculateScrollOffset(int position, int offset, Coordinates lines) {
+    private float calculateScrollOffset(int position, int offset, Coordinates indicatorCoordinates) {
         float newScrollX = tabsContainer.getChildAt(position).getLeft() + offset;
         newScrollX -= getWidth() / 2;
-        newScrollX += ((lines.getEnd() - lines.getStart()) / 2f);
+        newScrollX += ((indicatorCoordinates.getEnd() - indicatorCoordinates.getStart()) / 2f);
         return newScrollX;
     }
 
