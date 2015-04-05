@@ -133,9 +133,12 @@ public class LandingStrip extends HorizontalScrollView {
     private void setSelected(int position) {
         int childCount = tabsContainer.getChildCount();
         for (int index = 0; index < childCount; index++) {
-            tabsContainer.getChildAt(index).setSelected(false);
+            if (index == position) {
+                tabsContainer.getChildAt(position).setSelected(true);
+            } else {
+                tabsContainer.getChildAt(index).setSelected(false);
+            }
         }
-        tabsContainer.getChildAt(position).setSelected(true);
     }
 
     private void notifyDataSetChanged(PagerAdapter pagerAdapter, TabSetterUpper tabSetterUpper) {
