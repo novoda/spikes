@@ -51,7 +51,7 @@ public class LandingStrip extends HorizontalScrollView {
         this.tabsContainer = new LinearLayout(context);
 
         tabsContainer.setOrientation(LinearLayout.HORIZONTAL);
-        tabsContainer.setPadding(HORIZ_PADDING, 0, HORIZ_PADDING, 0);
+        tabsContainer.setPadding(attributes.tabsPaddingLeft, 0, attributes.tabsPaddingRight, 0);
         indicatorPaint.setAntiAlias(true);
         indicatorPaint.setStyle(Paint.Style.FILL);
         indicatorPaint.setColor(getResources().getColor(attributes.indicatorColour));
@@ -63,8 +63,12 @@ public class LandingStrip extends HorizontalScrollView {
         TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.LandingStrip);
         int tabLayoutId = attributes.getResourceId(R.styleable.LandingStrip_tabLayoutId, -1);
         int indicatorColour = attributes.getResourceId(R.styleable.LandingStrip_indicatorColour, -1);
+
+        int tabsPaddingLeft = attributes.getDimensionPixelSize(R.styleable.LandingStrip_tabsLeftPadding, 0);
+        int tabsPaddingRight = attributes.getDimensionPixelSize(R.styleable.LandingStrip_tabsLeftPadding, 0);
+
         attributes.recycle();
-        return new Attributes(tabLayoutId, indicatorColour);
+        return new Attributes(tabLayoutId, indicatorColour, tabsPaddingLeft, tabsPaddingRight);
     }
 
     public void setOnPageChangeListener(ViewPager.OnPageChangeListener delegateOnPageChangeListener) {
@@ -277,9 +281,14 @@ public class LandingStrip extends HorizontalScrollView {
         @ColorRes
         final int indicatorColour;
 
-        Attributes(@LayoutRes int tabLayoutId, @ColorRes int indicatorColour) {
+        final int tabsPaddingLeft;
+        final int tabsPaddingRight;
+
+        Attributes(@LayoutRes int tabLayoutId, @ColorRes int indicatorColour, int tabsPaddingLeft, int tabsPaddingRight) {
             this.tabLayoutId = tabLayoutId;
             this.indicatorColour = indicatorColour;
+            this.tabsPaddingLeft = tabsPaddingLeft;
+            this.tabsPaddingRight = tabsPaddingRight;
         }
     }
 
