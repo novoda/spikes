@@ -18,8 +18,6 @@ import android.widget.TextView;
 public class LandingStrip extends HorizontalScrollView {
 
     private static final int INDICATOR_HEIGHT = 5;
-    private static final int HORIZ_PADDING = 0;
-
     private static final int TAG_KEY_POSITION = R.id.tag_key_position;
 
     private final MutableCoordinates drawCurrentTabCoordinates;
@@ -116,7 +114,7 @@ public class LandingStrip extends HorizontalScrollView {
         private int getHorizontalScrollOffset(int position, float swipePositionOffset) {
             int tabWidth = tabsContainer.getChildAt(position).getWidth();
             int scrollOffset = Math.round(swipePositionOffset * tabWidth);
-            return scrollOffset + HORIZ_PADDING;
+            return scrollOffset + attributes.tabsPaddingLeft;
         }
 
         @Override
