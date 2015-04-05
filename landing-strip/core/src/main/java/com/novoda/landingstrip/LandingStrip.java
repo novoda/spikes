@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 public class LandingStrip extends HorizontalScrollView {
 
-    private static final int INDICATOR_HEIGHT = 5;
     private static final int TAG_KEY_POSITION = R.id.tag_key_position;
 
     private final MutableCoordinates drawCurrentTabCoordinates;
@@ -63,11 +62,13 @@ public class LandingStrip extends HorizontalScrollView {
         int tabLayoutId = attributes.getResourceId(R.styleable.LandingStrip_tabLayoutId, -1);
         int indicatorColour = attributes.getResourceId(R.styleable.LandingStrip_indicatorColour, -1);
 
+        int indicatorHeight = attributes.getDimensionPixelSize(R.styleable.LandingStrip_indicatorHeight, 5);
+
         int tabsPaddingLeft = attributes.getDimensionPixelSize(R.styleable.LandingStrip_tabsLeftPadding, 0);
         int tabsPaddingRight = attributes.getDimensionPixelSize(R.styleable.LandingStrip_tabsRightPadding, 0);
 
         attributes.recycle();
-        return new Attributes(tabLayoutId, indicatorColour, tabsPaddingLeft, tabsPaddingRight);
+        return new Attributes(tabLayoutId, indicatorColour, indicatorHeight, tabsPaddingLeft, tabsPaddingRight);
     }
 
     public void setOnPageChangeListener(ViewPager.OnPageChangeListener delegateOnPageChangeListener) {
@@ -245,7 +246,7 @@ public class LandingStrip extends HorizontalScrollView {
         int height = getHeight();
         canvas.drawRect(
                 indicatorCoordinates.getStart(),
-                height - INDICATOR_HEIGHT,
+                height - attributes.indicatorHeight,
                 indicatorCoordinates.getEnd(),
                 height,
                 indicatorPaint
@@ -282,12 +283,14 @@ public class LandingStrip extends HorizontalScrollView {
         @ColorRes
         final int indicatorColour;
 
+        final int indicatorHeight;
         final int tabsPaddingLeft;
         final int tabsPaddingRight;
 
-        Attributes(@LayoutRes int tabLayoutId, @ColorRes int indicatorColour, int tabsPaddingLeft, int tabsPaddingRight) {
+        Attributes(@LayoutRes int tabLayoutId, @ColorRes int indicatorColour, int indicatorHeight, int tabsPaddingLeft, int tabsPaddingRight) {
             this.tabLayoutId = tabLayoutId;
             this.indicatorColour = indicatorColour;
+            this.indicatorHeight = indicatorHeight;
             this.tabsPaddingLeft = tabsPaddingLeft;
             this.tabsPaddingRight = tabsPaddingRight;
         }
