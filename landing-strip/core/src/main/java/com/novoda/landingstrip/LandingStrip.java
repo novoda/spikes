@@ -64,7 +64,7 @@ public class LandingStrip extends HorizontalScrollView {
         int indicatorColour = attributes.getResourceId(R.styleable.LandingStrip_indicatorColour, -1);
 
         int tabsPaddingLeft = attributes.getDimensionPixelSize(R.styleable.LandingStrip_tabsLeftPadding, 0);
-        int tabsPaddingRight = attributes.getDimensionPixelSize(R.styleable.LandingStrip_tabsLeftPadding, 0);
+        int tabsPaddingRight = attributes.getDimensionPixelSize(R.styleable.LandingStrip_tabsRightPadding, 0);
 
         attributes.recycle();
         return new Attributes(tabLayoutId, indicatorColour, tabsPaddingLeft, tabsPaddingRight);
@@ -114,8 +114,7 @@ public class LandingStrip extends HorizontalScrollView {
 
         private int getHorizontalScrollOffset(int position, float swipePositionOffset) {
             int tabWidth = tabsContainer.getChildAt(position).getWidth();
-            int scrollOffset = Math.round(swipePositionOffset * tabWidth);
-            return scrollOffset + attributes.tabsPaddingLeft;
+            return Math.round(swipePositionOffset * tabWidth);
         }
 
         @Override
@@ -139,6 +138,26 @@ public class LandingStrip extends HorizontalScrollView {
                 tabsContainer.getChildAt(index).setSelected(false);
             }
         }
+    }
+
+    private void scrollToChild(int position, int offset) {
+        Coordinates indicatorCoordinates = getIndicatorStartAndEndCoordinates();
+        float newScrollX = calculateScrollOffset(position, offset, indicatorCoordinates);
+
+        scrollTo((int) newScrollX, 0);
+    }
+
+    private float calculateScrollOffset(int position, int offset, Coordinates indicatorCoordinates) {
+        float newScrollX = tabsContainer.getChildAt(position).getLeft() + offset;
+        newScrollX -= getWidth() / 2;
+        newScrollX += ((indicatorCoordinates.getEnd() - indicatorCoordinates.getStart()) / 2f);
+        return newScrollX;
+    }
+
+    @Override
+    public void scrollTo(int x, int y) {
+        super.scrollTo(x, y);
+        invalidate();
     }
 
     private void notifyDataSetChanged(PagerAdapter pagerAdapter, TabSetterUpper tabSetterUpper) {
@@ -231,26 +250,6 @@ public class LandingStrip extends HorizontalScrollView {
                 height,
                 indicatorPaint
         );
-    }
-
-    private void scrollToChild(int position, int offset) {
-        Coordinates indicatorCoordinates = getIndicatorStartAndEndCoordinates();
-        float newScrollX = calculateScrollOffset(position, offset, indicatorCoordinates);
-
-        scrollTo((int) newScrollX, 0);
-    }
-
-    private float calculateScrollOffset(int position, int offset, Coordinates indicatorCoordinates) {
-        float newScrollX = tabsContainer.getChildAt(position).getLeft() + offset;
-        newScrollX -= getWidth() / 2;
-        newScrollX += ((indicatorCoordinates.getEnd() - indicatorCoordinates.getStart()) / 2f);
-        return newScrollX;
-    }
-
-    @Override
-    public void scrollTo(int x, int y) {
-        super.scrollTo(x, y);
-        invalidate();
     }
 
     static class State {
