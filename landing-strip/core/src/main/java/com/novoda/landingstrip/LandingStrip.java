@@ -1,11 +1,8 @@
 package com.novoda.landingstrip;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.annotation.ColorRes;
-import android.support.annotation.LayoutRes;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -38,7 +35,7 @@ public class LandingStrip extends HorizontalScrollView {
         setWillNotDraw(false);
         setHorizontalScrollBarEnabled(false);
 
-        this.attributes = readAttributes(context, attrs);
+        this.attributes = Attributes.readAttributes(context, attrs);
         this.delegateOnPageChangeListener = new ViewPager.SimpleOnPageChangeListener();
         this.layoutInflater = LayoutInflater.from(context);
         this.indicatorPaint = new Paint();
@@ -49,26 +46,12 @@ public class LandingStrip extends HorizontalScrollView {
         this.tabsContainer = new LinearLayout(context);
 
         tabsContainer.setOrientation(LinearLayout.HORIZONTAL);
-        tabsContainer.setPadding(attributes.tabsPaddingLeft, 0, attributes.tabsPaddingRight, 0);
+        tabsContainer.setPadding(attributes.getTabsPaddingLeft(), 0, attributes.getTabsPaddingRight(), 0);
         indicatorPaint.setAntiAlias(true);
         indicatorPaint.setStyle(Paint.Style.FILL);
-        indicatorPaint.setColor(getResources().getColor(attributes.indicatorColour));
+        indicatorPaint.setColor(getResources().getColor(attributes.getIndicatorColour()));
 
         addView(tabsContainer, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-    }
-
-    private static Attributes readAttributes(Context context, AttributeSet attrs) {
-        TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.LandingStrip);
-        int tabLayoutId = attributes.getResourceId(R.styleable.LandingStrip_tabLayoutId, -1);
-        int indicatorColour = attributes.getResourceId(R.styleable.LandingStrip_indicatorColour, -1);
-
-        int indicatorHeight = attributes.getDimensionPixelSize(R.styleable.LandingStrip_indicatorHeight, 5);
-
-        int tabsPaddingLeft = attributes.getDimensionPixelSize(R.styleable.LandingStrip_tabsLeftPadding, 0);
-        int tabsPaddingRight = attributes.getDimensionPixelSize(R.styleable.LandingStrip_tabsRightPadding, 0);
-
-        attributes.recycle();
-        return new Attributes(tabLayoutId, indicatorColour, indicatorHeight, tabsPaddingLeft, tabsPaddingRight);
     }
 
     public void setOnPageChangeListener(ViewPager.OnPageChangeListener delegateOnPageChangeListener) {
@@ -166,7 +149,7 @@ public class LandingStrip extends HorizontalScrollView {
         int tabCount = pagerAdapter.getCount();
         for (int position = 0; position < tabCount; position++) {
             CharSequence title = pagerAdapter.getPageTitle(position);
-            View inflatedTabView = layoutInflater.inflate(attributes.tabLayoutId, this, false);
+            View inflatedTabView = layoutInflater.inflate(attributes.getTabLayoutId(), this, false);
             addTab(position, title, inflatedTabView, tabSetterUpper);
         }
     }
@@ -246,7 +229,7 @@ public class LandingStrip extends HorizontalScrollView {
         int height = getHeight();
         canvas.drawRect(
                 indicatorCoordinates.getStart(),
-                height - attributes.indicatorHeight,
+                height - attributes.getIndicatorHeight(),
                 indicatorCoordinates.getEnd(),
                 height,
                 indicatorPaint
@@ -272,27 +255,6 @@ public class LandingStrip extends HorizontalScrollView {
 
         int getPosition() {
             return position;
-        }
-    }
-
-    static class Attributes {
-
-        @LayoutRes
-        final int tabLayoutId;
-
-        @ColorRes
-        final int indicatorColour;
-
-        final int indicatorHeight;
-        final int tabsPaddingLeft;
-        final int tabsPaddingRight;
-
-        Attributes(@LayoutRes int tabLayoutId, @ColorRes int indicatorColour, int indicatorHeight, int tabsPaddingLeft, int tabsPaddingRight) {
-            this.tabLayoutId = tabLayoutId;
-            this.indicatorColour = indicatorColour;
-            this.indicatorHeight = indicatorHeight;
-            this.tabsPaddingLeft = tabsPaddingLeft;
-            this.tabsPaddingRight = tabsPaddingRight;
         }
     }
 
