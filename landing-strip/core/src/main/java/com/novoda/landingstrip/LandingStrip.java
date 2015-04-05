@@ -16,15 +16,12 @@ public class LandingStrip extends HorizontalScrollView {
 
     private static final int TAG_KEY_POSITION = R.id.tag_key_position;
 
-    private final MutableCoordinates drawCurrentTabCoordinates;
-    private final MutableCoordinates drawNextTabCoordinates;
-    private final MutableCoordinates drawMovingIndicatorCoordinates;
-
     private final Attributes attributes;
     private final LayoutInflater layoutInflater;
     private final Paint indicatorPaint;
     private final State state;
     private final LinearLayout tabsContainer;
+    private final IndicatorCoordinatesCalculator indicatorCoordinatesCalculator;
 
     private ViewPager viewPager;
     private ViewPager.OnPageChangeListener delegateOnPageChangeListener;
@@ -40,9 +37,7 @@ public class LandingStrip extends HorizontalScrollView {
         this.layoutInflater = LayoutInflater.from(context);
         this.indicatorPaint = new Paint();
         this.state = new State();
-        this.drawCurrentTabCoordinates = new MutableCoordinates();
-        this.drawNextTabCoordinates = new MutableCoordinates();
-        this.drawMovingIndicatorCoordinates = new MutableCoordinates();
+        this.indicatorCoordinatesCalculator = IndicatorCoordinatesCalculator.newInstance();
         this.tabsContainer = new LinearLayout(context);
 
         tabsContainer.setOrientation(LinearLayout.HORIZONTAL);
@@ -125,7 +120,7 @@ public class LandingStrip extends HorizontalScrollView {
     }
 
     private void scrollToChild(int position, int offset) {
-        Coordinates indicatorCoordinates = getIndicatorStartAndEndCoordinates();
+        Coordinates indicatorCoordinates = indicatorCoordinatesCalculator.calculateIndicatorCoordinates(state, tabsContainer);
         float newScrollX = calculateScrollOffset(position, offset, indicatorCoordinates);
 
         scrollTo((int) newScrollX, 0);
@@ -176,53 +171,8 @@ public class LandingStrip extends HorizontalScrollView {
             return;
         }
 
-        Coordinates indicatorCoordinates = getIndicatorStartAndEndCoordinates();
+        Coordinates indicatorCoordinates = indicatorCoordinatesCalculator.calculateIndicatorCoordinates(state, tabsContainer);
         drawIndicator(canvas, indicatorCoordinates);
-    }
-
-    private Coordinates getIndicatorStartAndEndCoordinates() {
-        int currentPosition = state.getPosition();
-        View currentTab = tabsContainer.getChildAt(currentPosition);
-
-        float currentTabStart = currentTab.getLeft();
-        float currentTabEnd = currentTab.getRight();
-        float positionOffset = state.getOffset();
-
-        drawCurrentTabCoordinates.setStart(currentTabStart);
-        drawCurrentTabCoordinates.setEnd(currentTabEnd);
-
-        if (isScrolling(positionOffset, currentPosition)) {
-            View nextTab = tabsContainer.getChildAt(currentPosition + 1);
-
-            drawNextTabCoordinates.setStart(nextTab.getLeft());
-            drawNextTabCoordinates.setEnd(nextTab.getRight());
-
-            return calculateMovingIndicatorCoordinates(positionOffset, drawCurrentTabCoordinates, drawNextTabCoordinates);
-        }
-        return drawCurrentTabCoordinates;
-    }
-
-    private boolean isScrolling(float positionOffset, int currentPosition) {
-        return positionOffset > 0f && currentPosition < tabsContainer.getChildCount() - 1;
-    }
-
-    private Coordinates calculateMovingIndicatorCoordinates(float positionOffset, Coordinates currentTab, Coordinates nextTab) {
-        float nextTabPositionOffset = getFractionFrom(positionOffset);
-        float indicatorStart = getIndicatorPosition(nextTab.getStart(), positionOffset, currentTab.getStart(), nextTabPositionOffset);
-        float indicatorEnd = getIndicatorPosition(nextTab.getEnd(), positionOffset, currentTab.getEnd(), nextTabPositionOffset);
-
-        drawMovingIndicatorCoordinates.setStart(indicatorStart);
-        drawMovingIndicatorCoordinates.setEnd(indicatorEnd);
-
-        return drawMovingIndicatorCoordinates;
-    }
-
-    private float getFractionFrom(float input) {
-        return 1f - input;
-    }
-
-    private float getIndicatorPosition(float tabOffset, float positionOffset, float tabBoundary, float nextTabPositionOffset) {
-        return positionOffset * tabOffset + nextTabPositionOffset * tabBoundary;
     }
 
     protected void drawIndicator(Canvas canvas, Coordinates indicatorCoordinates) {
@@ -234,28 +184,6 @@ public class LandingStrip extends HorizontalScrollView {
                 height,
                 indicatorPaint
         );
-    }
-
-    static class State {
-
-        private float offset;
-        private int position;
-
-        void updateOffset(float offset) {
-            this.offset = offset;
-        }
-
-        void updatePosition(int position) {
-            this.position = position;
-        }
-
-        float getOffset() {
-            return offset;
-        }
-
-        int getPosition() {
-            return position;
-        }
     }
 
     public interface TabSetterUpper {
