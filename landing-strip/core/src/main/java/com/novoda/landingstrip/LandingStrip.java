@@ -37,6 +37,7 @@ public class LandingStrip extends HorizontalScrollView {
         super(context, attrs);
         setFillViewport(true);
         setWillNotDraw(false);
+        setHorizontalScrollBarEnabled(false);
 
         this.attributes = readAttributes(context, attrs);
         this.delegateOnPageChangeListener = new ViewPager.SimpleOnPageChangeListener();
