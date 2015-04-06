@@ -9,15 +9,13 @@ class Foo implements ViewPager.OnPageChangeListener {
 
     private final State state;
     private final ViewGroup tabsContainer;
-    private final IndicatorCoordinatesCalculator indicatorCoordinatesCalculator;
     private final HorizontalScrollView scrollView;
 
     private boolean firstTimeAccessed = true;
 
-    Foo(State state, ViewGroup tabsContainer, IndicatorCoordinatesCalculator indicatorCoordinatesCalculator, HorizontalScrollView scrollView) {
+    Foo(State state, ViewGroup tabsContainer, HorizontalScrollView scrollView) {
         this.state = state;
         this.tabsContainer = tabsContainer;
-        this.indicatorCoordinatesCalculator = indicatorCoordinatesCalculator;
         this.scrollView = scrollView;
     }
 
@@ -28,8 +26,8 @@ class Foo implements ViewPager.OnPageChangeListener {
             firstTimeAccessed = false;
         }
 
-        Coordinates indicatorCoordinates = indicatorCoordinatesCalculator.calculateIndicatorCoordinates(position, positionOffset, tabsContainer);
-        state.updateIndicatorCoordinates(indicatorCoordinates);
+        state.updatePosition(position);
+        state.updatePositionOffset(positionOffset);
 
         int scrollOffset = getHorizontalScrollOffset(position, positionOffset);
         float newScrollX = calculateScrollOffset(position, scrollOffset);

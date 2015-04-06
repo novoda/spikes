@@ -21,6 +21,7 @@ public class LandingStrip extends HorizontalScrollView {
     private final Paint indicatorPaint;
     private final State state;
     private final LinearLayout tabsContainer;
+    private final IndicatorCoordinatesCalculator indicatorCoordinatesCalculator;
 
     private ViewPager viewPager;
 
@@ -35,9 +36,9 @@ public class LandingStrip extends HorizontalScrollView {
         this.indicatorPaint = new Paint();
         this.state = new State();
         this.tabsContainer = new LinearLayout(context);
+        this.indicatorCoordinatesCalculator = IndicatorCoordinatesCalculator.newInstance();
 
         state.updateDelegateOnPageListener(new ViewPager.SimpleOnPageChangeListener());
-        state.updateIndicatorCoordinates(new MutableCoordinates());
 
         tabsContainer.setOrientation(LinearLayout.HORIZONTAL);
         tabsContainer.setPadding(attributes.getTabsPaddingLeft(), 0, attributes.getTabsPaddingRight(), 0);
@@ -67,7 +68,7 @@ public class LandingStrip extends HorizontalScrollView {
 
     public void setViewPager(ViewPager viewPager, PagerAdapter pagerAdapter, TabSetterUpper tabSetterUpper) {
         this.viewPager = viewPager;
-        viewPager.setOnPageChangeListener(new Foo(state, tabsContainer, IndicatorCoordinatesCalculator.newInstance(), this));
+        viewPager.setOnPageChangeListener(new Foo(state, tabsContainer, this));
         notifyDataSetChanged(pagerAdapter, tabSetterUpper);
     }
 
@@ -105,7 +106,7 @@ public class LandingStrip extends HorizontalScrollView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        drawIndicator(canvas, state.getIndicatorCoordinates());
+        drawIndicator(canvas, indicatorCoordinatesCalculator.calculate(state.getPosition(), state.getPositionOffset(), tabsContainer));
     }
 
     protected void drawIndicator(Canvas canvas, Coordinates indicatorCoordinates) {

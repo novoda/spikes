@@ -23,7 +23,7 @@ class IndicatorCoordinatesCalculator {
         this.drawMovingIndicatorCoordinates = drawMovingIndicatorCoordinates;
     }
 
-    Coordinates calculateIndicatorCoordinates(int currentPosition, float positionOffset, ViewGroup tabsContainer) {
+    Coordinates calculate(int currentPosition, float positionOffset, ViewGroup tabsContainer) {
         View currentTab = tabsContainer.getChildAt(currentPosition);
 
         float currentTabStart = currentTab.getLeft();
