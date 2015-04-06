@@ -59,23 +59,23 @@ class Attributes {
         this.tabsPaddingRight = tabsPaddingRight;
     }
 
-    public int getTabLayoutId() {
+    int getTabLayoutId() {
         return tabLayoutId;
     }
 
-    public int getIndicatorColour() {
+    int getIndicatorColour() {
         return indicatorColour;
     }
 
-    public int getIndicatorHeight() {
+    int getIndicatorHeight() {
         return indicatorHeight;
     }
 
-    public int getTabsPaddingLeft() {
+    int getTabsPaddingLeft() {
         return tabsPaddingLeft;
     }
 
-    public int getTabsPaddingRight() {
+    int getTabsPaddingRight() {
         return tabsPaddingRight;
     }
 
