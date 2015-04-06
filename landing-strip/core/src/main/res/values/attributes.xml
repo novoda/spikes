@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <declare-styleable name="LandingStrip">
+    <attr name="tabLayoutId" format="reference" />
+    <attr name="indicatorColor" format="color" />
+    <attr name="indicatorHeight" format="dimension" />
+    <attr name="tabsLeftPadding" format="dimension" />
+    <attr name="tabsRightPadding" format="dimension" />
+  </declare-styleable>
+
+</resources>
