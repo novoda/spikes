@@ -21,7 +21,6 @@ public class LandingStrip extends HorizontalScrollView {
     private final Paint indicatorPaint;
     private final State state;
     private final LinearLayout tabsContainer;
-    private final IndicatorCoordinatesCalculator indicatorCoordinatesCalculator;
 
     private ViewPager viewPager;
 
@@ -35,7 +34,6 @@ public class LandingStrip extends HorizontalScrollView {
         this.layoutInflater = LayoutInflater.from(context);
         this.indicatorPaint = new Paint();
         this.state = new State();
-        this.indicatorCoordinatesCalculator = IndicatorCoordinatesCalculator.newInstance();
         this.tabsContainer = new LinearLayout(context);
 
         state.updateDelegateOnPageListener(new ViewPager.SimpleOnPageChangeListener());
@@ -69,7 +67,7 @@ public class LandingStrip extends HorizontalScrollView {
 
     public void setViewPager(ViewPager viewPager, PagerAdapter pagerAdapter, TabSetterUpper tabSetterUpper) {
         this.viewPager = viewPager;
-        viewPager.setOnPageChangeListener(new Foo(state, tabsContainer, indicatorCoordinatesCalculator, this));
+        viewPager.setOnPageChangeListener(new Foo(state, tabsContainer, IndicatorCoordinatesCalculator.newInstance(), this));
         notifyDataSetChanged(pagerAdapter, tabSetterUpper);
     }
 

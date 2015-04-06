@@ -26,11 +26,9 @@ class Foo implements ViewPager.OnPageChangeListener {
             setSelected(position);
             firstTimeAccessed = false;
         }
-        state.updatePosition(position);
-        state.updateOffset(positionOffset);
 
-        int offset = getHorizontalScrollOffset(position, positionOffset);
-        scrollToChild(position, offset);
+        int scrollOffset = getHorizontalScrollOffset(position, positionOffset);
+        scrollToChild(position, positionOffset, scrollOffset);
         state.getDelegateOnPageListener().onPageScrolled(position, positionOffset, positionOffsetPixels);
     }
 
@@ -39,8 +37,8 @@ class Foo implements ViewPager.OnPageChangeListener {
         return Math.round(swipePositionOffset * tabWidth);
     }
 
-    private void scrollToChild(int position, int offset) {
-        Coordinates indicatorCoordinates = indicatorCoordinatesCalculator.calculateIndicatorCoordinates(state, tabsContainer);
+    private void scrollToChild(int position, float positionOffset, int offset) {
+        Coordinates indicatorCoordinates = indicatorCoordinatesCalculator.calculateIndicatorCoordinates(position, positionOffset, tabsContainer);
         float newScrollX = calculateScrollOffset(position, offset, indicatorCoordinates);
 
         state.updateIndicatorCoordinates(indicatorCoordinates);

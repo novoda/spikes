@@ -23,11 +23,9 @@ class IndicatorCoordinatesCalculator {
         this.drawMovingIndicatorCoordinates = drawMovingIndicatorCoordinates;
     }
 
-    Coordinates calculateIndicatorCoordinates(State state, ViewGroup tabsContainer) {
-        int currentPosition = state.getPosition();
+    Coordinates calculateIndicatorCoordinates(int currentPosition, float positionOffset, ViewGroup tabsContainer) {
         View currentTab = tabsContainer.getChildAt(currentPosition);
 
-        float positionOffset = state.getOffset();
         float currentTabStart = currentTab.getLeft();
         float currentTabEnd = currentTab.getRight();
 
