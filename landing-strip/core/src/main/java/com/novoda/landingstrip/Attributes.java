@@ -54,7 +54,7 @@ class Attributes {
         if (tabLayoutId != MISSING_TAB_LAYOUT_ID) {
             return;
         }
-        throw new MissingTabLayoutIdExecption();
+        throw new MissingTabLayoutIdException();
     }
 
     private static int getDimensPixelSize(int styleIndex, @DimenRes int defaultSize, TypedArray attributes) {
@@ -94,8 +94,8 @@ class Attributes {
         return tabsPaddingRight;
     }
 
-    static class MissingTabLayoutIdExecption extends RuntimeException {
-        MissingTabLayoutIdExecption() {
+    static class MissingTabLayoutIdException extends RuntimeException {
+        MissingTabLayoutIdException() {
             super("No tabLayoutId has been set, you need to set one!");
         }
     }
