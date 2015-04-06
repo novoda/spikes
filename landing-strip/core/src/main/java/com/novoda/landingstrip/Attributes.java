@@ -48,7 +48,7 @@ class Attributes {
         if (tabLayoutId != MISSING_TAB_LAYOUT_ID) {
             return;
         }
-        throw new MissingTabLayoutId();
+        throw new MissingTabLayoutIdExecption();
     }
 
     Attributes(@LayoutRes int tabLayoutId, @ColorRes int indicatorColour, int indicatorHeight, int tabsPaddingLeft, int tabsPaddingRight) {
@@ -79,8 +79,8 @@ class Attributes {
         return tabsPaddingRight;
     }
 
-    static class MissingTabLayoutId extends RuntimeException {
-        MissingTabLayoutId() {
+    static class MissingTabLayoutIdExecption extends RuntimeException {
+        MissingTabLayoutIdExecption() {
             super("No tabLayoutId has been set, you need to set one!");
         }
     }
