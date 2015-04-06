@@ -24,7 +24,6 @@ public class LandingStrip extends HorizontalScrollView {
     private final IndicatorCoordinatesCalculator indicatorCoordinatesCalculator;
 
     private ViewPager viewPager;
-    private ViewPager.OnPageChangeListener delegateOnPageChangeListener;
 
     public LandingStrip(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -33,13 +32,13 @@ public class LandingStrip extends HorizontalScrollView {
         setHorizontalScrollBarEnabled(false);
 
         this.attributes = Attributes.readAttributes(context, attrs);
-        this.delegateOnPageChangeListener = new ViewPager.SimpleOnPageChangeListener();
         this.layoutInflater = LayoutInflater.from(context);
         this.indicatorPaint = new Paint();
         this.state = new State();
         this.indicatorCoordinatesCalculator = IndicatorCoordinatesCalculator.newInstance();
         this.tabsContainer = new LinearLayout(context);
 
+        state.updateDelegateOnPageListener(new ViewPager.SimpleOnPageChangeListener());
         tabsContainer.setOrientation(LinearLayout.HORIZONTAL);
         tabsContainer.setPadding(attributes.getTabsPaddingLeft(), 0, attributes.getTabsPaddingRight(), 0);
         indicatorPaint.setAntiAlias(true);
@@ -50,7 +49,7 @@ public class LandingStrip extends HorizontalScrollView {
     }
 
     public void setOnPageChangeListener(ViewPager.OnPageChangeListener delegateOnPageChangeListener) {
-        this.delegateOnPageChangeListener = delegateOnPageChangeListener;
+        state.updateDelegateOnPageListener(delegateOnPageChangeListener);
     }
 
     public void setViewPager(ViewPager viewPager, PagerAdapter pagerAdapter) {
@@ -88,7 +87,7 @@ public class LandingStrip extends HorizontalScrollView {
 
             int offset = getHorizontalScrollOffset(position, positionOffset);
             scrollToChild(position, offset);
-            delegateOnPageChangeListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            state.getDelegateOnPageListener().onPageScrolled(position, positionOffset, positionOffsetPixels);
         }
 
         private int getHorizontalScrollOffset(int position, float swipePositionOffset) {
@@ -113,7 +112,7 @@ public class LandingStrip extends HorizontalScrollView {
         @Override
         public void onPageSelected(int position) {
             setSelected(position);
-            delegateOnPageChangeListener.onPageSelected(position);
+            state.getDelegateOnPageListener().onPageSelected(position);
         }
 
         private void setSelected(int position) {
@@ -128,8 +127,8 @@ public class LandingStrip extends HorizontalScrollView {
         }
 
         @Override
-        public void onPageScrollStateChanged(int state) {
-            delegateOnPageChangeListener.onPageScrollStateChanged(state);
+        public void onPageScrollStateChanged(int changedState) {
+            state.getDelegateOnPageListener().onPageScrollStateChanged(changedState);
         }
 
     };
