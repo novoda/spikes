@@ -32,7 +32,7 @@ class IndicatorCoordinatesCalculator {
         drawCurrentTabCoordinates.setStart(currentTabStart);
         drawCurrentTabCoordinates.setEnd(currentTabEnd);
 
-        if (isScrolling(positionOffset, currentPosition, tabsContainer.getChildCount())) {
+        if (isScrolling(positionOffset) && hasNextTab(currentPosition, tabsContainer.getChildCount())) {
             View nextTab = tabsContainer.getChildAt(currentPosition + 1);
 
             drawNextTabCoordinates.setStart(nextTab.getLeft());
@@ -43,8 +43,13 @@ class IndicatorCoordinatesCalculator {
         return drawCurrentTabCoordinates;
     }
 
-    private boolean isScrolling(float positionOffset, int currentPosition, int childCount) {
-        return positionOffset > 0f && currentPosition < childCount - 1;
+    private boolean isScrolling(float positionOffset) {
+        return positionOffset > 0f;
+    }
+
+    private boolean hasNextTab(int currentPosition, int childCount) {
+        return currentPosition < childCount;
+
     }
 
     private Coordinates calculateMovingIndicatorCoordinates(float positionOffset, Coordinates currentTab, Coordinates nextTab) {
