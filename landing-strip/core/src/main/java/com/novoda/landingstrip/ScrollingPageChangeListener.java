@@ -3,28 +3,24 @@ package com.novoda.landingstrip;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.HorizontalScrollView;
 
-class Foo implements ViewPager.OnPageChangeListener {
+class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
 
     private final State state;
     private final ViewGroup tabsContainer;
-    private final HorizontalScrollView scrollView;
+    private final Scrollable scrollable;
 
     private boolean firstTimeAccessed = true;
 
-    Foo(State state, ViewGroup tabsContainer, HorizontalScrollView scrollView) {
+    ScrollingPageChangeListener(State state, ViewGroup tabsContainer, Scrollable scrollable) {
         this.state = state;
         this.tabsContainer = tabsContainer;
-        this.scrollView = scrollView;
+        this.scrollable = scrollable;
     }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        if (firstTimeAccessed) {
-            setSelected(position);
-            firstTimeAccessed = false;
-        }
+        handleAdapterSetBecausePageSelectedIsNotCalled(position);
 
         state.updatePosition(position);
         state.updatePositionOffset(positionOffset);
@@ -32,9 +28,16 @@ class Foo implements ViewPager.OnPageChangeListener {
         int scrollOffset = getHorizontalScrollOffset(position, positionOffset);
         float newScrollX = calculateScrollOffset(position, scrollOffset);
 
-        scrollView.scrollTo((int) newScrollX, 0);
+        scrollable.scrollTo((int) newScrollX);
 
         state.getDelegateOnPageListener().onPageScrolled(position, positionOffset, positionOffsetPixels);
+    }
+
+    private void handleAdapterSetBecausePageSelectedIsNotCalled(int position) {
+        if (firstTimeAccessed) {
+            setSelected(position);
+            firstTimeAccessed = false;
+        }
     }
 
     private int getHorizontalScrollOffset(int position, float swipePositionOffset) {
@@ -46,10 +49,14 @@ class Foo implements ViewPager.OnPageChangeListener {
         View tabForPosition = tabsContainer.getChildAt(position);
 
         float tabStartX = tabForPosition.getLeft() + scrollOffset;
-        int  viewMiddleOffset = scrollView.getWidth() / 2;
+        int  viewMiddleOffset = getTabParentWidth() / 2;
         float tabCenterOffset = ((tabForPosition.getRight() - tabForPosition.getLeft()) / 2f);
 
         return tabStartX - viewMiddleOffset + tabCenterOffset;
+    }
+
+    private int getTabParentWidth() {
+        return ((View) tabsContainer.getParent()).getWidth();
     }
 
     @Override

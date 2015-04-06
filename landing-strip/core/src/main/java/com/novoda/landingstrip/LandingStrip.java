@@ -12,7 +12,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class LandingStrip extends HorizontalScrollView {
+public class LandingStrip extends HorizontalScrollView implements Scrollable {
 
     private static final int TAG_KEY_POSITION = R.id.tag_key_position;
 
@@ -68,14 +68,8 @@ public class LandingStrip extends HorizontalScrollView {
 
     public void setViewPager(ViewPager viewPager, PagerAdapter pagerAdapter, TabSetterUpper tabSetterUpper) {
         this.viewPager = viewPager;
-        viewPager.setOnPageChangeListener(new Foo(state, tabsContainer, this));
+        viewPager.setOnPageChangeListener(new ScrollingPageChangeListener(state, tabsContainer, this));
         notifyDataSetChanged(pagerAdapter, tabSetterUpper);
-    }
-
-    @Override
-    public void scrollTo(int x, int y) {
-        super.scrollTo(x, y);
-        invalidate();
     }
 
     private void notifyDataSetChanged(PagerAdapter pagerAdapter, TabSetterUpper tabSetterUpper) {
@@ -118,6 +112,17 @@ public class LandingStrip extends HorizontalScrollView {
                 height,
                 indicatorPaint
         );
+    }
+
+    @Override
+    public void scrollTo(int x) {
+        scrollTo(x, 0);
+    }
+
+    @Override
+    public void scrollTo(int x, int y) {
+        super.scrollTo(x, y);
+        invalidate();
     }
 
     public interface TabSetterUpper {
