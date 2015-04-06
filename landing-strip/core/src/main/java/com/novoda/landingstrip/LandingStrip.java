@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 public class LandingStrip extends HorizontalScrollView implements Scrollable {
 
-    private static final int TAG_KEY_POSITION = R.id.tag_key_position;
+    private static final int TAG_KEY_POSITION = R.id.ls__tag_key_position;
 
     private final Attributes attributes;
     private final LayoutInflater layoutInflater;
