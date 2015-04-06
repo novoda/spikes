@@ -27,8 +27,14 @@ class Foo implements ViewPager.OnPageChangeListener {
             firstTimeAccessed = false;
         }
 
+        Coordinates indicatorCoordinates = indicatorCoordinatesCalculator.calculateIndicatorCoordinates(position, positionOffset, tabsContainer);
+        state.updateIndicatorCoordinates(indicatorCoordinates);
+
         int scrollOffset = getHorizontalScrollOffset(position, positionOffset);
-        scrollToChild(position, positionOffset, scrollOffset);
+        float newScrollX = calculateScrollOffset(position, scrollOffset, indicatorCoordinates);
+
+        scrollView.scrollTo((int) newScrollX, 0);
+
         state.getDelegateOnPageListener().onPageScrolled(position, positionOffset, positionOffsetPixels);
     }
 
@@ -37,20 +43,15 @@ class Foo implements ViewPager.OnPageChangeListener {
         return Math.round(swipePositionOffset * tabWidth);
     }
 
-    private void scrollToChild(int position, float positionOffset, int offset) {
-        Coordinates indicatorCoordinates = indicatorCoordinatesCalculator.calculateIndicatorCoordinates(position, positionOffset, tabsContainer);
-        float newScrollX = calculateScrollOffset(position, offset, indicatorCoordinates);
-
-        state.updateIndicatorCoordinates(indicatorCoordinates);
-
-        scrollView.scrollTo((int) newScrollX, 0);
-    }
-
-    private float calculateScrollOffset(int position, int offset, Coordinates indicatorCoordinates) {
-        float newScrollX = tabsContainer.getChildAt(position).getLeft() + offset;
-        newScrollX -= scrollView.getWidth() / 2;
+    private float calculateScrollOffset(int position, int scrollOffset, Coordinates indicatorCoordinates) {
+        float newScrollX = tabsContainer.getChildAt(position).getLeft() + scrollOffset;
+        newScrollX -= maintainMiddlePositionWhilstScrolling();
         newScrollX += ((indicatorCoordinates.getEnd() - indicatorCoordinates.getStart()) / 2f);
         return newScrollX;
+    }
+
+    private int maintainMiddlePositionWhilstScrolling() {
+        return scrollView.getWidth() / 2;
     }
 
     @Override
