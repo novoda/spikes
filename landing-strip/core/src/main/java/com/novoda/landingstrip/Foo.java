@@ -1,6 +1,7 @@
 package com.novoda.landingstrip;
 
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 
@@ -31,7 +32,7 @@ class Foo implements ViewPager.OnPageChangeListener {
         state.updateIndicatorCoordinates(indicatorCoordinates);
 
         int scrollOffset = getHorizontalScrollOffset(position, positionOffset);
-        float newScrollX = calculateScrollOffset(position, scrollOffset, indicatorCoordinates);
+        float newScrollX = calculateScrollOffset(position, scrollOffset);
 
         scrollView.scrollTo((int) newScrollX, 0);
 
@@ -43,15 +44,14 @@ class Foo implements ViewPager.OnPageChangeListener {
         return Math.round(swipePositionOffset * tabWidth);
     }
 
-    private float calculateScrollOffset(int position, int scrollOffset, Coordinates indicatorCoordinates) {
-        float newScrollX = tabsContainer.getChildAt(position).getLeft() + scrollOffset;
-        newScrollX -= maintainMiddlePositionWhilstScrolling();
-        newScrollX += ((indicatorCoordinates.getEnd() - indicatorCoordinates.getStart()) / 2f);
-        return newScrollX;
-    }
+    private float calculateScrollOffset(int position, int scrollOffset) {
+        View tabForPosition = tabsContainer.getChildAt(position);
 
-    private int maintainMiddlePositionWhilstScrolling() {
-        return scrollView.getWidth() / 2;
+        float tabStartX = tabForPosition.getLeft() + scrollOffset;
+        int  viewMiddleOffset = scrollView.getWidth() / 2;
+        float tabCenterOffset = ((tabForPosition.getRight() - tabForPosition.getLeft()) / 2f);
+
+        return tabStartX - viewMiddleOffset + tabCenterOffset;
     }
 
     @Override
