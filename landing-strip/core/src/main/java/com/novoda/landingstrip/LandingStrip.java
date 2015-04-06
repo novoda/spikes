@@ -46,7 +46,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         tabsContainer.setPadding(attributes.getTabsPaddingLeft(), 0, attributes.getTabsPaddingRight(), 0);
         indicatorPaint.setAntiAlias(true);
         indicatorPaint.setStyle(Paint.Style.FILL);
-        indicatorPaint.setColor(getResources().getColor(attributes.getIndicatorColour()));
+        indicatorPaint.setColor(getResources().getColor(attributes.getIndicatorColor()));
 
         addView(tabsContainer, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }

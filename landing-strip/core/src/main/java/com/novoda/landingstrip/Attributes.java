@@ -19,7 +19,7 @@ class Attributes {
     private final int tabLayoutId;
 
     @ColorRes
-    private final int indicatorColour;
+    private final int indicatorColor;
 
     private final int indicatorHeight;
     private final int tabsPaddingLeft;
@@ -33,7 +33,7 @@ class Attributes {
 
             throwIfTabLayoutIsMissing(tabLayoutId);
 
-            int indicatorColour = xml.getResourceId(R.styleable.LandingStrip_indicatorColour, DEFAULT_INDICATOR_COLOUR);
+            int indicatorColour = xml.getResourceId(R.styleable.LandingStrip_indicatorColor, DEFAULT_INDICATOR_COLOUR);
             int indicatorHeight = xml.getDimensionPixelSize(R.styleable.LandingStrip_indicatorHeight, DEFAULT_INDICATOR_HEIGHT);
             int tabsPaddingLeft = xml.getDimensionPixelSize(R.styleable.LandingStrip_tabsLeftPadding, DEFAULT_TABS_PADDING);
             int tabsPaddingRight = xml.getDimensionPixelSize(R.styleable.LandingStrip_tabsRightPadding, DEFAULT_TABS_PADDING);
@@ -51,9 +51,9 @@ class Attributes {
         throw new MissingTabLayoutIdExecption();
     }
 
-    Attributes(@LayoutRes int tabLayoutId, @ColorRes int indicatorColour, int indicatorHeight, int tabsPaddingLeft, int tabsPaddingRight) {
+    Attributes(@LayoutRes int tabLayoutId, @ColorRes int indicatorColor, int indicatorHeight, int tabsPaddingLeft, int tabsPaddingRight) {
         this.tabLayoutId = tabLayoutId;
-        this.indicatorColour = indicatorColour;
+        this.indicatorColor = indicatorColor;
         this.indicatorHeight = indicatorHeight;
         this.tabsPaddingLeft = tabsPaddingLeft;
         this.tabsPaddingRight = tabsPaddingRight;
@@ -63,8 +63,8 @@ class Attributes {
         return tabLayoutId;
     }
 
-    int getIndicatorColour() {
-        return indicatorColour;
+    int getIndicatorColor() {
+        return indicatorColor;
     }
 
     int getIndicatorHeight() {

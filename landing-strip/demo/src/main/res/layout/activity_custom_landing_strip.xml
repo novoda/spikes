@@ -16,7 +16,7 @@
       android:layout_height="50dp"
       android:layout_width="wrap_content"
       app:tabLayoutId="@layout/tab_simple_text"
-      app:indicatorColour="@android:color/white" />
+      app:indicatorColor="@android:color/white" />
 
   </FrameLayout>
 
