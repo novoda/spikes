@@ -5,9 +5,9 @@ import android.view.ViewGroup;
 
 class IndicatorCoordinatesCalculator {
 
-    private final MutableCoordinates drawCurrentTabCoordinates;
-    private final MutableCoordinates drawNextTabCoordinates;
-    private final MutableCoordinates drawMovingIndicatorCoordinates;
+    private final MutableCoordinates currentTabCoordinates;
+    private final MutableCoordinates nextTabCoordinates;
+    private final MutableCoordinates movingIndicatorCoordinates;
 
     static IndicatorCoordinatesCalculator newInstance() {
         MutableCoordinates drawCurrentTabCoordinates = new MutableCoordinates();
@@ -17,30 +17,30 @@ class IndicatorCoordinatesCalculator {
         return new IndicatorCoordinatesCalculator(drawCurrentTabCoordinates, drawNextTabCoordinates, drawMovingIndicatorCoordinates);
     }
 
-    IndicatorCoordinatesCalculator(MutableCoordinates drawCurrentTabCoordinates, MutableCoordinates drawNextTabCoordinates, MutableCoordinates drawMovingIndicatorCoordinates) {
-        this.drawCurrentTabCoordinates = drawCurrentTabCoordinates;
-        this.drawNextTabCoordinates = drawNextTabCoordinates;
-        this.drawMovingIndicatorCoordinates = drawMovingIndicatorCoordinates;
+    IndicatorCoordinatesCalculator(MutableCoordinates currentTabCoordinates, MutableCoordinates nextTabCoordinates, MutableCoordinates movingIndicatorCoordinates) {
+        this.currentTabCoordinates = currentTabCoordinates;
+        this.nextTabCoordinates = nextTabCoordinates;
+        this.movingIndicatorCoordinates = movingIndicatorCoordinates;
     }
 
-    Coordinates calculate(int currentPosition, float positionOffset, ViewGroup tabsContainer) {
+    Coordinates calculate(int currentPosition, float pagePositionOffset, ViewGroup tabsContainer) {
         View currentTab = tabsContainer.getChildAt(currentPosition);
 
         float currentTabStart = currentTab.getLeft();
         float currentTabEnd = currentTab.getRight();
 
-        drawCurrentTabCoordinates.setStart(currentTabStart);
-        drawCurrentTabCoordinates.setEnd(currentTabEnd);
+        currentTabCoordinates.setStart(currentTabStart);
+        currentTabCoordinates.setEnd(currentTabEnd);
 
-        if (isScrolling(positionOffset) && hasNextTab(currentPosition, tabsContainer.getChildCount())) {
+        if (isScrolling(pagePositionOffset) && hasNextTab(currentPosition, tabsContainer.getChildCount())) {
             View nextTab = tabsContainer.getChildAt(currentPosition + 1);
 
-            drawNextTabCoordinates.setStart(nextTab.getLeft());
-            drawNextTabCoordinates.setEnd(nextTab.getRight());
+            nextTabCoordinates.setStart(nextTab.getLeft());
+            nextTabCoordinates.setEnd(nextTab.getRight());
 
-            return calculateMovingIndicatorCoordinates(positionOffset, drawCurrentTabCoordinates, drawNextTabCoordinates);
+            return calculateMovingIndicatorCoordinates(pagePositionOffset, currentTabCoordinates, nextTabCoordinates);
         }
-        return drawCurrentTabCoordinates;
+        return currentTabCoordinates;
     }
 
     private boolean isScrolling(float positionOffset) {
@@ -52,23 +52,23 @@ class IndicatorCoordinatesCalculator {
 
     }
 
-    private Coordinates calculateMovingIndicatorCoordinates(float positionOffset, Coordinates currentTab, Coordinates nextTab) {
-        float nextTabPositionOffset = getFractionFrom(positionOffset);
-        float indicatorStart = getIndicatorPosition(nextTab.getStart(), positionOffset, currentTab.getStart(), nextTabPositionOffset);
-        float indicatorEnd = getIndicatorPosition(nextTab.getEnd(), positionOffset, currentTab.getEnd(), nextTabPositionOffset);
+    private Coordinates calculateMovingIndicatorCoordinates(float pagePositionOffset, Coordinates currentTab, Coordinates nextTab) {
+        float nextTabPositionOffset = getFractionFrom(pagePositionOffset);
+        float indicatorStart = getIndicatorPosition(nextTab.getStart(), pagePositionOffset, currentTab.getStart(), nextTabPositionOffset);
+        float indicatorEnd = getIndicatorPosition(nextTab.getEnd(), pagePositionOffset, currentTab.getEnd(), nextTabPositionOffset);
 
-        drawMovingIndicatorCoordinates.setStart(indicatorStart);
-        drawMovingIndicatorCoordinates.setEnd(indicatorEnd);
+        movingIndicatorCoordinates.setStart(indicatorStart);
+        movingIndicatorCoordinates.setEnd(indicatorEnd);
 
-        return drawMovingIndicatorCoordinates;
+        return movingIndicatorCoordinates;
     }
 
     private float getFractionFrom(float input) {
         return 1f - input;
     }
 
-    private float getIndicatorPosition(float tabOffset, float positionOffset, float tabBoundary, float nextTabPositionOffset) {
-        return positionOffset * tabOffset + nextTabPositionOffset * tabBoundary;
+    private float getIndicatorPosition(float tabOffset, float pagePositionOffset, float tabBoundary, float nextTabPositionOffset) {
+        return pagePositionOffset * tabOffset + nextTabPositionOffset * tabBoundary;
     }
 
 }

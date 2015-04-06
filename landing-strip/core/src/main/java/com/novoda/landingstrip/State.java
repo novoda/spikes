@@ -5,7 +5,7 @@ import android.support.v4.view.ViewPager;
 class State {
 
     private ViewPager.OnPageChangeListener delegateOnPageListener;
-    private float positionOffset;
+    private float pagePositionOffset;
     private int position;
 
     void updateDelegateOnPageListener(ViewPager.OnPageChangeListener onPageChangeListener) {
@@ -17,15 +17,15 @@ class State {
     }
 
     public void updatePositionOffset(float positionOffset) {
-        this.positionOffset = positionOffset;
+        this.pagePositionOffset = positionOffset;
     }
 
     public void updatePosition(int position) {
         this.position = position;
     }
 
-    public float getPositionOffset() {
-        return positionOffset;
+    public float getPagePositionOffset() {
+        return pagePositionOffset;
     }
 
     public int getPosition() {

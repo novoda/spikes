@@ -39,6 +39,8 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         this.indicatorCoordinatesCalculator = IndicatorCoordinatesCalculator.newInstance();
 
         state.updateDelegateOnPageListener(new ViewPager.SimpleOnPageChangeListener());
+        state.updatePosition(0);
+        state.updatePositionOffset(0);
 
         tabsContainer.setOrientation(LinearLayout.HORIZONTAL);
         tabsContainer.setPadding(attributes.getTabsPaddingLeft(), 0, attributes.getTabsPaddingRight(), 0);
@@ -100,7 +102,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        drawIndicator(canvas, indicatorCoordinatesCalculator.calculate(state.getPosition(), state.getPositionOffset(), tabsContainer));
+        drawIndicator(canvas, indicatorCoordinatesCalculator.calculate(state.getPosition(), state.getPagePositionOffset(), tabsContainer));
     }
 
     protected void drawIndicator(Canvas canvas, Coordinates indicatorCoordinates) {
