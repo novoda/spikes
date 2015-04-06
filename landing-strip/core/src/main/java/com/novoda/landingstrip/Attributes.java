@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 class Attributes {
 
     @ColorRes
-    private static final int DEFAULT_INDICATOR_COLOUR = android.R.color.white;
+    private static final int DEFAULT_INDICATOR_COLOUR = R.color.ls__white;
     private static final int DEFAULT_INDICATOR_HEIGHT = 5;
     private static final int DEFAULT_TABS_PADDING = 0;
 
