@@ -96,42 +96,43 @@ public class LandingStrip extends HorizontalScrollView {
             return Math.round(swipePositionOffset * tabWidth);
         }
 
+        private void scrollToChild(int position, int offset) {
+            Coordinates indicatorCoordinates = indicatorCoordinatesCalculator.calculateIndicatorCoordinates(state, tabsContainer);
+            float newScrollX = calculateScrollOffset(position, offset, indicatorCoordinates);
+
+            scrollTo((int) newScrollX, 0);
+        }
+
+        private float calculateScrollOffset(int position, int offset, Coordinates indicatorCoordinates) {
+            float newScrollX = tabsContainer.getChildAt(position).getLeft() + offset;
+            newScrollX -= getWidth() / 2;
+            newScrollX += ((indicatorCoordinates.getEnd() - indicatorCoordinates.getStart()) / 2f);
+            return newScrollX;
+        }
+
         @Override
         public void onPageSelected(int position) {
             setSelected(position);
             delegateOnPageChangeListener.onPageSelected(position);
         }
 
+        private void setSelected(int position) {
+            int childCount = tabsContainer.getChildCount();
+            for (int index = 0; index < childCount; index++) {
+                if (index == position) {
+                    tabsContainer.getChildAt(position).setSelected(true);
+                } else {
+                    tabsContainer.getChildAt(index).setSelected(false);
+                }
+            }
+        }
+
         @Override
         public void onPageScrollStateChanged(int state) {
             delegateOnPageChangeListener.onPageScrollStateChanged(state);
         }
+
     };
-
-    private void setSelected(int position) {
-        int childCount = tabsContainer.getChildCount();
-        for (int index = 0; index < childCount; index++) {
-            if (index == position) {
-                tabsContainer.getChildAt(position).setSelected(true);
-            } else {
-                tabsContainer.getChildAt(index).setSelected(false);
-            }
-        }
-    }
-
-    private void scrollToChild(int position, int offset) {
-        Coordinates indicatorCoordinates = indicatorCoordinatesCalculator.calculateIndicatorCoordinates(state, tabsContainer);
-        float newScrollX = calculateScrollOffset(position, offset, indicatorCoordinates);
-
-        scrollTo((int) newScrollX, 0);
-    }
-
-    private float calculateScrollOffset(int position, int offset, Coordinates indicatorCoordinates) {
-        float newScrollX = tabsContainer.getChildAt(position).getLeft() + offset;
-        newScrollX -= getWidth() / 2;
-        newScrollX += ((indicatorCoordinates.getEnd() - indicatorCoordinates.getStart()) / 2f);
-        return newScrollX;
-    }
 
     @Override
     public void scrollTo(int x, int y) {
