@@ -1,8 +1,10 @@
 package com.novoda.landingstrip;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.support.annotation.ColorRes;
+import android.support.annotation.DimenRes;
 import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 
@@ -10,8 +12,12 @@ class Attributes {
 
     @ColorRes
     private static final int DEFAULT_INDICATOR_COLOUR = R.color.ls__white;
-    private static final int DEFAULT_INDICATOR_HEIGHT = 5;
-    private static final int DEFAULT_TABS_PADDING = 0;
+
+    @DimenRes
+    private static final int DEFAULT_INDICATOR_HEIGHT = R.dimen.ls__default_indicator_height;
+
+    @DimenRes
+    private static final int DEFAULT_TABS_PADDING = R.dimen.ls__default_tabs_container_padding;
 
     private static final int MISSING_TAB_LAYOUT_ID = -1;
 
@@ -34,9 +40,9 @@ class Attributes {
             throwIfTabLayoutIsMissing(tabLayoutId);
 
             int indicatorColour = xml.getResourceId(R.styleable.LandingStrip_indicatorColor, DEFAULT_INDICATOR_COLOUR);
-            int indicatorHeight = xml.getDimensionPixelSize(R.styleable.LandingStrip_indicatorHeight, DEFAULT_INDICATOR_HEIGHT);
-            int tabsPaddingLeft = xml.getDimensionPixelSize(R.styleable.LandingStrip_tabsLeftPadding, DEFAULT_TABS_PADDING);
-            int tabsPaddingRight = xml.getDimensionPixelSize(R.styleable.LandingStrip_tabsRightPadding, DEFAULT_TABS_PADDING);
+            int indicatorHeight = getDimensPixelSize(R.styleable.LandingStrip_indicatorHeight, DEFAULT_INDICATOR_HEIGHT, xml);
+            int tabsPaddingLeft = getDimensPixelSize(R.styleable.LandingStrip_tabsLeftPadding, DEFAULT_TABS_PADDING, xml);
+            int tabsPaddingRight = getDimensPixelSize(R.styleable.LandingStrip_tabsRightPadding, DEFAULT_TABS_PADDING, xml);
 
             return new Attributes(tabLayoutId, indicatorColour, indicatorHeight, tabsPaddingLeft, tabsPaddingRight);
         } finally {
@@ -49,6 +55,15 @@ class Attributes {
             return;
         }
         throw new MissingTabLayoutIdExecption();
+    }
+
+    private static int getDimensPixelSize(int styleIndex, @DimenRes int defaultSize, TypedArray attributes) {
+        return attributes.getDimensionPixelSize(styleIndex, toPixelDimens(defaultSize, attributes.getResources()));
+
+    }
+
+    private static int toPixelDimens(@DimenRes int dimens, Resources resources) {
+        return resources.getDimensionPixelSize(dimens);
     }
 
     Attributes(@LayoutRes int tabLayoutId, @ColorRes int indicatorColor, int indicatorHeight, int tabsPaddingLeft, int tabsPaddingRight) {

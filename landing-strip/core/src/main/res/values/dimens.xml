@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="ls__default_tabs_container_padding">0dp</dimen>
+  <dimen name="ls__default_indicator_height">2dp</dimen>
+</resources>
