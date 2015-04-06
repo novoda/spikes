@@ -168,12 +168,7 @@ public class LandingStrip extends HorizontalScrollView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (isInEditMode() || tabsContainer.getChildCount() == 0) {
-            return;
-        }
-
-        Coordinates indicatorCoordinates = indicatorCoordinatesCalculator.calculateIndicatorCoordinates(state, tabsContainer);
-        drawIndicator(canvas, indicatorCoordinates);
+        drawIndicator(canvas, indicatorCoordinatesCalculator.calculateIndicatorCoordinates(state, tabsContainer));
     }
 
     protected void drawIndicator(Canvas canvas, Coordinates indicatorCoordinates) {
