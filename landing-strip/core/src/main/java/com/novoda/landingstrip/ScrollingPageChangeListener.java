@@ -21,12 +21,9 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         handleAdapterSetBecausePageSelectedIsNotCalled(position);
+
         state.updatePosition(position);
         state.updatePositionOffset(positionOffset);
-
-        if (tabsContainer.getChildCount() == 0) {
-            return;
-        }
 
         int scrollOffset = getHorizontalScrollOffset(position, positionOffset);
         float newScrollX = calculateScrollOffset(position, scrollOffset);

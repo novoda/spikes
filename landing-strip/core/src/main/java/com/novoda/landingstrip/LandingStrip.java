@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -70,7 +71,6 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
 
     public void setViewPager(ViewPager viewPager, PagerAdapter pagerAdapter, TabSetterUpper tabSetterUpper) {
         this.viewPager = viewPager;
-        viewPager.setOnPageChangeListener(new ScrollingPageChangeListener(state, tabsContainer, this));
         notifyDataSetChanged(pagerAdapter, tabSetterUpper);
     }
 
@@ -81,6 +81,20 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
             CharSequence title = pagerAdapter.getPageTitle(position);
             View inflatedTabView = layoutInflater.inflate(attributes.getTabLayoutId(), this, false);
             addTab(position, title, inflatedTabView, tabSetterUpper);
+        }
+        restoreTabStateFrom(viewPager);
+    }
+
+    private void restoreTabStateFrom(final ViewPager viewPager) {
+        if (tabsContainer.getChildCount() > 0) {
+            tabsContainer.getChildAt(0).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    tabsContainer.getChildAt(0).getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    viewPager.setOnPageChangeListener(new ScrollingPageChangeListener(state, tabsContainer, LandingStrip.this));
+                    viewPager.onRestoreInstanceState(viewPager.onSaveInstanceState());
+                }
+            });
         }
     }
 
