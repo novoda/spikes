@@ -102,6 +102,10 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if (tabsContainer.getChildCount() == 0) {
+            return;
+        }
+
         drawIndicator(canvas, indicatorCoordinatesCalculator.calculate(state.getPosition(), state.getPagePositionOffset(), tabsContainer));
     }
 
