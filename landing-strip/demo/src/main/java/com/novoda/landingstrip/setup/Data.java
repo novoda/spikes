@@ -7,7 +7,12 @@ public enum Data {
     C("C", "foo", android.R.drawable.ic_media_next),
     D("D", "bar", android.R.drawable.ic_media_pause),
     E("E", "bar", android.R.drawable.ic_media_pause),
-    F("F", "bar", android.R.drawable.ic_media_pause);
+    F("F", "bar", android.R.drawable.ic_media_pause),
+    ONE("1", "bar", android.R.drawable.ic_media_pause),
+    TWO("2", "bar", android.R.drawable.ic_media_pause),
+    THREE("3", "bar", android.R.drawable.ic_media_pause),
+    FOUR("4", "bar", android.R.drawable.ic_media_pause),
+    FIVE("5", "bar", android.R.drawable.ic_media_pause);
 
     private final String title;
     private final String content;
