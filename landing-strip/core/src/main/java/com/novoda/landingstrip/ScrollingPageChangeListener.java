@@ -22,7 +22,7 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         handleAdapterSetBecausePageSelectedIsNotCalled(position);
 
-        if (state.getFastForwardPosition() == position && positionOffsetPixels == 0) {
+        if (fastForwardPositionReached(position, positionOffsetPixels)) {
             fastForward();
             state.invalidateFastForwardPosition();
         } else if (state.fastForwardPositionIsValid()) {
@@ -39,6 +39,10 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
             setSelected(position);
             firstTimeAccessed = false;
         }
+    }
+
+    private boolean fastForwardPositionReached(int position, int positionOffsetPixels) {
+        return state.getFastForwardPosition() == position && positionOffsetPixels == 0;
     }
 
     private void fastForward() {
