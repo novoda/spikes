@@ -8,6 +8,8 @@ class State {
     private float pagePositionOffset;
     private int position;
 
+    private int fastForwardPosition;
+
     void updateDelegateOnPageListener(ViewPager.OnPageChangeListener onPageChangeListener) {
         this.delegateOnPageListener = onPageChangeListener;
     }
@@ -32,4 +34,19 @@ class State {
         return position;
     }
 
+    public void updateFastForwardPosition(int fastForwardPosition) {
+        this.fastForwardPosition = fastForwardPosition;
+    }
+
+    public int getFastForwardPosition() {
+        return fastForwardPosition;
+    }
+
+    public void invalidateFastForwardPosition() {
+        updateFastForwardPosition(-1);
+    }
+
+    public boolean fastForwardPositionIsValid() {
+        return getFastForwardPosition() != -1;
+    }
 }

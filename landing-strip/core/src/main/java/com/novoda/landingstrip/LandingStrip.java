@@ -42,6 +42,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         state.updateDelegateOnPageListener(new ViewPager.SimpleOnPageChangeListener());
         state.updatePosition(0);
         state.updatePositionOffset(0);
+        state.invalidateFastForwardPosition();
 
         tabsContainer.setOrientation(LinearLayout.HORIZONTAL);
         tabsContainer.setPadding(attributes.getTabsPaddingLeft(), 0, attributes.getTabsPaddingRight(), 0);
@@ -109,6 +110,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         @Override
         public void onClick(View view) {
             int position = (int) view.getTag(TAG_KEY_POSITION);
+            state.updateFastForwardPosition(position);
             viewPager.setCurrentItem(position);
         }
     };

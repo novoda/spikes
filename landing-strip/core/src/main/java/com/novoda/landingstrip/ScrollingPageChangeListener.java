@@ -22,13 +22,14 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         handleAdapterSetBecausePageSelectedIsNotCalled(position);
 
-        state.updatePosition(position);
-        state.updatePositionOffset(positionOffset);
-
-        int scrollOffset = getHorizontalScrollOffset(position, positionOffset);
-        float newScrollX = calculateScrollOffset(position, scrollOffset);
-
-        scrollable.scrollTo((int) newScrollX);
+        if (state.getFastForwardPosition() == position && positionOffsetPixels == 0) {
+            fastForward();
+            state.invalidateFastForwardPosition();
+        } else if (state.fastForwardPositionIsValid()) {
+            fastForward();
+        } else {
+            scroll(position, positionOffset);
+        }
 
         state.getDelegateOnPageListener().onPageScrolled(position, positionOffset, positionOffsetPixels);
     }
@@ -38,6 +39,20 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
             setSelected(position);
             firstTimeAccessed = false;
         }
+    }
+
+    private void fastForward() {
+        scroll(state.getFastForwardPosition(), 0);
+    }
+
+    private void scroll(int position, float positionOffset) {
+        int scrollOffset = getHorizontalScrollOffset(position, positionOffset);
+        float newScrollX = calculateScrollOffset(position, scrollOffset);
+
+        state.updatePosition(position);
+        state.updatePositionOffset(positionOffset);
+
+        scrollable.scrollTo((int) newScrollX);
     }
 
     private int getHorizontalScrollOffset(int position, float swipePositionOffset) {
