@@ -25,15 +25,19 @@ dependencies {
 
 ## Simple usage
 
-`R.layout.tab_simple_text`
+The tab item layout
 
 ```xml
+R.layout.tab_simple_text
+
 <TextView
   android:layout_width="wrap_content"
   android:layout_height="match_parent"
   android:textSize="18dp"
   android:gravity="center" />
 ```
+
+The tab strip which will contain the tab items
 
 ```xml
 <com.novoda.landingstrip.LandingStrip
@@ -43,6 +47,8 @@ dependencies {
   android:background="@android:color/holo_orange_dark"
   app:tabLayoutId="@layout/tab_simple_text" />
 ```
+
+Attaching the `ViewPager` to the `LandingStrip`
 
 ```java
 LandingStrip landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
