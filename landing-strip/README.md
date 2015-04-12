@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.novoda:merlin:0.6.2'
+    compile 'com.novoda:landing-strip:0.0.0'
 }
 ```
 
