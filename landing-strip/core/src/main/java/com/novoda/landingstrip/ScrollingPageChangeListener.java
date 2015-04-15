@@ -7,12 +7,12 @@ import android.view.ViewGroup;
 class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
 
     private final State state;
-    private final ViewGroup tabsContainer;
+    private final TabsContainer tabsContainer;
     private final Scrollable scrollable;
 
     private boolean firstTimeAccessed = true;
 
-    ScrollingPageChangeListener(State state, ViewGroup tabsContainer, Scrollable scrollable) {
+    ScrollingPageChangeListener(State state, TabsContainer tabsContainer, Scrollable scrollable) {
         this.state = state;
         this.tabsContainer = tabsContainer;
         this.scrollable = scrollable;
@@ -36,7 +36,7 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
 
     private void handleAdapterSetBecausePageSelectedIsNotCalled(int position) {
         if (firstTimeAccessed) {
-            setSelected(position);
+            tabsContainer.setSelected(position);
             firstTimeAccessed = false;
         }
     }
@@ -60,12 +60,12 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
     }
 
     private int getHorizontalScrollOffset(int position, float swipePositionOffset) {
-        int tabWidth = tabsContainer.getChildAt(position).getWidth();
+        int tabWidth = tabsContainer.getTabAt(position).getWidth();
         return Math.round(swipePositionOffset * tabWidth);
     }
 
     private float calculateScrollOffset(int position, int scrollOffset) {
-        View tabForPosition = tabsContainer.getChildAt(position);
+        View tabForPosition = tabsContainer.getTabAt(position);
 
         float tabStartX = tabForPosition.getLeft() + scrollOffset;
         int viewMiddleOffset = getTabParentWidth() / 2;
@@ -75,24 +75,13 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
     }
 
     private int getTabParentWidth() {
-        return ((View) tabsContainer.getParent()).getWidth();
+        return tabsContainer.getParentWidth();
     }
 
     @Override
     public void onPageSelected(int position) {
-        setSelected(position);
+        tabsContainer.setSelected(position);
         state.getDelegateOnPageListener().onPageSelected(position);
-    }
-
-    private void setSelected(int position) {
-        int childCount = tabsContainer.getChildCount();
-        for (int index = 0; index < childCount; index++) {
-            if (index == position) {
-                tabsContainer.getChildAt(position).setSelected(true);
-            } else {
-                tabsContainer.getChildAt(index).setSelected(false);
-            }
-        }
     }
 
     @Override
