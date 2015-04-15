@@ -18,7 +18,7 @@ public class CustomLandingStrip extends ActionBarActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setAdapter(new DemoPagerAdapter(getSupportFragmentManager()));
 
-        landingStrip.setViewPager(viewPager, viewPager.getAdapter());
+        landingStrip.attach(viewPager, viewPager.getAdapter());
     }
 
 }

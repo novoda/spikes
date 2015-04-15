@@ -22,7 +22,7 @@ public class CustomTabActivity extends ActionBarActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setAdapter(new DemoPagerAdapter(getSupportFragmentManager()));
 
-        landingStrip.setViewPager(viewPager, viewPager.getAdapter(), customTabs);
+        landingStrip.attach(viewPager, viewPager.getAdapter(), customTabs);
     }
 
     private final LandingStrip.TabSetterUpper customTabs = new LandingStrip.TabSetterUpper() {

@@ -14,11 +14,11 @@ public class SimpleTextTabActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_basic_usage);
 
-        LandingStrip landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setAdapter(new DemoPagerAdapter(getSupportFragmentManager()));
 
-        landingStrip.setViewPager(viewPager, viewPager.getAdapter());
+        LandingStrip landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
+        landingStrip.attach(viewPager, viewPager.getAdapter());
     }
 
 }

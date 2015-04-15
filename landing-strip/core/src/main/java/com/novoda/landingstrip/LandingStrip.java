@@ -13,7 +13,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class LandingStrip extends HorizontalScrollView implements Scrollable {
+public class LandingStrip extends HorizontalScrollView implements Scrollable, Notifiable {
 
     private static final int TAG_KEY_POSITION = R.id.ls__tag_key_position;
 
@@ -23,8 +23,10 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
     private final State state;
     private final LinearLayout tabsContainer;
     private final IndicatorCoordinatesCalculator indicatorCoordinatesCalculator;
+    private final PagerAdapterObserver pagerAdapterObserver;
 
     private ViewPager viewPager;
+    private TabSetterUpper tabSetterUpper;
 
     public LandingStrip(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -38,6 +40,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         this.state = new State();
         this.tabsContainer = new LinearLayout(context);
         this.indicatorCoordinatesCalculator = IndicatorCoordinatesCalculator.newInstance();
+        this.pagerAdapterObserver = new PagerAdapterObserver(this);
 
         state.updateDelegateOnPageListener(new ViewPager.SimpleOnPageChangeListener());
         state.updatePosition(0);
@@ -57,8 +60,12 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         state.updateDelegateOnPageListener(delegateOnPageChangeListener);
     }
 
-    public void setViewPager(ViewPager viewPager, PagerAdapter pagerAdapter) {
-        setViewPager(viewPager, pagerAdapter, SIMPLE_TEXT_TAB);
+    public void attach(ViewPager viewPager) {
+        attach(viewPager, viewPager.getAdapter());
+    }
+
+    public void attach(ViewPager viewPager, PagerAdapter pagerAdapter) {
+        attach(viewPager, pagerAdapter, SIMPLE_TEXT_TAB);
     }
 
     private static final TabSetterUpper SIMPLE_TEXT_TAB = new TabSetterUpper() {
@@ -70,12 +77,14 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
         }
     };
 
-    public void setViewPager(ViewPager viewPager, PagerAdapter pagerAdapter, TabSetterUpper tabSetterUpper) {
+    public void attach(ViewPager viewPager, PagerAdapter pagerAdapter, TabSetterUpper tabSetterUpper) {
         this.viewPager = viewPager;
-        notifyDataSetChanged(pagerAdapter, tabSetterUpper);
+        this.tabSetterUpper = tabSetterUpper;
+        pagerAdapterObserver.registerTo(pagerAdapter);
+        notifyDataSetChanged(pagerAdapter);
     }
 
-    private void notifyDataSetChanged(PagerAdapter pagerAdapter, TabSetterUpper tabSetterUpper) {
+    private void notifyDataSetChanged(PagerAdapter pagerAdapter) {
         tabsContainer.removeAllViews();
         int tabCount = pagerAdapter.getCount();
         for (int position = 0; position < tabCount; position++) {
@@ -145,6 +154,17 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable {
     public void scrollTo(int x, int y) {
         super.scrollTo(x, y);
         invalidate();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        pagerAdapterObserver.unregister();
+        super.onDetachedFromWindow();
+    }
+
+    @Override
+    public void notify(PagerAdapter pagerAdapter) {
+        notifyDataSetChanged(pagerAdapter);
     }
 
     public interface TabSetterUpper {
