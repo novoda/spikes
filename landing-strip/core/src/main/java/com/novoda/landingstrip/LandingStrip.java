@@ -77,35 +77,8 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, No
         this.viewPager = viewPager;
         this.tabSetterUpper = tabSetterUpper;
         pagerAdapterObserver.registerTo(pagerAdapter);
-        notifyDataSetChanged(pagerAdapter);
+        pagerAdapterObserver.onChanged();
     }
-
-    private void notifyDataSetChanged(PagerAdapter pagerAdapter) {
-        tabsContainer.clearTabs();
-        int tabCount = pagerAdapter.getCount();
-        for (int position = 0; position < tabCount; position++) {
-            CharSequence title = pagerAdapter.getPageTitle(position);
-            View inflatedTabView = layoutInflater.inflate(attributes.getTabLayoutId(), this, false);
-            addTab(position, title, inflatedTabView, tabSetterUpper);
-        }
-        tabsContainer.startWatching(viewPager, new ScrollingPageChangeListener(state, tabsContainer, this));
-    }
-
-    private void addTab(final int position, CharSequence title, View tabView, TabSetterUpper tabSetterUpper) {
-        tabView = tabSetterUpper.setUp(position, title, tabView);
-        tabsContainer.addTab(tabView, position);
-        tabView.setOnClickListener(onTabClick);
-        tabView.setTag(TAG_KEY_POSITION, position);
-    }
-
-    private final OnClickListener onTabClick = new OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            int position = (int) view.getTag(TAG_KEY_POSITION);
-            state.updateFastForwardPosition(position);
-            viewPager.setCurrentItem(position);
-        }
-    };
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -140,6 +113,12 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, No
     }
 
     @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        pagerAdapterObserver.reregister();
+    }
+
+    @Override
     protected void onDetachedFromWindow() {
         pagerAdapterObserver.unregister();
         super.onDetachedFromWindow();
@@ -149,6 +128,33 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, No
     public void notify(PagerAdapter pagerAdapter) {
         notifyDataSetChanged(pagerAdapter);
     }
+
+    private void notifyDataSetChanged(PagerAdapter pagerAdapter) {
+        tabsContainer.clearTabs();
+        int tabCount = pagerAdapter.getCount();
+        for (int position = 0; position < tabCount; position++) {
+            CharSequence title = pagerAdapter.getPageTitle(position);
+            View inflatedTabView = layoutInflater.inflate(attributes.getTabLayoutId(), this, false);
+            addTab(position, title, inflatedTabView, tabSetterUpper);
+        }
+        tabsContainer.startWatching(viewPager, new ScrollingPageChangeListener(state, tabsContainer, this));
+    }
+
+    private void addTab(final int position, CharSequence title, View tabView, TabSetterUpper tabSetterUpper) {
+        tabView = tabSetterUpper.setUp(position, title, tabView);
+        tabsContainer.addTab(tabView, position);
+        tabView.setOnClickListener(onTabClick);
+        tabView.setTag(TAG_KEY_POSITION, position);
+    }
+
+    private final OnClickListener onTabClick = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int position = (int) view.getTag(TAG_KEY_POSITION);
+            state.updateFastForwardPosition(position);
+            viewPager.setCurrentItem(position);
+        }
+    };
 
     public interface TabSetterUpper {
         View setUp(int position, CharSequence title, View inflatedTab);

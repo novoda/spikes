@@ -6,18 +6,30 @@ import android.support.v4.view.PagerAdapter;
 class PagerAdapterObserver extends DataSetObserver {
 
     private final Notifiable notifiable;
+
     private PagerAdapter pagerAdapter;
+    private boolean registered;
 
     PagerAdapterObserver(Notifiable notifiable) {
         this.notifiable = notifiable;
+        this.registered = false;
     }
 
     void registerTo(PagerAdapter pagerAdapter) {
-        if (this.pagerAdapter != null) {
+        if (this.pagerAdapter != null ||  registered) {
             unregister();
         }
+
         this.pagerAdapter = pagerAdapter;
         pagerAdapter.registerDataSetObserver(this);
+        registered = true;
+    }
+
+    void reregister() {
+        if (pagerAdapter == null ) {
+            return;
+        }
+        registerTo(pagerAdapter);
     }
 
     void unregister() {
@@ -25,6 +37,7 @@ class PagerAdapterObserver extends DataSetObserver {
             return;
         }
         pagerAdapter.unregisterDataSetObserver(this);
+        registered = false;
     }
 
     @Override
