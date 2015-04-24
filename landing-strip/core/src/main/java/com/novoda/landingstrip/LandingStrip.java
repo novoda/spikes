@@ -76,6 +76,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, No
     public void attach(ViewPager viewPager, PagerAdapter pagerAdapter, TabSetterUpper tabSetterUpper) {
         this.viewPager = viewPager;
         this.tabSetterUpper = tabSetterUpper;
+
         pagerAdapterObserver.registerTo(pagerAdapter);
         pagerAdapterObserver.onChanged();
     }

@@ -26,7 +26,6 @@ class TabsContainer {
 
     void attachTo(ViewGroup parent) {
         parent.addView(tabsContainerView, new LinearLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
-
     }
 
     void clearTabs() {
@@ -56,7 +55,8 @@ class TabsContainer {
                 public void onGlobalLayout() {
                     getTabAt(0).getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     viewPager.setOnPageChangeListener(onPageChangeListener);
-                    viewPager.onRestoreInstanceState(viewPager.onSaveInstanceState());
+
+                    onPageChangeListener.onPageScrolled(viewPager.getCurrentItem(), 0, 0);
                 }
             });
         }
