@@ -68,7 +68,7 @@ class TabsContainer {
 
     void setSelected(int position) {
         for (int index = 0; index < getTabCount(); index++) {
-            View tab = getTabAt(position);
+            View tab = getTabAt(index);
             tab.setSelected(index == position);
         }
     }
