@@ -12,13 +12,15 @@ public class NoFragmentsSimpleTextTabActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(NoFragmentsSimpleTextTabActivity.class.getSimpleName());
+
         setContentView(R.layout.activity_basic_usage);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setAdapter(new DemoViewPagerAdapter(getLayoutInflater()));
 
         LandingStrip landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
-        landingStrip.attach(viewPager, viewPager.getAdapter());
+        landingStrip.attach(viewPager);
     }
 
 }

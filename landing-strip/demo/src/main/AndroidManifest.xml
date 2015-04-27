@@ -8,15 +8,15 @@
     android:label="@string/app_name"
     android:theme="@style/AppTheme">
 
-    <activity android:name="com.novoda.landingstrip.SimpleTextTabActivity">
-      <intent-filter android:label="LS: Simple Text Tab">
+    <activity android:name="com.novoda.landingstrip.NoFragmentsSimpleTextTabActivity">
+      <intent-filter android:label="LS: No Fragments">
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
 
-    <activity android:name="com.novoda.landingstrip.NoFragmentsSimpleTextTabActivity">
-      <intent-filter android:label="LS: No Fragments">
+    <activity android:name="com.novoda.landingstrip.SimpleTextTabActivity">
+      <intent-filter android:label="LS: Simple Text Tab">
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>

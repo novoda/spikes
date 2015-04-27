@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.novoda.landing_strip.R;
 import com.novoda.landingstrip.setup.Data;
 
 public class DemoViewPagerAdapter extends ViewPagerAdapter {
@@ -17,7 +18,7 @@ public class DemoViewPagerAdapter extends ViewPagerAdapter {
 
     @Override
     protected View getView(ViewGroup container, int position) {
-        TextView view = (TextView) layoutInflater.inflate(com.novoda.landing_strip.R.layout.view_demo, container, false);
+        TextView view = (TextView) layoutInflater.inflate(R.layout.view_demo, container, false);
         view.setText(Data.values()[position].getTitle());
         return view;
     }
