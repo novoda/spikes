@@ -61,10 +61,10 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, On
     }
 
     public void attach(ViewPager viewPager, PagerAdapter pagerAdapter) {
-        attach(viewPager, pagerAdapter, SIMPLE_TEXT_TAB);
+        attach(viewPager, pagerAdapter, SIMPLE_TEXT_TAB_SETTER_UPPER);
     }
 
-    private static final TabSetterUpper SIMPLE_TEXT_TAB = new TabSetterUpper() {
+    private static final TabSetterUpper SIMPLE_TEXT_TAB_SETTER_UPPER = new TabSetterUpper() {
         @Override
         public View setUp(int position, CharSequence title, View inflatedTab) {
             ((TextView) inflatedTab).setText(title);
