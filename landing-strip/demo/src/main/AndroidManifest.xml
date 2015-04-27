@@ -15,6 +15,13 @@
       </intent-filter>
     </activity>
 
+    <activity android:name="com.novoda.landingstrip.NoFragmentsSimpleTextTabActivity">
+      <intent-filter android:label="LS: No Fragments">
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+
     <activity android:name="com.novoda.landingstrip.CustomTabActivity">
       <intent-filter android:label="LS: Custom Tab">
         <action android:name="android.intent.action.MAIN" />
