@@ -1,8 +1,10 @@
-package com.novoda.landingstrip.setup;
+package com.novoda.landingstrip.setup.fragment;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.novoda.landingstrip.setup.Data;
 
 public class DemoPagerAdapter extends FragmentPagerAdapter {
 
