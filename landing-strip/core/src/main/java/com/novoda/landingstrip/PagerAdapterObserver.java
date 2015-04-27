@@ -5,13 +5,13 @@ import android.support.v4.view.PagerAdapter;
 
 class PagerAdapterObserver extends DataSetObserver {
 
-    private final Notifiable notifiable;
+    private final OnPagerAdapterChangedListener onPagerAdapterChangedListener;
 
     private PagerAdapter pagerAdapter;
     private boolean registered;
 
-    PagerAdapterObserver(Notifiable notifiable) {
-        this.notifiable = notifiable;
+    PagerAdapterObserver(OnPagerAdapterChangedListener onPagerAdapterChangedListener) {
+        this.onPagerAdapterChangedListener = onPagerAdapterChangedListener;
         this.registered = false;
     }
 
@@ -43,6 +43,6 @@ class PagerAdapterObserver extends DataSetObserver {
     @Override
     public void onChanged() {
         super.onChanged();
-        notifiable.notify(pagerAdapter);
+        onPagerAdapterChangedListener.onPagerAdapterChanged(pagerAdapter);
     }
 }

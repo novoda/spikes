@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
-public class LandingStrip extends HorizontalScrollView implements Scrollable, Notifiable {
+public class LandingStrip extends HorizontalScrollView implements Scrollable, OnPagerAdapterChangedListener {
 
     private static final int TAG_KEY_POSITION = R.id.ls__tag_key_position;
 
@@ -126,7 +126,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, No
     }
 
     @Override
-    public void notify(PagerAdapter pagerAdapter) {
+    public void onPagerAdapterChanged(PagerAdapter pagerAdapter) {
         notifyDataSetChanged(pagerAdapter);
     }
 
