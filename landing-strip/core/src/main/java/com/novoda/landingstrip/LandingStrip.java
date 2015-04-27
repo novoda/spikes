@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
-public class LandingStrip extends HorizontalScrollView implements Scrollable, Notifiable {
+public class LandingStrip extends HorizontalScrollView implements Scrollable, OnPagerAdapterChangedListener {
 
     private static final int TAG_KEY_POSITION = R.id.ls__tag_key_position;
 
@@ -61,10 +61,10 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, No
     }
 
     public void attach(ViewPager viewPager, PagerAdapter pagerAdapter) {
-        attach(viewPager, pagerAdapter, SIMPLE_TEXT_TAB);
+        attach(viewPager, pagerAdapter, SIMPLE_TEXT_TAB_SETTER_UPPER);
     }
 
-    private static final TabSetterUpper SIMPLE_TEXT_TAB = new TabSetterUpper() {
+    private static final TabSetterUpper SIMPLE_TEXT_TAB_SETTER_UPPER = new TabSetterUpper() {
         @Override
         public View setUp(int position, CharSequence title, View inflatedTab) {
             ((TextView) inflatedTab).setText(title);
@@ -126,7 +126,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, No
     }
 
     @Override
-    public void notify(PagerAdapter pagerAdapter) {
+    public void onPagerAdapterChanged(PagerAdapter pagerAdapter) {
         notifyDataSetChanged(pagerAdapter);
     }
 
