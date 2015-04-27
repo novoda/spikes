@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.novoda.landing_strip.R;
 import com.novoda.landingstrip.setup.Data;
 
 public class ViewPagerFragment extends Fragment {
@@ -24,7 +25,7 @@ public class ViewPagerFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(com.novoda.landing_strip.R.layout.view_demo, container, false);
+        return inflater.inflate(R.layout.view_demo, container, false);
     }
 
     @Override
