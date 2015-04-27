@@ -28,4 +28,9 @@ public class DemoViewPagerAdapter extends ViewPagerAdapter {
         return Data.values().length;
     }
 
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return Data.values()[position].getTitle();
+    }
+
 }
