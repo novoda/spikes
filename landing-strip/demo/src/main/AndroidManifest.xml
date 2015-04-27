@@ -9,21 +9,21 @@
     android:theme="@style/AppTheme">
 
     <activity android:name="com.novoda.landingstrip.SimpleTextTabActivity">
-      <intent-filter>
+      <intent-filter android:label="LS: Simple Text Tab">
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
 
     <activity android:name="com.novoda.landingstrip.CustomTabActivity">
-      <intent-filter>
+      <intent-filter android:label="LS: Custom Tab">
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
 
     <activity android:name="com.novoda.landingstrip.CustomLandingStrip">
-      <intent-filter>
+      <intent-filter android:label="LS: Custom LS">
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
