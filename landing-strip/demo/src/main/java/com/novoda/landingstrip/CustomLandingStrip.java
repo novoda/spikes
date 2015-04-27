@@ -5,7 +5,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 
 import com.novoda.landing_strip.R;
-import com.novoda.landingstrip.setup.fragment.DemoPagerAdapter;
+import com.novoda.landingstrip.setup.fragment.DemoFragmentPagerAdapter;
 
 public class CustomLandingStrip extends ActionBarActivity {
 
@@ -16,7 +16,7 @@ public class CustomLandingStrip extends ActionBarActivity {
 
         LandingStrip landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-        viewPager.setAdapter(new DemoPagerAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new DemoFragmentPagerAdapter(getSupportFragmentManager()));
 
         landingStrip.attach(viewPager, viewPager.getAdapter());
     }

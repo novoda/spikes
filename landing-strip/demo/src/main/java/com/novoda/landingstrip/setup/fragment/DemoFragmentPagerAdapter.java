@@ -6,9 +6,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.novoda.landingstrip.setup.Data;
 
-public class DemoPagerAdapter extends FragmentPagerAdapter {
+public class DemoFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    public DemoPagerAdapter(FragmentManager fm) {
+    public DemoFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 

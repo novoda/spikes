@@ -24,7 +24,7 @@ public class ViewPagerFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(com.novoda.landing_strip.R.layout.fragment_demo, container, false);
+        return inflater.inflate(com.novoda.landing_strip.R.layout.view_demo, container, false);
     }
 
     @Override

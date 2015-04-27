@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.novoda.landing_strip.R;
 import com.novoda.landingstrip.setup.Data;
-import com.novoda.landingstrip.setup.fragment.DemoPagerAdapter;
+import com.novoda.landingstrip.setup.fragment.DemoFragmentPagerAdapter;
 
 public class CustomTabActivity extends ActionBarActivity {
 
@@ -20,7 +20,7 @@ public class CustomTabActivity extends ActionBarActivity {
 
         LandingStrip landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-        viewPager.setAdapter(new DemoPagerAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new DemoFragmentPagerAdapter(getSupportFragmentManager()));
 
         landingStrip.attach(viewPager, viewPager.getAdapter(), customTabs);
     }

@@ -5,7 +5,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 
 import com.novoda.landing_strip.R;
-import com.novoda.landingstrip.setup.fragment.DemoPagerAdapter;
+import com.novoda.landingstrip.setup.fragment.DemoFragmentPagerAdapter;
 
 public class SimpleTextTabActivity extends ActionBarActivity {
 
@@ -15,7 +15,7 @@ public class SimpleTextTabActivity extends ActionBarActivity {
         setContentView(R.layout.activity_basic_usage);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-        viewPager.setAdapter(new DemoPagerAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new DemoFragmentPagerAdapter(getSupportFragmentManager()));
 
         LandingStrip landingStrip = (LandingStrip) findViewById(R.id.landing_strip);
         landingStrip.attach(viewPager, viewPager.getAdapter());
