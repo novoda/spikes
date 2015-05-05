@@ -104,7 +104,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, On
 
     @Override
     public void scrollTo(int x) {
-        scrollTo(x, 0);
+        scrollTo(x, getBottom());
     }
 
     @Override

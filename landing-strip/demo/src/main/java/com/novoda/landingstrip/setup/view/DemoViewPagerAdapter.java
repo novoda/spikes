@@ -30,7 +30,7 @@ public class DemoViewPagerAdapter extends ViewPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return Data.values()[position].getTitle();
+        return Data.values()[position].getContent();
     }
 
 }

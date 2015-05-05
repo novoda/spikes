@@ -22,10 +22,10 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
         handleAdapterSetBecausePageSelectedIsNotCalled(position);
 
         if (state.fastForwardPositionIsValid()) {
-            if (fastForwardPositionReached(position, positionOffsetPixels)) {
+            fastForward();
+            if (fastForwardPositionReached(position, positionOffset)) {
                 state.invalidateFastForwardPosition();
             }
-            fastForward();
         } else {
             scroll(position, positionOffset);
         }
@@ -40,8 +40,8 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
         }
     }
 
-    private boolean fastForwardPositionReached(int position, int positionOffsetPixels) {
-        return state.getFastForwardPosition() == position && positionOffsetPixels == 0;
+    private boolean fastForwardPositionReached(int position, float positionOffset) {
+        return position == state.getFastForwardPosition() && positionOffset == 0F;
     }
 
     private void fastForward() {
@@ -50,7 +50,7 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
 
     private void scroll(int position, float positionOffset) {
         int scrollOffset = getHorizontalScrollOffset(position, positionOffset);
-        float newScrollX = calculateScrollOffset(position, scrollOffset);
+        float newScrollX = calculateScrollOffset(position, scrollOffset, positionOffset);
 
         state.updatePosition(position);
         state.updatePositionOffset(positionOffset);
@@ -63,14 +63,24 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
         return Math.round(swipePositionOffset * tabWidth);
     }
 
-    private float calculateScrollOffset(int position, int scrollOffset) {
+    private float calculateScrollOffset(int position, int scrollOffset, float pagerOffset) {
         View tabForPosition = tabsContainer.getTabAt(position);
 
         float tabStartX = tabForPosition.getLeft() + scrollOffset;
-        int viewMiddleOffset = getTabParentWidth() / 2;
-        float tabCenterOffset = ((tabForPosition.getRight() - tabForPosition.getLeft()) / 2f);
 
-        return tabStartX - viewMiddleOffset + tabCenterOffset;
+        int viewMiddleOffset = getTabParentWidth() / 2;
+        float tabCenterOffset = (tabForPosition.getRight() - tabForPosition.getLeft()) * 0.5F;
+
+        float nextTabDelta = getNextTabDelta(position, pagerOffset, tabForPosition);
+
+        return tabStartX - viewMiddleOffset + tabCenterOffset + nextTabDelta;
+    }
+
+    private float getNextTabDelta(int position, float pagerOffset, View tabForPosition) {
+        if (tabsContainer.getTabCount() - 1 >= position + 1) {
+            return (((tabsContainer.getTabAt(position + 1).getWidth()) - tabForPosition.getWidth()) * pagerOffset) * 0.5F;
+        }
+        return 0F;
     }
 
     private int getTabParentWidth() {
