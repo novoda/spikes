@@ -2,7 +2,6 @@ package com.novoda.landingstrip;
 
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.view.ViewGroup;
 
 class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
 
@@ -22,10 +21,10 @@ class ScrollingPageChangeListener implements ViewPager.OnPageChangeListener {
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         handleAdapterSetBecausePageSelectedIsNotCalled(position);
 
-        if (fastForwardPositionReached(position, positionOffsetPixels)) {
-            fastForward();
-            state.invalidateFastForwardPosition();
-        } else if (state.fastForwardPositionIsValid()) {
+        if (state.fastForwardPositionIsValid()) {
+            if (fastForwardPositionReached(position, positionOffsetPixels)) {
+                state.invalidateFastForwardPosition();
+            }
             fastForward();
         } else {
             scroll(position, positionOffset);
