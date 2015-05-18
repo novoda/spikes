@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 public class FixedWidthLandingStrip extends LinearLayout implements Scrollable, LandingStrip {
     private final Attributes attributes;
     private final Paint indicatorPaint;
-    private TabsState tabsState;
+    private TabsPagerListener tabsPagerListener;
 
     public FixedWidthLandingStrip(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -20,7 +20,7 @@ public class FixedWidthLandingStrip extends LinearLayout implements Scrollable, 
 
         attributes = Attributes.readAttributes(context, attrs);
         TabsContainer tabsContainer = FixedWidthTabsContainer.newInstance(context, attributes, attrs);
-        tabsState = TabsState.newInstance(tabsContainer, attributes, this, this);
+        tabsPagerListener = TabsPagerListener.newInstance(tabsContainer, attributes, this, this);
 
         this.indicatorPaint = new Paint();
         indicatorPaint.setAntiAlias(true);
@@ -29,32 +29,32 @@ public class FixedWidthLandingStrip extends LinearLayout implements Scrollable, 
     }
 
     public void setOnPageChangeListener(ViewPager.OnPageChangeListener delegateOnPageChangeListener) {
-        tabsState.setOnPageChangeListener(delegateOnPageChangeListener);
+        tabsPagerListener.setOnPageChangeListener(delegateOnPageChangeListener);
     }
 
     @Override
     public void attach(ViewPager viewPager) {
-        tabsState.attach(viewPager);
+        tabsPagerListener.attach(viewPager);
     }
 
     @Override
     public void attach(ViewPager viewPager, PagerAdapter pagerAdapter) {
-        tabsState.attach(viewPager, pagerAdapter);
+        tabsPagerListener.attach(viewPager, pagerAdapter);
     }
 
     @Override
     public void attach(ViewPager viewPager, PagerAdapter pagerAdapter, TabSetterUpper tabSetterUpper) {
-        tabsState.attach(viewPager, pagerAdapter, tabSetterUpper);
+        tabsPagerListener.attach(viewPager, pagerAdapter, tabSetterUpper);
     }
 
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
-        if (tabsState.isEmpty()) {
+        if (tabsPagerListener.isEmpty()) {
             return;
         }
 
-        drawIndicator(canvas, tabsState.calculateIndicatorCoordinates());
+        drawIndicator(canvas, tabsPagerListener.calculateIndicatorCoordinates());
     }
 
     protected void drawIndicator(Canvas canvas, Coordinates indicatorCoordinates) {
@@ -76,12 +76,12 @@ public class FixedWidthLandingStrip extends LinearLayout implements Scrollable, 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        tabsState.reregister();
+        tabsPagerListener.reregister();
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        tabsState.unregister();
+        tabsPagerListener.unregister();
         super.onDetachedFromWindow();
     }
 }
