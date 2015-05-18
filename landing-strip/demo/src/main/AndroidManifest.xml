@@ -36,6 +36,13 @@
       </intent-filter>
     </activity>
 
+    <activity android:name="com.novoda.landingstrip.FixedWidthTabActivity">
+      <intent-filter android:label="LS: Fixed Width LS">
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+
   </application>
 
 </manifest>
