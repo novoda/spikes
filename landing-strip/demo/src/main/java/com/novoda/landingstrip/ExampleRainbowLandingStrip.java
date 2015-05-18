@@ -7,7 +7,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 
-public class ExampleRainbowLandingStrip extends LandingStrip {
+public class ExampleRainbowLandingStrip extends ScrollingLandingStrip {
 
     private static final int AMPLITUDE = 127;
     private static final int CENTER_FREQUENCY = 128;

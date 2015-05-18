@@ -5,7 +5,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
-  <com.novoda.landingstrip.LandingStrip
+  <com.novoda.landingstrip.ScrollingLandingStrip
     android:id="@+id/landing_strip"
     android:layout_height="50dp"
     android:layout_width="match_parent"
