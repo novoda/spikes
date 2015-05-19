@@ -16,7 +16,7 @@ public class FixedWidthLandingStrip extends LinearLayout implements Scrollable, 
     private final Paint indicatorPaint;
     private final TabsContainer tabsContainer;
     private final IndicatorCoordinatesCalculator indicatorCoordinatesCalculator;
-    private TabsOnPagerAdapterChangedListener tabsOnPagerAdapterChangedListener;
+    private final TabsOnPagerAdapterChangedListener tabsOnPagerAdapterChangedListener;
 
     public FixedWidthLandingStrip(Context context, AttributeSet attrs) {
         super(context, attrs);

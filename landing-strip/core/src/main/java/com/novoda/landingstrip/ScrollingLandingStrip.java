@@ -16,7 +16,7 @@ public class ScrollingLandingStrip extends HorizontalScrollView implements Scrol
     private final Paint indicatorPaint;
     private final TabsContainer tabsContainer;
     private final IndicatorCoordinatesCalculator indicatorCoordinatesCalculator;
-    private TabsOnPagerAdapterChangedListener tabsOnPagerAdapterChangedListener;
+    private final TabsOnPagerAdapterChangedListener tabsOnPagerAdapterChangedListener;
 
     public ScrollingLandingStrip(Context context, AttributeSet attrs) {
         super(context, attrs);
