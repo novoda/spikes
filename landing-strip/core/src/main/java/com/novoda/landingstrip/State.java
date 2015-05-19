@@ -3,22 +3,12 @@ package com.novoda.landingstrip;
 import android.support.v4.view.ViewPager;
 
 class State {
-    private final IndicatorCoordinatesCalculator indicatorCoordinatesCalculator;
 
     private ViewPager.OnPageChangeListener delegateOnPageListener;
     private float pagePositionOffset;
     private int position;
 
     private int fastForwardPosition;
-
-    public static State newInstance() {
-        IndicatorCoordinatesCalculator indicatorCoordinatesCalculator = IndicatorCoordinatesCalculator.newInstance();
-        return new State(indicatorCoordinatesCalculator);
-    }
-
-    State(IndicatorCoordinatesCalculator indicatorCoordinatesCalculator) {
-        this.indicatorCoordinatesCalculator = indicatorCoordinatesCalculator;
-    }
 
     void updateDelegateOnPageListener(ViewPager.OnPageChangeListener onPageChangeListener) {
         this.delegateOnPageListener = onPageChangeListener;
@@ -58,12 +48,5 @@ class State {
 
     public boolean fastForwardPositionIsValid() {
         return getFastForwardPosition() != -1;
-    }
-
-    public Coordinates getIndicatorPosition(TabsContainer tabsContainer) {
-        int currentPosition = getPosition();
-        float pagePositionOffset = getPagePositionOffset();
-
-        return indicatorCoordinatesCalculator.calculate(currentPosition, pagePositionOffset, tabsContainer);
     }
 }

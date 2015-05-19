@@ -10,51 +10,63 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 public class FixedWidthLandingStrip extends LinearLayout implements Scrollable, LandingStrip {
+
+    private final State state;
     private final Attributes attributes;
     private final Paint indicatorPaint;
-    private TabsPagerListener tabsPagerListener;
+    private final TabsContainer tabsContainer;
+    private final IndicatorCoordinatesCalculator indicatorCoordinatesCalculator;
+    private TabsOnPagerAdapterChangedListener tabsOnPagerAdapterChangedListener;
 
     public FixedWidthLandingStrip(Context context, AttributeSet attrs) {
         super(context, attrs);
         setWillNotDraw(false);
 
+        state = new State();
+        state.updateDelegateOnPageListener(new ViewPager.SimpleOnPageChangeListener());
+        state.updatePosition(0);
+        state.updatePositionOffset(0);
+        state.invalidateFastForwardPosition();
+
         attributes = Attributes.readAttributes(context, attrs);
-        TabsContainer tabsContainer = FixedWidthTabsContainer.newInstance(context, attributes, attrs);
-        tabsPagerListener = TabsPagerListener.newInstance(tabsContainer, attributes, this, this);
+        tabsContainer = FixedWidthTabsContainer.newInstance(context, attributes, attrs);
+        tabsOnPagerAdapterChangedListener = TabsOnPagerAdapterChangedListener.newInstance(state, tabsContainer, attributes, this, this);
 
         this.indicatorPaint = new Paint();
         indicatorPaint.setAntiAlias(true);
         indicatorPaint.setStyle(Paint.Style.FILL);
         indicatorPaint.setColor(getResources().getColor(attributes.getIndicatorColor()));
+
+        indicatorCoordinatesCalculator = IndicatorCoordinatesCalculator.newInstance(tabsContainer);
     }
 
     public void setOnPageChangeListener(ViewPager.OnPageChangeListener delegateOnPageChangeListener) {
-        tabsPagerListener.setOnPageChangeListener(delegateOnPageChangeListener);
+        state.updateDelegateOnPageListener(delegateOnPageChangeListener);
     }
 
     @Override
     public void attach(ViewPager viewPager) {
-        tabsPagerListener.attach(viewPager);
+        tabsOnPagerAdapterChangedListener.attach(viewPager);
     }
 
     @Override
     public void attach(ViewPager viewPager, PagerAdapter pagerAdapter) {
-        tabsPagerListener.attach(viewPager, pagerAdapter);
+        tabsOnPagerAdapterChangedListener.attach(viewPager, pagerAdapter);
     }
 
     @Override
     public void attach(ViewPager viewPager, PagerAdapter pagerAdapter, TabSetterUpper tabSetterUpper) {
-        tabsPagerListener.attach(viewPager, pagerAdapter, tabSetterUpper);
+        tabsOnPagerAdapterChangedListener.attach(viewPager, pagerAdapter, tabSetterUpper);
     }
 
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
-        if (tabsPagerListener.isEmpty()) {
+        if (tabsContainer.isEmpty()) {
             return;
         }
 
-        drawIndicator(canvas, tabsPagerListener.calculateIndicatorCoordinates());
+        drawIndicator(canvas, indicatorCoordinatesCalculator.calculate(state));
     }
 
     protected void drawIndicator(Canvas canvas, Coordinates indicatorCoordinates) {
@@ -76,12 +88,12 @@ public class FixedWidthLandingStrip extends LinearLayout implements Scrollable, 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        tabsPagerListener.reregister();
+        tabsOnPagerAdapterChangedListener.reregister();
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        tabsPagerListener.unregister();
+        tabsOnPagerAdapterChangedListener.unregister();
         super.onDetachedFromWindow();
     }
 }

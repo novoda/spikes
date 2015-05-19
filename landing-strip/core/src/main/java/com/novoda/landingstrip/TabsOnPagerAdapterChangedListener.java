@@ -6,48 +6,31 @@ import android.view.ViewGroup;
 
 import com.novoda.landingstrip.LandingStrip.TabSetterUpper;
 
-public class TabsPagerListener implements OnPagerAdapterChangedListener {
-    private final State state;
+public class TabsOnPagerAdapterChangedListener implements OnPagerAdapterChangedListener {
     private final TabCreator tabCreator;
     private final TabsContainer tabsContainer;
 
     private PagerAdapterObserver pagerAdapterObserver;
 
-    public static TabsPagerListener newInstance(TabsContainer tabsContainer, Attributes attributes, ViewGroup parent, Scrollable scrollable) {
-        State state = State.newInstance();
+    TabsOnPagerAdapterChangedListener(TabsContainer tabsContainer, TabCreator tabCreator) {
+        this.tabsContainer = tabsContainer;
+        this.tabCreator = tabCreator;
+    }
 
-        state.updateDelegateOnPageListener(new ViewPager.SimpleOnPageChangeListener());
-        state.updatePosition(0);
-        state.updatePositionOffset(0);
-        state.invalidateFastForwardPosition();
-
+    public static TabsOnPagerAdapterChangedListener newInstance(State state, TabsContainer tabsContainer, Attributes attributes, ViewGroup parent, Scrollable scrollable) {
         TabCreator tabCreator = new TabCreator(attributes, state, tabsContainer, parent, scrollable);
 
         tabsContainer.attachTo(parent);
 
-        TabsPagerListener tabsPagerListener = new TabsPagerListener(state, tabsContainer, tabCreator);
-        PagerAdapterObserver observer = new PagerAdapterObserver(tabsPagerListener);
-        tabsPagerListener.setPagerAdapterObserver(observer);
-        return tabsPagerListener;
-    }
-
-    public Coordinates calculateIndicatorCoordinates() {
-        return state.getIndicatorPosition(tabsContainer);
+        TabsOnPagerAdapterChangedListener tabsOnPagerAdapterChangedListener = new TabsOnPagerAdapterChangedListener(tabsContainer, tabCreator);
+        PagerAdapterObserver observer = new PagerAdapterObserver(tabsOnPagerAdapterChangedListener);
+        tabsOnPagerAdapterChangedListener.setPagerAdapterObserver(observer);
+        return tabsOnPagerAdapterChangedListener;
     }
 
     @Override
     public void onPagerAdapterChanged(PagerAdapter pagerAdapter) {
         tabCreator.onPagerAdapterChanged(pagerAdapter);
-    }
-
-    TabsPagerListener(State state, TabsContainer tabsContainer, TabCreator tabCreator) {
-        this.state = state;
-        this.tabsContainer = tabsContainer;
-        this.tabCreator = tabCreator;
-    }
-
-    public void setOnPageChangeListener(ViewPager.OnPageChangeListener delegateOnPageChangeListener) {
-        state.updateDelegateOnPageListener(delegateOnPageChangeListener);
     }
 
     public void attach(ViewPager viewPager) {
@@ -77,9 +60,5 @@ public class TabsPagerListener implements OnPagerAdapterChangedListener {
 
     public void unregister() {
         pagerAdapterObserver.unregister();
-    }
-
-    public boolean isEmpty() {
-        return tabsContainer.isEmpty();
     }
 }
