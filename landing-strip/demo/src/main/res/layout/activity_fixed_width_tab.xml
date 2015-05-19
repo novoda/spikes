@@ -5,13 +5,13 @@
   android:layout_height="match_parent"
   android:orientation="vertical">
 
-  <com.novoda.landingstrip.ScrollingLandingStrip
+  <com.novoda.landingstrip.FixedWidthLandingStrip
     android:id="@+id/landing_strip"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:background="@android:color/holo_orange_dark"
     app:indicatorColor="@android:color/white"
-    app:tabLayoutId="@layout/tab_custom" />
+    app:tabLayoutId="@layout/tab_fixed_width" />
 
   <android.support.v4.view.ViewPager
     android:id="@+id/view_pager"

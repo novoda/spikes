@@ -4,25 +4,30 @@ import android.view.View;
 
 class IndicatorCoordinatesCalculator {
 
+    private final TabsContainer tabsContainer;
     private final MutableCoordinates currentTabCoordinates;
     private final MutableCoordinates nextTabCoordinates;
     private final MutableCoordinates movingIndicatorCoordinates;
 
-    static IndicatorCoordinatesCalculator newInstance() {
-        MutableCoordinates drawCurrentTabCoordinates = new MutableCoordinates();
-        MutableCoordinates drawNextTabCoordinates = new MutableCoordinates();
-        MutableCoordinates drawMovingIndicatorCoordinates = new MutableCoordinates();
-
-        return new IndicatorCoordinatesCalculator(drawCurrentTabCoordinates, drawNextTabCoordinates, drawMovingIndicatorCoordinates);
-    }
-
-    IndicatorCoordinatesCalculator(MutableCoordinates currentTabCoordinates, MutableCoordinates nextTabCoordinates, MutableCoordinates movingIndicatorCoordinates) {
+    IndicatorCoordinatesCalculator(TabsContainer tabsContainer, MutableCoordinates currentTabCoordinates, MutableCoordinates nextTabCoordinates,
+                                   MutableCoordinates movingIndicatorCoordinates) {
+        this.tabsContainer = tabsContainer;
         this.currentTabCoordinates = currentTabCoordinates;
         this.nextTabCoordinates = nextTabCoordinates;
         this.movingIndicatorCoordinates = movingIndicatorCoordinates;
     }
 
-    Coordinates calculate(int currentPosition, float pagePositionOffset, TabsContainer tabsContainer) {
+    public static IndicatorCoordinatesCalculator newInstance(TabsContainer tabsContainer) {
+        MutableCoordinates drawCurrentTabCoordinates = new MutableCoordinates();
+        MutableCoordinates drawNextTabCoordinates = new MutableCoordinates();
+        MutableCoordinates drawMovingIndicatorCoordinates = new MutableCoordinates();
+
+        return new IndicatorCoordinatesCalculator(tabsContainer, drawCurrentTabCoordinates, drawNextTabCoordinates, drawMovingIndicatorCoordinates);
+    }
+
+    Coordinates calculate(State state) {
+        int currentPosition = state.getPosition();
+        float pagePositionOffset = state.getPagePositionOffset();
         View currentTab = tabsContainer.getTabAt(currentPosition);
 
         float currentTabStart = currentTab.getLeft();
