@@ -26,7 +26,7 @@ public class FixedWidthTabsContainer extends TabsContainer {
     @Override
     void addTab(View tabView, int position, CharSequence title) {
         super.addTab(tabView, position, title);
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)tabView.getLayoutParams();
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) tabView.getLayoutParams();
         layoutParams.weight = 1;
         tabView.setLayoutParams(layoutParams);
     }

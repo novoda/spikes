@@ -16,7 +16,7 @@ class PagerAdapterObserver extends DataSetObserver {
     }
 
     void registerTo(PagerAdapter pagerAdapter) {
-        if (this.pagerAdapter != null ||  registered) {
+        if (this.pagerAdapter != null || registered) {
             unregister();
         }
 
@@ -26,7 +26,7 @@ class PagerAdapterObserver extends DataSetObserver {
     }
 
     void reregister() {
-        if (pagerAdapter == null ) {
+        if (pagerAdapter == null) {
             return;
         }
         registerTo(pagerAdapter);
