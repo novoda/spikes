@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -60,6 +61,10 @@ public class TabsContainer {
 
     void attachTo(ViewGroup parent) {
         parent.addView(tabsContainerView, new LinearLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+    }
+
+    View inflateLayout(LayoutInflater layoutInflater, int id) {
+        return layoutInflater.inflate(id, tabsContainerView, false);
     }
 
     void clearTabs() {

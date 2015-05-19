@@ -80,7 +80,7 @@ public class TabsOnPagerAdapterChangedListener implements OnPagerAdapterChangedL
         int tabCount = pagerAdapter.getCount();
         for (int position = 0; position < tabCount; position++) {
             CharSequence title = pagerAdapter.getPageTitle(position);
-            View inflatedTabView = layoutInflater.inflate(attributes.getTabLayoutId(), parent, false);
+            View inflatedTabView = tabsContainer.inflateLayout(layoutInflater, attributes.getTabLayoutId());
             addTab(position, title, inflatedTabView);
         }
         tabsContainer.startWatching(viewPager, new ScrollingPageChangeListener(state, tabsContainer, scrollable));
