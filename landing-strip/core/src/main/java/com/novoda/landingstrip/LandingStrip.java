@@ -82,8 +82,8 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, On
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+    protected void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
         if (tabsContainer.isEmpty()) {
             return;
         }
