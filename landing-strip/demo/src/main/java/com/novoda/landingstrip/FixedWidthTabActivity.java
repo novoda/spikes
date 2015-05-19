@@ -2,7 +2,7 @@ package com.novoda.landingstrip;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,7 +11,7 @@ import com.novoda.landing_strip.R;
 import com.novoda.landingstrip.setup.Data;
 import com.novoda.landingstrip.setup.fragment.DemoFragmentSmallPagerAdapter;
 
-public class FixedWidthTabActivity extends ActionBarActivity {
+public class FixedWidthTabActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
