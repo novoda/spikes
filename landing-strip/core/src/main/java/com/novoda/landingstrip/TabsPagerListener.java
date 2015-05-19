@@ -56,7 +56,7 @@ public class TabsPagerListener implements OnPagerAdapterChangedListener {
     }
 
     public void attach(ViewPager viewPager, PagerAdapter pagerAdapter) {
-        attach(viewPager, pagerAdapter, TabsContainer.getDefaultTabSetterUpper());
+        attach(viewPager, pagerAdapter, null);
     }
 
     public void attach(ViewPager viewPager, PagerAdapter pagerAdapter, TabSetterUpper tabSetterUpper) {
