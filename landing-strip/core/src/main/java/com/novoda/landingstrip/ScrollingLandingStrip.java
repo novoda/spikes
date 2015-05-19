@@ -22,7 +22,7 @@ public class ScrollingLandingStrip extends HorizontalScrollView implements Scrol
         setHorizontalScrollBarEnabled(false);
 
         attributes = Attributes.readAttributes(context, attrs);
-        TabsContainer tabsContainer = DynamicTabsContainer.newInstance(context, attributes, attrs);
+        TabsContainer tabsContainer = ScrollingTabsContainer.newInstance(context, attributes, attrs);
         tabsPagerListener = TabsPagerListener.newInstance(tabsContainer, attributes, this, this);
         this.indicatorPaint = new Paint();
         indicatorPaint.setAntiAlias(true);

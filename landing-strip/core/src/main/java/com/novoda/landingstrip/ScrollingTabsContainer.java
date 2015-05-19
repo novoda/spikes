@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-public class DynamicTabsContainer extends TabsContainer {
+public class ScrollingTabsContainer extends TabsContainer {
 
     static TabsContainer newInstance(Context context, Attributes attributes, AttributeSet attrs) {
         LinearLayout tabsContainerView = new LinearLayout(context);
@@ -15,10 +15,10 @@ public class DynamicTabsContainer extends TabsContainer {
         tabsContainerView.setLayoutParams(layoutParams);
         tabsContainerView.setPadding(attributes.getTabsPaddingLeft(), 0, attributes.getTabsPaddingRight(), 0);
 
-        return new DynamicTabsContainer(tabsContainerView);
+        return new ScrollingTabsContainer(tabsContainerView);
     }
 
-    DynamicTabsContainer(LinearLayout tabsContainerView) {
+    ScrollingTabsContainer(LinearLayout tabsContainerView) {
         super(tabsContainerView);
     }
 }
