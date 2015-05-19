@@ -31,7 +31,7 @@ public class ScrollingLandingStrip extends HorizontalScrollView implements Scrol
         state.invalidateFastForwardPosition();
 
         attributes = Attributes.readAttributes(context, attrs);
-        tabsContainer = ScrollingTabsContainer.newInstance(context, attributes, attrs);
+        tabsContainer = TabsContainer.newScrollingTabsContainer(context, attributes, attrs);
         tabsOnPagerAdapterChangedListener = TabsOnPagerAdapterChangedListener.newInstance(state, tabsContainer, attributes, this, this);
         this.indicatorPaint = new Paint();
         indicatorPaint.setAntiAlias(true);

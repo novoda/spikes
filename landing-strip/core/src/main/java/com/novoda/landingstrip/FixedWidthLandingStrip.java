@@ -29,7 +29,7 @@ public class FixedWidthLandingStrip extends LinearLayout implements Scrollable, 
         state.invalidateFastForwardPosition();
 
         attributes = Attributes.readAttributes(context, attrs);
-        tabsContainer = FixedWidthTabsContainer.newInstance(context, attributes, attrs);
+        tabsContainer = TabsContainer.newFixedWidthTabsContainer(context, attributes, attrs);
         tabsOnPagerAdapterChangedListener = TabsOnPagerAdapterChangedListener.newInstance(state, tabsContainer, attributes, this, this);
 
         this.indicatorPaint = new Paint();

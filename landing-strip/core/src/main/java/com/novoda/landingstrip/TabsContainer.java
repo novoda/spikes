@@ -1,7 +1,9 @@
 package com.novoda.landingstrip;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -14,6 +16,30 @@ import com.novoda.landingstrip.LandingStrip.TabSetterUpper;
 public class TabsContainer {
     private final LinearLayout tabsContainerView;
     private TabSetterUpper tabSetterUpper;
+
+    public static TabsContainer newFixedWidthTabsContainer(Context context, Attributes attributes, AttributeSet attributeSet) {
+        LinearLayout tabsContainerView = new LinearLayout(context);
+        tabsContainerView.setOrientation(LinearLayout.HORIZONTAL);
+        ViewGroup.LayoutParams layoutParams = tabsContainerView.generateLayoutParams(attributeSet);
+        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        tabsContainerView.setLayoutParams(layoutParams);
+        tabsContainerView.setPadding(attributes.getTabsPaddingLeft(), 0, attributes.getTabsPaddingRight(), 0);
+
+        return new TabsContainer(tabsContainerView);
+
+    }
+
+    public static TabsContainer newScrollingTabsContainer(Context context, Attributes attributes, AttributeSet attributeSet) {
+        LinearLayout tabsContainerView = new LinearLayout(context);
+        tabsContainerView.setOrientation(LinearLayout.HORIZONTAL);
+        ViewGroup.LayoutParams layoutParams = tabsContainerView.generateLayoutParams(attributeSet);
+        layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+        tabsContainerView.setLayoutParams(layoutParams);
+        tabsContainerView.setPadding(attributes.getTabsPaddingLeft(), 0, attributes.getTabsPaddingRight(), 0);
+
+        return new TabsContainer(tabsContainerView);
+
+    }
 
     TabsContainer(LinearLayout tabsContainerView) {
         this(tabsContainerView, SIMPLE_TEXT_TAB_SETTER_UPPER);
