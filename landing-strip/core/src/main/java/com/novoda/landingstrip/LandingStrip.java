@@ -12,6 +12,8 @@ public interface LandingStrip {
 
     void attach(ViewPager viewPager, PagerAdapter pagerAdapter, TabSetterUpper tabSetterUpper);
 
+    void setOnPageChangeListener(ViewPager.OnPageChangeListener delegateOnPageChangeListener);
+
     interface TabSetterUpper {
         View setUp(int position, CharSequence title, View inflatedTab);
     }
