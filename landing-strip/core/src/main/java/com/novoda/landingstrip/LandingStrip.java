@@ -135,7 +135,7 @@ public class LandingStrip extends HorizontalScrollView implements Scrollable, On
         int tabCount = pagerAdapter.getCount();
         for (int position = 0; position < tabCount; position++) {
             CharSequence title = pagerAdapter.getPageTitle(position);
-            View inflatedTabView = layoutInflater.inflate(attributes.getTabLayoutId(), this, false);
+            View inflatedTabView = tabsContainer.inflateTab(layoutInflater, attributes.getTabLayoutId());
             addTab(position, title, inflatedTabView, tabSetterUpper);
         }
         tabsContainer.startWatching(viewPager, new ScrollingPageChangeListener(state, tabsContainer, this));

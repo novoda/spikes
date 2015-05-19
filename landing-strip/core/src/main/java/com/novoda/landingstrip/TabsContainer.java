@@ -2,6 +2,7 @@ package com.novoda.landingstrip;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -30,6 +31,10 @@ class TabsContainer {
 
     void clearTabs() {
         tabsContainerView.removeAllViews();
+    }
+
+    View inflateTab(LayoutInflater layoutInflater, int layoutId) {
+        return layoutInflater.inflate(layoutId, tabsContainerView, false);
     }
 
     void addTab(View tabView, int position) {
