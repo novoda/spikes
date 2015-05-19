@@ -16,10 +16,6 @@ class State {
         return new State(indicatorCoordinatesCalculator);
     }
 
-    private State() {
-        this(IndicatorCoordinatesCalculator.newInstance());
-    }
-
     State(IndicatorCoordinatesCalculator indicatorCoordinatesCalculator) {
         this.indicatorCoordinatesCalculator = indicatorCoordinatesCalculator;
     }
