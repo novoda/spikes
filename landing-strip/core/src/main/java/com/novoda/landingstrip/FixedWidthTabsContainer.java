@@ -2,7 +2,6 @@ package com.novoda.landingstrip;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
@@ -21,13 +20,5 @@ public class FixedWidthTabsContainer extends TabsContainer {
 
     FixedWidthTabsContainer(LinearLayout tabsContainerView) {
         super(tabsContainerView);
-    }
-
-    @Override
-    void addTab(View tabView, int position, CharSequence title) {
-        super.addTab(tabView, position, title);
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) tabView.getLayoutParams();
-        layoutParams.weight = 1;
-        tabView.setLayoutParams(layoutParams);
     }
 }
