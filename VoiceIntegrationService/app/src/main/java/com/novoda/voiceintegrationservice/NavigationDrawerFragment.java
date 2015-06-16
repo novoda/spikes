@@ -1,4 +1,4 @@
-package voiceintegrationservice.android.novoda.com.voiceintegrationservice;
+package com.novoda.voiceintegrationservice;
 
 
 import android.app.Activity;

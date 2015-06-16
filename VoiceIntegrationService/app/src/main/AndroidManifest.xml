@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="voiceintegrationservice.android.novoda.com.voiceintegrationservice"
+<manifest
+  package="com.novoda.voiceintegrationservice"
   xmlns:android="http://schemas.android.com/apk/res/android">
 
   <application
@@ -16,14 +17,31 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
+    <activity
+      android:name=".SettingsActivity"
+      android:label="@string/app_name">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+
     <service
       android:name=".SmartContextInteractionService"
       android:permission="android.permission.BIND_VOICE_INTERACTION">
       <intent-filter>
         <action android:name="android.service.voice.VoiceInteractionService" />
       </intent-filter>
-      <meta-data android:name="android.voice_interaction"
-        android:value="@xml/voice_interaction"/>
+      <meta-data
+        android:name="android.voice_interaction"
+        android:value="@xml/voice_interaction" />
+    </service>
+    <service
+      android:name=".RecognitionService">
+    </service>
+    <service
+      android:name=".SessionService">
     </service>
   </application>
 
