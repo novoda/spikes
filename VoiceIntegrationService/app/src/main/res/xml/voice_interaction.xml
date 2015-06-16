@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
-  <voice-interaction-service
-    android:recognitionService="com.novoda.voiceintegrationservice.RecognitionService"
-    android:sessionService="com.novoda.voiceintegrationservice.SessionService"
-    android:settingsActivity="com.novoda.voiceintegrationservice.SettingsActivity"/>
-</resources>
+<voice-interaction-service xmlns:android="http://schemas.android.com/apk/res/android"
+  android:recognitionService="com.novoda.voiceintegrationservice.RecognitionService"
+  android:sessionService="com.novoda.voiceintegrationservice.SessionService"
+  android:settingsActivity="com.novoda.voiceintegrationservice.SettingsActivity" />

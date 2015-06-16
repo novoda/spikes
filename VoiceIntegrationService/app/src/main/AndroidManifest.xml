@@ -39,6 +39,12 @@
     </service>
     <service
       android:name=".RecognitionService">
+      <intent-filter>
+        <action android:name="android.speech.RecognitionService"/>
+      </intent-filter>
+      <meta-data
+        android:name="android.speech"
+        android:value="@xml/speech" />
     </service>
     <service
       android:name=".SessionService">
