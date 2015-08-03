@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+  package="com.novoda.voiceintegrationservice"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <application
+    android:allowBackup="true"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:theme="@style/AppTheme">
+    <activity
+      android:name=".MainActivity"
+      android:label="@string/app_name">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+    <activity
+      android:name=".SettingsActivity"
+      android:label="@string/app_name">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+
+    <service
+      android:name=".SmartContextInteractionService"
+      android:permission="android.permission.BIND_VOICE_INTERACTION">
+      <intent-filter>
+        <action android:name="android.service.voice.VoiceInteractionService" />
+      </intent-filter>
+      <meta-data
+        android:name="android.voice_interaction"
+        android:value="@xml/voice_interaction" />
+    </service>
+    <service
+      android:name=".RecognitionService">
+      <intent-filter>
+        <action android:name="android.speech.RecognitionService"/>
+      </intent-filter>
+      <meta-data
+        android:name="android.speech"
+        android:value="@xml/speech" />
+    </service>
+    <service
+      android:name=".SessionService">
+    </service>
+  </application>
+
+</manifest>
