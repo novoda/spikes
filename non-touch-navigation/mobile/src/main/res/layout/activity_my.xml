@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+      android:id="@+id/tab_one"
+      android:layout_width="0dp"
+      android:layout_height="48dp"
+      android:layout_weight="33"
+      android:background="@drawable/tab_background"
+      android:focusable="true"
+      android:gravity="center"
+      android:text="ONE"
+      android:textColor="@color/tab_text"
+      android:onClick="showPageOne" />
+
+    <TextView
+      android:id="@+id/tab_two"
+      android:layout_width="0dp"
+      android:layout_height="48dp"
+      android:layout_weight="33"
+      android:background="@drawable/tab_background"
+      android:focusable="true"
+      android:gravity="center"
+      android:text="TWO"
+      android:textColor="@color/tab_text"
+      android:onClick="showPageTwo" />
+
+    <TextView
+      android:id="@+id/tab_three"
+      android:layout_width="0dp"
+      android:layout_height="48dp"
+      android:layout_weight="33"
+      android:background="@drawable/tab_background"
+      android:focusable="true"
+      android:gravity="center"
+      android:text="THREE"
+      android:textColor="@color/tab_text"
+      android:onClick="showPageThree" />
+
+  </LinearLayout>
+
+  <android.support.v4.view.ViewPager
+    android:id="@+id/viewpager"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+
+</LinearLayout>
