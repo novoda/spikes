@@ -2,6 +2,7 @@ package com.novoda.activitytalkbackinvestigation;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.LayoutRes;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,21 +15,20 @@ import android.widget.ListView;
 
 public abstract class DrawerActivity extends AppCompatActivity {
 
+    private Intent pendingNavigationClick;
+
     @Override
-    public void setContentView(int layoutResID) {
+    public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(R.layout.drawer_layout);
-
         ViewGroup contentView = (ViewGroup) findViewById(R.id.content_frame);
-
         getLayoutInflater().inflate(layoutResID, contentView);
         setupDrawer();
     }
 
-    Intent pendingNavigationClick;
-
     private void setupDrawer() {
         ListView listView = (ListView) findViewById(R.id.left_drawer);
         listView.setAdapter(createDrawerAdapter(this));
+
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
