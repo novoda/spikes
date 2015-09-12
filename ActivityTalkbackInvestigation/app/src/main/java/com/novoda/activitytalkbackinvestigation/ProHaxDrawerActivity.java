@@ -18,6 +18,8 @@ import android.widget.ListView;
 
 public abstract class ProHaxDrawerActivity extends AppCompatActivity {
 
+    private static final String EXTRA_INTERNAL_NAV = BuildConfig.APPLICATION_ID + "EXTRA_INTERNAL_NAV";
+
     private DrawerLayout drawerLayout;
 
     @Override
@@ -26,8 +28,11 @@ public abstract class ProHaxDrawerActivity extends AppCompatActivity {
         ViewGroup contentView = (ViewGroup) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(layoutResID, contentView);
         setupDrawer();
-        drawerLayout.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS);
-        drawerLayout.openDrawer(GravityCompat.START);
+
+        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(EXTRA_INTERNAL_NAV)) {
+            drawerLayout.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS);
+            drawerLayout.openDrawer(GravityCompat.START);
+        }
     }
 
     @Override
@@ -80,11 +85,14 @@ public abstract class ProHaxDrawerActivity extends AppCompatActivity {
     }
 
     private static Intent createIntentForItem(int itemPosition, Context context) {
+        Intent intent;
         if (itemPosition == 0) {
-            return new Intent(context, EarthActivity.class);
+            intent = new Intent(context, EarthActivity.class);
         } else {
-            return new Intent(context, SaturnActivity.class);
+            intent = new Intent(context, SaturnActivity.class);
         }
+        intent.putExtra(EXTRA_INTERNAL_NAV, true);
+        return intent;
     }
 
     @Override
