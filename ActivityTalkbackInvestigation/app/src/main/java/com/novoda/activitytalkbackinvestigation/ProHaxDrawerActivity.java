@@ -26,6 +26,7 @@ public abstract class ProHaxDrawerActivity extends AppCompatActivity {
         ViewGroup contentView = (ViewGroup) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(layoutResID, contentView);
         setupDrawer();
+        drawerLayout.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS);
         drawerLayout.openDrawer(GravityCompat.START);
     }
 
@@ -37,6 +38,7 @@ public abstract class ProHaxDrawerActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     drawerLayout.closeDrawer(GravityCompat.START);
+                    drawerLayout.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_AUTO);
                 }
             }, 1000);
         }
