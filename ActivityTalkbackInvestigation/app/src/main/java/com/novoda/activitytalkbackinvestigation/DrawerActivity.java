@@ -1,5 +1,6 @@
 package com.novoda.activitytalkbackinvestigation;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 public abstract class DrawerActivity extends AppCompatActivity {
@@ -23,32 +25,16 @@ public abstract class DrawerActivity extends AppCompatActivity {
     }
 
     private void setupDrawer() {
-        String[] planetTitles = new String[]{"Earth", "Saturn"};
         ListView listView = (ListView) findViewById(R.id.left_drawer);
-
-        // Set the adapter for the list view
-        listView.setAdapter(
-                new ArrayAdapter<>(
-                        this,
-                        android.R.layout.simple_list_item_1,
-                        planetTitles
-                )
-        );
-
+        listView.setAdapter(createDrawerAdapter(this));
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
+
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        startActivity(createIntentForItem(position));
+                        startActivity(createIntentForItem(position, DrawerActivity.this));
                     }
 
-                    private Intent createIntentForItem(int position) {
-                        if (position == 0) {
-                            return new Intent(DrawerActivity.this, EarthActivity.class);
-                        } else {
-                            return new Intent(DrawerActivity.this, SaturnActivity.class);
-                        }
-                    }
                 }
         );
 
@@ -56,4 +42,21 @@ public abstract class DrawerActivity extends AppCompatActivity {
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.setDrawerListener(drawerToggle);
     }
+
+    private static ListAdapter createDrawerAdapter(Context context) {
+        return new ArrayAdapter<>(
+                context,
+                android.R.layout.simple_list_item_1,
+                new String[]{"Earth", "Saturn"}
+        );
+    }
+
+    private static Intent createIntentForItem(int itemPosition, Context context) {
+        if (itemPosition == 0) {
+            return new Intent(context, EarthActivity.class);
+        } else {
+            return new Intent(context, SaturnActivity.class);
+        }
+    }
+    
 }
