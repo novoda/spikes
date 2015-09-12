@@ -24,7 +24,6 @@ public abstract class DrawerActivity extends AppCompatActivity {
 
     private void setupDrawer() {
         String[] planetTitles = new String[]{"Earth", "Saturn"};
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ListView listView = (ListView) findViewById(R.id.left_drawer);
 
         // Set the adapter for the list view
@@ -53,6 +52,7 @@ public abstract class DrawerActivity extends AppCompatActivity {
                 }
         );
 
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.setDrawerListener(drawerToggle);
     }
