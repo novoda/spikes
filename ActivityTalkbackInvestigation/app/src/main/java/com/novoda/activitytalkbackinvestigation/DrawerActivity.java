@@ -24,22 +24,38 @@ public abstract class DrawerActivity extends AppCompatActivity {
         setupDrawer();
     }
 
+    Intent pendingNavigationClick;
+
     private void setupDrawer() {
         ListView listView = (ListView) findViewById(R.id.left_drawer);
         listView.setAdapter(createDrawerAdapter(this));
+        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
 
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        startActivity(createIntentForItem(position, DrawerActivity.this));
+                        pendingNavigationClick = createIntentForItem(position, DrawerActivity.this);
+                        drawerLayout.closeDrawers();
                     }
 
                 }
         );
 
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close) {
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                // waiting for the drawer to close, then navigating seems to cause issue.
+                // why wait for the drawer to close? jankiness.
+                if (pendingNavigationClick != null) {
+                    startActivity(pendingNavigationClick);
+                    pendingNavigationClick = null;
+                }
+            }
+
+        };
         drawerLayout.setDrawerListener(drawerToggle);
     }
 
@@ -58,5 +74,5 @@ public abstract class DrawerActivity extends AppCompatActivity {
             return new Intent(context, SaturnActivity.class);
         }
     }
-    
+
 }
