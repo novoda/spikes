@@ -40,14 +40,15 @@ public abstract class DrawerActivity extends AppCompatActivity {
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent;
-                        if (position == 0) {
-                            intent = new Intent(DrawerActivity.this, EarthActivity.class);
-                        } else {
-                            intent = new Intent(DrawerActivity.this, SaturnActivity.class);
-                        }
+                        startActivity(createIntentForItem(position));
+                    }
 
-                        startActivity(intent);
+                    private Intent createIntentForItem(int position) {
+                        if (position == 0) {
+                            return new Intent(DrawerActivity.this, EarthActivity.class);
+                        } else {
+                            return new Intent(DrawerActivity.this, SaturnActivity.class);
+                        }
                     }
                 }
         );
