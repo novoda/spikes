@@ -10,21 +10,21 @@ import android.support.customtabs.CustomTabsSession;
 
 import com.novoda.easycustomtabs.connection.Connection;
 import com.novoda.easycustomtabs.connection.EasyCustomTabsConnection;
-import com.novoda.easycustomtabs.navigation.EasyCustomTabsNavigator;
+import com.novoda.easycustomtabs.navigation.EasyCustomTabsWebNavigator;
 import com.novoda.easycustomtabs.navigation.IntentCustomizer;
 import com.novoda.easycustomtabs.navigation.NavigationFallback;
-import com.novoda.easycustomtabs.navigation.Navigator;
+import com.novoda.easycustomtabs.navigation.WebNavigator;
 import com.novoda.easycustomtabs.provider.AvailableAppProvider;
 import com.novoda.easycustomtabs.provider.EasyCustomTabsAvailableAppProvider;
 import com.novoda.notils.exception.DeveloperError;
 
 import java.util.List;
 
-public final class EasyCustomTabs implements Navigator, Connection, AvailableAppProvider {
+public final class EasyCustomTabs implements WebNavigator, Connection, AvailableAppProvider {
 
     private static Context applicationContext;
     private Connection connection;
-    private Navigator navigator;
+    private WebNavigator webNavigator;
     private AvailableAppProvider availableAppProvider;
 
     private EasyCustomTabs() {
@@ -46,7 +46,7 @@ public final class EasyCustomTabs implements Navigator, Connection, AvailableApp
     public static void initialize(Context context) {
         applicationContext = context.getApplicationContext();
         LazyHolder.INSTANCE.connection = EasyCustomTabsConnection.newInstance();
-        LazyHolder.INSTANCE.navigator = EasyCustomTabsNavigator.newInstance();
+        LazyHolder.INSTANCE.webNavigator = EasyCustomTabsWebNavigator.newInstance();
         LazyHolder.INSTANCE.availableAppProvider = EasyCustomTabsAvailableAppProvider.newInstance();
     }
 
@@ -58,11 +58,11 @@ public final class EasyCustomTabs implements Navigator, Connection, AvailableApp
      * Provides a {@link NavigationFallback} to specify navigation mechanism in case of no Chrome Custom Tabs support found.
      *
      * @param navigationFallback
-     * @return Navigator with navigation fallback.
+     * @return WebNavigator with navigation fallback.
      */
     @Override
-    public Navigator withFallback(NavigationFallback navigationFallback) {
-        return navigator.withFallback(navigationFallback);
+    public WebNavigator withFallback(NavigationFallback navigationFallback) {
+        return webNavigator.withFallback(navigationFallback);
     }
 
     /**
@@ -70,11 +70,11 @@ public final class EasyCustomTabs implements Navigator, Connection, AvailableApp
      * {@link com.novoda.easycustomtabs.navigation.EasyCustomTabsIntentBuilder}
      *
      * @param intentCustomizer
-     * @return Navigator with customized Chrome Custom Tabs.
+     * @return WebNavigator with customized Chrome Custom Tabs.
      */
     @Override
-    public Navigator withIntentCustomizer(IntentCustomizer intentCustomizer) {
-        return navigator.withIntentCustomizer(intentCustomizer);
+    public WebNavigator withIntentCustomizer(IntentCustomizer intentCustomizer) {
+        return webNavigator.withIntentCustomizer(intentCustomizer);
     }
 
     /**
@@ -87,7 +87,7 @@ public final class EasyCustomTabs implements Navigator, Connection, AvailableApp
      */
     @Override
     public void navigateTo(Uri url, Activity activityContext) {
-        navigator.navigateTo(url, activityContext);
+        webNavigator.navigateTo(url, activityContext);
     }
 
     /**

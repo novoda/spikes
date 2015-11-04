@@ -34,7 +34,7 @@ public class EasyCustomTabsNavigatorTest {
     @Mock
     private EasyCustomTabsIntentBuilder mockEasyCustomTabsIntentBuilder;
 
-    private Navigator navigator;
+    private WebNavigator webNavigator;
 
     @Before
     public void setUp() {
@@ -44,15 +44,15 @@ public class EasyCustomTabsNavigatorTest {
         when(mockIntentCustomizer.onCustomiseIntent(any(EasyCustomTabsIntentBuilder.class))).thenReturn(mockEasyCustomTabsIntentBuilder);
         when(mockEasyCustomTabsIntentBuilder.createIntent()).thenReturn(ANY_INTENT);
 
-        navigator = new EasyCustomTabsNavigator(mockConnection);
+        webNavigator = new EasyCustomTabsWebNavigator(mockConnection);
     }
 
     @Test
     public void navigateToWillFallbackIfHasFallbackAndNotConnected() {
         when(mockConnection.isConnected()).thenReturn(false);
-        navigator.withFallback(mockNavigationFallback);
+        webNavigator.withFallback(mockNavigationFallback);
 
-        navigator.navigateTo(ANY_URL, mockActivity);
+        webNavigator.navigateTo(ANY_URL, mockActivity);
 
         verify(mockNavigationFallback).onFallbackNavigateTo(ANY_URL);
     }
@@ -61,7 +61,7 @@ public class EasyCustomTabsNavigatorTest {
     public void navigateToDoesNothingIfHasNotFallbackAndNotConnected() {
         when(mockConnection.isConnected()).thenReturn(false);
 
-        navigator.navigateTo(ANY_URL, mockActivity);
+        webNavigator.navigateTo(ANY_URL, mockActivity);
 
         verifyZeroInteractions(mockNavigationFallback);
     }
@@ -69,9 +69,9 @@ public class EasyCustomTabsNavigatorTest {
     @Test
     public void intentBuilderIsCustomizedIfConnectedAndHasCustomizer() {
         when(mockConnection.isConnected()).thenReturn(true);
-        navigator.withIntentCustomizer(mockIntentCustomizer);
+        webNavigator.withIntentCustomizer(mockIntentCustomizer);
 
-        navigator.navigateTo(ANY_URL, mockActivity);
+        webNavigator.navigateTo(ANY_URL, mockActivity);
 
         verify(mockIntentCustomizer).onCustomiseIntent(any(EasyCustomTabsIntentBuilder.class));
     }
