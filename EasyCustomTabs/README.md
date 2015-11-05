@@ -1,17 +1,22 @@
-# EasyCustomTabs 
+# EasyCustomTabs [![](https://ci.novoda.com/buildStatus/icon?job=landing-strip)]() [![](https://raw.githubusercontent.com/novoda/novoda/master/assets/btn_apache_lisence.png)]()
 
-TODO - Adding to CI + Licence at some point in the future.
+^^^ **TODO** link properly
 
-Navigating to external websites from your app? 
+- Navigating to external websites from your app? 
+- *"Yes, that one is easy"*
+- Wondering how to keep the user in context?
+- *"I know... it can be done using WebView, but I don't like it that much"*
+- Aha! Why don't you try Chrome Custom Tabs? 
+- *"Integrating it into my app can be a pain..."*
+- Not anymore!
 
-Wondering how to keep the user in context?
-
-**EasyCustomTabs** will help you with this.
+**EasyCustomTabs** will help you with that.
 
 ## Description
 
 **EasyCustomTabs** provides easy integration of Chrome Custom Tabs into your project.
-Just connect it to your activity, and navigate to the external website styling your tab as you wish!
+Just connect it to your activity, and navigate to the external website styling your tab as you wish.
+Moreover with Custom Tabs the navigation can be nearly instantaneous!
 
 More information about Chrome Custom Tabs available at: https://developer.chrome.com/multidevice/android/customtabs
 
@@ -19,7 +24,7 @@ More information about Chrome Custom Tabs available at: https://developer.chrome
 
 To start using this library, add these lines to the `build.gradle` of your project:
 
-TODO - move to own repo + bintray at some point in the future.
+**TODO**: Move to own repo + bintray at some point in the future.
 
 
 ## Simple usage
@@ -55,9 +60,9 @@ Uri url = ANY_WEBSITE_URL;
 EasyCustomTabs.getInstance().navigateTo(url, activity);
 ```
 
-TODO - add screenshot.
+**TODO**: Add screenshot.
 
-Info about customizing your tab and more stuff into [Github Wiki] TODO - add wiki
+Info about customizing your tab and more stuff into [Github Wiki]() **TODO**: Add wiki and link.
 
 
 
@@ -66,5 +71,5 @@ Info about customizing your tab and more stuff into [Github Wiki] TODO - add wik
 Here are a list of useful links:
 
  * We always welcome people to contribute new features or bug fixes, [here is how](https://github.com/novoda/novoda/blob/master/CONTRIBUTING.md)
- * If you have a problem check the [Issues Page - Add link] first to see if we are working on it
- * For further usage or to delve more deeply checkout the [Project Wiki - Add link]
+ * If you have a problem check the [Issues Page]() first to see if we are working on it <- **TODO**: Add link
+ * For further usage or to delve more deeply checkout the [Project Wiki]() <- **TODO**: Add link
