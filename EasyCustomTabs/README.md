@@ -66,5 +66,5 @@ Info about customizing your tab and more stuff into [Github Wiki] TODO - add wik
 Here are a list of useful links:
 
  * We always welcome people to contribute new features or bug fixes, [here is how](https://github.com/novoda/novoda/blob/master/CONTRIBUTING.md)
- * If you have a problem check the [Issues Page](https://github.com/novoda/landing-strip/issues) first to see if we are working on it
- * For further usage or to delve more deeply checkout the [Project Wiki](https://github.com/novoda/landing-strip/wiki)
+ * If you have a problem check the [Issues Page - Add link] first to see if we are working on it
+ * For further usage or to delve more deeply checkout the [Project Wiki - Add link]
