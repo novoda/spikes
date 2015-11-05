@@ -62,7 +62,7 @@ EasyCustomTabs.getInstance().navigateTo(url, activity);
 
 **TODO**: Add screenshot.
 
-Info about customizing your tab and more stuff into [Github Wiki]() **TODO**: Add wiki and link.
+Info about customizing your tab and more stuff into [Github Wiki]() <- **TODO**: Add wiki and link.
 
 
 
