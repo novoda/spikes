@@ -1,0 +1,30 @@
+def sourceSetMain = android.sourceSets.main.java.srcDirs
+def rulesDir = new File("$project.rootDir/code-quality", 'rules')
+def ignoreFail = true // sad panda
+
+def includeSrcPatternApplication = 'com/novoda/easycustomtabs/**/*.java'
+def excludeSrcPatternRClass = 'com/novoda/easycustomtabs/**/R.java'
+def excludeSrcPatternGeneratedFiles = '**/gen/**'
+
+apply plugin: 'checkstyle'
+task checkstyleMain(type: Checkstyle) {
+    description 'Checks whether Java source code complies with coding rules.'
+    ignoreFailures ignoreFail
+    configFile = file("$rulesDir/checkstyle/modules.xml")
+
+    source sourceSetMain
+    include includeSrcPatternApplication
+    exclude excludeSrcPatternRClass
+    exclude excludeSrcPatternGeneratedFiles
+
+    classpath = files()
+
+    doLast {
+        def htmlReportFile = new File(reports.xml.destination.parent, name - 'checkstyle' + '.html')
+        ant.xslt(in: reports.xml.destination,
+                style: file("$rulesDir/checkstyle/stylesheet-noframes-sorted.xsl"),
+                out: htmlReportFile)
+        println "See the Checkstyle report at: $htmlReportFile"
+    }
+}
+staticAnalysis.dependsOn checkstyleMain

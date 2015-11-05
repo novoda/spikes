@@ -1,0 +1,24 @@
+def sourceSetMain = android.sourceSets.main.java.srcDirs
+def rulesDir = new File("$project.rootDir/code-quality", 'rules')
+def ignoreFail = true // sad panda
+
+def includeSrcPatternApplication = 'com/novoda/easycustomtabs/**/*.java'
+def excludeSrcPatternRClass = 'com/novoda/easycustomtabs/**/R.java'
+def excludeSrcPatternGeneratedFiles = '**/gen/**'
+
+apply plugin: 'pmd'
+task pmdMain(type: Pmd) {
+    description 'Finds common programming flaws throw static analysis of code.'
+    ignoreFailures ignoreFail
+    ruleSetFiles = files("$rulesDir/pmd/ruleset.xml")
+
+    source sourceSetMain
+    include includeSrcPatternApplication
+    exclude excludeSrcPatternRClass
+    exclude excludeSrcPatternGeneratedFiles
+
+    reports {
+        xml.enabled = true
+    }
+}
+staticAnalysis.dependsOn pmdMain
