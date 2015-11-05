@@ -4,15 +4,18 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.novoda.easycustomtabs.EasyCustomTabs;
+import com.novoda.easycustomtabs.navigation.EasyCustomTabsIntentBuilder;
+import com.novoda.easycustomtabs.navigation.IntentCustomizer;
 import com.novoda.easycustomtabs.navigation.NavigationFallback;
 
 import static com.novoda.easycustomtabs.provider.EasyCustomTabsAvailableAppProvider.PackageFoundCallback;
 
-public class SimpleDemoActivity extends AppCompatActivity {
+public class ExtendedDemoActivity extends AppCompatActivity {
 
     private static final Uri WEB_URL = Uri.parse("http://www.novoda.com");
 
@@ -28,7 +31,8 @@ public class SimpleDemoActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             EasyCustomTabs.getInstance().withFallback(navigationFallback)
-                    .navigateTo(WEB_URL, SimpleDemoActivity.this);
+                    .withIntentCustomizer(intentCustomizer)
+                    .navigateTo(WEB_URL, ExtendedDemoActivity.this);
         }
     };
 
@@ -39,6 +43,16 @@ public class SimpleDemoActivity extends AppCompatActivity {
                     .setData(url)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+        }
+    };
+
+    private final IntentCustomizer intentCustomizer = new IntentCustomizer() {
+        @Override
+        public EasyCustomTabsIntentBuilder onCustomiseIntent(EasyCustomTabsIntentBuilder easyCustomTabsIntentBuilder) {
+            //TODO customize a bit more.
+            return easyCustomTabsIntentBuilder.withToolbarColor(ContextCompat.getColor(getApplicationContext(), android.R.color.black))
+                    .showingTitle()
+                    .withUrlBarHiding();
         }
     };
 
