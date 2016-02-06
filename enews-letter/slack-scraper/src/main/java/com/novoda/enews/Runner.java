@@ -23,7 +23,7 @@ public class Runner {
         SlackHistoryFetcher slackHistoryFetcher = SlackHistoryFetcher.from(slackWebService, slackToken);
 
         LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = LocalDateTime.now().minusDays(365);
+        LocalDateTime end = LocalDateTime.now().minusDays(7);
         ChannelHistory channelHistory = slackHistoryFetcher.getChannelHistory(start, end);
 
         System.out.println(channelHistory.getHistoryFrom() + " / " + channelHistory.getHistoryTo());
