@@ -40,7 +40,9 @@ public class TweetView extends LinearLayout {
     public interface Listener {
 
         void onClick(String tweet);
+
         void onClickReply(String tweet);
+
         void onClickRetweet(String tweet);
 
     }
