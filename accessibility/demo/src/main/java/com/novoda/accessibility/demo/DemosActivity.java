@@ -13,7 +13,7 @@ import java.util.List;
 public class DemosActivity extends AppCompatActivity {
 
     private final List<Demo> demos = Arrays.asList(
-            new Demo("Accessibility checker", AccessibilityCheckerActivity.class)
+            new Demo("Accessibility Services", AccessibilityServicesActivity.class)
     );
 
     @Override

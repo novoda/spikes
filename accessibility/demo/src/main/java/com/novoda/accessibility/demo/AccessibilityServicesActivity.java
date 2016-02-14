@@ -5,11 +5,11 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-import com.novoda.accessibility.AccessibilityChecker;
+import com.novoda.accessibility.AccessibilityServices;
 
-public class AccessibilityCheckerActivity extends AppCompatActivity {
+public class AccessibilityServicesActivity extends AppCompatActivity {
 
-    private AccessibilityChecker accessibilityChecker;
+    private AccessibilityServices accessibilityServices;
     private TextView talkbackStatus;
 
     @Override
@@ -17,17 +17,17 @@ public class AccessibilityCheckerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accessibility_checker);
 
-        accessibilityChecker = AccessibilityChecker.newInstance(this);
+        accessibilityServices = AccessibilityServices.newInstance(this);
         talkbackStatus = ((TextView) findViewById(R.id.talkback_status));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (accessibilityChecker.isSpokenFeedbackEnabled()) {
-            talkbackStatus.setText("TalkBack is enabled");
+        if (accessibilityServices.isSpokenFeedbackEnabled()) {
+            talkbackStatus.setText("Spoken feedback is enabled");
         } else {
-            talkbackStatus.setText("TalkBack is not enabled");
+            talkbackStatus.setText("Spoken feedback is not enabled");
         }
     }
 
