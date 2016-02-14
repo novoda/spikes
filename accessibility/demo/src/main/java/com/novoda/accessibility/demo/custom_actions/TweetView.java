@@ -1,7 +1,9 @@
 package com.novoda.accessibility.demo.custom_actions;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
@@ -40,7 +42,7 @@ public class TweetView extends LinearLayout {
     }
 
     public void display(final String tweet, final Listener listener) {
-        Actions actions = createActions(tweet, listener);
+        final Actions actions = createActions(tweet, listener);
         ViewCompat.setAccessibilityDelegate(this, new ActionsAccessibilityDelegate(getResources(), actions));
 
         tweetTextView.setText(tweet);
@@ -50,7 +52,7 @@ public class TweetView extends LinearLayout {
                     @Override
                     public void onClick(View v) {
                         if (services.isSpokenFeedbackEnabled()) {
-                            // TODO: show dialog
+                            showAlertDialogFor(actions);
                         } else {
                             listener.onClick(tweet);
                         }
@@ -100,6 +102,31 @@ public class TweetView extends LinearLayout {
                         })
                 )
         );
+    }
+
+    private void showAlertDialogFor(final Actions actions) {
+        CharSequence[] itemLabels = new CharSequence[actions.getCount()];
+        for (int i = 0; i < actions.getCount(); i++) {
+            itemLabels[i] = getResources().getString(actions.getAction(i).getLabel());
+        }
+
+        new AlertDialog.Builder(getContext())
+                .setTitle(R.string.tweet_actions_title)
+                .setItems(
+                        itemLabels,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Action action = actions.getAction(which);
+                                action.run();
+                                dialog.dismiss();
+                            }
+
+                        }
+                )
+                .create()
+                .show();
     }
 
     public interface Listener {

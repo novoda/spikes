@@ -3,4 +3,5 @@
   <string name="tweet_action_open">Open detail</string>
   <string name="tweet_action_reply">Reply</string>
   <string name="tweet_action_retweet">Retweet</string>
+  <string name="tweet_actions_title">Tweet options</string>
 </resources>
