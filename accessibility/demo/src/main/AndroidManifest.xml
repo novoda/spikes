@@ -16,7 +16,7 @@
     </activity>
 
     <activity android:name=".AccessibilityServicesActivity" />
-    <activity android:name=".CustomActionsActivity" />
+    <activity android:name=".custom_actions.CustomActionsActivity" />
 
   </application>
 
