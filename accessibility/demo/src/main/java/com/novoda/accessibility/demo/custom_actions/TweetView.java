@@ -1,10 +1,7 @@
 package com.novoda.accessibility.demo.custom_actions;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.support.annotation.StringRes;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
