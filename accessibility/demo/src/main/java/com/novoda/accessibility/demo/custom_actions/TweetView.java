@@ -2,6 +2,7 @@ package com.novoda.accessibility.demo.custom_actions;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.annotation.StringRes;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.AttributeSet;
@@ -14,6 +15,7 @@ import com.novoda.accessibility.AccessibilityServices;
 import com.novoda.accessibility.Action;
 import com.novoda.accessibility.Actions;
 import com.novoda.accessibility.ActionsAccessibilityDelegate;
+import com.novoda.accessibility.ActionsAlertDialogCreator;
 import com.novoda.accessibility.demo.R;
 
 import java.util.Arrays;
@@ -104,27 +106,8 @@ public class TweetView extends LinearLayout {
         );
     }
 
-    private void showAlertDialogFor(final Actions actions) {
-        CharSequence[] itemLabels = new CharSequence[actions.getCount()];
-        for (int i = 0; i < actions.getCount(); i++) {
-            itemLabels[i] = getResources().getString(actions.getAction(i).getLabel());
-        }
-
-        new AlertDialog.Builder(getContext())
-                .setTitle(R.string.tweet_actions_title)
-                .setItems(
-                        itemLabels,
-                        new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Action action = actions.getAction(which);
-                                action.run();
-                                dialog.dismiss();
-                            }
-
-                        }
-                )
+    private void showAlertDialogFor(Actions actions) {
+        new ActionsAlertDialogCreator(getContext(), R.string.tweet_actions_title, actions)
                 .create()
                 .show();
     }
