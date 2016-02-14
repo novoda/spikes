@@ -42,15 +42,15 @@ public class Action {
             return false;
         }
 
-        Action action = (Action) o;
+        Action otherAction = (Action) o;
 
-        if (id != action.id) {
+        if (id != otherAction.id) {
             return false;
         }
-        if (labelRes != action.labelRes) {
+        if (labelRes != otherAction.labelRes) {
             return false;
         }
-        return this.action.equals(action.action);
+        return this.action.equals(otherAction.action);
 
     }
 
