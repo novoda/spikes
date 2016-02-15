@@ -9,13 +9,13 @@ public class Action {
     private final int id;
 
     @StringRes
-    private final int labelRes;
+    private final int label;
 
     private final Runnable action;
 
     public Action(@IdRes int id, @StringRes int label, Runnable action) {
         this.id = id;
-        this.labelRes = label;
+        this.label = label;
         this.action = action;
     }
 
@@ -26,7 +26,7 @@ public class Action {
 
     @StringRes
     public int getLabel() {
-        return labelRes;
+        return label;
     }
 
     public void run() {
@@ -47,7 +47,7 @@ public class Action {
         if (id != otherAction.id) {
             return false;
         }
-        if (labelRes != otherAction.labelRes) {
+        if (label != otherAction.label) {
             return false;
         }
         return this.action.equals(otherAction.action);
@@ -57,7 +57,7 @@ public class Action {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + labelRes;
+        result = 31 * result + label;
         result = 31 * result + action.hashCode();
         return result;
     }
