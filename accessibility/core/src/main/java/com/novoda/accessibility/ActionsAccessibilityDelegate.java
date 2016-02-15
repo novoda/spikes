@@ -19,8 +19,7 @@ public class ActionsAccessibilityDelegate extends AccessibilityDelegateCompat {
     @Override
     public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfoCompat info) {
         super.onInitializeAccessibilityNodeInfo(host, info);
-        for (int i = 0; i < actions.getCount(); i++) {
-            Action action = actions.getAction(i);
+        for (Action action : actions) {
             String label = resources.getString(action.getLabel());
             info.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(action.getId(), label));
         }

@@ -3,9 +3,10 @@ package com.novoda.accessibility;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 
+import java.util.Iterator;
 import java.util.List;
 
-public class Actions {
+public class Actions implements Iterable<Action> {
 
     private final List<Action> actions;
 
@@ -47,6 +48,11 @@ public class Actions {
     @Override
     public int hashCode() {
         return actions.hashCode();
+    }
+
+    @Override
+    public Iterator<Action> iterator() {
+        return actions.iterator();
     }
 
 }
