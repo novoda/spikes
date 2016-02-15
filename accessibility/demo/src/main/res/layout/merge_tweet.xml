@@ -19,14 +19,14 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="50"
-      android:text="Reply" />
+      android:text="@string/tweet_button_reply" />
 
     <Button
       android:id="@+id/tweet_button_retweet"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="50"
-      android:text="Retweet" />
+      android:text="@string/tweet_button_retweet" />
 
   </LinearLayout>
 
