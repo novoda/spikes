@@ -12,7 +12,7 @@ services.isSpokenFeedbackEnabled();
 ## Custom accessibility actions
 - a wrapper around View actions to facilitate actions via dialog or TalkBack local gestures menu
 
-First create `Actions`. It's necessary to give each `Action` a unique resource ID (required by `AccessibilityActionCompat` see `ActionsAccessibilityDelegate`), and a display label.
+First create `Actions`. It's necessary to give each `Action` a unique resource ID (required by [`AccessibilityActionCompat`](http://developer.android.com/reference/android/support/v4/view/accessibility/AccessibilityNodeInfoCompat.AccessibilityActionCompat.html) see `ActionsAccessibilityDelegate`), and a display label.
 
 ```java
 Actions actions = // ...
