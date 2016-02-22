@@ -1,3 +1,11 @@
 <resources>
   <string name="app_name">accessibility</string>
+
+  <string name="tweet_button_reply">@string/tweet_action_reply</string>
+  <string name="tweet_button_retweet">@string/tweet_action_retweet</string>
+
+  <string name="tweet_actions_title">Tweet options</string>
+  <string name="tweet_action_open">Open detail</string>
+  <string name="tweet_action_reply">Reply</string>
+  <string name="tweet_action_retweet">Retweet</string>
 </resources>

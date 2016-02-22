@@ -6,6 +6,7 @@ import android.widget.ListView;
 
 import com.novoda.accessibility.demo.base.Demo;
 import com.novoda.accessibility.demo.base.DemoAdapter;
+import com.novoda.accessibility.demo.custom_actions.CustomActionsActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +14,8 @@ import java.util.List;
 public class DemosActivity extends AppCompatActivity {
 
     private final List<Demo> demos = Arrays.asList(
-            new Demo("Accessibility Services", AccessibilityServicesActivity.class)
+            new Demo("Accessibility Services", AccessibilityServicesActivity.class),
+            new Demo("Custom actions", CustomActionsActivity.class)
     );
 
     @Override

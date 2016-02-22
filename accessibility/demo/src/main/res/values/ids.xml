@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <item name="tweet_action_open"
+    type="id" />
+  <item name="tweet_action_reply"
+    type="id" />
+  <item name="tweet_action_retweet"
+    type="id" />
+</resources>

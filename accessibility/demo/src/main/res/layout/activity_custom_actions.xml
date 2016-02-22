@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.novoda.accessibility.demo.custom_actions.TweetView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/tweet"
+  android:layout_width="300dp"
+  android:layout_height="wrap_content"
+  android:layout_gravity="center"
+  android:layout_marginTop="16dp"
+  android:background="@android:color/holo_blue_light" />
