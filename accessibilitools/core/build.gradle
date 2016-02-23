@@ -4,7 +4,7 @@ apply plugin: 'bintray-release'
 android {
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 23
     }
 
     compileSdkVersion 23
@@ -15,12 +15,12 @@ publish {
     userOrg = 'novoda'
     repoName = 'maven-private'
     groupId = 'com.novoda'
-    artifactId = 'accessibility'
+    artifactId = 'accessibilitools'
     version = project.version
 
-    uploadName = 'accessibility'
-    description = 'Utility classes for accessibility'
-    website = 'https://github.com/novoda/spikes/tree/master/accessibility'
+    uploadName = 'accessibilitools'
+    description = 'Tools to help implement accessibility features on Android'
+    website = 'https://github.com/novoda/spikes/tree/master/accessibilitools'
 }
 
 dependencies {
