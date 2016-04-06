@@ -1,8 +1,0 @@
-<resources>
-    <string name="app_name">Easy Custom Tabs - Extended Demo</string>
-
-    <string name="open_website_button">Open Website</string>
-
-    <string name="application_found">The website will open on a Chrome Custom Tab! (custom theme).</string>
-    <string name="application_not_found">You don\'t have an appropriate version of Chrome.\nWebsite will be open on default browser.</string>
-</resources>
