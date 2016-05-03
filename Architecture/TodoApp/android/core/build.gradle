@@ -1,0 +1,39 @@
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: JavaAptPlugin.class
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+dependencies {
+    compile project(':event')
+    compile project(':data')
+
+    compile "io.reactivex:rxjava:$rootProject.rxJavaVersion"
+    compile "com.jakewharton.rxrelay:rxrelay:$rootProject.rxJavaVersion"
+    compile "com.google.guava:guava:$rootProject.guavaVersion"
+
+    compileOnly "com.jakewharton.auto.value:auto-value-annotations:$rootProject.autoValueAnnotationsVersion"
+    javapt "com.google.auto.value:auto-value:$rootProject.autoValueVersion"
+
+
+    testCompile "org.jetbrains.kotlin:kotlin-stdlib:$rootProject.kotlinVersion"
+    testCompile "org.jetbrains.kotlin:kotlin-test:$rootProject.kotlinVersion"
+    testCompile "org.mockito:mockito-core:$rootProject.mockitoVersion"
+    testCompile "junit:junit:$rootProject.junitVersion"
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$rootProject.kotlinVersion"
+    }
+}
+repositories {
+    mavenCentral()
+}
+sourceSets {
+    test.java.srcDirs += 'src/test/kotlin'
+}

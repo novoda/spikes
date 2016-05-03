@@ -1,0 +1,5 @@
+rootProject.name = "TodoApp"
+include ':mobile'
+include ':core'
+include ':event'
+include ':data'
