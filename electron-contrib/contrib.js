@@ -1,5 +1,5 @@
-var fs = require('fs');
-var exec = require('child_process').exec;
+const fs = require('fs');
+const exec = require('child_process').exec;
 
 module.exports = {
   check: function(directory, callback) {
@@ -33,7 +33,7 @@ function checkFile(gitRepoPath, file, callback) {
 }
 
 function executeShortLog(gitRepoPath, file, callback) {
-  exec(shortlogCommand(gitRepoPath, file), { cwd : "/tmp/" }, function(err, stdout, stderr) {
+  exec(shortlogCommand(gitRepoPath, file), { cwd : '/tmp/' }, function(err, stdout, stderr) {
     if (stdout.length == 0) {
       return;
     }
