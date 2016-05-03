@@ -12,8 +12,8 @@ function check(directory, callback) {
 }
 
 function checkInt(gitRepoPath, currentDirectory, callback) {
-  fs.readdir(currentDirectory, function(err, items) {
-    items.forEach(function(it) {
+  fs.readdir(currentDirectory, (err, items) => {
+    items.forEach(it => {
       let file = currentDirectory + '/' + it;
       checkFile(gitRepoPath, file, callback);
     })
@@ -21,11 +21,11 @@ function checkInt(gitRepoPath, currentDirectory, callback) {
 }
 
 function checkFile(gitRepoPath, file, callback) {
-  fs.stat(file, function(err, stats) {
+  fs.stat(file, (err, stats) => {
       if (!stats.isDirectory()) {
         return;
       }
-      executeShortLog(gitRepoPath, file, function(result) {
+      executeShortLog(gitRepoPath, file, result => {
         callback(result);
         checkInt(gitRepoPath, file, callback);
       });
@@ -33,7 +33,7 @@ function checkFile(gitRepoPath, file, callback) {
 }
 
 function executeShortLog(gitRepoPath, file, callback) {
-  exec(shortlogCommand(gitRepoPath, file), { cwd : '/tmp/' }, function(err, stdout, stderr) {
+  exec(shortlogCommand(gitRepoPath, file), { cwd : '/tmp/' }, (err, stdout, stderr) => {
     if (stdout.length == 0) {
       return;
     }
@@ -48,7 +48,7 @@ function shortlogCommand(gitRepoPath, file) {
 }
 
 function parseShortLog(file, shortlog) {
-  let lines = shortlog.replace(/[\t\r]/g," ").split("\n").filter(filterEmpty);
+  let lines = shortlog.replace(/[\t\r]/g, ' ').split('\n').filter(filterEmpty);
   let contributors = marshallToContributors(lines);
   return {
     directory: file,
@@ -56,13 +56,11 @@ function parseShortLog(file, shortlog) {
   }
 }
 
-function filterEmpty(it) {
-  return it && it.length > 0;
-}
+let filterEmpty = (it => it && it.length > 0)
 
 function marshallToContributors(lines) {
   let contributors = [];
-  lines.forEach(function(each) {
+  lines.forEach(each => {
     let split = each.trim().split(/(\d+)/g).filter(filterEmpty);
     let contributor = {
       author: split[1].trim(),

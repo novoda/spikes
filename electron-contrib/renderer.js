@@ -1,12 +1,12 @@
 const contrib = require('./contrib');
 
 let onReady = function() {
-  console.log("ready");
+  console.log('ready');
   let submit = document.getElementById('form-submit');
 
   submit.addEventListener('click', function() {
     console.log('submit clicked')
-    let path = document.getElementById("full-path").value;
+    let path = document.getElementById('full-path').value;
     contrib.check(path, function(result) {
       appendResult(result);
     });
