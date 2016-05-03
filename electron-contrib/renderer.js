@@ -1,12 +1,12 @@
 var contrib = require("./contrib")
 
-var onReady = function() {
+let onReady = function() {
   console.log("ready");
-  var submit = document.getElementById("form-submit");
+  let submit = document.getElementById("form-submit");
 
   submit.addEventListener('click', function() {
     console.log('submit clicked')
-    var path = document.getElementById("full-path").value;
+    let path = document.getElementById("full-path").value;
     contrib.check(path, function(result) {
       appendResult(result);
     });
@@ -14,11 +14,11 @@ var onReady = function() {
 }
 
 function appendResult(result) {
-  var text = result.contributors[0].author + " is the owner of " + result.directory;
-  var resultElement = document.createElement('div');
-  var html = '<span id="title" style="display:inline-block; width=100px;">' + text + '</span>';
+  let text = result.contributors[0].author + " is the owner of " + result.directory;
+  let resultElement = document.createElement('div');
+  let html = '<span id="title" style="display:inline-block; width=100px;">' + text + '</span>';
   resultElement.innerHTML = html;
-  var root = document.body;
+  let root = document.body;
   while (resultElement.children.length > 0) {
     root.appendChild(resultElement.children[0]);
   }

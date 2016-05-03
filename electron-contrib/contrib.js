@@ -14,7 +14,7 @@ function check(directory, callback) {
 function checkInt(gitRepoPath, currentDirectory, callback) {
   fs.readdir(currentDirectory, function(err, items) {
     items.forEach(function(it) {
-      var file = currentDirectory + '/' + it;
+      let file = currentDirectory + '/' + it;
       checkFile(gitRepoPath, file, callback);
     })
   });
@@ -38,7 +38,7 @@ function executeShortLog(gitRepoPath, file, callback) {
       return;
     }
 
-    var result = parseShortLog(file, stdout);
+    let result = parseShortLog(file, stdout);
     callback(result);
   });
 }
@@ -48,8 +48,8 @@ function shortlogCommand(gitRepoPath, file) {
 }
 
 function parseShortLog(file, shortlog) {
-  var lines = shortlog.replace(/[\t\r]/g," ").split("\n").filter(filterEmpty);
-  var contributors = marshallToContributors(lines);
+  let lines = shortlog.replace(/[\t\r]/g," ").split("\n").filter(filterEmpty);
+  let contributors = marshallToContributors(lines);
   return {
     directory: file,
     contributors: contributors
@@ -61,10 +61,10 @@ function filterEmpty(it) {
 }
 
 function marshallToContributors(lines) {
-  var contributors = [];
+  let contributors = [];
   lines.forEach(function(each) {
-    var split = each.trim().split(/(\d+)/g).filter(filterEmpty);
-    var contributor = {
+    let split = each.trim().split(/(\d+)/g).filter(filterEmpty);
+    let contributor = {
       author: split[1].trim(),
       commitCount: split[0].trim()
     };
