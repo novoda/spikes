@@ -8,10 +8,10 @@ module.exports = {
 };
 
 function check(directory, callback) {
-  checkInt(directory, directory, callback);
+  recursiveCheck(directory, directory, callback);
 }
 
-function checkInt(gitRepoPath, currentDirectory, callback) {
+function recursiveCheck(gitRepoPath, currentDirectory, callback) {
   fs.readdir(currentDirectory, (err, items) => {
     items.forEach(it => {
       let file = currentDirectory + '/' + it;
@@ -27,7 +27,7 @@ function checkFile(gitRepoPath, file, callback) {
       }
       executeShortLog(gitRepoPath, file, result => {
         callback(result);
-        checkInt(gitRepoPath, file, callback);
+        recursiveCheck(gitRepoPath, file, callback);
       });
   });
 }
@@ -61,12 +61,14 @@ let filterEmpty = (it => it && it.length > 0)
 function marshallToContributors(lines) {
   let contributors = [];
   lines.forEach(each => {
-    let split = each.trim().split(/(\d+)/g).filter(filterEmpty);
+    let segments = toCleanSegments(each);
     let contributor = {
-      author: split[1].trim(),
-      commitCount: split[0].trim()
+      author: segments[1].trim(),
+      commitCount: segments[0].trim()
     };
     contributors.push(contributor)
   });
   return contributors;
 }
+
+let toCleanSegments = (it => it.trim().split(/(\d+)/g).filter(filterEmpty))
