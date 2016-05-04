@@ -1,26 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <EditText
-    android:id="@+id/edit_task_title"
+  <com.novoda.todoapp.views.TodoAppBar
+    android:id="@+id/app_bar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:hint="@string/title_hint"
-    android:singleLine="true"
-    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
 
-  <EditText
-    android:id="@+id/edit_task_description"
-    android:layout_width="match_parent"
-    android:layout_height="350dp"
-    android:gravity="top"
-    android:hint="@string/description_hint" />
+    <EditText
+      android:id="@+id/edit_task_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/title_hint"
+      android:singleLine="true"
+      android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-  <!-- TODO replace by a FAB!-->
-  <Button
-    android:id="@+id/edit_save_button"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Save" />
+    <EditText
+      android:id="@+id/edit_task_description"
+      android:layout_width="match_parent"
+      android:layout_height="350dp"
+      android:gravity="top"
+      android:hint="@string/description_hint" />
+
+    <!-- TODO replace by a FAB!-->
+    <Button
+      android:id="@+id/edit_save_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Save" />
+
+  </LinearLayout>
 
 </merge>

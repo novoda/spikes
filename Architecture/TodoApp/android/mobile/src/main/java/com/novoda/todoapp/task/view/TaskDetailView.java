@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.novoda.data.SyncedData;
@@ -14,7 +14,7 @@ import com.novoda.todoapp.task.data.model.Task;
 import com.novoda.todoapp.task.displayer.TaskActionListener;
 import com.novoda.todoapp.task.displayer.TaskDisplayer;
 
-public class TaskDetailView extends RelativeLayout implements TaskDisplayer {
+public class TaskDetailView extends LinearLayout implements TaskDisplayer {
 
     private TextView titleView;
     private TextView descriptionView;
@@ -24,6 +24,7 @@ public class TaskDetailView extends RelativeLayout implements TaskDisplayer {
 
     public TaskDetailView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setOrientation(VERTICAL);
     }
 
     @Override
@@ -59,7 +60,13 @@ public class TaskDetailView extends RelativeLayout implements TaskDisplayer {
             }
         });
 
-        setOnClickListener(new OnClickListener() { //TODO replace by FAB
+        titleView.setOnClickListener(new OnClickListener() { //TODO replace by FAB
+            @Override
+            public void onClick(View v) {
+                taskActionListener.onEditSelected(task);
+            }
+        });
+        descriptionView.setOnClickListener(new OnClickListener() { //TODO replace by FAB
             @Override
             public void onClick(View v) {
                 taskActionListener.onEditSelected(task);

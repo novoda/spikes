@@ -26,7 +26,6 @@
       android:name=".task.edit.TaskEditActivity"
       android:label="CHANGE ME2" />
 
-
   </application>
 
 </manifest>
