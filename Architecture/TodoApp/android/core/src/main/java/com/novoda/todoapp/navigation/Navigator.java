@@ -6,4 +6,6 @@ public interface Navigator {
 
     void toTaskDetail(Task task);
 
+    void toTaskEdit(Task task);
+
 }

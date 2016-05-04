@@ -58,6 +58,13 @@ public class TaskDetailView extends RelativeLayout implements TaskDisplayer {
                 taskActionListener.toggleCompletion(task);
             }
         });
+
+        setOnClickListener(new OnClickListener() { //TODO replace by FAB
+            @Override
+            public void onClick(View v) {
+                taskActionListener.onEditSelected(task);
+            }
+        });
     }
 
 }

@@ -6,4 +6,6 @@ public interface TaskActionListener {
 
     void toggleCompletion(Task task);
 
+    void onEditSelected(Task task);
+
 }

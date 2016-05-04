@@ -27,4 +27,6 @@ public interface TasksService {
 
     Action0 activate(Task task);
 
+    Action0 save(Task task);
+
 }

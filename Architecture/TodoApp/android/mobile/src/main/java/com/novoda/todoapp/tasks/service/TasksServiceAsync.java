@@ -66,6 +66,11 @@ public class TasksServiceAsync implements TasksService {
         return asAsyncAction(tasksService.activate(task));
     }
 
+    @Override
+    public Action0 save(Task task) {
+        return asAsyncAction(tasksService.save(task));
+    }
+
     private static Action0 asAsyncAction(final Action0 action0) {
         return new Action0() {
             @Override

@@ -1,64 +1,57 @@
-package com.novoda.todoapp.task.presenter;
+package com.novoda.todoapp.task.edit.presenter;
 
+import com.google.common.base.Optional;
 import com.novoda.data.SyncedData;
 import com.novoda.event.DataObserver;
-import com.novoda.todoapp.navigation.Navigator;
 import com.novoda.todoapp.task.data.model.Id;
 import com.novoda.todoapp.task.data.model.Task;
-import com.novoda.todoapp.task.displayer.TaskActionListener;
-import com.novoda.todoapp.task.displayer.TaskDisplayer;
+import com.novoda.todoapp.task.edit.displayer.TaskEditActionListener;
+import com.novoda.todoapp.task.edit.displayer.TaskEditDisplayer;
 import com.novoda.todoapp.tasks.service.TasksService;
 
 import rx.subscriptions.CompositeSubscription;
 
-public class TaskPresenter {
+public class TaskEditPresenter {
 
     private final Id taskId;
     private final TasksService tasksService;
-    private final TaskDisplayer taskDisplayer;
-    private final Navigator navigator;
+    private final TaskEditDisplayer taskDisplayer;
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
-    public TaskPresenter(
-            Id taskId,
-            TasksService tasksService,
-            TaskDisplayer taskDisplayer,
-            Navigator navigator
-    ) {
+    public TaskEditPresenter(Id taskId, TasksService tasksService, TaskEditDisplayer taskDisplayer) {
         this.taskId = taskId;
         this.tasksService = tasksService;
         this.taskDisplayer = taskDisplayer;
-        this.navigator = navigator;
     }
 
     public void startPresenting() {
-        taskDisplayer.attach(taskActionListener);
+        taskDisplayer.attach(taskEditActionListener);
         subscriptions.add(
                 tasksService.getTask(taskId)
-                    .subscribe(taskObserver)
+                        .subscribe(taskObserver)
         );
     }
 
     public void stopPresenting() {
-        taskDisplayer.detach(taskActionListener);
+        taskDisplayer.detach(taskEditActionListener);
         subscriptions.clear();
         subscriptions = new CompositeSubscription();
     }
 
-    final TaskActionListener taskActionListener = new TaskActionListener() {
+    final TaskEditActionListener taskEditActionListener = new TaskEditActionListener() {
         @Override
-        public void toggleCompletion(Task task) {
-            if (task.isCompleted()) {
-                tasksService.activate(task).call();
+        public void save(Optional<String> title, Optional<String> description) {
+            if (title.or(description).isPresent()) {
+                Task task = Task.builder()
+                        .id(taskId)
+                        .title(title)
+                        .description(description)
+                        .build();
+                tasksService.save(task).call();
             } else {
-                tasksService.complete(task).call();
+                taskDisplayer.showEmptyTaskError();
             }
-        }
-
-        @Override
-        public void onEditSelected(Task task) {
-            navigator.toTaskEdit(task);
         }
     };
 

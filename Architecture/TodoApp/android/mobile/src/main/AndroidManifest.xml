@@ -22,6 +22,10 @@
     <activity
       android:name=".task.TaskDetailActivity"
       android:label="CHANGE ME" />
+    <activity
+      android:name=".task.edit.TaskEditActivity"
+      android:label="CHANGE ME2" />
+
 
   </application>
 

@@ -1,41 +1,40 @@
-package com.novoda.todoapp.task.presenter;
+package com.novoda.todoapp.task.edit.presenter;
 
+import com.google.common.base.Optional
 import com.novoda.data.SyncState
 import com.novoda.data.SyncedData
-import com.novoda.todoapp.navigation.Navigator
 import com.novoda.todoapp.task.data.model.Id
 import com.novoda.todoapp.task.data.model.Task
-import com.novoda.todoapp.task.displayer.TaskDisplayer
+import com.novoda.todoapp.task.edit.displayer.TaskEditDisplayer
 import com.novoda.todoapp.tasks.service.TasksService
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Matchers
 import org.mockito.Mockito
+import org.mockito.Mockito.never
 import rx.functions.Action0
 import rx.subjects.BehaviorSubject
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class TaskPresenterTest {
+class TaskEditPresenterTest {
 
     val TASK_ID = Id.from("TEST_ID")
 
     var taskSubject: BehaviorSubject<SyncedData<Task>> = BehaviorSubject.create()
     var service: TasksService = Mockito.mock(TasksService::class.java)
 
-    var displayer: TaskDisplayer = Mockito.mock(TaskDisplayer::class.java)
-    var navigator: Navigator = Mockito.mock(Navigator::class.java)
+    var displayer: TaskEditDisplayer = Mockito.mock(TaskEditDisplayer::class.java)
 
-    var completeAction: Action0 = Mockito.mock(Action0::class.java)
-    var activateAction: Action0 = Mockito.mock(Action0::class.java)
+    var saveAction: Action0 = Mockito.mock(Action0::class.java)
 
-    var presenter = TaskPresenter(TASK_ID, service, displayer, navigator)
+    var presenter = TaskEditPresenter(TASK_ID, service, displayer)
 
     @Before
     fun setUp() {
         setUpService()
-        presenter = TaskPresenter(TASK_ID, service, displayer, navigator)
+        presenter = TaskEditPresenter(TASK_ID, service, displayer)
     }
 
     @After
@@ -67,7 +66,7 @@ class TaskPresenterTest {
 
         presenter.startPresenting()
 
-        Mockito.verify(displayer).attach(presenter.taskActionListener)
+        Mockito.verify(displayer).attach(presenter.taskEditActionListener)
     }
 
     @Test
@@ -76,7 +75,7 @@ class TaskPresenterTest {
 
         presenter.stopPresenting()
 
-        Mockito.verify(displayer).detach(presenter.taskActionListener)
+        Mockito.verify(displayer).detach(presenter.taskEditActionListener)
     }
 
     @Test
@@ -98,36 +97,53 @@ class TaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_ToggleCompleteSelectedForCompletedTask_it_ShouldReactivateTask() {
+    fun given_TaskTitleAndDescriptionAreValid_on_SaveTask_it_ShouldSaveTaskToService() {
         givenThePresenterIsPresenting()
-        val completedTask = simpleTask().complete()
+        val task = Task.builder()
+                        .id(TASK_ID)
+                        .title("Title")
+                        .description("Description")
+                        .build()
 
-        presenter.taskActionListener.toggleCompletion(completedTask)
+        presenter.taskEditActionListener.save(task.title(), task.description());
 
-        Mockito.verify(service).activate(completedTask)
-        Mockito.verify(activateAction).call()
+        Mockito.verify(service).save(task)
+        Mockito.verify(saveAction).call()
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_ToggleCompleteSelectedForActivatedTask_it_ShouldCompleteTask() {
+    fun given_TaskTitleIsValid_on_SaveTask_it_ShouldSaveTaskToService() {
         givenThePresenterIsPresenting()
-        val activatedTask = simpleTask().activate()
+        val task = Task.builder()
+                .id(TASK_ID)
+                .title("Title")
+                .build()
 
-        presenter.taskActionListener.toggleCompletion(activatedTask)
+        presenter.taskEditActionListener.save(task.title(), task.description());
 
-        Mockito.verify(service).complete(activatedTask)
-        Mockito.verify(completeAction).call()
+        Mockito.verify(service).save(task)
+        Mockito.verify(saveAction).call()
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EditTaskSelected_it_ShouldNavigateToTaskEdit() {
+    fun given_TaskTitleAndDescriptionAreInvalid_on_SaveTask_it_ShouldNotSaveTaskToService() {
         givenThePresenterIsPresenting()
-        val simpleTask = simpleTask()
 
-        presenter.taskActionListener.onEditSelected(simpleTask)
+        presenter.taskEditActionListener.save(Optional.absent(), Optional.absent());
 
-        Mockito.verify(navigator).toTaskEdit(simpleTask)
+        Mockito.verify(service, never()).save(Matchers.any())
+        Mockito.verify(saveAction, never()).call()
     }
+
+    @Test
+    fun given_TaskTitleAndDescriptionAreInvalid_on_SaveTask_it_ShouldPresentEmptyTaskError() {
+        givenThePresenterIsPresenting()
+
+        presenter.taskEditActionListener.save(Optional.absent(), Optional.absent());
+
+        Mockito.verify(displayer).showEmptyTaskError()
+    }
+
 
     private fun givenThePresenterIsPresenting() {
         presenter.startPresenting()
@@ -152,8 +168,8 @@ class TaskPresenterTest {
     private fun setUpService() {
         taskSubject = BehaviorSubject.create()
         Mockito.`when`(service.getTask(TASK_ID)).thenReturn(taskSubject)
-        Mockito.`when`(service.complete(Matchers.any())).thenReturn(completeAction)
-        Mockito.`when`(service.activate(Matchers.any())).thenReturn(activateAction)
+        Mockito.`when`(service.save(Matchers.any())).thenReturn(saveAction)
     }
 }
+
 

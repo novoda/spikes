@@ -22,7 +22,8 @@ public class TaskDetailActivity extends AppCompatActivity {
         taskPresenter = new TaskPresenter(
                 taskId,
                 TodoApplication.TASKS_SERVICE,
-                ((TaskDisplayer) findViewById(R.id.content))
+                ((TaskDisplayer) findViewById(R.id.content)),
+                new AndroidNavigator(this)
         );
     }
 

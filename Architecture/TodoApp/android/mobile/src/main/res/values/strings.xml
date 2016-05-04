@@ -1,4 +1,7 @@
 <resources>
   <string name="app_name">TodoApp</string>
   <string name="action_settings">Settings</string>
+  <string name="title_hint">Title</string>
+  <string name="description_hint">Enter your TO-DO here.</string>
+  <string name="empty_task_message">TO DOs cannot be empty</string>
 </resources>

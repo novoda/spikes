@@ -191,37 +191,30 @@ public class PersistedTasksService implements TasksService {
 
     @Override
     public Action0 complete(final Task originalTask) {
-        return new Action0() {
-            @Override
-            public void call() {
-                final long actionTimestamp = clock.timeInMillis();
-                final Task completedTask = originalTask.complete();
-                remoteDataSource.saveTask(completedTask)
-                        .compose(startAheadThenConfirmOrRevert(completedTask, originalTask, actionTimestamp))
-                        .compose(updateAndPersistIfMostRecentAction())
-                        .subscribe();
-            }
-        };
+        return save(originalTask.complete());
     }
 
     @Override
     public Action0 activate(final Task originalTask) {
+        return save(originalTask.activate());
+    }
+
+    @Override
+    public Action0 save(final Task updatedTask) {
         return new Action0() {
             @Override
             public void call() {
                 final long actionTimestamp = clock.timeInMillis();
-                final Task activatedTask = originalTask.activate();
-                remoteDataSource.saveTask(activatedTask)
-                        .compose(startAheadThenConfirmOrRevert(activatedTask, originalTask, actionTimestamp))
+                remoteDataSource.saveTask(updatedTask)
+                        .compose(startAheadThenConfirmOrMarkAsError(updatedTask, actionTimestamp))
                         .compose(updateAndPersistIfMostRecentAction())
                         .subscribe();
             }
         };
     }
 
-    private static Observable.Transformer<Task, SyncedData<Task>> startAheadThenConfirmOrRevert(
+    private static Observable.Transformer<Task, SyncedData<Task>> startAheadThenConfirmOrMarkAsError(
             final Task updatedTask,
-            final Task originalTask,
             final long actionTimestamp
     ) {
         return asSyncedAction(new SyncedDataCreator<Task>() {
@@ -237,7 +230,7 @@ public class PersistedTasksService implements TasksService {
 
             @Override
             public SyncedData<Task> onError() {
-                return SyncedData.from(originalTask, SyncState.IN_SYNC, actionTimestamp);
+                return SyncedData.from(updatedTask, SyncState.SYNC_ERROR, actionTimestamp); //TODO add a retry logic for all Sync_Error states
             }
         });
     }

@@ -57,14 +57,14 @@ public abstract class Task {
             return description(Optional.of(description));
         }
 
-        abstract Builder title(Optional<String> title);
+        public abstract Builder title(Optional<String> title);
 
-        abstract Builder description(Optional<String> description);
+        public abstract Builder description(Optional<String> description);
 
         public Task build() {
             Task task = autoBuild();
             Preconditions.checkState(
-                    task.title().isPresent() || task.description().isPresent(),
+                    task.title().or(task.description()).isPresent(),
                     "Please provide one of (Title, Description)"
             );
             return task;
