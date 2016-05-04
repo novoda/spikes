@@ -8,4 +8,6 @@ public interface Navigator {
 
     void toTaskEdit(Task task);
 
+    void back();
+
 }

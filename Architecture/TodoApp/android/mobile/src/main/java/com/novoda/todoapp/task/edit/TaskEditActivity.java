@@ -24,7 +24,8 @@ public class TaskEditActivity extends AppCompatActivity {
         taskPresenter = new TaskEditPresenter(
                 taskId,
                 TodoApplication.TASKS_SERVICE,
-                ((TaskEditDisplayer) findViewById(R.id.content))
+                ((TaskEditDisplayer) findViewById(R.id.content)),
+                new AndroidNavigator(this)
         );
     }
 

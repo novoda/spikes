@@ -31,4 +31,9 @@ public class AndroidNavigator implements Navigator {
         activity.startActivity(intent);
     }
 
+    @Override
+    public void back() {
+        activity.finish();
+    }
+
 }

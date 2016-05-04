@@ -3,6 +3,7 @@ package com.novoda.todoapp.task.edit.presenter;
 import com.google.common.base.Optional
 import com.novoda.data.SyncState
 import com.novoda.data.SyncedData
+import com.novoda.todoapp.navigation.Navigator
 import com.novoda.todoapp.task.data.model.Id
 import com.novoda.todoapp.task.data.model.Task
 import com.novoda.todoapp.task.edit.displayer.TaskEditDisplayer
@@ -26,15 +27,16 @@ class TaskEditPresenterTest {
     var service: TasksService = Mockito.mock(TasksService::class.java)
 
     var displayer: TaskEditDisplayer = Mockito.mock(TaskEditDisplayer::class.java)
+    var navigator: Navigator = Mockito.mock(Navigator::class.java)
 
     var saveAction: Action0 = Mockito.mock(Action0::class.java)
 
-    var presenter = TaskEditPresenter(TASK_ID, service, displayer)
+    var presenter = TaskEditPresenter(TASK_ID, service, displayer, navigator)
 
     @Before
     fun setUp() {
         setUpService()
-        presenter = TaskEditPresenter(TASK_ID, service, displayer)
+        presenter = TaskEditPresenter(TASK_ID, service, displayer, navigator)
     }
 
     @After
@@ -126,6 +128,20 @@ class TaskEditPresenterTest {
     }
 
     @Test
+    fun given_TaskDescriptionIsValid_on_SaveTask_it_ShouldSaveTaskToService() {
+        givenThePresenterIsPresenting()
+        val task = Task.builder()
+                .id(TASK_ID)
+                .description("Description")
+                .build()
+
+        presenter.taskEditActionListener.save(task.title(), task.description());
+
+        Mockito.verify(service).save(task)
+        Mockito.verify(saveAction).call()
+    }
+
+    @Test
     fun given_TaskTitleAndDescriptionAreInvalid_on_SaveTask_it_ShouldNotSaveTaskToService() {
         givenThePresenterIsPresenting()
 
@@ -133,6 +149,41 @@ class TaskEditPresenterTest {
 
         Mockito.verify(service, never()).save(Matchers.any())
         Mockito.verify(saveAction, never()).call()
+    }
+
+    @Test
+    fun given_TaskTitleIsValid_on_SaveTask_it_ShouldNavigateBack() {
+        givenThePresenterIsPresenting()
+        val task = Task.builder()
+                .id(TASK_ID)
+                .title("Title")
+                .build()
+
+        presenter.taskEditActionListener.save(task.title(), task.description());
+
+        Mockito.verify(navigator).back()
+    }
+
+    @Test
+    fun given_TaskDescriptionIsValid_on_SaveTask_it_ShouldNavigateBack() {
+        givenThePresenterIsPresenting()
+        val task = Task.builder()
+                .id(TASK_ID)
+                .description("Description")
+                .build()
+
+        presenter.taskEditActionListener.save(task.title(), task.description());
+
+        Mockito.verify(navigator).back()
+    }
+
+    @Test
+    fun given_TaskTitleAndDescriptionAreInvalid_on_SaveTask_it_ShouldNotNavigateBack() {
+        givenThePresenterIsPresenting()
+
+        presenter.taskEditActionListener.save(Optional.absent(), Optional.absent());
+
+        Mockito.verify(navigator, never()).back()
     }
 
     @Test
