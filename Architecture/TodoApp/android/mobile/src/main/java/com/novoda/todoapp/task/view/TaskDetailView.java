@@ -1,10 +1,10 @@
 package com.novoda.todoapp.task.view;
 
 import android.content.Context;
+import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.novoda.data.SyncedData;
@@ -14,17 +14,17 @@ import com.novoda.todoapp.task.data.model.Task;
 import com.novoda.todoapp.task.displayer.TaskActionListener;
 import com.novoda.todoapp.task.displayer.TaskDisplayer;
 
-public class TaskDetailView extends LinearLayout implements TaskDisplayer {
+public class TaskDetailView extends CoordinatorLayout implements TaskDisplayer {
 
     private TextView titleView;
     private TextView descriptionView;
     private CheckBox completeCheckBox;
+    private View editActionButton;
 
     private TaskActionListener taskActionListener;
 
     public TaskDetailView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setOrientation(VERTICAL);
     }
 
     @Override
@@ -34,6 +34,7 @@ public class TaskDetailView extends LinearLayout implements TaskDisplayer {
         titleView = Views.findById(this, R.id.task_detail_title);
         descriptionView = Views.findById(this, R.id.task_detail_description);
         completeCheckBox = Views.findById(this, R.id.task_detail_complete);
+        editActionButton = Views.findById(this, R.id.fab_edit_task);
     }
 
     @Override
@@ -60,13 +61,7 @@ public class TaskDetailView extends LinearLayout implements TaskDisplayer {
             }
         });
 
-        titleView.setOnClickListener(new OnClickListener() { //TODO replace by FAB
-            @Override
-            public void onClick(View v) {
-                taskActionListener.onEditSelected(task);
-            }
-        });
-        descriptionView.setOnClickListener(new OnClickListener() { //TODO replace by FAB
+        editActionButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 taskActionListener.onEditSelected(task);
