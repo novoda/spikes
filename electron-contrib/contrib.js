@@ -56,8 +56,6 @@ function parseShortLog(file, shortlog) {
   }
 }
 
-let filterEmpty = (it => it && it.length > 0)
-
 function marshallToContributors(lines) {
   let contributors = lines.map(each => {
     let segments = toCleanSegments(each);
@@ -70,3 +68,5 @@ function marshallToContributors(lines) {
 }
 
 let toCleanSegments = (it => it.trim().split(/(\d+)/g).filter(filterEmpty))
+
+let filterEmpty = (it => it && it.length > 0)
