@@ -1,6 +1,7 @@
 package com.novoda.todoapp.tasks.data.model;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.novoda.data.ImmutableMapWithCopy;
@@ -10,6 +11,9 @@ import com.novoda.todoapp.task.data.model.Id;
 import com.novoda.todoapp.task.data.model.Task;
 
 import java.util.Collection;
+import java.util.Map;
+
+import static com.google.common.base.Predicates.not;
 
 @AutoValue
 public abstract class Tasks {
@@ -63,5 +67,22 @@ public abstract class Tasks {
 
     public boolean containsTask(Id taskId) {
         return internalMap().containsKey(taskId);
+    }
+
+    public Tasks onlyActives() {
+        return Tasks.from(internalMap().filter(not(isCompleted())));
+    }
+
+    public Tasks onlyCompleted() {
+        return Tasks.from(internalMap().filter(isCompleted()));
+    }
+
+    private static Predicate<Map.Entry<Id, SyncedData<Task>>> isCompleted() {
+        return new Predicate<Map.Entry<Id, SyncedData<Task>>>() {
+            @Override
+            public boolean apply(Map.Entry<Id, SyncedData<Task>> input) {
+                return input.getValue().data().isCompleted();
+            }
+        };
     }
 }

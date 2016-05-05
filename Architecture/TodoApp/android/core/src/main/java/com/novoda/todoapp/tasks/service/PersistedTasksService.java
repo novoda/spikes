@@ -1,5 +1,6 @@
 package com.novoda.todoapp.tasks.service;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.jakewharton.rxrelay.BehaviorRelay;
 import com.novoda.data.SyncState;
@@ -59,6 +60,55 @@ public class PersistedTasksService implements TasksService {
     @Override
     public Observable<Tasks> getTasks() {
         return getTasksEvents().compose(asData(Tasks.class));
+    }
+
+    @Override
+    public Observable<Event<Tasks>> getCompletedTasksEvents() {
+        return getTasksEvents()
+                .map(filterTasks(onlyCompleted()));
+    }
+
+    private static Func1<Event<Tasks>, Event<Tasks>> filterTasks(final Function<Tasks, Tasks> filter) {
+        return new Func1<Event<Tasks>, Event<Tasks>>() {
+            @Override
+            public Event<Tasks> call(Event<Tasks> event) {
+                return event.updateData(event.data().transform(filter));
+            }
+        };
+    }
+
+    private static Function<Tasks, Tasks> onlyCompleted() {
+        return new Function<Tasks, Tasks>() {
+            @Override
+            public Tasks apply(Tasks input) {
+                return input.onlyCompleted();
+            }
+        };
+    }
+
+    @Override
+    public Observable<Tasks> getCompletedTasks() {
+        return getCompletedTasksEvents().compose(asData(Tasks.class));
+    }
+
+    @Override
+    public Observable<Event<Tasks>> getActiveTasksEvents() {
+        return getTasksEvents()
+                .map(filterTasks(onlyActives()));
+    }
+
+    private static Function<Tasks, Tasks> onlyActives() {
+        return new Function<Tasks, Tasks>() {
+            @Override
+            public Tasks apply(Tasks input) {
+                return input.onlyActives();
+            }
+        };
+    }
+
+    @Override
+    public Observable<Tasks> getActiveTasks() {
+        return getActiveTasksEvents().compose(asData(Tasks.class));
     }
 
     private Observable<Event<Tasks>> initialiseSubject() {

@@ -35,6 +35,34 @@ public class TasksServiceAsync implements TasksService {
     }
 
     @Override
+    public Observable<Tasks> getCompletedTasks() {
+        return tasksService.getCompletedTasks()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<Event<Tasks>> getCompletedTasksEvents() {
+        return tasksService.getCompletedTasksEvents()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<Tasks> getActiveTasks() {
+        return tasksService.getActiveTasks()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Observable<Event<Tasks>> getActiveTasksEvents() {
+        return tasksService.getActiveTasksEvents()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
     public Observable<SyncedData<Task>> getTask(Id taskId) {
         return tasksService.getTask(taskId)
                 .subscribeOn(Schedulers.io())

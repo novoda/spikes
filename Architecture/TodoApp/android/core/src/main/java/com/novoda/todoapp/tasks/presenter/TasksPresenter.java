@@ -12,6 +12,7 @@ import com.novoda.todoapp.tasks.displayer.TasksActionListener;
 import com.novoda.todoapp.tasks.displayer.TasksDisplayer;
 import com.novoda.todoapp.tasks.service.TasksService;
 
+import rx.Observable;
 import rx.subscriptions.CompositeSubscription;
 
 public class TasksPresenter {
@@ -22,6 +23,7 @@ public class TasksPresenter {
     private final Navigator navigator;
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
+    private TasksActionListener.Filter currentFilter = TasksActionListener.Filter.ALL;
 
     public TasksPresenter(TasksService tasksService, TasksDisplayer tasksDisplayer, LoadingDisplayer loadingDisplayer, Navigator navigator) {
         this.tasksService = tasksService;
@@ -30,22 +32,64 @@ public class TasksPresenter {
         this.navigator = navigator;
     }
 
+    public void setInitialFilterTo(TasksActionListener.Filter filter){
+        currentFilter = filter;
+    }
+
+    public TasksActionListener.Filter getCurrentFilter() {
+        return currentFilter;
+    }
+
     public void startPresenting() {
         loadingDisplayer.attach(retryActionListener);
         tasksDisplayer.attach(tasksActionListener);
+        subscribeToSourcesFilteredWith(currentFilter);
+    }
+
+    private void subscribeToSourcesFilteredWith(TasksActionListener.Filter filter) {
         subscriptions.add(
-                tasksService.getTasks()
-                    .subscribe(tasksObserver)
+                getTasksObservableFor(filter)
+                        .subscribe(tasksObserver)
         );
         subscriptions.add(
-                tasksService.getTasksEvents()
-                    .subscribe(tasksEventObserver)
+                getTasksEventObservableFor(filter)
+                        .subscribe(tasksEventObserver)
         );
+    }
+
+    private Observable<Tasks> getTasksObservableFor(TasksActionListener.Filter filter) {
+        switch (filter) {
+            case ACTIVE:
+                return tasksService.getActiveTasks();
+            case COMPLETED:
+                return tasksService.getCompletedTasks();
+            case ALL:
+                return tasksService.getTasks();
+            default:
+                throw new IllegalArgumentException("Unkown filter type " + filter);
+        }
+    }
+
+    private Observable<Event<Tasks>> getTasksEventObservableFor(TasksActionListener.Filter filter) {
+        switch (filter) {
+            case ACTIVE:
+                return tasksService.getActiveTasksEvents();
+            case COMPLETED:
+                return tasksService.getCompletedTasksEvents();
+            case ALL:
+                return tasksService.getTasksEvents();
+            default:
+                throw new IllegalArgumentException("Unkown filter type " + filter);
+        }
     }
 
     public void stopPresenting() {
         loadingDisplayer.detach(retryActionListener);
         tasksDisplayer.detach(tasksActionListener);
+        clearSubscriptions();
+    }
+
+    private void clearSubscriptions() {
         subscriptions.clear();
         subscriptions = new CompositeSubscription();
     }
@@ -70,6 +114,23 @@ public class TasksPresenter {
             } else {
                 tasksService.complete(task).call();
             }
+        }
+
+        @Override
+        public void onRefreshSelected() {
+            tasksService.refreshTasks().call();
+        }
+
+        @Override
+        public void onClearCompletedSelected() {
+            tasksService.clearCompletedTasks().call();
+        }
+
+        @Override
+        public void onFilterSelected(Filter filter) {
+            currentFilter = filter;
+            clearSubscriptions();
+            subscribeToSourcesFilteredWith(filter);
         }
     };
 

@@ -93,8 +93,23 @@ public abstract class Event<T> {
 
     public Event<T> updateData(T value) {
         return toBuilder()
-                .data(validatedData(value))
+                .data(validateData(value))
                 .build();
+    }
+
+    public Event<T> updateData(Optional<T> data) {
+        return toBuilder()
+                .data(data.transform(validateData()).or(Optional.<T>absent()))
+                .build();
+    }
+
+    private Function<T, Optional<T>> validateData() {
+        return new Function<T, Optional<T>>() {
+            @Override
+            public Optional<T> apply(T input) {
+                return validateData(input);
+            }
+        };
     }
 
     public Event<T> removeData() {
@@ -113,12 +128,12 @@ public abstract class Event<T> {
     public Event<T> asLoadingWithData(T value) {
         return toBuilder()
                 .state(Status.LOADING)
-                .data(validatedData(value))
+                .data(validateData(value))
                 .error(Optional.<Throwable>absent())
                 .build();
     }
 
-    private Optional<T> validatedData(T value) {
+    private Optional<T> validateData(T value) {
         if (dataValidator().apply(value)) {
             return Optional.of(value);
         } else {

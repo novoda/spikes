@@ -2,7 +2,9 @@ package com.novoda.data;
 
 import com.google.auto.value.AutoValue;
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -91,4 +93,9 @@ public abstract class ImmutableMapWithCopy<K, V> {
         }
         return mutableMap;
     }
+
+    public ImmutableMapWithCopy<K, V> filter(Predicate<Map.Entry<K, V>> predicate) {
+        return from(Maps.filterEntries(internalMap(), predicate));
+    }
+
 }

@@ -8,4 +8,16 @@ public interface TasksActionListener {
 
     void toggleCompletion(Task task);
 
+    void onRefreshSelected();
+
+    void onClearCompletedSelected();
+
+    void onFilterSelected(Filter filter);
+
+    enum Filter {
+        ALL,
+        ACTIVE,
+        COMPLETED
+    }
+
 }

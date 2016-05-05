@@ -15,6 +15,14 @@ public interface TasksService {
 
     Observable<Event<Tasks>> getTasksEvents();
 
+    Observable<Tasks> getCompletedTasks();
+
+    Observable<Event<Tasks>> getCompletedTasksEvents();
+
+    Observable<Tasks> getActiveTasks();
+
+    Observable<Event<Tasks>> getActiveTasksEvents();
+
     Observable<SyncedData<Task>> getTask(Id taskId);
 
     Action0 refreshTasks();
