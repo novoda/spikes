@@ -59,14 +59,12 @@ function parseShortLog(file, shortlog) {
 let filterEmpty = (it => it && it.length > 0)
 
 function marshallToContributors(lines) {
-  let contributors = [];
-  lines.forEach(each => {
+  let contributors = lines.map(each => {
     let segments = toCleanSegments(each);
-    let contributor = {
+    return {
       author: segments[1].trim(),
       commitCount: segments[0].trim()
     };
-    contributors.push(contributor)
   });
   return contributors;
 }
