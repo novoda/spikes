@@ -132,6 +132,11 @@ public class TasksPresenter {
             clearSubscriptions();
             subscribeToSourcesFilteredWith(filter);
         }
+
+        @Override
+        public void onAddTaskSelected() {
+            navigator.toAddTask();
+        }
     };
 
     private final DataObserver<Tasks> tasksObserver = new DataObserver<Tasks>() {

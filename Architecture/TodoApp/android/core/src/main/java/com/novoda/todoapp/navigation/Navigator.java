@@ -10,4 +10,6 @@ public interface Navigator {
 
     void back();
 
+    void toAddTask();
+
 }

@@ -3,6 +3,7 @@ package com.novoda.todoapp.tasks.view;
 import android.content.Context;
 import android.support.annotation.MenuRes;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +11,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.novoda.notils.caster.Views;
 import com.novoda.todoapp.R;
@@ -19,7 +19,7 @@ import com.novoda.todoapp.tasks.data.model.Tasks;
 import com.novoda.todoapp.tasks.displayer.TasksActionListener;
 import com.novoda.todoapp.tasks.displayer.TasksDisplayer;
 
-public class TasksView extends LinearLayout implements TasksDisplayer {
+public class TasksView extends CoordinatorLayout implements TasksDisplayer {
 
     private RecyclerView recyclerView;
     private TasksAdapter adapter;
@@ -27,7 +27,6 @@ public class TasksView extends LinearLayout implements TasksDisplayer {
 
     public TasksView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        setOrientation(VERTICAL);
     }
 
     @MenuRes
@@ -46,15 +45,22 @@ public class TasksView extends LinearLayout implements TasksDisplayer {
     }
 
     @Override
-    public void attach(TasksActionListener tasksActionListener) {
+    public void attach(final TasksActionListener tasksActionListener) {
         this.tasksActionListener = tasksActionListener;
         adapter.setActionListener(tasksActionListener);
+        Views.findById(this, R.id.fab_add_task).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tasksActionListener.onAddTaskSelected();
+            }
+        });
     }
 
     @Override
     public void detach(TasksActionListener tasksActionListener) {
         this.tasksActionListener = null;
         adapter.setActionListener(null);
+        Views.findById(this, R.id.fab_add_task).setOnClickListener(null);
     }
 
     @Override

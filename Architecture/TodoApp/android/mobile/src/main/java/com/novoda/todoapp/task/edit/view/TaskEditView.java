@@ -22,8 +22,6 @@ public class TaskEditView extends LinearLayout implements TaskEditDisplayer {
     private TextView descriptionView;
     private Button saveButton; //TODO replace by FAB
 
-    private TaskEditActionListener taskActionListener;
-
     public TaskEditView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -38,13 +36,18 @@ public class TaskEditView extends LinearLayout implements TaskEditDisplayer {
     }
 
     @Override
-    public void attach(TaskEditActionListener taskActionListener) {
-        this.taskActionListener = taskActionListener;
+    public void attach(final TaskEditActionListener taskActionListener) {
+        saveButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                taskActionListener.save(getTitle(), getDescription());
+            }
+        });
     }
 
     @Override
     public void detach(TaskEditActionListener taskActionListener) {
-        this.taskActionListener = null;
+        saveButton.setOnClickListener(null);
     }
 
     @Override
@@ -52,12 +55,6 @@ public class TaskEditView extends LinearLayout implements TaskEditDisplayer {
         final Task task = syncedData.data();
         titleView.setText(task.title().orNull());
         descriptionView.setText(task.description().orNull());
-        saveButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                taskActionListener.save(getTitle(), getDescription());
-            }
-        });
     }
 
     private Optional<String> getTitle() {

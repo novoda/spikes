@@ -256,7 +256,6 @@ class TasksPresenterTest {
     @Test
     fun given_ThePresenterIsPresenting_on_RefreshSelected_it_ShouldRefreshTheService() {
         givenThePresenterIsPresenting()
-        val simpleTask = simpleTask()
 
         presenter.tasksActionListener.onRefreshSelected();
 
@@ -267,12 +266,19 @@ class TasksPresenterTest {
     @Test
     fun given_ThePresenterIsPresenting_on_ClearCompletedSelected_it_ShouldClearCompletedOnTheService() {
         givenThePresenterIsPresenting()
-        val simpleTask = simpleTask()
 
         presenter.tasksActionListener.onClearCompletedSelected()
 
         Mockito.verify(service).clearCompletedTasks()
         Mockito.verify(clearCompletedAction).call()
+    }
+
+    fun given_ThePresenterIsPresenting_on_AddTaskSelected_it_ShouldNavigateToAddTask() {
+        givenThePresenterIsPresenting()
+
+        presenter.tasksActionListener.onAddTaskSelected()
+
+        Mockito.verify(navigator).toAddTask()
     }
 
     @Test

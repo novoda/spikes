@@ -36,4 +36,10 @@ public class AndroidNavigator implements Navigator {
         activity.finish();
     }
 
+    @Override
+    public void toAddTask() {
+        Intent intent = new Intent(activity, TaskEditActivity.class);
+        activity.startActivity(intent);
+    }
+
 }

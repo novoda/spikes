@@ -14,6 +14,8 @@ public interface TasksActionListener {
 
     void onFilterSelected(Filter filter);
 
+    void onAddTaskSelected();
+
     enum Filter {
         ALL,
         ACTIVE,
