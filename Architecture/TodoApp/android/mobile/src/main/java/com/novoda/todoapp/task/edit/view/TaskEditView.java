@@ -1,11 +1,11 @@
 package com.novoda.todoapp.task.edit.view;
 
 import android.content.Context;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.common.base.Optional;
@@ -16,11 +16,11 @@ import com.novoda.todoapp.task.data.model.Task;
 import com.novoda.todoapp.task.edit.displayer.TaskEditActionListener;
 import com.novoda.todoapp.task.edit.displayer.TaskEditDisplayer;
 
-public class TaskEditView extends LinearLayout implements TaskEditDisplayer {
+public class TaskEditView extends CoordinatorLayout implements TaskEditDisplayer {
 
     private TextView titleView;
     private TextView descriptionView;
-    private Button saveButton; //TODO replace by FAB
+    private FloatingActionButton editActionButton;
 
     public TaskEditView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -32,12 +32,12 @@ public class TaskEditView extends LinearLayout implements TaskEditDisplayer {
         View.inflate(getContext(), R.layout.merge_task_edit_view, this);
         titleView = Views.findById(this, R.id.edit_task_title);
         descriptionView = Views.findById(this, R.id.edit_task_description);
-        saveButton = Views.findById(this, R.id.edit_save_button);
+        editActionButton = Views.findById(this, R.id.fab_edit_task_done);
     }
 
     @Override
     public void attach(final TaskEditActionListener taskActionListener) {
-        saveButton.setOnClickListener(new OnClickListener() {
+        editActionButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 taskActionListener.save(getTitle(), getDescription());
@@ -47,7 +47,7 @@ public class TaskEditView extends LinearLayout implements TaskEditDisplayer {
 
     @Override
     public void detach(TaskEditActionListener taskActionListener) {
-        saveButton.setOnClickListener(null);
+        editActionButton.setOnClickListener(null);
     }
 
     @Override
@@ -55,6 +55,7 @@ public class TaskEditView extends LinearLayout implements TaskEditDisplayer {
         final Task task = syncedData.data();
         titleView.setText(task.title().orNull());
         descriptionView.setText(task.description().orNull());
+        editActionButton.setImageResource(R.drawable.ic_done);
     }
 
     private Optional<String> getTitle() {
