@@ -35,7 +35,7 @@ public final class InMemoryLocalTaskDataSource implements LocalTasksDataSource {
     );
 
     public static LocalTasksDataSource newInstance() {
-        return new InMemoryLocalTaskDataSource(800, TimeUnit.MILLISECONDS);
+        return new InMemoryLocalTaskDataSource(1, TimeUnit.SECONDS);
     }
 
     private InMemoryLocalTaskDataSource(int localDelay, TimeUnit localDelayUnit) {

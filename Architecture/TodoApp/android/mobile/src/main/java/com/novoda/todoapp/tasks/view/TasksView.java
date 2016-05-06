@@ -14,10 +14,10 @@ import android.view.View;
 
 import com.novoda.notils.caster.Views;
 import com.novoda.todoapp.R;
-import com.novoda.todoapp.loading.LoadingView;
 import com.novoda.todoapp.tasks.data.model.Tasks;
 import com.novoda.todoapp.tasks.displayer.TasksActionListener;
 import com.novoda.todoapp.tasks.displayer.TasksDisplayer;
+import com.novoda.todoapp.tasks.view.loading.TasksLoadingView;
 
 public class TasksView extends CoordinatorLayout implements TasksDisplayer {
 
@@ -68,7 +68,7 @@ public class TasksView extends CoordinatorLayout implements TasksDisplayer {
         adapter.update(tasks);
     }
 
-    public LoadingView getLoadingView() {
+    public TasksLoadingView getLoadingView() {
         return Views.findById(this, R.id.loading_view);
     }
 

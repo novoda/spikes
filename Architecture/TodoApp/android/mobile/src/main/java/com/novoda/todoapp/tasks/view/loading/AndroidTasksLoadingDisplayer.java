@@ -1,19 +1,19 @@
-package com.novoda.todoapp.loading;
+package com.novoda.todoapp.tasks.view.loading;
 
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
-import com.novoda.todoapp.loading.displayer.LoadingDisplayer;
-import com.novoda.todoapp.loading.displayer.RetryActionListener;
+import com.novoda.todoapp.tasks.loading.displayer.TasksLoadingDisplayer;
+import com.novoda.todoapp.tasks.loading.displayer.RetryActionListener;
 
-public class AndroidLoadingDisplayer implements LoadingDisplayer {
+public class AndroidTasksLoadingDisplayer implements TasksLoadingDisplayer {
 
-    private final LoadingView loadingView;
+    private final TasksLoadingView loadingView;
     private final View contentView;
 
     private Snackbar snackBar;
 
-    public AndroidLoadingDisplayer(LoadingView loadingView, View contentView) {
+    public AndroidTasksLoadingDisplayer(TasksLoadingView loadingView, View contentView) {
         this.loadingView = loadingView;
         this.contentView = contentView;
     }
@@ -55,11 +55,27 @@ public class AndroidLoadingDisplayer implements LoadingDisplayer {
     }
 
     @Override
-    public void showEmptyScreen() {
+    public void showEmptyTasksScreen() {
         dismissSnackBar();
         contentView.setVisibility(View.GONE);
         loadingView.setVisibility(View.VISIBLE);
-        loadingView.setAsEmpty();
+        loadingView.setAsEmptyTasks();
+    }
+
+    @Override
+    public void showEmptyActiveTasksScreen() {
+        dismissSnackBar();
+        contentView.setVisibility(View.GONE);
+        loadingView.setVisibility(View.VISIBLE);
+        loadingView.setAsEmptyActiveTasks();
+    }
+
+    @Override
+    public void showEmptyCompletedTasksScreen() {
+        dismissSnackBar();
+        contentView.setVisibility(View.GONE);
+        loadingView.setVisibility(View.VISIBLE);
+        loadingView.setAsEmptyCompletedTasks();
     }
 
     @Override
@@ -87,7 +103,7 @@ public class AndroidLoadingDisplayer implements LoadingDisplayer {
         if (snackBar != null && snackBar.isShown()) {
             snackBar.setText(message);
         } else {
-            snackBar = Snackbar.make(loadingView, message, Snackbar.LENGTH_INDEFINITE);
+            snackBar = Snackbar.make(contentView, message, Snackbar.LENGTH_INDEFINITE);
             snackBar.show();
         }
     }

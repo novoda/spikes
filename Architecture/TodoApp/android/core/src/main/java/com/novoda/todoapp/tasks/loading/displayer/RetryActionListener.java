@@ -1,4 +1,4 @@
-package com.novoda.todoapp.loading.displayer;
+package com.novoda.todoapp.tasks.loading.displayer;
 
 public interface RetryActionListener {
 

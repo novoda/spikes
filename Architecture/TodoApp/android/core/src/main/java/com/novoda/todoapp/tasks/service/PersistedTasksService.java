@@ -122,7 +122,7 @@ public class PersistedTasksService implements TasksService {
                         .flatMap(fetchFromRemoteIfOutOfDate())
                         .switchIfEmpty(fetchFromRemote())
                         .compose(asEvent(taskRelay.getValue()))
-                        .doOnNext(taskRelay);
+                        .doOnNext(taskRelay); //TODO fix issue with unsubscribe before completion. Either revert or persist request.
             }
         });
     }

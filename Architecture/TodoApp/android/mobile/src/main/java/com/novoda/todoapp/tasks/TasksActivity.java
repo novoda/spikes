@@ -8,7 +8,7 @@ import com.novoda.notils.caster.Views;
 import com.novoda.todoapp.BaseActivity;
 import com.novoda.todoapp.R;
 import com.novoda.todoapp.TodoApplication;
-import com.novoda.todoapp.loading.AndroidLoadingDisplayer;
+import com.novoda.todoapp.tasks.view.loading.AndroidTasksLoadingDisplayer;
 import com.novoda.todoapp.navigation.AndroidNavigator;
 import com.novoda.todoapp.tasks.displayer.TasksActionListener;
 import com.novoda.todoapp.tasks.presenter.TasksPresenter;
@@ -29,7 +29,7 @@ public class TasksActivity extends BaseActivity {
         presenter = new TasksPresenter(
                 TodoApplication.TASKS_SERVICE,
                 tasksView,
-                new AndroidLoadingDisplayer(tasksView.getLoadingView(), tasksView.getContentView()),
+                new AndroidTasksLoadingDisplayer(tasksView.getLoadingView(), tasksView.getContentView()),
                 new AndroidNavigator(this)
         );
         if (savedInstanceState != null && savedInstanceState.containsKey(KEY_FILTER)) {

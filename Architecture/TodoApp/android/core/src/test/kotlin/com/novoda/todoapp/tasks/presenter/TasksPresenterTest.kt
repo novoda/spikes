@@ -1,13 +1,13 @@
 package com.novoda.todoapp.tasks.presenter;
 
 import com.novoda.event.Event
-import com.novoda.todoapp.loading.displayer.LoadingDisplayer
 import com.novoda.todoapp.navigation.Navigator
 import com.novoda.todoapp.task.data.model.Id
 import com.novoda.todoapp.task.data.model.Task
 import com.novoda.todoapp.tasks.data.model.Tasks
 import com.novoda.todoapp.tasks.displayer.TasksActionListener
 import com.novoda.todoapp.tasks.displayer.TasksDisplayer
+import com.novoda.todoapp.tasks.loading.displayer.TasksLoadingDisplayer
 import com.novoda.todoapp.tasks.service.TasksService
 import org.junit.After
 import org.junit.Before
@@ -37,7 +37,7 @@ class TasksPresenterTest {
     var service: TasksService = Mockito.mock(TasksService::class.java)
 
     var displayer: TasksDisplayer = Mockito.mock(TasksDisplayer::class.java)
-    var loadingDisplayer: LoadingDisplayer = Mockito.mock(LoadingDisplayer::class.java)
+    var loadingDisplayer: TasksLoadingDisplayer = Mockito.mock(TasksLoadingDisplayer::class.java)
     var navigator: Navigator = Mockito.mock(Navigator::class.java)
 
     var refreshAction: Action0 = Mockito.mock(Action0::class.java)
@@ -86,12 +86,33 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfAnIdleEventWithNoData_it_ShouldPresentTheEmptyScreen() {
+    fun given_TheCurrentFilterIsAll_on_EmissionOfAnIdleEventWithNoData_it_ShouldPresentTheEmptyScreen() {
+        presenter.setInitialFilterTo(TasksActionListener.Filter.ALL)
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(Event.idle())
 
-        Mockito.verify(loadingDisplayer).showEmptyScreen()
+        Mockito.verify(loadingDisplayer).showEmptyTasksScreen()
+    }
+
+    @Test
+    fun given_TheCurrentFilterIsActive_on_EmissionOfAnIdleEventWithNoData_it_ShouldPresentTheEmptyActiveTasksScreen() {
+        presenter.setInitialFilterTo(TasksActionListener.Filter.ACTIVE)
+        givenThePresenterIsPresenting()
+
+        tasksActiveEventSubject.onNext(Event.idle())
+
+        Mockito.verify(loadingDisplayer).showEmptyActiveTasksScreen()
+    }
+
+    @Test
+    fun given_TheCurrentFilterIsCompleted_on_EmissionOfAnIdleEventWithNoData_it_ShouldPresentTheEmptyCompletedTasksScreen() {
+        presenter.setInitialFilterTo(TasksActionListener.Filter.COMPLETED)
+        givenThePresenterIsPresenting()
+
+        tasksCompletedEventSubject.onNext(Event.idle())
+
+        Mockito.verify(loadingDisplayer).showEmptyCompletedTasksScreen()
     }
 
     @Test

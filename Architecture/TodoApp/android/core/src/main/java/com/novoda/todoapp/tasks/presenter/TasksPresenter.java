@@ -3,8 +3,8 @@ package com.novoda.todoapp.tasks.presenter;
 import com.novoda.event.DataObserver;
 import com.novoda.event.Event;
 import com.novoda.event.EventObserver;
-import com.novoda.todoapp.loading.displayer.LoadingDisplayer;
-import com.novoda.todoapp.loading.displayer.RetryActionListener;
+import com.novoda.todoapp.tasks.loading.displayer.TasksLoadingDisplayer;
+import com.novoda.todoapp.tasks.loading.displayer.RetryActionListener;
 import com.novoda.todoapp.navigation.Navigator;
 import com.novoda.todoapp.task.data.model.Task;
 import com.novoda.todoapp.tasks.data.model.Tasks;
@@ -18,14 +18,14 @@ import rx.subscriptions.CompositeSubscription;
 public class TasksPresenter {
 
     private final TasksService tasksService;
-    private final LoadingDisplayer loadingDisplayer;
+    private final TasksLoadingDisplayer loadingDisplayer;
     private final TasksDisplayer tasksDisplayer;
     private final Navigator navigator;
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
     private TasksActionListener.Filter currentFilter = TasksActionListener.Filter.ALL;
 
-    public TasksPresenter(TasksService tasksService, TasksDisplayer tasksDisplayer, LoadingDisplayer loadingDisplayer, Navigator navigator) {
+    public TasksPresenter(TasksService tasksService, TasksDisplayer tasksDisplayer, TasksLoadingDisplayer loadingDisplayer, Navigator navigator) {
         this.tasksService = tasksService;
         this.loadingDisplayer = loadingDisplayer;
         this.tasksDisplayer = tasksDisplayer;
@@ -161,7 +161,7 @@ public class TasksPresenter {
             if (event.data().isPresent()) {
                 loadingDisplayer.showData();
             } else {
-                loadingDisplayer.showEmptyScreen();
+                showEmptyScreen();
             }
         }
 
@@ -174,5 +174,19 @@ public class TasksPresenter {
             }
         }
     };
+
+    private void showEmptyScreen() {
+        switch (currentFilter) {
+            case ALL:
+                loadingDisplayer.showEmptyTasksScreen();
+                break;
+            case ACTIVE:
+                loadingDisplayer.showEmptyActiveTasksScreen();
+                break;
+            case COMPLETED:
+                loadingDisplayer.showEmptyCompletedTasksScreen();
+                break;
+        }
+    }
 
 }

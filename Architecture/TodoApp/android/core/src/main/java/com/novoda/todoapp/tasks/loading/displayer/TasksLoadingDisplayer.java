@@ -1,6 +1,6 @@
-package com.novoda.todoapp.loading.displayer;
+package com.novoda.todoapp.tasks.loading.displayer;
 
-public interface LoadingDisplayer {
+public interface TasksLoadingDisplayer {
 
     void attach(RetryActionListener retryActionListener);
 
@@ -12,7 +12,11 @@ public interface LoadingDisplayer {
 
     void showData();
 
-    void showEmptyScreen();
+    void showEmptyTasksScreen();
+
+    void showEmptyActiveTasksScreen();
+
+    void showEmptyCompletedTasksScreen();
 
     void showErrorIndicator();
 
