@@ -51,14 +51,12 @@ function parseShortLog(file, shortlog) {
   return {
     directory: file,
     contributors: contributors
-  }
+  };
 }
 
-let filterEmpty = (it => it && it.length > 0)
+let marshallToContributors = (each) => toContributor(toCleanSegments(each));
 
-let toCleanSegments = (it) => {
-  return it.trim().split(/(\d+)/g).filter(filterEmpty)
-}
+let toCleanSegments = (it) => it.trim().split(/(\d+)/g).filter(filterEmpty);
 
 let toContributor = (it) => {
   return {
@@ -67,4 +65,4 @@ let toContributor = (it) => {
   };
 }
 
-let marshallToContributors = (each) => toContributor(toCleanSegments(each));
+let filterEmpty = (it) => it && it.length > 0;
