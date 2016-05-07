@@ -49,7 +49,7 @@ function shortlogCommand(gitRepoPath, file) {
 
 function parseShortLog(file, shortlog) {
   let lines = shortlog.replace(/[\t\r]/g, ' ').split('\n').filter(filterEmpty);
-  let contributors = marshallToContributors(lines);
+  let contributors = lines.map(marshallToContributors);
   return {
     directory: file,
     contributors: contributors
@@ -58,17 +58,17 @@ function parseShortLog(file, shortlog) {
 
 let filterEmpty = (it => it && it.length > 0)
 
-function marshallToContributors(lines) {
-  let contributors = [];
-  lines.forEach(each => {
-    let segments = toCleanSegments(each);
-    let contributor = {
-      author: segments[1].trim(),
-      commitCount: segments[0].trim()
-    };
-    contributors.push(contributor)
-  });
-  return contributors;
+let toCleanSegments = (it) => {
+  console.log('clean')
+  return it.trim().split(/(\d+)/g).filter(filterEmpty)
 }
 
-let toCleanSegments = (it => it.trim().split(/(\d+)/g).filter(filterEmpty))
+let toContributor = (it) => {
+  console.log('contributors')
+  return {
+    author: it[1].trim(),
+    commitCount: it[0].trim()
+  };
+}
+
+let marshallToContributors = (each) => toContributor(toCleanSegments(each));
