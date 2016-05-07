@@ -2,9 +2,7 @@ const fs = require('fs');
 const exec = require('child_process').exec;
 
 module.exports = {
-  check: function(directory, callback) {
-    return check(directory, callback);
-  }
+  check: check
 };
 
 function check(directory, callback) {
@@ -59,12 +57,10 @@ function parseShortLog(file, shortlog) {
 let filterEmpty = (it => it && it.length > 0)
 
 let toCleanSegments = (it) => {
-  console.log('clean')
   return it.trim().split(/(\d+)/g).filter(filterEmpty)
 }
 
 let toContributor = (it) => {
-  console.log('contributors')
   return {
     author: it[1].trim(),
     commitCount: it[0].trim()
