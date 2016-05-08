@@ -1,4 +1,5 @@
 const contrib = require('./contrib');
+const windowReady = require('./window-ready')
 
 let onReady = function() {
   console.log('ready');
@@ -24,12 +25,4 @@ function appendResult(result) {
   }
 }
 
-waitForWindow(onReady);
-
-function waitForWindow(callback) {
-  if (document.readyState === 'interactive' || document.readyState === 'complete') {
-      callback();
-  } else {
-    document.addEventListener('DOMContentLoaded', callback, false);
-  }
-};
+windowReady.waitForWindow(onReady);
