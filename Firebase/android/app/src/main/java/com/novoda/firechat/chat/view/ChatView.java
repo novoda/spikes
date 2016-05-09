@@ -33,7 +33,9 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
         messageView = Views.findById(this, R.id.messageEdit);
         submitButton = Views.findById(this, R.id.submitButton);
         RecyclerView recyclerView = Views.findById(this, R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(chatAdapter);
     }
 
@@ -43,6 +45,7 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
             @Override
             public void onClick(View v) {
                 actionListener.onSubmitMessage(new Message("Bob", messageView.getText().toString())); //TODO sort out username
+                messageView.setText("");
             }
         });
     }
