@@ -12,6 +12,7 @@ public class ChatPresenter {
 
     private final ChatService chatService;
     private final ChatDisplayer chatDisplayer;
+
     private Subscription subscription;
 
     public ChatPresenter(ChatService chatService, ChatDisplayer chatDisplayer) {

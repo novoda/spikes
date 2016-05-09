@@ -10,6 +10,14 @@ public class Chat {
         this.messages = messages;
     }
 
+    public int size() {
+        return messages.size();
+    }
+
+    public Message get(int position) {
+        return messages.get(position);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -30,11 +38,4 @@ public class Chat {
         return messages != null ? messages.hashCode() : 0;
     }
 
-    public int size() {
-        return messages.size();
-    }
-
-    public Message get(int position) {
-        return messages.get(position);
-    }
 }

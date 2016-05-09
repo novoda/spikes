@@ -7,6 +7,7 @@ import com.novoda.firechat.FireChatApplication;
 import com.novoda.firechat.R;
 import com.novoda.firechat.chat.displayer.ChatDisplayer;
 import com.novoda.firechat.chat.presenter.ChatPresenter;
+import com.novoda.firechat.chat.service.ChatService;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -16,7 +17,9 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        presenter = new ChatPresenter(((FireChatApplication) getApplication()).getChatService(), (ChatDisplayer) findViewById(R.id.chatView));
+        ChatService chatService = ((FireChatApplication) getApplication()).getChatService();
+        ChatDisplayer chatDisplayer = (ChatDisplayer) findViewById(R.id.chatView);
+        presenter = new ChatPresenter(chatService, chatDisplayer);
     }
 
     @Override
