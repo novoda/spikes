@@ -4,14 +4,16 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "./node_modules/jest-cli/bin/jest.js",
-    "test-cli": "./node_modules/jest-cli/bin/jest.js --json >> test-output.json"
+    "test": "./node_modules/eslint/bin/eslint.js . && ./node_modules/jest-cli/bin/jest.js",
+    "test-cli": "./node_modules/eslint/bin/eslint.js . && ./node_modules/jest-cli/bin/jest.js --json >> test-output.json"
   },
   "dependencies": {
     "react": "^0.14.8",
     "react-native": "^0.25.1"
   },
   "devDependencies": {
+    "eslint-plugin-promise": "^1.1.0",
+    "eslint-plugin-react": "^5.0.1",
     "jest-cli": "^12.0.2"
   }
 }

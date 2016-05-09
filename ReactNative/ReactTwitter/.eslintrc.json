@@ -1,0 +1,7 @@
+{
+    "extends": ["standard", "plugin:react/recommended"],
+    "plugins": [
+        "standard",
+        "react"
+    ]
+}

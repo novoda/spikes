@@ -4,9 +4,8 @@
  * @flow
  */
 
-import React, { Component } from 'react';
-import { AppRegistry } from 'react-native';
+import { AppRegistry } from 'react-native'
 
-var HelloWorldView = require('./core/views/helloworld.js');
+var HelloWorldView = require('./core/views/helloworld.js')
 
-AppRegistry.registerComponent('ReactTwitter', () => HelloWorldView);
+AppRegistry.registerComponent('ReactTwitter', () => HelloWorldView)
