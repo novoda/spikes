@@ -1,7 +1,6 @@
 package com.novoda.firechat.chat.displayer;
 
 import com.novoda.firechat.chat.model.Chat;
-import com.novoda.firechat.chat.model.Message;
 
 public interface ChatDisplayer {
 
@@ -11,9 +10,13 @@ public interface ChatDisplayer {
 
     void display(Chat chat);
 
+    void enableInteraction();
+
+    void disableInteraction();
+
     public interface ChatActionListener {
 
-        void onSubmitMessage(Message message);
+        void onSubmitMessage(String message);
 
     }
 

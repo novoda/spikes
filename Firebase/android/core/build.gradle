@@ -3,4 +3,5 @@ apply plugin: 'java'
 dependencies {
     compile 'com.firebase:firebase-client-android:2.5.2'
     compile 'io.reactivex:rxjava:1.1.5'
+    compile 'com.jakewharton.rxrelay:rxrelay:1.1.0'
 }

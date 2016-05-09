@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.novoda.firechat.R;
 import com.novoda.firechat.chat.displayer.ChatDisplayer;
 import com.novoda.firechat.chat.model.Chat;
-import com.novoda.firechat.chat.model.Message;
 import com.novoda.notils.caster.Views;
 
 public class ChatView extends LinearLayout implements ChatDisplayer {
@@ -44,7 +43,7 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
         submitButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                actionListener.onSubmitMessage(new Message("Bob", messageView.getText().toString())); //TODO sort out username
+                actionListener.onSubmitMessage(messageView.getText().toString());
                 messageView.setText("");
             }
         });
@@ -58,6 +57,16 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
     @Override
     public void display(Chat chat) {
         chatAdapter.update(chat);
+    }
+
+    @Override
+    public void enableInteraction() {
+        submitButton.setEnabled(true);
+    }
+
+    @Override
+    public void disableInteraction() {
+        submitButton.setEnabled(false);
     }
 
 }
