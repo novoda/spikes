@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "test-cli": "jest --json >> test-output.json"
   },
   "dependencies": {
     "react": "^0.14.8",
