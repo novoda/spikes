@@ -3,10 +3,14 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start"
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
   },
   "dependencies": {
     "react": "^0.14.8",
     "react-native": "^0.25.1"
+  },
+  "devDependencies": {
+    "jest-cli": "^12.0.2"
   }
 }
