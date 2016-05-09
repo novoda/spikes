@@ -4,8 +4,8 @@ import android.os.Bundle;
 
 import com.novoda.firechat.BaseActivity;
 import com.novoda.firechat.R;
-import com.novoda.firechat.chat.login.displayer.LoginDisplayer;
-import com.novoda.firechat.chat.login.presenter.LoginPresenter;
+import com.novoda.firechat.login.displayer.LoginDisplayer;
+import com.novoda.firechat.login.presenter.LoginPresenter;
 import com.novoda.firechat.navigation.AndroidNavigator;
 
 public class LoginActivity extends BaseActivity {

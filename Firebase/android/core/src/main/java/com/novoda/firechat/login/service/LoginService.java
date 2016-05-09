@@ -1,6 +1,6 @@
-package com.novoda.firechat.chat.login;
+package com.novoda.firechat.login.service;
 
-import com.novoda.firechat.chat.login.model.User;
+import com.novoda.firechat.login.data.model.User;
 
 import rx.Observable;
 

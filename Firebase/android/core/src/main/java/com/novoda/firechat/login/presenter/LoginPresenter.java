@@ -1,9 +1,9 @@
-package com.novoda.firechat.chat.login.presenter;
+package com.novoda.firechat.login.presenter;
 
-import com.novoda.firechat.chat.login.LoginService;
-import com.novoda.firechat.chat.login.displayer.LoginDisplayer;
-import com.novoda.firechat.chat.login.model.User;
-import com.novoda.firechat.chat.navigation.Navigator;
+import com.novoda.firechat.login.service.LoginService;
+import com.novoda.firechat.login.displayer.LoginDisplayer;
+import com.novoda.firechat.login.data.model.User;
+import com.novoda.firechat.navigation.Navigator;
 
 import rx.Subscription;
 import rx.functions.Action1;

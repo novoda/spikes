@@ -1,4 +1,4 @@
-package com.novoda.firechat.chat.login.displayer;
+package com.novoda.firechat.login.displayer;
 
 public interface LoginDisplayer {
 

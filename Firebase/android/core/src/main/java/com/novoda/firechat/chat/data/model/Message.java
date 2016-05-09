@@ -1,4 +1,4 @@
-package com.novoda.firechat.chat.model;
+package com.novoda.firechat.chat.data.model;
 
 public class Message {
 

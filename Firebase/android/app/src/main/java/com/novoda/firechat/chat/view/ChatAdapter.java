@@ -5,8 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.novoda.firechat.chat.model.Chat;
-import com.novoda.firechat.chat.model.Message;
+import com.novoda.firechat.chat.data.model.Chat;
+import com.novoda.firechat.chat.data.model.Message;
 
 import java.util.ArrayList;
 

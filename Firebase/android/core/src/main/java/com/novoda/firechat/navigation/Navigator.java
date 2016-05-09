@@ -1,4 +1,4 @@
-package com.novoda.firechat.chat.navigation;
+package com.novoda.firechat.navigation;
 
 public interface Navigator {
 

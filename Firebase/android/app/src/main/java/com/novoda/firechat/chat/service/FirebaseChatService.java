@@ -6,8 +6,8 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.novoda.firechat.chat.model.Chat;
-import com.novoda.firechat.chat.model.Message;
+import com.novoda.firechat.chat.data.model.Chat;
+import com.novoda.firechat.chat.data.model.Message;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.novoda.firechat.R;
-import com.novoda.firechat.chat.login.displayer.LoginDisplayer;
+import com.novoda.firechat.login.displayer.LoginDisplayer;
 import com.novoda.notils.caster.Views;
 
 public class LoginView extends LinearLayout implements LoginDisplayer {

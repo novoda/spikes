@@ -1,4 +1,4 @@
-package com.novoda.firechat.chat.login.model;
+package com.novoda.firechat.login.data.model;
 
 public class User {
 

@@ -1,6 +1,6 @@
 package com.novoda.firechat.chat.displayer;
 
-import com.novoda.firechat.chat.model.Chat;
+import com.novoda.firechat.chat.data.model.Chat;
 
 public interface ChatDisplayer {
 

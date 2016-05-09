@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.novoda.firechat.chat.model.Message;
+import com.novoda.firechat.chat.data.model.Message;
 
 class MessageViewHolder extends RecyclerView.ViewHolder {
 

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.novoda.firechat.chat.ChatActivity;
-import com.novoda.firechat.chat.navigation.Navigator;
 
 public class AndroidNavigator implements Navigator {
 

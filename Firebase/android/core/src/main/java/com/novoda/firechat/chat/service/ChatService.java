@@ -1,7 +1,7 @@
 package com.novoda.firechat.chat.service;
 
-import com.novoda.firechat.chat.model.Chat;
-import com.novoda.firechat.chat.model.Message;
+import com.novoda.firechat.chat.data.model.Chat;
+import com.novoda.firechat.chat.data.model.Message;
 
 import rx.Observable;
 

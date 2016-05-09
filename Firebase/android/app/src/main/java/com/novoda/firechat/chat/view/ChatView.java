@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.novoda.firechat.R;
 import com.novoda.firechat.chat.displayer.ChatDisplayer;
-import com.novoda.firechat.chat.model.Chat;
+import com.novoda.firechat.chat.data.model.Chat;
 import com.novoda.notils.caster.Views;
 
 public class ChatView extends LinearLayout implements ChatDisplayer {
