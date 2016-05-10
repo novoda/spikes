@@ -2,8 +2,11 @@ import React, { Component } from 'react'
 import {
   StyleSheet,
   View,
-  Text
+  Text,
+  NativeModules
 } from 'react-native'
+
+var Button = require('react-native-button');
 
 class HelloWorldView extends Component {
   render () {
@@ -12,8 +15,19 @@ class HelloWorldView extends Component {
         <Text style={styles.welcome}>
           Hello World!
         </Text>
+        <Button
+        style={styles.button}
+        styleDisabled={styles.button_disabled}
+        onPress={this._loginButtonClicked}> Login </Button>
       </View>
     )
+  }
+
+  _loginButtonClicked () {
+    var intent = NativeModules.OauthIntentAndroid;
+    intent.registerForDeepLinking().then((uri) => {
+      console.log(uri)
+    })
   }
 }
 
@@ -28,6 +42,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     margin: 10
+  },
+  button: {
+    fontSize: 20,
+    color: 'black'
+  },
+  button_disabled: {
+    fontSize: 20,
+    color: 'grey'
   }
 })
 

@@ -1,5 +1,8 @@
 package com.reacttwitter;
 
+import android.content.Intent;
+import android.util.Log;
+
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -8,6 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends ReactActivity {
+
+    private OauthIntentPackage oauthIntentPackage = new OauthIntentPackage();
 
     /**
      * Returns the name of the main component registered from JavaScript.
@@ -33,8 +38,15 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected List<ReactPackage> getPackages() {
-        return Arrays.<ReactPackage>asList(
-            new MainReactPackage()
+        return Arrays.asList(
+                new MainReactPackage(),
+                oauthIntentPackage
         );
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        oauthIntentPackage.handleOnNewIntent(intent.getData());
     }
 }
