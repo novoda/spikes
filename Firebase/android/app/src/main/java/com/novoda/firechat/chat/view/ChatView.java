@@ -18,6 +18,7 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
     private TextView messageView;
     private ChatAdapter chatAdapter;
     private View submitButton;
+    private RecyclerView recyclerView;
 
     public ChatView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -31,7 +32,7 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
         chatAdapter = new ChatAdapter(getContext());
         messageView = Views.findById(this, R.id.messageEdit);
         submitButton = Views.findById(this, R.id.submitButton);
-        RecyclerView recyclerView = Views.findById(this, R.id.recyclerView);
+        recyclerView = Views.findById(this, R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
@@ -57,6 +58,7 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
     @Override
     public void display(Chat chat) {
         chatAdapter.update(chat);
+        recyclerView.smoothScrollToPosition(chatAdapter.getItemCount() - 1);
     }
 
     @Override
