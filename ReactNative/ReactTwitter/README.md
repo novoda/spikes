@@ -6,7 +6,6 @@ _____
 
 ##Project setup##
 * Install React Native as described in https://facebook.github.io/react-native/docs/getting-started.html
-* initialise the project with `react-native init ReactTwitter` and confirm when asking about reusing the existing folder
 * Install all the dependencies with `npm install`
 
 ##Project run##
