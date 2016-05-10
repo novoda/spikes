@@ -59,7 +59,7 @@ public class FirebaseLoginService implements LoginService {
                 }
                 subscriber.onCompleted();
             }
-        }).doOnNext(authRelay);
+        }).doOnNext(authRelay).ignoreElements();
     }
 
     @NonNull
