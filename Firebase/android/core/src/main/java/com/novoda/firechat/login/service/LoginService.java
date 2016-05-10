@@ -4,10 +4,10 @@ import com.novoda.firechat.login.data.model.Authentication;
 
 import rx.Observable;
 
-public interface LoginService {
+public interface LoginService<T> {
 
     Observable<Authentication> getAuthentication();
 
-    void login(String idToken);
+    void loginWithGoogle(String idToken);
 
 }
