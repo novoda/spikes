@@ -1,7 +1,7 @@
 package com.reacttwitter;
 
 import android.content.Intent;
-import android.util.Log;
+import android.net.Uri;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactPackage;
@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends ReactActivity {
+
+    private static final String REACT_TWITTER_OAUTH_SCHEME = "react-twitter-oauth";
 
     private OauthIntentPackage oauthIntentPackage = new OauthIntentPackage();
 
@@ -47,6 +49,11 @@ public class MainActivity extends ReactActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        oauthIntentPackage.handleOnNewIntent(intent.getData());
+        Uri data = intent.getData();
+        if (data == null || !REACT_TWITTER_OAUTH_SCHEME.equals(data.getScheme())) {
+            return;
+        }
+
+        oauthIntentPackage.handleOnNewIntent(data);
     }
 }

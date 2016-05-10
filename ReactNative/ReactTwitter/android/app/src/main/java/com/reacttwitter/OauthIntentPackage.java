@@ -38,10 +38,6 @@ public class OauthIntentPackage implements ReactPackage {
     }
 
     void handleOnNewIntent(Uri uri) {
-        if (intentModule == null) {
-            return;
-        }
-
         intentModule.handleOnNewIntent(uri);
     }
 
