@@ -2,10 +2,11 @@ package com.novoda.firechat.chat.service;
 
 import android.content.Context;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.novoda.firechat.chat.data.model.Chat;
 import com.novoda.firechat.chat.data.model.Message;
 
@@ -19,11 +20,10 @@ import rx.subscriptions.BooleanSubscription;
 
 public class FirebaseChatService implements ChatService {
 
-    private final Firebase firebase;
+    private final DatabaseReference databaseReference;
 
     public FirebaseChatService(Context context) {
-        Firebase.setAndroidContext(context);
-        firebase = new Firebase("https://firechat-novoda.firebaseio.com/");
+        databaseReference = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
@@ -31,7 +31,7 @@ public class FirebaseChatService implements ChatService {
         return Observable.create(new Observable.OnSubscribe<Chat>() {
             @Override
             public void call(final Subscriber<? super Chat> subscriber) {
-                final ValueEventListener eventListener = firebase.child("messages").addValueEventListener(new ValueEventListener() {
+                final ValueEventListener eventListener = databaseReference.child("messages").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         List<Message> messages = toMessages(dataSnapshot);
@@ -39,14 +39,15 @@ public class FirebaseChatService implements ChatService {
                     }
 
                     @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-                        subscriber.onError(firebaseError.toException());
+                    public void onCancelled(DatabaseError databaseError) {
+                        subscriber.onError(databaseError.toException()); //TODO handle errors in pipeline
                     }
+
                 });
                 subscriber.add(BooleanSubscription.create(new Action0() {
                     @Override
                     public void call() {
-                        firebase.removeEventListener(eventListener);
+                        databaseReference.removeEventListener(eventListener);
                     }
                 }));
             }
@@ -55,7 +56,7 @@ public class FirebaseChatService implements ChatService {
 
     @Override
     public void sendMessage(Message message) {
-        firebase.child("messages").push().setValue(message);
+        databaseReference.child("messages").push().setValue(message);
     }
 
     private List<Message> toMessages(DataSnapshot dataSnapshot) {

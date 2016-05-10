@@ -21,14 +21,19 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/LICENSE-FIREBASE.txt'
         exclude 'META-INF/NOTICE'
+        exclude 'META-INF/rxjava.properties'
     }
 }
 
 dependencies {
     compile project(':core')
+    compile 'com.google.firebase:firebase-database:8.5.6'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:recyclerview-v7:23.3.0'
     compile 'com.novoda:notils:2.2.16'
 
     testCompile 'junit:junit:4.12'
 }
+
+
+apply plugin: 'com.google.gms.google-services'
