@@ -33,10 +33,17 @@ class TweetsList extends Component {
     };
   }
 
+  tweetSelected (tweetId) {
+    // TODO: navigate to tweet detail screen
+    Alert.alert(
+      'Tweet selected',
+      'User selected tweet with id=' + tweetId
+    )
+  }
 
   renderRow (rowData, sectionID, rowID) {
     return (
-      <TouchableHighlight 
+      <TouchableHighlight onPress={() => this.tweetSelected(rowData.id)}
          underlayColor='#dddddd'>
        <View>
         <View style={styles.rowContainer}>
