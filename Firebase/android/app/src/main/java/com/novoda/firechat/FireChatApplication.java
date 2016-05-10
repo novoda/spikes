@@ -2,11 +2,13 @@ package com.novoda.firechat;
 
 import android.app.Application;
 
-import com.novoda.firechat.login.service.LoginService;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 import com.novoda.firechat.chat.service.ChatService;
 import com.novoda.firechat.chat.service.FirebaseChatService;
-import com.novoda.firechat.login.data.source.SharedPreferencesUserDataSource;
-import com.novoda.firechat.login.service.LocalLoginService;
+import com.novoda.firechat.login.service.FirebaseLoginService;
+import com.novoda.firechat.login.service.LoginService;
+import com.novoda.notils.logger.simple.Log;
 
 public class FireChatApplication extends Application {
 
@@ -16,8 +18,10 @@ public class FireChatApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        chatService = new FirebaseChatService(this);
-        loginService = new LocalLoginService(new SharedPreferencesUserDataSource(this));
+        Log.setShowLogs(BuildConfig.DEBUG);
+        FirebaseApp firebaseApp = FirebaseApp.initializeApp(this, FirebaseOptions.fromResource(this), "FireChat");
+        chatService = new FirebaseChatService(firebaseApp);
+        loginService = new FirebaseLoginService(firebaseApp);
     }
 
     public ChatService getChatService() {

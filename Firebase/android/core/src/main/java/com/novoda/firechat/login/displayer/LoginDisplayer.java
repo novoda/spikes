@@ -6,9 +6,11 @@ public interface LoginDisplayer {
 
     void detach(LoginActionListener actionListener);
 
+    void showAuthenticationError(String message);
+
     public interface LoginActionListener {
 
-        void onUserNameEntered(String userName);
+        void onGooglePlusLoginSelected();
 
     }
 

@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.novoda.firechat.R;
 import com.novoda.firechat.login.displayer.LoginDisplayer;
@@ -13,8 +13,7 @@ import com.novoda.notils.caster.Views;
 
 public class LoginView extends LinearLayout implements LoginDisplayer {
 
-    TextView userView;
-    View loginButton;
+    private View loginButton;
 
     public LoginView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -26,8 +25,7 @@ public class LoginView extends LinearLayout implements LoginDisplayer {
     protected void onFinishInflate() {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_login_view, this);
-        userView = Views.findById(this, R.id.userEdit);
-        loginButton = Views.findById(this, R.id.loginButton);
+        loginButton = Views.findById(this, R.id.sign_in_button);
     }
 
     @Override
@@ -35,7 +33,7 @@ public class LoginView extends LinearLayout implements LoginDisplayer {
         loginButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                actionListener.onUserNameEntered(userView.getText().toString());
+                actionListener.onGooglePlusLoginSelected();
             }
         });
     }
@@ -43,6 +41,11 @@ public class LoginView extends LinearLayout implements LoginDisplayer {
     @Override
     public void detach(LoginActionListener actionListener) {
         loginButton.setOnClickListener(null);
+    }
+
+    @Override
+    public void showAuthenticationError(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show(); //TODO improve error display
     }
 
 }

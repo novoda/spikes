@@ -1,6 +1,7 @@
 package com.novoda.firechat.chat.presenter;
 
 import com.novoda.firechat.chat.displayer.ChatDisplayer;
+import com.novoda.firechat.login.data.model.Authentication;
 import com.novoda.firechat.login.service.LoginService;
 import com.novoda.firechat.login.data.model.User;
 import com.novoda.firechat.chat.data.model.Chat;
@@ -38,10 +39,10 @@ public class ChatPresenter {
                 })
         );
         subscriptions.add(
-                loginService.getUser().subscribe(new Action1<User>() {
+                loginService.getAuthentication().subscribe(new Action1<Authentication>() {
                     @Override
-                    public void call(User user) {
-                        ChatPresenter.this.user = user;
+                    public void call(Authentication authentication) {
+                        ChatPresenter.this.user = authentication.getUser(); //TODO handle missing auth
                         chatDisplayer.enableInteraction();
                     }
                 })

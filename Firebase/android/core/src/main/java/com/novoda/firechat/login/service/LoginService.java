@@ -1,13 +1,13 @@
 package com.novoda.firechat.login.service;
 
-import com.novoda.firechat.login.data.model.User;
+import com.novoda.firechat.login.data.model.Authentication;
 
 import rx.Observable;
 
 public interface LoginService {
 
-    Observable<User> getUser();
+    Observable<Authentication> getAuthentication();
 
-    void login(User user);
+    void login(String idToken);
 
 }

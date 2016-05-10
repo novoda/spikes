@@ -1,7 +1,6 @@
 package com.novoda.firechat.chat.service;
 
-import android.content.Context;
-
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,8 +21,9 @@ public class FirebaseChatService implements ChatService {
 
     private final DatabaseReference databaseReference;
 
-    public FirebaseChatService(Context context) {
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+    public FirebaseChatService(FirebaseApp firebaseApp) {
+        databaseReference = FirebaseDatabase.getInstance(firebaseApp)
+                .getReference();
     }
 
     @Override
