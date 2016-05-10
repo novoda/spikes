@@ -1,8 +1,7 @@
 /**
- * Sample React Native App
+ * Sample React Native App with different text here
  * https://github.com/facebook/react-native
  */
-
 
 import { AppRegistry } from 'react-native'
 
