@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <ImageView
+    android:id="@+id/messageAuthorImage"
+    android:layout_width="30dp"
+    android:layout_height="30dp" />
+
+  <TextView
+    android:id="@+id/messageBody"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+
+</merge>

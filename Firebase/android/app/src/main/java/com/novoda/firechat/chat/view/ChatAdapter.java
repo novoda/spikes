@@ -1,9 +1,7 @@
 package com.novoda.firechat.chat.view;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.novoda.firechat.chat.data.model.Chat;
 import com.novoda.firechat.chat.data.model.Message;
@@ -12,12 +10,9 @@ import java.util.ArrayList;
 
 class ChatAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
-    private final Context context;
-
     private Chat chat = new Chat(new ArrayList<Message>());
 
-    ChatAdapter(Context context) {
-        this.context = context;
+    ChatAdapter() {
         setHasStableIds(true);
     }
 
@@ -28,7 +23,7 @@ class ChatAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
     @Override
     public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MessageViewHolder(new TextView(context));
+        return new MessageViewHolder(new MessageView(parent.getContext()));
     }
 
     @Override

@@ -29,11 +29,13 @@ dependencies {
     compile project(':core')
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:recyclerview-v7:23.3.0'
+    compile 'com.android.support:support-v4:23.3.0'
     compile 'com.novoda:notils:2.2.16'
     compile 'com.google.firebase:firebase-database:8.5.6'
     compile 'com.google.firebase:firebase-auth-api:8.5.6'
     compile 'com.google.android.gms:play-services-auth:8.5.6'
     compile 'com.google.android.gms:play-services-auth-api:8.5.6'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 
     testCompile 'junit:junit:4.12'
 }

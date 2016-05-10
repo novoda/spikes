@@ -64,7 +64,7 @@ public class FirebaseLoginService implements LoginService {
 
     @NonNull
     private Authentication authenticationFrom(FirebaseUser currentUser) {
-        return new Authentication(new User(currentUser.getDisplayName()));
+        return new Authentication(new User(currentUser.getDisplayName(), currentUser.getPhotoUrl().toString()));
     }
 
     @Override

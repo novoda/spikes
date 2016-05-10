@@ -28,7 +28,7 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
     protected void onFinishInflate() {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_chat_view, this);
-        chatAdapter = new ChatAdapter(getContext());
+        chatAdapter = new ChatAdapter();
         messageView = Views.findById(this, R.id.messageEdit);
         submitButton = Views.findById(this, R.id.submitButton);
         RecyclerView recyclerView = Views.findById(this, R.id.recyclerView);

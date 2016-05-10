@@ -58,7 +58,7 @@ public class ChatPresenter {
     private final ChatDisplayer.ChatActionListener actionListener = new ChatDisplayer.ChatActionListener() {
         @Override
         public void onSubmitMessage(String message) {
-            chatService.sendMessage(new Message(user.getName(), message));
+            chatService.sendMessage(new Message(user, message));
         }
     };
 

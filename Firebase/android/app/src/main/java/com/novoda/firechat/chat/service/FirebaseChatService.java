@@ -31,7 +31,7 @@ public class FirebaseChatService implements ChatService {
         return Observable.create(new Observable.OnSubscribe<Chat>() {
             @Override
             public void call(final Subscriber<? super Chat> subscriber) {
-                final ValueEventListener eventListener = databaseReference.child("messages").addValueEventListener(new ValueEventListener() {
+                final ValueEventListener eventListener = databaseReference.child("messages-with-pic").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         List<Message> messages = toMessages(dataSnapshot);
@@ -56,12 +56,12 @@ public class FirebaseChatService implements ChatService {
 
     @Override
     public void sendMessage(Message message) {
-        databaseReference.child("messages").push().setValue(message);
+        databaseReference.child("messages-with-pic").push().setValue(message);
     }
 
     private List<Message> toMessages(DataSnapshot dataSnapshot) {
         Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-        List<Message> messages = new ArrayList<Message>();
+        List<Message> messages = new ArrayList<>();
         for (DataSnapshot child : children) {
             Message message = child.getValue(Message.class);
             messages.add(message);

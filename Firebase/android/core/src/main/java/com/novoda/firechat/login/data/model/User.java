@@ -2,14 +2,25 @@ package com.novoda.firechat.login.data.model;
 
 public class User {
 
-    private final String name;
+    private String name;
+    private String photoUrl;
 
-    public User(String name) {
+    @SuppressWarnings("unused") //Used by Firebase
+    public User() {
+
+    }
+
+    public User(String name, String photoUrl) {
         this.name = name;
+        this.photoUrl = photoUrl;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
     }
 
     @Override

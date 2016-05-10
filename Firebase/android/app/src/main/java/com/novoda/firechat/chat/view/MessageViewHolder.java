@@ -1,19 +1,19 @@
 package com.novoda.firechat.chat.view;
 
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.TextView;
 
 import com.novoda.firechat.chat.data.model.Message;
 
 class MessageViewHolder extends RecyclerView.ViewHolder {
 
-    public MessageViewHolder(View itemView) {
-        super(itemView);
+    private final MessageView messageView;
+
+    public MessageViewHolder(MessageView messageView) {
+        super(messageView);
+        this.messageView = messageView;
     }
 
     public void bind(Message message) {
-        ((TextView) itemView).setText(message.toString());
+        messageView.display(message);
     }
-
 }

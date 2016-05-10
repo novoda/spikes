@@ -1,8 +1,10 @@
 package com.novoda.firechat.chat.data.model;
 
+import com.novoda.firechat.login.data.model.User;
+
 public class Message {
 
-    private String author;
+    private User author;
     private String body;
     private long timestamp;
 
@@ -10,7 +12,7 @@ public class Message {
     public Message() {
     }
 
-    public Message(String author, String body) {
+    public Message(User author, String body) {
         this.author = author;
         this.body = body;
         this.timestamp = System.currentTimeMillis(); //TODO move timestamp db side ?
@@ -21,7 +23,7 @@ public class Message {
         return author + ": " + body;
     }
 
-    public String getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
