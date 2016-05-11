@@ -12,9 +12,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by gbasile on 10/05/2016.
- */
 public class OauthIntentPackage implements ReactPackage {
 
     private OauthIntentModule intentModule;
