@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.novoda.bonfire.analytics.FirebaseAnalyticsLogger;
 import com.novoda.bonfire.login.service.FirebaseLoginService;
 import com.novoda.bonfire.chat.service.ChatService;
 import com.novoda.bonfire.chat.service.FirebaseChatService;
@@ -14,6 +15,7 @@ public class BonfireApplication extends Application {
 
     private LoginService loginService;
     private ChatService chatService;
+    private FirebaseAnalyticsLogger firebaseAnalyticsLogger;
 
     @Override
     public void onCreate() {
@@ -22,6 +24,7 @@ public class BonfireApplication extends Application {
         FirebaseApp firebaseApp = FirebaseApp.initializeApp(this, FirebaseOptions.fromResource(this), "Bonfire");
         chatService = new FirebaseChatService(firebaseApp);
         loginService = new FirebaseLoginService(firebaseApp);
+        firebaseAnalyticsLogger = new FirebaseAnalyticsLogger(this);
     }
 
     public ChatService getChatService() {
@@ -30,5 +33,9 @@ public class BonfireApplication extends Application {
 
     public LoginService getLoginService() {
         return loginService;
+    }
+
+    public FirebaseAnalyticsLogger getAnalytics() {
+        return firebaseAnalyticsLogger;
     }
 }

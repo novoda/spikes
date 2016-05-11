@@ -8,4 +8,15 @@ public class BaseActivity extends AppCompatActivity {
         return (BonfireApplication) getApplication();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getFireChatApplication().getAnalytics().trackActivityStart(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        getFireChatApplication().getAnalytics().trackActivityStop(this);
+    }
 }
