@@ -1,0 +1,11 @@
+import com.novoda.buildproperties.BuildProperties
+
+apply plugin: 'java'
+apply plugin: 'com.novoda.buildproperties'
+
+buildProperties {
+    file = '/props/simple.properties'
+}
+
+// the expected behavior of the plugin would be to add the read properties to project.buildProperties
+System.out.println((project.buildProperties as BuildProperties).getInt('someNumber'))

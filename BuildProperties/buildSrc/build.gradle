@@ -1,0 +1,21 @@
+apply plugin: 'groovy'
+
+ext.name = 'buildproperties'
+group 'com.novoda'
+version '0.0.1'
+
+sourceCompatibility = 1.6
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+
+    compile 'org.apache.commons:commons-configuration2:2.0'
+    compile 'commons-beanutils:commons-beanutils:1.9.2'
+
+    testCompile 'junit:junit:4.12'
+}
