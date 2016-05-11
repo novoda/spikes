@@ -33,7 +33,7 @@ The following example shows how to include multiple files in another one:
 
 ```properties
 include=basic-prop.properties
-include=extra=prop.properties
+include=extra-prop.properties
 version=0.0.2
 description=This is a string
 ```
