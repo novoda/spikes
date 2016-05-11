@@ -4,5 +4,8 @@
   },
   "hosting": {
     "public": "public"
+  },
+  "functions": {
+        ".source": "functions" // Directory containing your Firebase Functions code
   }
 }

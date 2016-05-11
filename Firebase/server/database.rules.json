@@ -9,7 +9,7 @@
           "author": {
             ".validate": "newData.hasChildren(['id', 'name', 'photoUrl'])",
             "id": {
-              ".validate": "newData.val() === auth.uid",
+              ".validate": "newData.val() === auth.uid"
             }
           }
         }
