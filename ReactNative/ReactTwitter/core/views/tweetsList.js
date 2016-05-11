@@ -1,13 +1,6 @@
 import React, { Component } from 'react'
-import {
-  Alert,
-  StyleSheet,
-  View,
-  Image,
-  ListView,
-  Text,
-  TouchableHighlight
-} from 'react-native'
+import { ListView } from 'react-native'
+import TweetsListItem from './tweetsListItem'
 
 class TweetsList extends Component {
 
@@ -47,30 +40,15 @@ class TweetsList extends Component {
     }
   }
 
-  tweetSelected (tweetId) {
-    // TODO: navigate to tweet detail screen
-    Alert.alert(
-      'Tweet selected',
-      'User selected tweet with id=' + tweetId
-    )
-  }
-
-  renderRow (rowData, sectionID, rowID) {
+  renderRow (rowData) {
     return (
-      <TouchableHighlight onPress={() => this.tweetSelected(rowData.id)}
-         underlayColor='#dddddd'>
-       <View>
-        <View style={styles.rowContainer}>
-          <Image style={styles.tweet_avatar} source={{ uri: rowData.user.profile_image_url }} />
-          <View style={styles.textContainer}>
-            <Text style={styles.tweet_author}>{rowData.user.name}</Text>
-            <Text style={styles.tweet_author_handle}>{rowData.user.screen_name}</Text>
-            <Text style={styles.tweet_text}>{rowData.text}</Text>
-          </View>
-         </View>
-         <View style={styles.separator}/>
-       </View>
-     </TouchableHighlight>
+       <TweetsListItem
+          id={rowData.id}
+          author_avatar={rowData.user.profile_image_url}
+          author_name={rowData.user.name}
+          author_handle={rowData.user.screen_name}
+          text={rowData.text}
+        />
     )
   }
 
@@ -83,38 +61,5 @@ class TweetsList extends Component {
     )
   }
 }
-
-const styles = StyleSheet.create({
-  textContainer: {
-    flex: 1
-  },
-  separator: {
-    height: 1,
-    backgroundColor: '#dddddd'
-  },
-  tweet_author: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    color: '#48BBEC'
-  },
-  tweet_author_handle: {
-    fontSize: 20,
-    fontStyle: 'italic',
-    color: '#656565'
-  },
-  tweet_text: {
-    fontSize: 20,
-    color: '#656565'
-  },
-  tweet_avatar: {
-    width: 80,
-    height: 80,
-    marginRight: 10
-  },
-  rowContainer: {
-    flexDirection: 'row',
-    padding: 10
-  }
-})
 
 module.exports = TweetsList
