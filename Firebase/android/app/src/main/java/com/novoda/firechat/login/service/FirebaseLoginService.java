@@ -62,9 +62,8 @@ public class FirebaseLoginService implements LoginService {
         }).doOnNext(authRelay).ignoreElements();
     }
 
-    @NonNull
     private Authentication authenticationFrom(FirebaseUser currentUser) {
-        return new Authentication(new User(currentUser.getDisplayName(), currentUser.getPhotoUrl().toString()));
+        return new Authentication(new User(currentUser.getUid(), currentUser.getDisplayName(), currentUser.getPhotoUrl().toString()));
     }
 
     @Override
@@ -75,8 +74,8 @@ public class FirebaseLoginService implements LoginService {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            FirebaseUser user = task.getResult().getUser();
-                            authRelay.call(authenticationFrom(user));
+                            FirebaseUser firebaseUser = task.getResult().getUser();
+                            authRelay.call(authenticationFrom(firebaseUser));
                         } else {
                             Throwable exception = task.getException();
                             Log.e(exception, "Failed to authenticate Firebase");

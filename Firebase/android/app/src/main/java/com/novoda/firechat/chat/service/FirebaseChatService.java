@@ -22,8 +22,8 @@ public class FirebaseChatService implements ChatService {
     private final DatabaseReference messagesDB;
 
     public FirebaseChatService(FirebaseApp firebaseApp) {
-        messagesDB = FirebaseDatabase.getInstance(firebaseApp)
-                .getReference().child("messages-with-pic");
+        FirebaseDatabase database = FirebaseDatabase.getInstance(firebaseApp);
+        messagesDB = database.getReference("channels/global");
     }
 
     @Override

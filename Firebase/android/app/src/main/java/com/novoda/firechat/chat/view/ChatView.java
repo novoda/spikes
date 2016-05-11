@@ -58,7 +58,8 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
     @Override
     public void display(Chat chat) {
         chatAdapter.update(chat);
-        recyclerView.smoothScrollToPosition(chatAdapter.getItemCount() - 1);
+        int lastMessagePosition = chatAdapter.getItemCount() == 0 ? 0 : chatAdapter.getItemCount() - 1;
+        recyclerView.smoothScrollToPosition(lastMessagePosition);
     }
 
     @Override

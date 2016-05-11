@@ -18,11 +18,6 @@ public class Message {
         this.timestamp = System.currentTimeMillis(); //TODO move timestamp db side ?
     }
 
-    @Override
-    public String toString() {
-        return author + ": " + body;
-    }
-
     public User getAuthor() {
         return author;
     }
@@ -34,5 +29,4 @@ public class Message {
     public long getTimestamp() {
         return timestamp;
     }
-
 }
