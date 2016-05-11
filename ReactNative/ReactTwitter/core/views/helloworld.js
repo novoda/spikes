@@ -2,13 +2,20 @@ import React, { Component } from 'react'
 import {
   StyleSheet,
   View,
-  Text,
-  NativeModules
+  Text
 } from 'react-native'
 
-var Button = require('react-native-button');
+var Button = require('react-native-button')
+var DeepLinkingFacade = require('../service/deep-linking-facade')
 
-class HelloWorldView extends Component {
+var HelloWorldView = React.createClass({
+
+  getInitialState() {
+    return {
+      facade: new DeepLinkingFacade()
+    }
+  },
+
   render () {
     return (
       <View style={styles.container}>
@@ -16,20 +23,17 @@ class HelloWorldView extends Component {
           Hello World!
         </Text>
         <Button
-        style={styles.button}
-        styleDisabled={styles.button_disabled}
-        onPress={this._loginButtonClicked}> Login </Button>
+          style={styles.button}
+          styleDisabled={styles.button_disabled}
+          onPress={this._loginButtonClicked}> Login </Button>
       </View>
     )
-  }
+  },
 
   _loginButtonClicked () {
-    var intent = NativeModules.OauthIntentAndroid;
-    intent.registerForDeepLinking().then((uri) => {
-      console.log(uri)
-    })
+    this.state.facade.listenForDeepLinking().then((uri) => console.log(uri))    
   }
-}
+})
 
 const styles = StyleSheet.create({
   container: {
