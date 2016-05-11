@@ -10,7 +10,7 @@ class DeepLinkingFacade {
 
   listenForDeepLinking () {
     return oAuthIntentAndroid.registerForDeepLinking()
-      .then(function (event) { return event.url })
+      .then((event) => event.url)
   }
 
   stopListeningForDeepLinking () {
