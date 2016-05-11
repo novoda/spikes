@@ -2,15 +2,15 @@ import React from 'react'
 import {
   StyleSheet,
   View,
-  Text
+  Text,
+  Navigator
 } from 'react-native'
 
 var Button = require('react-native-button')
-var MainNavigator = require('./main-navigator')
 
 var DebugScreenView = React.createClass({
   propTypes: {
-    navigator: React.PropTypes.instanceOf(MainNavigator).isRequired
+    navigator: React.PropTypes.instanceOf(Navigator).isRequired
   },
 
   render () {

@@ -11,6 +11,7 @@ var DeepLinkingFacade = require('../service/deep-linking-facade')
 var DeepLinkingView = React.createClass({
 
   getInitialState () {
+    console.log('Get initial state')
     return {
       facade: DeepLinkingFacade.newInstance(),
       deepLinkUrl: '[incoming]'
@@ -26,12 +27,16 @@ var DeepLinkingView = React.createClass({
         <Button
           style={styles.button}
           styleDisabled={styles.button_disabled}
-          onPress={this._loginButtonClicked}> Listen for deep linking </Button>
+          onPress={this._buttonClicked}> Listen for deep linking </Button>
       </View>
     )
   },
 
-  _loginButtonClicked () {
+  componentWillUnmount () {
+    this.state.facade.stopListeningForDeepLinking()
+  },
+
+  _buttonClicked () {
     this.state.facade.listenForDeepLinking().then((uri) => { this.setState({ deepLinkUrl: uri }) })
   }
 })

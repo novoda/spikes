@@ -12,6 +12,10 @@ class DeepLinkingFacade {
     return oAuthIntentAndroid.registerForDeepLinking()
       .then(function (event) { return event.url })
   }
+
+  stopListeningForDeepLinking () {
+    // no-op
+  }
 }
 
 module.exports = DeepLinkingFacade

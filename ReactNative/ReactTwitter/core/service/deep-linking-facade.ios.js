@@ -18,8 +18,11 @@ class DeepLinkingFacade {
     })
   }
 
-  _handleOpenURL (event) {
+  stopListeningForDeepLinking () {
     this.linking.removeEventListener('url', this._handleOpenURL)
+  }
+
+  _handleOpenURL (event) {
     this.resolvePromise(event.url)
   }
 }
