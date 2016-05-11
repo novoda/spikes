@@ -8,7 +8,7 @@ import {
 var Button = require('react-native-button')
 var DeepLinkingFacade = require('../service/deep-linking-facade')
 
-var HelloWorldView = React.createClass({
+var DeepLinkingView = React.createClass({
 
   getInitialState () {
     return {
@@ -58,4 +58,4 @@ const styles = StyleSheet.create({
   }
 })
 
-module.exports = HelloWorldView
+module.exports = DeepLinkingView
