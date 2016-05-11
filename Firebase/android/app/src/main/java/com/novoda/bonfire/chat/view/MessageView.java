@@ -31,6 +31,7 @@ public class MessageView extends LinearLayout {
     private final ImageView picture;
     private final TextView body;
     private final TextView time;
+    private final TextView name;
 
     public MessageView(Context context) {
         super(context);
@@ -39,9 +40,11 @@ public class MessageView extends LinearLayout {
         this.picture = Views.findById(view, R.id.messageAuthorImage);
         this.body = Views.findById(view, R.id.messageBody);
         this.time = Views.findById(view, R.id.messageTime);
+        this.name = Views.findById(view, R.id.messageAuthorName);
     }
 
     private void configureViewParams() {
+        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         setOrientation(HORIZONTAL);
         setGravity(Gravity.CENTER_VERTICAL);
         int horizontalMargin = getResources().getDimensionPixelSize(R.dimen.message_horizontal_margin);
@@ -56,6 +59,7 @@ public class MessageView extends LinearLayout {
                 .into(picture);
         body.setText(message.getBody());
         time.setText(formattedTimeFrom(message.getTimestamp()));
+        name.setText(message.getAuthor().getName());
     }
 
     private String formattedTimeFrom(long timestamp) {
