@@ -13,7 +13,7 @@ class TweetsList extends Component {
 
   constructor (props) {
     super(props)
-    var dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    var dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
     this.state = {
       dataSource: dataSource.cloneWithRows([
         {
@@ -21,7 +21,7 @@ class TweetsList extends Component {
           user: {
             name: 'User 1',
             screen_name: 'user_1',
-            profile_image_url: 'http:\/\/pbs.twimg.com\/profile_images\/2215576731\/ars-logo_normal.png'
+            profile_image_url: 'http://pbs.twimg.com/profile_images/2215576731/ars-logo_normal.png'
           },
           text: 'this is the first tweet'
         },
@@ -30,7 +30,7 @@ class TweetsList extends Component {
           user: {
             name: 'User 2',
             screen_name: 'another_user',
-            profile_image_url: 'http:\/\/pbs.twimg.com\/profile_images\/655059892022022144\/Pq3Q_1oU_normal.png'
+            profile_image_url: 'http://pbs.twimg.com/profile_images/655059892022022144/Pq3Q_1oU_normal.png'
           },
           text: 'this is the a cool tweet!!1!'
         },
@@ -39,12 +39,12 @@ class TweetsList extends Component {
           user: {
             name: 'User 1',
             screen_name: 'user_1',
-            profile_image_url: 'http:\/\/pbs.twimg.com\/profile_images\/2215576731\/ars-logo_normal.png'
+            profile_image_url: 'http://pbs.twimg.com/profile_images/2215576731/ars-logo_normal.png'
           },
           text: 'this is the second tweet'
-        },
-      ]),
-    };
+        }
+      ])
+    }
   }
 
   tweetSelected (tweetId) {
@@ -61,7 +61,7 @@ class TweetsList extends Component {
          underlayColor='#dddddd'>
        <View>
         <View style={styles.rowContainer}>
-          <Image style={styles.thumb} source={{ uri: rowData.user.profile_image_url }} />
+          <Image style={styles.tweet_avatar} source={{ uri: rowData.user.profile_image_url }} />
           <View style={styles.textContainer}>
             <Text style={styles.tweet_author}>{rowData.user.name}</Text>
             <Text style={styles.tweet_author_handle}>{rowData.user.screen_name}</Text>
@@ -71,7 +71,7 @@ class TweetsList extends Component {
          <View style={styles.separator}/>
        </View>
      </TouchableHighlight>
-    );
+    )
   }
 
   render () {
@@ -80,16 +80,11 @@ class TweetsList extends Component {
         dataSource={this.state.dataSource}
         renderRow={this.renderRow.bind(this)}
       />
-    );
+    )
   }
 }
 
 const styles = StyleSheet.create({
-  thumb: {
-    width: 80,
-    height: 80,
-    marginRight: 10
-  },
   textContainer: {
     flex: 1
   },
@@ -110,6 +105,11 @@ const styles = StyleSheet.create({
   tweet_text: {
     fontSize: 20,
     color: '#656565'
+  },
+  tweet_avatar: {
+    width: 80,
+    height: 80,
+    marginRight: 10
   },
   rowContainer: {
     flexDirection: 'row',
