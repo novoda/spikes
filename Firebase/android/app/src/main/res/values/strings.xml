@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">FireChat</string>
+  <string name="app_name">Bonfire</string>
   <string name="submit">Submit</string>
   <string name="login">Login</string>
   <string name="selectLoginProvider">Please select your login provider</string>
