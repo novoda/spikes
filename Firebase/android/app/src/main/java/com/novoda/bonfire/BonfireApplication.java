@@ -19,7 +19,7 @@ public class BonfireApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Log.setShowLogs(BuildConfig.DEBUG);
-        FirebaseApp firebaseApp = FirebaseApp.initializeApp(this, FirebaseOptions.fromResource(this), "FireChat");
+        FirebaseApp firebaseApp = FirebaseApp.initializeApp(this, FirebaseOptions.fromResource(this), "Bonfire");
         chatService = new FirebaseChatService(firebaseApp);
         loginService = new FirebaseLoginService(firebaseApp);
     }
