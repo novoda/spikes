@@ -56,7 +56,7 @@ public class LoginPresenter {
     private final LoginNavigator.LoginResultListener loginResultListener = new LoginNavigator.LoginResultListener() {
         @Override
         public void onGooglePlusLoginSuccess(String tokenId) {
-            loginService.login(tokenId);
+            loginService.loginWithGoogle(tokenId);
         }
 
         @Override

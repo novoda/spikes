@@ -59,7 +59,7 @@ public class FirebaseLoginService implements LoginService {
                 }
                 subscriber.onCompleted();
             }
-        });
+        }).doOnNext(authRelay).ignoreElements();
     }
 
     @NonNull
@@ -68,7 +68,7 @@ public class FirebaseLoginService implements LoginService {
     }
 
     @Override
-    public void login(String idToken) {
+    public void loginWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {

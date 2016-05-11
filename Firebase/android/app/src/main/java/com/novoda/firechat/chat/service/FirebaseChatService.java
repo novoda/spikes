@@ -19,11 +19,11 @@ import rx.subscriptions.BooleanSubscription;
 
 public class FirebaseChatService implements ChatService {
 
-    private final DatabaseReference databaseReference;
+    private final DatabaseReference messagesDB;
 
     public FirebaseChatService(FirebaseApp firebaseApp) {
-        databaseReference = FirebaseDatabase.getInstance(firebaseApp)
-                .getReference();
+        messagesDB = FirebaseDatabase.getInstance(firebaseApp)
+                .getReference().child("messages-with-pic");
     }
 
     @Override
@@ -31,7 +31,7 @@ public class FirebaseChatService implements ChatService {
         return Observable.create(new Observable.OnSubscribe<Chat>() {
             @Override
             public void call(final Subscriber<? super Chat> subscriber) {
-                final ValueEventListener eventListener = databaseReference.child("messages-with-pic").addValueEventListener(new ValueEventListener() {
+                final ValueEventListener eventListener = messagesDB.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         List<Message> messages = toMessages(dataSnapshot);
@@ -47,7 +47,7 @@ public class FirebaseChatService implements ChatService {
                 subscriber.add(BooleanSubscription.create(new Action0() {
                     @Override
                     public void call() {
-                        databaseReference.removeEventListener(eventListener);
+                        messagesDB.removeEventListener(eventListener);
                     }
                 }));
             }
@@ -56,7 +56,7 @@ public class FirebaseChatService implements ChatService {
 
     @Override
     public void sendMessage(Message message) {
-        databaseReference.child("messages-with-pic").push().setValue(message);
+        messagesDB.push().setValue(message);
     }
 
     private List<Message> toMessages(DataSnapshot dataSnapshot) {

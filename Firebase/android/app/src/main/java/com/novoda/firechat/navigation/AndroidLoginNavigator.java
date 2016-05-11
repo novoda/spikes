@@ -49,6 +49,7 @@ public class AndroidLoginNavigator implements LoginNavigator {
     @Override
     public void toChat() {
         navigator.toChat();
+        activity.finish();
     }
 
     @Override

@@ -33,4 +33,28 @@ public class Authentication {
         return failure;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Authentication that = (Authentication) o;
+
+        if (user != null ? !user.equals(that.user) : that.user != null) {
+            return false;
+        }
+        return failure != null ? failure.equals(that.failure) : that.failure == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = user != null ? user.hashCode() : 0;
+        result = 31 * result + (failure != null ? failure.hashCode() : 0);
+        return result;
+    }
 }
