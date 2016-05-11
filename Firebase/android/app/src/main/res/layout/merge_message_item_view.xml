@@ -5,12 +5,27 @@
     android:id="@+id/messageAuthorImage"
     android:layout_width="40dp"
     android:layout_height="40dp"
-    android:layout_marginRight="16dp"/>
+    android:layout_marginEnd="16dp"
+    android:layout_marginRight="16dp" />
 
-  <TextView
-    android:id="@+id/messageBody"
-    android:textSize="16sp"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
+    <TextView
+      android:id="@+id/messageBody"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="16sp" />
+
+    <TextView
+      android:id="@+id/messageTime"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="4dp"
+      android:textSize="12sp"
+      android:textColor="@color/hint_light"
+      />
+  </LinearLayout>
 </merge>
