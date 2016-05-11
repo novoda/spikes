@@ -1,18 +1,25 @@
-import React from 'react'
 import { Linking } from 'react-native'
 
 class DeepLinkingFacade {
 
-  listenForDeepLinking() {
-    Linking.removeEventListener('url', this._handleOpenURL);
-    Linking.addEventListener('url', this._handleOpenURL);
-    return new Promise(function (resolve, reject) {
-      this.resolvePromise = resolve;
-    });
+  static newInstance () {
+    return new DeepLinkingFacade(Linking)
   }
 
-  _handleOpenURL(event) {
-    Linking.removeEventListener('url', this._handleOpenURL);
+  constructor (linking) {
+    this.linking = linking
+  }
+
+  listenForDeepLinking () {
+    this.linking.removeEventListener('url', this._handleOpenURL)
+    this.linking.addEventListener('url', this._handleOpenURL)
+    return new Promise(function (resolve, reject) {
+      this.resolvePromise = resolve
+    })
+  }
+
+  _handleOpenURL (event) {
+    this.linking.removeEventListener('url', this._handleOpenURL)
     this.resolvePromise(event.url)
   }
 }

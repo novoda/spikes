@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {
   StyleSheet,
   View,
@@ -10,28 +10,29 @@ var DeepLinkingFacade = require('../service/deep-linking-facade')
 
 var HelloWorldView = React.createClass({
 
-  getInitialState() {
+  getInitialState () {
     return {
-      facade: new DeepLinkingFacade()
+      facade: DeepLinkingFacade.newInstance(),
+      deepLinkUrl: '[incoming]'
     }
   },
 
   render () {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Hello World!
+        <Text style={styles.normal} numberOfLines={2}>
+          The deep link url is {"\n"}{this.state.deepLinkUrl}
         </Text>
         <Button
           style={styles.button}
           styleDisabled={styles.button_disabled}
-          onPress={this._loginButtonClicked}> Login </Button>
+          onPress={this._loginButtonClicked}> Listen for deep linking </Button>
       </View>
     )
   },
 
   _loginButtonClicked () {
-    this.state.facade.listenForDeepLinking().then((uri) => console.log(uri))    
+    this.state.facade.listenForDeepLinking().then((uri) => { this.setState({ deepLinkUrl: uri }) })
   }
 })
 
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF'
   },
-  welcome: {
+  normal: {
     fontSize: 20,
     textAlign: 'center',
     margin: 10
