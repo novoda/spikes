@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,10 +27,18 @@ public class MessageView extends LinearLayout {
 
     public MessageView(Context context) {
         super(context);
-        setOrientation(HORIZONTAL);
+        configureViewParams();
         View view = inflate(context, R.layout.merge_message_item_view, this);
         this.picture = Views.findById(view, R.id.messageAuthorImage);
         this.messageBody = Views.findById(view, R.id.messageBody);
+    }
+
+    private void configureViewParams() {
+        setOrientation(HORIZONTAL);
+        setGravity(Gravity.CENTER_VERTICAL);
+        int horizontalMargin = getResources().getDimensionPixelSize(R.dimen.message_horizontal_margin);
+        int verticalMargin = getResources().getDimensionPixelSize(R.dimen.message_vertical_margin);
+        setPadding(horizontalMargin, verticalMargin, horizontalMargin, verticalMargin);
     }
 
     public void display(Message message) {
@@ -42,7 +51,7 @@ public class MessageView extends LinearLayout {
 
     private static class CircleCropTransformation extends BitmapTransformation {
 
-        private Paint paint = new Paint();
+        private final Paint paint = new Paint();
 
         public CircleCropTransformation(Context context) {
             super(context);

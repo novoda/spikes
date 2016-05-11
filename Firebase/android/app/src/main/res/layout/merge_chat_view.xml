@@ -12,6 +12,8 @@
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/message_horizontal_margin"
+    android:paddingRight="@dimen/message_horizontal_margin"
     android:orientation="horizontal">
 
     <EditText
