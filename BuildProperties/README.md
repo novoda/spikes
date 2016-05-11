@@ -18,7 +18,8 @@ buildProperties {
 ```
 
 As soon as the plugin is applied to the project, you can access `project.buildProperties` and use
-the available getters (see ()[]) to read the data you need:
+the available getters (see [BuildProperties.groovy](buildSrc/src/main/groovy/com/novoda/buildproperties/BuildProperties.groovy))
+to read the data you need:
 
 ```groovy
 version project.buildProperties.getString('version')
