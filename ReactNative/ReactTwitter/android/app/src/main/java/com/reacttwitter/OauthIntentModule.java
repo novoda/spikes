@@ -9,8 +9,9 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 
-
 public class OauthIntentModule extends ReactContextBaseJavaModule {
+
+    public static final String KEY_URL = "url";
 
     private Promise promise;
 
@@ -24,6 +25,7 @@ public class OauthIntentModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    @SuppressWarnings("unused") // used from react-native code
     public void registerForDeepLinking(Promise promise) {
         this.promise = promise;
     }
@@ -33,12 +35,9 @@ public class OauthIntentModule extends ReactContextBaseJavaModule {
             return;
         }
 
-        // TODO extract data from uri
         WritableMap map = Arguments.createMap();
-        map.putString("uri", uri.toString());
+        map.putString(KEY_URL, uri.toString());
         promise.resolve(map);
         promise = null;
-
-//        promise.reject("Something is missing");
     }
 }
