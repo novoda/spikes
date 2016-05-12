@@ -1,8 +1,10 @@
 package com.novoda.bonfire.chat.data.model;
 
+import com.novoda.bonfire.login.data.model.User;
+
 public class Message {
 
-    private com.novoda.bonfire.login.data.model.User author;
+    private User author;
     private String body;
     private long timestamp;
 
@@ -10,13 +12,13 @@ public class Message {
     public Message() {
     }
 
-    public Message(com.novoda.bonfire.login.data.model.User author, String body) {
+    public Message(User author, String body) {
         this.author = author;
         this.body = body;
         this.timestamp = System.currentTimeMillis(); //TODO move timestamp db side ?
     }
 
-    public com.novoda.bonfire.login.data.model.User getAuthor() {
+    public User getAuthor() {
         return author;
     }
 

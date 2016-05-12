@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.novoda.bonfire.BaseActivity;
+import com.novoda.bonfire.Dependencies;
 import com.novoda.bonfire.R;
+import com.novoda.bonfire.login.displayer.LoginDisplayer;
 import com.novoda.bonfire.login.presenter.LoginPresenter;
 import com.novoda.bonfire.navigation.AndroidLoginNavigator;
 import com.novoda.bonfire.navigation.AndroidNavigator;
@@ -20,9 +22,9 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        com.novoda.bonfire.login.displayer.LoginDisplayer loginDisplayer = (com.novoda.bonfire.login.displayer.LoginDisplayer) findViewById(R.id.loginView);
+        LoginDisplayer loginDisplayer = (LoginDisplayer) findViewById(R.id.loginView);
         navigator = new AndroidLoginNavigator(this, new AndroidNavigator(this));
-        presenter = new LoginPresenter(getFireChatApplication().getLoginService(), loginDisplayer, navigator);
+        presenter = new LoginPresenter(Dependencies.INSTANCE.getLoginService(), loginDisplayer, navigator);
     }
 
     @Override

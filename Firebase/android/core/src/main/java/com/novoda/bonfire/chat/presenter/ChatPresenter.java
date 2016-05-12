@@ -1,12 +1,13 @@
 package com.novoda.bonfire.chat.presenter;
 
 import com.novoda.bonfire.analytics.Analytics;
-import com.novoda.bonfire.chat.displayer.ChatDisplayer;
-import com.novoda.bonfire.login.data.model.Authentication;
-import com.novoda.bonfire.login.service.LoginService;
-import com.novoda.bonfire.login.data.model.User;
+import com.novoda.bonfire.chat.data.model.Chat;
 import com.novoda.bonfire.chat.data.model.Message;
+import com.novoda.bonfire.chat.displayer.ChatDisplayer;
 import com.novoda.bonfire.chat.service.ChatService;
+import com.novoda.bonfire.login.data.model.Authentication;
+import com.novoda.bonfire.login.data.model.User;
+import com.novoda.bonfire.login.service.LoginService;
 
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
@@ -33,7 +34,7 @@ public class ChatPresenter {
         chatDisplayer.attach(actionListener);
         chatDisplayer.disableInteraction();
         subscriptions.add(
-                chatService.getChat().subscribe(new Action1<com.novoda.bonfire.chat.data.model.Chat>() { //TODO sort out error flow
+                chatService.getChat().subscribe(new Action1<Chat>() { //TODO sort out error flow
                     @Override
                     public void call(com.novoda.bonfire.chat.data.model.Chat chat) {
                         chatDisplayer.display(chat);

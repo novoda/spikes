@@ -1,10 +1,12 @@
 package com.novoda.bonfire.login.service;
 
+import com.novoda.bonfire.login.data.model.Authentication;
+
 import rx.Observable;
 
 public interface LoginService<T> {
 
-    Observable<com.novoda.bonfire.login.data.model.Authentication> getAuthentication();
+    Observable<Authentication> getAuthentication();
 
     void loginWithGoogle(String idToken);
 

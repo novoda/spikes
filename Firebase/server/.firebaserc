@@ -1,5 +1,5 @@
 {
   "projects": {
-    "default": "bonfire-ca45c"
+    "bonfire": "bonfire-ca45c"
   }
 }

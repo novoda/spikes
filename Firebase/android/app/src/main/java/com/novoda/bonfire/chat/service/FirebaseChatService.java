@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.novoda.bonfire.chat.data.model.Chat;
 import com.novoda.bonfire.chat.data.model.Message;
 
 import java.util.ArrayList;
@@ -26,15 +27,15 @@ public class FirebaseChatService implements ChatService {
     }
 
     @Override
-    public Observable<com.novoda.bonfire.chat.data.model.Chat> getChat() {
-        return Observable.create(new Observable.OnSubscribe<com.novoda.bonfire.chat.data.model.Chat>() {
+    public Observable<Chat> getChat() {
+        return Observable.create(new Observable.OnSubscribe<Chat>() {
             @Override
-            public void call(final Subscriber<? super com.novoda.bonfire.chat.data.model.Chat> subscriber) {
+            public void call(final Subscriber<? super Chat> subscriber) {
                 final ValueEventListener eventListener = messagesDB.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         List<Message> messages = toMessages(dataSnapshot);
-                        subscriber.onNext(new com.novoda.bonfire.chat.data.model.Chat(messages));
+                        subscriber.onNext(new Chat(messages));
                     }
 
                     @Override
