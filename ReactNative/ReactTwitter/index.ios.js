@@ -6,6 +6,6 @@
 
 import { AppRegistry } from 'react-native'
 
-var HelloWorldView = require('./core/views/helloworld.js')
+var MainNavigator = require('./core/views/main-navigator.js')
 
-AppRegistry.registerComponent('ReactTwitter', () => HelloWorldView)
+AppRegistry.registerComponent('ReactTwitter', () => MainNavigator)
