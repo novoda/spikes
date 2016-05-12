@@ -10,8 +10,12 @@ public class Channels {
         this.channels = channels;
     }
 
-    public List<Channel> getChannels() {
-        return channels;
+    public Channel getChannelAt(int position) {
+        return channels.get(position);
+    }
+
+    public int size() {
+        return channels.size();
     }
 
     @Override

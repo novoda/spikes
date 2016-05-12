@@ -30,7 +30,7 @@ public class LoginPresenter {
                     @Override
                     public void call(Authentication authentication) {
                         if (authentication.isSuccess()) {
-                            navigator.toChat();
+                            navigator.toChannels();
                         } else {
                             loginDisplayer.showAuthenticationError(authentication.getFailure().getLocalizedMessage()); //TODO improve error display
                         }

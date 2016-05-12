@@ -4,10 +4,6 @@ public class Channel {
 
     private String name;
 
-    @SuppressWarnings("unused") //Used by Firebase
-    public Channel() {
-    }
-
     public Channel(String name) {
         this.name = name;
     }

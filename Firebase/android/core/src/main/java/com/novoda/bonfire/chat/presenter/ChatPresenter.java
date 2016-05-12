@@ -1,6 +1,8 @@
 package com.novoda.bonfire.chat.presenter;
 
+import com.novoda.bonfire.Presenter;
 import com.novoda.bonfire.analytics.Analytics;
+import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.chat.data.model.Chat;
 import com.novoda.bonfire.chat.data.model.Message;
 import com.novoda.bonfire.chat.displayer.ChatDisplayer;
@@ -12,29 +14,32 @@ import com.novoda.bonfire.login.service.LoginService;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
-public class ChatPresenter {
+public class ChatPresenter implements Presenter {
 
     private final LoginService loginService;
     private final ChatService chatService;
     private final ChatDisplayer chatDisplayer;
     private Analytics analytics;
+    private Channel channel;
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
-    private User user; //TODO replace nullable by optional ?
+    private User user;
 
-    public ChatPresenter(LoginService loginService, ChatService chatService, ChatDisplayer chatDisplayer, Analytics analytics) {
+    public ChatPresenter(LoginService loginService, ChatService chatService, ChatDisplayer chatDisplayer, String channelName, Analytics analytics) {
         this.loginService = loginService;
         this.chatService = chatService;
         this.chatDisplayer = chatDisplayer;
         this.analytics = analytics;
+        this.channel = new Channel(channelName);
     }
 
+    @Override
     public void startPresenting() {
         chatDisplayer.attach(actionListener);
         chatDisplayer.disableInteraction();
         subscriptions.add(
-                chatService.getChat().subscribe(new Action1<Chat>() { //TODO sort out error flow
+                chatService.getChat(channel).subscribe(new Action1<Chat>() { //TODO sort out error flow
                     @Override
                     public void call(com.novoda.bonfire.chat.data.model.Chat chat) {
                         chatDisplayer.display(chat);
@@ -51,10 +56,15 @@ public class ChatPresenter {
         );
     }
 
+    @Override
     public void stopPresenting() {
         chatDisplayer.detach(actionListener);
         subscriptions.clear(); //TODO sort out checks
         subscriptions = new CompositeSubscription();
+    }
+
+    private boolean userIsAuthenticated() {
+        return user != null;
     }
 
     private final ChatDisplayer.ChatActionListener actionListener = new ChatDisplayer.ChatActionListener() {
@@ -69,13 +79,9 @@ public class ChatPresenter {
 
         @Override
         public void onSubmitMessage(String message) {
-            chatService.sendMessage(new Message(user, message));
+            chatService.sendMessage(channel, new Message(user, message));
             analytics.trackEvent("message_length", message.length());
         }
     };
-
-    private boolean userIsAuthenticated() {
-        return user != null;
-    }
 
 }

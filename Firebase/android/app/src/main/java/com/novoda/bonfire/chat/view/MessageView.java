@@ -47,8 +47,8 @@ public class MessageView extends LinearLayout {
         setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         setOrientation(HORIZONTAL);
         setGravity(Gravity.CENTER_VERTICAL);
-        int horizontalMargin = getResources().getDimensionPixelSize(R.dimen.message_horizontal_margin);
-        int verticalMargin = getResources().getDimensionPixelSize(R.dimen.message_vertical_margin);
+        int horizontalMargin = getResources().getDimensionPixelSize(R.dimen.list_item_horizontal_margin);
+        int verticalMargin = getResources().getDimensionPixelSize(R.dimen.list_item_vertical_margin);
         setPadding(horizontalMargin, verticalMargin, horizontalMargin, verticalMargin);
     }
 

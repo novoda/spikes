@@ -11,6 +11,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.novoda.bonfire.BaseActivity;
 import com.novoda.bonfire.R;
+import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.notils.logger.simple.Log;
 
 public class AndroidLoginNavigator implements LoginNavigator {
@@ -47,9 +48,14 @@ public class AndroidLoginNavigator implements LoginNavigator {
     }
 
     @Override
-    public void toChat() {
-        navigator.toChat();
+    public void toChannel(Channel channel) {
+        navigator.toChannel(channel);
         activity.finish();
+    }
+
+    @Override
+    public void toChannels() {
+        navigator.toChannels();
     }
 
     @Override
