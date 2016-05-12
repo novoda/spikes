@@ -37,7 +37,7 @@ var TweetsListItem = React.createClass({
   },
 
   tweetSelected (tweetId) {
-    // TODO: navigate to tweet detail screen
+    // TODO: navigate to tweet details screen
     Alert.alert(
       'Tweet selected',
       'User selected tweet with id=' + tweetId
