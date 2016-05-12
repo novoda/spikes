@@ -1,6 +1,7 @@
 {
   "rules": {
     "channels": {
+      ".read": "auth != null",
       "global": {
         ".read": "auth != null",
         "$message": {
