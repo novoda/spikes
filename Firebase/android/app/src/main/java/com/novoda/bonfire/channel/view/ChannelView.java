@@ -1,6 +1,7 @@
 package com.novoda.bonfire.channel.view;
 
 import android.content.Context;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -19,6 +20,9 @@ public class ChannelView extends LinearLayout {
         configureViewParams();
         View view = inflate(context, R.layout.merge_channel_item_view, this);
         title = Views.findById(view, R.id.channelTitle);
+        TypedValue outValue = new TypedValue();
+        context.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
+        setBackgroundResource(outValue.resourceId);
     }
 
     private void configureViewParams() {
