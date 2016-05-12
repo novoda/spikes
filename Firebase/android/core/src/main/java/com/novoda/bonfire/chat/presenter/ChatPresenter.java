@@ -1,5 +1,6 @@
 package com.novoda.bonfire.chat.presenter;
 
+import com.novoda.bonfire.analytics.Analytics;
 import com.novoda.bonfire.chat.displayer.ChatDisplayer;
 import com.novoda.bonfire.login.data.model.Authentication;
 import com.novoda.bonfire.login.service.LoginService;
@@ -15,15 +16,17 @@ public class ChatPresenter {
     private final LoginService loginService;
     private final ChatService chatService;
     private final ChatDisplayer chatDisplayer;
+    private Analytics analytics;
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
     private User user; //TODO replace nullable by optional ?
 
-    public ChatPresenter(LoginService loginService, ChatService chatService, ChatDisplayer chatDisplayer) {
+    public ChatPresenter(LoginService loginService, ChatService chatService, ChatDisplayer chatDisplayer, Analytics analytics) {
         this.loginService = loginService;
         this.chatService = chatService;
         this.chatDisplayer = chatDisplayer;
+        this.analytics = analytics;
     }
 
     public void startPresenting() {
@@ -58,6 +61,7 @@ public class ChatPresenter {
         @Override
         public void onSubmitMessage(String message) {
             chatService.sendMessage(new Message(user, message));
+            analytics.trackEvent("message_length", message.length());
         }
     };
 
