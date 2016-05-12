@@ -32,9 +32,9 @@ var DeepLinkingView = React.createClass({
   _buttonClicked () {
     let helper = new TwitterRequestsService()
     helper.requestToken()
-      .then((tokenData) => {
-      this.setState({accessToken: tokenData.oauth_token})
-      })
+        .then((tokenData) => {
+          this.setState({accessToken: tokenData.oauth_token})
+        })
   }
 })
 

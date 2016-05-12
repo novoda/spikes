@@ -37,7 +37,7 @@ class TwitterRequestsService {
     })
   }
 
-  _getTokenDateFromResponse(response) {
+  _getTokenDateFromResponse (response) {
     let result = {}
     let data = response.split('&')
     data.forEach((pair) => {

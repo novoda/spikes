@@ -33,7 +33,7 @@ var DebugScreenView = React.createClass({
     this.props.navigator.push({id: 'deep-linking-identifier'})
   },
 
-  pushOauth() {
+  pushOauth () {
     this.props.navigator.push({id: 'oauth-screen-identifier'})
   }
 })
