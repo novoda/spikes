@@ -6,9 +6,22 @@ class TweetsList extends Component {
 
   constructor (props) {
     super(props)
-    var dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
+    console.log('constructor')
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
     this.state = {
-      dataSource: dataSource.cloneWithRows([
+      dataSource: ds.cloneWithRows([])
+    }
+  }
+
+  componentDidMount () {
+    console.log('componentDIdMount')
+    this.refreshData()
+    console.log(this.state)
+  }
+
+  refreshData () {
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows([
         {
           id: '1',
           user: {
@@ -37,7 +50,7 @@ class TweetsList extends Component {
           text: 'this is the second tweet'
         }
       ])
-    }
+    })
   }
 
   renderRow (rowData) {
