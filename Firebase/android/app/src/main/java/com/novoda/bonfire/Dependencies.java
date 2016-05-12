@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.novoda.bonfire.analytics.FirebaseAnalyticsAnalytics;
 import com.novoda.bonfire.chat.service.ChatService;
 import com.novoda.bonfire.chat.service.FirebaseChatService;
 import com.novoda.bonfire.login.service.FirebaseLoginService;
@@ -14,6 +15,7 @@ public enum Dependencies {
 
     private LoginService loginService;
     private ChatService chatService;
+    private FirebaseAnalyticsAnalytics firebaseAnalytics;
 
     public void init(Context context) {
         if (needsInitialisation()) {
@@ -21,6 +23,7 @@ public enum Dependencies {
             FirebaseApp firebaseApp = FirebaseApp.initializeApp(appContext, FirebaseOptions.fromResource(appContext), "Bonfire");
             chatService = new FirebaseChatService(firebaseApp);
             loginService = new FirebaseLoginService(firebaseApp);
+            firebaseAnalytics = new FirebaseAnalyticsAnalytics(context);
         }
     }
 
@@ -36,4 +39,7 @@ public enum Dependencies {
         return chatService;
     }
 
+    public FirebaseAnalyticsAnalytics getFirebaseAnalytics() {
+        return firebaseAnalytics;
+    }
 }

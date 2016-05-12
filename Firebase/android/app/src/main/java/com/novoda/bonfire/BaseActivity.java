@@ -14,5 +14,4 @@ public class BaseActivity extends AppCompatActivity {
         Log.setShowLogs(BuildConfig.DEBUG);
         Dependencies.INSTANCE.init(this);
     }
-
 }

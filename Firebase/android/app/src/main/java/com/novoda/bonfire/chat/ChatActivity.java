@@ -17,7 +17,8 @@ public class ChatActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         ChatDisplayer chatDisplayer = (ChatDisplayer) findViewById(R.id.chatView);
-        presenter = new ChatPresenter(Dependencies.INSTANCE.getLoginService(), Dependencies.INSTANCE.getChatService(), chatDisplayer);
+        Dependencies dependencies = Dependencies.INSTANCE;
+        presenter = new ChatPresenter(dependencies.getLoginService(), dependencies.getChatService(), chatDisplayer, dependencies.getFirebaseAnalytics());
     }
 
     @Override
