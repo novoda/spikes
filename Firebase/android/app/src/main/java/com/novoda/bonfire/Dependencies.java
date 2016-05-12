@@ -17,7 +17,8 @@ public enum Dependencies {
 
     public void init(Context context) {
         if (needsInitialisation()) {
-            FirebaseApp firebaseApp = FirebaseApp.initializeApp(context, FirebaseOptions.fromResource(context), "Bonfire");
+            Context appContext = context.getApplicationContext();
+            FirebaseApp firebaseApp = FirebaseApp.initializeApp(appContext, FirebaseOptions.fromResource(appContext), "Bonfire");
             chatService = new FirebaseChatService(firebaseApp);
             loginService = new FirebaseLoginService(firebaseApp);
         }
