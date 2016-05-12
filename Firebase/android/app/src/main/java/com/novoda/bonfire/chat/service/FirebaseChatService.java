@@ -23,7 +23,7 @@ public class FirebaseChatService implements ChatService {
 
     public FirebaseChatService(FirebaseApp firebaseApp) {
         FirebaseDatabase database = FirebaseDatabase.getInstance(firebaseApp);
-        messagesDB = database.getReference("channels/global");
+        messagesDB = database.getReference("channels-private/test-channel/messages");
     }
 
     @Override
@@ -56,7 +56,7 @@ public class FirebaseChatService implements ChatService {
 
     @Override
     public void sendMessage(Message message) {
-        messagesDB.push().setValue(message);
+        messagesDB.push().setValue(message); //TODO handle errors
     }
 
     private List<Message> toMessages(DataSnapshot dataSnapshot) {
