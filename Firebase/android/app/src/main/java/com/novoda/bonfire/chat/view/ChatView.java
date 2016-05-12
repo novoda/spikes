@@ -3,6 +3,8 @@ package com.novoda.bonfire.chat.view;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -20,6 +22,7 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
     private View submitButton;
     private RecyclerView recyclerView;
 
+    private ChatActionListener actionListener;
     public ChatView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setOrientation(VERTICAL);
@@ -41,6 +44,8 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
 
     @Override
     public void attach(final ChatActionListener actionListener) {
+        this.actionListener = actionListener;
+        messageView.addTextChangedListener(textWatcher);
         submitButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,6 +58,8 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
     @Override
     public void detach(ChatActionListener actionListener) {
         submitButton.setOnClickListener(null);
+        messageView.removeTextChangedListener(textWatcher);
+        this.actionListener = null;
     }
 
     @Override
@@ -71,5 +78,20 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
     public void disableInteraction() {
         submitButton.setEnabled(false);
     }
+
+    private final TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            actionListener.onMessageLengthChanged(s.length());
+        }
+    };
 
 }
