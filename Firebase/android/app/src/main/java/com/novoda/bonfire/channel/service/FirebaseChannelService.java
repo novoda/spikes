@@ -59,8 +59,8 @@ public class FirebaseChannelService implements ChannelService {
         Iterable<DataSnapshot> children = dataSnapshot.getChildren();
         List<Channel> channels = new ArrayList<>();
         for (DataSnapshot child : children) {
-            Channel message = child.getValue(Channel.class);
-            channels.add(message);
+            String channelName = child.getKey();
+            channels.add(new Channel(channelName));
         }
         return channels;
     }
