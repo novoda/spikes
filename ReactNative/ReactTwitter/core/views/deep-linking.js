@@ -13,8 +13,8 @@ var DeepLinkingView = React.createClass({
   getInitialState () {
     console.log('Get initial state')
     return {
-      facade: DeepLinkingFacade.newInstance(),
-      deepLinkUrl: '[incoming]'
+      facade: new DeepLinkingFacade(),
+      deepLinkUrl: ''
     }
   },
 
