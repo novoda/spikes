@@ -3,17 +3,20 @@ package com.novoda.bonfire.chat.view;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
+import com.novoda.bonfire.chat.data.model.Chat;
+import com.novoda.bonfire.chat.data.model.Message;
+
 import java.util.ArrayList;
 
 class ChatAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
-    private com.novoda.bonfire.chat.data.model.Chat chat = new com.novoda.bonfire.chat.data.model.Chat(new ArrayList<com.novoda.bonfire.chat.data.model.Message>());
+    private Chat chat = new Chat(new ArrayList<Message>());
 
     ChatAdapter() {
         setHasStableIds(true);
     }
 
-    public void update(com.novoda.bonfire.chat.data.model.Chat chat) {
+    public void update(Chat chat) {
         this.chat = chat;
         notifyDataSetChanged();
     }
