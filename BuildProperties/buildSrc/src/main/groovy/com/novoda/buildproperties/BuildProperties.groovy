@@ -14,13 +14,13 @@ class BuildProperties {
     final URI uri;
     final Configuration configuration;
 
-    BuildProperties(Project project, String path) {
+    BuildProperties(Project project, File path) {
         this.project = project
-        this.uri = URI.create(new File(path as String).getAbsolutePath())
-        FileBasedBuilderProperties params = new Parameters().fileBased().setFileName(path)
+        this.uri = URI.create(path.getAbsolutePath())
+        FileBasedBuilderProperties params = new Parameters().fileBased().setFile(path)
         FileBasedConfigurationBuilder<FileBasedConfiguration> builder =
-                new FileBasedConfigurationBuilder<FileBasedConfiguration>(PropertiesConfiguration.class).configure(params)
-        this.configuration = builder.getConfiguration();
+            new FileBasedConfigurationBuilder<FileBasedConfiguration>(PropertiesConfiguration.class).configure(params)
+        this.configuration = builder.getConfiguration() 
     }
 
     int getInt(String property) {
