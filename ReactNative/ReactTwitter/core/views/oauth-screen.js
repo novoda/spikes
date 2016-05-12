@@ -6,38 +6,35 @@ import {
 } from 'react-native'
 
 var Button = require('react-native-button')
-var DeepLinkingFacade = require('../service/deep-linking-facade')
+var TwitterRequestsService = require('../service/twitter-requests-service.js')
 
 var DeepLinkingView = React.createClass({
-
   getInitialState () {
-    console.log('Get initial state')
     return {
-      facade: new DeepLinkingFacade(),
-      deepLinkUrl: ''
+      accessToken: ''
     }
   },
 
   render () {
     return (
       <View style={styles.container}>
-        <Button
-          style={styles.button}
-          styleDisabled={styles.button_disabled}
-          onPress={this._buttonClicked}> Start Listening for deep linking </Button>
+      <Button
+        style={styles.button}
+        styleDisabled={styles.button_disabled}
+        onPress={this._buttonClicked}> Request Access Token </Button>
         <Text style={styles.normal} numberOfLines={2}>
-          The deep link url is {"\n"}{this.state.deepLinkUrl}
+          Access Token: {"\n"}{this.state.accessToken}
         </Text>
       </View>
     )
   },
 
-  componentWillUnmount () {
-    this.state.facade.stopListeningForDeepLinking()
-  },
-
   _buttonClicked () {
-    this.state.facade.listenForDeepLinking().then((uri) => { this.setState({ deepLinkUrl: uri }) })
+    let helper = new TwitterRequestsService()
+    helper.requestToken()
+      .then((tokenData) => {
+      this.setState({accessToken: tokenData.oauth_token})
+      })
   }
 })
 
@@ -49,7 +46,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF'
   },
   normal: {
-    fontSize: 20,
+    fontSize: 14,
     textAlign: 'center',
     margin: 10
   },
