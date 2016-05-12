@@ -7,26 +7,33 @@ class OauthHelper {
     this.consumerSecret = consumerSecret
   }
 
+  buildAuthorizationHeader (method, url, params, oauthTokenSecret) {
+    let output = 'OAuth '
+    let signature = this.getSigningKey(method, url, params, oauthTokenSecret)
+    for (let key in params) {
+      output += PercentEncoder.encode(key) + '="' + PercentEncoder.encode(params[key]) + '", '
+    }
+    output += 'oauth_signature="' + PercentEncoder.encode(signature) + '"'
+    return output
+  }
+
   getSigningKey (method, url, params, oauthTokenSecret) {
-    var signingKey = this.consumerSecret + '&' + oauthTokenSecret
-    console.log(`signing key: ${signingKey}`)
-    let signatureBase = this._getSignatureBase(method, url, params)
-    console.log(`signatureBase: ${signatureBase}`)
-    console.log(HmacSHA1(signatureBase, signingKey))
+    let signingKey = PercentEncoder.encode(this.consumerSecret) + '&' + PercentEncoder.encode(oauthTokenSecret)
+    let signatureBase = OauthHelper._getSignatureBase(method, url, params)
     return CryptoJS.enc.Base64.stringify(HmacSHA1(signatureBase, signingKey))
   }
 
-  _getSignatureBase (method, url, params) {
-    return method.toUpperCase() + '&' + PercentEncoder.encode(url) + '&' + PercentEncoder.encode(this._collectParameters(params))
+  static _getSignatureBase (method, url, params) {
+    return method.toUpperCase() + '&' + PercentEncoder.encode(url) + '&' + PercentEncoder.encode(OauthHelper._collectParameters(params))
   }
 
-  _collectParameters (params) {
-    let encodedParams = this._percentEncodeParams(params)
-    this._sortEncodedParams(encodedParams)
-    return this._joinParams(encodedParams)
+  static _collectParameters (params) {
+    let encodedParams = OauthHelper._percentEncodeParams(params)
+    OauthHelper._sortEncodedParams(encodedParams)
+    return OauthHelper._joinParams(encodedParams)
   }
 
-  _percentEncodeParams (params) {
+  static _percentEncodeParams (params) {
     let encodedParams = []
     for (let key in params) {
       encodedParams.push({
@@ -37,13 +44,13 @@ class OauthHelper {
     return encodedParams
   }
 
-  _sortEncodedParams (params) {
+  static _sortEncodedParams (params) {
     params.sort((first, second) => {
       return (first.key > second.key) ? 1 : ((second.key > first.key) ? -1 : 0)
     })
   }
 
-  _joinParams (params) {
+  static _joinParams (params) {
     let output = ''
     params.forEach((param) => {
       if (output.length > 0) {
