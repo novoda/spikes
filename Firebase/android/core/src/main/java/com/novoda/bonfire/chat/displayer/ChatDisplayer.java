@@ -14,7 +14,9 @@ public interface ChatDisplayer {
 
     void disableInteraction();
 
-    public interface ChatActionListener {
+    interface ChatActionListener {
+
+        void onMessageLengthChanged(int messageLength);
 
         void onSubmitMessage(String message);
 

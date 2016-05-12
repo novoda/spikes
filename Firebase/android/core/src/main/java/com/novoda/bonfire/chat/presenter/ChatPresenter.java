@@ -46,7 +46,6 @@ public class ChatPresenter {
                     @Override
                     public void call(Authentication authentication) {
                         ChatPresenter.this.user = authentication.getUser(); //TODO handle missing auth
-                        chatDisplayer.enableInteraction();
                     }
                 })
         );
@@ -60,10 +59,23 @@ public class ChatPresenter {
 
     private final ChatDisplayer.ChatActionListener actionListener = new ChatDisplayer.ChatActionListener() {
         @Override
+        public void onMessageLengthChanged(int messageLength) {
+            if (userIsAuthenticated() && messageLength > 0) {
+                chatDisplayer.enableInteraction();
+            } else {
+                chatDisplayer.disableInteraction();
+            }
+        }
+
+        @Override
         public void onSubmitMessage(String message) {
             chatService.sendMessage(new Message(user, message));
             analytics.trackEvent("message_length", message.length());
         }
     };
+
+    private boolean userIsAuthenticated() {
+        return user != null;
+    }
 
 }
