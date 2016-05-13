@@ -1,20 +1,22 @@
-import React, { Component } from 'react'
-import { ListView } from 'react-native'
+import React from 'react'
+import {
+  ListView,
+  Navigator
+} from 'react-native'
 import TweetsListItem from './tweetsListItem'
 
-class TweetsList extends Component {
+var TweetsList = React.createClass({
 
-  constructor (props) {
-    super(props)
+  getInitialState () {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
-    this.state = {
+    return {
       dataSource: ds.cloneWithRows([])
     }
-  }
+  },
 
   componentDidMount () {
     this._refreshData()
-  }
+  },
 
   /*global fetch*/
   /*eslint no-undef: "error"*/
@@ -35,7 +37,7 @@ class TweetsList extends Component {
         })
       })
       .done()
-  }
+  },
 
   renderRow (rowData) {
     return (
@@ -49,7 +51,7 @@ class TweetsList extends Component {
           navigator={this.props.navigator}
         />
     )
-  }
+  },
 
   render () {
     return (
@@ -59,6 +61,6 @@ class TweetsList extends Component {
       />
     )
   }
-}
+})
 
 module.exports = TweetsList
