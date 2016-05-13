@@ -47,7 +47,6 @@ var TweetsList = React.createClass({
           dataSource: this.state.dataSource.cloneWithRows(rjson)
         })
       })
-      .done()
   },
 
   renderRow (rowData) {

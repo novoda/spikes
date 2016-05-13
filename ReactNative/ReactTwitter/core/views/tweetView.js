@@ -48,7 +48,6 @@ var TweetsView = React.createClass({
           tweet: rjson
         })
       })
-      .done()
   },
 
   render () {
