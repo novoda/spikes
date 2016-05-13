@@ -6,7 +6,6 @@ class TweetsList extends Component {
 
   constructor (props) {
     super(props)
-    console.log('constructor')
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
     this.state = {
       dataSource: ds.cloneWithRows([])
@@ -14,9 +13,7 @@ class TweetsList extends Component {
   }
 
   componentDidMount () {
-    console.log('componentDIdMount')
     this.refreshData()
-    console.log(this.state)
   }
 
   refreshData () {
