@@ -32,7 +32,7 @@ var MainNavigator = React.createClass({
       case tweetsListID:
         return (<TweetsList navigator={navigator} title='Tweets List' />)
       case tweetViewID:
-        return (<TweetView navigator={navigator} title='Tweet View' />)
+        return (<TweetView navigator={navigator} tweetId={route.tweetId} title='Tweet View' />)
     }
   }
 })

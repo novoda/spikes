@@ -10,7 +10,7 @@ import {
 
 var TweetsView = React.createClass({
   propTypes: {
-    id: React.PropTypes.string.isRequired
+    tweetId: React.PropTypes.string.isRequired
   },
 
   getInitialState: function() {
@@ -24,7 +24,7 @@ var TweetsView = React.createClass({
   },
 
   _refreshData () {
-    var tweetId = '210462857140252672'
+    var tweetId = this.props.tweetId
     var url = 'https://api.twitter.com/1.1/statuses/show.json?id=' + tweetId
     fetch(url, {
       method: 'GET',

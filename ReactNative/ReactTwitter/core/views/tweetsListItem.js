@@ -5,7 +5,8 @@ import {
   View,
   Image,
   Text,
-  TouchableHighlight
+  TouchableHighlight,
+  Navigator
 } from 'react-native'
 
 var TweetsListItem = React.createClass({
@@ -15,7 +16,8 @@ var TweetsListItem = React.createClass({
     author_avatar: React.PropTypes.string.isRequired,
     author_name: React.PropTypes.string.isRequired,
     author_handle: React.PropTypes.string.isRequired,
-    text: React.PropTypes.string.isRequired
+    text: React.PropTypes.string.isRequired,
+    navigator: React.PropTypes.instanceOf(Navigator).isRequired
   },
 
   render () {
@@ -45,11 +47,10 @@ var TweetsListItem = React.createClass({
   },
 
   _tweetSelected (tweetId) {
-    // TODO: navigate to tweet details screen
-    Alert.alert(
-      'Tweet selected',
-      'User selected tweet with id=' + tweetId
-    )
+    this.props.navigator.push({
+      id: 'tweet-view-identifier',
+      tweetId: tweetId
+    })
   }
 
 })

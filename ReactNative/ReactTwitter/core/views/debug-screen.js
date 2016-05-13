@@ -42,7 +42,10 @@ var DebugScreenView = React.createClass({
   },
 
   pushTweetView () {
-    this.props.navigator.push({id: 'tweet-view-identifier'})
+    this.props.navigator.push({
+      id: 'tweet-view-identifier',
+      tweetId: '210462857140252672'
+    })
   }
 })
 

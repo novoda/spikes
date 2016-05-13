@@ -46,6 +46,7 @@ class TweetsList extends Component {
           author_name={rowData.user.name}
           author_handle={rowData.user.screen_name}
           text={rowData.text}
+          navigator={this.props.navigator}
         />
     )
   }
