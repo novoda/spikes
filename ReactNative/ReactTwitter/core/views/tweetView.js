@@ -8,6 +8,8 @@ import {
   Navigator
 } from 'react-native'
 
+var dateFormat = require('dateformat')
+
 var TweetsView = React.createClass({
   propTypes: {
     tweetId: React.PropTypes.string.isRequired,
@@ -77,7 +79,6 @@ var TweetsView = React.createClass({
   },
 
   _formatTime (time) {
-    var dateFormat = require('dateformat')
     return dateFormat(time, 'mmmm dS, yyyy, h:MM:ss TT')
   }
 })
