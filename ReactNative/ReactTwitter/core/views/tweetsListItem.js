@@ -28,7 +28,7 @@ var TweetsListItem = React.createClass({
             <Image style={styles.tweet_avatar} source={{ uri: this.props.author_avatar }} />
             <View style={styles.textContainer}>
               <Text style={styles.tweet_author}>{this.props.author_name}</Text>
-              <Text style={styles.tweet_author_handle}>{this.props.author_handle}</Text>
+              <Text style={styles.tweet_author_handle}>@{this.props.author_handle}</Text>
               <Text style={styles.tweet_time}>{formattedTime}</Text>
               <Text style={styles.tweet_text}>{this.props.text}</Text>
             </View>
