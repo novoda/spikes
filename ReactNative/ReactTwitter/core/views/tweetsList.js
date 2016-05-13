@@ -1,11 +1,15 @@
 import React from 'react'
 import {
   ListView,
+  BackAndroid,
   Navigator
 } from 'react-native'
 import TweetsListItem from './tweetsListItem'
 
 var TweetsList = React.createClass({
+  propTypes: {
+    navigator: React.PropTypes.instanceOf(Navigator).isRequired
+  },
 
   getInitialState () {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
@@ -15,6 +19,13 @@ var TweetsList = React.createClass({
   },
 
   componentDidMount () {
+    BackAndroid.addEventListener('hardwareBackPress', () => {
+      if (this.props.navigator.getCurrentRoutes().length === 1) {
+        return false
+      }
+      this.props.navigator.pop()
+      return true
+    })
     this._refreshData()
   },
 

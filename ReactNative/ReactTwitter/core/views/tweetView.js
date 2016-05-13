@@ -5,24 +5,35 @@ import {
   View,
   Image,
   Text,
-  TouchableHighlight
+  BackAndroid,
+  Navigator
 } from 'react-native'
 
 var TweetsView = React.createClass({
   propTypes: {
-    tweetId: React.PropTypes.string.isRequired
+    tweetId: React.PropTypes.string.isRequired,
+    navigator: React.PropTypes.instanceOf(Navigator).isRequired
   },
 
-  getInitialState: function() {
+  getInitialState () {
     return {
-        tweet: {}
+      tweet: {}
     }
   },
 
   componentDidMount () {
+    BackAndroid.addEventListener('hardwareBackPress', () => {
+      if (this.props.navigator.getCurrentRoutes().length === 1) {
+        return false
+      }
+      this.props.navigator.pop()
+      return true
+    })
     this._refreshData()
   },
 
+  /*global fetch*/
+  /*eslint no-undef: "error"*/
   _refreshData () {
     var tweetId = this.props.tweetId
     var url = 'https://api.twitter.com/1.1/statuses/show.json?id=' + tweetId
@@ -34,7 +45,6 @@ var TweetsView = React.createClass({
     })
       .then((response) => response.json())
       .then((rjson) => {
-
         this.setState({
           tweet: rjson
         })
@@ -66,7 +76,6 @@ var TweetsView = React.createClass({
         <Text style={styles.tweet_text}>{this.state.tweet.text}</Text>
       </View>
     )
-
   },
 
   _formatTime (time) {
@@ -88,7 +97,7 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
     flexDirection: 'row',
-    alignItems:'center'
+    alignItems: 'center'
   },
   tweet_author: {
     fontSize: 25,
