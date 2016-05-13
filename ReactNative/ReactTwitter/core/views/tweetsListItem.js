@@ -11,6 +11,7 @@ import {
 var TweetsListItem = React.createClass({
   propTypes: {
     id: React.PropTypes.string.isRequired,
+    time: React.PropTypes.number.isRequired,
     author_avatar: React.PropTypes.string.isRequired,
     author_name: React.PropTypes.string.isRequired,
     author_handle: React.PropTypes.string.isRequired,
@@ -18,9 +19,9 @@ var TweetsListItem = React.createClass({
   },
 
   render () {
-    var formattedTime = this.formatTime(this.props.time)
+    var formattedTime = this._formatTime(this.props.time)
     return (
-      <TouchableHighlight onPress={() => this.tweetSelected(this.props.id)}
+      <TouchableHighlight onPress={() => this._tweetSelected(this.props.id)}
         underlayColor='#dddddd'>
          <View>
           <View style={styles.rowContainer}>
@@ -38,12 +39,12 @@ var TweetsListItem = React.createClass({
     )
   },
 
-  formatTime(time) {
+  _formatTime (time) {
     var dateFormat = require('dateformat')
-    return dateFormat(time, "mmmm dS, yyyy, h:MM:ss TT")
+    return dateFormat(time, 'mmmm dS, yyyy, h:MM:ss TT')
   },
 
-  tweetSelected (tweetId) {
+  _tweetSelected (tweetId) {
     // TODO: navigate to tweet details screen
     Alert.alert(
       'Tweet selected',
