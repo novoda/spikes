@@ -46,6 +46,10 @@ var OauthView = React.createClass({
         .catch(console.warn)
   },
 
+  componentWillUnmount () {
+    this.state.facade.stopListeningForDeepLinking()
+  },
+
   _browserAuthenticationWithToken (oauthToken) {
     this.state.facade.listenForDeepLinking().then((uri) => {
       let parsedURI = OauthHelper.getOauthTokenAndVerifierFromURLCallback(uri)
@@ -53,6 +57,7 @@ var OauthView = React.createClass({
         accessToken: parsedURI.oauth_token,
         oauthVerifier: parsedURI.oauth_verifier
       })
+      this.state.facade.stopListeningForDeepLinking()
     })
     Linking.openURL('https://api.twitter.com/oauth/authenticate?oauth_token=' + oauthToken)
   }
