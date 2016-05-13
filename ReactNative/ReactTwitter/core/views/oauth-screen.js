@@ -16,7 +16,9 @@ var OauthView = React.createClass({
     return {
       accessToken: '',
       oauthVerifier: '',
-      facade: new DeepLinkingFacade()
+      tokenData: {},
+      facade: new DeepLinkingFacade(),
+      twitterService: new TwitterRequestsService()
     }
   },
 
@@ -27,17 +29,22 @@ var OauthView = React.createClass({
         style={styles.button}
         styleDisabled={styles.button_disabled}
         onPress={this._buttonClicked}> Request Access Token </Button>
-        <Text style={styles.normal} numberOfLines={4}>
-          Access Token: {"\n"}{this.state.accessToken}{"\n"}
-          Oauth Verifier: {"\n"}{this.state.oauthVerifier}
+        <Text style={styles.normal}>
+          STEP 1 Access Token: {"\n"}{this.state.accessToken}{"\n"}{"\n"}
+          STEP 2 Oauth Verifier: {"\n"}{this.state.oauthVerifier}{"\n"}{"\n"}
+          STEP 3 Token Data: {"\n"}{JSON.stringify(this.state.tokenData)}
         </Text>
       </View>
     )
   },
 
   _buttonClicked () {
-    let helper = new TwitterRequestsService()
-    helper.requestToken()
+    this.setState({
+      accessToken: '',
+      oauthVerifier: '',
+      tokenData: {}
+    })
+    this.state.twitterService.requestToken()
         .then((tokenData) => {
           let oauthToken = tokenData.oauth_token
           this.setState({accessToken: oauthToken})
@@ -58,6 +65,11 @@ var OauthView = React.createClass({
         oauthVerifier: parsedURI.oauth_verifier
       })
       this.state.facade.stopListeningForDeepLinking()
+
+      this.state.twitterService.getAccessToken(parsedURI.oauth_token, parsedURI.oauth_verifier)
+        .then((tokenData) => {
+          this.setState({tokenData: tokenData})
+        })
     })
     Linking.openURL('https://api.twitter.com/oauth/authenticate?oauth_token=' + oauthToken)
   }
@@ -66,9 +78,10 @@ var OauthView = React.createClass({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF'
+    backgroundColor: '#F5FCFF',
+    marginTop: 20
   },
   normal: {
     fontSize: 14,
