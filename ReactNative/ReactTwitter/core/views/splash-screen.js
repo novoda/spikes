@@ -28,8 +28,7 @@ var SplashScreenView = React.createClass({
         })
       })
       .then(() => {
-        let token = authService.getOAuthToken()
-        if (token.length > 0) {
+        if (authService.isUserLoggedIn()) {
           this._pushTweetsList()
         } else {
           this._pushLogin()
@@ -46,7 +45,7 @@ var SplashScreenView = React.createClass({
   },
 
   _pushLogin () {
-    this.props.navigator.resetTo({id: 'oauth-screen-identifier'})
+    this.props.navigator.resetTo({id: 'login-screen-identifier'})
   },
 
   _pushTweetsList () {
