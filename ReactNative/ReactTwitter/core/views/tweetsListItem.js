@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Alert,
   StyleSheet,
   View,
   Image,
