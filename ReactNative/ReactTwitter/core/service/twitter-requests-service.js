@@ -25,11 +25,8 @@ class TwitterRequestsService {
           'Authorization': ouathHelper.buildAuthorizationHeader('post', url, params, '')
         }
       })
-    .then((response) => { return response.text() })
-    .then((text) => { return this._getTokenDateFromResponse(text) })
-    .catch((error) => {
-      console.warn(error)
-    })
+      .then((response) => { return response.text() })
+      .then((text) => { return this._getTokenDateFromResponse(text) })
   }
 
   _getTokenDateFromResponse (response) {

@@ -35,6 +35,7 @@ var DeepLinkingView = React.createClass({
         .then((tokenData) => {
           this.setState({accessToken: tokenData.oauth_token})
         })
+        .catch(console.warn)
   }
 })
 
