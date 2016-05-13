@@ -1,4 +1,5 @@
 var OauthHelper = require('../service/oauth-helper.js')
+var NetworkCallsManager = require('./network-calls-manager.js')
 
 const config = require('./config.json')
 
@@ -18,7 +19,9 @@ class TwitterRequestsService {
       'oauth_version': '1.0'
     }
 
-    return fetch(url, // eslint-disable-line no-undef
+    let callsManager = new NetworkCallsManager()
+
+    return callsManager.makeCall(url,
       {
         method: 'POST',
         headers: {
