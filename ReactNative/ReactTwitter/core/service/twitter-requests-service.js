@@ -5,7 +5,7 @@ const config = require('./config.json')
 
 class TwitterRequestsService {
 
-  constructor(){
+  constructor () {
     this.callsManager = new NetworkCallsManager()
   }
 
