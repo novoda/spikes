@@ -25,6 +25,10 @@ var DebugScreenView = React.createClass({
             style={styles.button}
             styleDisabled={styles.button_disabled}
             onPress={this.pushOauth}>Oauth</Button>
+        <Button
+          style={styles.button}
+          styleDisabled={styles.button_disabled}
+          onPress={this.pushTweetsList}>Tweets List</Button>
       </View>
     )
   },
@@ -35,6 +39,10 @@ var DebugScreenView = React.createClass({
 
   pushOauth () {
     this.props.navigator.push({id: 'oauth-screen-identifier'})
+  },
+
+  pushTweetsList () {
+    this.props.navigator.push({id: 'tweets-list-identifier'})
   }
 })
 
