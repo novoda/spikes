@@ -21,12 +21,20 @@ var DebugScreenView = React.createClass({
           style={styles.button}
           styleDisabled={styles.button_disabled}
           onPress={this.pushDeepLinking}>Deep Linking</Button>
+        <Button
+          style={styles.button}
+          styleDisabled={styles.button_disabled}
+          onPress={this.pushTweetsList}>Tweets List</Button>
       </View>
     )
   },
 
   pushDeepLinking () {
     this.props.navigator.push({id: 'deep-linking-identifier'})
+  },
+
+  pushTweetsList () {
+    this.props.navigator.push({id: 'tweets-list-identifier'})
   }
 })
 
