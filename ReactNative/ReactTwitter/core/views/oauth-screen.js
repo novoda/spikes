@@ -2,16 +2,21 @@ import React from 'react'
 import {
   StyleSheet,
   View,
-  Text
+  Text,
+  Linking
 } from 'react-native'
 
 var Button = require('react-native-button')
 var TwitterRequestsService = require('../service/twitter-requests-service.js')
+var DeepLinkingFacade = require('../service/deep-linking-facade')
+var OauthHelper = require('../service/oauth-helper.js')
 
-var DeepLinkingView = React.createClass({
+var OauthView = React.createClass({
   getInitialState () {
     return {
-      accessToken: ''
+      accessToken: '',
+      oauthVerifier: '',
+      facade: new DeepLinkingFacade()
     }
   },
 
@@ -22,8 +27,9 @@ var DeepLinkingView = React.createClass({
         style={styles.button}
         styleDisabled={styles.button_disabled}
         onPress={this._buttonClicked}> Request Access Token </Button>
-        <Text style={styles.normal} numberOfLines={2}>
-          Access Token: {"\n"}{this.state.accessToken}
+        <Text style={styles.normal} numberOfLines={4}>
+          Access Token: {"\n"}{this.state.accessToken}{"\n"}
+          Oauth Verifier: {"\n"}{this.state.oauthVerifier}
         </Text>
       </View>
     )
@@ -33,9 +39,22 @@ var DeepLinkingView = React.createClass({
     let helper = new TwitterRequestsService()
     helper.requestToken()
         .then((tokenData) => {
-          this.setState({accessToken: tokenData.oauth_token})
+          let oauthToken = tokenData.oauth_token
+          this.setState({accessToken: oauthToken})
+          this._browserAuthenticationWithToken(oauthToken)
         })
         .catch(console.warn)
+  },
+
+  _browserAuthenticationWithToken (oauthToken) {
+    this.state.facade.listenForDeepLinking().then((uri) => {
+      let parsedURI = OauthHelper.getOauthTokenAndVerifierFromURLCallback(uri)
+      this.setState({
+        accessToken: parsedURI.oauth_token,
+        oauthVerifier: parsedURI.oauth_verifier
+      })
+    })
+    Linking.openURL('https://api.twitter.com/oauth/authenticate?oauth_token=' + oauthToken)
   }
 })
 
@@ -61,4 +80,4 @@ const styles = StyleSheet.create({
   }
 })
 
-module.exports = DeepLinkingView
+module.exports = OauthView

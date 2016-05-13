@@ -3,6 +3,28 @@ jest.unmock('../../../core/service/percent-encoder.js')
 // var OauthHelper = require('../../../core/service/oauth-helper.js')
 
 describe('OauthHelper', () => {
+  // describe('URL Callback', () => {
+  //   it('should be defined', () => {
+  //     let urlCallback = 'react-twitter-oauth://callback?oauth_token=xOL-GwAAAAAAvI9oAAABVKmtBm8&oauth_verifier=pFIFpsIVlT59NpDkID3oa3X67UEJLa4k'
+  //     let result = OauthHelper.getOauthTokenAndVerifierFromURLCallback(urlCallback)
+  //
+  //     expect(result).toBeDefined()
+  //   })
+  //
+  //   it('should contains the correct oauth_token', () => {
+  //     let urlCallback = 'react-twitter-oauth://callback?oauth_token=xOL-GwAAAAAAvI9oAAABVKmtBm8&oauth_verifier=pFIFpsIVlT59NpDkID3oa3X67UEJLa4k'
+  //     let result = OauthHelper.getOauthTokenAndVerifierFromURLCallback(urlCallback)
+  //
+  //     expect(result.oauth_token).toBe('xOL-GwAAAAAAvI9oAAABVKmtBm8')
+  //   })
+  //
+  //   it('should contains the correct verifier', () => {
+  //     let urlCallback = 'react-twitter-oauth://callback?oauth_token=xOL-GwAAAAAAvI9oAAABVKmtBm8&oauth_verifier=pFIFpsIVlT59NpDkID3oa3X67UEJLa4k'
+  //     let result = OauthHelper.getOauthTokenAndVerifierFromURLCallback(urlCallback)
+  //
+  //     expect(result.oauth_verifier).toBe('pFIFpsIVlT59NpDkID3oa3X67UEJLa4k')
+  //   })
+  // })
 
   // commented out because it's failing for a strange reason
   // describe('_collectParameters', () => {

@@ -23,6 +23,20 @@ class OauthHelper {
     return CryptoJS.enc.Base64.stringify(HmacSHA1(signatureBase, signingKey))
   }
 
+  // Returns an object with oauth_token and oauth_verifier
+  static getOauthTokenAndVerifierFromURLCallback (urlCallback) {
+    let prefix = 'react-twitter-oauth://callback?'
+    let content = urlCallback.substr(prefix.length)
+
+    let result = {}
+    content.split('&').forEach((pair) => {
+      let values = pair.split('=')
+      result[values[0]] = values[1]
+    })
+
+    return result
+  }
+
   static _getSignatureBase (method, url, params) {
     return method.toUpperCase() + '&' + PercentEncoder.encode(url) + '&' + PercentEncoder.encode(OauthHelper._collectParameters(params))
   }
