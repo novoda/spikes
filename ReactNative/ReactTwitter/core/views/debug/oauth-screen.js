@@ -7,10 +7,10 @@ import {
 } from 'react-native'
 
 var Button = require('react-native-button')
-var TwitterRequestsService = require('../service/twitter-requests-service.js')
-var DeepLinkingFacade = require('../service/deep-linking-facade')
-var OauthHelper = require('../service/oauth-helper.js')
-var AuthenticationService = require('../service/authentication-service.js')
+var TwitterRequestsService = require('../../service/twitter-requests-service.js')
+var DeepLinkingFacade = require('../../service/deep-linking-facade')
+var OauthHelper = require('../../service/oauth-helper.js')
+var AuthenticationService = require('../../service/authentication-service.js')
 
 var OauthView = React.createClass({
   getInitialState () {

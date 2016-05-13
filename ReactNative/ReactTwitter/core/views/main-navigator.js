@@ -4,9 +4,9 @@ import {
 } from 'react-native'
 
 var SplashScreenView = require('./splash-screen.js')
-var DebugScreenView = require('./debug-screen.js')
-var DeepLinkingView = require('./deep-linking.js')
-var OauthView = require('./oauth-screen.js')
+var DebugScreenView = require('./debug/debug-screen.js')
+var DeepLinkingView = require('./debug/deep-linking.js')
+var OauthView = require('./debug/oauth-screen.js')
 var TweetsList = require('./tweetsList.js')
 
 const splashScreenID = 'splash-screen-identifier'
