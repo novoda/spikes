@@ -1,8 +1,13 @@
 import UIKit
 
+protocol ChannelsTableViewActionListener: class {
+    func didSelectChannel(channel: Channel)
+}
+
 final class ChannelsTableViewManager: NSObject, UITableViewDataSource, UITableViewDelegate {
 
     private var channels = [Channel]()
+    weak var actionListener: ChannelsTableViewActionListener?
 
     func updateTableView(tableView: UITableView, withChannels channels: [Channel]) {
         self.channels = channels
@@ -33,6 +38,11 @@ final class ChannelsTableViewManager: NSObject, UITableViewDataSource, UITableVi
 
     func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
+    }
+
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let channel = channels[indexPath.row]
+        actionListener?.didSelectChannel(channel)
     }
 
 }
