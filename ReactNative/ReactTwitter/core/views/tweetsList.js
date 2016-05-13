@@ -16,8 +16,11 @@ class TweetsList extends Component {
     this._refreshData()
   }
 
+  /*global fetch*/
+  /*eslint no-undef: "error"*/
   _refreshData () {
-    var url = 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=twitterapi'
+    var userHandle = 'twitterapi'
+    var url = 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=' + userHandle
     fetch(url, {
       method: 'GET',
       headers: {
@@ -39,7 +42,6 @@ class TweetsList extends Component {
        <TweetsListItem
           id={rowData.id_str}
           time={Date.parse(rowData.created_at)}
-          id={rowData.id_str}
           author_avatar={rowData.user.profile_image_url}
           author_name={rowData.user.name}
           author_handle={rowData.user.screen_name}
