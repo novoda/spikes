@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Alert,
   StyleSheet,
   View,
   Image,
@@ -81,16 +80,7 @@ var TweetsView = React.createClass({
   _formatTime (time) {
     var dateFormat = require('dateformat')
     return dateFormat(time, 'mmmm dS, yyyy, h:MM:ss TT')
-  },
-
-  _tweetSelected (tweetId) {
-    // TODO: navigate to tweet details screen
-    Alert.alert(
-      'Tweet selected',
-      'User selected tweet with id=' + tweetId
-    )
   }
-
 })
 
 const styles = StyleSheet.create({
