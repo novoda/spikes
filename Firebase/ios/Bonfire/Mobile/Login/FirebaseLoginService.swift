@@ -9,7 +9,7 @@ import GoogleSignIn
 
 struct NoAuthAvailable: ErrorType {}
 
-class FirebaseLoginService: NSObject, LoginService {
+final class FirebaseLoginService: NSObject, LoginService {
 
     let authentication = Variable<Authentication?>(nil)
 

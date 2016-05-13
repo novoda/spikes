@@ -1,7 +1,7 @@
 import UIKit
 import GoogleSignIn
 
-class LoginView: UIView {
+final class LoginView: UIView {
 
     private let googleButton = GIDSignInButton()
     weak var alertDelegate: AlertDelegate?

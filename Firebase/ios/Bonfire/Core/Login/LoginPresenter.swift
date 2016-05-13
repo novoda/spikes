@@ -1,7 +1,7 @@
 import Foundation
 import RxSwift
 
-class LoginPresenter {
+final class LoginPresenter {
     let loginService: LoginService
     let loginDisplayer: LoginDisplayer
     let navigator: Navigator

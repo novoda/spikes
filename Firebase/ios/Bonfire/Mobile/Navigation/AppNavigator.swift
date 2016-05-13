@@ -1,6 +1,6 @@
 import UIKit
 
-class AppNavigator: Navigator {
+final class AppNavigator: Navigator {
 
     let navigationController = UINavigationController()
 

@@ -4,7 +4,7 @@ import RxCocoa
 
 struct HTTPImageServiceError: ErrorType {}
 
-class ChatCell: UITableViewCell {
+final class ChatCell: UITableViewCell {
 
     let authorLabel = UILabel()
     let timestampLabel = UILabel()

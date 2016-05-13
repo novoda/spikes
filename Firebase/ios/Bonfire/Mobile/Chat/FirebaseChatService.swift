@@ -5,7 +5,7 @@ import FirebaseInstanceID
 import FirebaseDatabase
 import RxSwift
 
-class FirebaseChatService: ChatService {
+final class FirebaseChatService: ChatService {
 
     static let sharedInstance = FirebaseChatService()
 

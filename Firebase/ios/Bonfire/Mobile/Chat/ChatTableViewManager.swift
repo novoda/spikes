@@ -1,6 +1,6 @@
 import UIKit
 
-class ChatTableViewManager: NSObject, UITableViewDataSource, UITableViewDelegate {
+final class ChatTableViewManager: NSObject, UITableViewDataSource, UITableViewDelegate {
     private var messages = [Message]()
 
     func updateTableView(tableView: UITableView, withChat chat: Chat) {
