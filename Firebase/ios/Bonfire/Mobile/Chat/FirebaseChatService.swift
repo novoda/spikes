@@ -7,8 +7,6 @@ import RxSwift
 
 final class FirebaseChatService: ChatService {
 
-    static let sharedInstance = FirebaseChatService()
-
     let firebase = FIRDatabase.database().reference()
 
     var messages: FIRDatabaseReference {

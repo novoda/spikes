@@ -5,6 +5,7 @@ import FirebaseInstanceID
 import FirebaseDatabase
 import FirebaseAuth
 import GoogleSignIn
+import RxSwift
 
 @UIApplicationMain
 final class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -35,8 +36,15 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
+class FakeChannelsService: ChannelsService {
+    func channels() -> Observable<[Channel]> {
+        return Observable.just([Channel(name: "global")])
+    }
+}
+
 struct SharedServices {
     static let loginService: LoginService = FirebaseLoginService()
+    static let channelsService: ChannelsService = FakeChannelsService()
     static let chatService: ChatService = FirebaseChatService()
     static let navigator: Navigator = AppNavigator()
 }
