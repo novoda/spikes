@@ -21,6 +21,7 @@ class TweetsList extends Component {
       dataSource: this.state.dataSource.cloneWithRows([
         {
           id: '1',
+          created_at: 'Tue May 03 21:09:46 +0000 2016',
           user: {
             name: 'User 1',
             screen_name: 'user_1',
@@ -30,6 +31,7 @@ class TweetsList extends Component {
         },
         {
           id: '2',
+          created_at: 'Tue May 03 21:05:46 +0000 2016',
           user: {
             name: 'User 2',
             screen_name: 'another_user',
@@ -39,6 +41,7 @@ class TweetsList extends Component {
         },
         {
           id: '3',
+          created_at: 'Tue May 03 20:55:46 +0000 2016',
           user: {
             name: 'User 1',
             screen_name: 'user_1',
@@ -54,6 +57,7 @@ class TweetsList extends Component {
     return (
        <TweetsListItem
           id={rowData.id}
+          time={Date.parse(rowData.created_at)}
           author_avatar={rowData.user.profile_image_url}
           author_name={rowData.user.name}
           author_handle={rowData.user.screen_name}

@@ -18,6 +18,7 @@ var TweetsListItem = React.createClass({
   },
 
   render () {
+    var formattedTime = this.formatTime(this.props.time)
     return (
       <TouchableHighlight onPress={() => this.tweetSelected(this.props.id)}
         underlayColor='#dddddd'>
@@ -27,6 +28,7 @@ var TweetsListItem = React.createClass({
             <View style={styles.textContainer}>
               <Text style={styles.tweet_author}>{this.props.author_name}</Text>
               <Text style={styles.tweet_author_handle}>{this.props.author_handle}</Text>
+              <Text style={styles.tweet_time}>{formattedTime}</Text>
               <Text style={styles.tweet_text}>{this.props.text}</Text>
             </View>
            </View>
@@ -34,6 +36,11 @@ var TweetsListItem = React.createClass({
          </View>
        </TouchableHighlight>
     )
+  },
+
+  formatTime(time) {
+    var dateFormat = require('dateformat')
+    return dateFormat(time, "mmmm dS, yyyy, h:MM:ss TT")
   },
 
   tweetSelected (tweetId) {
@@ -62,6 +69,10 @@ const styles = StyleSheet.create({
   tweet_author_handle: {
     fontSize: 20,
     fontStyle: 'italic',
+    color: '#656565'
+  },
+  tweet_time: {
+    fontSize: 16,
     color: '#656565'
   },
   tweet_text: {
