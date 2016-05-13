@@ -6,10 +6,12 @@ import {
 var DebugScreenView = require('./debug-screen.js')
 var DeepLinkingView = require('./deep-linking.js')
 var TweetsList = require('./tweetsList.js')
+var TweetView = require('./tweetView.js')
 
 const debugScreenID = 'debug-screen-identifier'
 const deepLinkingID = 'deep-linking-identifier'
 const tweetsListID = 'tweets-list-identifier'
+const tweetViewID = 'tweet-view-identifier'
 
 var MainNavigator = React.createClass({
 
@@ -29,6 +31,8 @@ var MainNavigator = React.createClass({
         return (<DeepLinkingView navigator={navigator} title='Deep Linking' />)
       case tweetsListID:
         return (<TweetsList navigator={navigator} title='Tweets List' />)
+      case tweetViewID:
+        return (<TweetView navigator={navigator} title='Tweet View' />)
     }
   }
 })
