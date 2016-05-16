@@ -9,8 +9,10 @@ final class ChatPresenter {
     var disposeBag: DisposeBag!
 
     private var user: User?
+    private let channel: Channel
 
-    init(loginService: LoginService, chatService: ChatService, chatDisplayer: ChatDisplayer) {
+    init(channel: Channel, loginService: LoginService, chatService: ChatService, chatDisplayer: ChatDisplayer) {
+        self.channel = channel
         self.loginService = loginService
         self.chatService = chatService
         self.chatDisplayer = chatDisplayer
@@ -26,7 +28,7 @@ final class ChatPresenter {
                 self?.user = authentication.user
         }).addDisposableTo(disposeBag)
 
-        chatService.chat().subscribe(
+        chatService.chat(channel).subscribe(
             onNext: { [weak self] chat in
                 self?.chatDisplayer.display(chat)
         }).addDisposableTo(disposeBag)
@@ -46,6 +48,6 @@ extension ChatPresenter: ChatActionListener {
         }
 
         let msg = Message(author: user, body: message)
-        chatService.sendMessage(msg)
+        chatService.sendMessage(msg, channel: channel)
     }
 }

@@ -9,13 +9,13 @@ final class FirebaseChatService: ChatService {
 
     let firebase = FIRDatabase.database().reference()
 
-    var messages: FIRDatabaseReference {
+    func messages(channel: Channel) -> FIRDatabaseReference {
         return firebase.child("channels/global")
     }
 
-    func chat() -> Observable<Chat> {
+    func chat(channel: Channel) -> Observable<Chat> {
         return Observable.create { observer in
-            let handle = self.messages.observeEventType(.Value, withBlock: { snapshot in
+            let handle = self.messages(channel).observeEventType(.Value, withBlock: { snapshot in
                 let firebaseMessages = snapshot.children.allObjects
                 let messages = try! firebaseMessages.map{$0.value}.map(Message.init)
                 observer.onNext(Chat(messages: messages))
@@ -27,13 +27,7 @@ final class FirebaseChatService: ChatService {
         }
     }
 
-    func sendMessage(message: Message) {
-        messages.push(message)
-    }
-}
-
-extension FIRDatabaseReference {
-    func push(value: FirebaseConvertible) {
-        self.childByAutoId().setValue(value.asFirebaseValue())
+    func sendMessage(message: Message, channel: Channel) {
+        messages(channel).childByAutoId().setValue(message.asFirebaseValue())
     }
 }
