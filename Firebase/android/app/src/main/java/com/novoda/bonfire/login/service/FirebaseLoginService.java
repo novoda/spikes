@@ -10,6 +10,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.jakewharton.rxrelay.BehaviorRelay;
 import com.novoda.bonfire.login.data.model.Authentication;
 import com.novoda.bonfire.login.data.model.User;
@@ -24,9 +26,11 @@ public class FirebaseLoginService implements LoginService {
     private final FirebaseAuth firebaseAuth;
 
     private final BehaviorRelay<Authentication> authRelay;
+    private final DatabaseReference usersDB;
 
     public FirebaseLoginService(FirebaseApp firebaseApp) {
         firebaseAuth = FirebaseAuth.getInstance(firebaseApp);
+        usersDB = FirebaseDatabase.getInstance(firebaseApp).getReference("users");
         authRelay = BehaviorRelay.create();
     }
 
@@ -75,6 +79,8 @@ public class FirebaseLoginService implements LoginService {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = task.getResult().getUser();
+                            User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), firebaseUser.getPhotoUrl().toString()); //Refactor this double creation
+                            usersDB.child(firebaseUser.getUid()).setValue(user);
                             authRelay.call(authenticationFrom(firebaseUser));
                         } else {
                             Throwable exception = task.getException();

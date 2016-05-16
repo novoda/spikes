@@ -57,7 +57,7 @@ public class FirebaseChatService implements ChatService {
 
     @Override
     public void sendMessage(Channel channel, Message message) {
-        channelDB(channel).child("messages").push().setValue(message);
+        channelDB(channel).child("messages").push().setValue(message); //TODO handle errors
     }
 
     private DatabaseReference channelDB(Channel channel) {

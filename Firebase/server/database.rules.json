@@ -3,16 +3,55 @@
     "channels": {
       ".read": "auth != null",
       "global": {
-        ".read": "auth != null",
-        "$message": {
-          ".write": "!data.exists() && newData.exists()",
-          ".validate": "newData.hasChildren(['author', 'body', 'timestamp'])",
-          "author": {
-            ".validate": "newData.hasChildren(['id', 'name', 'photoUrl'])",
-            "id": {
-              ".validate": "newData.val() === auth.uid"
+        "messages": {
+          ".read": "auth != null",
+          "$message": {
+            ".write": "!data.exists() && newData.exists()",
+            ".validate": "newData.hasChildren(['author', 'body', 'timestamp'])",
+            "author": {
+              ".validate": "newData.hasChildren(['id', 'name'])",
+              "id": {
+                ".validate": "newData.val() === auth.uid"
+              }
             }
           }
+        }
+      }
+    },
+    "channels-global": {
+      "$channel": {
+        ".read": "!data.child('owners').exists() || data.child('owners').child(auth.uid).exists()",
+        "messages": {
+          "$message": {
+            ".write": "(!data.child('owners').exists() || data.child('owners').child(auth.uid).exists()) && !data.exists() && newData.exists()",
+            ".validate": "newData.hasChildren(['author', 'body', 'timestamp'])",
+            "author": {
+              ".validate": "newData.hasChildren(['id', 'name'])",
+              "id": {
+                ".validate": "newData.val() === auth.uid"
+              }
+            }
+          }
+        },
+        "owners": {
+          "$user_id": {
+            ".write": "(!root.child('channels-private/'+$channel).exists() || data.parent().child(auth.uid).exists()) && newData.exists() && auth != null",
+            ".validate": "newData.hasChildren(['id', 'name'])"
+          }
+        }
+      }
+    },
+    "channels-global-index": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "users": {
+      "$user_id": {
+        ".read": "auth != null",
+        ".write": "auth.uid === $user_id",
+        ".validate": "newData.hasChildren(['id', 'name'])",
+        "id": {
+          ".validate": "newData.val() === auth.uid"
         }
       }
     }
