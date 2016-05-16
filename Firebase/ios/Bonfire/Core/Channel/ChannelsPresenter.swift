@@ -2,13 +2,15 @@ import Foundation
 import RxSwift
 
 class ChannelsPresenter {
+    let loginService: LoginService
     let channelsService: ChannelsService
     let channelsDisplayer: ChannelsDisplayer
     let navigator: Navigator
 
     var disposeBag: DisposeBag!
 
-    init(channelsService: ChannelsService, channelsDisplayer: ChannelsDisplayer, navigator: Navigator) {
+    init(loginService: LoginService, channelsService: ChannelsService, channelsDisplayer: ChannelsDisplayer, navigator: Navigator) {
+        self.loginService = loginService
         self.channelsService = channelsService
         self.channelsDisplayer = channelsDisplayer
         self.navigator = navigator
@@ -19,11 +21,14 @@ class ChannelsPresenter {
 
         channelsDisplayer.attach(self)
 
-        channelsService.channels().subscribe(
+        loginService.user().filter({ auth in
+            auth.isSuccess()
+        }).flatMap({ auth in
+            return self.channelsService.channels(forUser: auth.user!)
+        }).subscribe(
             onNext: { [weak self] channels in
                 self?.channelsDisplayer.display(channels)
-            }
-        ).addDisposableTo(disposeBag)
+            }).addDisposableTo(disposeBag)
     }
 
     func stopPresenting() {
