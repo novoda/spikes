@@ -26,7 +26,7 @@ public class FirebaseChannelService implements ChannelService {
 
     public FirebaseChannelService(FirebaseApp firebaseApp) {
         FirebaseDatabase database = FirebaseDatabase.getInstance(firebaseApp);
-        publicChannelsDB = database.getReference("channels-global-index");
+        publicChannelsDB = database.getReference("channels-public-index");
         privateChannelsDB = database.getReference("channels-private-index");
     }
 

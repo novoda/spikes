@@ -1,28 +1,6 @@
 {
   "rules": {
     "channels": {
-      ".read": "auth != null",
-      "global": {
-        "messages": {
-          ".read": "auth != null",
-          "$message": {
-            ".write": "!data.exists() && newData.exists()",
-            ".validate": "newData.hasChildren(['author', 'body', 'timestamp'])",
-            "author": {
-              ".validate": "newData.hasChildren(['id', 'name'])",
-              "id": {
-                ".validate": "newData.val() === auth.uid"
-              }
-            }
-          }
-        }
-      }
-    },
-    "channels-global-index": {
-      ".read": "auth != null",
-      ".write": "auth != null"
-    },
-    "channels": {
       "$channel": {
         ".read": "!data.child('owners').exists() || data.child('owners').child(auth.uid).exists()",
         "messages": {
@@ -44,6 +22,10 @@
           }
         }
       }
+    },
+    "channels-public-index": {
+      ".read": "auth != null",
+      ".write": "auth != null"
     },
     "channels-private-index": {
         ".read": "auth != null",
