@@ -20,11 +20,11 @@ import rx.subscriptions.BooleanSubscription;
 
 public class FirebaseChatService implements ChatService {
 
-    private final DatabaseReference messagesDB;
+    private final DatabaseReference channelsDB;
 
     public FirebaseChatService(FirebaseApp firebaseApp) {
         FirebaseDatabase database = FirebaseDatabase.getInstance(firebaseApp);
-        messagesDB = database.getReference("channels-global");
+        channelsDB = database.getReference("channels");
     }
 
     @Override
@@ -61,7 +61,7 @@ public class FirebaseChatService implements ChatService {
     }
 
     private DatabaseReference channelDB(Channel channel) {
-        return messagesDB.child(channel.getName());
+        return channelsDB.child(channel.getName());
     }
 
     private List<Message> toMessages(DataSnapshot dataSnapshot) {

@@ -28,16 +28,16 @@ public class ChatActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         ChatDisplayer chatDisplayer = (ChatDisplayer) findViewById(R.id.chatView);
-        String channelName = getIntent().getStringExtra(CHANNEL_EXTRA);
+        Channel channel = new Channel(getIntent().getStringExtra(CHANNEL_EXTRA));
 
-        getSupportActionBar().setTitle(channelName);
+        getSupportActionBar().setTitle(channel.getName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         presenter = new ChatPresenter(
                 Dependencies.INSTANCE.getLoginService(),
                 Dependencies.INSTANCE.getChatService(),
                 chatDisplayer,
-                channelName,
+                channel,
                 Dependencies.INSTANCE.getFirebaseAnalytics()
         );
     }

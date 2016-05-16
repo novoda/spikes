@@ -18,12 +18,16 @@
         }
       }
     },
-    "channels-global": {
+    "channels-global-index": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "channels": {
       "$channel": {
         ".read": "!data.child('owners').exists() || data.child('owners').child(auth.uid).exists()",
         "messages": {
           "$message": {
-            ".write": "(!data.child('owners').exists() || data.child('owners').child(auth.uid).exists()) && !data.exists() && newData.exists()",
+            ".write": "(!data.parent().parent().child('owners').exists() || data.parent().parent().child('owners').child(auth.uid).exists()) && !data.exists() && newData.exists()",
             ".validate": "newData.hasChildren(['author', 'body', 'timestamp'])",
             "author": {
               ".validate": "newData.hasChildren(['id', 'name'])",
@@ -35,15 +39,15 @@
         },
         "owners": {
           "$user_id": {
-            ".write": "(!root.child('channels-private/'+$channel).exists() || data.parent().child(auth.uid).exists()) && newData.exists() && auth != null",
+            ".write": "(!root.child('channels/'+$channel).exists() || data.parent().child(auth.uid).exists()) && newData.exists() && auth != null",
             ".validate": "newData.hasChildren(['id', 'name'])"
           }
         }
       }
     },
-    "channels-global-index": {
-      ".read": "auth != null",
-      ".write": "auth != null"
+    "channels-private-index": {
+        ".read": "auth != null",
+        ".write": "auth != null"
     },
     "users": {
       "$user_id": {

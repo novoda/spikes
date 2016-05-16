@@ -20,7 +20,10 @@ public class ChannelsActivity extends BaseActivity {
         setContentView(R.layout.activity_channels);
 
         Dependencies dependencies = Dependencies.INSTANCE;
-        channelsPresenter = new ChannelsPresenter((ChannelsDisplayer) findViewById(R.id.channelsView), dependencies.getChannelService(), new AndroidNavigator(this));
+        channelsPresenter = new ChannelsPresenter((ChannelsDisplayer) findViewById(R.id.channelsView),
+                                                  dependencies.getChannelService(),
+                                                  dependencies.getLoginService(),
+                                                  new AndroidNavigator(this));
     }
 
     @Override
