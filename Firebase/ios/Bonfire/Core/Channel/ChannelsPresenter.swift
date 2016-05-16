@@ -34,6 +34,6 @@ class ChannelsPresenter {
 
 extension ChannelsPresenter: ChannelsActionListener {
     func viewChannel(channel: Channel) {
-        navigator.toChat()
+        navigator.toChat(channel)
     }
 }

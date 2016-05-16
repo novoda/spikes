@@ -9,7 +9,7 @@ final class AppNavigator: Navigator {
         navigationController.setViewControllers([channelsViewController], animated: true)
     }
 
-    func toChat() {
+    func toChat(channel: Channel) {
         let chatViewController = ChatViewController.withDependencies()
         navigationController.setViewControllers([chatViewController], animated: true)
     }
