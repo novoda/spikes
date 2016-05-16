@@ -24,7 +24,7 @@ public class FirebaseChatService implements ChatService {
 
     public FirebaseChatService(FirebaseApp firebaseApp) {
         FirebaseDatabase database = FirebaseDatabase.getInstance(firebaseApp);
-        messagesDB = database.getReference("channels");
+        messagesDB = database.getReference("channels-global");
     }
 
     @Override
@@ -57,7 +57,7 @@ public class FirebaseChatService implements ChatService {
 
     @Override
     public void sendMessage(Channel channel, Message message) {
-        channelDB(channel).push().setValue(message);
+        channelDB(channel).child("messages").push().setValue(message);
     }
 
     private DatabaseReference channelDB(Channel channel) {
@@ -65,7 +65,7 @@ public class FirebaseChatService implements ChatService {
     }
 
     private List<Message> toMessages(DataSnapshot dataSnapshot) {
-        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+        Iterable<DataSnapshot> children = dataSnapshot.child("messages").getChildren();
         List<Message> messages = new ArrayList<>();
         for (DataSnapshot child : children) {
             Message message = child.getValue(Message.class);

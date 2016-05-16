@@ -23,7 +23,7 @@ public class FirebaseChannelService implements ChannelService {
 
     public FirebaseChannelService(FirebaseApp firebaseApp) {
         FirebaseDatabase database = FirebaseDatabase.getInstance(firebaseApp);
-        channelsDB = database.getReference("channels");
+        channelsDB = database.getReference("channels-global");
     }
 
 
