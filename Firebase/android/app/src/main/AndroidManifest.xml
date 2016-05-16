@@ -19,7 +19,10 @@
       </intent-filter>
     </activity>
 
-    <activity android:name="com.novoda.bonfire.chat.ChatActivity" />
+    <activity android:name=".channel.ChannelsActivity" />
+
+    <activity android:name="com.novoda.bonfire.chat.ChatActivity"
+      android:parentActivityName=".channel.ChannelsActivity"/>
 
   </application>
 

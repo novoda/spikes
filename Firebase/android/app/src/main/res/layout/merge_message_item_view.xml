@@ -33,8 +33,8 @@
         android:layout_height="wrap_content"
         android:textColor="@color/hint_light"
         android:textSize="12sp"
-        android:paddingLeft="@dimen/message_horizontal_margin"
-        android:paddingRight="@dimen/message_horizontal_margin"/>
+        android:paddingLeft="@dimen/list_item_horizontal_margin"
+        android:paddingRight="@dimen/list_item_horizontal_margin"/>
     </LinearLayout>
 
     <TextView
