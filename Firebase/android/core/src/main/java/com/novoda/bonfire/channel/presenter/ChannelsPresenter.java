@@ -1,6 +1,5 @@
 package com.novoda.bonfire.channel.presenter;
 
-import com.novoda.bonfire.Presenter;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.data.model.Channels;
 import com.novoda.bonfire.channel.displayer.ChannelsDisplayer;
@@ -10,7 +9,7 @@ import com.novoda.bonfire.navigation.Navigator;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
-public class ChannelsPresenter implements Presenter {
+public class ChannelsPresenter {
 
     private final ChannelsDisplayer channelsDisplayer;
     private final ChannelService channelService;
@@ -24,7 +23,6 @@ public class ChannelsPresenter implements Presenter {
         this.navigator = navigator;
     }
 
-    @Override
     public void startPresenting() {
         channelsDisplayer.attach(channelSelectionListener);
         subscriptions.add(channelService.getChannels().subscribe(new Action1<Channels>() {
@@ -35,7 +33,6 @@ public class ChannelsPresenter implements Presenter {
         }));
     }
 
-    @Override
     public void stopPresenting() {
         subscriptions.clear();
         channelsDisplayer.detach(channelSelectionListener);

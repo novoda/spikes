@@ -1,6 +1,5 @@
 package com.novoda.bonfire.chat.presenter;
 
-import com.novoda.bonfire.Presenter;
 import com.novoda.bonfire.analytics.Analytics;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.chat.data.model.Chat;
@@ -14,7 +13,7 @@ import com.novoda.bonfire.login.service.LoginService;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
-public class ChatPresenter implements Presenter {
+public class ChatPresenter {
 
     private final LoginService loginService;
     private final ChatService chatService;
@@ -34,7 +33,6 @@ public class ChatPresenter implements Presenter {
         this.channel = new Channel(channelName);
     }
 
-    @Override
     public void startPresenting() {
         chatDisplayer.attach(actionListener);
         chatDisplayer.disableInteraction();
@@ -56,7 +54,6 @@ public class ChatPresenter implements Presenter {
         );
     }
 
-    @Override
     public void stopPresenting() {
         chatDisplayer.detach(actionListener);
         subscriptions.clear(); //TODO sort out checks
