@@ -2,10 +2,10 @@
   "rules": {
     "channels": {
       "$channel": {
-        ".read": "!data.child('owners').exists() || data.child('owners').child(auth.uid).exists()",
+        ".read": "!root.child('owners').child($channel).exists() || root.child('owners').child($channel).child(auth.uid).exists()",
         "messages": {
           "$message": {
-            ".write": "(!data.parent().parent().child('owners').exists() || data.parent().parent().child('owners').child(auth.uid).exists()) && !data.exists() && newData.exists()",
+            ".write": "(!root.child('owners').child($channel).exists() || root.child('owners').child($channel).child(auth.uid).exists()) && !data.exists() && newData.exists()",
             ".validate": "newData.hasChildren(['author', 'body', 'timestamp'])",
             "author": {
               ".validate": "newData.hasChildren(['id', 'name'])",
@@ -13,12 +13,6 @@
                 ".validate": "newData.val() === auth.uid"
               }
             }
-          }
-        },
-        "owners": {
-          "$user_id": {
-            ".write": "(!root.child('channels/'+$channel).exists() || data.parent().child(auth.uid).exists()) && newData.exists() && auth != null",
-            ".validate": "newData.hasChildren(['id', 'name'])"
           }
         }
       }
