@@ -53,7 +53,6 @@ var TweetsView = React.createClass({
   },
 
   render () {
-    var tweetx = this.state.tweet
     if (!this.state.tweet.user) {
       return (<View />)
     }
