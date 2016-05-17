@@ -54,7 +54,7 @@ SPEC CHECKSUMS:
   Firebase: 27915d1e881090d53e883f4e3a60a649ecec69eb
   FirebaseAnalytics: 498839d560d7eb39e4094312dd537ead5bee6f21
   FirebaseAuth: f1791434cd6c11af63bca36223a15144a1e7d0d4
-  FirebaseDatabase: 3ee5caa4cbc19a0c79ca3de522d082a0f112af70
+  FirebaseDatabase: 6be1bf0edc03ae11fbb2fd5414f905486dae395a
   FirebaseInstanceID: d8afa34d12da3cde72ebeded0067fefb2995c5cb
   GoogleAppUtilities: f1730f91f67767b453c289577040dd3f425ffdc7
   GoogleAuthUtilities: d7a19615cd7627688afcf181737f1011ee8b5a23
