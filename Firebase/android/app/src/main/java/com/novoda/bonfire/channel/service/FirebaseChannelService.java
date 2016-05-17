@@ -1,6 +1,5 @@
 package com.novoda.bonfire.channel.service;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,10 +23,9 @@ public class FirebaseChannelService implements ChannelService {
     private final DatabaseReference publicChannelsDB;
     private final DatabaseReference privateChannelsDB;
 
-    public FirebaseChannelService(FirebaseApp firebaseApp) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance(firebaseApp);
-        publicChannelsDB = database.getReference("channels-public-index");
-        privateChannelsDB = database.getReference("channels-private-index");
+    public FirebaseChannelService(FirebaseDatabase firebaseDatabase) {
+        publicChannelsDB = firebaseDatabase.getReference("channels-public-index");
+        privateChannelsDB = firebaseDatabase.getReference("channels-private-index");
     }
 
     @Override

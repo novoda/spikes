@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,9 +27,9 @@ public class FirebaseLoginService implements LoginService {
     private final BehaviorRelay<Authentication> authRelay;
     private final DatabaseReference usersDB;
 
-    public FirebaseLoginService(FirebaseApp firebaseApp) {
-        firebaseAuth = FirebaseAuth.getInstance(firebaseApp);
-        usersDB = FirebaseDatabase.getInstance(firebaseApp).getReference("users");
+    public FirebaseLoginService(FirebaseDatabase firebaseDatabase, FirebaseAuth firebaseAuth) {
+        this.firebaseAuth = firebaseAuth;
+        usersDB = firebaseDatabase.getReference("users");
         authRelay = BehaviorRelay.create();
     }
 

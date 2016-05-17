@@ -1,6 +1,5 @@
 package com.novoda.bonfire.chat.service;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,9 +21,8 @@ public class FirebaseChatService implements ChatService {
 
     private final DatabaseReference channelsDB;
 
-    public FirebaseChatService(FirebaseApp firebaseApp) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance(firebaseApp);
-        channelsDB = database.getReference("channels");
+    public FirebaseChatService(FirebaseDatabase firebaseDatabase) {
+        channelsDB = firebaseDatabase.getReference("channels");
     }
 
     @Override

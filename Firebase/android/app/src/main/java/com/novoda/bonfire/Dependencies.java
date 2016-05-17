@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.bonfire.analytics.FirebaseAnalyticsAnalytics;
 import com.novoda.bonfire.channel.service.ChannelService;
 import com.novoda.bonfire.channel.service.FirebaseChannelService;
@@ -25,15 +27,19 @@ public enum Dependencies {
         if (needsInitialisation()) {
             Context appContext = context.getApplicationContext();
             FirebaseApp firebaseApp = FirebaseApp.initializeApp(appContext, FirebaseOptions.fromResource(appContext), "Bonfire");
+            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance(firebaseApp);
+            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(firebaseApp);
+            firebaseDatabase.setPersistenceEnabled(true);
+
             firebaseAnalytics = new FirebaseAnalyticsAnalytics(context);
-            loginService = new FirebaseLoginService(firebaseApp);
-            chatService = new FirebaseChatService(firebaseApp);
-            channelService = new FirebaseChannelService(firebaseApp);
+            loginService = new FirebaseLoginService(firebaseDatabase, firebaseAuth);
+            chatService = new FirebaseChatService(firebaseDatabase);
+            channelService = new FirebaseChannelService(firebaseDatabase);
         }
     }
 
     private boolean needsInitialisation() {
-        return loginService == null && chatService == null;
+        return loginService == null && chatService == null && channelService == null && firebaseAnalytics == null;
     }
 
     public FirebaseAnalyticsAnalytics getFirebaseAnalytics() {
