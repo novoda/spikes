@@ -7,6 +7,8 @@ import {
 } from 'react-native'
 var AuthenticationService = require('../service/authentication-service.js')
 
+const SPLASH_DURATION_MS = 1000
+
 var SplashScreenView = React.createClass({
   propTypes: {
     navigator: React.PropTypes.instanceOf(Navigator).isRequired
@@ -24,7 +26,7 @@ var SplashScreenView = React.createClass({
     authService.loadDataFromDisk()
       .then(() => {
         return new Promise((resolve, reject) => {
-          setTimeout(resolve, 1100)
+          setTimeout(resolve, SPLASH_DURATION_MS)
         })
       })
       .then(() => {
