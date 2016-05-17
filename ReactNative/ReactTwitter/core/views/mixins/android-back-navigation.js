@@ -8,17 +8,20 @@ var AndroidBackNavigationMixin = {
   },
 
   componentDidMount () {
-    BackAndroid.addEventListener('hardwareBackPress', () => {
-      if (this.props.navigator.getCurrentRoutes().length === 1) {
-        return false
-      }
-      this.props.navigator.pop()
-      return true
-    })
+    BackAndroid.addEventListener('hardwareBackPress', this._handleBackAndroid)
   },
 
   componentWillUnmount: function () {
-    BackAndroid.removeEventListener('hardwareBackPress')
+    BackAndroid.removeEventListener('hardwareBackPress', this._handleBackAndroid)
+  },
+
+  _handleBackAndroid () {
+    if (this.props.navigator.getCurrentRoutes().length === 1) {
+      return false
+    }
+    this.props.navigator.pop()
+
+    return true
   }
 }
 
