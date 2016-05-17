@@ -29,6 +29,10 @@ var DebugScreenView = React.createClass({
           style={styles.button}
           styleDisabled={styles.button_disabled}
           onPress={this.pushTweetsList}>Tweets List</Button>
+        <Button
+          style={styles.button}
+          styleDisabled={styles.button_disabled}
+          onPress={this.pushTweetView}>Tweet Detail View</Button>
       </View>
     )
   },
@@ -43,6 +47,13 @@ var DebugScreenView = React.createClass({
 
   pushTweetsList () {
     this.props.navigator.push({id: 'tweets-list-identifier'})
+  },
+
+  pushTweetView () {
+    this.props.navigator.push({
+      id: 'tweet-view-identifier',
+      tweetId: '210462857140252672'
+    })
   }
 })
 

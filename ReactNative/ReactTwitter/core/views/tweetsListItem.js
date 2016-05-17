@@ -1,12 +1,14 @@
 import React from 'react'
 import {
-  Alert,
   StyleSheet,
   View,
   Image,
   Text,
-  TouchableHighlight
+  TouchableHighlight,
+  Navigator
 } from 'react-native'
+
+var novodaDataFormat = require('./common/data-format.js')
 
 var TweetsListItem = React.createClass({
   propTypes: {
@@ -15,11 +17,12 @@ var TweetsListItem = React.createClass({
     author_avatar: React.PropTypes.string.isRequired,
     author_name: React.PropTypes.string.isRequired,
     author_handle: React.PropTypes.string.isRequired,
-    text: React.PropTypes.string.isRequired
+    text: React.PropTypes.string.isRequired,
+    navigator: React.PropTypes.instanceOf(Navigator).isRequired
   },
 
   render () {
-    var formattedTime = this._formatTime(this.props.time)
+    var formattedTime = novodaDataFormat.longTime(this.props.time)
     return (
       <TouchableHighlight onPress={() => this._tweetSelected(this.props.id)}
         underlayColor='#dddddd'>
@@ -39,17 +42,11 @@ var TweetsListItem = React.createClass({
     )
   },
 
-  _formatTime (time) {
-    var dateFormat = require('dateformat')
-    return dateFormat(time, 'mmmm dS, yyyy, h:MM:ss TT')
-  },
-
   _tweetSelected (tweetId) {
-    // TODO: navigate to tweet details screen
-    Alert.alert(
-      'Tweet selected',
-      'User selected tweet with id=' + tweetId
-    )
+    this.props.navigator.push({
+      id: 'tweet-view-identifier',
+      tweetId: tweetId
+    })
   }
 
 })
