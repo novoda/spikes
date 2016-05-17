@@ -5,6 +5,8 @@ import {
 } from 'react-native'
 import TweetsListItem from './tweetsListItem'
 import AndroidBackNavigationMixin from './mixins/android-back-navigation'
+var TwitterRequestsService = require('../service/twitter-requests-service.js')
+var AuthenticationService = require('../service/authentication-service.js')
 
 var TweetsList = React.createClass({
   mixins: [AndroidBackNavigationMixin],
@@ -20,26 +22,29 @@ var TweetsList = React.createClass({
   },
 
   componentDidMount () {
-    this._refreshData()
+    let authService = new AuthenticationService()
+    authService.loadDataFromDisk()
+      .then(() => {
+        this._refreshData(
+          authService.getUsername(),
+          authService.getOAuthToken(),
+          authService.getSecretToken()
+        )
+      })
+      .catch((err) => { console.log(err) })
   },
 
   /*global fetch*/
   /*eslint no-undef: "error"*/
-  _refreshData () {
-    var userHandle = 'twitterapi'
-    var url = 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=' + userHandle
-    fetch(url, {
-      method: 'GET',
-      headers: {
-        'Authorization': 'OAuth oauth_consumer_key="aqPSTs1FT2ndP7qXi247BtbXd", oauth_nonce="987e33536527c50a7a0e1eb7b2d77e36", oauth_signature="K5W7yxsVPmQgd8arTIJ8qZXq%2FTk%3D", oauth_signature_method="HMAC-SHA1", oauth_timestamp="1463065323", oauth_token="730013266697654273-RDssoTCOdHNQtFA9k87OSijeZHcF4SU", oauth_version="1.0"'
-      }
-    })
-    .then((response) => response.json())
-    .then((rjson) => {
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(rjson)
+  _refreshData (username, oauthToken, oauthTokenSecret) {
+    let twitterService = new TwitterRequestsService()
+    twitterService.getHomeTimeline(username, oauthToken, oauthTokenSecret)
+      .then((rjson) => {
+        this.setState({
+          dataSource: this.state.dataSource.cloneWithRows(rjson)
+        })
       })
-    })
+      .catch((err) => { console.log(err) })
   },
 
   renderRow (rowData) {
@@ -60,7 +65,8 @@ var TweetsList = React.createClass({
     return (
       <ListView
         dataSource={this.state.dataSource}
-        renderRow={this.renderRow.bind(this)}
+        enableEmptySections={true}
+        renderRow={this.renderRow}
       />
     )
   }
