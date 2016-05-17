@@ -1,0 +1,14 @@
+source 'https://cpdc-eap.googlesource.com/spec.git'
+source 'https://github.com/CocoaPods/Specs.git'
+
+platform :ios, '9.0'
+use_frameworks!
+
+target 'Bonfire' do
+    pod 'RxSwift',    '~> 2.0'
+    pod 'RxCocoa',    '~> 2.0'
+    pod 'Firebase/Core'
+    pod 'Firebase/Database'
+    pod 'Firebase/Auth'
+    pod 'GoogleSignIn'
+end
