@@ -7,11 +7,11 @@ import {
 
 var Button = require('react-native-button')
 var DeepLinkingFacade = require('../service/deep-linking-facade')
+import AndroidBackNavigationMixin from './mixins/android-back-navigation'
 
 var DeepLinkingView = React.createClass({
-
+  mixins: [AndroidBackNavigationMixin],
   getInitialState () {
-    console.log('Get initial state')
     return {
       facade: new DeepLinkingFacade(),
       deepLinkUrl: ''
