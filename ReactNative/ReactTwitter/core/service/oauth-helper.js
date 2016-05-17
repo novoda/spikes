@@ -8,8 +8,12 @@ class OauthHelper {
   }
 
   buildAuthorizationHeader (method, url, params, oauthTokenSecret) {
+    return buildAuthorizationHeader (method, url, params, [], oauthTokenSecret)
+  }
+
+  buildAuthorizationHeader (method, url, params, queryParams, oauthTokenSecret) {
     let output = 'OAuth '
-    let signature = this.getSigningKey(method, url, params, oauthTokenSecret)
+    let signature = this.getSigningKey(method, url, params, queryParams, oauthTokenSecret)
     for (let key in params) {
       output += PercentEncoder.encode(key) + '="' + PercentEncoder.encode(params[key]) + '", '
     }
@@ -17,9 +21,9 @@ class OauthHelper {
     return output
   }
 
-  getSigningKey (method, url, params, oauthTokenSecret) {
+  getSigningKey (method, url, params, queryParams, oauthTokenSecret) {
     let signingKey = PercentEncoder.encode(this.consumerSecret) + '&' + PercentEncoder.encode(oauthTokenSecret)
-    let signatureBase = OauthHelper._getSignatureBase(method, url, params)
+    let signatureBase = OauthHelper._getSignatureBase(method, url, params, queryParams)
     return CryptoJS.enc.Base64.stringify(HmacSHA1(signatureBase, signingKey))
   }
 
@@ -37,22 +41,29 @@ class OauthHelper {
     return result
   }
 
-  static _getSignatureBase (method, url, params) {
-    return method.toUpperCase() + '&' + PercentEncoder.encode(url) + '&' + PercentEncoder.encode(OauthHelper._collectParameters(params))
+  static _getSignatureBase (method, url, params, queryParams) {
+    return method.toUpperCase() + '&' + PercentEncoder.encode(url) + '&'
+      + PercentEncoder.encode(OauthHelper._collectParameters(params, queryParams))
   }
 
-  static _collectParameters (params) {
-    let encodedParams = OauthHelper._percentEncodeParams(params)
+  static _collectParameters (params, queryParams) {
+    let encodedParams = OauthHelper._percentEncodeParams(params, queryParams)
     OauthHelper._sortEncodedParams(encodedParams)
     return OauthHelper._joinParams(encodedParams)
   }
 
-  static _percentEncodeParams (params) {
+  static _percentEncodeParams (params, queryParams) {
     let encodedParams = []
     for (let key in params) {
       encodedParams.push({
         key: `${PercentEncoder.encode(key)}`,
         value: `${PercentEncoder.encode(params[key])}`
+      })
+    }
+    for (let key in queryParams) {
+      encodedParams.push({
+        key: `${PercentEncoder.encode(key)}`,
+        value: `${PercentEncoder.encode(queryParams[key])}`
       })
     }
     return encodedParams
