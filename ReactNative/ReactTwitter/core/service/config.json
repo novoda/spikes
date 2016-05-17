@@ -3,5 +3,6 @@
   "CONSUMER_SECRET": "pTvKlESMnsmc7DqP70CfmJypGgk9oaHPxgC7DkUVbxVZXtIGp6",
   "BASE_URL": "https://api.twitter.com",
   "REQUEST_TOKEN": "/oauth/request_token",
+  "ACCESS_TOKEN": "/oauth/access_token",
   "CALLBACK_URL": "react-twitter-oauth://callback"
 }
