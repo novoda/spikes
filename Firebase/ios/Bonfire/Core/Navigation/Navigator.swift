@@ -1,5 +1,6 @@
 import Foundation
 
 protocol Navigator {
-    func toChat() 
+    func toChannels()
+    func toChat(channel: Channel)
 }

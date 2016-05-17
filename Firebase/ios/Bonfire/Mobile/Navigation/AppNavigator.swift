@@ -1,12 +1,17 @@
 import UIKit
 
-class AppNavigator: Navigator {
+final class AppNavigator: Navigator {
 
     let navigationController = UINavigationController()
 
-    func toChat() {
-        let chatViewController = ChatViewController.withDependencies()
-        navigationController.setViewControllers([chatViewController], animated: true)
+    func toChannels() {
+        let channelsViewController = ChannelsViewController.withDependencies()
+        navigationController.setViewControllers([channelsViewController], animated: true)
+    }
+
+    func toChat(channel: Channel) {
+        let chatViewController = ChatViewController.withDependencies(channel: channel)
+        navigationController.pushViewController(chatViewController, animated: true)
     }
 
 }

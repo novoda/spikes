@@ -1,7 +1,7 @@
 import Foundation
 import RxSwift
 
-class LoginPresenter {
+final class LoginPresenter {
     let loginService: LoginService
     let loginDisplayer: LoginDisplayer
     let navigator: Navigator
@@ -29,7 +29,7 @@ class LoginPresenter {
 
     private func handleAuth(auth: Authentication) {
         if auth.isSuccess() {
-            navigator.toChat()
+            navigator.toChannels()
         } else {
             let error = auth.failure as! NSError
             loginDisplayer.shouldShowAuthenticationError(error.localizedDescription)

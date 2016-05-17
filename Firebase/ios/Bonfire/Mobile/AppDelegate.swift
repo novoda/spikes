@@ -5,9 +5,10 @@ import FirebaseInstanceID
 import FirebaseDatabase
 import FirebaseAuth
 import GoogleSignIn
+import RxSwift
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
@@ -37,6 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 struct SharedServices {
     static let loginService: LoginService = FirebaseLoginService()
+    static let channelsService: ChannelsService = FirebaseChannelsService()
     static let chatService: ChatService = FirebaseChatService()
     static let navigator: Navigator = AppNavigator()
 }

@@ -6,12 +6,12 @@ final class ChatViewController: UIViewController {
 
     var bottomConstraint: NSLayoutConstraint!
 
-    static func withDependencies() -> ChatViewController {
-        return ChatViewController(loginService: SharedServices.loginService, chatService: SharedServices.chatService)
+    static func withDependencies(channel channel: Channel) -> ChatViewController {
+        return ChatViewController(channel: channel, loginService: SharedServices.loginService, chatService: SharedServices.chatService)
     }
 
-    init(loginService: LoginService, chatService: ChatService) {
-        self.chatPresenter = ChatPresenter(loginService: loginService, chatService: chatService, chatDisplayer: chatView)
+    init(channel: Channel, loginService: LoginService, chatService: ChatService) {
+        self.chatPresenter = ChatPresenter(channel: channel, loginService: loginService, chatService: chatService, chatDisplayer: chatView)
 
         super.init(nibName: nil, bundle: nil)
     }

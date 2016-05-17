@@ -9,8 +9,9 @@ import GoogleSignIn
 
 struct NoAuthAvailable: ErrorType {}
 
-class FirebaseLoginService: NSObject, LoginService {
+final class FirebaseLoginService: NSObject, LoginService {
 
+    let usersDB = FIRDatabase.database().referenceWithPath("users")
     let authentication = Variable<Authentication?>(nil)
 
     override init() {
@@ -55,10 +56,11 @@ class FirebaseLoginService: NSObject, LoginService {
 
     func loginWithGoogle(idToken idToken: String, accessToken: String) {
         let credential = FIRGoogleAuthProvider.credentialWithIDToken(idToken, accessToken: accessToken)
-        FIRAuth.auth()?.signInWithCredential(credential, completion: { user, error in
-            if let user = user {
-                let myUser = User(firebaseUser: user)
-                self.authentication.value = Authentication(user: myUser)
+        FIRAuth.auth()?.signInWithCredential(credential, completion: { firebaseUser, error in
+            if let user = firebaseUser {
+                let user = User(firebaseUser: user)
+                self.usersDB.child(user.id).setValue(user.asFirebaseValue())
+                self.authentication.value = Authentication(user: user)
             } else if let error = error {
                 self.authentication.value = Authentication(failure: error)
             }

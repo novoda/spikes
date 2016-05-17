@@ -1,13 +1,13 @@
 import UIKit
 
-class ChatTableViewManager: NSObject, UITableViewDataSource, UITableViewDelegate {
+final class ChatTableViewManager: NSObject, UITableViewDataSource, UITableViewDelegate {
     private var messages = [Message]()
 
     func updateTableView(tableView: UITableView, withChat chat: Chat) {
         messages = chat.messages
         tableView.reloadData()
-        let indexPath = NSIndexPath(forItem: messages.count - 1, inSection: 0)
-        tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Bottom, animated: true)
+//        let indexPath = NSIndexPath(forItem: messages.count - 1, inSection: 0)
+//        tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Bottom, animated: true)
     }
 
     func setupTableView(tableView: UITableView) {

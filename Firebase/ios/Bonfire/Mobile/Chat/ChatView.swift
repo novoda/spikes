@@ -2,7 +2,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class ChatView: UIView {
+final class ChatView: UIView {
     private let textField = UITextField()
     private let tableView = UITableView()
     private let tableViewManager = ChatTableViewManager()
