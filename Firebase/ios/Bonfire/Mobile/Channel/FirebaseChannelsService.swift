@@ -10,7 +10,7 @@ class FirebaseChannelsService: ChannelsService {
     let firebase = FIRDatabase.database().reference()
 
     private func channelsIndex() -> FIRDatabaseReference {
-        return firebase.child("channels-global-index")
+        return firebase.child("channels-public-index")
     }
 
     private func privateChannelsIndex(forUser user: User) -> FIRDatabaseReference {
