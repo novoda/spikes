@@ -46,6 +46,30 @@ class TwitterRequestsService {
       .then((text) => { return this._getTokenDataFromResponse(text) })
   }
 
+  getHomeTimeline (userHandle, oauthToken, oauthTokenSecret) {
+    let ouathHelper = new OauthHelper(config.CONSUMER_SECRET)
+    let url = config.BASE_URL + config.HOME_TIMELINE
+
+    let parameters = this._getBaseParams()
+    parameters['oauth_token'] = oauthToken
+
+    let queryParams = {'screen_name': userHandle }
+
+    let authHeader = ouathHelper
+      .buildAuthorizationHeader('get', url, parameters, queryParams, oauthTokenSecret)
+
+    let finalUrl = url + '?screen_name=' + userHandle
+
+    return this.callsManager.makeCall(finalUrl,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': authHeader
+        }
+      })
+    .then((response) => { return response.json() })
+  }
+
   _getBaseParams () {
     let time = new Date().getTime() / 1000 | 0
     let nonce = OauthHelper.generateNonce()

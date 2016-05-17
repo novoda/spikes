@@ -4,5 +4,6 @@
   "BASE_URL": "https://api.twitter.com",
   "REQUEST_TOKEN": "/oauth/request_token",
   "ACCESS_TOKEN": "/oauth/access_token",
-  "CALLBACK_URL": "react-twitter-oauth://callback"
+  "CALLBACK_URL": "react-twitter-oauth://callback",
+  "HOME_TIMELINE": "/1.1/statuses/home_timeline.json"
 }
