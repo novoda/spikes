@@ -6,7 +6,7 @@ import {
 } from 'react-native'
 
 var Button = require('react-native-button')
-var DeepLinkingFacade = require('../service/deep-linking-facade')
+var DeepLinkingFacade = require('../../service/deep-linking-facade')
 
 var DeepLinkingView = React.createClass({
 

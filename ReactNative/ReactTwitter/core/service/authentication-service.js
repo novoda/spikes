@@ -24,6 +24,10 @@ class AuthenticationService {
     return AsyncStorage.removeItem(TOKEN_STORAGE_KEY)
   }
 
+  isUserLoggedIn () {
+    return this.getOAuthToken().length > 0
+  }
+
   getOAuthToken () {
     if (this.tokenData) {
       return this.tokenData.oauth_token

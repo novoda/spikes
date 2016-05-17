@@ -3,11 +3,15 @@ import {
   Navigator
 } from 'react-native'
 
-var DebugScreenView = require('./debug-screen.js')
-var DeepLinkingView = require('./deep-linking.js')
-var OauthView = require('./oauth-screen.js')
+var SplashScreenView = require('./splash-screen.js')
+var DebugScreenView = require('./debug/debug-screen.js')
+var LoginScreenView = require('./login-screen.js')
+var DeepLinkingView = require('./debug/deep-linking.js')
+var OauthView = require('./debug/oauth-screen.js')
 var TweetsList = require('./tweetsList.js')
 
+const splashScreenID = 'splash-screen-identifier'
+const loginScreenID = 'login-screen-identifier'
 const debugScreenID = 'debug-screen-identifier'
 const deepLinkingID = 'deep-linking-identifier'
 const OauthViewID = 'oauth-screen-identifier'
@@ -18,13 +22,17 @@ var MainNavigator = React.createClass({
   render () {
     return (
       <Navigator
-        initialRoute={{id: debugScreenID}}
+        initialRoute={{id: splashScreenID}}
         renderScene={this.navigatorRenderScene}/>
     )
   },
 
   navigatorRenderScene (route, navigator) {
     switch (route.id) {
+      case splashScreenID:
+        return (<SplashScreenView navigator={navigator} title='Splash Screen' />)
+      case loginScreenID:
+        return (<LoginScreenView navigator={navigator} title='Login Screen' />)
       case debugScreenID:
         return (<DebugScreenView navigator={navigator} title='Debug Screen' />)
       case deepLinkingID:
