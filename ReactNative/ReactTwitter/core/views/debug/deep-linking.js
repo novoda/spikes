@@ -6,8 +6,8 @@ import {
 } from 'react-native'
 
 var Button = require('react-native-button')
-var DeepLinkingFacade = require('../service/deep-linking-facade')
-import AndroidBackNavigationMixin from './mixins/android-back-navigation'
+var DeepLinkingFacade = require('../../service/deep-linking-facade')
+import AndroidBackNavigationMixin from '../mixins/android-back-navigation'
 
 var DeepLinkingView = React.createClass({
   mixins: [AndroidBackNavigationMixin],
@@ -21,13 +21,13 @@ var DeepLinkingView = React.createClass({
   render () {
     return (
       <View style={styles.container}>
-        <Text style={styles.normal} numberOfLines={2}>
-          The deep link url is {"\n"}{this.state.deepLinkUrl}
-        </Text>
         <Button
           style={styles.button}
           styleDisabled={styles.button_disabled}
-          onPress={this._buttonClicked}> Listen for deep linking </Button>
+          onPress={this._buttonClicked}> Start Listening for deep linking </Button>
+        <Text style={styles.normal} numberOfLines={2}>
+          The deep link url is {"\n"}{this.state.deepLinkUrl}
+        </Text>
       </View>
     )
   },

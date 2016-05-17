@@ -21,6 +21,10 @@ var DebugScreenView = React.createClass({
           style={styles.button}
           styleDisabled={styles.button_disabled}
           onPress={this.pushDeepLinking}>Deep Linking</Button>
+          <Button
+            style={styles.button}
+            styleDisabled={styles.button_disabled}
+            onPress={this.pushOauth}>Oauth</Button>
         <Button
           style={styles.button}
           styleDisabled={styles.button_disabled}
@@ -35,6 +39,10 @@ var DebugScreenView = React.createClass({
 
   pushDeepLinking () {
     this.props.navigator.push({id: 'deep-linking-identifier'})
+  },
+
+  pushOauth () {
+    this.props.navigator.push({id: 'oauth-screen-identifier'})
   },
 
   pushTweetsList () {
