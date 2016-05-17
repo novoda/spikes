@@ -1,12 +1,13 @@
 import React from 'react'
 import {
   ListView,
-  BackAndroid,
   Navigator
 } from 'react-native'
 import TweetsListItem from './tweetsListItem'
+import AndroidBackNavigationMixin from './mixins/android-back-navigation'
 
 var TweetsList = React.createClass({
+  mixins: [AndroidBackNavigationMixin],
   propTypes: {
     navigator: React.PropTypes.instanceOf(Navigator).isRequired
   },
@@ -19,13 +20,6 @@ var TweetsList = React.createClass({
   },
 
   componentDidMount () {
-    BackAndroid.addEventListener('hardwareBackPress', () => {
-      if (this.props.navigator.getCurrentRoutes().length === 1) {
-        return false
-      }
-      this.props.navigator.pop()
-      return true
-    })
     this._refreshData()
   },
 
@@ -40,13 +34,12 @@ var TweetsList = React.createClass({
         'Authorization': 'OAuth oauth_consumer_key="aqPSTs1FT2ndP7qXi247BtbXd", oauth_nonce="987e33536527c50a7a0e1eb7b2d77e36", oauth_signature="K5W7yxsVPmQgd8arTIJ8qZXq%2FTk%3D", oauth_signature_method="HMAC-SHA1", oauth_timestamp="1463065323", oauth_token="730013266697654273-RDssoTCOdHNQtFA9k87OSijeZHcF4SU", oauth_version="1.0"'
       }
     })
-      .then((response) => response.json())
-      .then((rjson) => {
-        console.log(rjson)
-        this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(rjson)
-        })
+    .then((response) => response.json())
+    .then((rjson) => {
+      this.setState({
+        dataSource: this.state.dataSource.cloneWithRows(rjson)
       })
+    })
   },
 
   renderRow (rowData) {

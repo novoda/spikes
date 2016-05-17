@@ -4,13 +4,14 @@ import {
   View,
   Image,
   Text,
-  BackAndroid,
   Navigator
 } from 'react-native'
+import AndroidBackNavigationMixin from './mixins/android-back-navigation'
 
 var dateFormat = require('dateformat')
 
 var TweetsView = React.createClass({
+  mixins: [AndroidBackNavigationMixin],
   propTypes: {
     tweetId: React.PropTypes.string.isRequired,
     navigator: React.PropTypes.instanceOf(Navigator).isRequired
@@ -23,13 +24,6 @@ var TweetsView = React.createClass({
   },
 
   componentDidMount () {
-    BackAndroid.addEventListener('hardwareBackPress', () => {
-      if (this.props.navigator.getCurrentRoutes().length === 1) {
-        return false
-      }
-      this.props.navigator.pop()
-      return true
-    })
     this._refreshData()
   },
 

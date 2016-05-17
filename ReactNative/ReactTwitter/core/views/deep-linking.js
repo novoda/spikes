@@ -11,7 +11,6 @@ var DeepLinkingFacade = require('../service/deep-linking-facade')
 var DeepLinkingView = React.createClass({
 
   getInitialState () {
-    console.log('Get initial state')
     return {
       facade: new DeepLinkingFacade(),
       deepLinkUrl: ''
