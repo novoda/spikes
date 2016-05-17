@@ -8,7 +8,7 @@ import {
   Navigator
 } from 'react-native'
 
-var dateFormat = require('dateformat')
+var novodaDataFormat = require('./common/data-format.js')
 
 var TweetsListItem = React.createClass({
   propTypes: {
@@ -22,7 +22,7 @@ var TweetsListItem = React.createClass({
   },
 
   render () {
-    var formattedTime = this._formatTime(this.props.time)
+    var formattedTime = novodaDataFormat.longTime(this.props.time)
     return (
       <TouchableHighlight onPress={() => this._tweetSelected(this.props.id)}
         underlayColor='#dddddd'>
@@ -40,10 +40,6 @@ var TweetsListItem = React.createClass({
          </View>
        </TouchableHighlight>
     )
-  },
-
-  _formatTime (time) {
-    return dateFormat(time, 'mmmm dS, yyyy, h:MM:ss TT')
   },
 
   _tweetSelected (tweetId) {

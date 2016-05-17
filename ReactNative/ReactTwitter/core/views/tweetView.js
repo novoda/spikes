@@ -7,8 +7,7 @@ import {
   Navigator
 } from 'react-native'
 import AndroidBackNavigationMixin from './mixins/android-back-navigation'
-
-var dateFormat = require('dateformat')
+var novodaDataFormat = require('./common/data-format.js')
 
 var TweetsView = React.createClass({
   mixins: [AndroidBackNavigationMixin],
@@ -51,7 +50,7 @@ var TweetsView = React.createClass({
       return (<View />)
     }
 
-    var formattedTime = this._formatTime(Date.parse(this.state.tweet.created_at))
+    var formattedTime = novodaDataFormat.longTime(Date.parse(this.state.tweet.created_at))
     return (
       <View style={styles.mainContainer}>
         <View style={styles.header}>
@@ -67,10 +66,6 @@ var TweetsView = React.createClass({
         <Text style={styles.tweet_text}>{this.state.tweet.text}</Text>
       </View>
     )
-  },
-
-  _formatTime (time) {
-    return dateFormat(time, 'mmmm dS, yyyy, h:MM:ss TT')
   }
 })
 
