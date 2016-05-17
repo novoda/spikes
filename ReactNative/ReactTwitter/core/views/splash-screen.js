@@ -36,6 +36,11 @@ var SplashScreenView = React.createClass({
           this._pushLogin()
         }
       })
+      .catch((error) => {
+        console.warn(error)
+        authService.logoutCurrentUser()
+        this._pushLogin()
+      })
   },
 
   render () {
