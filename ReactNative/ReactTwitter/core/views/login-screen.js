@@ -69,7 +69,7 @@ var LoginScreenView = React.createClass({
             if (authService.isUserLoggedIn()) {
               this._pushTweetsList()
             } else {
-              // TODO
+              console.log('Something went wrong :o')
             }
           })
         })
