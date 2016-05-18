@@ -5,5 +5,6 @@
   "REQUEST_TOKEN": "/oauth/request_token",
   "ACCESS_TOKEN": "/oauth/access_token",
   "CALLBACK_URL": "react-twitter-oauth://callback",
-  "HOME_TIMELINE": "/1.1/statuses/home_timeline.json"
+  "HOME_TIMELINE": "/1.1/statuses/home_timeline.json",
+  "TWEET_DETAIL": "/1.1/statuses/show.json"
 }
