@@ -10,7 +10,7 @@ final class FirebaseChatService: ChatService {
     let firebase = FIRDatabase.database().reference()
 
     func messages(channel: Channel) -> FIRDatabaseReference {
-        return firebase.child("channels/\(channel.name)/messages")
+        return firebase.child("messages/\(channel.name)")
     }
 
     func chat(channel: Channel) -> Observable<Chat> {
