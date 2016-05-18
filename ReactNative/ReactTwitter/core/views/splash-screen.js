@@ -14,8 +14,14 @@ var SplashScreenView = React.createClass({
     navigator: React.PropTypes.instanceOf(Navigator).isRequired
   },
 
+  getInitialState () {
+    return {
+      authenticationService: new AuthenticationService()
+    }
+  },
+
   componentDidMount () {
-    let authService = new AuthenticationService()
+    let authService = this.state.authenticationService
 
     authService.loadDataFromDisk()
       .then(() => {
