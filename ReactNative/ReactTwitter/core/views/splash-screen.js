@@ -23,7 +23,7 @@ var SplashScreenView = React.createClass({
   componentDidMount () {
     let authService = this.state.authenticationService
 
-    authService.loadDataFromDisk()
+    authService.loadData()
       .then(() => {
         return new Promise((resolve, reject) => {
           setTimeout(resolve, SPLASH_DURATION_MS)

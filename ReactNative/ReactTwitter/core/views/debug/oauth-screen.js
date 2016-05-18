@@ -29,7 +29,7 @@ var OauthView = React.createClass({
   },
 
   componentDidMount () {
-    this.state.authenticationService.loadDataFromDisk().then(() => {
+    this.state.authenticationService.loadData().then(() => {
       this._updateAuthenaticationServiceState()
     })
   },
