@@ -56,7 +56,7 @@ class TwitterRequestsService {
     let parameters = this._getBaseParams()
     parameters['oauth_token'] = this.authService.getOAuthToken()
 
-    let queryParams = {'screen_name': this.authService.getUsername() }
+    let queryParams = { 'screen_name': this.authService.getUsername() }
     return this._getResource(url, parameters, queryParams)
   }
 
@@ -66,33 +66,33 @@ class TwitterRequestsService {
     let parameters = this._getBaseParams()
     parameters['oauth_token'] = this.authService.getOAuthToken()
 
-    let queryParams = {'id': tweetId }
+    let queryParams = { 'id': tweetId }
 
     return this._getResource(url, parameters, queryParams)
   }
 
- _getResource(baseURL, parameters, queryParams) {
-   let ouathHelper = new OauthHelper(config.CONSUMER_SECRET)
-   let authHeader = ouathHelper
+  _getResource (baseURL, parameters, queryParams) {
+    let ouathHelper = new OauthHelper(config.CONSUMER_SECRET)
+    let authHeader = ouathHelper
      .buildAuthorizationHeader('get', baseURL, parameters, queryParams, this.authService.getSecretToken())
 
-   let finalUrl = baseURL
-   for (let key in queryParams) {
-     finalUrl += (finalUrl == baseURL) ? '?': '&'
-     finalUrl += key
-     finalUrl += '='
-     finalUrl += queryParams[key]
-   }
+    let finalUrl = baseURL
+    for (let key in queryParams) {
+      finalUrl += (finalUrl === baseURL) ? '?' : '&'
+      finalUrl += key
+      finalUrl += '='
+      finalUrl += queryParams[key]
+    }
 
-   return this.callsManager.makeCall(finalUrl,
-     {
-       method: 'GET',
-       headers: {
-         'Authorization': authHeader
-       }
-     })
-   .then((response) => { return response.json() })
- }
+    return this.callsManager.makeCall(finalUrl,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': authHeader
+        }
+      })
+    .then((response) => { return response.json() })
+  }
   _getBaseParams () {
     let time = new Date().getTime() / 1000 | 0
     let nonce = OauthHelper.generateNonce()

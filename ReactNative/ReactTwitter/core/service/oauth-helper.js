@@ -6,7 +6,7 @@ class OauthHelper {
   constructor (consumerSecret) {
     this.consumerSecret = consumerSecret
   }
-  
+
   buildAuthorizationHeader (method, url, params, queryParams, oauthTokenSecret) {
     let output = 'OAuth '
     let signature = this.getSigningKey(method, url, params, queryParams, oauthTokenSecret)
@@ -38,8 +38,8 @@ class OauthHelper {
   }
 
   static _getSignatureBase (method, url, params, queryParams) {
-    return method.toUpperCase() + '&' + PercentEncoder.encode(url) + '&'
-      + PercentEncoder.encode(OauthHelper._collectParameters(params, queryParams))
+    return method.toUpperCase() + '&' + PercentEncoder.encode(url) + '&' +
+      PercentEncoder.encode(OauthHelper._collectParameters(params, queryParams))
   }
 
   static _collectParameters (params, queryParams) {
