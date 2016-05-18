@@ -6,11 +6,7 @@ class OauthHelper {
   constructor (consumerSecret) {
     this.consumerSecret = consumerSecret
   }
-
-  buildAuthorizationHeader (method, url, params, oauthTokenSecret) {
-    return buildAuthorizationHeader (method, url, params, [], oauthTokenSecret)
-  }
-
+  
   buildAuthorizationHeader (method, url, params, queryParams, oauthTokenSecret) {
     let output = 'OAuth '
     let signature = this.getSigningKey(method, url, params, queryParams, oauthTokenSecret)
