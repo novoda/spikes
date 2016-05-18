@@ -10,11 +10,11 @@ class FirebaseChannelsService: ChannelsService {
     let firebase = FIRDatabase.database().reference()
 
     private func channelsIndex() -> FIRDatabaseReference {
-        return firebase.child("channels-public-index")
+        return firebase.child("public-channels-index")
     }
 
     private func privateChannelsIndex(forUser user: User) -> FIRDatabaseReference {
-        return firebase.child("channels-private-index").child(user.id)
+        return firebase.child("private-channels-index").child(user.id)
     }
 
     func channels(forUser user: User) -> Observable<[Channel]> {
@@ -27,7 +27,7 @@ class FirebaseChannelsService: ChannelsService {
         return Observable.create { observer in
             let handle = self.channelsIndex().observeEventType(.Value, withBlock: { snapshot in
                 let firebaseChannels = snapshot.children.allObjects
-                let channels = firebaseChannels.map{$0.value}.map(Channel.init)
+                let channels = firebaseChannels.map{$0.key}.map(Channel.init)
                 observer.onNext(channels)
             })
 
@@ -41,7 +41,7 @@ class FirebaseChannelsService: ChannelsService {
         return Observable.create { observer in
             let handle = self.privateChannelsIndex(forUser: user).observeEventType(.Value, withBlock: { snapshot in
                 let firebaseChannels = snapshot.children.allObjects
-                let channels = firebaseChannels.map{$0.value}.map(Channel.init)
+                let channels = firebaseChannels.map{$0.key}.map(Channel.init)
                 observer.onNext(channels)
             })
 
