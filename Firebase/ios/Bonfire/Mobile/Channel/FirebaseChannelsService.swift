@@ -23,32 +23,53 @@ class FirebaseChannelsService: ChannelsService {
         }
     }
 
-    func publicChannels() -> Observable<[Channel]> {
-        return Observable.create { observer in
-            let handle = self.channelsIndex().observeEventType(.Value, withBlock: { snapshot in
-                let firebaseChannels = snapshot.children.allObjects
-                let channels = firebaseChannels.map{$0.key}.map(Channel.init)
-                observer.onNext(channels)
-            })
-
-            return AnonymousDisposable() {
-                self.firebase.removeObserverWithHandle(handle)
-            }
-        }
+    func createPublicChannel(withName name: String) {
+        channelsIndex().childByAutoId().setValue(name)
     }
 
-    func privateChannels(forUser user: User) -> Observable<[Channel]> {
-        return Observable.create { observer in
-            let handle = self.privateChannelsIndex(forUser: user).observeEventType(.Value, withBlock: { snapshot in
-                let firebaseChannels = snapshot.children.allObjects
-                let channels = firebaseChannels.map{$0.key}.map(Channel.init)
-                observer.onNext(channels)
+    private func publicChannels() -> Observable<[Channel]> {
+        return Observable.create({ observer in
+
+            let handle = self.channelsIndex().observeEventType(.Value, withBlock: { snapshot in
+                let firebaseChannels: [Observable<Channel>] = snapshot.children.allObjects.map{$0.key!}.map(self.channel)
+                observer.onNext(firebaseChannels)
             })
 
             return AnonymousDisposable() {
                 self.firebase.removeObserverWithHandle(handle)
             }
-        }
+
+        }).flatMap(mergeToArray)
+    }
+
+    private func privateChannels(forUser user: User) -> Observable<[Channel]> {
+        // Observable<[Observable<Channel>]>
+
+        return Observable.create({ observer in
+
+            let handle = self.privateChannelsIndex(forUser: user).observeEventType(.Value, withBlock: { snapshot in
+                let firebaseChannelKeys = snapshot.children.allObjects.map{$0.key!}
+                let firebaseChannels: [Observable<Channel>] = firebaseChannelKeys.map(self.channel)
+                observer.onNext(firebaseChannels)
+            })
+
+            return AnonymousDisposable() {
+                self.firebase.removeObserverWithHandle(handle)
+            }
+
+        }).flatMap(mergeToArray)
+    }
+
+    private func channel(withKey key: String) -> Observable<Channel> {
+        return Observable.create({ observer in
+            self.firebase.child("channels/\(key)").observeSingleEventOfType(.Value, withBlock: { snapshot in
+                let channel = try! Channel(firebaseValue: snapshot.value!)
+                observer.on(.Next(channel))
+                observer.on(.Completed)
+            })
+
+            return AnonymousDisposable() {}
+        })
     }
 
 }
