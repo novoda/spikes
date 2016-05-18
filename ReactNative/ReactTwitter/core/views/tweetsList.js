@@ -32,7 +32,7 @@ var TweetsList = React.createClass({
           dataSource: this.state.dataSource.cloneWithRows(rjson)
         })
       })
-      .catch((err) => { console.log(err) })
+      .catch((err) => { console.warn(err) })
   },
 
   renderRow (rowData) {
