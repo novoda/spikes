@@ -79,9 +79,7 @@ class TwitterRequestsService {
     let finalUrl = baseURL
     for (let key in queryParams) {
       finalUrl += (finalUrl === baseURL) ? '?' : '&'
-      finalUrl += key
-      finalUrl += '='
-      finalUrl += queryParams[key]
+      finalUrl += `${key}=${queryParams[key]}`
     }
 
     return this.callsManager.makeCall(finalUrl,
