@@ -78,9 +78,9 @@ public class FirebaseLoginService implements LoginService {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = task.getResult().getUser();
-                            User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), firebaseUser.getPhotoUrl().toString()); //Refactor this double creation
-                            usersDB.child(firebaseUser.getUid()).setValue(user);
-                            authRelay.call(authenticationFrom(firebaseUser));
+                            Authentication authentication = authenticationFrom(firebaseUser);
+                            usersDB.child(firebaseUser.getUid()).setValue(authentication.getUser());
+                            authRelay.call(authentication);
                         } else {
                             Throwable exception = task.getException();
                             Log.e(exception, "Failed to authenticate Firebase");

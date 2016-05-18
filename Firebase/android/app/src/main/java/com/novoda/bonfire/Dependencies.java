@@ -39,7 +39,7 @@ public enum Dependencies {
     }
 
     private boolean needsInitialisation() {
-        return loginService == null && chatService == null && channelService == null && firebaseAnalytics == null;
+        return loginService == null || chatService == null || channelService == null || firebaseAnalytics == null;
     }
 
     public FirebaseAnalyticsAnalytics getFirebaseAnalytics() {

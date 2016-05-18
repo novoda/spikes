@@ -39,7 +39,8 @@ public class ChannelsPresenter {
                                       public void call(Channels channels) {
                                           channelsDisplayer.display(channels);
                                       }
-                                  }));
+                                  })
+        );
     }
 
     private Func1<Authentication, Observable<Channels>> channelsForUser() {

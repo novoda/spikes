@@ -35,9 +35,9 @@ public class FirebaseChannelService implements ChannelService {
                 publicChannels(),
                 new Func2<List<Channel>, List<Channel>, Channels>() {
                     @Override
-                    public Channels call(List<Channel> channels, List<Channel> channels2) {
-                        List<Channel> combinedChannels = new ArrayList<>(channels);
-                        combinedChannels.addAll(channels2);
+                    public Channels call(List<Channel> privateChannels, List<Channel> publicChannels) {
+                        List<Channel> combinedChannels = new ArrayList<>(privateChannels);
+                        combinedChannels.addAll(publicChannels);
                         return new Channels(combinedChannels);
                     }
                 }
