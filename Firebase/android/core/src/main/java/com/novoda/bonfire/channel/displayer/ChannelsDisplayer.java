@@ -7,16 +7,23 @@ public interface ChannelsDisplayer {
 
     void display(Channels channels);
 
-    void attach(ChannelSelectionListener channelSelectionListener);
+    void attach(ChannelsInteractionListener channelsInteractionListener);
 
-    void detach(ChannelSelectionListener channelSelectionListener);
+    void detach(ChannelsInteractionListener channelsInteractionListener);
 
-    interface ChannelSelectionListener {
+    interface ChannelsInteractionListener {
         void onChannelSelected(Channel channel);
 
-        ChannelSelectionListener NO_OP = new ChannelSelectionListener() {
+        void onCreateChannel();
+
+        ChannelsInteractionListener NO_OP = new ChannelsInteractionListener() {
             @Override
             public void onChannelSelected(Channel channel) {
+                // this does not do anything
+            }
+
+            @Override
+            public void onCreateChannel() {
                 // this does not do anything
             }
         };

@@ -7,4 +7,6 @@ public interface Navigator {
     void toChannel(Channel channel);
 
     void toChannels();
+
+    void toCreateChannel();
 }

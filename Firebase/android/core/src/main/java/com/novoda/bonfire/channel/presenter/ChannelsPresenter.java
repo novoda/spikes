@@ -30,7 +30,7 @@ public class ChannelsPresenter {
     }
 
     public void startPresenting() {
-        channelsDisplayer.attach(channelSelectionListener);
+        channelsDisplayer.attach(channelsInteractionListener);
         subscriptions.add(loginService.getAuthentication()
                                   .filter(successfullyAuthenticated())
                                   .flatMap(channelsForUser())
@@ -63,14 +63,20 @@ public class ChannelsPresenter {
 
     public void stopPresenting() {
         subscriptions.clear();
-        channelsDisplayer.detach(channelSelectionListener);
+        channelsDisplayer.detach(channelsInteractionListener);
         subscriptions = new CompositeSubscription();
     }
 
-    private final ChannelsDisplayer.ChannelSelectionListener channelSelectionListener = new ChannelsDisplayer.ChannelSelectionListener() {
+    private final ChannelsDisplayer.ChannelsInteractionListener channelsInteractionListener = new ChannelsDisplayer.ChannelsInteractionListener() {
         @Override
         public void onChannelSelected(Channel channel) {
             navigator.toChannel(channel);
         }
+
+        @Override
+        public void onCreateChannel() {
+            navigator.toCreateChannel();
+        }
+
     };
 }

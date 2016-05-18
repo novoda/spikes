@@ -1,6 +1,7 @@
 package com.novoda.bonfire.channel.view;
 
 import android.content.Context;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -15,6 +16,7 @@ import com.novoda.notils.caster.Views;
 public class ChannelsView extends FrameLayout implements ChannelsDisplayer {
 
     private final ChannelsAdapter channelsAdapter = new ChannelsAdapter();
+    private FloatingActionButton newChannelFab;
 
     public ChannelsView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -27,6 +29,7 @@ public class ChannelsView extends FrameLayout implements ChannelsDisplayer {
         RecyclerView channels = Views.findById(this, R.id.channels);
         channels.setLayoutManager(new LinearLayoutManager(getContext()));
         channels.setAdapter(channelsAdapter);
+        newChannelFab = Views.findById(this, R.id.newChannelFab);
     }
 
     @Override
@@ -35,12 +38,19 @@ public class ChannelsView extends FrameLayout implements ChannelsDisplayer {
     }
 
     @Override
-    public void attach(ChannelSelectionListener channelSelectionListener) {
-        channelsAdapter.attach(channelSelectionListener);
+    public void attach(final ChannelsInteractionListener channelsInteractionListener) {
+        channelsAdapter.attach(channelsInteractionListener);
+        newChannelFab.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                channelsInteractionListener.onCreateChannel();
+            }
+        });
     }
 
     @Override
-    public void detach(ChannelSelectionListener channelSelectionListener) {
-        channelsAdapter.detach(channelSelectionListener);
+    public void detach(ChannelsInteractionListener channelsInteractionListener) {
+        channelsAdapter.detach(channelsInteractionListener);
+        newChannelFab.setOnClickListener(null);
     }
 }

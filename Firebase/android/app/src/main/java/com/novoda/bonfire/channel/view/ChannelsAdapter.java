@@ -12,7 +12,7 @@ import java.util.ArrayList;
 class ChannelsAdapter extends RecyclerView.Adapter<ChannelViewHolder>  {
 
     private Channels channels = new Channels(new ArrayList<Channel>());
-    private ChannelsDisplayer.ChannelSelectionListener channelSelectionListener;
+    private ChannelsDisplayer.ChannelsInteractionListener channelsInteractionListener;
 
     public void update(Channels channels){
         this.channels = channels;
@@ -39,18 +39,18 @@ class ChannelsAdapter extends RecyclerView.Adapter<ChannelViewHolder>  {
         return channels.getChannelAt(position).hashCode();
     }
 
-    public void attach(ChannelsDisplayer.ChannelSelectionListener channelSelectionListener) {
-        this.channelSelectionListener = channelSelectionListener;
+    public void attach(ChannelsDisplayer.ChannelsInteractionListener channelsInteractionListener) {
+        this.channelsInteractionListener = channelsInteractionListener;
     }
 
-    public void detach(ChannelsDisplayer.ChannelSelectionListener channelSelectionListener) {
-        this.channelSelectionListener = ChannelsDisplayer.ChannelSelectionListener.NO_OP;
+    public void detach(ChannelsDisplayer.ChannelsInteractionListener channelsInteractionListener) {
+        this.channelsInteractionListener = ChannelsDisplayer.ChannelsInteractionListener.NO_OP;
     }
 
     private final ChannelViewHolder.ChannelSelectionListener clickListener = new ChannelViewHolder.ChannelSelectionListener() {
         @Override
         public void onChannelSelected(Channel channel) {
-            ChannelsAdapter.this.channelSelectionListener.onChannelSelected(channel);
+            ChannelsAdapter.this.channelsInteractionListener.onChannelSelected(channel);
         }
     };
 }
