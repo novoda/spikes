@@ -55,8 +55,8 @@ var LoginScreenView = React.createClass({
       let parsedURI = OauthHelper.getOauthTokenAndVerifierFromURLCallback(uri)
       this.state.facade.stopListeningForDeepLinking()
 
-      if (this._userCancelledLogin(parsedURI)) {
-        // user canceled login
+      let userCancelledLogin = parsedURI.oauth_token == null || parsedURI.oauth_token.length === 0
+      if (userCancelledLogin) {
         return
       }
 
@@ -66,10 +66,6 @@ var LoginScreenView = React.createClass({
         })
     })
     Linking.openURL('https://api.twitter.com/oauth/authenticate?oauth_token=' + oauthToken)
-  },
-
-  _userCancelledLogin (parsedURI) {
-    return parsedURI.oauth_token == null || parsedURI.oauth_token.length === 0
   },
 
   _pushTweetsList () {
