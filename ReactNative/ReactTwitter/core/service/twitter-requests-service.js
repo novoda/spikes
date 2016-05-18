@@ -20,7 +20,7 @@ class TwitterRequestsService {
       {
         method: 'POST',
         headers: {
-          'Authorization': ouathHelper.buildAuthorizationHeader('post', url, parameters, '')
+          'Authorization': ouathHelper.buildAuthorizationHeader('post', url, parameters, [], '')
         }
       })
       .then((response) => { return response.text() })
