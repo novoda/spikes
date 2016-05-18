@@ -11,18 +11,16 @@ var Button = require('react-native-button')
 var TwitterRequestsService = require('../service/twitter-requests-service.js')
 var DeepLinkingFacade = require('../service/deep-linking-facade')
 var OauthHelper = require('../service/oauth-helper.js')
-var AuthenticationService = require('../service/authentication-service.js')
 
 var LoginScreenView = React.createClass({
   propTypes: {
-    navigator: React.PropTypes.instanceOf(Navigator).isRequired
+    navigator: React.PropTypes.instanceOf(Navigator).isRequired,
+    twitterService: React.PropTypes.instanceOf(TwitterRequestsService).isRequired
   },
 
   getInitialState () {
     return {
-      facade: new DeepLinkingFacade(),
-      twitterService: new TwitterRequestsService(),
-      authenticationService: new AuthenticationService()
+      facade: new DeepLinkingFacade()
     }
   },
 
@@ -44,7 +42,7 @@ var LoginScreenView = React.createClass({
   },
 
   _startLogin () {
-    this.state.twitterService.requestToken()
+    this.props.twitterService.requestToken()
         .then((tokenData) => {
           let oauthToken = tokenData.oauth_token
           this._browserAuthenticationWithToken(oauthToken)
@@ -62,16 +60,9 @@ var LoginScreenView = React.createClass({
         return
       }
 
-      this.state.twitterService.getAccessToken(parsedURI.oauth_token, parsedURI.oauth_verifier)
+      this.props.twitterService.getAccessToken(parsedURI.oauth_token, parsedURI.oauth_verifier)
         .then((tokenData) => {
-          let authService = this.state.authenticationService
-          authService.updateWithTokenData(tokenData).then(() => {
-            if (authService.isUserLoggedIn()) {
-              this._pushTweetsList()
-            } else {
-              console.log('Something went wrong :o')
-            }
-          })
+          this._pushTweetsList()
         })
     })
     Linking.openURL('https://api.twitter.com/oauth/authenticate?oauth_token=' + oauthToken)
@@ -82,7 +73,7 @@ var LoginScreenView = React.createClass({
   },
 
   _pushTweetsList () {
-    this.props.navigator.resetTo({id: 'tweets-list-identifier'})
+    this.props.navigator.resetTo({id: 'tweets-list-identifier', twitterService: this.props.twitterService})
   }
 })
 

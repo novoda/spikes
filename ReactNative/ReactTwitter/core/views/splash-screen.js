@@ -6,6 +6,7 @@ import {
   Navigator
 } from 'react-native'
 var AuthenticationService = require('../service/authentication-service.js')
+var TwitterRequestsService = require('../service/twitter-requests-service.js')
 
 const SPLASH_DURATION_MS = 1000
 
@@ -15,8 +16,10 @@ var SplashScreenView = React.createClass({
   },
 
   getInitialState () {
+    let authService = new AuthenticationService()
     return {
-      authenticationService: new AuthenticationService()
+      authenticationService: authService,
+      twitterService: new TwitterRequestsService(authService)
     }
   },
 
@@ -52,11 +55,11 @@ var SplashScreenView = React.createClass({
   },
 
   _pushLogin () {
-    this.props.navigator.resetTo({id: 'login-screen-identifier'})
+    this.props.navigator.resetTo({id: 'login-screen-identifier', twitterService: this.state.twitterService})
   },
 
   _pushTweetsList () {
-    this.props.navigator.resetTo({id: 'tweets-list-identifier'})
+    this.props.navigator.resetTo({id: 'tweets-list-identifier', twitterService: this.state.twitterService})
   }
 })
 

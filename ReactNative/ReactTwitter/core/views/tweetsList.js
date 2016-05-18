@@ -6,11 +6,11 @@ import {
 import TweetsListItem from './tweetsListItem'
 import AndroidBackNavigationMixin from './mixins/android-back-navigation'
 var TwitterRequestsService = require('../service/twitter-requests-service.js')
-var AuthenticationService = require('../service/authentication-service.js')
 
 var TweetsList = React.createClass({
   mixins: [AndroidBackNavigationMixin],
   propTypes: {
+    twitterService: React.PropTypes.instanceOf(TwitterRequestsService).isRequired,
     navigator: React.PropTypes.instanceOf(Navigator).isRequired
   },
 
@@ -22,23 +22,11 @@ var TweetsList = React.createClass({
   },
 
   componentDidMount () {
-    let authService = new AuthenticationService()
-    authService.loadDataFromDisk()
-      .then(() => {
-        this._refreshData(
-          authService.getUsername(),
-          authService.getOAuthToken(),
-          authService.getSecretToken()
-        )
-      })
-      .catch((err) => { console.log(err) })
+    this._refreshData()
   },
 
-  /*global fetch*/
-  /*eslint no-undef: "error"*/
-  _refreshData (username, oauthToken, oauthTokenSecret) {
-    let twitterService = new TwitterRequestsService()
-    twitterService.getHomeTimeline(username, oauthToken, oauthTokenSecret)
+  _refreshData () {
+    this.props.twitterService.getHomeTimeline()
       .then((rjson) => {
         this.setState({
           dataSource: this.state.dataSource.cloneWithRows(rjson)
@@ -57,6 +45,7 @@ var TweetsList = React.createClass({
           author_handle={rowData.user.screen_name}
           text={rowData.text}
           navigator={this.props.navigator}
+          twitterService={this.props.twitterService}
         />
     )
   },
