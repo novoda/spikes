@@ -5,9 +5,25 @@ import FirebaseInstanceID
 import FirebaseDatabase
 import RxSwift
 
+enum ChannelCreation {
+    case Idle
+    case Busy
+    case Successful
+    case Error
+}
+
+enum DatabaseWriteResult<T> {
+    case Success(T)
+    case Error(ErrorType)
+}
+
 class FirebaseChannelsService: ChannelsService {
 
     let firebase = FIRDatabase.database().reference()
+
+    private func channelsInfo(withKey key: String) -> FIRDatabaseReference {
+        return firebase.child("channels/\(key)")
+    }
 
     private func channelsIndex() -> FIRDatabaseReference {
         return firebase.child("public-channels-index")
@@ -23,8 +39,21 @@ class FirebaseChannelsService: ChannelsService {
         }
     }
 
-    func createPublicChannel(withName name: String) {
-        channelsIndex().childByAutoId().setValue(name)
+    func createPublicChannel(withName name: String) -> Observable<DatabaseWriteResult<Channel>> {
+        return Observable.create({ observer in
+            let channel = Channel(name: name, access: .Public)
+            self.channelsInfo(withKey: name).setValue(channel.asFirebaseValue(), withCompletionBlock: { error, firebase in
+                if let error = error {
+                    observer.on(.Next(.Error(error)))
+                } else {
+                    self.channelsIndex().childByAutoId().setValue(name)
+                    observer.on(.Next(.Success(channel)))
+                }
+                observer.on(.Completed)
+            })
+
+            return AnonymousDisposable {}
+        })
     }
 
     private func publicChannels() -> Observable<[Channel]> {
@@ -43,8 +72,6 @@ class FirebaseChannelsService: ChannelsService {
     }
 
     private func privateChannels(forUser user: User) -> Observable<[Channel]> {
-        // Observable<[Observable<Channel>]>
-
         return Observable.create({ observer in
 
             let handle = self.privateChannelsIndex(forUser: user).observeEventType(.Value, withBlock: { snapshot in
@@ -62,7 +89,7 @@ class FirebaseChannelsService: ChannelsService {
 
     private func channel(withKey key: String) -> Observable<Channel> {
         return Observable.create({ observer in
-            self.firebase.child("channels/\(key)").observeSingleEventOfType(.Value, withBlock: { snapshot in
+            self.channelsInfo(withKey: key).observeSingleEventOfType(.Value, withBlock: { snapshot in
                 let channel = try! Channel(firebaseValue: snapshot.value!)
                 observer.on(.Next(channel))
                 observer.on(.Completed)
