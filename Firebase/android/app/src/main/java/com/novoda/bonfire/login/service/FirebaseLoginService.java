@@ -4,12 +4,13 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.jakewharton.rxrelay.BehaviorRelay;
 import com.novoda.bonfire.login.data.model.Authentication;
 import com.novoda.bonfire.login.data.model.User;
@@ -24,9 +25,11 @@ public class FirebaseLoginService implements LoginService {
     private final FirebaseAuth firebaseAuth;
 
     private final BehaviorRelay<Authentication> authRelay;
+    private final DatabaseReference usersDB;
 
-    public FirebaseLoginService(FirebaseApp firebaseApp) {
-        firebaseAuth = FirebaseAuth.getInstance(firebaseApp);
+    public FirebaseLoginService(FirebaseDatabase firebaseDatabase, FirebaseAuth firebaseAuth) {
+        this.firebaseAuth = firebaseAuth;
+        usersDB = firebaseDatabase.getReference("users");
         authRelay = BehaviorRelay.create();
     }
 
@@ -75,7 +78,9 @@ public class FirebaseLoginService implements LoginService {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = task.getResult().getUser();
-                            authRelay.call(authenticationFrom(firebaseUser));
+                            Authentication authentication = authenticationFrom(firebaseUser);
+                            usersDB.child(firebaseUser.getUid()).setValue(authentication.getUser());
+                            authRelay.call(authentication);
                         } else {
                             Throwable exception = task.getException();
                             Log.e(exception, "Failed to authenticate Firebase");

@@ -1,6 +1,5 @@
 package com.novoda.bonfire.chat.service;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,11 +19,10 @@ import rx.subscriptions.BooleanSubscription;
 
 public class FirebaseChatService implements ChatService {
 
-    private final DatabaseReference messagesDB;
+    private final DatabaseReference channelsDB;
 
-    public FirebaseChatService(FirebaseApp firebaseApp) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance(firebaseApp);
-        messagesDB = database.getReference("channels");
+    public FirebaseChatService(FirebaseDatabase firebaseDatabase) {
+        channelsDB = firebaseDatabase.getReference("channels");
     }
 
     @Override
@@ -57,15 +55,15 @@ public class FirebaseChatService implements ChatService {
 
     @Override
     public void sendMessage(Channel channel, Message message) {
-        channelDB(channel).push().setValue(message);
+        channelDB(channel).child("messages").push().setValue(message); //TODO handle errors
     }
 
     private DatabaseReference channelDB(Channel channel) {
-        return messagesDB.child(channel.getName());
+        return channelsDB.child(channel.getName());
     }
 
     private List<Message> toMessages(DataSnapshot dataSnapshot) {
-        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+        Iterable<DataSnapshot> children = dataSnapshot.child("messages").getChildren();
         List<Message> messages = new ArrayList<>();
         for (DataSnapshot child : children) {
             Message message = child.getValue(Message.class);

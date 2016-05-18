@@ -1,18 +1,37 @@
 {
   "rules": {
     "channels": {
-      ".read": "auth != null",
-      "global": {
-        ".read": "auth != null",
-        "$message": {
-          ".write": "!data.exists() && newData.exists()",
-          ".validate": "newData.hasChildren(['author', 'body', 'timestamp'])",
-          "author": {
-            ".validate": "newData.hasChildren(['id', 'name', 'photoUrl'])",
-            "id": {
-              ".validate": "newData.val() === auth.uid"
+      "$channel": {
+        ".read": "!root.child('owners').child($channel).exists() || root.child('owners').child($channel).child(auth.uid).exists()",
+        "messages": {
+          "$message": {
+            ".write": "(!root.child('owners').child($channel).exists() || root.child('owners').child($channel).child(auth.uid).exists()) && !data.exists() && newData.exists()",
+            ".validate": "newData.hasChildren(['author', 'body', 'timestamp'])",
+            "author": {
+              ".validate": "newData.hasChildren(['id', 'name'])",
+              "id": {
+                ".validate": "newData.val() === auth.uid"
+              }
             }
           }
+        }
+      }
+    },
+    "channels-public-index": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "channels-private-index": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+    },
+    "users": {
+      "$user_id": {
+        ".read": "auth != null",
+        ".write": "auth.uid === $user_id",
+        ".validate": "newData.hasChildren(['id', 'name'])",
+        "id": {
+          ".validate": "newData.val() === auth.uid"
         }
       }
     }

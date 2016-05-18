@@ -25,12 +25,12 @@ public class ChatPresenter {
 
     private User user;
 
-    public ChatPresenter(LoginService loginService, ChatService chatService, ChatDisplayer chatDisplayer, String channelName, Analytics analytics) {
+    public ChatPresenter(LoginService loginService, ChatService chatService, ChatDisplayer chatDisplayer, Channel channel, Analytics analytics) {
         this.loginService = loginService;
         this.chatService = chatService;
         this.chatDisplayer = chatDisplayer;
         this.analytics = analytics;
-        this.channel = new Channel(channelName);
+        this.channel = channel;
     }
 
     public void startPresenting() {
