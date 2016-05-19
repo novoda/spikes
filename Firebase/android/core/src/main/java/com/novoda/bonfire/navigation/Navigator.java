@@ -8,5 +8,5 @@ public interface Navigator {
 
     void toChannels();
 
-    void toCreateChannel();
+    void toNewChannel();
 }

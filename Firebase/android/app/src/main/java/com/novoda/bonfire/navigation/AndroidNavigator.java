@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.novoda.bonfire.channel.ChannelsActivity;
-import com.novoda.bonfire.channel.CreateChannelActivity;
+import com.novoda.bonfire.channel.NewChannelActivity;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.chat.ChatActivity;
 
@@ -27,8 +27,8 @@ public class AndroidNavigator implements Navigator {
     }
 
     @Override
-    public void toCreateChannel() {
-        activity.startActivity(new Intent(activity, CreateChannelActivity.class));
+    public void toNewChannel() {
+        activity.startActivity(new Intent(activity, NewChannelActivity.class));
     }
 
 }

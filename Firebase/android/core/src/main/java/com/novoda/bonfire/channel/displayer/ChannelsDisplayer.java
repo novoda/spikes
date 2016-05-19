@@ -14,7 +14,7 @@ public interface ChannelsDisplayer {
     interface ChannelsInteractionListener {
         void onChannelSelected(Channel channel);
 
-        void onCreateChannel();
+        void onAddNewChannel();
 
         ChannelsInteractionListener NO_OP = new ChannelsInteractionListener() {
             @Override
@@ -23,7 +23,7 @@ public interface ChannelsDisplayer {
             }
 
             @Override
-            public void onCreateChannel() {
+            public void onAddNewChannel() {
                 // this does not do anything
             }
         };

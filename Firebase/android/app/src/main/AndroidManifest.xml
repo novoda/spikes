@@ -24,7 +24,7 @@
     <activity android:name="com.novoda.bonfire.chat.ChatActivity"
       android:parentActivityName=".channel.ChannelsActivity"/>
 
-    <activity android:name=".channel.CreateChannelActivity"
+    <activity android:name=".channel.NewChannelActivity"
       android:parentActivityName=".channel.ChannelsActivity"
       android:label="@string/createChannel"/>
 

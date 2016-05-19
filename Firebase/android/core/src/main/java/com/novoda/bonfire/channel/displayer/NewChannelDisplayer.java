@@ -1,8 +1,6 @@
 package com.novoda.bonfire.channel.displayer;
 
-import com.novoda.bonfire.channel.data.model.Channel;
-
-public interface CreateChannelDisplayer {
+public interface NewChannelDisplayer {
 
     void attach(InteractionListener interactionListener);
 
@@ -22,7 +20,7 @@ public interface CreateChannelDisplayer {
 
         void onPrivateChannelSwitchStateChanged(boolean isChecked);
 
-        void onCreateChannel(Channel channel);
+        void onCreateChannelClicked(String channelName, boolean isPrivate);
 
         InteractionListener NO_OP = new InteractionListener() {
             @Override
@@ -36,7 +34,7 @@ public interface CreateChannelDisplayer {
             }
 
             @Override
-            public void onCreateChannel(Channel channel) {
+            public void onCreateChannelClicked(String channelName, boolean isPrivate) {
                 // empty implementation
             }
         };

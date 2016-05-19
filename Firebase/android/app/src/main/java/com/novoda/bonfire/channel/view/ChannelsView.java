@@ -43,7 +43,7 @@ public class ChannelsView extends FrameLayout implements ChannelsDisplayer {
         newChannelFab.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                channelsInteractionListener.onCreateChannel();
+                channelsInteractionListener.onAddNewChannel();
             }
         });
     }

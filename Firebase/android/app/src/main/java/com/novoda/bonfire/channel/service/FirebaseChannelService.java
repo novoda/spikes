@@ -41,6 +41,11 @@ public class FirebaseChannelService implements ChannelService {
                 .flatMap(convertToChannelsInstance());
     }
 
+    @Override
+    public void createChannel(String channelName, boolean isPrivate) {
+
+    }
+
     private Observable<List<String>> privateChannelsFor(final User user) {
         return Observable.create(new Observable.OnSubscribe<List<String>>() {
             @Override

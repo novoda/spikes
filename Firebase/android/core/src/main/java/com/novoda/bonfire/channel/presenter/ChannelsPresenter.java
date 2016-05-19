@@ -74,8 +74,8 @@ public class ChannelsPresenter {
         }
 
         @Override
-        public void onCreateChannel() {
-            navigator.toCreateChannel();
+        public void onAddNewChannel() {
+            navigator.toNewChannel();
         }
 
     };

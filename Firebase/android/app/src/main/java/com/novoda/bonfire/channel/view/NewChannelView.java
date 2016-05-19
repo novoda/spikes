@@ -1,18 +1,21 @@
 package com.novoda.bonfire.channel.view;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 
 import com.novoda.bonfire.R;
-import com.novoda.bonfire.channel.displayer.CreateChannelDisplayer;
+import com.novoda.bonfire.channel.displayer.NewChannelDisplayer;
 import com.novoda.notils.caster.Views;
 
-public class CreateChannelView extends LinearLayout implements CreateChannelDisplayer {
+public class NewChannelView extends LinearLayout implements NewChannelDisplayer {
 
     private InteractionListener interactionListener = InteractionListener.NO_OP;
     private EditText newChannelName;
@@ -20,7 +23,7 @@ public class CreateChannelView extends LinearLayout implements CreateChannelDisp
     private EditText addChannelMember;
     private Button createButton;
 
-    public CreateChannelView(Context context, AttributeSet attrs) {
+    public NewChannelView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setOrientation(VERTICAL);
     }
@@ -38,6 +41,9 @@ public class CreateChannelView extends LinearLayout implements CreateChannelDisp
     @Override
     public void attach(InteractionListener interactionListener) {
         this.interactionListener = interactionListener;
+        newChannelName.addTextChangedListener(channelNameTextWatcher);
+        privateChannelSwitch.setOnCheckedChangeListener(privateSwitchCheckedListener);
+        createButton.setOnClickListener(createButtonClickListener);
     }
 
     @Override
@@ -66,4 +72,35 @@ public class CreateChannelView extends LinearLayout implements CreateChannelDisp
         addChannelMember.setVisibility(GONE);
         addChannelMember.setEnabled(false);
     }
+
+    private final TextWatcher channelNameTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            interactionListener.onChannelNameLengthChanged(s.length());
+        }
+    };
+
+    private final CompoundButton.OnCheckedChangeListener privateSwitchCheckedListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            interactionListener.onPrivateChannelSwitchStateChanged(isChecked);
+        }
+    };
+
+    private final OnClickListener createButtonClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            interactionListener.onCreateChannelClicked(newChannelName.getText().toString(), privateChannelSwitch.isChecked());
+        }
+    };
 }

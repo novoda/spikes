@@ -8,4 +8,6 @@ import rx.Observable;
 public interface ChannelService {
 
     Observable<Channels> getChannelsFor(User user);
+
+    void createChannel(String channelName, boolean isPrivate);
 }
