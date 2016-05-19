@@ -44,4 +44,14 @@ final class CreateChannelViewController: UIViewController {
         bottomConstraint = createChannelView.pinToSuperviewBottom()
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        createChannelPresenter.startPresenting()
+    }
+
+    override func viewDidDisappear(animated: Bool) {
+        createChannelPresenter.stopPresenting()
+        super.viewDidDisappear(animated)
+    }
+
 }

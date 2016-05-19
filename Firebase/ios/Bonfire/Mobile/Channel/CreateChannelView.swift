@@ -20,6 +20,8 @@ final class CreateChannelView: UIView {
     }
 
     func setupViews() {
+        backgroundColor = .whiteColor()
+
         textField.backgroundColor = .lightGrayColor()
         textField.clearButtonMode = .Always
         textField.placeholder = "Channel name here!"
@@ -45,7 +47,12 @@ extension CreateChannelView: CreateChannelDisplayer {
 
 extension CreateChannelView: UITextFieldDelegate {
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-//        actionListener?.submitMessage(textField.text ?? "")
+        guard let newChannelName = textField.text
+            where !newChannelName.isEmpty
+            else {
+                return false
+            }
+        actionListener?.createChannel(withName: newChannelName)
         textField.text = ""
         return true
     }

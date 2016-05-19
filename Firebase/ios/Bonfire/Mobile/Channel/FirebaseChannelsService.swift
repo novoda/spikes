@@ -46,7 +46,7 @@ class FirebaseChannelsService: ChannelsService {
                 if let error = error {
                     observer.on(.Next(.Error(error)))
                 } else {
-                    self.channelsIndex().childByAutoId().setValue(name)
+                    self.channelsIndex().child(name).setValue(true)
                     observer.on(.Next(.Success(channel)))
                 }
                 observer.on(.Completed)
@@ -90,13 +90,17 @@ class FirebaseChannelsService: ChannelsService {
     private func channel(withKey key: String) -> Observable<Channel> {
         return Observable.create({ observer in
             self.channelsInfo(withKey: key).observeSingleEventOfType(.Value, withBlock: { snapshot in
-                let channel = try! Channel(firebaseValue: snapshot.value!)
-                observer.on(.Next(channel))
+                if let channelFirebaseValue = snapshot.value,
+                    let channel = try? Channel(firebaseValue: channelFirebaseValue) {
+                    observer.on(.Next(channel))
+                } else {
+                    print("Couldn't find \(key)")
+                }
                 observer.on(.Completed)
             })
-
+            
             return AnonymousDisposable() {}
         })
     }
-
+    
 }

@@ -41,4 +41,8 @@ extension ChannelsPresenter: ChannelsActionListener {
     func viewChannel(channel: Channel) {
         navigator.toChat(channel)
     }
+
+    func goToNewChannel() {
+        navigator.toCreateChannel()
+    }
 }

@@ -39,7 +39,7 @@ final class ChannelsView: UIView {
     }
 
     @objc private func newChannel() {
-
+        actionListener?.goToNewChannel()
     }
 }
 

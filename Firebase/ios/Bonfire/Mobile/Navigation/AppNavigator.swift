@@ -11,7 +11,12 @@ final class AppNavigator: Navigator {
 
     func toChat(channel: Channel) {
         let chatViewController = ChatViewController.withDependencies(channel: channel)
+        navigationController.popToRootViewControllerAnimated(false)
         navigationController.pushViewController(chatViewController, animated: true)
     }
 
+    func toCreateChannel() {
+        let createChannelViewController = CreateChannelViewController.withDependencies()
+        navigationController.pushViewController(createChannelViewController, animated: true)
+    }
 }

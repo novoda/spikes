@@ -25,6 +25,7 @@ final class CreateChannelPresenter {
 
     func startPresenting() {
         disposeBag = DisposeBag()
+        createChannelDisplayer.actionListener = self
 
         createChannelSubject
             .flatMap ({ name in
@@ -41,6 +42,11 @@ final class CreateChannelPresenter {
                 }
 
             }).addDisposableTo(disposeBag)
+    }
+
+    func stopPresenting() {
+        disposeBag = nil
+        createChannelDisplayer.actionListener = nil
     }
 }
 
