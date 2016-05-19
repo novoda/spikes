@@ -1,7 +1,8 @@
 import React from 'react'
 import {
   ListView,
-  Navigator
+  Navigator,
+  StyleSheet
 } from 'react-native'
 import TweetsListItem from './tweetsListItem'
 import AndroidBackNavigationMixin from './mixins/android-back-navigation'
@@ -56,9 +57,15 @@ var TweetsList = React.createClass({
         dataSource={this.state.dataSource}
         enableEmptySections={true}
         renderRow={this.renderRow}
+        style={styles.container}
       />
     )
   }
 })
 
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white'
+  }
+})
 module.exports = TweetsList
