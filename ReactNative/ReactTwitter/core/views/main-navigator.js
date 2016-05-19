@@ -1,6 +1,10 @@
 import React from 'react'
 import {
-  Navigator
+  Navigator,
+  TouchableOpacity,
+  TouchableHighlight,
+  StyleSheet,
+  Text
 } from 'react-native'
 
 var SplashScreenView = require('./splash-screen.js')
@@ -19,11 +23,66 @@ const OauthViewID = 'oauth-screen-identifier'
 const tweetsListID = 'tweets-list-identifier'
 const tweetViewID = 'tweet-view-identifier'
 
-var MainNavigator = React.createClass({
+var NavigationBarRouteMapper = {
+  LeftButton: function(route, navigator, index, navState) {
+    if (index === 0) {
+      return null;
+    }
 
+    return (
+      <TouchableOpacity
+        onPress={() => navigator.pop()}
+        style={styles.navBarLeftButton}>
+        <Text style={[styles.navBarText, styles.navBarButtonText]}>
+          Back
+        </Text>
+      </TouchableOpacity>
+    );
+  },
+
+  RightButton: function(route, navigator, index, navState) {
+    return null;
+  },
+
+  Title: function(route, navigator, index, navState) {
+    return (
+      <Text style={[styles.navBarText, styles.navBarTitleText]}>
+      {this._getTitleByScreenId(route.id)}
+      </Text>
+    );
+  },
+
+  _getTitleByScreenId(screenId) {
+    switch (screenId) {
+      case splashScreenID:
+        return 'SplashScreen'
+      case loginScreenID:
+        return 'Login'
+      case debugScreenID:
+        return 'Debug Screen'
+      case deepLinkingID:
+        return 'Deep Linking'
+      case OauthViewID:
+        return 'Oauth'
+      case tweetsListID:
+        return 'Timeline'
+      case tweetViewID:
+        return 'Tweet Detail'
+      default:
+        return ''
+    }
+  }
+}
+
+var MainNavigator = React.createClass({
   render () {
+    let navBar = (<Navigator.NavigationBar
+      routeMapper={NavigationBarRouteMapper}
+      style={styles.navBar} />)
     return (
       <Navigator
+        style={styles.appContainer}
+        navigationBar={navBar}
         initialRoute={{id: splashScreenID}}
         renderScene={this.navigatorRenderScene}/>
     )
@@ -32,21 +91,61 @@ var MainNavigator = React.createClass({
   navigatorRenderScene (route, navigator) {
     switch (route.id) {
       case splashScreenID:
-        return (<SplashScreenView navigator={navigator} title='Splash Screen' />)
+        return (<SplashScreenView navigator={navigator} />)
       case loginScreenID:
-        return (<LoginScreenView navigator={navigator} title='Login Screen' twitterService={route.twitterService}/>)
+        return (<LoginScreenView navigator={navigator} twitterService={route.twitterService}/>)
       case debugScreenID:
-        return (<DebugScreenView navigator={navigator} title='Debug Screen' />)
+        return (<DebugScreenView navigator={navigator} />)
       case deepLinkingID:
-        return (<DeepLinkingView navigator={navigator} title='Deep Linking' />)
+        return (<DeepLinkingView navigator={navigator} />)
       case OauthViewID:
-        return (<OauthView navigator={navigator} title='Oauth' />)
+        return (<OauthView navigator={navigator} />)
       case tweetsListID:
-        return (<TweetsList navigator={navigator} title='Tweets List' twitterService={route.twitterService} />)
+        return (<TweetsList navigator={navigator} twitterService={route.twitterService} />)
       case tweetViewID:
-        return (<TweetView navigator={navigator} tweetId={route.tweetId} title='Tweet View' twitterService={route.twitterService} />)
+        return (<TweetView navigator={navigator} tweetId={route.tweetId} twitterService={route.twitterService} />)
+    }
+  },
+
+  _getTitleByScreenId(screenId) {
+    switch (screenId) {
+      case splashScreenID:
+        return 'SplashScreen'
+      case loginScreenID:
+        return 'Login'
+      case debugScreenID:
+        return 'Debug Screen'
+      case deepLinkingID:
+        return 'Deep Linking'
+      case OauthViewID:
+        return 'Oauth'
+      case tweetsListID:
+        return 'Timeline'
+      case tweetViewID:
+        return 'Tweet Detail'
+      default:
+        return ''
     }
   }
 })
+
+var styles = StyleSheet.create({
+  appContainer: {
+    paddingTop: Navigator.NavigationBar.Styles.General.TotalNavHeight
+  },
+  navBarText: {
+   fontSize: 16,
+   marginVertical: 10,
+  },
+  navBarLeftButton: {
+   paddingLeft: 10,
+  },
+  navBarButtonText: {
+   color: 'black',
+  },
+  navBar: {
+   backgroundColor: 'white'
+  }
+});
 
 module.exports = MainNavigator
