@@ -40,6 +40,8 @@ class FirebaseChannelsService: ChannelsService {
     }
 
     func createPublicChannel(withName name: String) -> Observable<DatabaseWriteResult<Channel>> {
+        let name = name.stringByTrimmingCharactersInSet(.whitespaceCharacterSet())
+
         return Observable.create({ observer in
             let channel = Channel(name: name, access: .Public)
             self.channelsInfo(withKey: name).setValue(channel.asFirebaseValue(), withCompletionBlock: { error, firebase in
