@@ -5,6 +5,6 @@
 
 import { AppRegistry } from 'react-native'
 
-var MainNavigator = require('./core/views/main-navigator.js')
+var MainNavigatorExperimental = require('./core/views/main-navigator-experimental.js')
 
-AppRegistry.registerComponent('ReactTwitter', () => MainNavigator)
+AppRegistry.registerComponent('ReactTwitter', () => MainNavigatorExperimental)
