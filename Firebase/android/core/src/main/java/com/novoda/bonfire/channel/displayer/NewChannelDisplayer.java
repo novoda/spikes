@@ -14,6 +14,8 @@ public interface NewChannelDisplayer {
 
     void disableAddingMembers();
 
+    void showChannelCreationError();
+
     interface InteractionListener {
 
         void onChannelNameLengthChanged(int length);

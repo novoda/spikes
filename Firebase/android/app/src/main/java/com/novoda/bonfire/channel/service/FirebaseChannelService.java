@@ -9,6 +9,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.data.model.ChannelInfo;
+import com.novoda.bonfire.channel.data.model.ChannelWriteResult;
 import com.novoda.bonfire.channel.data.model.Channels;
 import com.novoda.bonfire.login.data.model.User;
 
@@ -42,9 +43,59 @@ public class FirebaseChannelService implements ChannelService {
     }
 
     @Override
-    public void createPublicChannel(Channel newChannel) {
-        channelsDB.child(newChannel.getPath()).setValue(newChannel.getChannelInfo());
-        publicChannelsDB.child(newChannel.getPath()).setValue(true);
+    public Observable<ChannelWriteResult> createPublicChannel(Channel newChannel) {
+        return writeChannelToChannelsDB(newChannel)
+                .flatMap(writeChannelToChannelIndexDb(newChannel))
+                .onErrorReturn(convertErrorToWriteResult());
+    }
+
+    @NonNull
+    private Observable<ChannelWriteResult> writeChannelToChannelsDB(final Channel newChannel) {
+        return Observable.create(new Observable.OnSubscribe<ChannelWriteResult>() {
+            @Override
+            public void call(final Subscriber<? super ChannelWriteResult> subscriber) {
+                channelsDB.child(newChannel.getPath()).setValue(newChannel.getChannelInfo(), completionListenerFor(subscriber));
+            }
+        });
+    }
+
+    @NonNull
+    private Func1<ChannelWriteResult, Observable<ChannelWriteResult>> writeChannelToChannelIndexDb(final Channel newChannel) {
+        return new Func1<ChannelWriteResult, Observable<ChannelWriteResult>>() {
+            @Override
+            public Observable<ChannelWriteResult> call(ChannelWriteResult channelWriteResult) {
+                return Observable.create(new Observable.OnSubscribe<ChannelWriteResult>() {
+                    @Override
+                    public void call(final Subscriber<? super ChannelWriteResult> subscriber) {
+                        publicChannelsDB.child(newChannel.getPath()).setValue(true, completionListenerFor(subscriber));
+                    }
+                });
+            }
+        };
+    }
+
+    @NonNull
+    private Func1<Throwable, ChannelWriteResult> convertErrorToWriteResult() {
+        return new Func1<Throwable, ChannelWriteResult>() {
+            @Override
+            public ChannelWriteResult call(Throwable throwable) {
+                return new ChannelWriteResult(throwable);
+            }
+        };
+    }
+
+    @NonNull
+    private DatabaseReference.CompletionListener completionListenerFor(final Subscriber<? super ChannelWriteResult> subscriber) {
+        return new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError == null) {
+                    subscriber.onNext(new ChannelWriteResult());
+                } else {
+                    subscriber.onError(databaseError.toException());
+                }
+            }
+        };
     }
 
     private Observable<List<String>> privateChannelsFor(final User user) {

@@ -8,4 +8,5 @@
   <string name="private_channel">Private channel</string>
   <string name="add_channel_members">Add channel members</string>
   <string name="create">Create</string>
+  <string name="channel_already_exists">Channel with this name already exists</string>
 </resources>

@@ -73,6 +73,11 @@ public class NewChannelView extends LinearLayout implements NewChannelDisplayer 
         addChannelMember.setEnabled(false);
     }
 
+    @Override
+    public void showChannelCreationError() {
+        newChannelName.setError(getContext().getString(R.string.channel_already_exists));
+    }
+
     private final TextWatcher channelNameTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
