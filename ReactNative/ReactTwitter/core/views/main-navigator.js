@@ -2,8 +2,8 @@ import React from 'react'
 import {
   Navigator,
   TouchableOpacity,
-  TouchableHighlight,
   StyleSheet,
+  Image,
   Text
 } from 'react-native'
 
@@ -24,9 +24,9 @@ const tweetsListID = 'tweets-list-identifier'
 const tweetViewID = 'tweet-view-identifier'
 
 var NavigationBarRouteMapper = {
-  LeftButton: function(route, navigator, index, navState) {
+  LeftButton (route, navigator, index, navState) {
     if (index === 0) {
-      return null;
+      return null
     }
 
     return (
@@ -37,22 +37,32 @@ var NavigationBarRouteMapper = {
           Back
         </Text>
       </TouchableOpacity>
-    );
+    )
   },
 
-  RightButton: function(route, navigator, index, navState) {
-    return null;
+  RightButton (route, navigator, index, navState) {
+    if (index !== 0 || !__DEV__) { // eslint-disable-line no-undef
+      return null
+    }
+
+    return (<TouchableOpacity
+        onPress={() => navigator.push({
+          id: debugScreenID})}
+        style={styles.navBarRightButton}>
+            <Image style={styles.navBarIcon} source={require('./assets/debug.png')} />
+      </TouchableOpacity>
+    )
   },
 
-  Title: function(route, navigator, index, navState) {
+  Title (route, navigator, index, navState) {
     return (
       <Text style={[styles.navBarText, styles.navBarTitleText]}>
-      {this._getTitleByScreenId(route.id)}
+        {this._getTitleByScreenId(route.id)}
       </Text>
-    );
+    )
   },
 
-  _getTitleByScreenId(screenId) {
+  _getTitleByScreenId (screenId) {
     switch (screenId) {
       case splashScreenID:
         return 'SplashScreen'
@@ -107,7 +117,7 @@ var MainNavigator = React.createClass({
     }
   },
 
-  _getTitleByScreenId(screenId) {
+  _getTitleByScreenId (screenId) {
     switch (screenId) {
       case splashScreenID:
         return 'SplashScreen'
@@ -129,23 +139,32 @@ var MainNavigator = React.createClass({
   }
 })
 
+const navBarIconSize = 30
+
 var styles = StyleSheet.create({
   appContainer: {
     paddingTop: Navigator.NavigationBar.Styles.General.TotalNavHeight
   },
   navBarText: {
-   fontSize: 16,
-   marginVertical: 10,
+    fontSize: 16,
+    marginVertical: 10
   },
   navBarLeftButton: {
-   paddingLeft: 10,
+    paddingLeft: 10
+  },
+  navBarRightButton: {
+    paddingTop: (Navigator.NavigationBar.Styles.General.TotalNavHeight - navBarIconSize) / 2
   },
   navBarButtonText: {
-   color: 'black',
+    color: 'black'
   },
   navBar: {
-   backgroundColor: 'white'
+    backgroundColor: 'white'
+  },
+  navBarIcon: {
+    width: navBarIconSize,
+    height: navBarIconSize
   }
-});
+})
 
 module.exports = MainNavigator
