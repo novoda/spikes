@@ -6,7 +6,13 @@ var {
 const TOKEN_STORAGE_KEY = '@AuthenticationServiceToken:key'
 
 class AuthenticationService {
-  loadDataFromDisk () {
+  loadData () {
+    if (this.tokenData) {
+      return new Promise((resolve, reject) => {
+        resolve(this.tokenData)
+      })
+    }
+
     return AsyncStorage.getItem(TOKEN_STORAGE_KEY).then((tokenString) => {
       this.tokenData = JSON.parse(tokenString)
       return this.tokenData

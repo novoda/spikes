@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 
 var novodaDataFormat = require('./common/data-format.js')
+var TwitterRequestsService = require('../service/twitter-requests-service.js')
 
 var TweetsListItem = React.createClass({
   propTypes: {
@@ -18,7 +19,8 @@ var TweetsListItem = React.createClass({
     author_name: React.PropTypes.string.isRequired,
     author_handle: React.PropTypes.string.isRequired,
     text: React.PropTypes.string.isRequired,
-    navigator: React.PropTypes.instanceOf(Navigator).isRequired
+    navigator: React.PropTypes.instanceOf(Navigator).isRequired,
+    twitterService: React.PropTypes.instanceOf(TwitterRequestsService).isRequired
   },
 
   render () {
@@ -45,7 +47,8 @@ var TweetsListItem = React.createClass({
   _tweetSelected (tweetId) {
     this.props.navigator.push({
       id: 'tweet-view-identifier',
-      tweetId: tweetId
+      tweetId: tweetId,
+      twitterService: this.props.twitterService
     })
   }
 

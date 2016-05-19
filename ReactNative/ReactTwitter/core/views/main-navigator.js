@@ -34,7 +34,7 @@ var MainNavigator = React.createClass({
       case splashScreenID:
         return (<SplashScreenView navigator={navigator} title='Splash Screen' />)
       case loginScreenID:
-        return (<LoginScreenView navigator={navigator} title='Login Screen' />)
+        return (<LoginScreenView navigator={navigator} title='Login Screen' twitterService={route.twitterService}/>)
       case debugScreenID:
         return (<DebugScreenView navigator={navigator} title='Debug Screen' />)
       case deepLinkingID:
@@ -42,9 +42,9 @@ var MainNavigator = React.createClass({
       case OauthViewID:
         return (<OauthView navigator={navigator} title='Oauth' />)
       case tweetsListID:
-        return (<TweetsList navigator={navigator} title='Tweets List' />)
+        return (<TweetsList navigator={navigator} title='Tweets List' twitterService={route.twitterService} />)
       case tweetViewID:
-        return (<TweetView navigator={navigator} tweetId={route.tweetId} title='Tweet View' />)
+        return (<TweetView navigator={navigator} tweetId={route.tweetId} title='Tweet View' twitterService={route.twitterService} />)
     }
   }
 })
