@@ -9,7 +9,7 @@ enum ChannelCreationState {
 }
 
 final class CreateChannelPresenter {
-    let channelService: ChannelsService
+    let channelsService: ChannelsService
     let createChannelDisplayer: CreateChannelDisplayer
     let navigator: Navigator
 
@@ -17,8 +17,8 @@ final class CreateChannelPresenter {
 
     private let createChannelSubject = PublishSubject<String>()
 
-    init(channelService: ChannelsService, createChannelDisplayer: CreateChannelDisplayer, navigator: Navigator) {
-        self.channelService = channelService
+    init(channelsService: ChannelsService, createChannelDisplayer: CreateChannelDisplayer, navigator: Navigator) {
+        self.channelsService = channelsService
         self.createChannelDisplayer = createChannelDisplayer
         self.navigator = navigator
     }
@@ -29,7 +29,7 @@ final class CreateChannelPresenter {
         createChannelSubject
             .flatMap ({ name in
 
-                self.channelService.createPublicChannel(withName: name)
+                self.channelsService.createPublicChannel(withName: name)
 
             }).subscribe(onNext: { result in
 

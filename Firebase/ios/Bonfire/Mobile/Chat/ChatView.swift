@@ -6,7 +6,7 @@ final class ChatView: UIView {
     private let textField = UITextField()
     private let tableView = UITableView()
     private let tableViewManager = ChatTableViewManager()
-    private weak var actionListener: ChatActionListener?
+    weak var actionListener: ChatActionListener?
 
     override init(frame: CGRect) {
         super.init(frame: frame)

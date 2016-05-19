@@ -2,6 +2,7 @@ import Foundation
 
 protocol ChannelsActionListener: class {
     func viewChannel(channel: Channel)
+    func goToNewChannel()
 }
 
 protocol ChannelsDisplayer {

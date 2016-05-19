@@ -5,10 +5,14 @@ final class ChannelsView: UIView {
     private let tableViewManager = ChannelsTableViewManager()
     private weak var actionListener: ChannelsActionListener?
 
+    let newChannelBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: nil, action: nil)
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
         setupLayout()
+        newChannelBarButtonItem.target = self
+        newChannelBarButtonItem.action = #selector(newChannel)
     }
 
     convenience init() {
@@ -32,6 +36,10 @@ final class ChannelsView: UIView {
 
         tableView.pinToSuperviewLeading()
         tableView.pinToSuperviewTrailing()
+    }
+
+    @objc private func newChannel() {
+
     }
 }
 
