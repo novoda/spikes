@@ -42,8 +42,9 @@ public class FirebaseChannelService implements ChannelService {
     }
 
     @Override
-    public void createChannel(String channelName, boolean isPrivate) {
-
+    public void createPublicChannel(Channel newChannel) {
+        channelsDB.child(newChannel.getPath()).setValue(newChannel.getChannelInfo());
+        publicChannelsDB.child(newChannel.getPath()).setValue(true);
     }
 
     private Observable<List<String>> privateChannelsFor(final User user) {

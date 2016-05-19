@@ -12,6 +12,10 @@ public class Channel implements Serializable {
         this.channelInfo = channelInfo;
     }
 
+    public ChannelInfo getChannelInfo() {
+        return channelInfo;
+    }
+
     public String getPath() {
         return path;
     }

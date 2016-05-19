@@ -11,9 +11,9 @@ public class ChannelInfo implements Serializable {
     public ChannelInfo() {
     }
 
-    public ChannelInfo(String name, String access) {
+    public ChannelInfo(String name, boolean isPrivate) {
         this.name = name;
-        this.access = access;
+        this.access = isPrivate ? "private" : "public";
     }
 
     public String getName() {
