@@ -37,6 +37,12 @@
 		B65C45DB1CE1F06E00B2179D /* AppNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65C45DA1CE1F06E00B2179D /* AppNavigator.swift */; };
 		B660785C1CE37FAC008E7DD4 /* ReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B660785B1CE37FAC008E7DD4 /* ReusableView.swift */; };
 		B660785E1CE38078008E7DD4 /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B660785D1CE38078008E7DD4 /* ChatCell.swift */; };
+		B6CC1CE91CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CC1CE81CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift */; };
+		B6CC1CEB1CEC992F00BA8500 /* Observable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CC1CEA1CEC992F00BA8500 /* Observable+Extensions.swift */; };
+		B6CC1CEE1CECA83600BA8500 /* CreateChannelPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CC1CED1CECA83600BA8500 /* CreateChannelPresenter.swift */; };
+		B6CC1CF01CECA96B00BA8500 /* CreateChannelDisplayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CC1CEF1CECA96B00BA8500 /* CreateChannelDisplayer.swift */; };
+		B6CC1CF31CECB05900BA8500 /* CreateChannelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CC1CF21CECB05900BA8500 /* CreateChannelView.swift */; };
+		B6CC1CF51CECB3E500BA8500 /* CreateChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CC1CF41CECB3E500BA8500 /* CreateChannelViewController.swift */; };
 		B6ECCEAE1CE3477000580434 /* User+FirebaseConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ECCEAD1CE3477000580434 /* User+FirebaseConvertible.swift */; };
 		D0C31583D21898285630F157 /* ChannelsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C318BAA30984F559ACD8D2 /* ChannelsService.swift */; };
 		D0C317C9CD54BDC5F4607BCD /* ChannelsTableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C3139DAF23783F159C1640 /* ChannelsTableViewManager.swift */; };
@@ -91,6 +97,12 @@
 		B65C45DA1CE1F06E00B2179D /* AppNavigator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppNavigator.swift; sourceTree = "<group>"; };
 		B660785B1CE37FAC008E7DD4 /* ReusableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReusableView.swift; sourceTree = "<group>"; };
 		B660785D1CE38078008E7DD4 /* ChatCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
+		B6CC1CE81CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Channel+FirebaseConvertible.swift"; sourceTree = "<group>"; };
+		B6CC1CEA1CEC992F00BA8500 /* Observable+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Extensions.swift"; sourceTree = "<group>"; };
+		B6CC1CED1CECA83600BA8500 /* CreateChannelPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChannelPresenter.swift; sourceTree = "<group>"; };
+		B6CC1CEF1CECA96B00BA8500 /* CreateChannelDisplayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChannelDisplayer.swift; sourceTree = "<group>"; };
+		B6CC1CF21CECB05900BA8500 /* CreateChannelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChannelView.swift; sourceTree = "<group>"; };
+		B6CC1CF41CECB3E500BA8500 /* CreateChannelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChannelViewController.swift; sourceTree = "<group>"; };
 		B6ECCEAD1CE3477000580434 /* User+FirebaseConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+FirebaseConvertible.swift"; sourceTree = "<group>"; };
 		D0C3118D694918412533A84F /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		D0C3119EA7B34321EC65CBAF /* ChannelsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelsViewController.swift; sourceTree = "<group>"; };
@@ -181,6 +193,7 @@
 				B660785B1CE37FAC008E7DD4 /* ReusableView.swift */,
 				B654B2881CE0C86200EEDE0A /* UIView+AutolayoutExtensions.swift */,
 				B6210AC71CE2318B00570509 /* UIViewController+AlertExtensions.swift */,
+				B6CC1CEA1CEC992F00BA8500 /* Observable+Extensions.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -273,14 +286,35 @@
 			path = Navigation;
 			sourceTree = "<group>";
 		};
+		B6CC1CEC1CECA81C00BA8500 /* ChannelCreation */ = {
+			isa = PBXGroup;
+			children = (
+				B6CC1CED1CECA83600BA8500 /* CreateChannelPresenter.swift */,
+				B6CC1CEF1CECA96B00BA8500 /* CreateChannelDisplayer.swift */,
+			);
+			name = ChannelCreation;
+			path = ../../Mobile/Channel;
+			sourceTree = "<group>";
+		};
+		B6CC1CF11CECB02E00BA8500 /* ChannelCreation */ = {
+			isa = PBXGroup;
+			children = (
+				B6CC1CF21CECB05900BA8500 /* CreateChannelView.swift */,
+				B6CC1CF41CECB3E500BA8500 /* CreateChannelViewController.swift */,
+			);
+			name = ChannelCreation;
+			sourceTree = "<group>";
+		};
 		D0C3157242B43FBD5D799CA5 /* Channel */ = {
 			isa = PBXGroup;
 			children = (
+				B6CC1CF11CECB02E00BA8500 /* ChannelCreation */,
 				D0C31525ED6865A9B8F030CA /* ChannelCell.swift */,
 				D0C3139DAF23783F159C1640 /* ChannelsTableViewManager.swift */,
-				D0C3169A5FF39E209C5BA3EE /* ChannelsView.swift */,
 				D0C3119EA7B34321EC65CBAF /* ChannelsViewController.swift */,
+				D0C3169A5FF39E209C5BA3EE /* ChannelsView.swift */,
 				D0C318C841B6FF1360F3261D /* FirebaseChannelsService.swift */,
+				B6CC1CE81CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift */,
 			);
 			path = Channel;
 			sourceTree = "<group>";
@@ -288,6 +322,7 @@
 		D0C31C76FECC7AA384D36365 /* Channel */ = {
 			isa = PBXGroup;
 			children = (
+				B6CC1CEC1CECA81C00BA8500 /* ChannelCreation */,
 				D0C3118D694918412533A84F /* Channel.swift */,
 				D0C31879D1AD9CF1461F5956 /* ChannelsDisplayer.swift */,
 				D0C31217E78F04ADE3808836 /* ChannelsPresenter.swift */,
@@ -420,8 +455,12 @@
 			files = (
 				B65C45CD1CE1E3F700B2179D /* LoginPresenter.swift in Sources */,
 				B654B2891CE0C86200EEDE0A /* UIView+AutolayoutExtensions.swift in Sources */,
+				B6CC1CF31CECB05900BA8500 /* CreateChannelView.swift in Sources */,
 				B65C45C11CE0ED8200B2179D /* ChatDisplayer.swift in Sources */,
+				B6CC1CF51CECB3E500BA8500 /* CreateChannelViewController.swift in Sources */,
 				B65C45B41CE0E0F900B2179D /* Chat.swift in Sources */,
+				B6CC1CE91CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift in Sources */,
+				B6CC1CF01CECA96B00BA8500 /* CreateChannelDisplayer.swift in Sources */,
 				B65C45CA1CE1E31A00B2179D /* LoginViewController.swift in Sources */,
 				B654B28C1CE0CE8300EEDE0A /* Message.swift in Sources */,
 				B6ECCEAE1CE3477000580434 /* User+FirebaseConvertible.swift in Sources */,
@@ -450,7 +489,9 @@
 				D0C31FE2185A206D4B6AB6ED /* ChannelsPresenter.swift in Sources */,
 				D0C31D0085982E1BA7EB3638 /* ChannelsDisplayer.swift in Sources */,
 				D0C319895F726FA2DAECFC21 /* ChannelsViewController.swift in Sources */,
+				B6CC1CEE1CECA83600BA8500 /* CreateChannelPresenter.swift in Sources */,
 				D0C31F91CCF73EC549BE1264 /* ChannelCell.swift in Sources */,
+				B6CC1CEB1CEC992F00BA8500 /* Observable+Extensions.swift in Sources */,
 				D0C31B830B0684A6D238C842 /* ChannelsView.swift in Sources */,
 				D0C317C9CD54BDC5F4607BCD /* ChannelsTableViewManager.swift in Sources */,
 				D0C3182DE2D857AA460FCFA9 /* FirebaseChannelsService.swift in Sources */,

@@ -14,6 +14,8 @@ final class ChatViewController: UIViewController {
         self.chatPresenter = ChatPresenter(channel: channel, loginService: loginService, chatService: chatService, chatDisplayer: chatView)
 
         super.init(nibName: nil, bundle: nil)
+
+        self.title = channel.name
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -27,7 +29,6 @@ final class ChatViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
-        title = "Bonfire"
     }
 
     private func setupLayout() {

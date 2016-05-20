@@ -22,6 +22,7 @@ final class ChannelsViewController: UIViewController {
         super.viewDidLoad()
         setupLayout()
         title = "Channels"
+        addBarButtonItem()
     }
 
     private func setupLayout() {
@@ -42,6 +43,13 @@ final class ChannelsViewController: UIViewController {
     override func viewDidDisappear(animated: Bool) {
         channelsPresenter.stopPresenting()
         super.viewDidDisappear(animated)
+    }
+
+    func addBarButtonItem() {
+        let newChannelBarButtonItem = self.channelsView.newChannelBarButtonItem
+        navigationItem.rightBarButtonItem = newChannelBarButtonItem
+        navigationItem.setRightBarButtonItem(newChannelBarButtonItem, animated: false)
+
     }
 
 }
