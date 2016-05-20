@@ -47,19 +47,13 @@ var TweetsView = React.createClass({
       return (<View />)
     }
 
-    var formattedTime = novodaDataFormat.longTime(Date.parse(this.state.tweet.created_at))
+    let formattedTime = novodaDataFormat.humanTime(Date.parse(this.state.tweet.created_at))
     return (
       <View style={styles.mainContainer}>
-        <View style={styles.header}>
-          <AvatarView uri={this.state.tweet.user.profile_image_url} image_size={80}/>
-          <View style={styles.textContainer}>
-            <View>
-              <Text style={styles.tweet_author}>{this.state.tweet.user.name}</Text>
-              <Text style={styles.tweet_author_handle}>@{this.state.tweet.user.screen_name}</Text>
-            </View>
-          </View>
-        </View>
-        <Text style={styles.tweet_time}>{formattedTime}</Text>
+        <AvatarView uri={this.state.tweet.user.profile_image_url} size={200}/>
+        <Text style={styles.tweet_author}>{this.state.tweet.user.name}</Text>
+        <Text style={styles.tweet_author_handle}>@{this.state.tweet.user.screen_name}</Text>
+        <Text style={styles.tweet_time}>Tweeted {formattedTime}</Text>
         <Text style={styles.tweet_text}>{this.state.tweet.text}</Text>
       </View>
     )
@@ -67,36 +61,36 @@ var TweetsView = React.createClass({
 })
 
 const styles = StyleSheet.create({
-  textContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center'
+  mainContainer: {
+    padding: 10,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    flex: 1
+  },
+  userInfoContainer: {
+    flexDirection: 'row'
   },
   tweet_author: {
-    fontSize: 25,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: '#48BBEC'
+    color: 'black'
   },
   tweet_author_handle: {
-    fontSize: 20,
+    fontSize: 22,
     fontStyle: 'italic',
-    color: '#656565'
+    color: 'grey',
+    marginLeft: 8
   },
   tweet_time: {
     fontSize: 16,
-    color: '#656565'
+    color: '#656565',
+    marginTop: 8
   },
   tweet_text: {
     fontSize: 20,
-    color: '#656565'
-  },
-  header: {
-    flexDirection: 'row',
-    marginBottom: 10
-  },
-  mainContainer: {
-    padding: 10,
-    backgroundColor: 'white'
+    color: '#656565',
+    marginTop: 8,
+    flex: 1
   }
 })
 
