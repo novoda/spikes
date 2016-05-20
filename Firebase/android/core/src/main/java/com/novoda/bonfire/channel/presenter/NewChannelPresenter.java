@@ -13,8 +13,7 @@ import com.novoda.bonfire.login.service.LoginService;
 import com.novoda.bonfire.navigation.Navigator;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import rx.Observable;
 import rx.functions.Action1;
@@ -27,7 +26,7 @@ public class NewChannelPresenter {
     private final LoginService loginService;
     private final UserService userService;
     private final Navigator navigator;
-    private final Set<User> owners = new HashSet<>();
+    private final List<User> owners = new ArrayList<>();
     private User user;
 
     public NewChannelPresenter(NewChannelDisplayer newChannelDisplayer,
@@ -72,10 +71,8 @@ public class NewChannelPresenter {
         public void onPrivateChannelSwitchStateChanged(boolean isChecked) {
             if (isChecked) {
                 newChannelDisplayer.enableAddingMembers();
-                owners.add(user);
             } else {
                 newChannelDisplayer.disableAddingMembers();
-                owners.remove(user);
             }
         }
 
@@ -96,10 +93,19 @@ public class NewChannelPresenter {
 
         @Override
         public void onCreateChannelClicked(String channelName, boolean isPrivate) {
-            Channel newChannel = buildChannel(channelName, isPrivate);
+            final Channel newChannel = buildChannel(channelName, isPrivate);
             Observable<ChannelWriteResult> resultObservable;
             if (isPrivate) {
-                resultObservable = channelService.createPrivateChannel(newChannel, new ArrayList<>(owners));
+                resultObservable = channelService.createPrivateChannel(newChannel, user)
+                        .flatMap(new Func1<ChannelWriteResult, Observable<ChannelWriteResult>>() {
+                            @Override
+                            public Observable<ChannelWriteResult> call(ChannelWriteResult channelWriteResult) {
+                                if (channelWriteResult.isFailure()) {
+                                    return Observable.just(channelWriteResult);
+                                }
+                                return channelService.addOwnersToPrivateChannel(newChannel, owners);
+                            }
+                        });
             } else {
                 resultObservable = channelService.createPublicChannel(newChannel);
             }

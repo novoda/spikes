@@ -28,11 +28,13 @@ public class FirebaseChannelService implements ChannelService {
     private final DatabaseReference publicChannelsDB;
     private final DatabaseReference privateChannelsDB;
     private final DatabaseReference channelsDB;
+    private final DatabaseReference ownersDB;
 
     public FirebaseChannelService(FirebaseDatabase firebaseDatabase) {
         publicChannelsDB = firebaseDatabase.getReference("public-channels-index");
         privateChannelsDB = firebaseDatabase.getReference("private-channels-index");
         channelsDB = firebaseDatabase.getReference("channels");
+        ownersDB = firebaseDatabase.getReference("owners");
     }
 
     @Override
@@ -46,17 +48,155 @@ public class FirebaseChannelService implements ChannelService {
     public Observable<ChannelWriteResult> createPublicChannel(Channel newChannel) {
         return writeChannelToChannelsDB(newChannel)
                 .flatMap(writeChannelToChannelIndexDb(newChannel))
-                .onErrorReturn(convertErrorToWriteResult());
+                .onErrorReturn(errorConertedToWriteResult());
     }
 
     @Override
-    public Observable<ChannelWriteResult> createPrivateChannel(Channel newChannel, List<User> owners) {
+    public Observable<ChannelWriteResult> createPrivateChannel(final Channel newChannel, User owner) {
+        return Observable.just(owner)
+                .flatMap(addUserToPrivateChannelIndex(newChannel))
+                .flatMap(addUserAsChannelOwner(newChannel))
+                .flatMap(new Func1<ChannelWriteResult, Observable<ChannelWriteResult>>() {
+                    @Override
+                    public Observable<ChannelWriteResult> call(ChannelWriteResult user) {
+                        return writeChannelToChannelsDB(newChannel);
+                    }
+                })
+                .onErrorReturn(errorConertedToWriteResult());
+    }
+
+    @Override
+    public Observable<ChannelWriteResult> addOwnersToPrivateChannel(Channel privateChannel, List<User> newOwners) {
+        return Observable.from(newOwners)
+                .flatMap(addUserToPrivateChannelIndex(privateChannel))
+                .flatMap(addUserAsChannelOwner(privateChannel))
+                .onErrorReturn(errorConertedToWriteResult());
+    }
+
+    @NonNull
+    private Func1<User, Observable<ChannelWriteResult>> addUserAsChannelOwner(final Channel newChannel) {
+        return new Func1<User, Observable<ChannelWriteResult>>() {
+            @Override
+            public Observable<ChannelWriteResult> call(final User user) {
+                return Observable.create(new Observable.OnSubscribe<ChannelWriteResult>() {
+                    @Override
+                    public void call(final Subscriber<? super ChannelWriteResult> subscriber) {
+                        DatabaseReference channelReference = privateChannelsDB.child(user.getId());
+                        channelReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                subscriber.onNext(new ChannelWriteResult());
+                                subscriber.onCompleted();
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                subscriber.onError(databaseError.toException());
+                            }
+                        });
+                        channelReference.child(newChannel.getPath()).setValue(true);
+                    }
+                });
+            }
+        };
+    }
+
+    @NonNull
+    private Func1<User, Observable<User>> addUserToPrivateChannelIndex(final Channel newChannel) {
+        return new Func1<User, Observable<User>>() {
+            @Override
+            public Observable<User> call(final User user) {
+                return Observable.create(new Observable.OnSubscribe<User>() {
+                    @Override
+                    public void call(final Subscriber<? super User> subscriber) {
+                        DatabaseReference channelRefInOwners = ownersDB.child(newChannel.getPath());
+                        channelRefInOwners.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                subscriber.onNext(user);
+                                subscriber.onCompleted();
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                subscriber.onError(databaseError.toException());
+                            }
+                        });
+                        channelRefInOwners.child(user.getId()).setValue(true);
+                    }
+                });
+            }
+        };
+    }
+
+    @NonNull
+    private Observable<ChannelWriteResult> observableWithLoops(final Channel newChannel, final List<User> owners) {
         return Observable.create(new Observable.OnSubscribe<ChannelWriteResult>() {
             @Override
-            public void call(Subscriber<? super ChannelWriteResult> subscriber) {
-                //TODO write stuff to the database
+            public void call(final Subscriber<? super ChannelWriteResult> subscriber) {
+                DatabaseReference channelReference = ownersDB.child(newChannel.getPath());
+                final int ownerCount = owners.size();
+                ValueEventListener eventListener = channelReference.addValueEventListener(new ValueEventListener() {
+                    int receivedEventCount = 0;
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        receivedEventCount++;
+                        if (receivedEventCount == ownerCount) {
+                            subscriber.onNext(new ChannelWriteResult());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        subscriber.onError(databaseError.toException());
+                    }
+                });
+
+                removeEventListenerFromDatabase(channelReference, eventListener);
+
+                for (User user : owners) {
+                    channelReference.child(user.getId()).setValue(true);
+                }
+
+
             }
-        }).onErrorReturn(convertErrorToWriteResult());
+        }).flatMap(new Func1<ChannelWriteResult, Observable<ChannelWriteResult>>() {
+            @Override
+            public Observable<ChannelWriteResult> call(ChannelWriteResult channelWriteResult) {
+                return Observable.create(new Observable.OnSubscribe<ChannelWriteResult>() {
+                    @Override
+                    public void call(final Subscriber<? super ChannelWriteResult> subscriber) {
+                        final int ownerCount = owners.size();
+                        ValueEventListener valueEventListener = new ValueEventListener() {
+                            int receivedEventCount = 0;
+
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                receivedEventCount++;
+                                if (receivedEventCount == ownerCount) {
+                                    subscriber.onNext(new ChannelWriteResult());
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        };
+                        for (User user : owners) {
+                            DatabaseReference channelReference = privateChannelsDB.child(user.getId());
+                            channelReference.addListenerForSingleValueEvent(valueEventListener);
+                            channelReference.child(newChannel.getPath()).setValue(true);
+                        }
+                    }
+                });
+            }
+        }).flatMap(new Func1<ChannelWriteResult, Observable<ChannelWriteResult>>() {
+            @Override
+            public Observable<ChannelWriteResult> call(ChannelWriteResult channelWriteResult) {
+                return writeChannelToChannelsDB(newChannel);
+            }
+        }).onErrorReturn(errorConertedToWriteResult());
     }
 
     @NonNull
@@ -85,7 +225,7 @@ public class FirebaseChannelService implements ChannelService {
     }
 
     @NonNull
-    private Func1<Throwable, ChannelWriteResult> convertErrorToWriteResult() {
+    private Func1<Throwable, ChannelWriteResult> errorConertedToWriteResult() {
         return new Func1<Throwable, ChannelWriteResult>() {
             @Override
             public ChannelWriteResult call(Throwable throwable) {
