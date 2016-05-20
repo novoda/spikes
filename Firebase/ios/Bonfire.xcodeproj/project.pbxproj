@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1AF7D1A01CEF651600B74483 /* UsersTableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */; };
+		1AF7D1A21CEF659A00B74483 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF7D1A11CEF659A00B74483 /* UserCell.swift */; };
 		A075FA5839A18AA6C9CC5840 /* Pods_Bonfire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB70D05C61A560423DF28B22 /* Pods_Bonfire.framework */; };
 		B6210AC41CE20CEC00570509 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B6210AC31CE20CEC00570509 /* GoogleService-Info.plist */; };
 		B6210AC61CE21FA500570509 /* FirebaseLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6210AC51CE21FA500570509 /* FirebaseLoginService.swift */; };
@@ -65,6 +67,8 @@
 /* Begin PBXFileReference section */
 		18552469EE733CDD665FAABA /* Pods-FireChat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FireChat.release.xcconfig"; path = "Pods/Target Support Files/Pods-FireChat/Pods-FireChat.release.xcconfig"; sourceTree = "<group>"; };
 		19F398DA972350BEE0B6C106 /* Pods-BonfireTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BonfireTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BonfireTests/Pods-BonfireTests.debug.xcconfig"; sourceTree = "<group>"; };
+		1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersTableViewManager.swift; sourceTree = "<group>"; };
+		1AF7D1A11CEF659A00B74483 /* UserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		2A4F22BDF6F3209EA6A47490 /* Pods-FireChat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FireChat.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FireChat/Pods-FireChat.debug.xcconfig"; sourceTree = "<group>"; };
 		2D075B151032785BA369976F /* Pods-FireChatTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FireChatTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FireChatTests/Pods-FireChatTests.debug.xcconfig"; sourceTree = "<group>"; };
 		49CB42CBF07CB67A7098B119 /* Pods_BonfireTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BonfireTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -318,7 +322,9 @@
 			children = (
 				B6962C8A1CEF5686006A3A9E /* FirebaseUsersService.swift */,
 				B6962C8C1CEF568E006A3A9E /* UsersView.swift */,
+				1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */,
 				B6962C8E1CEF5697006A3A9E /* UsersViewController.swift */,
+				1AF7D1A11CEF659A00B74483 /* UserCell.swift */,
 			);
 			path = Users;
 			sourceTree = "<group>";
@@ -498,6 +504,7 @@
 				B65C45B41CE0E0F900B2179D /* Chat.swift in Sources */,
 				B6CC1CE91CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift in Sources */,
 				B6962C8B1CEF5686006A3A9E /* FirebaseUsersService.swift in Sources */,
+				1AF7D1A01CEF651600B74483 /* UsersTableViewManager.swift in Sources */,
 				B6CC1CF01CECA96B00BA8500 /* CreateChannelDisplayer.swift in Sources */,
 				B65C45CA1CE1E31A00B2179D /* LoginViewController.swift in Sources */,
 				B654B28C1CE0CE8300EEDE0A /* Message.swift in Sources */,
@@ -527,6 +534,7 @@
 				B6210ACC1CE24AC600570509 /* Authentication.swift in Sources */,
 				D0C317D2ED38A77789D6B864 /* Channel.swift in Sources */,
 				D0C31583D21898285630F157 /* ChannelsService.swift in Sources */,
+				1AF7D1A21CEF659A00B74483 /* UserCell.swift in Sources */,
 				D0C31FE2185A206D4B6AB6ED /* ChannelsPresenter.swift in Sources */,
 				B6962C8F1CEF5697006A3A9E /* UsersViewController.swift in Sources */,
 				D0C31D0085982E1BA7EB3638 /* ChannelsDisplayer.swift in Sources */,

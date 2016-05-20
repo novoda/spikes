@@ -1,9 +1,45 @@
-//
-//  UsersView.swift
-//  Bonfire
-//
-//  Created by Dominic Freeston on 20/05/2016.
-//  Copyright © 2016 Novoda. All rights reserved.
-//
+import UIKit
 
-import Foundation
+final class UsersView: UIView {
+
+    private let tableView = UITableView()
+    private let tableViewManager = UsersTableViewManager()
+
+    weak var actionListener: UsersActionListener?
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupViews()
+        setupLayout()
+    }
+
+    convenience init() {
+        self.init(frame: CGRect.zero)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func setupViews() {
+        tableViewManager.setupTableView(tableView)
+    }
+
+    private func setupLayout() {
+        addSubview(tableView)
+
+        tableView.pinToSuperviewTop()
+        tableView.pinToSuperviewBottom()
+        tableView.pinToSuperviewLeading()
+        tableView.pinToSuperviewTrailing()
+    }
+
+}
+
+extension UsersView: UsersDisplayer {
+
+    func display(users: [User]) {
+        tableViewManager.updateTableView(tableView, withUsers: users)
+    }
+
+}
