@@ -115,27 +115,6 @@ var MainNavigator = React.createClass({
       case tweetViewID:
         return (<TweetView navigator={navigator} tweetId={route.tweetId} twitterService={route.twitterService} />)
     }
-  },
-
-  _getTitleByScreenId (screenId) {
-    switch (screenId) {
-      case splashScreenID:
-        return 'SplashScreen'
-      case loginScreenID:
-        return 'Login'
-      case debugScreenID:
-        return 'Debug Screen'
-      case deepLinkingID:
-        return 'Deep Linking'
-      case OauthViewID:
-        return 'Oauth'
-      case tweetsListID:
-        return 'Timeline'
-      case tweetViewID:
-        return 'Tweet Detail'
-      default:
-        return ''
-    }
   }
 })
 
