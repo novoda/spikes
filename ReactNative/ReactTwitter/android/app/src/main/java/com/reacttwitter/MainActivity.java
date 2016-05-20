@@ -6,9 +6,12 @@ import android.net.Uri;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
+import com.oney.gcm.GcmPackage;
 
 import java.util.Arrays;
 import java.util.List;
+
+import io.neson.react.notification.NotificationPackage;
 
 public class MainActivity extends ReactActivity {
 
@@ -42,7 +45,9 @@ public class MainActivity extends ReactActivity {
     protected List<ReactPackage> getPackages() {
         return Arrays.asList(
                 new MainReactPackage(),
-                oauthIntentPackage
+                oauthIntentPackage,
+                new GcmPackage(),
+                new NotificationPackage(this)
         );
     }
 
