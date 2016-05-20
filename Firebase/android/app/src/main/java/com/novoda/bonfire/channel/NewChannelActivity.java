@@ -22,7 +22,10 @@ public class NewChannelActivity extends BaseActivity {
         Dependencies dependencies = Dependencies.INSTANCE;
         newChannelPresenter = new NewChannelPresenter((NewChannelDisplayer) findViewById(R.id.createChannelView),
                                                       dependencies.getChannelService(),
-                                                      new AndroidNavigator(this));
+                                                      dependencies.getLoginService(),
+                                                      dependencies.getUserService(),
+                                                      new AndroidNavigator(this)
+        );
     }
 
     @Override

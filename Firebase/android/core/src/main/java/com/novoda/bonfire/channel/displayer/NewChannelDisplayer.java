@@ -22,6 +22,8 @@ public interface NewChannelDisplayer {
 
         void onPrivateChannelSwitchStateChanged(boolean isChecked);
 
+        void onAddOwner(String name);
+
         void onCreateChannelClicked(String channelName, boolean isPrivate);
 
         InteractionListener NO_OP = new InteractionListener() {
@@ -32,6 +34,11 @@ public interface NewChannelDisplayer {
 
             @Override
             public void onPrivateChannelSwitchStateChanged(boolean isChecked) {
+                // empty implementation
+            }
+
+            @Override
+            public void onAddOwner(String name) {
                 // empty implementation
             }
 

@@ -3,22 +3,42 @@ package com.novoda.bonfire.channel.presenter;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.data.model.ChannelInfo;
 import com.novoda.bonfire.channel.data.model.ChannelWriteResult;
+import com.novoda.bonfire.channel.data.model.UserSearchResult;
 import com.novoda.bonfire.channel.displayer.NewChannelDisplayer;
 import com.novoda.bonfire.channel.service.ChannelService;
+import com.novoda.bonfire.channel.service.UserService;
+import com.novoda.bonfire.login.data.model.Authentication;
+import com.novoda.bonfire.login.data.model.User;
+import com.novoda.bonfire.login.service.LoginService;
 import com.novoda.bonfire.navigation.Navigator;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import rx.Observable;
 import rx.functions.Action1;
+import rx.functions.Func1;
 
 public class NewChannelPresenter {
 
-    private NewChannelDisplayer newChannelDisplayer;
-    private ChannelService channelService;
-    private Navigator navigator;
+    private final NewChannelDisplayer newChannelDisplayer;
+    private final ChannelService channelService;
+    private final LoginService loginService;
+    private final UserService userService;
+    private final Navigator navigator;
+    private final Set<User> owners = new HashSet<>();
+    private User user;
 
-    public NewChannelPresenter(NewChannelDisplayer newChannelDisplayer, ChannelService channelService, Navigator navigator) {
+    public NewChannelPresenter(NewChannelDisplayer newChannelDisplayer,
+                               ChannelService channelService,
+                               LoginService loginService,
+                               UserService userService,
+                               Navigator navigator) {
         this.newChannelDisplayer = newChannelDisplayer;
         this.channelService = channelService;
+        this.loginService = loginService;
+        this.userService = userService;
         this.navigator = navigator;
     }
 
@@ -26,6 +46,12 @@ public class NewChannelPresenter {
         newChannelDisplayer.attach(interactionListener);
         newChannelDisplayer.disableChannelCreation();
         newChannelDisplayer.disableAddingMembers();
+        loginService.getAuthentication().subscribe(new Action1<Authentication>() {
+            @Override
+            public void call(Authentication authentication) {
+                user = authentication.getUser();
+            }
+        });
     }
 
     public void stopPresenting() {
@@ -46,9 +72,26 @@ public class NewChannelPresenter {
         public void onPrivateChannelSwitchStateChanged(boolean isChecked) {
             if (isChecked) {
                 newChannelDisplayer.enableAddingMembers();
+                owners.add(user);
             } else {
                 newChannelDisplayer.disableAddingMembers();
+                owners.remove(user);
             }
+        }
+
+        @Override
+        public void onAddOwner(String name) {
+            userService.getUserWithName(name).filter(new Func1<UserSearchResult, Boolean>() {
+                @Override
+                public Boolean call(UserSearchResult userSearchResult) {
+                    return userSearchResult.isSuccess();
+                }
+            }).subscribe(new Action1<UserSearchResult>() {
+                @Override
+                public void call(UserSearchResult user) {
+                    owners.add(user.getUser());
+                }
+            });
         }
 
         @Override
@@ -56,7 +99,7 @@ public class NewChannelPresenter {
             Channel newChannel = buildChannel(channelName, isPrivate);
             Observable<ChannelWriteResult> resultObservable;
             if (isPrivate) {
-                resultObservable = channelService.createPublicChannel(newChannel); // TODO private channel
+                resultObservable = channelService.createPrivateChannel(newChannel, new ArrayList<>(owners));
             } else {
                 resultObservable = channelService.createPublicChannel(newChannel);
             }

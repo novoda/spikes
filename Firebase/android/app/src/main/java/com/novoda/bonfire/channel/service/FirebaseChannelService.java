@@ -49,6 +49,16 @@ public class FirebaseChannelService implements ChannelService {
                 .onErrorReturn(convertErrorToWriteResult());
     }
 
+    @Override
+    public Observable<ChannelWriteResult> createPrivateChannel(Channel newChannel, List<User> owners) {
+        return Observable.create(new Observable.OnSubscribe<ChannelWriteResult>() {
+            @Override
+            public void call(Subscriber<? super ChannelWriteResult> subscriber) {
+                //TODO write stuff to the database
+            }
+        }).onErrorReturn(convertErrorToWriteResult());
+    }
+
     @NonNull
     private Observable<ChannelWriteResult> writeChannelToChannelsDB(final Channel newChannel) {
         return Observable.create(new Observable.OnSubscribe<ChannelWriteResult>() {

@@ -15,18 +15,32 @@
     android:layout_height="wrap_content"
     android:text="@string/private_channel" />
 
-  <EditText
-    android:id="@+id/addChannelMember"
-    android:hint="@string/add_channel_members"
+  <LinearLayout
+    android:id="@+id/addMemberView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <EditText
+      android:id="@+id/channelMemberName"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="3"
+      android:hint="@string/add_channel_members" />
+
+    <Button
+      android:id="@+id/addChannelMemberButton"
+      android:text="@string/add"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1" />
+  </LinearLayout>
 
   <Button
     android:id="@+id/createButton"
-    android:text="@string/create"
-    android:layout_gravity="end"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    />
+    android:layout_gravity="end"
+    android:text="@string/create" />
 
 </merge>
