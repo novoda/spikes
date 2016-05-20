@@ -2,7 +2,6 @@ import React from 'react'
 import {
   StyleSheet,
   View,
-  Text,
   Navigator
 } from 'react-native'
 
@@ -16,7 +15,6 @@ var DebugScreenView = React.createClass({
   render () {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Debug Screen List: </Text>
         <Button
           style={styles.button}
           styleDisabled={styles.button_disabled}
@@ -25,14 +23,6 @@ var DebugScreenView = React.createClass({
             style={styles.button}
             styleDisabled={styles.button_disabled}
             onPress={this.pushOauth}>Oauth</Button>
-        <Button
-          style={styles.button}
-          styleDisabled={styles.button_disabled}
-          onPress={this.pushTweetsList}>Tweets List</Button>
-        <Button
-          style={styles.button}
-          styleDisabled={styles.button_disabled}
-          onPress={this.pushTweetView}>Tweet Detail View</Button>
       </View>
     )
   },
@@ -43,17 +33,6 @@ var DebugScreenView = React.createClass({
 
   pushOauth () {
     this.props.navigator.push({id: 'oauth-screen-identifier'})
-  },
-
-  pushTweetsList () {
-    this.props.navigator.push({id: 'tweets-list-identifier'})
-  },
-
-  pushTweetView () {
-    this.props.navigator.push({
-      id: 'tweet-view-identifier',
-      tweetId: '210462857140252672'
-    })
   }
 })
 
@@ -62,14 +41,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    backgroundColor: '#F5FCFF',
-    margin: 10
-  },
-  title: {
-    fontSize: 30,
-    textAlign: 'center',
-    marginTop: 20,
-    marginBottom: 20
+    backgroundColor: '#F5FCFF'
   },
   button: {
     fontSize: 20,
