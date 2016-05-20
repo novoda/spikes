@@ -11,7 +11,9 @@
     "crypto-js": "^3.1.6",
     "react": "^0.14.8",
     "react-native": "^0.25.1",
-    "react-native-button": "^1.5.0"
+    "react-native-button": "^1.5.0",
+    "react-native-gcm-android": "^0.2.0",
+    "react-native-system-notification": "^0.1.11"
   },
   "devDependencies": {
     "babel-jest": "^12.0.2",
