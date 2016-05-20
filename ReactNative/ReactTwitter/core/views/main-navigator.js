@@ -46,7 +46,7 @@ var NavigationBarRouteMapper = {
     }
 
     return (<TouchableOpacity onPress={() => navigator.push({id: debugScreenID})} style={styles.navBarRightButton}>
-        <Image style={styles.navBarIcon} source={require('./assets/debug.png')} />
+    <Text style={[styles.navBarText, styles.navBarButtonText]}>Debug</Text>
       </TouchableOpacity>)
   },
 
@@ -127,16 +127,18 @@ var styles = StyleSheet.create({
     marginVertical: 10
   },
   navBarLeftButton: {
-    paddingLeft: 10
+    paddingLeft: 8
   },
   navBarRightButton: {
-    paddingTop: (Navigator.NavigationBar.Styles.General.TotalNavHeight - navBarIconSize) / 2
+    // paddingBottom: (Navigator.NavigationBar.Styles.General.TotalNavHeight - navBarIconSize) / 2
+    alignItems: 'center',
+    paddingRight: 8
   },
   navBarButtonText: {
     color: 'black'
   },
   navBar: {
-    backgroundColor: 'white'
+    backgroundColor: '#F1F1F1'
   },
   navBarIcon: {
     width: navBarIconSize,
