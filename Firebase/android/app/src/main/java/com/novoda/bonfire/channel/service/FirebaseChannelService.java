@@ -112,25 +112,8 @@ public class FirebaseChannelService implements ChannelService {
         return Observable.create(new Observable.OnSubscribe<List<String>>() {
             @Override
             public void call(final Subscriber<? super List<String>> subscriber) {
-                final DatabaseReference privateChannelsOfUserDb = FirebaseChannelService.this.privateChannelsDB.child(user.getId());
-                final ValueEventListener eventListener = privateChannelsOfUserDb.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        subscriber.onNext(toChannels(dataSnapshot));
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        subscriber.onError(databaseError.toException()); //TODO handle errors in pipeline
-                    }
-
-                });
-                subscriber.add(BooleanSubscription.create(new Action0() {
-                    @Override
-                    public void call() {
-                        privateChannelsOfUserDb.removeEventListener(eventListener);
-                    }
-                }));
+                DatabaseReference privateChannelsOfUserDb = FirebaseChannelService.this.privateChannelsDB.child(user.getId());
+                getChannelsFromDatabase(subscriber, privateChannelsOfUserDb);
 
             }
         });
@@ -140,24 +123,23 @@ public class FirebaseChannelService implements ChannelService {
         return Observable.create(new Observable.OnSubscribe<List<String>>() {
             @Override
             public void call(final Subscriber<? super List<String>> subscriber) {
-                final ValueEventListener eventListener = FirebaseChannelService.this.publicChannelsDB.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        subscriber.onNext(toChannels(dataSnapshot));
-                    }
+                DatabaseReference publicChannelsDB = FirebaseChannelService.this.publicChannelsDB;
+                getChannelsFromDatabase(subscriber, publicChannelsDB);
+            }
+        });
+    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        subscriber.onError(databaseError.toException()); //TODO handle errors in pipeline
-                    }
+    private void getChannelsFromDatabase(Subscriber<? super List<String>> subscriber, DatabaseReference databaseReference) {
+        ValueEventListener eventListener = databaseReference.addValueEventListener(new DataSubscriptionListener(subscriber));
+        subscriber.add(removeEventListenerFromDatabase(databaseReference, eventListener));
+    }
 
-                });
-                subscriber.add(BooleanSubscription.create(new Action0() {
-                    @Override
-                    public void call() {
-                        FirebaseChannelService.this.publicChannelsDB.removeEventListener(eventListener);
-                    }
-                }));
+    @NonNull
+    private BooleanSubscription removeEventListenerFromDatabase(final DatabaseReference publicChannelsDB, final ValueEventListener eventListener) {
+        return BooleanSubscription.create(new Action0() {
+            @Override
+            public void call() {
+                publicChannelsDB.removeEventListener(eventListener);
             }
         });
     }
@@ -191,28 +173,21 @@ public class FirebaseChannelService implements ChannelService {
     private Func1<String, Observable<Channel>> createChannelInstanceFromPath() {
         return new Func1<String, Observable<Channel>>() {
             @Override
-            public Observable<Channel> call(final String channelPath) {
-                return Observable.create(new Observable.OnSubscribe<ChannelInfo>() {
-                    @Override
-                    public void call(final Subscriber<? super ChannelInfo> subscriber) {
-                        channelsDB.child(channelPath).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.hasChildren()) {
-                                    subscriber.onNext(toChannelInfo(dataSnapshot));
-                                }
-                                subscriber.onCompleted();
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                subscriber.onError(databaseError.toException()); //TODO handle errors in pipeline
-                            }
-                        });
-                    }
-                }).map(createChannelInstanceWith(channelPath));
+            public Observable<Channel> call(String channelPath) {
+                return getChannelInfoFor(channelPath)
+                        .map(createChannelInstanceWith(channelPath));
             }
         };
+    }
+
+    @NonNull
+    private Observable<ChannelInfo> getChannelInfoFor(final String channelPath) {
+        return Observable.create(new Observable.OnSubscribe<ChannelInfo>() {
+            @Override
+            public void call(final Subscriber<? super ChannelInfo> subscriber) {
+                channelsDB.child(channelPath).addListenerForSingleValueEvent(new ChannelInfoCheckingEventListener(subscriber));
+            }
+        });
     }
 
     @NonNull
@@ -264,5 +239,45 @@ public class FirebaseChannelService implements ChannelService {
             }
         }
         return channelPaths;
+    }
+
+    private class DataSubscriptionListener implements ValueEventListener {
+        private final Subscriber<? super List<String>> subscriber;
+
+        private DataSubscriptionListener(Subscriber<? super List<String>> subscriber) {
+            this.subscriber = subscriber;
+        }
+
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            subscriber.onNext(toChannels(dataSnapshot));
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            subscriber.onError(databaseError.toException()); //TODO handle errors in pipeline
+        }
+
+    }
+
+    private class ChannelInfoCheckingEventListener implements ValueEventListener {
+        private final Subscriber<? super ChannelInfo> subscriber;
+
+        public ChannelInfoCheckingEventListener(Subscriber<? super ChannelInfo> subscriber) {
+            this.subscriber = subscriber;
+        }
+
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            if (dataSnapshot.hasChildren()) {
+                subscriber.onNext(toChannelInfo(dataSnapshot));
+            }
+            subscriber.onCompleted();
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            subscriber.onError(databaseError.toException()); //TODO handle errors in pipeline
+        }
     }
 }

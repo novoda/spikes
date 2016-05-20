@@ -4,7 +4,7 @@
       "$channel_id": {
         ".read": "!root.child('owners').child($channel_id).exists() || root.child('owners').child($channel_id).child(auth.uid).exists()",
         ".write": "(!root.child('owners').child($channel_id).exists() || root.child('owners').child($channel_id).child(auth.uid).exists()) && !data.exists()",
-        ".validate": "newData.hasChildren(['name', 'type'])"
+        ".validate": "newData.hasChildren(['name', 'access'])"
       }
     },
     "messages": {
@@ -19,7 +19,7 @@
                 ".validate": "newData.val() === auth.uid"
               }
             }
-          }    
+          }
       }
     },
     "public-channels-index": {
@@ -34,7 +34,7 @@
       "$channel_id": {
         ".read": "!root.child('owners').child($channel_id).exists() || root.child('owners').child($channel_id).child(auth.uid).exists()",
         ".write": "!(root.child('channels').child($channel_id).exists() || root.child('owners').child($channel_id).exists()) || root.child('owners').child($channel_id).child(auth.uid).exists()",
-        ".validate": "newData.hasChildren(['name', 'type'])"
+        ".validate": "newData.hasChildren(['name', 'access'])"
       }
     },
     "users": {
