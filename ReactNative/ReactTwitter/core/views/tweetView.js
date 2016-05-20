@@ -9,6 +9,7 @@ import {
 import AndroidBackNavigationMixin from './mixins/android-back-navigation'
 var novodaDataFormat = require('./common/data-format.js')
 var TwitterRequestsService = require('../service/twitter-requests-service.js')
+var AvatarView = require('./common/avatar-view.js')
 
 var TweetsView = React.createClass({
   mixins: [AndroidBackNavigationMixin],
@@ -50,7 +51,7 @@ var TweetsView = React.createClass({
     return (
       <View style={styles.mainContainer}>
         <View style={styles.header}>
-          <Image style={styles.tweet_avatar} source={{ uri: this.state.tweet.user.profile_image_url }} />
+          <AvatarView uri={this.state.tweet.user.profile_image_url} image_size={80}/>
           <View style={styles.textContainer}>
             <View>
               <Text style={styles.tweet_author}>{this.state.tweet.user.name}</Text>
@@ -88,11 +89,6 @@ const styles = StyleSheet.create({
   tweet_text: {
     fontSize: 20,
     color: '#656565'
-  },
-  tweet_avatar: {
-    width: 80,
-    height: 80,
-    marginRight: 10
   },
   header: {
     flexDirection: 'row',
