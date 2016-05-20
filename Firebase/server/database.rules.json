@@ -37,8 +37,8 @@
       }
     },
     "users": {
+      ".read": "auth != null",
       "$user_id": {
-        ".read": "auth != null",
         ".write": "auth.uid === $user_id",
         ".validate": "newData.hasChildren(['id', 'name'])",
         "id": {
