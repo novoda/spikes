@@ -1,5 +1,6 @@
 package com.novoda.bonfire.login.service;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -66,7 +67,8 @@ public class FirebaseLoginService implements LoginService {
     }
 
     private Authentication authenticationFrom(FirebaseUser currentUser) {
-        return new Authentication(new User(currentUser.getUid(), currentUser.getDisplayName(), currentUser.getPhotoUrl().toString()));
+        Uri photoUrl = currentUser.getPhotoUrl();
+        return new Authentication(new User(currentUser.getUid(), currentUser.getDisplayName(), photoUrl == null ? "" : photoUrl.toString()));
     }
 
     @Override

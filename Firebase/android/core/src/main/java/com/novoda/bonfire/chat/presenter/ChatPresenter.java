@@ -39,7 +39,7 @@ public class ChatPresenter {
         subscriptions.add(
                 chatService.getChat(channel).subscribe(new Action1<Chat>() { //TODO sort out error flow
                     @Override
-                    public void call(com.novoda.bonfire.chat.data.model.Chat chat) {
+                    public void call(Chat chat) {
                         chatDisplayer.display(chat);
                     }
                 })

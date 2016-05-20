@@ -1,15 +1,27 @@
 package com.novoda.bonfire.channel.data.model;
 
-public class Channel {
+import java.io.Serializable;
 
-    private String name;
+public class Channel implements Serializable {
 
-    public Channel(String name) {
-        this.name = name;
+    private final String path;
+    private final ChannelInfo channelInfo;
+
+    public Channel(String path, ChannelInfo channelInfo) {
+        this.path = path;
+        this.channelInfo = channelInfo;
+    }
+
+    public String getPath() {
+        return path;
     }
 
     public String getName() {
-        return name;
+        return channelInfo.getName();
+    }
+
+    public boolean isPublic() {
+        return channelInfo.getAccess().equalsIgnoreCase("public");
     }
 
     @Override
@@ -23,11 +35,14 @@ public class Channel {
 
         Channel channel = (Channel) o;
 
-        return name != null ? name.equals(channel.name) : channel.name == null;
+        return path != null ? path.equals(channel.path) : channel.path == null
+                && channelInfo != null ? channelInfo.equals(channel.channelInfo) : channel.channelInfo == null;
     }
 
     @Override
     public int hashCode() {
-        return name != null ? name.hashCode() : 0;
+        int result = path != null ? path.hashCode() : 0;
+        result = 31 * result + (channelInfo != null ? channelInfo.hashCode() : 0);
+        return result;
     }
 }
