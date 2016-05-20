@@ -45,13 +45,9 @@ var NavigationBarRouteMapper = {
       return null
     }
 
-    return (<TouchableOpacity
-        onPress={() => navigator.push({
-          id: debugScreenID})}
-        style={styles.navBarRightButton}>
-            <Image style={styles.navBarIcon} source={require('./assets/debug.png')} />
-      </TouchableOpacity>
-    )
+    return (<TouchableOpacity onPress={() => navigator.push({id: debugScreenID})} style={styles.navBarRightButton}>
+        <Image style={styles.navBarIcon} source={require('./assets/debug.png')} />
+      </TouchableOpacity>)
   },
 
   Title (route, navigator, index, navState) {
@@ -86,16 +82,18 @@ var NavigationBarRouteMapper = {
 
 var MainNavigator = React.createClass({
   render () {
-    let navBar = (<Navigator.NavigationBar
-      routeMapper={NavigationBarRouteMapper}
-      style={styles.navBar} />)
+    let navBar = (
+      <Navigator.NavigationBar
+        routeMapper={NavigationBarRouteMapper}
+        style={styles.navBar}
+      />)
     return (
       <Navigator
         style={styles.appContainer}
         navigationBar={navBar}
         initialRoute={{id: splashScreenID}}
-        renderScene={this.navigatorRenderScene}/>
-    )
+        renderScene={this.navigatorRenderScene}
+      />)
   },
 
   navigatorRenderScene (route, navigator) {
