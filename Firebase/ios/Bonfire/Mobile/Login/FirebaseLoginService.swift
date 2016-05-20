@@ -21,10 +21,6 @@ final class FirebaseLoginService: NSObject, LoginService {
         return User(firebaseUser: firebaseUser)
     }
 
-    override init() {
-        super.init()
-    }
-
     func user() -> Observable<Authentication> {
         let auth = authentication.asObservable()
             .filter{ $0 != nil }

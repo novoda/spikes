@@ -17,24 +17,6 @@ enum DatabaseWriteResult<T> {
     case Error(ErrorType)
 }
 
-extension FIRDatabaseReference {
-
-    func rx_write(value: AnyObject) -> Observable<Void> {
-        return Observable.create({ observer in
-            self.setValue(value, withCompletionBlock: { error, firebase in
-                if let error = error {
-                    observer.on(.Error(error))
-                } else {
-                    observer.on(.Next())
-                }
-                observer.on(.Completed)
-            })
-
-            return AnonymousDisposable {}
-        })
-    }
-}
-
 func convertToFirebaseOwners(owners: [User]) -> AnyObject {
     var dic = [String: Bool]()
     owners.forEach({ val in

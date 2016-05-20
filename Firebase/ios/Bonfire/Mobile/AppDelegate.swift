@@ -11,6 +11,8 @@ import RxSwift
 final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    let disposeBag = DisposeBag()
+    var userService: UsersService!
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         FIRApp.configure()
@@ -18,6 +20,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
 //        try! FIRAuth.auth()?.signOut()
 //        GIDSignIn.sharedInstance().signOut()
+
+        self.userService = SharedServices.usersService
+        self.userService.allUsers().subscribe(onNext: { users in
+            print(users)
+        }).addDisposableTo(disposeBag)
 
         let navigationController = (SharedServices.navigator as! AppNavigator).navigationController
         navigationController.pushViewController(LoginViewController.withDependencies(), animated: false)
@@ -38,6 +45,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
 struct SharedServices {
     static let loginService: LoginService = FirebaseLoginService()
+    static let usersService: UsersService = FirebaseUsersService()
     static let channelsService: ChannelsService = FirebaseChannelsService()
     static let chatService: ChatService = FirebaseChatService()
     static let navigator: Navigator = AppNavigator()
