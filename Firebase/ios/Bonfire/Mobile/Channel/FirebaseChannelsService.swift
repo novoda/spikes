@@ -17,6 +17,24 @@ enum DatabaseWriteResult<T> {
     case Error(ErrorType)
 }
 
+extension FIRDatabaseReference {
+
+    func rx_write(value: AnyObject) -> Observable<Void> {
+        return Observable.create({ observer in
+            self.setValue(value, withCompletionBlock: { error, firebase in
+                if let error = error {
+                    observer.on(.Error(error))
+                } else {
+                    observer.on(.Next())
+                }
+                observer.on(.Completed)
+            })
+
+            return AnonymousDisposable {}
+        })
+    }
+}
+
 class FirebaseChannelsService: ChannelsService {
 
     let firebase = FIRDatabase.database().reference()
@@ -42,20 +60,11 @@ class FirebaseChannelsService: ChannelsService {
     func createPublicChannel(withName name: String) -> Observable<DatabaseWriteResult<Channel>> {
         let name = name.stringByTrimmingCharactersInSet(.whitespaceCharacterSet())
 
-        return Observable.create({ observer in
-            let channel = Channel(name: name, access: .Public)
-            self.channelsInfo(withKey: name).setValue(channel.asFirebaseValue(), withCompletionBlock: { error, firebase in
-                if let error = error {
-                    observer.on(.Next(.Error(error)))
-                } else {
-                    self.channelsIndex().child(name).setValue(true)
-                    observer.on(.Next(.Success(channel)))
-                }
-                observer.on(.Completed)
-            })
-
-            return AnonymousDisposable {}
-        })
+        let channel = Channel(name: name, access: .Public)
+        return self.channelsInfo(withKey: name).rx_write(channel.asFirebaseValue())
+            .flatMap({self.channelsIndex().child(channel.name).rx_write(true)})
+            .map({DatabaseWriteResult.Success(channel)})
+            .catchError({Observable.just(DatabaseWriteResult.Error($0))})
     }
 
     private func publicChannels() -> Observable<[Channel]> {
