@@ -4,8 +4,12 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  Text
+  Text,
+  DeviceEventEmitter
 } from 'react-native'
+
+var GcmAndroid = require('react-native-gcm-android');
+import Notification from 'react-native-system-notification';
 
 var SplashScreenView = require('./splash-screen.js')
 var DebugScreenView = require('./debug/debug-screen.js')
@@ -81,6 +85,41 @@ var NavigationBarRouteMapper = {
 }
 
 var MainNavigator = React.createClass({
+  componentDidMount () {
+    if (GcmAndroid.launchNotification) {
+      var notification = GcmAndroid.launchNotification;
+      var info = JSON.parse(notification.info);
+      Notification.create({
+        subject: info.location,
+        message: info.weather,
+      });
+      GcmAndroid.stopService();
+    }
+    GcmAndroid.addEventListener('register', function(token){
+        console.log('send gcm token to server', token)
+      })
+      GcmAndroid.addEventListener('registerError', function(error){
+        console.log('registerError', error.message)
+      })
+      GcmAndroid.addEventListener('notification', function(notification){
+        console.log('receive gcm notification', notification)
+        var info = notification.data // JSON.parse(notification.data)
+        console.log(GcmAndroid.isInForeground)
+        if (!GcmAndroid.isInForeground) {
+          Notification.create({
+            subject: info.location,
+            message: info.weather,
+          })
+        }
+      })
+
+      DeviceEventEmitter.addListener('sysNotificationClick', function(e) {
+        console.log('sysNotificationClick', e)
+      })
+
+      GcmAndroid.requestPermissions()
+  },
+
   render () {
     let navBar = (
       <Navigator.NavigationBar
