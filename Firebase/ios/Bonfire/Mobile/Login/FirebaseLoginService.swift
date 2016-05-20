@@ -14,6 +14,13 @@ final class FirebaseLoginService: NSObject, LoginService {
     let usersDB = FIRDatabase.database().referenceWithPath("users")
     let authentication = Variable<Authentication?>(nil)
 
+    var currentUser: User? {
+        guard let firebaseUser = FIRAuth.auth()?.currentUser else {
+            return nil
+        }
+        return User(firebaseUser: firebaseUser)
+    }
+
     override init() {
         super.init()
     }

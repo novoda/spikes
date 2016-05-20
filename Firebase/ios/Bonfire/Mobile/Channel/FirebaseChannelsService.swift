@@ -35,12 +35,28 @@ extension FIRDatabaseReference {
     }
 }
 
+func convertToFirebaseOwners(owners: [User]) -> AnyObject {
+    var dic = [String: Bool]()
+    owners.forEach({ val in
+        dic[val.id] = true
+    })
+    return dic
+}
+
 class FirebaseChannelsService: ChannelsService {
 
     let firebase = FIRDatabase.database().reference()
 
     private func channelsInfo(withKey key: String) -> FIRDatabaseReference {
         return firebase.child("channels/\(key)")
+    }
+
+    private func owners() -> FIRDatabaseReference {
+        return firebase.child("owners")
+    }
+
+    private func ownersList(withKey key: String) -> FIRDatabaseReference {
+        return owners().child(key)
     }
 
     private func channelsIndex() -> FIRDatabaseReference {
@@ -61,8 +77,28 @@ class FirebaseChannelsService: ChannelsService {
         let name = name.stringByTrimmingCharactersInSet(.whitespaceCharacterSet())
 
         let channel = Channel(name: name, access: .Public)
-        return self.channelsInfo(withKey: name).rx_write(channel.asFirebaseValue())
+        return self.channelsInfo(withKey: name)
+            .rx_write(channel.asFirebaseValue())
             .flatMap({self.channelsIndex().child(channel.name).rx_write(true)})
+            .map({DatabaseWriteResult.Success(channel)})
+            .catchError({Observable.just(DatabaseWriteResult.Error($0))})
+    }
+
+    func createPrivateChannel(withName name: String, owners: [User]) -> Observable<DatabaseWriteResult<Channel>> {
+        let name = name.stringByTrimmingCharactersInSet(.whitespaceCharacterSet())
+        let channel = Channel(name: name, access: .Private)
+        let firebaseOwners = convertToFirebaseOwners(owners)
+
+        return self.ownersList(withKey: name)
+            .rx_write(firebaseOwners)
+            .flatMap({
+                owners.toObservable().flatMap({ user in
+                    self.privateChannelsIndex(forUser: user).child(channel.name).rx_write(true)
+                })
+            })
+            .flatMap({
+                self.channelsInfo(withKey: name).rx_write(channel.asFirebaseValue())
+            })
             .map({DatabaseWriteResult.Success(channel)})
             .catchError({Observable.just(DatabaseWriteResult.Error($0))})
     }

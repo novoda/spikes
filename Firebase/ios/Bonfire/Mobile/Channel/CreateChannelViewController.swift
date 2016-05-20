@@ -9,7 +9,7 @@ final class CreateChannelViewController: UIViewController {
 
     static func withDependencies() -> CreateChannelViewController {
         let view = CreateChannelView()
-        let presenter = CreateChannelPresenter(channelsService: SharedServices.channelsService, createChannelDisplayer: view, navigator: SharedServices.navigator)
+        let presenter = CreateChannelPresenter(loginService: SharedServices.loginService, channelsService: SharedServices.channelsService, createChannelDisplayer: view, navigator: SharedServices.navigator)
         return CreateChannelViewController(createChannelPresenter: presenter, createChannelView: view)
     }
 
