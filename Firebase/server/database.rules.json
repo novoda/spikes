@@ -33,8 +33,7 @@
     "owners": {
       "$channel_id": {
         ".read": "!root.child('owners').child($channel_id).exists() || root.child('owners').child($channel_id).child(auth.uid).exists()",
-        ".write": "!(root.child('channels').child($channel_id).exists() || root.child('owners').child($channel_id).exists()) || root.child('owners').child($channel_id).child(auth.uid).exists()",
-        ".validate": "newData.hasChildren(['name', 'access'])"
+        ".write": "!(root.child('channels').child($channel_id).exists() || root.child('owners').child($channel_id).exists()) || root.child('owners').child($channel_id).child(auth.uid).exists()"
       }
     },
     "users": {
