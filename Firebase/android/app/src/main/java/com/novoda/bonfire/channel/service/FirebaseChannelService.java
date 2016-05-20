@@ -106,28 +106,21 @@ public class FirebaseChannelService implements ChannelService {
     private Func1<String, Observable<Channel>> createChannelInstanceFromPath() {
         return new Func1<String, Observable<Channel>>() {
             @Override
-            public Observable<Channel> call(final String channelPath) {
-                return Observable.create(new Observable.OnSubscribe<ChannelInfo>() {
-                    @Override
-                    public void call(final Subscriber<? super ChannelInfo> subscriber) {
-                        channelsDB.child(channelPath).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.hasChildren()) {
-                                    subscriber.onNext(toChannelInfo(dataSnapshot));
-                                }
-                                subscriber.onCompleted();
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                subscriber.onError(databaseError.toException()); //TODO handle errors in pipeline
-                            }
-                        });
-                    }
-                }).map(createChannelInstanceWith(channelPath));
+            public Observable<Channel> call(String channelPath) {
+                return getChannelInfoFor(channelPath)
+                        .map(createChannelInstanceWith(channelPath));
             }
         };
+    }
+
+    @NonNull
+    private Observable<ChannelInfo> getChannelInfoFor(final String channelPath) {
+        return Observable.create(new Observable.OnSubscribe<ChannelInfo>() {
+            @Override
+            public void call(final Subscriber<? super ChannelInfo> subscriber) {
+                channelsDB.child(channelPath).addListenerForSingleValueEvent(new ChannelInfoCheckingEventListener(subscriber));
+            }
+        });
     }
 
     @NonNull
@@ -198,5 +191,26 @@ public class FirebaseChannelService implements ChannelService {
             subscriber.onError(databaseError.toException()); //TODO handle errors in pipeline
         }
 
+    }
+
+    private class ChannelInfoCheckingEventListener implements ValueEventListener {
+        private final Subscriber<? super ChannelInfo> subscriber;
+
+        public ChannelInfoCheckingEventListener(Subscriber<? super ChannelInfo> subscriber) {
+            this.subscriber = subscriber;
+        }
+
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            if (dataSnapshot.hasChildren()) {
+                subscriber.onNext(toChannelInfo(dataSnapshot));
+            }
+            subscriber.onCompleted();
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            subscriber.onError(databaseError.toException()); //TODO handle errors in pipeline
+        }
     }
 }
