@@ -19,4 +19,8 @@ final class AppNavigator: Navigator {
         let createChannelViewController = CreateChannelViewController.withDependencies()
         navigationController.pushViewController(createChannelViewController, animated: true)
     }
+
+    func toAddUsers(channel: Channel) {
+        print("Add some users in \(channel.name)")
+    }
 }

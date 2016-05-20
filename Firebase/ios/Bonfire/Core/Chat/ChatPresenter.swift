@@ -5,23 +5,25 @@ final class ChatPresenter {
     let loginService: LoginService
     let chatService: ChatService
     let chatDisplayer: ChatDisplayer
+    let navigator: Navigator
 
     var disposeBag: DisposeBag!
 
     private var user: User?
     private let channel: Channel
 
-    init(channel: Channel, loginService: LoginService, chatService: ChatService, chatDisplayer: ChatDisplayer) {
+    init(channel: Channel, loginService: LoginService, chatService: ChatService, chatDisplayer: ChatDisplayer, navigator: Navigator) {
         self.channel = channel
         self.loginService = loginService
         self.chatService = chatService
         self.chatDisplayer = chatDisplayer
+        self.navigator = navigator
     }
 
     func startPresenting() {
         disposeBag = DisposeBag()
 
-        chatDisplayer.attach(self)
+        chatDisplayer.actionListener = self
 
         loginService.user().subscribe(
             onNext: { [weak self] authentication in
@@ -35,7 +37,7 @@ final class ChatPresenter {
     }
 
     func stopPresenting() {
-        chatDisplayer.detach(self)
+        chatDisplayer.actionListener = nil
         disposeBag = nil
     }
 }
@@ -49,5 +51,9 @@ extension ChatPresenter: ChatActionListener {
 
         let msg = Message(author: user, body: message)
         chatService.sendMessage(msg, channel: channel)
+    }
+
+    func addUsers() {
+        navigator.toAddUsers(channel)
     }
 }

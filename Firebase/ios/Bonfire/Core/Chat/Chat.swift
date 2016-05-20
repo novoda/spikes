@@ -1,6 +1,7 @@
 import Foundation
 
 struct Chat {
+    let channel: Channel
     let messages: [Message]
 }
 
