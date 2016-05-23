@@ -35,7 +35,7 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
         chatAdapter = new ChatAdapter();
         messageView = Views.findById(this, R.id.messageEdit);
         submitButton = Views.findById(this, R.id.submitButton);
-        recyclerView = Views.findById(this, R.id.recyclerView);
+        recyclerView = Views.findById(this, R.id.messagesRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);

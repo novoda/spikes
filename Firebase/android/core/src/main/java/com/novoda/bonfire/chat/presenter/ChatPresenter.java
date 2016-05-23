@@ -7,7 +7,7 @@ import com.novoda.bonfire.chat.data.model.Message;
 import com.novoda.bonfire.chat.displayer.ChatDisplayer;
 import com.novoda.bonfire.chat.service.ChatService;
 import com.novoda.bonfire.login.data.model.Authentication;
-import com.novoda.bonfire.login.data.model.User;
+import com.novoda.bonfire.user.data.model.User;
 import com.novoda.bonfire.login.service.LoginService;
 
 import rx.functions.Action1;

@@ -1,6 +1,6 @@
 package com.novoda.bonfire.channel.data.model;
 
-import com.novoda.bonfire.login.data.model.User;
+import com.novoda.bonfire.user.data.model.User;
 
 public class UserSearchResult {
 

@@ -14,7 +14,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.jakewharton.rxrelay.BehaviorRelay;
 import com.novoda.bonfire.login.data.model.Authentication;
-import com.novoda.bonfire.login.data.model.User;
+import com.novoda.bonfire.user.data.model.User;
 import com.novoda.notils.logger.simple.Log;
 
 import rx.Observable;

@@ -9,4 +9,6 @@ public interface Navigator {
     void toChannels();
 
     void toNewChannel();
+
+    void toAddUsersFor(Channel channel);
 }

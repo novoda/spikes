@@ -3,21 +3,18 @@ package com.novoda.bonfire.channel.presenter;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.data.model.ChannelInfo;
 import com.novoda.bonfire.channel.data.model.ChannelWriteResult;
-import com.novoda.bonfire.channel.data.model.UserSearchResult;
 import com.novoda.bonfire.channel.displayer.NewChannelDisplayer;
 import com.novoda.bonfire.channel.service.ChannelService;
-import com.novoda.bonfire.channel.service.UserService;
 import com.novoda.bonfire.login.data.model.Authentication;
-import com.novoda.bonfire.login.data.model.User;
 import com.novoda.bonfire.login.service.LoginService;
 import com.novoda.bonfire.navigation.Navigator;
+import com.novoda.bonfire.user.data.model.User;
+import com.novoda.bonfire.user.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
 import rx.functions.Action1;
-import rx.functions.Func1;
 
 public class NewChannelPresenter {
 
@@ -44,7 +41,6 @@ public class NewChannelPresenter {
     public void startPresenting() {
         newChannelDisplayer.attach(interactionListener);
         newChannelDisplayer.disableChannelCreation();
-        newChannelDisplayer.disableAddingMembers();
         loginService.getAuthentication().subscribe(new Action1<Authentication>() {
             @Override
             public void call(Authentication authentication) {
@@ -68,57 +64,33 @@ public class NewChannelPresenter {
         }
 
         @Override
-        public void onPrivateChannelSwitchStateChanged(boolean isChecked) {
-            if (isChecked) {
-                newChannelDisplayer.enableAddingMembers();
-            } else {
-                newChannelDisplayer.disableAddingMembers();
-            }
-        }
-
-        @Override
-        public void onAddOwner(String name) {
-            userService.getUserWithName(name).filter(new Func1<UserSearchResult, Boolean>() {
-                @Override
-                public Boolean call(UserSearchResult userSearchResult) {
-                    return userSearchResult.isSuccess();
-                }
-            }).subscribe(new Action1<UserSearchResult>() {
-                @Override
-                public void call(UserSearchResult user) {
-                    owners.add(user.getUser());
-                }
-            });
-        }
-
-        @Override
         public void onCreateChannelClicked(String channelName, boolean isPrivate) {
             final Channel newChannel = buildChannel(channelName, isPrivate);
-            Observable<ChannelWriteResult> resultObservable;
             if (isPrivate) {
-                resultObservable = channelService.createPrivateChannel(newChannel, user)
-                        .flatMap(new Func1<ChannelWriteResult, Observable<ChannelWriteResult>>() {
+                channelService.createPrivateChannel(newChannel, user)
+                        .subscribe(new Action1<ChannelWriteResult>() {
                             @Override
-                            public Observable<ChannelWriteResult> call(ChannelWriteResult channelWriteResult) {
+                            public void call(ChannelWriteResult channelWriteResult) {
                                 if (channelWriteResult.isFailure()) {
-                                    return Observable.just(channelWriteResult);
+                                    newChannelDisplayer.showChannelCreationError();
+                                } else {
+                                    navigator.toAddUsersFor(newChannel);
                                 }
-                                return channelService.addOwnersToPrivateChannel(newChannel, owners);
                             }
                         });
             } else {
-                resultObservable = channelService.createPublicChannel(newChannel);
+                channelService.createPublicChannel(newChannel)
+                        .subscribe(new Action1<ChannelWriteResult>() {
+                            @Override
+                            public void call(ChannelWriteResult channelWriteResult) {
+                                if (channelWriteResult.isFailure()) {
+                                    newChannelDisplayer.showChannelCreationError();
+                                } else {
+                                    navigator.toChannels();
+                                }
+                            }
+                        });
             }
-            resultObservable.subscribe(new Action1<ChannelWriteResult>() {
-                @Override
-                public void call(ChannelWriteResult channelWriteResult) {
-                    if (channelWriteResult.isFailure()) {
-                        newChannelDisplayer.showChannelCreationError();
-                    } else {
-                        navigator.toChannels();
-                    }
-                }
-            });
         }
     };
 

@@ -20,10 +20,7 @@ public class NewChannelView extends LinearLayout implements NewChannelDisplayer 
     private InteractionListener interactionListener = InteractionListener.NO_OP;
     private EditText newChannelName;
     private Switch privateChannelSwitch;
-    private EditText channelMemberName;
     private Button createButton;
-    private View addMemberView;
-    private Button addMemberButton;
     public NewChannelView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setOrientation(VERTICAL);
@@ -35,19 +32,14 @@ public class NewChannelView extends LinearLayout implements NewChannelDisplayer 
         View.inflate(getContext(), R.layout.merge_create_channel_view, this);
         newChannelName = Views.findById(this, R.id.newChannelName);
         privateChannelSwitch = Views.findById(this, R.id.privateChannel);
-        channelMemberName = Views.findById(this, R.id.channelMemberName);
         createButton = Views.findById(this, R.id.createButton);
-        addMemberView = findViewById(R.id.addMemberView);
-        addMemberButton = Views.findById(this, R.id.addChannelMemberButton);
     }
 
     @Override
     public void attach(final InteractionListener interactionListener) {
         this.interactionListener = interactionListener;
         newChannelName.addTextChangedListener(channelNameTextWatcher);
-        privateChannelSwitch.setOnCheckedChangeListener(privateSwitchCheckedListener);
         createButton.setOnClickListener(createButtonClickListener);
-        addMemberButton.setOnClickListener(addMemberClickListener);
     }
 
     @Override
@@ -56,7 +48,6 @@ public class NewChannelView extends LinearLayout implements NewChannelDisplayer 
         newChannelName.removeTextChangedListener(channelNameTextWatcher);
         privateChannelSwitch.setOnCheckedChangeListener(null);
         createButton.setOnClickListener(null);
-        addMemberButton.setOnClickListener(null);
     }
 
     @Override
@@ -67,18 +58,6 @@ public class NewChannelView extends LinearLayout implements NewChannelDisplayer 
     @Override
     public void disableChannelCreation() {
         createButton.setEnabled(false);
-    }
-
-    @Override
-    public void enableAddingMembers() {
-        addMemberView.setVisibility(VISIBLE);
-        channelMemberName.setEnabled(true);
-    }
-
-    @Override
-    public void disableAddingMembers() {
-        addMemberView.setVisibility(GONE);
-        channelMemberName.setEnabled(false);
     }
 
     @Override
@@ -100,20 +79,6 @@ public class NewChannelView extends LinearLayout implements NewChannelDisplayer 
         @Override
         public void afterTextChanged(Editable s) {
             interactionListener.onChannelNameLengthChanged(s.length());
-        }
-    };
-
-    private final CompoundButton.OnCheckedChangeListener privateSwitchCheckedListener = new CompoundButton.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            interactionListener.onPrivateChannelSwitchStateChanged(isChecked);
-        }
-    };
-
-    private final OnClickListener addMemberClickListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            interactionListener.onAddOwner(channelMemberName.getText().toString());
         }
     };
 

@@ -1,6 +1,4 @@
-package com.novoda.bonfire.channel.data.model;
-
-import com.novoda.bonfire.login.data.model.User;
+package com.novoda.bonfire.user.data.model;
 
 import java.util.List;
 
@@ -14,5 +12,13 @@ public class Users {
 
     public List<User> getUsers() {
         return users;
+    }
+
+    public int size() {
+        return users.size() ;
+    }
+
+    public User getUserAt(int position) {
+        return users.get(position);
     }
 }

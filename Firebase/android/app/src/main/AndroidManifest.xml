@@ -28,6 +28,8 @@
       android:parentActivityName=".channel.ChannelsActivity"
       android:label="@string/createChannel"/>
 
+    <activity android:name=".user.UsersActivity" />
+
   </application>
 
 </manifest>
