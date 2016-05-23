@@ -5,13 +5,9 @@ import {
 } from 'react-native'
 
 class AvatarView extends Image {
-  getHighResolutionImage (originalURL) {
-    return originalURL.replace('_normal', '_bigger')
-  }
-
   render () {
     let source = {
-      uri: this.getHighResolutionImage(this.props.uri)
+      uri: this._getHighResolutionImageURL(this.props.uri)
     }
 
     let style = StyleSheet.create({
@@ -28,6 +24,10 @@ class AvatarView extends Image {
       source= {source}
       style = {style.image}
       resizeMode='contain'/>
+  }
+
+  _getHighResolutionImageURL (originalURL) {
+    return originalURL.replace('_normal', '_bigger')
   }
 }
 
