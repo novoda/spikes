@@ -36,11 +36,11 @@ public class MessageView extends LinearLayout {
     public MessageView(Context context) {
         super(context);
         configureViewParams();
-        View view = inflate(context, R.layout.merge_message_item_view, this);
-        this.picture = Views.findById(view, R.id.messageAuthorImage);
-        this.body = Views.findById(view, R.id.messageBody);
-        this.time = Views.findById(view, R.id.messageTime);
-        this.name = Views.findById(view, R.id.messageAuthorName);
+        View.inflate(context, R.layout.merge_message_item_view, this);
+        this.picture = Views.findById(this, R.id.messageAuthorImage);
+        this.body = Views.findById(this, R.id.messageBody);
+        this.time = Views.findById(this, R.id.messageTime);
+        this.name = Views.findById(this, R.id.messageAuthorName);
     }
 
     private void configureViewParams() {
