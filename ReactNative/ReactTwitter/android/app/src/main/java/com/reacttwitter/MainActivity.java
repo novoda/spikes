@@ -3,6 +3,7 @@ package com.reacttwitter;
 import android.content.Intent;
 import android.net.Uri;
 
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -13,6 +14,7 @@ import java.util.List;
 public class MainActivity extends ReactActivity {
 
     private OauthIntentPackage oauthIntentPackage = new OauthIntentPackage();
+    private ReactNativePushNotificationPackage pushNotificationPackage;
 
     /**
      * Returns the name of the main component registered from JavaScript.
@@ -38,9 +40,11 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected List<ReactPackage> getPackages() {
+        pushNotificationPackage = new ReactNativePushNotificationPackage(this);
         return Arrays.asList(
                 new MainReactPackage(),
-                oauthIntentPackage
+                oauthIntentPackage,
+                pushNotificationPackage
         );
     }
 
@@ -50,5 +54,7 @@ public class MainActivity extends ReactActivity {
         Uri data = intent.getData();
 
         oauthIntentPackage.handleOnNewIntent(data);
+
+        pushNotificationPackage.newIntent(intent);
     }
 }

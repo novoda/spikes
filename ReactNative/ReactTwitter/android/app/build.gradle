@@ -60,6 +60,7 @@ import com.android.build.OutputFile
  */
 
 apply from: "../../node_modules/react-native/react.gradle"
+apply plugin: 'com.google.gms.google-services'
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -121,6 +122,8 @@ android {
 
 dependencies {
     compile fileTree(dir: "libs", include: ["*.jar"])
+    compile project(':react-native-push-notification')
+    compile 'com.google.android.gms:play-services-gcm:8.3.0'
     compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
 }
