@@ -5,7 +5,7 @@ class NovodaDataFormat {
     return dateFormat(time, 'mmmm dS, yyyy, h:MM:ss TT')
   }
 
-  static humanTime (time) {
+  static elapsedTime (time) {
     return tinyHumanTime(new Date(), time) + ' ago'
   }
 }

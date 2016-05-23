@@ -46,7 +46,7 @@ var TweetsView = React.createClass({
       return (<View />)
     }
 
-    let formattedTime = novodaDataFormat.humanTime(Date.parse(this.state.tweet.created_at))
+    let formattedTime = novodaDataFormat.elapsedTime(Date.parse(this.state.tweet.created_at))
     return (
       <View style={styles.mainContainer}>
         <AvatarView uri={this.state.tweet.user.profile_image_url} size={200}/>

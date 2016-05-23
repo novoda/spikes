@@ -24,7 +24,7 @@ var TweetsListItem = React.createClass({
   },
 
   render () {
-    var formattedTime = novodaDataFormat.humanTime(this.props.time)
+    var formattedTime = novodaDataFormat.elapsedTime(this.props.time)
     return (
       <TouchableHighlight onPress={() => this._tweetSelected(this.props.id)}
         underlayColor='#dddddd'>
