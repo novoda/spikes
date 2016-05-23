@@ -3,7 +3,7 @@ package com.novoda.bonfire.user.view;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.novoda.bonfire.user.data.model.User;
+import com.novoda.bonfire.user.displayer.UsersDisplayer;
 
 class UserViewHolder extends RecyclerView.ViewHolder{
 
@@ -14,25 +14,17 @@ class UserViewHolder extends RecyclerView.ViewHolder{
         this.userView = itemView;
     }
 
-    public void bind(final User user, final UserSelectionListener listener) {
-        userView.display(user);
-        userView.setOnClickListener(new View.OnClickListener() {
+    public void bind(final UsersView.SelectableUser selectableUser, final UsersDisplayer.SelectionListener listener) {
+        userView.display(selectableUser);
+        itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v.isSelected()) {
-                    v.setSelected(false);
-                    listener.onUserDeselected(user);
+                if (selectableUser.isSelected) {
+                    listener.onUserDeselected(selectableUser.user);
                 } else {
-                    v.setSelected(true);
-                    listener.onUserSelected(user);
+                    listener.onUserSelected(selectableUser.user);
                 }
             }
         });
-    }
-
-    public interface UserSelectionListener {
-        void onUserSelected(User user);
-
-        void onUserDeselected(User user);
     }
 }

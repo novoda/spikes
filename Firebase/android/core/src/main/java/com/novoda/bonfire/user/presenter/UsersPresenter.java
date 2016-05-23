@@ -9,10 +9,11 @@ import com.novoda.bonfire.user.data.model.Users;
 import com.novoda.bonfire.user.displayer.UsersDisplayer;
 import com.novoda.bonfire.user.service.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
 import rx.functions.Action1;
+import rx.functions.Func1;
 
 public class UsersPresenter {
     private final UserService userService;
@@ -20,7 +21,6 @@ public class UsersPresenter {
     private final UsersDisplayer usersDisplayer;
     private final Channel channel;
     private final Navigator navigator;
-    private final List<User> newOwners = new ArrayList<>();
 
     public UsersPresenter(UserService userService, ChannelService channelService, UsersDisplayer usersDisplayer, Channel channel, Navigator navigator) {
         this.userService = userService;
@@ -46,22 +46,43 @@ public class UsersPresenter {
     private UsersDisplayer.SelectionListener selectionListener = new UsersDisplayer.SelectionListener() {
         @Override
         public void onUserSelected(User user) {
-            newOwners.add(user);
+            channelService.addOwnerToPrivateChannel(channel, user)
+                    .flatMap(getSelectedUsersData())
+                    .subscribe(updateUI());
+        }
+
+        @Override
+        public void onUserDeselected(User user) {
+            channelService.removeOwnerFromPrivateChannel(channel, user)
+                    .flatMap(getSelectedUsersData())
+                    .subscribe(updateUI());
         }
 
         @Override
         public void onCompleteClicked() {
-            channelService.addOwnersToPrivateChannel(channel, newOwners)
-                    .subscribe(new Action1<ChannelWriteResult>() {
-                        @Override
-                        public void call(ChannelWriteResult channelWriteResult) {
-                            if (channelWriteResult.isFailure()) {
-                                usersDisplayer.showFailure();
-                            } else {
-                                navigator.toChannel(channel);
-                            }
-                        }
-                    });
+            navigator.toChannel(channel);
         }
     };
+
+    private Action1<ChannelWriteResult<Users>> updateUI() {
+        return new Action1<ChannelWriteResult<Users>>() {
+            @Override
+            public void call(ChannelWriteResult<Users> channelWriteResult) {
+                if (channelWriteResult.isFailure()) {
+                    usersDisplayer.showFailure();
+                } else {
+                    usersDisplayer.displaySelectedUsers(channelWriteResult.getData());
+                }
+            }
+        };
+    }
+
+    private Func1<ChannelWriteResult<List<String>>, Observable<ChannelWriteResult<Users>>> getSelectedUsersData() {
+        return new Func1<ChannelWriteResult<List<String>>, Observable<ChannelWriteResult<Users>>>() {
+            @Override
+            public Observable<ChannelWriteResult<Users>> call(ChannelWriteResult<List<String>> result) {
+                return userService.getUsersForIds(result.getData());
+            }
+        };
+    }
 }

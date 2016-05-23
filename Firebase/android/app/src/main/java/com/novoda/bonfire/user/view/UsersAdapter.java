@@ -3,17 +3,22 @@ package com.novoda.bonfire.user.view;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.novoda.bonfire.user.data.model.User;
-import com.novoda.bonfire.user.data.model.Users;
 import com.novoda.bonfire.user.displayer.UsersDisplayer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 class UsersAdapter extends RecyclerView.Adapter<UserViewHolder>{
 
-    private Users users = new Users(new ArrayList<User>());
-    private UsersDisplayer.SelectionListener selectionListener = UsersDisplayer.SelectionListener.NO_OP;
-    public void update(Users users) {
+    private List<UsersView.SelectableUser> users = new ArrayList<>();
+    private final UsersDisplayer.SelectionListener selectionListener;
+
+    UsersAdapter(UsersDisplayer.SelectionListener selectionListener) {
+        this.selectionListener = selectionListener;
+        setHasStableIds(true);
+    }
+
+    public void update(List<UsersView.SelectableUser> users) {
         this.users = users;
         notifyDataSetChanged();
     }
@@ -25,7 +30,8 @@ class UsersAdapter extends RecyclerView.Adapter<UserViewHolder>{
 
     @Override
     public void onBindViewHolder(UserViewHolder holder, int position) {
-        holder.bind(users.getUserAt(position), userSelectionListener);
+        final UsersView.SelectableUser user = users.get(position);
+        holder.bind(user, selectionListener);
     }
 
     @Override
@@ -33,23 +39,8 @@ class UsersAdapter extends RecyclerView.Adapter<UserViewHolder>{
         return users.size();
     }
 
-    public void attach(UsersDisplayer.SelectionListener selectionListener) {
-        this.selectionListener = selectionListener;
+    @Override
+    public long getItemId(int position) {
+        return users.get(position).hashCode();
     }
-
-    public void detach(UsersDisplayer.SelectionListener selectionListener) {
-        this.selectionListener = UsersDisplayer.SelectionListener.NO_OP;
-    }
-
-    private final UserViewHolder.UserSelectionListener userSelectionListener = new UserViewHolder.UserSelectionListener() {
-        @Override
-        public void onUserSelected(User user) {
-            selectionListener.onUserSelected(user);
-        }
-
-        @Override
-        public void onUserDeselected(User user) {
-
-        }
-    };
 }

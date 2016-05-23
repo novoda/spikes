@@ -13,9 +13,13 @@ public interface UsersDisplayer {
 
     void showFailure();
 
+    void displaySelectedUsers(Users selectedUsers);
+
     interface SelectionListener {
 
         void onUserSelected(User user);
+
+        void onUserDeselected(User user);
 
         void onCompleteClicked();
 
@@ -26,9 +30,15 @@ public interface UsersDisplayer {
             }
 
             @Override
+            public void onUserDeselected(User user) {
+                // empty implementation
+            }
+
+            @Override
             public void onCompleteClicked() {
                 // empty implementation
             }
         };
+
     }
 }

@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.novoda.bonfire.R;
-import com.novoda.bonfire.user.data.model.User;
 import com.novoda.notils.caster.Views;
 
 public class UserView extends LinearLayout {
@@ -38,7 +37,8 @@ public class UserView extends LinearLayout {
         setBackgroundResource(outValue.resourceId);
     }
 
-    public void display(User user) {
-        name.setText(user.getName());
+    public void display(UsersView.SelectableUser user) {
+        name.setText(user.user.getName());
+        setSelected(user.isSelected);
     }
 }
