@@ -12,8 +12,6 @@ import java.util.List;
 
 public class MainActivity extends ReactActivity {
 
-    private static final String REACT_TWITTER_OAUTH_SCHEME = "react-twitter-oauth";
-
     private OauthIntentPackage oauthIntentPackage = new OauthIntentPackage();
 
     /**
@@ -50,9 +48,6 @@ public class MainActivity extends ReactActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Uri data = intent.getData();
-        if (data == null || !REACT_TWITTER_OAUTH_SCHEME.equals(data.getScheme())) {
-            return;
-        }
 
         oauthIntentPackage.handleOnNewIntent(data);
     }
