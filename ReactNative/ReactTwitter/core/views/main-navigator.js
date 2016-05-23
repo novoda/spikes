@@ -129,7 +129,6 @@ var styles = StyleSheet.create({
     paddingLeft: 8
   },
   navBarRightButton: {
-    // paddingBottom: (Navigator.NavigationBar.Styles.General.TotalNavHeight - navBarIconSize) / 2
     alignItems: 'center',
     paddingRight: 8
   },
