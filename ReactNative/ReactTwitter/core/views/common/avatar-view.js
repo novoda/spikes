@@ -5,7 +5,7 @@ import {
 } from 'react-native'
 
 class AvatarView extends Image {
-  getHighResolutionImage(originalURL) {
+  getHighResolutionImage (originalURL) {
     return originalURL.replace('_normal', '_bigger')
   }
 
@@ -18,7 +18,7 @@ class AvatarView extends Image {
       image: {
         width: this.props.size,
         height: this.props.size,
-        borderRadius:  this.props.size/10,
+        borderRadius: this.props.size / 10,
         borderWidth: 1,
         borderColor: '#E7E7E7'
       }

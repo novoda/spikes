@@ -2,7 +2,6 @@ import React from 'react'
 import {
   StyleSheet,
   View,
-  Image,
   Text,
   Navigator
 } from 'react-native'

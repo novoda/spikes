@@ -3,7 +3,6 @@ import {
   Navigator,
   TouchableOpacity,
   StyleSheet,
-  Image,
   Text
 } from 'react-native'
 
