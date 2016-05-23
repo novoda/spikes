@@ -49,40 +49,34 @@ class FirebaseChannelsService: ChannelsService {
         return firebase.child("private-channels-index").child(user.id)
     }
 
+    // MARK: - Read
     func channels(forUser user: User) -> Observable<[Channel]> {
         return Observable.combineLatest(publicChannels(), privateChannels(forUser: user)) { publicChannels, privateChannels in
             return publicChannels + privateChannels
         }
     }
 
-    func createPublicChannel(withName name: String) -> Observable<DatabaseWriteResult<Channel>> {
-        let name = name.stringByTrimmingCharactersInSet(.whitespaceCharacterSet())
-
-        let channel = Channel(name: name, access: .Public)
-        return self.channelsInfo(withKey: name)
-            .rx_write(channel.asFirebaseValue())
-            .flatMap({self.channelsIndex().child(channel.name).rx_write(true)})
-            .map({DatabaseWriteResult.Success(channel)})
-            .catchError({Observable.just(DatabaseWriteResult.Error($0))})
+    func users(forChannel channel: Channel) -> Observable<[User]> {
+        return ownersList(withKey: channel.name).rx_readValue()
+            .map({ snapshot in
+                let firebaseUserIndexes = snapshot.children.allObjects
+                return firebaseUserIndexes.map({self.user($0.key)})
+            })
+            .flatMap(mergeToArray)
     }
 
-    func createPrivateChannel(withName name: String, owners: [User]) -> Observable<DatabaseWriteResult<Channel>> {
-        let name = name.stringByTrimmingCharactersInSet(.whitespaceCharacterSet())
-        let channel = Channel(name: name, access: .Private)
-        let firebaseOwners = convertToFirebaseOwners(owners)
-
-        return self.ownersList(withKey: name)
-            .rx_write(firebaseOwners)
-            .flatMap({
-                owners.toObservable().flatMap({ user in
-                    self.privateChannelsIndex(forUser: user).child(channel.name).rx_write(true)
-                })
+    private func user(identifier: String) -> Observable<User> {
+        return firebase.child("users").child(identifier)
+            .rx_readOnce()
+            .map({snapshot in
+                if let userFirebaseValue = snapshot.value,
+                    let user = try? User(firebaseValue: userFirebaseValue) {
+                    return user
+                }
+                return nil
             })
-            .flatMap({
-                self.channelsInfo(withKey: name).rx_write(channel.asFirebaseValue())
-            })
-            .map({DatabaseWriteResult.Success(channel)})
-            .catchError({Observable.just(DatabaseWriteResult.Error($0))})
+            .filter({$0 != nil})
+            .map({$0!})
     }
 
     private func publicChannels() -> Observable<[Channel]> {
@@ -127,9 +121,40 @@ class FirebaseChannelsService: ChannelsService {
                 }
                 observer.on(.Completed)
             })
-
+            
             return AnonymousDisposable() {}
         })
+    }
+
+    // MARK: - Write
+    func createPublicChannel(withName name: String) -> Observable<DatabaseWriteResult<Channel>> {
+        let name = name.stringByTrimmingCharactersInSet(.whitespaceCharacterSet())
+
+        let channel = Channel(name: name, access: .Public)
+        return self.channelsInfo(withKey: name)
+            .rx_write(channel.asFirebaseValue())
+            .flatMap({self.channelsIndex().child(channel.name).rx_write(true)})
+            .map({DatabaseWriteResult.Success(channel)})
+            .catchError({Observable.just(DatabaseWriteResult.Error($0))})
+    }
+
+    func createPrivateChannel(withName name: String, owners: [User]) -> Observable<DatabaseWriteResult<Channel>> {
+        let name = name.stringByTrimmingCharactersInSet(.whitespaceCharacterSet())
+        let channel = Channel(name: name, access: .Private)
+        let firebaseOwners = convertToFirebaseOwners(owners)
+
+        return self.ownersList(withKey: name)
+            .rx_write(firebaseOwners)
+            .flatMap({
+                owners.toObservable().flatMap({ user in
+                    self.privateChannelsIndex(forUser: user).child(channel.name).rx_write(true)
+                })
+            })
+            .flatMap({
+                self.channelsInfo(withKey: name).rx_write(channel.asFirebaseValue())
+            })
+            .map({DatabaseWriteResult.Success(channel)})
+            .catchError({Observable.just(DatabaseWriteResult.Error($0))})
     }
 
     func addOwners(owners: [User], channel: Channel) -> Observable<DatabaseWriteResult<[User]>> {
@@ -140,8 +165,8 @@ class FirebaseChannelsService: ChannelsService {
                     .rx_write(true)
                     .flatMap({
                         self.privateChannelsIndex(forUser: user)
-                        .child(channel.name)
-                        .rx_write(true)
+                            .child(channel.name)
+                            .rx_write(true)
                     })
             })
             .map({DatabaseWriteResult.Success(owners)})
@@ -150,11 +175,20 @@ class FirebaseChannelsService: ChannelsService {
     }
 
     func removeOwners(owners: [User], channel: Channel) -> Observable<DatabaseWriteResult<[User]>> {
-        return Observable.empty()
-    }
-    
-    func users(forChannel channel: Channel) -> Observable<[User]> {
-        return Observable.empty()
+        return owners.toObservable()
+            .flatMap ({ user in
+                self.ownersList(withKey: channel.name)
+                    .child(user.id)
+                    .rx_delete()
+                    .flatMap({
+                        self.privateChannelsIndex(forUser: user)
+                            .child(channel.name)
+                            .rx_delete()
+                    })
+            })
+            .map({DatabaseWriteResult.Success(owners)})
+            .catchError({Observable.just(DatabaseWriteResult.Error($0))})
+            .takeLast(1)
     }
     
 }

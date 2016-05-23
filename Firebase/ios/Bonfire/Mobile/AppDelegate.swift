@@ -21,11 +21,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 //        try! FIRAuth.auth()?.signOut()
 //        GIDSignIn.sharedInstance().signOut()
 
-        self.userService = SharedServices.usersService
-        self.userService.allUsers().subscribe(onNext: { users in
-            print(users)
-        }).addDisposableTo(disposeBag)
-
         let navigationController = (SharedServices.navigator as! AppNavigator).navigationController
         navigationController.pushViewController(LoginViewController.withDependencies(), animated: false)
 

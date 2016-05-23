@@ -12,6 +12,13 @@ class UsersPresenter {
 
     let channel: Channel
 
+    enum UserAction {
+        case Add(User)
+        case Remove(User)
+    }
+
+    private let updateUserSubject = PublishSubject<UserAction>()
+
     init(channel: Channel, usersService: UsersService, channelsService: ChannelsService, usersDisplayer: UsersDisplayer, navigator: Navigator) {
         self.channel = channel
         self.usersService = usersService
@@ -25,11 +32,24 @@ class UsersPresenter {
 
         usersDisplayer.actionListener = self
 
-        usersService.allUsers().subscribe(
-            onNext: { [weak self] users in
-                self?.usersDisplayer.display(users)
-            }
-        ).addDisposableTo(disposeBag)
+        let usersObservable = Observable.combineLatest(usersService.allUsers(), channelsService.users(forChannel: channel)) { (allUsers, channelOwners) in
+            return (allUsers, channelOwners)
+        }
+
+        usersObservable.subscribe(
+            onNext: { [weak self] users, channelOwners in
+                self?.usersDisplayer.display(users, channelOwners: channelOwners)
+            }).addDisposableTo(disposeBag)
+
+
+        updateUserSubject
+            .flatMap({ userAction in
+                self.applyUserAction(userAction)
+            })
+            .subscribe(
+                onError: { error in
+                    print(error)
+            }).addDisposableTo(disposeBag)
     }
 
     func stopPresenting() {
@@ -37,16 +57,24 @@ class UsersPresenter {
         disposeBag = nil
     }
 
+    private func applyUserAction(userAction: UserAction) -> Observable<DatabaseWriteResult<[User]>> {
+        switch userAction {
+        case .Add(let user):
+            return channelsService.addOwners([user], channel: channel)
+        case .Remove(let user):
+            return channelsService.removeOwners([user], channel: channel)
+        }
+    }
 }
 
 extension UsersPresenter: UsersActionListener {
 
     func addOwner(user: User) {
-        channelsService.addOwners([user], channel: channel)
+        updateUserSubject.onNext(.Add(user))
     }
 
     func removeOwner(user: User) {
-        channelsService.removeOwners([user], channel: channel)
+        updateUserSubject.onNext(.Remove(user))
     }
-
+    
 }

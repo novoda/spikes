@@ -53,12 +53,14 @@ final class UserCell: UITableViewCell {
         super.prepareForReuse()
     }
 
-    func updateWithUser(user: User) {
+    func updateWithUser(user: User, selected: Bool) {
         userLabel.text = user.name
 
         if let url = user.photoURL {
             setUserPhoto(url)
         }
+
+        backgroundColor = selected ? .yellowColor() : .clearColor()
     }
 
     private func setUserPhoto(url: NSURL) {

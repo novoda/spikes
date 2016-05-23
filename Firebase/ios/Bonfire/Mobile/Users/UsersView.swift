@@ -39,18 +39,19 @@ final class UsersView: UIView {
 
 extension UsersView: UsersDisplayer {
 
-    func display(users: [User]) {
-        tableViewManager.updateTableView(tableView, withUsers: users)
+    func display(allUsers: [User], channelOwners: [User]) {
+        tableViewManager.updateTableView(tableView, withUsers: allUsers, withOwners: channelOwners)
     }
 
 }
 
 
 extension UsersView: UsersTableViewActionListener {
-
     func didSelectUser(user: User) {
-        print("did select: \(user.name)")
         actionListener?.addOwner(user)
     }
 
+    func didDeselectUser(user: User) {
+        actionListener?.removeOwner(user)
+    }
 }
