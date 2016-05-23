@@ -2,6 +2,7 @@ import React from 'react'
 import {
   ListView,
   Navigator,
+  RefreshControl,
   StyleSheet
 } from 'react-native'
 import TweetsListItem from './tweetsListItem'
@@ -18,6 +19,7 @@ var TweetsList = React.createClass({
   getInitialState () {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
     return {
+      isRefreshing: false,
       dataSource: ds.cloneWithRows([])
     }
   },
@@ -27,13 +29,30 @@ var TweetsList = React.createClass({
   },
 
   _refreshData () {
+    this.setState({isRefreshing: true})
     this.props.twitterService.getHomeTimeline()
       .then((rjson) => {
         this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(rjson)
+          dataSource: this.state.dataSource.cloneWithRows(rjson),
+          isRefreshing: false
         })
       })
-      .catch((err) => { console.warn(err) })
+      .catch((err) => {
+        console.warn(err)
+        this.setState({isRefreshing: false})
+      })
+  },
+
+  render () {
+    return (
+      <ListView
+        dataSource={this.state.dataSource}
+        enableEmptySections={true}
+        renderRow={this.renderRow}
+        refreshControl={this._refreshControl()}
+        style={styles.container}
+      />
+    )
   },
 
   renderRow (rowData) {
@@ -51,15 +70,16 @@ var TweetsList = React.createClass({
     )
   },
 
-  render () {
-    return (
-      <ListView
-        dataSource={this.state.dataSource}
-        enableEmptySections={true}
-        renderRow={this.renderRow}
-        style={styles.container}
-      />
-    )
+  _refreshControl () {
+    return (<RefreshControl
+      refreshing={this.state.isRefreshing}
+      onRefresh={this._refreshData}
+      tintColor='#aaaaaa'
+      title='Loading...'
+      titleColor='#48BBEC'
+      colors={['#48BBEC']}
+      progressBackgroundColor='#ffffff'
+    />)
   }
 })
 
