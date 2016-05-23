@@ -38,7 +38,7 @@ class UsersPresenter {
 
 extension UsersPresenter: UsersActionListener {
 
-    func addUsers(users: [User]) {
+    func addUser(user: User) {
         assertionFailure()
     }
 

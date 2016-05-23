@@ -1,7 +1,12 @@
 import UIKit
 
+protocol UsersTableViewActionListener: class {
+    func didSelectUser(user: User)
+}
+
 final class UsersTableViewManager: NSObject, UITableViewDataSource, UITableViewDelegate {
     private var users = [User]()
+    weak var actionListener: UsersTableViewActionListener?
 
     func updateTableView(tableView: UITableView, withUsers users: [User]) {
         self.users = users
@@ -14,6 +19,8 @@ final class UsersTableViewManager: NSObject, UITableViewDataSource, UITableViewD
 
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.allowsMultipleSelection = true
+
         tableView.register(UserCell)
     }
 
@@ -31,7 +38,12 @@ final class UsersTableViewManager: NSObject, UITableViewDataSource, UITableViewD
     }
 
     func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return false
+        return true
+    }
+
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let user = users[indexPath.row]
+        actionListener?.didSelectUser(user)
     }
 }
 

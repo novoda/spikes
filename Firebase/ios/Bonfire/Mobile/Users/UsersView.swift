@@ -23,6 +23,7 @@ final class UsersView: UIView {
 
     private func setupViews() {
         tableViewManager.setupTableView(tableView)
+        tableViewManager.actionListener = self
     }
 
     private func setupLayout() {
@@ -40,6 +41,16 @@ extension UsersView: UsersDisplayer {
 
     func display(users: [User]) {
         tableViewManager.updateTableView(tableView, withUsers: users)
+    }
+
+}
+
+
+extension UsersView: UsersTableViewActionListener {
+
+    func didSelectUser(user: User) {
+        print("did select: \(user.name)")
+        actionListener?.addUser(user)
     }
 
 }
