@@ -10,7 +10,10 @@ class UsersPresenter {
 
     var disposeBag: DisposeBag!
 
-    init(usersService: UsersService, channelsService: ChannelsService, usersDisplayer: UsersDisplayer, navigator: Navigator) {
+    let channel: Channel
+
+    init(channel: Channel, usersService: UsersService, channelsService: ChannelsService, usersDisplayer: UsersDisplayer, navigator: Navigator) {
+        self.channel = channel
         self.usersService = usersService
         self.channelsService = channelsService
         self.usersDisplayer = usersDisplayer
@@ -38,8 +41,12 @@ class UsersPresenter {
 
 extension UsersPresenter: UsersActionListener {
 
-    func addUser(user: User) {
-        assertionFailure()
+    func addOwner(user: User) {
+        channelsService.addOwners([user], channel: channel)
+    }
+
+    func removeOwner(user: User) {
+        channelsService.removeOwners([user], channel: channel)
     }
 
 }

@@ -50,7 +50,7 @@ extension UsersView: UsersTableViewActionListener {
 
     func didSelectUser(user: User) {
         print("did select: \(user.name)")
-        actionListener?.addUser(user)
+        actionListener?.addOwner(user)
     }
 
 }

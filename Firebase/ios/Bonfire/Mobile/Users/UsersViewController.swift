@@ -10,7 +10,7 @@ class UsersViewController: UIViewController {
 
     static func withDependencies(channel channel: Channel) -> UsersViewController {
         let usersView = UsersView()
-        let usersPresenter = UsersPresenter(usersService: SharedServices.usersService, channelsService: SharedServices.channelsService, usersDisplayer: usersView, navigator: SharedServices.navigator)
+        let usersPresenter = UsersPresenter(channel: channel, usersService: SharedServices.usersService, channelsService: SharedServices.channelsService, usersDisplayer: usersView, navigator: SharedServices.navigator)
         return UsersViewController(presenter: usersPresenter, view: usersView)
     }
 

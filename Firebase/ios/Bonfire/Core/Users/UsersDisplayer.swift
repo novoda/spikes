@@ -1,7 +1,8 @@
 import Foundation
 
 protocol UsersActionListener: class {
-    func addUser(user: User)
+    func addOwner(user: User)
+    func removeOwner(user: User)
 }
 
 protocol UsersDisplayer: class {

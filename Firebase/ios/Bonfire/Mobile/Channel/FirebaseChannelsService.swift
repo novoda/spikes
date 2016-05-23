@@ -127,9 +127,34 @@ class FirebaseChannelsService: ChannelsService {
                 }
                 observer.on(.Completed)
             })
-            
+
             return AnonymousDisposable() {}
         })
+    }
+
+    func addOwners(owners: [User], channel: Channel) -> Observable<DatabaseWriteResult<[User]>> {
+        return owners.toObservable()
+            .flatMap ({ user in
+                self.ownersList(withKey: channel.name)
+                    .child(user.id)
+                    .rx_write(true)
+                    .flatMap({
+                        self.privateChannelsIndex(forUser: user)
+                        .child(channel.name)
+                        .rx_write(true)
+                    })
+            })
+            .map({DatabaseWriteResult.Success(owners)})
+            .catchError({Observable.just(DatabaseWriteResult.Error($0))})
+            .takeLast(1)
+    }
+
+    func removeOwners(owners: [User], channel: Channel) -> Observable<DatabaseWriteResult<[User]>> {
+        return Observable.empty()
+    }
+    
+    func users(forChannel channel: Channel) -> Observable<[User]> {
+        return Observable.empty()
     }
     
 }
