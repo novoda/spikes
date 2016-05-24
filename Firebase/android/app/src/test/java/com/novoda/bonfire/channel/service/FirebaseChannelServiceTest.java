@@ -88,7 +88,7 @@ public class FirebaseChannelServiceTest {
             DatabaseReference mockChannelsDBReferenceForPublicChannel = mock(DatabaseReference.class);
             when(mockChannelsDBReference.child(FIRST_PUBLIC_CHANNEL)).thenReturn(mockChannelsDBReferenceForPublicChannel);
 
-            final DataSnapshot mockDataSnapshot = mock(DataSnapshot.class);
+            DataSnapshot mockDataSnapshot = mock(DataSnapshot.class);
             when(mockDataSnapshot.hasChildren()).thenReturn(true);
             when(mockDataSnapshot.getValue(ChannelInfo.class)).thenReturn(publicChannelInfo);
 
@@ -97,7 +97,7 @@ public class FirebaseChannelServiceTest {
             DatabaseReference mockChannelsDBReferenceForPrivateChannel = mock(DatabaseReference.class);
             when(mockChannelsDBReference.child(FIRST_PRIVATE_CHANNEL)).thenReturn(mockChannelsDBReferenceForPrivateChannel);
 
-            final DataSnapshot anotherMockDataSnapshot = mock(DataSnapshot.class);
+            DataSnapshot anotherMockDataSnapshot = mock(DataSnapshot.class);
             when(anotherMockDataSnapshot.hasChildren()).thenReturn(true);
             when(anotherMockDataSnapshot.getValue(ChannelInfo.class)).thenReturn(privateChannelInfo);
 
