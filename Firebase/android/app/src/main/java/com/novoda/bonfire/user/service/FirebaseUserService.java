@@ -38,6 +38,7 @@ public class FirebaseUserService implements UserService {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         List<User> users = toUsers(dataSnapshot);
                         subscriber.onNext(new Users(users));
+                        subscriber.onCompleted();
                     }
 
                     @Override
@@ -59,7 +60,7 @@ public class FirebaseUserService implements UserService {
     @Override
     public Observable<DatabaseResult<Users>> getUsersForIds(List<String> userIds) {
         return Observable.from(userIds)
-                .flatMap(getUserWIthId())
+                .flatMap(getUserWithId())
                 .toList()
                 .flatMap(convertToResultWithUsersInstance())
                 .onErrorReturn(convertErrorToResult());
@@ -67,7 +68,7 @@ public class FirebaseUserService implements UserService {
     }
 
     @NonNull
-    private Func1<String, Observable<User>> getUserWIthId() {
+    private Func1<String, Observable<User>> getUserWithId() {
         return new Func1<String, Observable<User>>() {
             @Override
             public Observable<User> call(final String userId) {
@@ -101,6 +102,7 @@ public class FirebaseUserService implements UserService {
                     @Override
                     public void call(Subscriber<? super DatabaseResult<Users>> subscriber) {
                         subscriber.onNext(new DatabaseResult<>(new Users(users)));
+                        subscriber.onCompleted();
                     }
                 });
             }
