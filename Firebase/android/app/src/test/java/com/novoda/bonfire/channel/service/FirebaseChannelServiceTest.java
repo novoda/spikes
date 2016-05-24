@@ -63,21 +63,8 @@ public class FirebaseChannelServiceTest {
             when(mockDataSnapshot.hasChildren()).thenReturn(true);
             when(mockDataSnapshot.getChildren()).thenReturn(Collections.singletonList(mockDataSnapshot));
 
-            setupAnswerFor(mockPublicChannelsDBReference, mockDataSnapshot);
+            callValueEventListenerOn(mockPublicChannelsDBReference, mockDataSnapshot);
             return mockPublicChannelsDBReference;
-        }
-
-        private void setupAnswerFor(DatabaseReference mockPublicChannelsDBReference, final DataSnapshot mockDataSnapshot) {
-            doAnswer(new Answer<Void>() {
-                @Override
-                public Void answer(InvocationOnMock invocation) throws Throwable {
-                    Object[] arguments = invocation.getArguments();
-                    ValueEventListener argument = (ValueEventListener) arguments[0];
-
-                    argument.onDataChange(mockDataSnapshot);
-                    return null;
-                }
-            }).when(mockPublicChannelsDBReference).addValueEventListener(any(ValueEventListener.class));
         }
 
         @Override
@@ -90,7 +77,7 @@ public class FirebaseChannelServiceTest {
             when(mockDataSnapshot.hasChildren()).thenReturn(true);
             when(mockDataSnapshot.getChildren()).thenReturn(Collections.singletonList(mockDataSnapshot));
 
-            setupAnswerFor(mockPrivateChannelsDBReference, mockDataSnapshot);
+            callValueEventListenerOn(mockPrivateChannelsDBReference, mockDataSnapshot);
             return mockPrivateChannelsDBReference;
         }
 
@@ -103,36 +90,18 @@ public class FirebaseChannelServiceTest {
 
             final DataSnapshot mockDataSnapshot = mock(DataSnapshot.class);
             when(mockDataSnapshot.hasChildren()).thenReturn(true);
-            when(mockDataSnapshot.getValue(ChannelInfo.class)).thenReturn(FirebaseChannelServiceTest.this.publicChannelInfo);
+            when(mockDataSnapshot.getValue(ChannelInfo.class)).thenReturn(publicChannelInfo);
 
-            doAnswer(new Answer<Void>() {
-                @Override
-                public Void answer(InvocationOnMock invocation) throws Throwable {
-                    Object[] arguments = invocation.getArguments();
-                    ValueEventListener argument = (ValueEventListener) arguments[0];
-
-                    argument.onDataChange(mockDataSnapshot);
-                    return null;
-                }
-            }).when(mockChannelsDBReferenceForPublicChannel).addListenerForSingleValueEvent(any(ValueEventListener.class));
+            callListenerForSingleValueEventOn(mockChannelsDBReferenceForPublicChannel, mockDataSnapshot);
 
             DatabaseReference mockChannelsDBReferenceForPrivateChannel = mock(DatabaseReference.class);
             when(mockChannelsDBReference.child(FIRST_PRIVATE_CHANNEL)).thenReturn(mockChannelsDBReferenceForPrivateChannel);
 
             final DataSnapshot anotherMockDataSnapshot = mock(DataSnapshot.class);
             when(anotherMockDataSnapshot.hasChildren()).thenReturn(true);
-            when(anotherMockDataSnapshot.getValue(ChannelInfo.class)).thenReturn(FirebaseChannelServiceTest.this.privateChannelInfo);
+            when(anotherMockDataSnapshot.getValue(ChannelInfo.class)).thenReturn(privateChannelInfo);
 
-            doAnswer(new Answer<Void>() {
-                @Override
-                public Void answer(InvocationOnMock invocation) throws Throwable {
-                    Object[] arguments = invocation.getArguments();
-                    ValueEventListener argument = (ValueEventListener) arguments[0];
-
-                    argument.onDataChange(anotherMockDataSnapshot);
-                    return null;
-                }
-            }).when(mockChannelsDBReferenceForPrivateChannel).addListenerForSingleValueEvent(any(ValueEventListener.class));
+            callListenerForSingleValueEventOn(mockChannelsDBReferenceForPrivateChannel, anotherMockDataSnapshot);
 
             return mockChannelsDBReference;
         }
@@ -140,6 +109,31 @@ public class FirebaseChannelServiceTest {
         @Override
         public DatabaseReference getOwnersDB() {
             return mock(DatabaseReference.class);
+        }
+
+        private void callValueEventListenerOn(DatabaseReference mockDBReference, final DataSnapshot mockDataSnapshot) {
+            doAnswer(new DataSnapshotAnswer(mockDataSnapshot)).when(mockDBReference).addValueEventListener(any(ValueEventListener.class));
+        }
+
+        private void callListenerForSingleValueEventOn(DatabaseReference mockChannelsDBReferenceForPublicChannel, final DataSnapshot mockDataSnapshot) {
+            doAnswer(new DataSnapshotAnswer(mockDataSnapshot)).when(mockChannelsDBReferenceForPublicChannel).addListenerForSingleValueEvent(any(ValueEventListener.class));
+        }
+
+        private class DataSnapshotAnswer implements Answer<Void> {
+            private final DataSnapshot mockDataSnapshot;
+
+            public DataSnapshotAnswer(DataSnapshot mockDataSnapshot) {
+                this.mockDataSnapshot = mockDataSnapshot;
+            }
+
+            @Override
+            public Void answer(InvocationOnMock invocation) throws Throwable {
+                Object[] arguments = invocation.getArguments();
+                ValueEventListener argument = (ValueEventListener) arguments[0];
+
+                argument.onDataChange(mockDataSnapshot);
+                return null;
+            }
         }
     }
 }
