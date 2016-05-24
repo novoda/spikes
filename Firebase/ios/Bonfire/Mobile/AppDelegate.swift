@@ -11,6 +11,8 @@ import RxSwift
 final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    let disposeBag = DisposeBag()
+    var userService: UsersService!
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         FIRApp.configure()
@@ -38,6 +40,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
 struct SharedServices {
     static let loginService: LoginService = FirebaseLoginService()
+    static let usersService: UsersService = FirebaseUsersService()
     static let channelsService: ChannelsService = FirebaseChannelsService()
     static let chatService: ChatService = FirebaseChatService()
     static let navigator: Navigator = AppNavigator()

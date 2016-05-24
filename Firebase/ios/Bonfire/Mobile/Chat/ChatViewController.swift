@@ -1,21 +1,24 @@
 import UIKit
 
 final class ChatViewController: UIViewController {
-    let chatView = ChatView()
+    let chatView: ChatView
     let chatPresenter: ChatPresenter
 
     var bottomConstraint: NSLayoutConstraint!
 
     static func withDependencies(channel channel: Channel) -> ChatViewController {
-        return ChatViewController(channel: channel, loginService: SharedServices.loginService, chatService: SharedServices.chatService)
+        let chatView = ChatView()
+        let presenter = ChatPresenter(channel: channel, loginService: SharedServices.loginService, chatService: SharedServices.chatService, chatDisplayer: chatView, navigator: SharedServices.navigator)
+        return ChatViewController(presenter: presenter, view: chatView)
     }
 
-    init(channel: Channel, loginService: LoginService, chatService: ChatService) {
-        self.chatPresenter = ChatPresenter(channel: channel, loginService: loginService, chatService: chatService, chatDisplayer: chatView)
+    init(presenter: ChatPresenter, view: ChatView) {
+        self.chatPresenter = presenter
+        self.chatView = view
 
         super.init(nibName: nil, bundle: nil)
 
-        self.title = channel.name
+        self.chatView.navigationItemDelegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -52,6 +55,12 @@ final class ChatViewController: UIViewController {
         chatPresenter.stopPresenting()
         removeKeyboardNotificationListeners()
         super.viewDidDisappear(animated)
+    }
+}
+
+extension ChatViewController: ChatViewNavigationItemDelegate {
+    func updateNavigationItem(withChat chat: Chat) {
+        chatView.updateNavigationItem(navigationItem, chat: chat)
     }
 }
 
