@@ -27,16 +27,18 @@ public class FirebaseChannelServiceTest {
 
     private static final String FIRST_PUBLIC_CHANNEL = "first public channel";
     private static final String FIRST_PRIVATE_CHANNEL = "first private channel";
+    private static final String USER_ID = "test user id";
 
     private final ChannelInfo publicChannelInfo = new ChannelInfo(FIRST_PUBLIC_CHANNEL, false);
     private final ChannelInfo privateChannelInfo = new ChannelInfo(FIRST_PRIVATE_CHANNEL, true);
+    private final User user = new User(USER_ID, "test username", "http://test.photo/url");
 
     @Test
-    public void testGetChannelsFor() {
+    public void canGetCompleteListOfChannelsForAUser() {
 
         FirebaseChannelService firebaseChannelService = new FirebaseChannelService(new StubChannelsDatabase());
 
-        Observable<Channels> channelsObservable = firebaseChannelService.getChannelsFor(new User("testId", "testName", "http://test.photo/url"));
+        Observable<Channels> channelsObservable = firebaseChannelService.getChannelsFor(user);
         TestObserver<Channels> channelsTestObserver = new TestObserver<>();
         channelsObservable.subscribe(channelsTestObserver);
 
@@ -70,7 +72,7 @@ public class FirebaseChannelServiceTest {
         @Override
         public DatabaseReference getPrivateChannelsDB() {
             DatabaseReference mockPrivateChannelsDBReference = mock(DatabaseReference.class);
-            when(mockPrivateChannelsDBReference.child(anyString())).thenReturn(mockPrivateChannelsDBReference);
+            when(mockPrivateChannelsDBReference.child(USER_ID)).thenReturn(mockPrivateChannelsDBReference);
 
             DataSnapshot mockDataSnapshot = mock(DataSnapshot.class);
             when(mockDataSnapshot.getKey()).thenReturn(FIRST_PRIVATE_CHANNEL);
