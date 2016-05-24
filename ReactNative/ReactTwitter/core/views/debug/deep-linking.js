@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import {
   StyleSheet,
@@ -6,6 +8,7 @@ import {
 } from 'react-native'
 
 var Button = require('react-native-button')
+// $FlowFixMe: flow doesn't understand dynamic import
 var DeepLinkingFacade = require('../../service/deep-linking-facade')
 import AndroidBackNavigationMixin from '../mixins/android-back-navigation'
 

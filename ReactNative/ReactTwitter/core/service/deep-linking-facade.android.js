@@ -1,3 +1,5 @@
+// @flow
+
 import { NativeModules } from 'react-native'
 
 var oAuthIntentAndroid = NativeModules.OauthIntentAndroid

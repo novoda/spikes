@@ -1,3 +1,5 @@
+// @flow
+
 var ReactNative = require('react-native')
 var {
   AsyncStorage
@@ -6,7 +8,9 @@ var {
 const TOKEN_STORAGE_KEY = '@AuthenticationServiceToken:key'
 
 class AuthenticationService {
-  loadData () {
+  tokenData: any;
+
+  loadData () : any {
     if (this.tokenData) {
       return new Promise((resolve, reject) => {
         resolve(this.tokenData)
@@ -19,7 +23,7 @@ class AuthenticationService {
     })
   }
 
-  updateWithTokenData (tokenData) {
+  updateWithTokenData (tokenData: any) {
     this.tokenData = tokenData
     let tokenString = JSON.stringify(tokenData)
     return AsyncStorage.setItem(TOKEN_STORAGE_KEY, tokenString)

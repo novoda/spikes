@@ -1,9 +1,12 @@
+// @flow
+
 import React from 'react'
 import {
   StyleSheet,
   View,
-  Text,
-  Navigator
+  Navigator,
+  Image,
+  Dimensions
 } from 'react-native'
 var AuthenticationService = require('../service/authentication-service.js')
 var TwitterRequestsService = require('../service/twitter-requests-service.js')
@@ -49,7 +52,7 @@ var SplashScreenView = React.createClass({
   render () {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>SplashScreen</Text>
+        <Image style={styles.logo} source={require('./assets/twitter-logo.png')} />
       </View>
     )
   },
@@ -63,16 +66,20 @@ var SplashScreenView = React.createClass({
   }
 })
 
+var screenWidth = Dimensions.get('window').width
+var screenHeight = Dimensions.get('window').height
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF'
   },
-  title: {
-    fontSize: 30,
-    textAlign: 'center'
+  logo: {
+    flex: 1,
+    width: screenWidth,
+    height: screenHeight,
+    resizeMode: 'contain'
   }
 })
 

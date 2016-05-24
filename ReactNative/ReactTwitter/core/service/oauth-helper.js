@@ -1,13 +1,17 @@
+// @flow
+
 import HmacSHA1 from 'crypto-js/hmac-sha1'
 import CryptoJS from 'crypto-js'
 import PercentEncoder from './percent-encoder.js'
 
 class OauthHelper {
-  constructor (consumerSecret) {
+  consumerSecret: string;
+
+  constructor (consumerSecret: string) {
     this.consumerSecret = consumerSecret
   }
 
-  buildAuthorizationHeader (method, url, params, queryParams, oauthTokenSecret) {
+  buildAuthorizationHeader (method: string, url: string, params: any, queryParams: any, oauthTokenSecret: string) {
     let output = 'OAuth '
     let signature = this.getSigningKey(method, url, params, queryParams, oauthTokenSecret)
     for (let key in params) {
@@ -17,14 +21,14 @@ class OauthHelper {
     return output
   }
 
-  getSigningKey (method, url, params, queryParams, oauthTokenSecret) {
+  getSigningKey (method: string, url: string, params: any, queryParams: any, oauthTokenSecret: string) {
     let signingKey = PercentEncoder.encode(this.consumerSecret) + '&' + PercentEncoder.encode(oauthTokenSecret)
     let signatureBase = OauthHelper._getSignatureBase(method, url, params, queryParams)
     return CryptoJS.enc.Base64.stringify(HmacSHA1(signatureBase, signingKey))
   }
 
   // Returns an object with oauth_token and oauth_verifier
-  static getOauthTokenAndVerifierFromURLCallback (urlCallback) {
+  static getOauthTokenAndVerifierFromURLCallback (urlCallback: string) {
     let prefix = 'react-twitter-oauth://callback?'
     let content = urlCallback.substr(prefix.length)
 
@@ -37,18 +41,18 @@ class OauthHelper {
     return result
   }
 
-  static _getSignatureBase (method, url, params, queryParams) {
+  static _getSignatureBase (method: string, url: string, params: any, queryParams: any) {
     return method.toUpperCase() + '&' + PercentEncoder.encode(url) + '&' +
       PercentEncoder.encode(OauthHelper._collectParameters(params, queryParams))
   }
 
-  static _collectParameters (params, queryParams) {
+  static _collectParameters (params: any, queryParams: any) {
     let encodedParams = OauthHelper._percentEncodeParams(params, queryParams)
     OauthHelper._sortEncodedParams(encodedParams)
     return OauthHelper._joinParams(encodedParams)
   }
 
-  static _percentEncodeParams (params, queryParams) {
+  static _percentEncodeParams (params: any, queryParams: any) {
     let encodedParams = []
     for (let key in params) {
       encodedParams.push({
@@ -65,13 +69,13 @@ class OauthHelper {
     return encodedParams
   }
 
-  static _sortEncodedParams (params) {
+  static _sortEncodedParams (params: any) {
     params.sort((first, second) => {
       return (first.key > second.key) ? 1 : ((second.key > first.key) ? -1 : 0)
     })
   }
 
-  static _joinParams (params) {
+  static _joinParams (params: any) {
     let output = ''
     params.forEach((param) => {
       if (output.length > 0) {

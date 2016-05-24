@@ -1,8 +1,9 @@
+// @flow
+
 import React from 'react'
 import {
   StyleSheet,
   View,
-  Image,
   Text,
   TouchableHighlight,
   Navigator
@@ -10,6 +11,7 @@ import {
 
 var novodaDataFormat = require('./common/data-format.js')
 var TwitterRequestsService = require('../service/twitter-requests-service.js')
+var AvatarView = require('./common/avatar-view.js')
 
 var TweetsListItem = React.createClass({
   propTypes: {
@@ -24,16 +26,18 @@ var TweetsListItem = React.createClass({
   },
 
   render () {
-    var formattedTime = novodaDataFormat.longTime(this.props.time)
+    var formattedTime = novodaDataFormat.elapsedTime(this.props.time)
     return (
       <TouchableHighlight onPress={() => this._tweetSelected(this.props.id)}
         underlayColor='#dddddd'>
          <View>
           <View style={styles.rowContainer}>
-            <Image style={styles.tweet_avatar} source={{ uri: this.props.author_avatar }} />
+            <AvatarView uri={this.props.author_avatar} size={60} />
             <View style={styles.textContainer}>
-              <Text style={styles.tweet_author}>{this.props.author_name}</Text>
-              <Text style={styles.tweet_author_handle}>@{this.props.author_handle}</Text>
+              <View style={styles.userInfoContainer}>
+                <Text style={styles.tweet_author}>{this.props.author_name}</Text>
+                <Text style={styles.tweet_author_handle}>@{this.props.author_handle}</Text>
+              </View>
               <Text style={styles.tweet_time}>{formattedTime}</Text>
               <Text style={styles.tweet_text}>{this.props.text}</Text>
             </View>
@@ -44,7 +48,7 @@ var TweetsListItem = React.createClass({
     )
   },
 
-  _tweetSelected (tweetId) {
+  _tweetSelected (tweetId: string) {
     this.props.navigator.push({
       id: 'tweet-view-identifier',
       tweetId: tweetId,
@@ -56,38 +60,40 @@ var TweetsListItem = React.createClass({
 
 const styles = StyleSheet.create({
   textContainer: {
-    flex: 1
+    flex: 1,
+    paddingLeft: 10
   },
   separator: {
     height: 1,
     backgroundColor: '#dddddd'
   },
   tweet_author: {
-    fontSize: 25,
+    fontSize: 16,
     fontWeight: 'bold',
-    color: '#48BBEC'
+    color: 'black'
   },
   tweet_author_handle: {
-    fontSize: 20,
+    fontSize: 16,
     fontStyle: 'italic',
-    color: '#656565'
+    color: 'grey',
+    marginLeft: 8
   },
   tweet_time: {
     fontSize: 16,
     color: '#656565'
   },
   tweet_text: {
-    fontSize: 20,
-    color: '#656565'
-  },
-  tweet_avatar: {
-    width: 80,
-    height: 80,
-    marginRight: 10
+    fontSize: 14,
+    color: '#656565',
+    marginTop: 8
   },
   rowContainer: {
     flexDirection: 'row',
-    padding: 10
+    padding: 10,
+    backgroundColor: 'white'
+  },
+  userInfoContainer: {
+    flexDirection: 'row'
   }
 })
 

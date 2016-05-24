@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import {
   StyleSheet,
@@ -9,6 +11,7 @@ import {
 
 var Button = require('react-native-button')
 var TwitterRequestsService = require('../service/twitter-requests-service.js')
+// $FlowFixMe: flow doesn't understand dynamic import
 var DeepLinkingFacade = require('../service/deep-linking-facade')
 var OauthHelper = require('../service/oauth-helper.js')
 
@@ -50,9 +53,9 @@ var LoginScreenView = React.createClass({
         .catch(console.warn)
   },
 
-  _browserAuthenticationWithToken (oauthToken) {
+  _browserAuthenticationWithToken (oauthToken: string) {
     this.state.facade.listenForDeepLinking().then((uri) => {
-      let parsedURI = OauthHelper.getOauthTokenAndVerifierFromURLCallback(uri)
+      let parsedURI: any = OauthHelper.getOauthTokenAndVerifierFromURLCallback(uri)
       this.state.facade.stopListeningForDeepLinking()
 
       let userCancelledLogin = parsedURI.oauth_token == null || parsedURI.oauth_token.length === 0
