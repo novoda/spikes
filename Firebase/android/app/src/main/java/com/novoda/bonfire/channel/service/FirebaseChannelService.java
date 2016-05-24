@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.novoda.bonfire.channel.data.model.Channel;
@@ -125,12 +126,13 @@ public class FirebaseChannelService implements ChannelService {
                 return Observable.create(new Observable.OnSubscribe<Channel>() {
                     @Override
                     public void call(final Subscriber<? super Channel> subscriber) {
-                        DatabaseReference channelReference = privateChannelsDB.child(userDatabaseResult.getData().getId());
-                        channelReference.child(channel.getPath()).removeValue(new DatabaseReference.CompletionListener() {
+                        DatabaseReference channelReference = privateChannelsDB.child(userDatabaseResult.getData().getId()).child(channel.getPath());
+                        channelReference.removeValue(new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                                 if (databaseError == null) {
                                     subscriber.onNext(channel);
+                                    subscriber.onCompleted();
                                 } else {
                                     subscriber.onError(databaseError.toException());
                                 }
@@ -150,12 +152,13 @@ public class FirebaseChannelService implements ChannelService {
                 return Observable.create(new Observable.OnSubscribe<DatabaseResult<User>>() {
                     @Override
                     public void call(final Subscriber<? super DatabaseResult<User>> subscriber) {
-                        DatabaseReference channelRefInOwners = ownersDB.child(channel.getPath());
-                        channelRefInOwners.child(user.getId()).removeValue(new DatabaseReference.CompletionListener() {
+                        DatabaseReference channelRefInOwners = ownersDB.child(channel.getPath()).child(user.getId());
+                        channelRefInOwners.removeValue(new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                                 if (databaseError == null) {
                                     subscriber.onNext(new DatabaseResult<>(user));
+                                    subscriber.onCompleted();
                                 } else {
                                     subscriber.onError(databaseError.toException());
                                 }
@@ -175,20 +178,18 @@ public class FirebaseChannelService implements ChannelService {
                 return Observable.create(new Observable.OnSubscribe<Channel>() {
                     @Override
                     public void call(final Subscriber<? super Channel> subscriber) {
-                        DatabaseReference channelReference = privateChannelsDB.child(user.getId());
-                        channelReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        DatabaseReference channelReference = privateChannelsDB.child(user.getId()).child(newChannel.getPath());
+                        channelReference.setValue(true, new DatabaseReference.CompletionListener() {
                             @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                subscriber.onNext(newChannel);
-                                subscriber.onCompleted();
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                subscriber.onError(databaseError.toException());
+                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                if (databaseError == null) {
+                                    subscriber.onNext(newChannel);
+                                    subscriber.onCompleted();
+                                } else {
+                                    subscriber.onError(databaseError.toException());
+                                }
                             }
                         });
-                        channelReference.child(newChannel.getPath()).setValue(true);
                     }
                 });
             }
@@ -203,20 +204,18 @@ public class FirebaseChannelService implements ChannelService {
                 return Observable.create(new Observable.OnSubscribe<User>() {
                     @Override
                     public void call(final Subscriber<? super User> subscriber) {
-                        DatabaseReference channelRefInOwners = ownersDB.child(newChannel.getPath());
-                        channelRefInOwners.addListenerForSingleValueEvent(new ValueEventListener() {
+                        DatabaseReference channelRefInOwners = ownersDB.child(newChannel.getPath()).child(user.getId());
+                        channelRefInOwners.setValue(true, new DatabaseReference.CompletionListener() {
                             @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                subscriber.onNext(user);
-                                subscriber.onCompleted();
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                subscriber.onError(databaseError.toException());
+                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                if (databaseError == null) {
+                                    subscriber.onNext(user);
+                                    subscriber.onCompleted();
+                                } else {
+                                    subscriber.onError(databaseError.toException());
+                                }
                             }
                         });
-                        channelRefInOwners.child(user.getId()).setValue(true);
                     }
                 });
             }
@@ -253,7 +252,7 @@ public class FirebaseChannelService implements ChannelService {
         return new Func1<Throwable, DatabaseResult<T>>() {
             @Override
             public DatabaseResult<T> call(Throwable throwable) {
-                return new DatabaseResult<>(throwable);
+                return new DatabaseResult<>(throwable == null ? new DatabaseException("Database error is missing") : throwable);
             }
         };
     }
@@ -265,6 +264,7 @@ public class FirebaseChannelService implements ChannelService {
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 if (databaseError == null) {
                     subscriber.onNext(new DatabaseResult<>(channel));
+                    subscriber.onCompleted();
                 } else {
                     subscriber.onError(databaseError.toException());
                 }
@@ -383,6 +383,7 @@ public class FirebaseChannelService implements ChannelService {
                     @Override
                     public void call(Subscriber<? super Channels> subscriber) {
                         subscriber.onNext(new Channels(channels));
+                        subscriber.onCompleted();
                     }
                 });
             }
