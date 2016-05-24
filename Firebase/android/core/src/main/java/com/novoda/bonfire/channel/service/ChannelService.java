@@ -13,11 +13,13 @@ public interface ChannelService {
 
     Observable<Channels> getChannelsFor(User user);
 
-    Observable<ChannelWriteResult> createPublicChannel(Channel newChannel);
+    Observable<ChannelWriteResult<Channel>> createPublicChannel(Channel newChannel);
 
-    Observable<ChannelWriteResult> createPrivateChannel(Channel newChannel, User owner);
+    Observable<ChannelWriteResult<Channel>> createPrivateChannel(Channel newChannel, User owner);
 
     Observable<ChannelWriteResult<List<String>>> addOwnerToPrivateChannel(Channel channel, User newOwner);
 
     Observable<ChannelWriteResult<List<String>>> removeOwnerFromPrivateChannel(Channel channel, User removedOwner);
+
+    Observable<ChannelWriteResult<List<String>>> getOwnersOfChannel(Channel channel);
 }
