@@ -1,3 +1,5 @@
+// @flow
+
 import { AsyncStorage } from 'react-native'
 var PushNotification = require('react-native-push-notification')
 
