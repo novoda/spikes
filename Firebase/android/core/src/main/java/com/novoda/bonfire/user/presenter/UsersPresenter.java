@@ -38,6 +38,27 @@ public class UsersPresenter {
                 usersDisplayer.display(users);
             }
         });
+        channelService.getOwnersOfChannel(channel)
+                .filter(new Func1<DatabaseResult<List<String>>, Boolean>() {
+                    @Override
+                    public Boolean call(DatabaseResult<List<String>> listDatabaseResult) {
+                        return listDatabaseResult.isSuccess();
+                    }
+                })
+                .flatMap(new Func1<DatabaseResult<List<String>>, Observable<DatabaseResult<Users>>>() {
+                    @Override
+                    public Observable<DatabaseResult<Users>> call(DatabaseResult<List<String>> result) {
+                        return userService.getUsersForIds(result.getData());
+                    }
+                })
+                .subscribe(new Action1<DatabaseResult<Users>>() {
+                    @Override
+                    public void call(DatabaseResult<Users> result) {
+                        if (result.isSuccess()) {
+                            usersDisplayer.displaySelectedUsers(result.getData());
+                        }
+                    }
+                });
     }
 
     public void stopPresenting() {
