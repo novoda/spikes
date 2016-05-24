@@ -10,6 +10,7 @@ import com.novoda.bonfire.R;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.chat.displayer.ChatDisplayer;
 import com.novoda.bonfire.chat.presenter.ChatPresenter;
+import com.novoda.bonfire.navigation.AndroidNavigator;
 
 public class ChatActivity extends BaseActivity {
 
@@ -38,7 +39,8 @@ public class ChatActivity extends BaseActivity {
                 Dependencies.INSTANCE.getChatService(),
                 chatDisplayer,
                 channel,
-                Dependencies.INSTANCE.getFirebaseAnalytics()
+                Dependencies.INSTANCE.getFirebaseAnalytics(),
+                new AndroidNavigator(this)
         );
     }
 

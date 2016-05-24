@@ -6,7 +6,9 @@ import com.novoda.bonfire.chat.data.model.Chat;
 import com.novoda.bonfire.chat.data.model.Message;
 import com.novoda.bonfire.chat.displayer.ChatDisplayer;
 import com.novoda.bonfire.chat.service.ChatService;
+import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.login.data.model.Authentication;
+import com.novoda.bonfire.navigation.Navigator;
 import com.novoda.bonfire.user.data.model.User;
 import com.novoda.bonfire.login.service.LoginService;
 
@@ -20,27 +22,33 @@ public class ChatPresenter {
     private final ChatDisplayer chatDisplayer;
     private Analytics analytics;
     private Channel channel;
+    private Navigator navigator;
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
     private User user;
 
-    public ChatPresenter(LoginService loginService, ChatService chatService, ChatDisplayer chatDisplayer, Channel channel, Analytics analytics) {
+    public ChatPresenter(LoginService loginService, ChatService chatService, ChatDisplayer chatDisplayer, Channel channel, Analytics analytics, Navigator navigator) {
         this.loginService = loginService;
         this.chatService = chatService;
         this.chatDisplayer = chatDisplayer;
         this.analytics = analytics;
         this.channel = channel;
+        this.navigator = navigator;
     }
 
     public void startPresenting() {
         chatDisplayer.attach(actionListener);
         chatDisplayer.disableInteraction();
         subscriptions.add(
-                chatService.getChat(channel).subscribe(new Action1<Chat>() { //TODO sort out error flow
+                chatService.getChat(channel).subscribe(new Action1<DatabaseResult<Chat>>() {
                     @Override
-                    public void call(Chat chat) {
-                        chatDisplayer.display(chat);
+                    public void call(DatabaseResult<Chat> result) {
+                        if (result.isSuccess()) {
+                            chatDisplayer.display(result.getData());
+                        } else {
+                            navigator.toChannels();
+                        }
                     }
                 })
         );
