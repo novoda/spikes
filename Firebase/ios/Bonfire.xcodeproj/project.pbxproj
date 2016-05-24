@@ -48,6 +48,8 @@
 		B6962C8D1CEF568E006A3A9E /* UsersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6962C8C1CEF568E006A3A9E /* UsersView.swift */; };
 		B6962C8F1CEF5697006A3A9E /* UsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6962C8E1CEF5697006A3A9E /* UsersViewController.swift */; };
 		B6962C911CEF5742006A3A9E /* Firebase+RxExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6962C901CEF5742006A3A9E /* Firebase+RxExtensions.swift */; };
+		B6AC7C151CF4589500F96722 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AC7C141CF4589500F96722 /* Analytics.swift */; };
+		B6AC7C171CF458E000F96722 /* FirebaseAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AC7C161CF458E000F96722 /* FirebaseAnalytics.swift */; };
 		B6CC1CE91CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CC1CE81CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift */; };
 		B6CC1CEB1CEC992F00BA8500 /* Observable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CC1CEA1CEC992F00BA8500 /* Observable+Extensions.swift */; };
 		B6CC1CEE1CECA83600BA8500 /* CreateChannelPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CC1CED1CECA83600BA8500 /* CreateChannelPresenter.swift */; };
@@ -111,6 +113,8 @@
 		B6962C8C1CEF568E006A3A9E /* UsersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersView.swift; sourceTree = "<group>"; };
 		B6962C8E1CEF5697006A3A9E /* UsersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersViewController.swift; sourceTree = "<group>"; };
 		B6962C901CEF5742006A3A9E /* Firebase+RxExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Firebase+RxExtensions.swift"; sourceTree = "<group>"; };
+		B6AC7C141CF4589500F96722 /* Analytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		B6AC7C161CF458E000F96722 /* FirebaseAnalytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseAnalytics.swift; sourceTree = "<group>"; };
 		B6CC1CE81CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Channel+FirebaseConvertible.swift"; sourceTree = "<group>"; };
 		B6CC1CEA1CEC992F00BA8500 /* Observable+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Extensions.swift"; sourceTree = "<group>"; };
 		B6CC1CED1CECA83600BA8500 /* CreateChannelPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChannelPresenter.swift; sourceTree = "<group>"; };
@@ -225,6 +229,7 @@
 				B65C45CB1CE1E3D900B2179D /* Login */,
 				B65C45D81CE1F00000B2179D /* Navigation */,
 				B636BA231CF34D9F009009F2 /* Config.swift */,
+				B6AC7C141CF4589500F96722 /* Analytics.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -239,6 +244,7 @@
 				B6962C891CEF5676006A3A9E /* Users */,
 				B654B2871CE0C86200EEDE0A /* Utilities */,
 				B636BA251CF34DDA009009F2 /* FirebaseRemoteConfig.swift */,
+				B6AC7C161CF458E000F96722 /* FirebaseAnalytics.swift */,
 			);
 			path = Mobile;
 			sourceTree = "<group>";
@@ -496,6 +502,7 @@
 				B6CC1CF01CECA96B00BA8500 /* CreateChannelDisplayer.swift in Sources */,
 				B65C45CA1CE1E31A00B2179D /* LoginViewController.swift in Sources */,
 				B654B28C1CE0CE8300EEDE0A /* Message.swift in Sources */,
+				B6AC7C171CF458E000F96722 /* FirebaseAnalytics.swift in Sources */,
 				B6ECCEAE1CE3477000580434 /* User+FirebaseConvertible.swift in Sources */,
 				B660785C1CE37FAC008E7DD4 /* ReusableView.swift in Sources */,
 				B654B2691CE0C38000EEDE0A /* ChatViewController.swift in Sources */,
@@ -528,6 +535,7 @@
 				B6962C8F1CEF5697006A3A9E /* UsersViewController.swift in Sources */,
 				D0C31D0085982E1BA7EB3638 /* ChannelsDisplayer.swift in Sources */,
 				D0C319895F726FA2DAECFC21 /* ChannelsViewController.swift in Sources */,
+				B6AC7C151CF4589500F96722 /* Analytics.swift in Sources */,
 				B6CC1CEE1CECA83600BA8500 /* CreateChannelPresenter.swift in Sources */,
 				D0C31F91CCF73EC549BE1264 /* ChannelCell.swift in Sources */,
 				B636BA241CF34D9F009009F2 /* Config.swift in Sources */,

@@ -44,5 +44,6 @@ struct SharedServices {
     static let channelsService: ChannelsService = FirebaseChannelsService()
     static let chatService: ChatService = FirebaseChatService()
     static let navigator: Navigator = AppNavigator()
+    static let analytics: Analytics = FirebaseAnalytics()
     static let config: Config = FirebaseRemoteConfig()
 }
