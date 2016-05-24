@@ -7,6 +7,7 @@ import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.data.model.ChannelInfo;
 import com.novoda.bonfire.channel.data.model.Channels;
 import com.novoda.bonfire.channel.service.database.ChannelsDatabase;
+import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.user.data.model.User;
 
 import java.util.ArrayList;
@@ -35,13 +36,6 @@ public class FirebaseChannelServiceTest {
 
     @Test
     public void canGetCompleteListOfChannelsForAUser() {
-
-        FirebaseChannelService firebaseChannelService = new FirebaseChannelService(new StubChannelsDatabase());
-
-        Observable<Channels> channelsObservable = firebaseChannelService.getChannelsFor(user);
-        TestObserver<Channels> channelsTestObserver = new TestObserver<>();
-        channelsObservable.subscribe(channelsTestObserver);
-
         List<Channel> listOfPublicChannels = new ArrayList<>();
         listOfPublicChannels.add(new Channel(FIRST_PUBLIC_CHANNEL, publicChannelInfo));
 
@@ -52,10 +46,30 @@ public class FirebaseChannelServiceTest {
         expectedList.addAll(listOfPrivateChannels);
         expectedList.addAll(listOfPublicChannels);
 
+        FirebaseChannelService firebaseChannelService = new FirebaseChannelService(new FakeChannelsDatabase());
+
+        Observable<Channels> channelsObservable = firebaseChannelService.getChannelsFor(user);
+        TestObserver<Channels> channelsTestObserver = new TestObserver<>();
+        channelsObservable.subscribe(channelsTestObserver);
+
         channelsTestObserver.assertReceivedOnNext(Collections.singletonList(new Channels(expectedList)));
     }
 
-    private class StubChannelsDatabase implements ChannelsDatabase {
+    @Test
+    public void canCreateAPublicChannel() {
+        FakeChannelsDatabase channelsDatabase = new FakeChannelsDatabase();
+        FirebaseChannelService firebaseChannelService = new FirebaseChannelService(channelsDatabase);
+
+        Channel newChannel = new Channel("another public channel", new ChannelInfo("another public channel", false));
+        Observable<DatabaseResult<Channel>> channelsObservable = firebaseChannelService.createPublicChannel(newChannel);
+        TestObserver<DatabaseResult<Channel>> channelsTestObserver = new TestObserver<>();
+        channelsObservable.subscribe(channelsTestObserver);
+
+        channelsTestObserver.assertReceivedOnNext(Collections.singletonList(new DatabaseResult<>(newChannel)));
+        verify(channelsDatabase.getChannelsDB()).setValue(eq(true), any(DatabaseReference.CompletionListener.class));
+    }
+
+    private class FakeChannelsDatabase implements ChannelsDatabase {
         @Override
         public DatabaseReference getPublicChannelsDB() {
             DatabaseReference mockPublicChannelsDBReference = mock(DatabaseReference.class);

@@ -32,4 +32,34 @@ public class DatabaseResult<T> {
         }
         return data;
     }
+
+    @Override
+    public String toString() {
+        return "DatabaseResult{" +
+                "failure=" + failure +
+                ", data=" + data +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        DatabaseResult<?> that = (DatabaseResult<?>) o;
+
+        return failure != null ? failure.equals(that.failure) : that.failure == null
+                && data != null ? data.equals(that.data) : that.data == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = failure != null ? failure.hashCode() : 0;
+        result = 31 * result + (data != null ? data.hashCode() : 0);
+        return result;
+    }
 }
