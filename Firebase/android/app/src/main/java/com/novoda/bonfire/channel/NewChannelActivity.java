@@ -23,7 +23,6 @@ public class NewChannelActivity extends BaseActivity {
         newChannelPresenter = new NewChannelPresenter((NewChannelDisplayer) findViewById(R.id.createChannelView),
                                                       dependencies.getChannelService(),
                                                       dependencies.getLoginService(),
-                                                      dependencies.getUserService(),
                                                       new AndroidNavigator(this)
         );
     }

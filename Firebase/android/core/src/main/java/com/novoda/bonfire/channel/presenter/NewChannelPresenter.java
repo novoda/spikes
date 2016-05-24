@@ -2,17 +2,13 @@ package com.novoda.bonfire.channel.presenter;
 
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.data.model.ChannelInfo;
-import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.channel.displayer.NewChannelDisplayer;
 import com.novoda.bonfire.channel.service.ChannelService;
+import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.login.data.model.Authentication;
 import com.novoda.bonfire.login.service.LoginService;
 import com.novoda.bonfire.navigation.Navigator;
 import com.novoda.bonfire.user.data.model.User;
-import com.novoda.bonfire.user.service.UserService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import rx.functions.Action1;
 
@@ -21,20 +17,16 @@ public class NewChannelPresenter {
     private final NewChannelDisplayer newChannelDisplayer;
     private final ChannelService channelService;
     private final LoginService loginService;
-    private final UserService userService;
     private final Navigator navigator;
-    private final List<User> owners = new ArrayList<>();
     private User user;
 
     public NewChannelPresenter(NewChannelDisplayer newChannelDisplayer,
                                ChannelService channelService,
                                LoginService loginService,
-                               UserService userService,
                                Navigator navigator) {
         this.newChannelDisplayer = newChannelDisplayer;
         this.channelService = channelService;
         this.loginService = loginService;
-        this.userService = userService;
         this.navigator = navigator;
     }
 
@@ -68,25 +60,25 @@ public class NewChannelPresenter {
             final Channel newChannel = buildChannel(channelName, isPrivate);
             if (isPrivate) {
                 channelService.createPrivateChannel(newChannel, user)
-                        .subscribe(new Action1<DatabaseResult>() {
+                        .subscribe(new Action1<DatabaseResult<Channel>>() {
                             @Override
-                            public void call(DatabaseResult databaseResult) {
-                                if (databaseResult.isFailure()) {
-                                    newChannelDisplayer.showChannelCreationError();
+                            public void call(DatabaseResult<Channel> databaseResult) {
+                                if (databaseResult.isSuccess()) {
+                                    navigator.toAddUsersFor(databaseResult.getData());
                                 } else {
-                                    navigator.toAddUsersFor(newChannel);
+                                    newChannelDisplayer.showChannelCreationError();
                                 }
                             }
                         });
             } else {
                 channelService.createPublicChannel(newChannel)
-                        .subscribe(new Action1<DatabaseResult>() {
+                        .subscribe(new Action1<DatabaseResult<Channel>>() {
                             @Override
-                            public void call(DatabaseResult databaseResult) {
-                                if (databaseResult.isFailure()) {
-                                    newChannelDisplayer.showChannelCreationError();
+                            public void call(DatabaseResult<Channel> databaseResult) {
+                                if (databaseResult.isSuccess()) {
+                                    navigator.toChannel(databaseResult.getData());
                                 } else {
-                                    navigator.toChannels();
+                                    newChannelDisplayer.showChannelCreationError();
                                 }
                             }
                         });
