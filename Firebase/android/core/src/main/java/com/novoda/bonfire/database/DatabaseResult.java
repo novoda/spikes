@@ -15,24 +15,20 @@ public class DatabaseResult<T> {
         this.data = data;
     }
 
-    public boolean isFailure() {
-        return failure != null;
-    }
-
     public boolean isSuccess() {
         return data != null;
     }
 
     public Throwable getFailure() {
         if (failure == null) {
-            throw new IllegalStateException("Database write is successful please check with isFailure first");
+            throw new IllegalStateException("Database write is successful please check with isSuccess first");
         }
         return failure;
     }
 
     public T getData() {
         if (data == null) {
-            throw new IllegalStateException("Database write is not successful please check with isFailure first");
+            throw new IllegalStateException("Database write is not successful please check with isSuccess first");
         }
         return data;
     }
