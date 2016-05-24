@@ -73,20 +73,22 @@ public class UsersView extends LinearLayout implements UsersDisplayer {
     public void displaySelectedUsers(Users selectedUsers) {
         List<SelectableUser> usersWithUpdatedSelection = new ArrayList<>(selectableUsers.size());
         for (SelectableUser selectableUser : selectableUsers) {
-            boolean foundMatch = false;
-            for (User selectedUser : selectedUsers.getUsers()) {
-                if (selectedUser.equals(selectableUser.user)) {
-                    usersWithUpdatedSelection.add(new SelectableUser(selectedUser, true));
-                    foundMatch = true;
-                    break;
-                }
-            }
-            if (!foundMatch) {
-                usersWithUpdatedSelection.add(selectableUser);
-            }
+            boolean isSelected = isUserSelected(selectedUsers, selectableUser);
+            usersWithUpdatedSelection.add(new SelectableUser(selectableUser.user, isSelected));
         }
         selectableUsers = usersWithUpdatedSelection;
         usersAdapter.update(selectableUsers);
+    }
+
+    private boolean isUserSelected(Users selectedUsers, SelectableUser selectableUser) {
+        boolean foundMatch = false;
+        for (User selectedUser : selectedUsers.getUsers()) {
+            if (selectedUser.equals(selectableUser.user)) {
+                foundMatch = true;
+                break;
+            }
+        }
+        return foundMatch;
     }
 
     class SelectableUser {

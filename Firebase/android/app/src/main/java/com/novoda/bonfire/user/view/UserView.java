@@ -1,7 +1,6 @@
 package com.novoda.bonfire.user.view;
 
 import android.content.Context;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -19,7 +18,7 @@ public class UserView extends LinearLayout {
         configureViewParams();
         View.inflate(context, R.layout.merge_user_item_view, this);
         name = Views.findById(this, R.id.userName);
-        setSelectableBackgroundFromAttributes(context);
+        setBackgroundResource(R.drawable.user_item_selector);
     }
 
     private void configureViewParams() {
@@ -29,12 +28,6 @@ public class UserView extends LinearLayout {
         int horizontalMargin = getResources().getDimensionPixelSize(R.dimen.list_item_horizontal_margin);
         int verticalMargin = getResources().getDimensionPixelSize(R.dimen.list_item_vertical_margin);
         setPadding(horizontalMargin, verticalMargin, horizontalMargin, verticalMargin);
-    }
-
-    private void setSelectableBackgroundFromAttributes(Context context) {
-        TypedValue outValue = new TypedValue();
-        context.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
-        setBackgroundResource(outValue.resourceId);
     }
 
     public void display(UsersView.SelectableUser user) {
