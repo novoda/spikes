@@ -6,7 +6,7 @@ import PercentEncoder from './percent-encoder.js'
 
 class OauthHelper {
   consumerSecret: string;
-  
+
   constructor (consumerSecret: string) {
     this.consumerSecret = consumerSecret
   }
