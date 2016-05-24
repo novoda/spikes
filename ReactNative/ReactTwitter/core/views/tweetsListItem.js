@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import {
   StyleSheet,
@@ -46,7 +48,7 @@ var TweetsListItem = React.createClass({
     )
   },
 
-  _tweetSelected (tweetId) {
+  _tweetSelected (tweetId: string) {
     this.props.navigator.push({
       id: 'tweet-view-identifier',
       tweetId: tweetId,

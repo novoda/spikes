@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import {
   Navigator,
@@ -95,7 +97,7 @@ var MainNavigator = React.createClass({
       />)
   },
 
-  navigatorRenderScene (route, navigator) {
+  navigatorRenderScene (route: any, navigator: Navigator) {
     switch (route.id) {
       case splashScreenID:
         return (<SplashScreenView navigator={navigator} />)

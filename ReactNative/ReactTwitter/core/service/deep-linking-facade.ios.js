@@ -1,6 +1,10 @@
+// @flow
+
 import { Linking } from 'react-native'
 
 class DeepLinkingFacade {
+  resolvePromise: any;
+
   listenForDeepLinking () {
     Linking.removeEventListener('url', this._handleOpenURL)
     Linking.addEventListener('url', this._handleOpenURL)
@@ -13,7 +17,7 @@ class DeepLinkingFacade {
     Linking.removeEventListener('url', this._handleOpenURL)
   }
 
-  _handleOpenURL (event) {
+  _handleOpenURL (event: any) {
     this.resolvePromise(event.url)
   }
 }
