@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import {
   StyleSheet,
@@ -8,12 +10,14 @@ import {
 
 var Button = require('react-native-button')
 var TwitterRequestsService = require('../../service/twitter-requests-service.js')
+// $FlowFixMe: flow doesn't understand dynamic import
 var DeepLinkingFacade = require('../../service/deep-linking-facade')
 var OauthHelper = require('../../service/oauth-helper.js')
 var AuthenticationService = require('../../service/authentication-service.js')
 
 var OauthView = React.createClass({
   getInitialState () {
+    let authService = new AuthenticationService()
     return {
       accessToken: '',
       oauthVerifier: '',
@@ -23,8 +27,8 @@ var OauthView = React.createClass({
       asSecretToken: '',
       asUsername: '',
       facade: new DeepLinkingFacade(),
-      twitterService: new TwitterRequestsService(),
-      authenticationService: new AuthenticationService()
+      twitterService: new TwitterRequestsService(authService),
+      authenticationService: authService
     }
   },
 
@@ -78,9 +82,9 @@ var OauthView = React.createClass({
         .catch(console.warn)
   },
 
-  _browserAuthenticationWithToken (oauthToken) {
+  _browserAuthenticationWithToken (oauthToken: string) {
     this.state.facade.listenForDeepLinking().then((uri) => {
-      let parsedURI = OauthHelper.getOauthTokenAndVerifierFromURLCallback(uri)
+      let parsedURI: any = OauthHelper.getOauthTokenAndVerifierFromURLCallback(uri)
       this.setState({
         accessToken: parsedURI.oauth_token,
         oauthVerifier: parsedURI.oauth_verifier

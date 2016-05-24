@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import {
   Image,
@@ -26,7 +28,7 @@ class AvatarView extends Image {
       resizeMode='contain'/>
   }
 
-  _getHighResolutionImageURL (originalURL) {
+  _getHighResolutionImageURL (originalURL: string) {
     return originalURL.replace('_normal', '_bigger')
   }
 }

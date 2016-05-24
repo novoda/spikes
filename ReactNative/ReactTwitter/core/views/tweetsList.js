@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react'
 import {
   ListView,
@@ -55,7 +57,7 @@ var TweetsList = React.createClass({
     )
   },
 
-  renderRow (rowData) {
+  renderRow (rowData: any) {
     return (
        <TweetsListItem
           id={rowData.id_str}

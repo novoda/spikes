@@ -1,3 +1,5 @@
+// @flow
+
 var dateFormat = require('dateformat')
 var tinyHumanTime = require('tiny-human-time')
 class NovodaDataFormat {
