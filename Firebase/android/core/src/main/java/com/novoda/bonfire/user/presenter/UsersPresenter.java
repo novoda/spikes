@@ -1,7 +1,7 @@
 package com.novoda.bonfire.user.presenter;
 
 import com.novoda.bonfire.channel.data.model.Channel;
-import com.novoda.bonfire.channel.data.model.ChannelWriteResult;
+import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.channel.service.ChannelService;
 import com.novoda.bonfire.navigation.Navigator;
 import com.novoda.bonfire.user.data.model.User;
@@ -64,23 +64,23 @@ public class UsersPresenter {
         }
     };
 
-    private Action1<ChannelWriteResult<Users>> updateUI() {
-        return new Action1<ChannelWriteResult<Users>>() {
+    private Action1<DatabaseResult<Users>> updateUI() {
+        return new Action1<DatabaseResult<Users>>() {
             @Override
-            public void call(ChannelWriteResult<Users> channelWriteResult) {
-                if (channelWriteResult.isFailure()) {
+            public void call(DatabaseResult<Users> databaseResult) {
+                if (databaseResult.isFailure()) {
                     usersDisplayer.showFailure();
                 } else {
-                    usersDisplayer.displaySelectedUsers(channelWriteResult.getData());
+                    usersDisplayer.displaySelectedUsers(databaseResult.getData());
                 }
             }
         };
     }
 
-    private Func1<ChannelWriteResult<List<String>>, Observable<ChannelWriteResult<Users>>> getSelectedUsersData() {
-        return new Func1<ChannelWriteResult<List<String>>, Observable<ChannelWriteResult<Users>>>() {
+    private Func1<DatabaseResult<List<String>>, Observable<DatabaseResult<Users>>> getSelectedUsersData() {
+        return new Func1<DatabaseResult<List<String>>, Observable<DatabaseResult<Users>>>() {
             @Override
-            public Observable<ChannelWriteResult<Users>> call(ChannelWriteResult<List<String>> result) {
+            public Observable<DatabaseResult<Users>> call(DatabaseResult<List<String>> result) {
                 return userService.getUsersForIds(result.getData());
             }
         };

@@ -1,6 +1,6 @@
 package com.novoda.bonfire.user.service;
 
-import com.novoda.bonfire.channel.data.model.ChannelWriteResult;
+import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.user.data.model.Users;
 
 import java.util.List;
@@ -11,5 +11,5 @@ public interface UserService {
 
     Observable<Users> getAllUsers();
 
-    Observable<ChannelWriteResult<Users>> getUsersForIds(List<String> userIds);
+    Observable<DatabaseResult<Users>> getUsersForIds(List<String> userIds);
 }

@@ -2,7 +2,7 @@ package com.novoda.bonfire.channel.presenter;
 
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.data.model.ChannelInfo;
-import com.novoda.bonfire.channel.data.model.ChannelWriteResult;
+import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.channel.displayer.NewChannelDisplayer;
 import com.novoda.bonfire.channel.service.ChannelService;
 import com.novoda.bonfire.login.data.model.Authentication;
@@ -68,10 +68,10 @@ public class NewChannelPresenter {
             final Channel newChannel = buildChannel(channelName, isPrivate);
             if (isPrivate) {
                 channelService.createPrivateChannel(newChannel, user)
-                        .subscribe(new Action1<ChannelWriteResult>() {
+                        .subscribe(new Action1<DatabaseResult>() {
                             @Override
-                            public void call(ChannelWriteResult channelWriteResult) {
-                                if (channelWriteResult.isFailure()) {
+                            public void call(DatabaseResult databaseResult) {
+                                if (databaseResult.isFailure()) {
                                     newChannelDisplayer.showChannelCreationError();
                                 } else {
                                     navigator.toAddUsersFor(newChannel);
@@ -80,10 +80,10 @@ public class NewChannelPresenter {
                         });
             } else {
                 channelService.createPublicChannel(newChannel)
-                        .subscribe(new Action1<ChannelWriteResult>() {
+                        .subscribe(new Action1<DatabaseResult>() {
                             @Override
-                            public void call(ChannelWriteResult channelWriteResult) {
-                                if (channelWriteResult.isFailure()) {
+                            public void call(DatabaseResult databaseResult) {
+                                if (databaseResult.isFailure()) {
                                     newChannelDisplayer.showChannelCreationError();
                                 } else {
                                     navigator.toChannels();

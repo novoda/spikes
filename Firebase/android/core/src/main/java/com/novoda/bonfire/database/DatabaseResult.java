@@ -1,16 +1,16 @@
-package com.novoda.bonfire.channel.data.model;
+package com.novoda.bonfire.database;
 
-public class ChannelWriteResult<T> {
+public class DatabaseResult<T> {
 
     private final Throwable failure;
     private final T data;
 
-    public ChannelWriteResult(Throwable failure) {
+    public DatabaseResult(Throwable failure) {
         this.failure = failure;
         data = null;
     }
 
-    public ChannelWriteResult(T data) {
+    public DatabaseResult(T data) {
         this.failure = null;
         this.data = data;
     }
