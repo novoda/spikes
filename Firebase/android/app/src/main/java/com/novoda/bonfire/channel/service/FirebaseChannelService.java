@@ -9,8 +9,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.data.model.ChannelInfo;
-import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.channel.data.model.Channels;
+import com.novoda.bonfire.channel.service.database.ChannelsDatabase;
+import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.user.data.model.User;
 
 import java.util.ArrayList;
@@ -35,6 +36,13 @@ public class FirebaseChannelService implements ChannelService {
         privateChannelsDB = firebaseDatabase.getReference("private-channels-index");
         channelsDB = firebaseDatabase.getReference("channels");
         ownersDB = firebaseDatabase.getReference("owners");
+    }
+
+    public FirebaseChannelService(ChannelsDatabase channelsDatabase) {
+        publicChannelsDB = channelsDatabase.getPublicChannelsDB();
+        privateChannelsDB = channelsDatabase.getPrivateChannelsDB();
+        channelsDB = channelsDatabase.getChannelsDB();
+        ownersDB = channelsDatabase.getOwnersDB();
     }
 
     @Override

@@ -81,7 +81,7 @@ public class UsersView extends LinearLayout implements UsersDisplayer {
                     break;
                 }
             }
-            if(!foundMatch) {
+            if (!foundMatch) {
                 usersWithUpdatedSelection.add(selectableUser);
             }
         }
