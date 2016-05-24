@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.data.model.ChannelInfo;
@@ -30,13 +29,6 @@ public class FirebaseChannelService implements ChannelService {
     private final DatabaseReference privateChannelsDB;
     private final DatabaseReference channelsDB;
     private final DatabaseReference ownersDB;
-
-    public FirebaseChannelService(FirebaseDatabase firebaseDatabase) {
-        publicChannelsDB = firebaseDatabase.getReference("public-channels-index");
-        privateChannelsDB = firebaseDatabase.getReference("private-channels-index");
-        channelsDB = firebaseDatabase.getReference("channels");
-        ownersDB = firebaseDatabase.getReference("owners");
-    }
 
     public FirebaseChannelService(ChannelsDatabase channelsDatabase) {
         publicChannelsDB = channelsDatabase.getPublicChannelsDB();
