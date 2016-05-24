@@ -11,6 +11,7 @@ var SplashScreenView = require('./splash-screen.js')
 var DebugScreenView = require('./debug/debug-screen.js')
 var LoginScreenView = require('./login-screen.js')
 var DeepLinkingView = require('./debug/deep-linking.js')
+var PushNotificationsView = require('./debug/push-notifications.js')
 var OauthView = require('./debug/oauth-screen.js')
 var TweetsList = require('./tweetsList.js')
 var TweetView = require('./tweetView.js')
@@ -19,6 +20,7 @@ const splashScreenID = 'splash-screen-identifier'
 const loginScreenID = 'login-screen-identifier'
 const debugScreenID = 'debug-screen-identifier'
 const deepLinkingID = 'deep-linking-identifier'
+const pushNotificationsID = 'push-notifications-identifier'
 const OauthViewID = 'oauth-screen-identifier'
 const tweetsListID = 'tweets-list-identifier'
 const tweetViewID = 'tweet-view-identifier'
@@ -68,6 +70,8 @@ var NavigationBarRouteMapper = {
         return 'Debug Screen'
       case deepLinkingID:
         return 'Deep Linking'
+      case pushNotificationsID:
+        return 'Push Notifications'
       case OauthViewID:
         return 'Oauth'
       case tweetsListID:
@@ -106,6 +110,8 @@ var MainNavigator = React.createClass({
         return (<DebugScreenView navigator={navigator} />)
       case deepLinkingID:
         return (<DeepLinkingView navigator={navigator} />)
+      case pushNotificationsID:
+        return (<PushNotificationsView />)
       case OauthViewID:
         return (<OauthView navigator={navigator} />)
       case tweetsListID:
