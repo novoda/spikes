@@ -1,5 +1,7 @@
 package com.novoda.bonfire.user.service;
 
+import android.support.annotation.NonNull;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -57,54 +59,62 @@ public class FirebaseUserService implements UserService {
     @Override
     public Observable<DatabaseResult<Users>> getUsersForIds(List<String> userIds) {
         return Observable.from(userIds)
-                .flatMap(new Func1<String, Observable<DatabaseResult<User>>>() {
-                    @Override
-                    public Observable<DatabaseResult<User>> call(final String userId) {
-                        return Observable.create(new Observable.OnSubscribe<DatabaseResult<User>>() {
-                            @Override
-                            public void call(final Subscriber<? super DatabaseResult<User>> subscriber) {
-                                usersDB.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        subscriber.onNext(new DatabaseResult<>(toUser(dataSnapshot)));
-                                        subscriber.onCompleted();
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-                                        subscriber.onNext(new DatabaseResult<User>(databaseError.toException()));
-                                        subscriber.onCompleted();
-                                    }
-                                });
-                            }
-                        });
-                    }
-                })
-                .filter(new Func1<DatabaseResult<User>, Boolean>() {
-                    @Override
-                    public Boolean call(DatabaseResult<User> result) {
-                        return result.isSuccess();
-                    }
-                })
-                .map(new Func1<DatabaseResult<User>, User>() {
-                    @Override
-                    public User call(DatabaseResult<User> result) {
-                        return result.getData();
-                    }
-                })
+                .flatMap(getUserWIthId())
                 .toList()
-                .flatMap(new Func1<List<User>, Observable<DatabaseResult<Users>>>() {
+                .flatMap(convertToResultWithUsersInstance())
+                .onErrorReturn(convertErrorToResult());
+
+    }
+
+    @NonNull
+    private Func1<String, Observable<User>> getUserWIthId() {
+        return new Func1<String, Observable<User>>() {
+            @Override
+            public Observable<User> call(final String userId) {
+                return Observable.create(new Observable.OnSubscribe<User>() {
                     @Override
-                    public Observable<DatabaseResult<Users>> call(final List<User> users) {
-                        return Observable.create(new Observable.OnSubscribe<DatabaseResult<Users>>() {
+                    public void call(final Subscriber<? super User> subscriber) {
+                        usersDB.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
-                            public void call(Subscriber<? super DatabaseResult<Users>> subscriber) {
-                                subscriber.onNext(new DatabaseResult<>(new Users(users)));
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                subscriber.onNext(toUser(dataSnapshot));
+                                subscriber.onCompleted();
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                subscriber.onError(databaseError.toException());
                             }
                         });
                     }
                 });
+            }
+        };
+    }
 
+    @NonNull
+    private Func1<List<User>, Observable<DatabaseResult<Users>>> convertToResultWithUsersInstance() {
+        return new Func1<List<User>, Observable<DatabaseResult<Users>>>() {
+            @Override
+            public Observable<DatabaseResult<Users>> call(final List<User> users) {
+                return Observable.create(new Observable.OnSubscribe<DatabaseResult<Users>>() {
+                    @Override
+                    public void call(Subscriber<? super DatabaseResult<Users>> subscriber) {
+                        subscriber.onNext(new DatabaseResult<>(new Users(users)));
+                    }
+                });
+            }
+        };
+    }
+
+    @NonNull
+    private Func1<Throwable, DatabaseResult<Users>> convertErrorToResult() {
+        return new Func1<Throwable, DatabaseResult<Users>>() {
+            @Override
+            public DatabaseResult<Users> call(Throwable throwable) {
+                return new DatabaseResult<>(throwable);
+            }
+        };
     }
 
     private User toUser(DataSnapshot dataSnapshot) {
