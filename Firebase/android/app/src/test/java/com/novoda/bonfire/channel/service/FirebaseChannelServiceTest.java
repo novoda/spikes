@@ -57,44 +57,40 @@ public class FirebaseChannelServiceTest {
         @Override
         public DatabaseReference getPublicChannelsDB() {
             DatabaseReference mockPublicChannelsDBReference = mock(DatabaseReference.class);
+
+            DataSnapshot mockDataSnapshot = mock(DataSnapshot.class);
+            when(mockDataSnapshot.getKey()).thenReturn(FIRST_PUBLIC_CHANNEL);
+            when(mockDataSnapshot.hasChildren()).thenReturn(true);
+            when(mockDataSnapshot.getChildren()).thenReturn(Collections.singletonList(mockDataSnapshot));
+
+            setupAnswerFor(mockPublicChannelsDBReference, mockDataSnapshot);
+            return mockPublicChannelsDBReference;
+        }
+
+        private void setupAnswerFor(DatabaseReference mockPublicChannelsDBReference, final DataSnapshot mockDataSnapshot) {
             doAnswer(new Answer<Void>() {
                 @Override
                 public Void answer(InvocationOnMock invocation) throws Throwable {
                     Object[] arguments = invocation.getArguments();
                     ValueEventListener argument = (ValueEventListener) arguments[0];
 
-                    DataSnapshot mock = mock(DataSnapshot.class);
-                    when(mock.getKey()).thenReturn(FIRST_PUBLIC_CHANNEL);
-                    when(mock.hasChildren()).thenReturn(true);
-
-                    when(mock.getChildren()).thenReturn(Collections.singletonList(mock));
-
-                    argument.onDataChange(mock);
+                    argument.onDataChange(mockDataSnapshot);
                     return null;
                 }
             }).when(mockPublicChannelsDBReference).addValueEventListener(any(ValueEventListener.class));
-            return mockPublicChannelsDBReference;
         }
 
         @Override
         public DatabaseReference getPrivateChannelsDB() {
             DatabaseReference mockPrivateChannelsDBReference = mock(DatabaseReference.class);
             when(mockPrivateChannelsDBReference.child(anyString())).thenReturn(mockPrivateChannelsDBReference);
-            doAnswer(new Answer<Void>() {
-                @Override
-                public Void answer(InvocationOnMock invocation) throws Throwable {
-                    Object[] arguments = invocation.getArguments();
-                    ValueEventListener argument = (ValueEventListener) arguments[0];
 
-                    DataSnapshot mock = mock(DataSnapshot.class);
-                    when(mock.getKey()).thenReturn(FIRST_PRIVATE_CHANNEL);
-                    when(mock.hasChildren()).thenReturn(true);
-                    when(mock.getChildren()).thenReturn(Collections.singletonList(mock));
+            DataSnapshot mockDataSnapshot = mock(DataSnapshot.class);
+            when(mockDataSnapshot.getKey()).thenReturn(FIRST_PRIVATE_CHANNEL);
+            when(mockDataSnapshot.hasChildren()).thenReturn(true);
+            when(mockDataSnapshot.getChildren()).thenReturn(Collections.singletonList(mockDataSnapshot));
 
-                    argument.onDataChange(mock);
-                    return null;
-                }
-            }).when(mockPrivateChannelsDBReference).addValueEventListener(any(ValueEventListener.class));
+            setupAnswerFor(mockPrivateChannelsDBReference, mockDataSnapshot);
             return mockPrivateChannelsDBReference;
         }
 
@@ -104,34 +100,36 @@ public class FirebaseChannelServiceTest {
 
             DatabaseReference mockChannelsDBReferenceForPublicChannel = mock(DatabaseReference.class);
             when(mockChannelsDBReference.child(FIRST_PUBLIC_CHANNEL)).thenReturn(mockChannelsDBReferenceForPublicChannel);
+
+            final DataSnapshot mockDataSnapshot = mock(DataSnapshot.class);
+            when(mockDataSnapshot.hasChildren()).thenReturn(true);
+            when(mockDataSnapshot.getValue(ChannelInfo.class)).thenReturn(FirebaseChannelServiceTest.this.publicChannelInfo);
+
             doAnswer(new Answer<Void>() {
                 @Override
                 public Void answer(InvocationOnMock invocation) throws Throwable {
                     Object[] arguments = invocation.getArguments();
                     ValueEventListener argument = (ValueEventListener) arguments[0];
 
-                    DataSnapshot mock = mock(DataSnapshot.class);
-                    when(mock.hasChildren()).thenReturn(true);
-                    when(mock.getValue(ChannelInfo.class)).thenReturn(FirebaseChannelServiceTest.this.publicChannelInfo);
-
-                    argument.onDataChange(mock);
+                    argument.onDataChange(mockDataSnapshot);
                     return null;
                 }
             }).when(mockChannelsDBReferenceForPublicChannel).addListenerForSingleValueEvent(any(ValueEventListener.class));
 
             DatabaseReference mockChannelsDBReferenceForPrivateChannel = mock(DatabaseReference.class);
             when(mockChannelsDBReference.child(FIRST_PRIVATE_CHANNEL)).thenReturn(mockChannelsDBReferenceForPrivateChannel);
+
+            final DataSnapshot anotherMockDataSnapshot = mock(DataSnapshot.class);
+            when(anotherMockDataSnapshot.hasChildren()).thenReturn(true);
+            when(anotherMockDataSnapshot.getValue(ChannelInfo.class)).thenReturn(FirebaseChannelServiceTest.this.privateChannelInfo);
+
             doAnswer(new Answer<Void>() {
                 @Override
                 public Void answer(InvocationOnMock invocation) throws Throwable {
                     Object[] arguments = invocation.getArguments();
                     ValueEventListener argument = (ValueEventListener) arguments[0];
 
-                    DataSnapshot mock = mock(DataSnapshot.class);
-                    when(mock.hasChildren()).thenReturn(true);
-                    when(mock.getValue(ChannelInfo.class)).thenReturn(FirebaseChannelServiceTest.this.privateChannelInfo);
-
-                    argument.onDataChange(mock);
+                    argument.onDataChange(anotherMockDataSnapshot);
                     return null;
                 }
             }).when(mockChannelsDBReferenceForPrivateChannel).addListenerForSingleValueEvent(any(ValueEventListener.class));
