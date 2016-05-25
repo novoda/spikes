@@ -52,8 +52,8 @@ public class DatabaseResult<T> {
 
         DatabaseResult<?> that = (DatabaseResult<?>) o;
 
-        return failure != null ? failure.equals(that.failure) : that.failure == null
-                && data != null ? data.equals(that.data) : that.data == null;
+        return (failure != null ? failure.equals(that.failure) : that.failure == null)
+                && (data != null ? data.equals(that.data) : that.data == null);
     }
 
     @Override
