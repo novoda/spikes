@@ -36,10 +36,14 @@ public class OauthIntentPackage implements ReactPackage {
     }
 
     void handleOnNewIntent(Uri uri) {
-        if (uri == null || !REACT_TWITTER_OAUTH_SCHEME.equals(uri.getScheme())) {
+        if (!isUriValid(uri)) {
             return;
         }
         intentModule.handleOnNewIntent(uri);
+    }
+
+    private boolean isUriValid(Uri uri) {
+        return uri != null && REACT_TWITTER_OAUTH_SCHEME.equals(uri.getScheme());
     }
 
 }
