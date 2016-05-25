@@ -70,8 +70,8 @@ var PushNotificationsView = React.createClass({
           },
           body: body
         })
-        .then((resonse) => {
-          return resonse.json()
+        .then((response) => {
+          return response.json()
         })
         .then((rjson) => { console.log(rjson) })
     })
