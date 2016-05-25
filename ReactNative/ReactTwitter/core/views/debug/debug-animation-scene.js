@@ -5,7 +5,6 @@ import {
   StyleSheet,
   View,
   Navigator,
-  Text,
   Animated
 } from 'react-native'
 
@@ -85,7 +84,7 @@ var DebugAnimationScene = React.createClass({
     })
   },
 
-  _resetState() {
+  _resetState () {
     this.state.imageSize.setValue(100)
     this.state.opacity.setValue(1)
   }

@@ -28,7 +28,7 @@ var SplashScreenView = React.createClass({
       authenticationService: authService,
       twitterService: new TwitterRequestsService(authService),
       imageSize: new Animated.Value(screenWidth),
-      opacity: new Animated.Value(1),
+      opacity: new Animated.Value(1)
     }
   },
 
