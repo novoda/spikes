@@ -25,16 +25,16 @@ var DebugAnimationScene = React.createClass({
   render () {
     return (
       <View style={styles.container}>
-        <Button style={styles.button} styleDisabled={styles.button_disabled} onPress={this.animateSpring}>Spring Animation</Button>
-        <Button style={styles.button} styleDisabled={styles.button_disabled} onPress={this.animateSequence}>Sequential Animations</Button>
-        <Button style={styles.button} styleDisabled={styles.button_disabled} onPress={this.animateParallel}>Parallel Animations</Button>
+        <Button style={styles.button} styleDisabled={styles.button_disabled} onPress={this._animateSpring}>Spring Animation</Button>
+        <Button style={styles.button} styleDisabled={styles.button_disabled} onPress={this._animateSequence}>Sequential Animations</Button>
+        <Button style={styles.button} styleDisabled={styles.button_disabled} onPress={this._animateParallel}>Parallel Animations</Button>
 
         <Animated.Image source={require('../assets/twitter-logo.png')} style={{width: this.state.imageSize, height: this.state.imageSize, opacity: this.state.opacity, resizeMode: 'contain'}} />
       </View>
     )
   },
 
-  animateSpring () {
+  _animateSpring () {
     Animated.spring(
       this.state.imageSize,
       {
@@ -45,7 +45,7 @@ var DebugAnimationScene = React.createClass({
     })
   },
 
-  animateSequence () {
+  _animateSequence () {
     Animated.sequence([
       Animated.spring(
         this.state.imageSize,
@@ -65,7 +65,7 @@ var DebugAnimationScene = React.createClass({
     })
   },
 
-  animateParallel () {
+  _animateParallel () {
     Animated.parallel([
       Animated.spring(
         this.state.imageSize,
