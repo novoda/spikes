@@ -1,8 +1,8 @@
-package com.novoda.bonfire.channel.service.database;
+package com.novoda.bonfire.channel.database.provider;
 
 import com.google.firebase.database.DatabaseReference;
 
-public interface ChannelsDatabase {
+public interface ChannelsDatabaseProvider {
     DatabaseReference getPublicChannelsDB();
 
     DatabaseReference getPrivateChannelsDB();

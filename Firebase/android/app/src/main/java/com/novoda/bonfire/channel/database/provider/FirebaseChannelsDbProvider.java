@@ -1,12 +1,12 @@
-package com.novoda.bonfire.channel.service.database;
+package com.novoda.bonfire.channel.database.provider;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-class FirebaseChannelsDatabase implements ChannelsDatabase {
+class FirebaseChannelsDbProvider implements ChannelsDatabaseProvider {
     private final FirebaseDatabase firebaseDatabase;
 
-    public FirebaseChannelsDatabase(FirebaseDatabase firebaseDatabase) {
+    public FirebaseChannelsDbProvider(FirebaseDatabase firebaseDatabase) {
         this.firebaseDatabase = firebaseDatabase;
     }
 

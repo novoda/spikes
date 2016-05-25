@@ -5,7 +5,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.data.model.Channels;
-import com.novoda.bonfire.channel.service.database.ChannelsDatabase;
+import com.novoda.bonfire.channel.database.provider.ChannelsDatabaseProvider;
 import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.user.data.model.User;
 
@@ -23,7 +23,7 @@ import rx.observers.TestObserver;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-public class FirebaseChannelServiceTest {
+public class PersistedChannelServiceTest {
 
     private static final String FIRST_PUBLIC_CHANNEL = "first public channel";
     private static final String FIRST_PRIVATE_CHANNEL = "first private channel";
@@ -45,9 +45,9 @@ public class FirebaseChannelServiceTest {
         expectedList.addAll(listOfPublicChannels);
         expectedList.addAll(listOfPrivateChannels);
 
-        FirebaseChannelService firebaseChannelService = new FirebaseChannelService(new FakeChannelsDatabase());
+        PersistedChannelService persistedChannelService = new PersistedChannelService(new FakeChannelsDatabaseProvider());
 
-        Observable<Channels> channelsObservable = firebaseChannelService.getChannelsFor(user);
+        Observable<Channels> channelsObservable = persistedChannelService.getChannelsFor(user);
         TestObserver<Channels> channelsTestObserver = new TestObserver<>();
         channelsObservable.subscribe(channelsTestObserver);
 
@@ -56,11 +56,11 @@ public class FirebaseChannelServiceTest {
 
     @Test
     public void canCreateAPublicChannel() {
-        FakeChannelsDatabase channelsDatabase = new FakeChannelsDatabase();
-        FirebaseChannelService firebaseChannelService = new FirebaseChannelService(channelsDatabase);
+        FakeChannelsDatabaseProvider channelsDatabase = new FakeChannelsDatabaseProvider();
+        PersistedChannelService persistedChannelService = new PersistedChannelService(channelsDatabase);
 
         Channel newChannel = new Channel("another public channel", false);
-        Observable<DatabaseResult<Channel>> channelsObservable = firebaseChannelService.createPublicChannel(newChannel);
+        Observable<DatabaseResult<Channel>> channelsObservable = persistedChannelService.createPublicChannel(newChannel);
         TestObserver<DatabaseResult<Channel>> channelsTestObserver = new TestObserver<>();
         channelsObservable.subscribe(channelsTestObserver);
 
@@ -68,7 +68,7 @@ public class FirebaseChannelServiceTest {
         //verify(channelsDatabase.getChannelsDB()).setValue(eq(true), any(DatabaseReference.CompletionListener.class));
     }
 
-    private class FakeChannelsDatabase implements ChannelsDatabase {
+    private class FakeChannelsDatabaseProvider implements ChannelsDatabaseProvider {
         @Override
         public DatabaseReference getPublicChannelsDB() {
             DatabaseReference mockPublicChannelsDBReference = mock(DatabaseReference.class);

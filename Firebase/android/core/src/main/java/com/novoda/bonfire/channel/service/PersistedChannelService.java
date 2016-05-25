@@ -1,10 +1,8 @@
 package com.novoda.bonfire.channel.service;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.data.model.Channels;
-import com.novoda.bonfire.channel.service.database.ChannelsDatabase;
+import com.novoda.bonfire.channel.database.ChannelsDatabase;
 import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.user.data.model.User;
 import com.novoda.bonfire.user.data.model.Users;
@@ -16,25 +14,12 @@ import rx.Observable;
 import rx.functions.Func1;
 import rx.functions.Func2;
 
-import static com.novoda.bonfire.rx.RxCompletionListener.removeValue;
-import static com.novoda.bonfire.rx.RxCompletionListener.setValue;
-import static com.novoda.bonfire.rx.RxSingleValueListener.listenToSingleValueEvents;
-import static com.novoda.bonfire.rx.RxValueListener.listenToValueEvents;
+public class PersistedChannelService implements ChannelService {
 
-public class FirebaseChannelService implements ChannelService {
+    private final ChannelsDatabase channelsDatabase;
 
-    private final DatabaseReference publicChannelsDB;
-    private final DatabaseReference privateChannelsDB;
-    private final DatabaseReference channelsDB;
-    private final DatabaseReference ownersDB;
-    private final DatabaseReference usersDB;
-
-    public FirebaseChannelService(ChannelsDatabase channelsDatabase) {
-        publicChannelsDB = channelsDatabase.getPublicChannelsDB();
-        privateChannelsDB = channelsDatabase.getPrivateChannelsDB();
-        channelsDB = channelsDatabase.getChannelsDB();
-        ownersDB = channelsDatabase.getOwnersDB();
-        usersDB = channelsDatabase.getUsersDB();
+    public PersistedChannelService(ChannelsDatabase channelsDatabase) {
+        this.channelsDatabase = channelsDatabase;
     }
 
     @Override
@@ -43,12 +28,12 @@ public class FirebaseChannelService implements ChannelService {
     }
 
     private Observable<List<Channel>> publicChannels() {
-        return listenToValueEvents(publicChannelsDB, getKeys())
+        return channelsDatabase.getPublicChannelIds()
                 .flatMap(channelsFromNames());
     }
 
     private Observable<List<Channel>> privateChannelsFor(User user) {
-        return listenToValueEvents(privateChannelsDB.child(user.getId()), getKeys())
+        return channelsDatabase.getPrivateChannelIdsFor(user)
                 .flatMap(channelsFromNames());
     }
 
@@ -67,7 +52,7 @@ public class FirebaseChannelService implements ChannelService {
         return new Func1<String, Observable<Channel>>() {
             @Override
             public Observable<Channel> call(final String channelName) {
-                return listenToSingleValueEvents(channelsDB.child(channelName), as(Channel.class));
+                return channelsDatabase.getChannelFor(channelName);
             }
         };
     }
@@ -85,40 +70,52 @@ public class FirebaseChannelService implements ChannelService {
 
     @Override
     public Observable<DatabaseResult<Channel>> createPublicChannel(Channel newChannel) {
-        return writeChannelToChannelsDB(newChannel)
-                .flatMap(writeChannelToChannelIndexDb(newChannel))
+        return channelsDatabase.writeChannel(newChannel)
+                .flatMap(writeChannelToChannelIndexDb())
                 .onErrorReturn(DatabaseResult.<Channel>errorAsDatabaseResult());
     }
 
-    private Observable<DatabaseResult<Channel>> writeChannelToChannelsDB(final Channel newChannel) {
-        return setValue(newChannel, channelsDB.child(newChannel.getName()), new DatabaseResult<>(newChannel));
-    }
-
-    private Func1<DatabaseResult, Observable<DatabaseResult<Channel>>> writeChannelToChannelIndexDb(final Channel newChannel) {
-        return new Func1<DatabaseResult, Observable<DatabaseResult<Channel>>>() {
+    private Func1<Channel, Observable<DatabaseResult<Channel>>> writeChannelToChannelIndexDb() {
+        return new Func1<Channel, Observable<DatabaseResult<Channel>>>() {
             @Override
-            public Observable<DatabaseResult<Channel>> call(DatabaseResult databaseResult) {
-                return setValue(true, publicChannelsDB.child(newChannel.getName()), new DatabaseResult<>(newChannel));
+            public Observable<DatabaseResult<Channel>> call(Channel channel) {
+                return channelsDatabase.writeChannelToPublicChannelIndex(channel)
+                        .map(new Func1<Channel, DatabaseResult<Channel>>() {
+                            @Override
+                            public DatabaseResult<Channel> call(Channel channel) {
+                                return new DatabaseResult<Channel>(channel);
+                            }
+                        });
             }
         };
     }
 
     @Override
     public Observable<DatabaseResult<Channel>> createPrivateChannel(final Channel newChannel, User owner) {
-        return addUserToPrivateChannelIndex(owner, newChannel)
+        return channelsDatabase.addOwnerToPrivateChannel(owner, newChannel)
                 .flatMap(addUserAsChannelOwner(owner))
-                .flatMap(new Func1<Channel, Observable<DatabaseResult<Channel>>>() {
-                    @Override
-                    public Observable<DatabaseResult<Channel>> call(Channel result) {
-                        return writeChannelToChannelsDB(result);
-                    }
-                })
+                .flatMap(writeChannel())
                 .onErrorReturn(DatabaseResult.<Channel>errorAsDatabaseResult());
+    }
+
+    private Func1<Channel, Observable<DatabaseResult<Channel>>> writeChannel() {
+        return new Func1<Channel, Observable<DatabaseResult<Channel>>>() {
+            @Override
+            public Observable<DatabaseResult<Channel>> call(Channel result) {
+                return channelsDatabase.writeChannel(result)
+                        .map(new Func1<Channel, DatabaseResult<Channel>>() {
+                            @Override
+                            public DatabaseResult<Channel> call(Channel channel) {
+                                return new DatabaseResult<Channel>(channel);
+                            }
+                        });
+            }
+        };
     }
 
     @Override
     public Observable<DatabaseResult<User>> addOwnerToPrivateChannel(final Channel channel, final User newOwner) {
-        return addUserToPrivateChannelIndex(newOwner, channel)
+        return channelsDatabase.addOwnerToPrivateChannel(newOwner, channel)
                 .flatMap(addUserAsChannelOwner(newOwner))
                 .map(new Func1<Channel, DatabaseResult<User>>() {
                     @Override
@@ -129,23 +126,19 @@ public class FirebaseChannelService implements ChannelService {
                 .onErrorReturn(DatabaseResult.<User>errorAsDatabaseResult());
     }
 
-    private Observable<Channel> addUserToPrivateChannelIndex(final User user, final Channel newChannel) {
-        return setValue(true, ownersDB.child(newChannel.getName()).child(user.getId()), newChannel);
-    }
-
     private Func1<Channel, Observable<Channel>> addUserAsChannelOwner(final User user) {
         return new Func1<Channel, Observable<Channel>>() {
             @Override
             public Observable<Channel> call(final Channel channel) {
-                return setValue(true, privateChannelsDB.child(user.getId()).child(channel.getName()), channel);
+                return channelsDatabase.addChannelToUserPrivateChannelIndex(user, channel);
             }
         };
     }
 
     @Override
     public Observable<DatabaseResult<User>> removeOwnerFromPrivateChannel(final Channel channel, final User removedOwner) {
-        return removeOwnerReferenceFromChannelOwners(removedOwner, channel)
-                .flatMap(removeChannelReferenceFromUser(channel))
+        return channelsDatabase.removeOwnerFromPrivateChannel(removedOwner, channel)
+                .flatMap(removeChannelReferenceFromUser(removedOwner))
                 .map(new Func1<Channel, DatabaseResult<User>>() {
                     @Override
                     public DatabaseResult<User> call(Channel channel) {
@@ -155,28 +148,20 @@ public class FirebaseChannelService implements ChannelService {
                 .onErrorReturn(DatabaseResult.<User>errorAsDatabaseResult());
     }
 
-    private Observable<DatabaseResult<User>> removeOwnerReferenceFromChannelOwners(final User user, final Channel channel) {
-        return removeValue(ownersDB.child(channel.getName()).child(user.getId()), new DatabaseResult<>(user));
-    }
-
-    private Func1<DatabaseResult<User>, Observable<Channel>> removeChannelReferenceFromUser(final Channel channel) {
-        return new Func1<DatabaseResult<User>, Observable<Channel>>() {
+    private Func1<Channel, Observable<Channel>> removeChannelReferenceFromUser(final User user) {
+        return new Func1<Channel, Observable<Channel>>() {
             @Override
-            public Observable<Channel> call(final DatabaseResult<User> userDatabaseResult) {
-                return removeValue(privateChannelsDB.child(userDatabaseResult.getData().getId()).child(channel.getName()), channel);
+            public Observable<Channel> call(Channel channel) {
+                return channelsDatabase.removeChannelFromUserPrivateChannelIndex(user, channel);
             }
         };
     }
 
     @Override
     public Observable<DatabaseResult<Users>> getOwnersOfChannel(Channel channel) {
-        return getOwnerIdsFor(channel)
+        return channelsDatabase.getOwnerIdsFor(channel)
                 .flatMap(getUsersFromIds())
                 .onErrorReturn(DatabaseResult.<Users>errorAsDatabaseResult());
-    }
-
-    private Observable<List<String>> getOwnerIdsFor(final Channel channel) {
-        return listenToValueEvents(ownersDB.child(channel.getName()), getKeys());
     }
 
     private Func1<List<String>, Observable<DatabaseResult<Users>>> getUsersFromIds() {
@@ -200,32 +185,7 @@ public class FirebaseChannelService implements ChannelService {
         return new Func1<String, Observable<User>>() {
             @Override
             public Observable<User> call(final String userId) {
-                return listenToSingleValueEvents(usersDB.child(userId), as(User.class));
-            }
-        };
-    }
-
-    private Func1<DataSnapshot, List<String>> getKeys() {
-        return new Func1<DataSnapshot, List<String>>() {
-            @Override
-            public List<String> call(DataSnapshot dataSnapshot) {
-                List<String> keys = new ArrayList<>();
-                if (dataSnapshot.hasChildren()) {
-                    Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                    for (DataSnapshot child : children) {
-                        keys.add(child.getKey());
-                    }
-                }
-                return keys;
-            }
-        };
-    }
-
-    private <T> Func1<DataSnapshot, T> as(final Class<T> tClass) {
-        return new Func1<DataSnapshot, T>() {
-            @Override
-            public T call(DataSnapshot dataSnapshot) {
-                return dataSnapshot.getValue(tClass);
+                return channelsDatabase.getUserFrom(userId);
             }
         };
     }
