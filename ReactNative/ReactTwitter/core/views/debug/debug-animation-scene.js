@@ -9,6 +9,11 @@ import {
 } from 'react-native'
 
 var Button = require('react-native-button')
+const IMAGE_SIZE_NORMAL = 100
+const IMAGE_SIZE_BIG = 200
+const OPACITY_NORMAL = 1
+const OPACITY_TRANSPARENT = 0
+const DELAY = 50
 
 var DebugAnimationScene = React.createClass({
   propTypes: {
@@ -17,8 +22,8 @@ var DebugAnimationScene = React.createClass({
 
   getInitialState () {
     return {
-      imageSize: new Animated.Value(100),
-      opacity: new Animated.Value(1)
+      imageSize: new Animated.Value(IMAGE_SIZE_NORMAL),
+      opacity: new Animated.Value(OPACITY_NORMAL)
     }
   },
 
@@ -38,7 +43,7 @@ var DebugAnimationScene = React.createClass({
     Animated.spring(
       this.state.imageSize,
       {
-        toValue: 200
+        toValue: IMAGE_SIZE_BIG
       }
     ).start((finished) => {
       this._resetState()
@@ -50,14 +55,14 @@ var DebugAnimationScene = React.createClass({
       Animated.spring(
         this.state.imageSize,
         {
-          toValue: 200
+          toValue: IMAGE_SIZE_BIG
         }
       ),
-      Animated.delay(50),
+      Animated.delay(DELAY),
       Animated.spring(
         this.state.imageSize,
         {
-          toValue: 100
+          toValue: IMAGE_SIZE_NORMAL
         }
       )
     ]).start((finished) => {
@@ -70,13 +75,13 @@ var DebugAnimationScene = React.createClass({
       Animated.spring(
         this.state.imageSize,
         {
-          toValue: 200
+          toValue: IMAGE_SIZE_BIG
         }
       ),
       Animated.spring(
         this.state.opacity,
         {
-          toValue: 0
+          toValue: OPACITY_TRANSPARENT
         }
       )
     ]).start((finished) => {
@@ -85,8 +90,8 @@ var DebugAnimationScene = React.createClass({
   },
 
   _resetState () {
-    this.state.imageSize.setValue(100)
-    this.state.opacity.setValue(1)
+    this.state.imageSize.setValue(IMAGE_SIZE_NORMAL)
+    this.state.opacity.setValue(OPACITY_NORMAL)
   }
 })
 

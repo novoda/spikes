@@ -15,7 +15,8 @@ var TwitterRequestsService = require('../service/twitter-requests-service.js')
 const SPLASH_DELAY_DURATION_MS = 1000
 const ANIMATION_DURATION_MS = 500
 
-const screenWidth = Dimensions.get('window').width
+const SCREEN_WIDTH = Dimensions.get('window').width
+const FINAL_LOGO_SIZE = SCREEN_WIDTH * 2
 
 var SplashScreenView = React.createClass({
   propTypes: {
@@ -27,7 +28,7 @@ var SplashScreenView = React.createClass({
     return {
       authenticationService: authService,
       twitterService: new TwitterRequestsService(authService),
-      imageSize: new Animated.Value(screenWidth),
+      imageSize: new Animated.Value(SCREEN_WIDTH),
       opacity: new Animated.Value(1)
     }
   },
@@ -88,7 +89,7 @@ var SplashScreenView = React.createClass({
       Animated.timing(
         this.state.imageSize,
         {
-          toValue: screenWidth * 2,
+          toValue: FINAL_LOGO_SIZE,
           duration: ANIMATION_DURATION_MS
         }
       ),
