@@ -57,7 +57,7 @@ public class FirebaseChannelService implements ChannelService {
         return new Observable.OnSubscribe<List<String>>() {
             @Override
             public void call(Subscriber<? super List<String>> subscriber) {
-                final ValueEventListener eventListener = indexChannelsDB.addValueEventListener(new ChannelNamesEventListener(subscriber));
+                final ValueEventListener eventListener = indexChannelsDB.addValueEventListener(new RxListKeysEventListener(subscriber));
                 subscriber.add(BooleanSubscription.create(new Action0() {
                     @Override
                     public void call() {
@@ -86,7 +86,8 @@ public class FirebaseChannelService implements ChannelService {
                 return Observable.create(new Observable.OnSubscribe<Channel>() {
                     @Override
                     public void call(Subscriber<? super Channel> subscriber) {
-                        channelsDB.child(channelName).addListenerForSingleValueEvent(new ChannelEventListener(subscriber));
+                        channelsDB.child(channelName)
+                                .addListenerForSingleValueEvent(new RxSingleEventValueListener<Channel>(subscriber, Channel.class));
                     }
                 });
             }
@@ -275,17 +276,8 @@ public class FirebaseChannelService implements ChannelService {
         return Observable.create(new Observable.OnSubscribe<List<String>>() {
             @Override
             public void call(final Subscriber<? super List<String>> subscriber) {
-                final ValueEventListener eventListener = ownersDB.child(channel.getName()).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        subscriber.onNext(getKeys(dataSnapshot));
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        subscriber.onError(databaseError.toException());
-                    }
-                });
+                final ValueEventListener eventListener = ownersDB.child(channel.getName())
+                        .addValueEventListener(new RxListKeysEventListener(subscriber));
                 subscriber.add(BooleanSubscription.create(new Action0() {
                     @Override
                     public void call() {
@@ -320,20 +312,8 @@ public class FirebaseChannelService implements ChannelService {
                 return Observable.create(new Observable.OnSubscribe<User>() {
                     @Override
                     public void call(final Subscriber<? super User> subscriber) {
-                        usersDB.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.hasChildren()) {
-                                    subscriber.onNext(dataSnapshot.getValue(User.class));
-                                }
-                                subscriber.onCompleted();
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                subscriber.onError(databaseError.toException());
-                            }
-                        });
+                        usersDB.child(userId)
+                                .addListenerForSingleValueEvent(new RxSingleEventValueListener<User>(subscriber, User.class));
                     }
                 });
             }
@@ -375,11 +355,11 @@ public class FirebaseChannelService implements ChannelService {
         return channelPaths;
     }
 
-    private class ChannelNamesEventListener implements ValueEventListener {
+    private static class RxListKeysEventListener implements ValueEventListener {
 
         private final Subscriber<? super List<String>> subscriber;
 
-        private ChannelNamesEventListener(Subscriber<? super List<String>> subscriber) {
+        private RxListKeysEventListener(Subscriber<? super List<String>> subscriber) {
             this.subscriber = subscriber;
         }
 
@@ -395,19 +375,33 @@ public class FirebaseChannelService implements ChannelService {
             subscriber.onError(databaseError.toException()); //TODO handle errors in pipeline
         }
 
+        private List<String> getKeys(DataSnapshot dataSnapshot) {
+            List<String> keys = new ArrayList<>();
+            if (dataSnapshot.hasChildren()) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot child : children) {
+                    keys.add(child.getKey());
+                }
+            }
+            return keys;
+        }
+
     }
 
-    private class ChannelEventListener implements ValueEventListener {
-        private final Subscriber<? super Channel> subscriber;
+    private static class RxSingleEventValueListener<T> implements ValueEventListener {
 
-        public ChannelEventListener(Subscriber<? super Channel> subscriber) {
+        private final Subscriber<? super T> subscriber;
+        private final Class<T> aClass;
+
+        public RxSingleEventValueListener(Subscriber<? super T> subscriber, Class<T> aClass) {
             this.subscriber = subscriber;
+            this.aClass = aClass;
         }
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             if (dataSnapshot.hasChildren()) {
-                subscriber.onNext(dataSnapshot.getValue(Channel.class));
+                subscriber.onNext(dataSnapshot.getValue(aClass));
             }
             subscriber.onCompleted();
         }
@@ -416,5 +410,6 @@ public class FirebaseChannelService implements ChannelService {
         public void onCancelled(DatabaseError databaseError) {
             subscriber.onError(databaseError.toException()); //TODO handle errors in pipeline
         }
+
     }
 }
