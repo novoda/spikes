@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class OauthIntentPackage implements ReactPackage {
+    private static final String REACT_TWITTER_OAUTH_SCHEME = "react-twitter-oauth";
 
     private OauthIntentModule intentModule;
 
@@ -35,7 +36,14 @@ public class OauthIntentPackage implements ReactPackage {
     }
 
     void handleOnNewIntent(Uri uri) {
+        if (!isUriValid(uri)) {
+            return;
+        }
         intentModule.handleOnNewIntent(uri);
+    }
+
+    private boolean isUriValid(Uri uri) {
+        return uri != null && REACT_TWITTER_OAUTH_SCHEME.equals(uri.getScheme());
     }
 
 }
