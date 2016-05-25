@@ -72,6 +72,9 @@ public class FirebaseChannelServiceTest {
         @Override
         public DatabaseReference getPublicChannelsDB() {
             DatabaseReference mockPublicChannelsDBReference = mock(DatabaseReference.class);
+            when(mockPublicChannelsDBReference.child(anyString())).thenReturn(mockPublicChannelsDBReference);
+
+            setupSuccessfulCompletionListenerOn(mockPublicChannelsDBReference);
 
             DataSnapshot mockDataSnapshot = mock(DataSnapshot.class);
             when(mockDataSnapshot.getKey()).thenReturn(FIRST_PUBLIC_CHANNEL);
@@ -100,23 +103,36 @@ public class FirebaseChannelServiceTest {
         public DatabaseReference getChannelsDB() {
             DatabaseReference mockChannelsDBReference = mock(DatabaseReference.class);
 
-            DatabaseReference mockChannelsDBReferenceForPublicChannel = mock(DatabaseReference.class);
-            when(mockChannelsDBReference.child(FIRST_PUBLIC_CHANNEL)).thenReturn(mockChannelsDBReferenceForPublicChannel);
+            final DatabaseReference mockPublicChannelsDBReference = mock(DatabaseReference.class);
+
+            final DatabaseReference mockPrivateChannelsDBReference = mock(DatabaseReference.class);
+
+            final DatabaseReference mockNewChannelDBReference = mock(DatabaseReference.class);
+
+            doAnswer(new Answer<DatabaseReference>() {
+                @Override
+                public DatabaseReference answer(InvocationOnMock invocation) throws Throwable {
+                    if (invocation.getArguments()[0].equals(FIRST_PUBLIC_CHANNEL)) {
+                        return mockPublicChannelsDBReference;
+                    }
+                    if (invocation.getArguments()[0].equals(FIRST_PRIVATE_CHANNEL)) {
+                        return mockPrivateChannelsDBReference;
+                    }
+                    return mockNewChannelDBReference;
+                }
+            }).when(mockChannelsDBReference).child(anyString());
 
             DataSnapshot mockDataSnapshot = mock(DataSnapshot.class);
             when(mockDataSnapshot.hasChildren()).thenReturn(true);
             when(mockDataSnapshot.getValue(Channel.class)).thenReturn(publicChannel);
-
-            callListenerForSingleValueEventOn(mockChannelsDBReferenceForPublicChannel, mockDataSnapshot);
-
-            DatabaseReference mockChannelsDBReferenceForPrivateChannel = mock(DatabaseReference.class);
-            when(mockChannelsDBReference.child(FIRST_PRIVATE_CHANNEL)).thenReturn(mockChannelsDBReferenceForPrivateChannel);
+            callListenerForSingleValueEventOn(mockPublicChannelsDBReference, mockDataSnapshot);
 
             DataSnapshot anotherMockDataSnapshot = mock(DataSnapshot.class);
             when(anotherMockDataSnapshot.hasChildren()).thenReturn(true);
             when(anotherMockDataSnapshot.getValue(Channel.class)).thenReturn(privateChannel);
+            callListenerForSingleValueEventOn(mockPrivateChannelsDBReference, anotherMockDataSnapshot);
 
-            callListenerForSingleValueEventOn(mockChannelsDBReferenceForPrivateChannel, anotherMockDataSnapshot);
+            setupSuccessfulCompletionListenerOn(mockNewChannelDBReference);
 
             return mockChannelsDBReference;
         }
@@ -139,6 +155,12 @@ public class FirebaseChannelServiceTest {
             doAnswer(new DataSnapshotAnswer(mockDataSnapshot)).when(mockChannelsDBReferenceForPublicChannel).addListenerForSingleValueEvent(any(ValueEventListener.class));
         }
 
+        private void setupSuccessfulCompletionListenerOn(DatabaseReference mockPublicChannelsDBReference) {
+            doAnswer(new DatabaseReferenceCompletionListenerAnswer(mockPublicChannelsDBReference))
+                    .when(mockPublicChannelsDBReference)
+                    .setValue(anyObject(), any(DatabaseReference.CompletionListener.class));
+        }
+
         private class DataSnapshotAnswer implements Answer<Void> {
             private final DataSnapshot mockDataSnapshot;
 
@@ -152,6 +174,24 @@ public class FirebaseChannelServiceTest {
                 ValueEventListener argument = (ValueEventListener) arguments[0];
 
                 argument.onDataChange(mockDataSnapshot);
+                return null;
+            }
+        }
+
+        private class DatabaseReferenceCompletionListenerAnswer implements Answer<Void> {
+            private final DatabaseReference mockDBReference;
+
+            public DatabaseReferenceCompletionListenerAnswer(DatabaseReference mockDBReference) {
+                this.mockDBReference = mockDBReference;
+            }
+
+            @Override
+            public Void answer(InvocationOnMock invocation) throws Throwable {
+                Object[] arguments = invocation.getArguments();
+                DatabaseReference.CompletionListener argument = (DatabaseReference.CompletionListener) arguments[1];
+
+                argument.onComplete(null, mockDBReference);
+
                 return null;
             }
         }
