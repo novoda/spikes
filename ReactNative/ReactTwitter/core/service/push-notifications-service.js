@@ -1,6 +1,6 @@
 // @flow
 
-import { AsyncStorage } from 'react-native'
+import { AsyncStorage, Alert } from 'react-native'
 var PushNotification = require('react-native-push-notification')
 
 const STORAGE_KEY = '@PushNotificationToken:key'
@@ -17,7 +17,7 @@ class PushNotificationsService {
 
       // (required) Called when a remote or local notification is opened or received
       onNotification (notification) {
-        console.warn('NOTIFICATION:', notification)
+        Alert.alert('NOTIFICATION', JSON.stringify(notification))
       },
 
       // ANDROID ONLY: (optional) GCM Sender ID.
