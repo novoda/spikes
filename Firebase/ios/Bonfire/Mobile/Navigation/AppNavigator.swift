@@ -24,4 +24,11 @@ final class AppNavigator: Navigator {
         let usersViewController = UsersViewController.withDependencies(channel: channel)
         navigationController.pushViewController(usersViewController, animated: true)
     }
+
+    func toWelcome() {
+        let welcomeViewController = WelcomeViewController.withDependencies()
+        let container = UINavigationController()
+        container.viewControllers = [welcomeViewController]
+        navigationController.presentViewController(container, animated: true, completion: nil)
+    }
 }

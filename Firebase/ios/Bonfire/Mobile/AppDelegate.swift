@@ -27,14 +27,41 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
+
         return true
     }
 
+
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+        if FIRDynamicLinks.dynamicLinks()!.shouldHandleDynamicLinkFromCustomSchemeURL(url) {
+            if let dynamicLink = FIRDynamicLinks.dynamicLinks()?.dynamicLinkFromCustomSchemeURL(url) {
+                handleDynamicLink(dynamicLink)
+            }
+            return true
+        }
+
         if url.scheme.hasPrefix("com.googleusercontent.apps") {
             return GIDSignIn.sharedInstance().handleURL(url, sourceApplication: options[UIApplicationOpenURLOptionsSourceApplicationKey] as? String, annotation: options[UIApplicationOpenURLOptionsAnnotationKey])
         }
+
         return false
+    }
+
+    func application(application: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler: ([AnyObject]?) -> Void) -> Bool {
+        let handled = FIRDynamicLinks.dynamicLinks()?.handleUniversalLink(userActivity.webpageURL!) { (dynamiclink, error) in
+            if let dynamiclink = dynamiclink {
+                self.handleDynamicLink(dynamiclink)
+            }
+        }
+
+        
+        return handled!
+    }
+
+    func handleDynamicLink(dynamicLink: FIRDynamicLink) {
+        if let component = dynamicLink.url?.lastPathComponent where component == "welcome" {
+            SharedServices.navigator.toWelcome()
+        }
     }
 }
 
