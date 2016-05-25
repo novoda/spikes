@@ -55,7 +55,7 @@ var PushNotificationsView = React.createClass({
         }
       }
     })
-    console.log(body)
+
     new Promise((resolve, reject) => {
       setTimeout(resolve, PUSH_DELAY_MS)
     })
@@ -73,7 +73,12 @@ var PushNotificationsView = React.createClass({
         .then((response) => {
           return response.json()
         })
-        .then((rjson) => { console.log(rjson) })
+        .then((responseJson) => {
+          console.log('Send GCM push result:', responseJson)
+        })
+        .catch((err) => {
+          console.warn(err)
+        })
     })
   }
 })
