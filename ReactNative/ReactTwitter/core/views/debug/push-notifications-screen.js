@@ -14,7 +14,7 @@ const PUSH_SERVER_URL = 'https://gcm-http.googleapis.com/gcm/send'
 const PUSH_DELAY_MS = 2000
 const PUSH_AUTHORIZATION_KEY = 'key=AIzaSyDiQB51T00e8s6JCkLYuvl0Ac05R0Dc4iY'
 
-var PushNotificationsView = React.createClass({
+var PushNotificationsScreenView = React.createClass({
 
   getInitialState () {
     return {
@@ -105,4 +105,4 @@ const styles = StyleSheet.create({
   }
 })
 
-module.exports = PushNotificationsView
+module.exports = PushNotificationsScreenView

@@ -42,7 +42,7 @@ var DebugScreenView = React.createClass({
   },
 
   _pushPushNotifications () {
-    this.props.navigator.push({id: 'push-notifications-identifier'})
+    this.props.navigator.push({id: 'push-notifications-screen-identifier'})
   }
 })
 
