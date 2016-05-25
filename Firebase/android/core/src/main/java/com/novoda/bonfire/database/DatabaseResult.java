@@ -1,9 +1,20 @@
 package com.novoda.bonfire.database;
 
+import rx.functions.Func1;
+
 public class DatabaseResult<T> {
 
     private final Throwable failure;
     private final T data;
+
+    public static  <T> Func1<Throwable, DatabaseResult<T>> errorAsDatabaseResult() {
+        return new Func1<Throwable, DatabaseResult<T>>() {
+            @Override
+            public DatabaseResult<T> call(Throwable throwable) {
+                return new DatabaseResult<>(throwable == null ? new Throwable("Database error is missing") : throwable);
+            }
+        };
+    }
 
     public DatabaseResult(Throwable failure) {
         this.failure = failure;
