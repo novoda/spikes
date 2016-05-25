@@ -4,28 +4,24 @@ import java.io.Serializable;
 
 public class Channel implements Serializable {
 
-    private final String path;
-    private final ChannelInfo channelInfo;
+    private String name;
+    private String access;
 
-    public Channel(String path, ChannelInfo channelInfo) {
-        this.path = path;
-        this.channelInfo = channelInfo;
+    @SuppressWarnings("unused") // used by Firebase
+    public Channel() {
     }
 
-    public ChannelInfo getChannelInfo() {
-        return channelInfo;
-    }
-
-    public String getPath() {
-        return path;
+    public Channel(String name, boolean isPrivate) {
+        this.name = name;
+        this.access = isPrivate ? "private" : "public";
     }
 
     public String getName() {
-        return channelInfo.getName();
+        return name;
     }
 
-    public boolean isPublic() {
-        return channelInfo.getAccess().equalsIgnoreCase("public");
+    public String getAccess() {
+        return access;
     }
 
     @Override
@@ -37,16 +33,16 @@ public class Channel implements Serializable {
             return false;
         }
 
-        Channel channel = (Channel) o;
+        Channel that = (Channel) o;
 
-        return path != null ? path.equals(channel.path) : channel.path == null
-                && channelInfo != null ? channelInfo.equals(channel.channelInfo) : channel.channelInfo == null;
+        return name != null ? name.equals(that.name) : that.name == null
+                && access != null ? access.equals(that.access) : that.access == null;
     }
 
     @Override
     public int hashCode() {
-        int result = path != null ? path.hashCode() : 0;
-        result = 31 * result + (channelInfo != null ? channelInfo.hashCode() : 0);
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (access != null ? access.hashCode() : 0);
         return result;
     }
 }

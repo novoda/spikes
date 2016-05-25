@@ -11,4 +11,6 @@ public interface ChannelsDatabase {
 
     DatabaseReference getOwnersDB();
 
+    DatabaseReference getUsersDB();
+
 }

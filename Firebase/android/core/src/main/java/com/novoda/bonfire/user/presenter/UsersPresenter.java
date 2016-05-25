@@ -1,20 +1,15 @@
 package com.novoda.bonfire.user.presenter;
 
 import com.novoda.bonfire.channel.data.model.Channel;
-import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.channel.service.ChannelService;
+import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.navigation.Navigator;
 import com.novoda.bonfire.user.data.model.User;
 import com.novoda.bonfire.user.data.model.Users;
 import com.novoda.bonfire.user.displayer.UsersDisplayer;
 import com.novoda.bonfire.user.service.UserService;
 
-import java.util.List;
-
-import rx.Observable;
-import rx.Subscriber;
 import rx.functions.Action1;
-import rx.functions.Func1;
 
 public class UsersPresenter {
     private final UserService userService;
@@ -40,7 +35,6 @@ public class UsersPresenter {
             }
         });
         channelService.getOwnersOfChannel(channel)
-                .flatMap(getSelectedUsersData())
                 .subscribe(updateSelectedUsers());
     }
 
@@ -49,17 +43,15 @@ public class UsersPresenter {
     }
     private UsersDisplayer.SelectionListener selectionListener = new UsersDisplayer.SelectionListener() {
         @Override
-        public void onUserSelected(User user) {
+        public void onUserSelected(final User user) {
             channelService.addOwnerToPrivateChannel(channel, user)
-                    .flatMap(getSelectedUsersData())
-                    .subscribe(updateSelectedUsers());
+                    .subscribe(updateOnActionResult());
         }
 
         @Override
         public void onUserDeselected(User user) {
             channelService.removeOwnerFromPrivateChannel(channel, user)
-                    .flatMap(getSelectedUsersData())
-                    .subscribe(updateSelectedUsers());
+                    .subscribe(updateOnActionResult());
         }
 
         @Override
@@ -67,6 +59,17 @@ public class UsersPresenter {
             navigator.toChannel(channel);
         }
     };
+
+    private Action1<DatabaseResult<User>> updateOnActionResult() {
+        return new Action1<DatabaseResult<User>>() {
+            @Override
+            public void call(DatabaseResult<User> userDatabaseResult) {
+                if (!userDatabaseResult.isSuccess()) {
+                    usersDisplayer.showFailure();
+                }
+            }
+        };
+    }
 
     private Action1<DatabaseResult<Users>> updateSelectedUsers() {
         return new Action1<DatabaseResult<Users>>() {
@@ -76,24 +79,6 @@ public class UsersPresenter {
                     usersDisplayer.displaySelectedUsers(databaseResult.getData());
                 } else {
                     usersDisplayer.showFailure();
-                }
-            }
-        };
-    }
-
-    private Func1<DatabaseResult<List<String>>, Observable<DatabaseResult<Users>>> getSelectedUsersData() {
-        return new Func1<DatabaseResult<List<String>>, Observable<DatabaseResult<Users>>>() {
-            @Override
-            public Observable<DatabaseResult<Users>> call(final DatabaseResult<List<String>> result) {
-                if (result.isSuccess()) {
-                    return userService.getUsersForIds(result.getData());
-                } else {
-                    return Observable.create(new Observable.OnSubscribe<DatabaseResult<Users>>() {
-                        @Override
-                        public void call(Subscriber<? super DatabaseResult<Users>> subscriber) {
-                            subscriber.onNext(new DatabaseResult<Users>(result.getFailure()));
-                        }
-                    });
                 }
             }
         };

@@ -4,7 +4,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.novoda.bonfire.channel.data.model.Channel;
-import com.novoda.bonfire.channel.data.model.ChannelInfo;
 import com.novoda.bonfire.channel.data.model.Channels;
 import com.novoda.bonfire.channel.service.database.ChannelsDatabase;
 import com.novoda.bonfire.database.DatabaseResult;
@@ -30,21 +29,21 @@ public class FirebaseChannelServiceTest {
     private static final String FIRST_PRIVATE_CHANNEL = "first private channel";
     private static final String USER_ID = "test user id";
 
-    private final ChannelInfo publicChannelInfo = new ChannelInfo(FIRST_PUBLIC_CHANNEL, false);
-    private final ChannelInfo privateChannelInfo = new ChannelInfo(FIRST_PRIVATE_CHANNEL, true);
+    private final Channel publicChannel = new Channel(FIRST_PUBLIC_CHANNEL, false);
+    private final Channel privateChannel = new Channel(FIRST_PRIVATE_CHANNEL, true);
     private final User user = new User(USER_ID, "test username", "http://test.photo/url");
 
     @Test
     public void canGetCompleteListOfChannelsForAUser() {
         List<Channel> listOfPublicChannels = new ArrayList<>();
-        listOfPublicChannels.add(new Channel(FIRST_PUBLIC_CHANNEL, publicChannelInfo));
+        listOfPublicChannels.add(publicChannel);
 
         List<Channel> listOfPrivateChannels = new ArrayList<>();
-        listOfPrivateChannels.add(new Channel(FIRST_PRIVATE_CHANNEL, privateChannelInfo));
+        listOfPrivateChannels.add(privateChannel);
 
         List<Channel> expectedList = new ArrayList<>();
-        expectedList.addAll(listOfPrivateChannels);
         expectedList.addAll(listOfPublicChannels);
+        expectedList.addAll(listOfPrivateChannels);
 
         FirebaseChannelService firebaseChannelService = new FirebaseChannelService(new FakeChannelsDatabase());
 
@@ -60,7 +59,7 @@ public class FirebaseChannelServiceTest {
         FakeChannelsDatabase channelsDatabase = new FakeChannelsDatabase();
         FirebaseChannelService firebaseChannelService = new FirebaseChannelService(channelsDatabase);
 
-        Channel newChannel = new Channel("another public channel", new ChannelInfo("another public channel", false));
+        Channel newChannel = new Channel("another public channel", false);
         Observable<DatabaseResult<Channel>> channelsObservable = firebaseChannelService.createPublicChannel(newChannel);
         TestObserver<DatabaseResult<Channel>> channelsTestObserver = new TestObserver<>();
         channelsObservable.subscribe(channelsTestObserver);
@@ -106,7 +105,7 @@ public class FirebaseChannelServiceTest {
 
             DataSnapshot mockDataSnapshot = mock(DataSnapshot.class);
             when(mockDataSnapshot.hasChildren()).thenReturn(true);
-            when(mockDataSnapshot.getValue(ChannelInfo.class)).thenReturn(publicChannelInfo);
+            when(mockDataSnapshot.getValue(Channel.class)).thenReturn(publicChannel);
 
             callListenerForSingleValueEventOn(mockChannelsDBReferenceForPublicChannel, mockDataSnapshot);
 
@@ -115,7 +114,7 @@ public class FirebaseChannelServiceTest {
 
             DataSnapshot anotherMockDataSnapshot = mock(DataSnapshot.class);
             when(anotherMockDataSnapshot.hasChildren()).thenReturn(true);
-            when(anotherMockDataSnapshot.getValue(ChannelInfo.class)).thenReturn(privateChannelInfo);
+            when(anotherMockDataSnapshot.getValue(Channel.class)).thenReturn(privateChannel);
 
             callListenerForSingleValueEventOn(mockChannelsDBReferenceForPrivateChannel, anotherMockDataSnapshot);
 
@@ -124,6 +123,11 @@ public class FirebaseChannelServiceTest {
 
         @Override
         public DatabaseReference getOwnersDB() {
+            return mock(DatabaseReference.class);
+        }
+
+        @Override
+        public DatabaseReference getUsersDB() {
             return mock(DatabaseReference.class);
         }
 

@@ -60,7 +60,7 @@ public class FirebaseChatService implements ChatService {
     }
 
     private DatabaseReference messagesInChannel(Channel channel) {
-        return messagesDB.child(channel.getPath());
+        return messagesDB.child(channel.getName());
     }
 
     private List<Message> toMessages(DataSnapshot dataSnapshot) {
