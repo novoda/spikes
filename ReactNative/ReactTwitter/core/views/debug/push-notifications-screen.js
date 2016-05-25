@@ -35,8 +35,9 @@ var PushNotificationsScreenView = React.createClass({
         <Button
           style={styles.button}
           styleDisabled={styles.button_disabled}
-          onPress={this._buttonClicked}> Send push notification</Button>
+          onPress={this._buttonClicked}> Send Android push notification</Button>
         <Text style={styles.normal_text}>
+          On iOS you can use Knuff to send remote notification using the right certificate{"\n"}{"\n"}
           The token is {"\n"}{this.state.token}
         </Text>
       </View>
