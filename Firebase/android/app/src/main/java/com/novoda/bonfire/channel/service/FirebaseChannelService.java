@@ -159,7 +159,7 @@ public class FirebaseChannelService implements ChannelService {
         return new Func1<Channel, Observable<Channel>>() {
             @Override
             public Observable<Channel> call(final Channel channel) {
-                return setValue(true, privateChannelsDB.child(user.getId()).child(user.getName()), channel);
+                return setValue(true, privateChannelsDB.child(user.getId()).child(channel.getName()), channel);
             }
         };
     }
