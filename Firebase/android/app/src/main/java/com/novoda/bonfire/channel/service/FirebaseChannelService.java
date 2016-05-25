@@ -1,7 +1,6 @@
 package com.novoda.bonfire.channel.service;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.data.model.Channels;
@@ -14,10 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
-import rx.Subscriber;
 import rx.functions.Func1;
 import rx.functions.Func2;
 
+import static com.novoda.bonfire.rx.RxCompletionListener.removeValue;
+import static com.novoda.bonfire.rx.RxCompletionListener.setValue;
 import static com.novoda.bonfire.rx.RxSingleValueListener.listenToSingleValueEvents;
 import static com.novoda.bonfire.rx.RxValueListener.listenToValueEvents;
 
@@ -203,46 +203,6 @@ public class FirebaseChannelService implements ChannelService {
                 return listenToSingleValueEvents(usersDB.child(userId), as(User.class));
             }
         };
-    }
-
-    private <T, U> Observable<U> setValue(final T value, final DatabaseReference databaseReference, final U returnValue) {
-        return Observable.create(new Observable.OnSubscribe<U>() {
-            @Override
-            public void call(Subscriber<? super U> subscriber) {
-                databaseReference.setValue(value, new RxCompletionListener<>(subscriber, returnValue));
-            }
-        });
-    }
-
-    private <T> Observable<T> removeValue(final DatabaseReference databaseReference, final T returnValue) {
-        return Observable.create(new Observable.OnSubscribe<T>() {
-            @Override
-            public void call(Subscriber<? super T> subscriber) {
-                databaseReference.removeValue(new RxCompletionListener<>(subscriber, returnValue));
-            }
-        });
-    }
-
-    private static class RxCompletionListener<T> implements DatabaseReference.CompletionListener {
-
-        private final Subscriber<? super T> subscriber;
-        private final T successValue;
-
-        private RxCompletionListener(Subscriber<? super T> subscriber, T successValue) {
-            this.subscriber = subscriber;
-            this.successValue = successValue;
-        }
-
-        @Override
-        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-            if (databaseError == null) {
-                subscriber.onNext(successValue);
-                subscriber.onCompleted();
-            } else {
-                subscriber.onError(databaseError.toException());
-            }
-        }
-
     }
 
     private Func1<DataSnapshot, List<String>> getKeys() {
