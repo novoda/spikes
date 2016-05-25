@@ -36,7 +36,7 @@ var PushNotificationsView = React.createClass({
           style={styles.button}
           styleDisabled={styles.button_disabled}
           onPress={this._buttonClicked}> Send push notification</Button>
-        <Text style={styles.normal}>
+        <Text style={styles.normal_text}>
           The token is {"\n"}{this.state.token}
         </Text>
       </View>
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF'
   },
-  normal: {
+  normal_text: {
     fontSize: 20,
     textAlign: 'center',
     margin: 10
