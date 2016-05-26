@@ -4,21 +4,25 @@ class FirebaseDynamicLinkFactory: DynamicLinkFactory {
 
     let dynamicLinkDomain: String
     let bundleIdentifier: String
+    let androidPackageName: String
     let deepLinkBaseURL: NSURL
 
-    init(dynamicLinkDomain: String, bundleIdentifier: String, deepLinkBaseURL: NSURL) {
+    init(dynamicLinkDomain: String, bundleIdentifier: String, androidPackageName: String, deepLinkBaseURL: NSURL) {
         self.dynamicLinkDomain = dynamicLinkDomain
         self.bundleIdentifier = bundleIdentifier
+        self.androidPackageName = androidPackageName
         self.deepLinkBaseURL = deepLinkBaseURL
     }
 
     func inviteLinkFromUser(user: User) -> NSURL {
         let deepLinkURL = welcomeDeepLinkFromUser(user)
+        let deepLinkURLString = deepLinkURL.absoluteString
 
         let shareURL = NSURLComponents(string: dynamicLinkDomain)!
         shareURL.queryItems = [
-            NSURLQueryItem(name: "link", value: deepLinkURL.absoluteString),
-            NSURLQueryItem(name: "ibi", value: bundleIdentifier)
+            NSURLQueryItem(name: "link", value: deepLinkURLString),
+            NSURLQueryItem(name: "ibi", value: bundleIdentifier),
+            NSURLQueryItem(name: "apn", value: androidPackageName)
         ]
 
         return shareURL.URL!
