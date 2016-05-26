@@ -11,7 +11,7 @@ public final class ChannelsDatabaseFactory {
 
     public static ChannelsDatabase buildChannelsDatabase(FirebaseDatabase firebaseDatabase) {
         return new FirebaseChannelsDatabase(
-                firebaseDatabase.getReference("private-channels-index"),
+                firebaseDatabase.getReference("public-channels-index"),
                 firebaseDatabase.getReference("private-channels-index"),
                 firebaseDatabase.getReference("channels"),
                 firebaseDatabase.getReference("owners"),
