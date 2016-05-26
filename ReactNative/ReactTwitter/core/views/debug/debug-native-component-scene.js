@@ -47,7 +47,7 @@ var DebugNativeComponentScene = React.createClass({
   _renderRow (rowData: string) {
     console.log(rowData)
     return <Text style={styles.text}>{rowData}</Text>
-  },
+  }
 })
 
 const styles = StyleSheet.create({
