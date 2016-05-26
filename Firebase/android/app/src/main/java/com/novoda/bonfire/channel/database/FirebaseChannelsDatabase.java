@@ -23,7 +23,12 @@ class FirebaseChannelsDatabase implements ChannelsDatabase {
     private final DatabaseReference channelsDB;
     private final DatabaseReference ownersDB;
 
-    public FirebaseChannelsDatabase(DatabaseReference publicChannelsDB, DatabaseReference privateChannelsDB, DatabaseReference channelsDB, DatabaseReference ownersDB) {
+    public FirebaseChannelsDatabase(
+            DatabaseReference publicChannelsDB,
+            DatabaseReference privateChannelsDB,
+            DatabaseReference channelsDB,
+            DatabaseReference ownersDB
+    ) {
         this.publicChannelsDB = publicChannelsDB;
         this.privateChannelsDB = privateChannelsDB;
         this.channelsDB = channelsDB;
