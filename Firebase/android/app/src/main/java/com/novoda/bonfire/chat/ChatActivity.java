@@ -19,7 +19,7 @@ public class ChatActivity extends BaseActivity {
     public static Intent createIntentFor(Context context, Channel channel) {
         Intent intent = new Intent(context, ChatActivity.class);
 
-        intent.putExtra(CHANNEL_EXTRA, channel.getName());
+        intent.putExtra(CHANNEL_EXTRA, channel);
         return intent;
     }
 
@@ -28,7 +28,7 @@ public class ChatActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         ChatDisplayer chatDisplayer = (ChatDisplayer) findViewById(R.id.chatView);
-        Channel channel = new Channel(getIntent().getStringExtra(CHANNEL_EXTRA));
+        Channel channel = (Channel) getIntent().getSerializableExtra(CHANNEL_EXTRA);
 
         getSupportActionBar().setTitle(channel.getName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
