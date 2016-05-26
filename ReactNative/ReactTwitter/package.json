@@ -30,18 +30,29 @@
     "rnpm-plugin-upgrade": "^0.26.0"
   },
   "jest": {
-    "scriptPreprocessor": "node_modules/react-native/jestSupport/preprocessor.js",
-    "setupEnvScriptFile": "react-env.js",
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "packager/react-packager/src/Activity/"
-    ],
+    "globals": {
+      "__DEV__": true,
+      "__RCTProfileIsProfiling": false
+    },
+    "setupEnvScriptFile": "jestSupport/env.js",
+    "haste": {
+      "defaultPlatform": "ios",
+      "platforms": [
+        "ios",
+        "android"
+      ],
+      "providesModuleNodeModules": [
+        "react",
+        "react-native"
+      ]
+    },
     "testFileExtensions": [
       "js"
     ],
     "unmockedModulePathPatterns": [
       "promise",
-      "source-map"
+      "source-map",
+      "react-native"
     ]
   }
 }
