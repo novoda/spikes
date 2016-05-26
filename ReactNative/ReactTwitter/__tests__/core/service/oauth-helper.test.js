@@ -13,14 +13,14 @@ describe('OauthHelper', () => {
       expect(result).toBeDefined()
     })
 
-    it('should contains the correct oauth_token', () => {
+    it('should contain the correct oauth_token', () => {
       let urlCallback = 'react-twitter-oauth://callback?oauth_token=xOL-GwAAAAAAvI9oAAABVKmtBm8&oauth_verifier=pFIFpsIVlT59NpDkID3oa3X67UEJLa4k'
       let result = OauthHelper.getOauthTokenAndVerifierFromURLCallback(urlCallback)
 
       expect(result.oauth_token).toBe('xOL-GwAAAAAAvI9oAAABVKmtBm8')
     })
 
-    it('should contains the correct verifier', () => {
+    it('should contain the correct verifier', () => {
       let urlCallback = 'react-twitter-oauth://callback?oauth_token=xOL-GwAAAAAAvI9oAAABVKmtBm8&oauth_verifier=pFIFpsIVlT59NpDkID3oa3X67UEJLa4k'
       let result = OauthHelper.getOauthTokenAndVerifierFromURLCallback(urlCallback)
 
@@ -29,7 +29,7 @@ describe('OauthHelper', () => {
   })
 
   describe('_collectParameters', () => {
-    it('when collecting parameters', () => {
+    it('should collect correct parameters', () => {
       const params = {
         'status': 'Hello Ladies + Gentlemen, a signed OAuth request!',
         'include_entities': 'true',
@@ -46,7 +46,7 @@ describe('OauthHelper', () => {
   })
 
   describe('_getSignatureBase', () => {
-    it('when getting signature base', () => {
+    it('should get signature base', () => {
       const params = {
         'status': 'Hello Ladies + Gentlemen, a signed OAuth request!',
         'include_entities': 'true',
