@@ -9,11 +9,11 @@ import com.novoda.bonfire.database.DatabaseResult;
 import rx.Observable;
 import rx.functions.Func1;
 
-public class FirebaseChatService implements ChatService {
+public class PersistedChatService implements ChatService {
 
     private final ChatDatabase chatDatabase;
 
-    public FirebaseChatService(ChatDatabase chatDatabase) {
+    public PersistedChatService(ChatDatabase chatDatabase) {
         this.chatDatabase = chatDatabase;
     }
 

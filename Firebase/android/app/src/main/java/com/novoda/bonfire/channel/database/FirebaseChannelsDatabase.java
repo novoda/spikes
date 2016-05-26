@@ -23,14 +23,12 @@ public class FirebaseChannelsDatabase implements ChannelsDatabase {
     private final DatabaseReference privateChannelsDB;
     private final DatabaseReference channelsDB;
     private final DatabaseReference ownersDB;
-    private final DatabaseReference usersDB;
 
     public FirebaseChannelsDatabase(ChannelsDatabaseProvider channelsDatabaseProvider) {
         publicChannelsDB = channelsDatabaseProvider.getPublicChannelsDB();
         privateChannelsDB = channelsDatabaseProvider.getPrivateChannelsDB();
         channelsDB = channelsDatabaseProvider.getChannelsDB();
         ownersDB = channelsDatabaseProvider.getOwnersDB();
-        usersDB = channelsDatabaseProvider.getUsersDB();
     }
 
     @Override
@@ -80,11 +78,6 @@ public class FirebaseChannelsDatabase implements ChannelsDatabase {
     @Override
     public Observable<List<String>> observeOwnerIdsFor(Channel channel) {
         return listenToValueEvents(ownersDB.child(channel.getName()), getKeys());
-    }
-
-    @Override
-    public Observable<User> readUserFrom(String userId) {
-        return listenToSingleValueEvents(usersDB.child(userId), as(User.class));
     }
 
     private Func1<DataSnapshot, List<String>> getKeys() {

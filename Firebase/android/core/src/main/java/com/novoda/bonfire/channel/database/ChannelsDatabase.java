@@ -29,6 +29,4 @@ public interface ChannelsDatabase {
 
     Observable<List<String>> observeOwnerIdsFor(Channel channel);
 
-    Observable<User> readUserFrom(String userId);
-
 }

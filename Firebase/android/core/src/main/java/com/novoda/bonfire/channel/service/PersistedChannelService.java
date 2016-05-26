@@ -6,6 +6,7 @@ import com.novoda.bonfire.channel.database.ChannelsDatabase;
 import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.user.data.model.User;
 import com.novoda.bonfire.user.data.model.Users;
+import com.novoda.bonfire.user.database.UserDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +18,11 @@ import rx.functions.Func2;
 public class PersistedChannelService implements ChannelService {
 
     private final ChannelsDatabase channelsDatabase;
+    private final UserDatabase userDatabase;
 
-    public PersistedChannelService(ChannelsDatabase channelsDatabase) {
+    public PersistedChannelService(ChannelsDatabase channelsDatabase, UserDatabase userDatabase) {
         this.channelsDatabase = channelsDatabase;
+        this.userDatabase = userDatabase;
     }
 
     @Override
@@ -185,7 +188,7 @@ public class PersistedChannelService implements ChannelService {
         return new Func1<String, Observable<User>>() {
             @Override
             public Observable<User> call(final String userId) {
-                return channelsDatabase.readUserFrom(userId);
+                return userDatabase.readUserFrom(userId);
             }
         };
     }

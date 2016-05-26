@@ -45,7 +45,7 @@ public class PersistedChannelServiceTest {
         expectedList.addAll(listOfPublicChannels);
         expectedList.addAll(listOfPrivateChannels);
 
-        PersistedChannelService persistedChannelService = new PersistedChannelService(new FakeChannelsDatabaseProvider());
+        PersistedChannelService persistedChannelService = new PersistedChannelService(new FakeChannelsDatabaseProvider(), userDatabase);
 
         Observable<Channels> channelsObservable = persistedChannelService.getChannelsFor(user);
         TestObserver<Channels> channelsTestObserver = new TestObserver<>();
@@ -57,7 +57,7 @@ public class PersistedChannelServiceTest {
     @Test
     public void canCreateAPublicChannel() {
         FakeChannelsDatabaseProvider channelsDatabase = new FakeChannelsDatabaseProvider();
-        PersistedChannelService persistedChannelService = new PersistedChannelService(channelsDatabase);
+        PersistedChannelService persistedChannelService = new PersistedChannelService(channelsDatabase, userDatabase);
 
         Channel newChannel = new Channel("another public channel", false);
         Observable<DatabaseResult<Channel>> channelsObservable = persistedChannelService.createPublicChannel(newChannel);

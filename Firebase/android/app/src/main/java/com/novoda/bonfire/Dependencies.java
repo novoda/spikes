@@ -7,14 +7,18 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.bonfire.analytics.FirebaseAnalyticsAnalytics;
+import com.novoda.bonfire.channel.database.provider.ChannelsDatabaseProvider;
 import com.novoda.bonfire.channel.service.ChannelService;
 import com.novoda.bonfire.channel.database.FirebaseChannelsDatabase;
 import com.novoda.bonfire.channel.service.PersistedChannelService;
 import com.novoda.bonfire.channel.database.provider.ChannelsDbProviderFactory;
-import com.novoda.bonfire.user.service.FirebaseUserService;
+import com.novoda.bonfire.chat.database.FirebaseChatDatabase;
+import com.novoda.bonfire.login.database.FirebaseAuthDatabase;
+import com.novoda.bonfire.user.database.FirebaseUserDatabase;
+import com.novoda.bonfire.user.service.PersistedUserService;
 import com.novoda.bonfire.user.service.UserService;
 import com.novoda.bonfire.chat.service.ChatService;
-import com.novoda.bonfire.chat.service.FirebaseChatService;
+import com.novoda.bonfire.chat.service.PersistedChatService;
 import com.novoda.bonfire.login.service.FirebaseLoginService;
 import com.novoda.bonfire.login.service.LoginService;
 
@@ -35,12 +39,14 @@ public enum Dependencies {
             FirebaseAuth firebaseAuth = FirebaseAuth.getInstance(firebaseApp);
             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(firebaseApp);
             firebaseDatabase.setPersistenceEnabled(true);
+            FirebaseUserDatabase userDatabase = new FirebaseUserDatabase(firebaseDatabase);
+            ChannelsDatabaseProvider channelsDbProvider = ChannelsDbProviderFactory.getChannelsDbProvider(firebaseDatabase);
 
             firebaseAnalytics = new FirebaseAnalyticsAnalytics(context);
-            loginService = new FirebaseLoginService(firebaseDatabase, firebaseAuth);
-            chatService = new FirebaseChatService(firebaseDatabase);
-            channelService = new PersistedChannelService(new FirebaseChannelsDatabase(ChannelsDbProviderFactory.getChannelsDbProvider(firebaseDatabase)));
-            userService = new FirebaseUserService(firebaseDatabase);
+            loginService = new FirebaseLoginService(new FirebaseAuthDatabase(firebaseAuth), userDatabase);
+            chatService = new PersistedChatService(new FirebaseChatDatabase(firebaseDatabase));
+            channelService = new PersistedChannelService(new FirebaseChannelsDatabase(channelsDbProvider), userDatabase);
+            userService = new PersistedUserService(userDatabase);
         }
     }
 

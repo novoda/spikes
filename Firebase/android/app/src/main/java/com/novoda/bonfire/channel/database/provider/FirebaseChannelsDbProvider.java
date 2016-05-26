@@ -29,9 +29,4 @@ class FirebaseChannelsDbProvider implements ChannelsDatabaseProvider {
     public DatabaseReference getOwnersDB() {
         return firebaseDatabase.getReference("owners");
     }
-
-    @Override
-    public DatabaseReference getUsersDB() {
-        return firebaseDatabase.getReference("users");
-    }
 }
