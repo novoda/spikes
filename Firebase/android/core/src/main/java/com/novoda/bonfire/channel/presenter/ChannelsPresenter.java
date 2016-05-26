@@ -9,6 +9,7 @@ import com.novoda.bonfire.login.service.LoginService;
 import com.novoda.bonfire.navigation.Navigator;
 
 import rx.Observable;
+import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
@@ -20,7 +21,7 @@ public class ChannelsPresenter {
     private final LoginService loginService;
     private final Navigator navigator;
 
-    private CompositeSubscription subscriptions = new CompositeSubscription();
+    private Subscription subscription;
 
     public ChannelsPresenter(ChannelsDisplayer channelsDisplayer, ChannelService channelService, LoginService loginService, Navigator navigator) {
         this.channelsDisplayer = channelsDisplayer;
@@ -31,16 +32,15 @@ public class ChannelsPresenter {
 
     public void startPresenting() {
         channelsDisplayer.attach(channelsInteractionListener);
-        subscriptions.add(loginService.getAuthentication()
-                                  .filter(successfullyAuthenticated())
-                                  .flatMap(channelsForUser())
-                                  .subscribe(new Action1<Channels>() {
-                                      @Override
-                                      public void call(Channels channels) {
-                                          channelsDisplayer.display(channels);
-                                      }
-                                  })
-        );
+        subscription = loginService.getAuthentication()
+                .filter(successfullyAuthenticated())
+                .flatMap(channelsForUser())
+                .subscribe(new Action1<Channels>() {
+                    @Override
+                    public void call(Channels channels) {
+                        channelsDisplayer.display(channels);
+                    }
+                });
     }
 
     private Func1<Authentication, Observable<Channels>> channelsForUser() {
@@ -62,9 +62,8 @@ public class ChannelsPresenter {
     }
 
     public void stopPresenting() {
-        subscriptions.clear();
+        subscription.unsubscribe();
         channelsDisplayer.detach(channelsInteractionListener);
-        subscriptions = new CompositeSubscription();
     }
 
     private final ChannelsDisplayer.ChannelsInteractionListener channelsInteractionListener = new ChannelsDisplayer.ChannelsInteractionListener() {
