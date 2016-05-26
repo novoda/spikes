@@ -5,11 +5,11 @@ final class ChannelsViewController: UIViewController {
     let channelsPresenter: ChannelsPresenter
 
     static func withDependencies() -> ChannelsViewController {
-        return ChannelsViewController(loginService: SharedServices.loginService, channelsService: SharedServices.channelsService, navigator: SharedServices.navigator)
+        return ChannelsViewController(loginService: SharedServices.loginService, channelsService: SharedServices.channelsService, navigator: SharedServices.navigator, config: SharedServices.config)
     }
 
-    init(loginService: LoginService, channelsService: ChannelsService, navigator: Navigator) {
-        self.channelsPresenter = ChannelsPresenter(loginService: loginService, channelsService: channelsService, channelsDisplayer: channelsView, navigator: navigator)
+    init(loginService: LoginService, channelsService: ChannelsService, navigator: Navigator, config: Config) {
+        self.channelsPresenter = ChannelsPresenter(loginService: loginService, channelsService: channelsService, channelsDisplayer: channelsView, navigator: navigator, config: config)
 
         super.init(nibName: nil, bundle: nil)
     }
