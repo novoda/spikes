@@ -7,11 +7,11 @@ final class ChannelsViewController: UIViewController {
     let channelsPresenter: ChannelsPresenter
 
     static func withDependencies() -> ChannelsViewController {
-        return ChannelsViewController(loginService: SharedServices.loginService, channelsService: SharedServices.channelsService, navigator: SharedServices.navigator, config: SharedServices.config)
+        return ChannelsViewController(loginService: SharedServices.loginService, channelsService: SharedServices.channelsService, navigator: SharedServices.navigator, dynamicLinkFactory: SharedServices.dynamicLinkFactory, config: SharedServices.config)
     }
 
-    init(loginService: LoginService, channelsService: ChannelsService, navigator: Navigator, config: Config) {
-        self.channelsPresenter = ChannelsPresenter(loginService: loginService, channelsService: channelsService, channelsDisplayer: channelsView, navigator: navigator, config: config)
+    init(loginService: LoginService, channelsService: ChannelsService, navigator: Navigator, dynamicLinkFactory: DynamicLinkFactory, config: Config) {
+        self.channelsPresenter = ChannelsPresenter(loginService: loginService, channelsService: channelsService, channelsDisplayer: channelsView, navigator: navigator, dynamicLinkFactory: dynamicLinkFactory, config: config)
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -48,34 +48,10 @@ final class ChannelsViewController: UIViewController {
     }
 
     func addBarButtonItem() {
-        let newChannelBarButtonItem = self.channelsView.newChannelBarButtonItem
-        let shareBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: #selector(shareBonfire))
+        let newChannelBarButtonItem = channelsView.newChannelBarButtonItem
+        let shareBarButtonItem = channelsView.shareBonfireBarButtonItem
         navigationItem.setRightBarButtonItem(newChannelBarButtonItem, animated: false)
         navigationItem.setLeftBarButtonItem(shareBarButtonItem, animated: false)
-    }
-
-    func shareBonfire() {
-        guard let currentUserName = FIRAuth.auth()?.currentUser?.displayName
-            else { return }
-
-        let deeplinkURL = NSURLComponents(string: "https://bonfire.com/welcome")!
-        deeplinkURL.queryItems = [
-            NSURLQueryItem(name: "sender", value: currentUserName)
-        ]
-
-        print(deeplinkURL.string)
-
-        let shareURL = NSURLComponents(string: "https://t6c2e.app.goo.gl")!
-        shareURL.queryItems = [
-            NSURLQueryItem(name: "link", value: deeplinkURL.string),
-            NSURLQueryItem(name: "ibi", value: "com.novoda.bonfire")
-        ]
-
-        print(shareURL.string)
-
-        let message = "Check out Bonfire!"
-        let activityController = UIActivityViewController(activityItems: [message, shareURL.URL!], applicationActivities: nil)
-        self.presentViewController(activityController, animated: true, completion: nil)
     }
 
 }

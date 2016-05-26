@@ -53,6 +53,8 @@
 		B6C054E11CF5AE9D00B1BB6C /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054E01CF5AE9D00B1BB6C /* WelcomeView.swift */; };
 		B6C054E41CF5BE5600B1BB6C /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054E31CF5BE5600B1BB6C /* WelcomeViewController.swift */; };
 		B6C054E61CF5DE7300B1BB6C /* WelcomeViewActionListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054E51CF5DE7300B1BB6C /* WelcomeViewActionListener.swift */; };
+		B6C054E91CF7014500B1BB6C /* FirebaseDynamicLinkFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054E81CF7014500B1BB6C /* FirebaseDynamicLinkFactory.swift */; };
+		B6C054EC1CF708D600B1BB6C /* DynamicLinkFactotry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054EB1CF708D600B1BB6C /* DynamicLinkFactotry.swift */; };
 		B6CC1CE91CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CC1CE81CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift */; };
 		B6CC1CEB1CEC992F00BA8500 /* Observable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CC1CEA1CEC992F00BA8500 /* Observable+Extensions.swift */; };
 		B6CC1CEE1CECA83600BA8500 /* CreateChannelPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CC1CED1CECA83600BA8500 /* CreateChannelPresenter.swift */; };
@@ -123,6 +125,8 @@
 		B6C054E21CF5B10200B1BB6C /* Bonfire.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Bonfire.entitlements; sourceTree = "<group>"; };
 		B6C054E31CF5BE5600B1BB6C /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		B6C054E51CF5DE7300B1BB6C /* WelcomeViewActionListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewActionListener.swift; sourceTree = "<group>"; };
+		B6C054E81CF7014500B1BB6C /* FirebaseDynamicLinkFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseDynamicLinkFactory.swift; sourceTree = "<group>"; };
+		B6C054EB1CF708D600B1BB6C /* DynamicLinkFactotry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicLinkFactotry.swift; sourceTree = "<group>"; };
 		B6CC1CE81CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Channel+FirebaseConvertible.swift"; sourceTree = "<group>"; };
 		B6CC1CEA1CEC992F00BA8500 /* Observable+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Extensions.swift"; sourceTree = "<group>"; };
 		B6CC1CED1CECA83600BA8500 /* CreateChannelPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChannelPresenter.swift; sourceTree = "<group>"; };
@@ -222,13 +226,14 @@
 		B65C45B51CE0E1B800B2179D /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				B6962C821CEF5358006A3A9E /* Users */,
+				B6AC7C141CF4589500F96722 /* Analytics.swift */,
+				B636BA231CF34D9F009009F2 /* Config.swift */,
 				D0C31C76FECC7AA384D36365 /* Channel */,
 				B654B28A1CE0CE8300EEDE0A /* Chat */,
+				B6C054EA1CF708C600B1BB6C /* DynamicLink */,
 				B65C45CB1CE1E3D900B2179D /* Login */,
 				B65C45D81CE1F00000B2179D /* Navigation */,
-				B636BA231CF34D9F009009F2 /* Config.swift */,
-				B6AC7C141CF4589500F96722 /* Analytics.swift */,
+				B6962C821CEF5358006A3A9E /* Users */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -236,14 +241,15 @@
 		B65C45B61CE0E1D000B2179D /* Mobile */ = {
 			isa = PBXGroup;
 			children = (
+				B6AC7C161CF458E000F96722 /* FirebaseAnalytics.swift */,
+				B636BA251CF34DDA009009F2 /* FirebaseRemoteConfig.swift */,
 				D0C3157242B43FBD5D799CA5 /* Channel */,
 				B65C45B71CE0E1E000B2179D /* Chat */,
+				B6C054E71CF7010300B1BB6C /* DynamicLink */,
 				B65C45C61CE1E13B00B2179D /* Login */,
 				B65C45D91CE1F05400B2179D /* Navigation */,
 				B6962C891CEF5676006A3A9E /* Users */,
 				B654B2871CE0C86200EEDE0A /* Utilities */,
-				B636BA251CF34DDA009009F2 /* FirebaseRemoteConfig.swift */,
-				B6AC7C161CF458E000F96722 /* FirebaseAnalytics.swift */,
 				B6C054DF1CF5AE9000B1BB6C /* Welcome */,
 			);
 			path = Mobile;
@@ -331,6 +337,22 @@
 				B6C054E31CF5BE5600B1BB6C /* WelcomeViewController.swift */,
 			);
 			path = Welcome;
+			sourceTree = "<group>";
+		};
+		B6C054E71CF7010300B1BB6C /* DynamicLink */ = {
+			isa = PBXGroup;
+			children = (
+				B6C054E81CF7014500B1BB6C /* FirebaseDynamicLinkFactory.swift */,
+			);
+			name = DynamicLink;
+			sourceTree = "<group>";
+		};
+		B6C054EA1CF708C600B1BB6C /* DynamicLink */ = {
+			isa = PBXGroup;
+			children = (
+				B6C054EB1CF708D600B1BB6C /* DynamicLinkFactotry.swift */,
+			);
+			name = DynamicLink;
 			sourceTree = "<group>";
 		};
 		B6CC1CEC1CECA81C00BA8500 /* ChannelCreation */ = {
@@ -547,6 +569,8 @@
 				B65C45BF1CE0E53200B2179D /* FirebaseChatService.swift in Sources */,
 				B65C45D71CE1EFE100B2179D /* Navigator.swift in Sources */,
 				B65C45D11CE1E41200B2179D /* LoginService.swift in Sources */,
+				B6C054E91CF7014500B1BB6C /* FirebaseDynamicLinkFactory.swift in Sources */,
+				B6C054EC1CF708D600B1BB6C /* DynamicLinkFactotry.swift in Sources */,
 				B6962C911CEF5742006A3A9E /* Firebase+RxExtensions.swift in Sources */,
 				B636BA261CF34DDA009009F2 /* FirebaseRemoteConfig.swift in Sources */,
 				B654B2671CE0C38000EEDE0A /* AppDelegate.swift in Sources */,

@@ -76,5 +76,9 @@ struct SharedServices {
     static let chatService: ChatService = FirebaseChatService()
     static let navigator: Navigator = AppNavigator()
     static let analytics: Analytics = FirebaseAnalytics()
+    static let dynamicLinkFactory: DynamicLinkFactory = FirebaseDynamicLinkFactory(
+        dynamicLinkDomain: "https://t6c2e.app.goo.gl",
+        bundleIdentifier: "com.novoda.bonfire",
+        deepLinkBaseURL: NSURL(string: "https://novoda.com/bonfire/welcome")!)
     static let config: Config = FirebaseRemoteConfig()
 }

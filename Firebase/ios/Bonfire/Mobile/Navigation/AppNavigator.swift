@@ -31,4 +31,9 @@ final class AppNavigator: Navigator {
         container.viewControllers = [welcomeViewController]
         navigationController.presentViewController(container, animated: true, completion: nil)
     }
+
+    func showShareSheet(activityItems: [AnyObject]) {
+        let activityController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        navigationController.presentViewController(activityController, animated: true, completion: nil)
+    }
 }
