@@ -6,7 +6,6 @@ import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.rx.ValueEventObservableCreator;
 import com.novoda.bonfire.user.data.model.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -39,12 +38,12 @@ class FirebaseChannelsDatabase implements ChannelsDatabase {
 
     @Override
     public Observable<List<String>> observePublicChannelIds() {
-        return valueEventObservableCreator.listenToValueEvents(publicChannelsDB, getKeys());
+        return valueEventObservableCreator.listenToValueEvents(publicChannelsDB, new DataSnapshotToStringListMarshaller());
     }
 
     @Override
     public Observable<List<String>> observePrivateChannelIdsFor(User user) {
-        return valueEventObservableCreator.listenToValueEvents(privateChannelsDB.child(user.getId()), getKeys());
+        return valueEventObservableCreator.listenToValueEvents(privateChannelsDB.child(user.getId()), new DataSnapshotToStringListMarshaller());
     }
 
     @Override
@@ -83,23 +82,7 @@ class FirebaseChannelsDatabase implements ChannelsDatabase {
 
     @Override
     public Observable<List<String>> observeOwnerIdsFor(Channel channel) {
-        return valueEventObservableCreator.listenToValueEvents(ownersDB.child(channel.getName()), getKeys());
-    }
-
-    private Func1<DataSnapshot, List<String>> getKeys() {
-        return new Func1<DataSnapshot, List<String>>() {
-            @Override
-            public List<String> call(DataSnapshot dataSnapshot) {
-                List<String> keys = new ArrayList<>();
-                if (dataSnapshot.hasChildren()) {
-                    Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                    for (DataSnapshot child : children) {
-                        keys.add(child.getKey());
-                    }
-                }
-                return keys;
-            }
-        };
+        return valueEventObservableCreator.listenToValueEvents(ownersDB.child(channel.getName()), new DataSnapshotToStringListMarshaller());
     }
 
     private <T> Func1<DataSnapshot, T> as(final Class<T> tClass) {
@@ -110,4 +93,5 @@ class FirebaseChannelsDatabase implements ChannelsDatabase {
             }
         };
     }
+
 }

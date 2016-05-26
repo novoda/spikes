@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import rx.Observable;
-import rx.functions.Func1;
 import rx.observers.TestObserver;
 
 import static org.mockito.Matchers.any;
@@ -47,7 +46,8 @@ public class FirebaseChannelsDatabaseTest {
         expectedPublicChannelList.add("publicChannelIdOne");
         expectedPublicChannelList.add("public channel id two");
 
-        when(mockValueEventObservableCreator.listenToValueEvents(eq(mockPublicChannelsDb), any(Func1.class))).thenReturn(Observable.just(expectedPublicChannelList));
+        when(mockValueEventObservableCreator.listenToValueEvents(eq(mockPublicChannelsDb), any(DataSnapshotToStringListMarshaller.class)))
+                .thenReturn(Observable.just(expectedPublicChannelList));
 
         FirebaseChannelsDatabase firebaseChannelsDatabase = createFirebaseChannelsDatabase();
 
