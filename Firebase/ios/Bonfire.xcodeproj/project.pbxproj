@@ -55,6 +55,8 @@
 		B6C054E61CF5DE7300B1BB6C /* WelcomeViewActionListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054E51CF5DE7300B1BB6C /* WelcomeViewActionListener.swift */; };
 		B6C054E91CF7014500B1BB6C /* FirebaseDynamicLinkFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054E81CF7014500B1BB6C /* FirebaseDynamicLinkFactory.swift */; };
 		B6C054EC1CF708D600B1BB6C /* DynamicLinkFactotry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054EB1CF708D600B1BB6C /* DynamicLinkFactotry.swift */; };
+		B6C054EE1CF728BA00B1BB6C /* ChannelsDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054ED1CF728BA00B1BB6C /* ChannelsDatabase.swift */; };
+		B6C054F01CF72A2900B1BB6C /* FirebaseChannelsDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054EF1CF72A2900B1BB6C /* FirebaseChannelsDatabase.swift */; };
 		B6CC1CE91CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CC1CE81CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift */; };
 		B6CC1CEB1CEC992F00BA8500 /* Observable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CC1CEA1CEC992F00BA8500 /* Observable+Extensions.swift */; };
 		B6CC1CEE1CECA83600BA8500 /* CreateChannelPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CC1CED1CECA83600BA8500 /* CreateChannelPresenter.swift */; };
@@ -127,6 +129,8 @@
 		B6C054E51CF5DE7300B1BB6C /* WelcomeViewActionListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewActionListener.swift; sourceTree = "<group>"; };
 		B6C054E81CF7014500B1BB6C /* FirebaseDynamicLinkFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseDynamicLinkFactory.swift; sourceTree = "<group>"; };
 		B6C054EB1CF708D600B1BB6C /* DynamicLinkFactotry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicLinkFactotry.swift; sourceTree = "<group>"; };
+		B6C054ED1CF728BA00B1BB6C /* ChannelsDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelsDatabase.swift; sourceTree = "<group>"; };
+		B6C054EF1CF72A2900B1BB6C /* FirebaseChannelsDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseChannelsDatabase.swift; sourceTree = "<group>"; };
 		B6CC1CE81CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Channel+FirebaseConvertible.swift"; sourceTree = "<group>"; };
 		B6CC1CEA1CEC992F00BA8500 /* Observable+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Extensions.swift"; sourceTree = "<group>"; };
 		B6CC1CED1CECA83600BA8500 /* CreateChannelPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChannelPresenter.swift; sourceTree = "<group>"; };
@@ -392,6 +396,7 @@
 				D0C3169A5FF39E209C5BA3EE /* ChannelsView.swift */,
 				D0C3119EA7B34321EC65CBAF /* ChannelsViewController.swift */,
 				D0C318C841B6FF1360F3261D /* FirebaseChannelsService.swift */,
+				B6C054EF1CF72A2900B1BB6C /* FirebaseChannelsDatabase.swift */,
 			);
 			path = Channel;
 			sourceTree = "<group>";
@@ -404,6 +409,7 @@
 				D0C31879D1AD9CF1461F5956 /* ChannelsDisplayer.swift */,
 				D0C31217E78F04ADE3808836 /* ChannelsPresenter.swift */,
 				D0C318BAA30984F559ACD8D2 /* ChannelsService.swift */,
+				B6C054ED1CF728BA00B1BB6C /* ChannelsDatabase.swift */,
 			);
 			path = Channel;
 			sourceTree = "<group>";
@@ -541,6 +547,7 @@
 				B6CC1CF31CECB05900BA8500 /* CreateChannelView.swift in Sources */,
 				B65C45C11CE0ED8200B2179D /* ChatDisplayer.swift in Sources */,
 				B6CC1CF51CECB3E500BA8500 /* CreateChannelViewController.swift in Sources */,
+				B6C054F01CF72A2900B1BB6C /* FirebaseChannelsDatabase.swift in Sources */,
 				B65C45B41CE0E0F900B2179D /* Chat.swift in Sources */,
 				B6CC1CE91CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift in Sources */,
 				B6962C8B1CEF5686006A3A9E /* FirebaseUsersService.swift in Sources */,
@@ -575,6 +582,7 @@
 				B654B2671CE0C38000EEDE0A /* AppDelegate.swift in Sources */,
 				B65C45BB1CE0E46B00B2179D /* ChatPresenter.swift in Sources */,
 				B65C45CF1CE1E40B00B2179D /* LoginDisplayer.swift in Sources */,
+				B6C054EE1CF728BA00B1BB6C /* ChannelsDatabase.swift in Sources */,
 				B65C45B21CE0E03F00B2179D /* FirebaseConvertible.swift in Sources */,
 				B65C45D31CE1E4B200B2179D /* User.swift in Sources */,
 				B6210ACC1CE24AC600570509 /* Authentication.swift in Sources */,
