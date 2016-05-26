@@ -17,6 +17,7 @@ var OauthView = require('./debug/oauth-screen.js')
 var TweetsList = require('./tweetsList.js')
 var TweetView = require('./tweetView.js')
 var DebugAnimationScene = require('./debug/debug-animation-scene.js')
+var DebugNativeComponentScene = require('./debug/debug-native-component-scene.js')
 
 const scenes = [
   SplashScreenView,
@@ -27,7 +28,8 @@ const scenes = [
   OauthView,
   TweetsList,
   TweetView,
-  DebugAnimationScene
+  DebugAnimationScene,
+  DebugNativeComponentScene
 ]
 
 var NavigationBarRouteMapper = {
@@ -114,6 +116,8 @@ var MainNavigator = React.createClass({
         return (<TweetView navigator={navigator} tweetId={route.tweetId} twitterService={route.twitterService} />)
       case DebugAnimationScene.navigatorID():
         return (<DebugAnimationScene navigator={navigator} />)
+      case DebugNativeComponentScene.navigatorID():
+        return (<DebugNativeComponentScene navigator={navigator} />)
     }
   }
 })

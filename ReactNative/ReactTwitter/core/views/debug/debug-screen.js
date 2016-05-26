@@ -13,12 +13,14 @@ var DeepLinkingView = require('./deep-linking.js')
 var PushNotificationsScreenView = require('./push-notifications-screen.js')
 var OauthView = require('./oauth-screen.js')
 var DebugAnimationScene = require('./debug-animation-scene.js')
+var DebugNativeComponentScene = require('./debug-native-component-scene.js')
 
 const scenes = [
   DeepLinkingView,
   PushNotificationsScreenView,
   OauthView,
   DebugAnimationScene,
+  DebugNativeComponentScene
 ]
 
 var DebugScreenView = React.createClass({
