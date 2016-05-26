@@ -4,6 +4,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.rx.OnSubscribeDatabaseListener;
+import com.novoda.bonfire.rx.OnSubscribeRemoveValueListener;
+import com.novoda.bonfire.rx.OnSubscribeSetValueListener;
 import com.novoda.bonfire.rx.OnSubscribeSingleValueListener;
 import com.novoda.bonfire.user.data.model.User;
 
@@ -11,9 +13,6 @@ import java.util.List;
 
 import rx.Observable;
 import rx.functions.Func1;
-
-import static com.novoda.bonfire.rx.RxCompletionListener.removeValue;
-import static com.novoda.bonfire.rx.RxCompletionListener.setValue;
 
 class FirebaseChannelsDatabase implements ChannelsDatabase {
 
@@ -50,31 +49,31 @@ class FirebaseChannelsDatabase implements ChannelsDatabase {
 
     @Override
     public Observable<Channel> writeChannel(Channel newChannel) {
-        return setValue(newChannel, channelsDB.child(newChannel.getName()), newChannel);
+        return Observable.create(new OnSubscribeSetValueListener<>(newChannel, channelsDB.child(newChannel.getName()), newChannel));
     }
 
     @Override
     public Observable<Channel> writeChannelToPublicChannelIndex(Channel newChannel) {
-        return setValue(true, publicChannelsDB.child(newChannel.getName()), newChannel);
+        return Observable.create(new OnSubscribeSetValueListener<>(true, publicChannelsDB.child(newChannel.getName()), newChannel));
     }
 
     @Override
     public Observable<Channel> addOwnerToPrivateChannel(User user, Channel channel) {
-        return setValue(true, ownersDB.child(channel.getName()).child(user.getId()), channel);
+        return Observable.create(new OnSubscribeSetValueListener<>(true, ownersDB.child(channel.getName()).child(user.getId()), channel));
     }
 
     public Observable<Channel> removeOwnerFromPrivateChannel(User user, Channel channel) {
-        return removeValue(ownersDB.child(channel.getName()).child(user.getId()), channel);
+        return Observable.create(new OnSubscribeRemoveValueListener<>(ownersDB.child(channel.getName()).child(user.getId()), channel));
     }
 
     @Override
     public Observable<Channel> addChannelToUserPrivateChannelIndex(User user, Channel channel) {
-        return setValue(true, privateChannelsDB.child(user.getId()).child(channel.getName()), channel);
+        return Observable.create(new OnSubscribeSetValueListener<>(true, privateChannelsDB.child(user.getId()).child(channel.getName()), channel));
     }
 
     @Override
     public Observable<Channel> removeChannelFromUserPrivateChannelIndex(User user, Channel channel) {
-        return removeValue(privateChannelsDB.child(user.getId()).child(channel.getName()), channel);
+        return Observable.create(new OnSubscribeRemoveValueListener<>(privateChannelsDB.child(user.getId()).child(channel.getName()), channel));
     }
 
     @Override
