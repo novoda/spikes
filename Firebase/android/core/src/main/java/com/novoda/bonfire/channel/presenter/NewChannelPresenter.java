@@ -33,8 +33,7 @@ public class NewChannelPresenter {
     }
 
     public void startPresenting() {
-        newChannelDisplayer.attach(interactionListener);
-        newChannelDisplayer.disableChannelCreation();
+        newChannelDisplayer.attach(channelCreationListener);
         subscriptions.add(
                 loginService.getAuthentication().subscribe(new Action1<Authentication>() {
                     @Override
@@ -46,20 +45,12 @@ public class NewChannelPresenter {
     }
 
     public void stopPresenting() {
-        newChannelDisplayer.detach(interactionListener);
+        newChannelDisplayer.detach(channelCreationListener);
         subscriptions.clear();
         subscriptions = new CompositeSubscription();
     }
 
-    private NewChannelDisplayer.InteractionListener interactionListener = new NewChannelDisplayer.InteractionListener() {
-        @Override
-        public void onChannelNameLengthChanged(int length) {
-            if (length > 0) {
-                newChannelDisplayer.enableChannelCreation();
-            } else {
-                newChannelDisplayer.disableChannelCreation();
-            }
-        }
+    private NewChannelDisplayer.ChannelCreationListener channelCreationListener = new NewChannelDisplayer.ChannelCreationListener() {
 
         @Override
         public void onCreateChannelClicked(String channelName, boolean isPrivate) {
