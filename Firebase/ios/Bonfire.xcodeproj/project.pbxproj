@@ -86,7 +86,7 @@
 		B636BA231CF34D9F009009F2 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		B636BA251CF34DDA009009F2 /* FirebaseRemoteConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseRemoteConfig.swift; sourceTree = "<group>"; };
 		B654B2631CE0C38000EEDE0A /* Bonfire.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bonfire.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		B654B2661CE0C38000EEDE0A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Mobile/AppDelegate.swift; sourceTree = "<group>"; };
+		B654B2661CE0C38000EEDE0A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B654B2681CE0C38000EEDE0A /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		B654B26D1CE0C38000EEDE0A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B654B2701CE0C38000EEDE0A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -169,9 +169,9 @@
 			isa = PBXGroup;
 			children = (
 				B654B2651CE0C38000EEDE0A /* Bonfire */,
-				B654B2641CE0C38000EEDE0A /* Products */,
-				C843196999D7E46141CC91DC /* Pods */,
 				3BACB0D2D89FA686D090BFE1 /* Frameworks */,
+				C843196999D7E46141CC91DC /* Pods */,
+				B654B2641CE0C38000EEDE0A /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -187,13 +187,12 @@
 			isa = PBXGroup;
 			children = (
 				B6C054E21CF5B10200B1BB6C /* Bonfire.entitlements */,
-				B654B2661CE0C38000EEDE0A /* AppDelegate.swift */,
-				B65C45B51CE0E1B800B2179D /* Core */,
-				B65C45B61CE0E1D000B2179D /* Mobile */,
-				B654B26D1CE0C38000EEDE0A /* Assets.xcassets */,
 				B6210AC31CE20CEC00570509 /* GoogleService-Info.plist */,
-				B654B26F1CE0C38000EEDE0A /* LaunchScreen.storyboard */,
 				B654B2721CE0C38000EEDE0A /* Info.plist */,
+				B654B26D1CE0C38000EEDE0A /* Assets.xcassets */,
+				B65C45B51CE0E1B800B2179D /* Core */,
+				B654B26F1CE0C38000EEDE0A /* LaunchScreen.storyboard */,
+				B65C45B61CE0E1D000B2179D /* Mobile */,
 			);
 			path = Bonfire;
 			sourceTree = "<group>";
@@ -201,12 +200,12 @@
 		B654B2871CE0C86200EEDE0A /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				B6962C901CEF5742006A3A9E /* Firebase+RxExtensions.swift */,
 				B65C45B11CE0E03F00B2179D /* FirebaseConvertible.swift */,
+				B6CC1CEA1CEC992F00BA8500 /* Observable+Extensions.swift */,
 				B660785B1CE37FAC008E7DD4 /* ReusableView.swift */,
 				B654B2881CE0C86200EEDE0A /* UIView+AutolayoutExtensions.swift */,
 				B6210AC71CE2318B00570509 /* UIViewController+AlertExtensions.swift */,
-				B6CC1CEA1CEC992F00BA8500 /* Observable+Extensions.swift */,
-				B6962C901CEF5742006A3A9E /* Firebase+RxExtensions.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -241,6 +240,7 @@
 		B65C45B61CE0E1D000B2179D /* Mobile */ = {
 			isa = PBXGroup;
 			children = (
+				B654B2661CE0C38000EEDE0A /* AppDelegate.swift */,
 				B6AC7C161CF458E000F96722 /* FirebaseAnalytics.swift */,
 				B636BA251CF34DDA009009F2 /* FirebaseRemoteConfig.swift */,
 				D0C3157242B43FBD5D799CA5 /* Channel */,
@@ -310,9 +310,9 @@
 		B6962C821CEF5358006A3A9E /* Users */ = {
 			isa = PBXGroup;
 			children = (
-				B6962C831CEF537A006A3A9E /* UsersService.swift */,
 				B6962C851CEF5388006A3A9E /* UsersDisplayer.swift */,
 				B6962C871CEF5392006A3A9E /* UsersPresenter.swift */,
+				B6962C831CEF537A006A3A9E /* UsersService.swift */,
 			);
 			path = Users;
 			sourceTree = "<group>";
@@ -321,10 +321,10 @@
 			isa = PBXGroup;
 			children = (
 				B6962C8A1CEF5686006A3A9E /* FirebaseUsersService.swift */,
-				B6962C8C1CEF568E006A3A9E /* UsersView.swift */,
-				1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */,
-				B6962C8E1CEF5697006A3A9E /* UsersViewController.swift */,
 				1AF7D1A11CEF659A00B74483 /* UserCell.swift */,
+				1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */,
+				B6962C8C1CEF568E006A3A9E /* UsersView.swift */,
+				B6962C8E1CEF5697006A3A9E /* UsersViewController.swift */,
 			);
 			path = Users;
 			sourceTree = "<group>";
@@ -344,7 +344,7 @@
 			children = (
 				B6C054E81CF7014500B1BB6C /* FirebaseDynamicLinkFactory.swift */,
 			);
-			name = DynamicLink;
+			path = DynamicLink;
 			sourceTree = "<group>";
 		};
 		B6C054EA1CF708C600B1BB6C /* DynamicLink */ = {
@@ -352,17 +352,16 @@
 			children = (
 				B6C054EB1CF708D600B1BB6C /* DynamicLinkFactotry.swift */,
 			);
-			name = DynamicLink;
+			path = DynamicLink;
 			sourceTree = "<group>";
 		};
 		B6CC1CEC1CECA81C00BA8500 /* ChannelCreation */ = {
 			isa = PBXGroup;
 			children = (
-				B6CC1CED1CECA83600BA8500 /* CreateChannelPresenter.swift */,
 				B6CC1CEF1CECA96B00BA8500 /* CreateChannelDisplayer.swift */,
+				B6CC1CED1CECA83600BA8500 /* CreateChannelPresenter.swift */,
 			);
-			name = ChannelCreation;
-			path = ../../Mobile/Channel;
+			path = ChannelCreation;
 			sourceTree = "<group>";
 		};
 		B6CC1CF11CECB02E00BA8500 /* ChannelCreation */ = {
@@ -371,7 +370,7 @@
 				B6CC1CF21CECB05900BA8500 /* CreateChannelView.swift */,
 				B6CC1CF41CECB3E500BA8500 /* CreateChannelViewController.swift */,
 			);
-			name = ChannelCreation;
+			path = ChannelCreation;
 			sourceTree = "<group>";
 		};
 		C843196999D7E46141CC91DC /* Pods */ = {
@@ -387,12 +386,12 @@
 			isa = PBXGroup;
 			children = (
 				B6CC1CF11CECB02E00BA8500 /* ChannelCreation */,
+				B6CC1CE81CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift */,
 				D0C31525ED6865A9B8F030CA /* ChannelCell.swift */,
 				D0C3139DAF23783F159C1640 /* ChannelsTableViewManager.swift */,
-				D0C3119EA7B34321EC65CBAF /* ChannelsViewController.swift */,
 				D0C3169A5FF39E209C5BA3EE /* ChannelsView.swift */,
+				D0C3119EA7B34321EC65CBAF /* ChannelsViewController.swift */,
 				D0C318C841B6FF1360F3261D /* FirebaseChannelsService.swift */,
-				B6CC1CE81CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift */,
 			);
 			path = Channel;
 			sourceTree = "<group>";
