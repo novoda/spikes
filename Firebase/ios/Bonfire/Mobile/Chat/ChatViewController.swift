@@ -8,7 +8,7 @@ final class ChatViewController: UIViewController {
 
     static func withDependencies(channel channel: Channel) -> ChatViewController {
         let chatView = ChatView()
-        let presenter = ChatPresenter(channel: channel, loginService: SharedServices.loginService, chatService: SharedServices.chatService, chatDisplayer: chatView, navigator: SharedServices.navigator)
+        let presenter = ChatPresenter(channel: channel, loginService: SharedServices.loginService, chatService: SharedServices.chatService, chatDisplayer: chatView, navigator: SharedServices.navigator, analytics: SharedServices.analytics)
         return ChatViewController(presenter: presenter, view: chatView)
     }
 

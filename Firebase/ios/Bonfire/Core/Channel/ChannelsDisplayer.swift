@@ -3,6 +3,7 @@ import Foundation
 protocol ChannelsActionListener: class {
     func viewChannel(channel: Channel)
     func goToNewChannel()
+    func shareBonfire()
 }
 
 protocol ChannelsDisplayer {

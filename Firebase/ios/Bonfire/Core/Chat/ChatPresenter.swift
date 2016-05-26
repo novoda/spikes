@@ -6,22 +6,26 @@ final class ChatPresenter {
     let chatService: ChatService
     let chatDisplayer: ChatDisplayer
     let navigator: Navigator
+    let analytics: Analytics
 
     var disposeBag: DisposeBag!
 
     private var user: User?
     private let channel: Channel
 
-    init(channel: Channel, loginService: LoginService, chatService: ChatService, chatDisplayer: ChatDisplayer, navigator: Navigator) {
+    init(channel: Channel, loginService: LoginService, chatService: ChatService, chatDisplayer: ChatDisplayer, navigator: Navigator, analytics: Analytics) {
         self.channel = channel
         self.loginService = loginService
         self.chatService = chatService
         self.chatDisplayer = chatDisplayer
         self.navigator = navigator
+        self.analytics = analytics
     }
 
     func startPresenting() {
         disposeBag = DisposeBag()
+
+        analytics.viewChannel(channel)
 
         chatDisplayer.actionListener = self
 

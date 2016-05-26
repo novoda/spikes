@@ -98,8 +98,7 @@ class FirebaseChannelsService: ChannelsService {
         return Observable.create({ observer in
 
             let handle = self.privateChannelsIndex(forUser: user).observeEventType(.Value, withBlock: { snapshot in
-                let firebaseChannelKeys = snapshot.children.allObjects.map{$0.key!}
-                let firebaseChannels: [Observable<Channel>] = firebaseChannelKeys.map(self.channel)
+                let firebaseChannels: [Observable<Channel>] = snapshot.children.allObjects.map{$0.key!}.map(self.channel)
                 observer.onNext(firebaseChannels)
             })
 
@@ -112,16 +111,22 @@ class FirebaseChannelsService: ChannelsService {
 
     private func channel(withKey key: String) -> Observable<Channel> {
         return Observable.create({ observer in
-            self.channelsInfo(withKey: key).observeSingleEventOfType(.Value, withBlock: { snapshot in
-                if let channelFirebaseValue = snapshot.value,
-                    let channel = try? Channel(firebaseValue: channelFirebaseValue) {
-                    observer.on(.Next(channel))
-                } else {
-                    print("Couldn't find \(key)")
+            self.channelsInfo(withKey: key).observeSingleEventOfType(.Value,
+                withBlock: { snapshot in
+                    if let channelFirebaseValue = snapshot.value,
+                        let channel = try? Channel(firebaseValue: channelFirebaseValue) {
+                        observer.onNext(channel)
+                    } else {
+                        print("Couldn't find or parse \(key)")
+                        observer.onCompleted()
+                    }
+                    observer.on(.Completed)
+                }, withCancelBlock: { error in
+                    print("problem! \(error)")
+                    observer.onCompleted()
                 }
-                observer.on(.Completed)
-            })
-            
+            )
+
             return AnonymousDisposable() {}
         })
     }

@@ -5,4 +5,6 @@ protocol Navigator {
     func toChat(channel: Channel)
     func toCreateChannel()
     func toAddUsers(channel: Channel)
+    func toWelcome(sender: String?)
+    func showShareSheet(parameters: [AnyObject])
 }
