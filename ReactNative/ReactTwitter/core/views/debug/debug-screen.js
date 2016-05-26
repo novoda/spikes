@@ -9,6 +9,18 @@ import {
 
 var Button = require('react-native-button')
 
+var DeepLinkingView = require('./deep-linking.js')
+var PushNotificationsScreenView = require('./push-notifications-screen.js')
+var OauthView = require('./oauth-screen.js')
+var DebugAnimationScene = require('./debug-animation-scene.js')
+
+const scenes = [
+  DeepLinkingView,
+  PushNotificationsScreenView,
+  OauthView,
+  DebugAnimationScene,
+]
+
 var DebugScreenView = React.createClass({
   statics: {
     navigatorID () {
@@ -24,16 +36,13 @@ var DebugScreenView = React.createClass({
 
   getInitialState: function () {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
-    let rows = [{
-      name: 'Deep Linking',
-      sceneID: 'deep-linking-identifier'
-    }, {
-      name: 'Oauth',
-      sceneID: 'oauth-screen-identifier'
-    }, {
-      name: 'Push Notifications',
-      sceneID: 'push-notifications-screen-identifier'
-    }]
+    let rows = scenes.map((scene) => {
+      return {
+        name: scene.navigatorTitle(),
+        sceneID: scene.navigatorID()
+      }
+    })
+
     return {
       dataSource: ds.cloneWithRows(rows)
     }
