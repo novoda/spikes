@@ -31,7 +31,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
         if FIRDynamicLinks.dynamicLinks()!.shouldHandleDynamicLinkFromCustomSchemeURL(url) {
             if let dynamicLink = FIRDynamicLinks.dynamicLinks()?.dynamicLinkFromCustomSchemeURL(url) {
@@ -59,8 +58,13 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func handleDynamicLink(dynamicLink: FIRDynamicLink) {
-        if let component = dynamicLink.url?.lastPathComponent where component == "welcome" {
-            SharedServices.navigator.toWelcome()
+        if let url = dynamicLink.url,
+        let path = url.lastPathComponent where path == "welcome" {
+            print(url)
+            let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
+            let sender = components?.queryItems?.first?.value
+            print(sender)
+            SharedServices.navigator.toWelcome(sender)
         }
     }
 }

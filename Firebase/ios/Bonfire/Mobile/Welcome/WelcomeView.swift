@@ -6,20 +6,22 @@ final class WelcomeView: UIView {
 
     private let welcomeMessageLabel = UILabel()
     private let doneButton = UIButton()
+    private var sender: String?
 
     weak var actionListener: WelcomeActionListener?
 
     private let disposeBag = DisposeBag()
 
-    override init(frame: CGRect) {
+    init(frame: CGRect, sender: String? = nil) {
         super.init(frame: frame)
+        self.sender = sender
         setupViews()
         setupLayout()
         setupActions()
     }
 
-    convenience init() {
-        self.init(frame: CGRect.zero)
+    convenience init(sender: String? = nil) {
+        self.init(frame: CGRect.zero, sender: sender)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -28,7 +30,12 @@ final class WelcomeView: UIView {
 
     private func setupViews() {
         backgroundColor = .whiteColor()
-        welcomeMessageLabel.text = "Welcome to Bonfire"
+        welcomeMessageLabel.numberOfLines = 0
+        if let sender = sender {
+            welcomeMessageLabel.text = "Welcome to Bonfire. \(sender) invited you!"
+        } else {
+            welcomeMessageLabel.text = "Welcome to Bonfire"
+        }
 
         doneButton.setTitle("Get Started", forState: .Normal)
         doneButton.setTitleColor(.blackColor(), forState: .Normal)
@@ -40,6 +47,7 @@ final class WelcomeView: UIView {
 
         welcomeMessageLabel.pinToSuperviewTop(withConstant: 20)
         welcomeMessageLabel.pinToSuperviewLeading(withConstant: 20)
+        welcomeMessageLabel.pinToSuperviewTrailing(withConstant: 20)
 
         doneButton.attachToBottomOf(welcomeMessageLabel, withConstant: 10)
         doneButton.pinToSuperviewLeading(withConstant: 20)

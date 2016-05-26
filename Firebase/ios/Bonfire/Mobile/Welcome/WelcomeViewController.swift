@@ -7,8 +7,8 @@ class WelcomeViewController: UIViewController, WelcomeActionListener {
 
     var bottomConstraint: NSLayoutConstraint!
 
-    static func withDependencies() -> WelcomeViewController {
-        let welcomeView = WelcomeView()
+    static func withDependencies(sender sender: String?) -> WelcomeViewController {
+        let welcomeView = WelcomeView(sender: sender)
         let navigator = SharedServices.navigator
         return WelcomeViewController(view: welcomeView, navigator: navigator)
     }
