@@ -20,29 +20,29 @@ var DebugScreenView = React.createClass({
         <Button
           style={styles.button}
           styleDisabled={styles.button_disabled}
-          onPress={this.pushDeepLinking}>Deep Linking</Button>
-          <Button
-            style={styles.button}
-            styleDisabled={styles.button_disabled}
-            onPress={this.pushOauth}>Oauth</Button>
-          <Button
-            style={styles.button}
-            styleDisabled={styles.button_disabled}
-            onPress={this.pushAnimationScene}>Animation</Button>
+          onPress={this._pushDeepLinking}>Deep Linking</Button>
+        <Button
+          style={styles.button}
+          styleDisabled={styles.button_disabled}
+          onPress={this._pushOauth}>Oauth</Button>
+        <Button
+          style={styles.button}
+          styleDisabled={styles.button_disabled}
+          onPress={this._pushPushNotifications}>Push Notifications</Button>
       </View>
     )
   },
 
-  pushDeepLinking () {
+  _pushDeepLinking () {
     this.props.navigator.push({id: 'deep-linking-identifier'})
   },
 
-  pushOauth () {
+  _pushOauth () {
     this.props.navigator.push({id: 'oauth-screen-identifier'})
   },
 
-  pushAnimationScene () {
-    this.props.navigator.push({id: 'debug-animation-identifier'})
+  _pushPushNotifications () {
+    this.props.navigator.push({id: 'push-notifications-screen-identifier'})
   }
 })
 
