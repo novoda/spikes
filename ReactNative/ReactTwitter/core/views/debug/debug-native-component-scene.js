@@ -23,7 +23,6 @@ var DebugNativeComponentScene = React.createClass({
   },
 
   getInitialState: function () {
-    console.log('Wabbalababd')
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
     let rows = ['Rick', 'And', 'Morty']
     return {
@@ -32,7 +31,6 @@ var DebugNativeComponentScene = React.createClass({
   },
 
   render () {
-    console.log('Rendering')
     return (
       <ListView
         dataSource={this.state.dataSource}
@@ -45,7 +43,6 @@ var DebugNativeComponentScene = React.createClass({
   },
 
   _renderRow (rowData: string) {
-    console.log(rowData)
     return <Text style={styles.text}>{rowData}</Text>
   }
 })
