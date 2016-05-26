@@ -11,8 +11,8 @@ import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.subscriptions.BooleanSubscription;
 
-public class ValueEventObservable {
-    public static <T> Observable<T> listenToValueEvents(final DatabaseReference databaseReference, final Func1<DataSnapshot, T> marshaller) {
+public class ValueEventObservableCreator {
+    public <T> Observable<T> listenToValueEvents(final DatabaseReference databaseReference, final Func1<DataSnapshot, T> marshaller) {
         return Observable.create(new Observable.OnSubscribe<T>() {
             @Override
             public void call(Subscriber<? super T> subscriber) {

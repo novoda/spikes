@@ -3,6 +3,7 @@ package com.novoda.bonfire.channel.database;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.novoda.bonfire.channel.data.model.Channel;
+import com.novoda.bonfire.rx.ValueEventObservableCreator;
 import com.novoda.bonfire.user.data.model.User;
 
 import java.util.ArrayList;
@@ -14,7 +15,6 @@ import rx.functions.Func1;
 import static com.novoda.bonfire.rx.RxCompletionListener.removeValue;
 import static com.novoda.bonfire.rx.RxCompletionListener.setValue;
 import static com.novoda.bonfire.rx.RxSingleValueListener.listenToSingleValueEvents;
-import static com.novoda.bonfire.rx.ValueEventObservable.listenToValueEvents;
 
 class FirebaseChannelsDatabase implements ChannelsDatabase {
 
@@ -22,27 +22,29 @@ class FirebaseChannelsDatabase implements ChannelsDatabase {
     private final DatabaseReference privateChannelsDB;
     private final DatabaseReference channelsDB;
     private final DatabaseReference ownersDB;
+    private final ValueEventObservableCreator valueEventObservableCreator;
 
     public FirebaseChannelsDatabase(
             DatabaseReference publicChannelsDB,
             DatabaseReference privateChannelsDB,
             DatabaseReference channelsDB,
-            DatabaseReference ownersDB
-    ) {
+            DatabaseReference ownersDB,
+            ValueEventObservableCreator valueEventObservableCreator) {
         this.publicChannelsDB = publicChannelsDB;
         this.privateChannelsDB = privateChannelsDB;
         this.channelsDB = channelsDB;
         this.ownersDB = ownersDB;
+        this.valueEventObservableCreator = valueEventObservableCreator;
     }
 
     @Override
     public Observable<List<String>> observePublicChannelIds() {
-        return listenToValueEvents(publicChannelsDB, getKeys());
+        return valueEventObservableCreator.listenToValueEvents(publicChannelsDB, getKeys());
     }
 
     @Override
     public Observable<List<String>> observePrivateChannelIdsFor(User user) {
-        return listenToValueEvents(privateChannelsDB.child(user.getId()), getKeys());
+        return valueEventObservableCreator.listenToValueEvents(privateChannelsDB.child(user.getId()), getKeys());
     }
 
     @Override
@@ -81,7 +83,7 @@ class FirebaseChannelsDatabase implements ChannelsDatabase {
 
     @Override
     public Observable<List<String>> observeOwnerIdsFor(Channel channel) {
-        return listenToValueEvents(ownersDB.child(channel.getName()), getKeys());
+        return valueEventObservableCreator.listenToValueEvents(ownersDB.child(channel.getName()), getKeys());
     }
 
     private Func1<DataSnapshot, List<String>> getKeys() {
