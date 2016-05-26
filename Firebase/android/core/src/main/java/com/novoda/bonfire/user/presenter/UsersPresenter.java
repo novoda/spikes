@@ -75,7 +75,7 @@ public class UsersPresenter {
 
         @Override
         public void onCompleteClicked() {
-            navigator.toChannel(channel);
+            navigator.toParent();
         }
     };
 

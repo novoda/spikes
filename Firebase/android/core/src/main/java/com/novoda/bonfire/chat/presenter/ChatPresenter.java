@@ -20,9 +20,9 @@ public class ChatPresenter {
     private final LoginService loginService;
     private final ChatService chatService;
     private final ChatDisplayer chatDisplayer;
-    private Analytics analytics;
-    private Channel channel;
-    private Navigator navigator;
+    private final Analytics analytics;
+    private final Channel channel;
+    private final Navigator navigator;
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
@@ -39,6 +39,9 @@ public class ChatPresenter {
 
     public void startPresenting() {
         chatDisplayer.setTitle(channel.getName());
+        if (channel.isPrivate()) {
+            chatDisplayer.showAddMembersButton();
+        }
         chatDisplayer.attach(actionListener);
         chatDisplayer.disableInteraction();
         subscriptions.add(

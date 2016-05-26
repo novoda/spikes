@@ -2,9 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
   <item
+    android:id="@+id/manageOwners"
     android:title="@string/add_users"
     android:icon="@drawable/ic_user_outline"
-    android:id="@+id/manageOwners"
     app:showAsAction="ifRoom"
+    android:visible="false"
     />
 </menu>

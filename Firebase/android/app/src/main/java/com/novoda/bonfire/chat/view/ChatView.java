@@ -26,6 +26,7 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
     private Toolbar toolbar;
 
     private ChatActionListener actionListener;
+
     public ChatView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setOrientation(VERTICAL);
@@ -39,8 +40,9 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
         messageView = Views.findById(this, R.id.messageEdit);
         submitButton = Views.findById(this, R.id.submitButton);
         recyclerView = Views.findById(this, R.id.messagesRecyclerView);
-        toolbar = Views.findById(this, R.id.chatToolbar);
+        toolbar = Views.findById(this, R.id.toolbar);
         toolbar.inflateMenu(R.menu.chat_menu);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
@@ -51,41 +53,27 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
     public void attach(final ChatActionListener actionListener) {
         this.actionListener = actionListener;
         messageView.addTextChangedListener(textWatcher);
-        submitButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                actionListener.onSubmitMessage(messageView.getText().toString());
-                messageView.setText("");
-            }
-        });
-        toolbar.setNavigationOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                actionListener.onUpPressed();
-            }
-        });
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.manageOwners) {
-                    actionListener.onManageOwnersClicked();
-                    return true;
-                }
-                return false;
-            }
-        });
+        submitButton.setOnClickListener(submitClickListener);
+        toolbar.setNavigationOnClickListener(navigationClickListener);
+        toolbar.setOnMenuItemClickListener(menuItemClickListener);
     }
 
     @Override
     public void detach(ChatActionListener actionListener) {
         submitButton.setOnClickListener(null);
         messageView.removeTextChangedListener(textWatcher);
+        toolbar.setOnMenuItemClickListener(null);
         this.actionListener = null;
     }
 
     @Override
     public void setTitle(String title) {
         toolbar.setTitle(title);
+    }
+
+    @Override
+    public void showAddMembersButton() {
+        toolbar.getMenu().findItem(R.id.manageOwners).setVisible(true);
     }
 
     @Override
@@ -117,6 +105,30 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
         @Override
         public void afterTextChanged(Editable s) {
             actionListener.onMessageLengthChanged(s.length());
+        }
+    };
+
+    private final OnClickListener submitClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            actionListener.onSubmitMessage(messageView.getText().toString());
+            messageView.setText("");
+        }
+    };
+    private final OnClickListener navigationClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            actionListener.onUpPressed();
+        }
+    };
+    private Toolbar.OnMenuItemClickListener menuItemClickListener = new Toolbar.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            if (item.getItemId() == R.id.manageOwners) {
+                actionListener.onManageOwnersClicked();
+                return true;
+            }
+            return false;
         }
     };
 

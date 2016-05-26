@@ -3,6 +3,8 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
+  <include layout="@layout/toolbar_layout" />
+
   <EditText
     android:id="@+id/newChannelName"
     android:layout_width="match_parent"

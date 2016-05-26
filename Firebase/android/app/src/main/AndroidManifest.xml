@@ -21,13 +21,14 @@
 
     <activity android:name=".channel.ChannelsActivity" />
 
-    <activity android:name="com.novoda.bonfire.chat.ChatActivity"
-      android:theme="@style/CustomToolbarTheme"
-      android:parentActivityName=".channel.ChannelsActivity"/>
+    <activity
+      android:name="com.novoda.bonfire.chat.ChatActivity"
+      android:parentActivityName=".channel.ChannelsActivity" />
 
-    <activity android:name=".channel.NewChannelActivity"
-      android:parentActivityName=".channel.ChannelsActivity"
-      android:label="@string/createChannel"/>
+    <activity
+      android:name=".channel.NewChannelActivity"
+      android:label="@string/createChannel"
+      android:parentActivityName=".channel.ChannelsActivity" />
 
     <activity android:name=".user.UsersActivity" />
 

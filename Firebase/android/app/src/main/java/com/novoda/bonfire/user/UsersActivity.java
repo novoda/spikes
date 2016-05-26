@@ -31,7 +31,6 @@ public class UsersActivity extends BaseActivity {
         setContentView(R.layout.activity_users);
         UsersDisplayer usersDisplayer = (UsersDisplayer) findViewById(R.id.usersView);
         Channel channel = (Channel) getIntent().getSerializableExtra(CHANNEL_EXTRA);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         presenter = new UsersPresenter(
                 Dependencies.INSTANCE.getUserService(),
                 Dependencies.INSTANCE.getChannelService(),

@@ -10,6 +10,8 @@ public interface ChatDisplayer {
 
     void setTitle(String title);
 
+    void showAddMembersButton();
+
     void display(Chat chat);
 
     void enableInteraction();

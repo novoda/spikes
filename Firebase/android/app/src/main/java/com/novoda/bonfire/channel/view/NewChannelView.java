@@ -20,6 +20,7 @@ public class NewChannelView extends LinearLayout implements NewChannelDisplayer 
     private EditText newChannelName;
     private Switch privateChannelSwitch;
     private Button createButton;
+
     public NewChannelView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setOrientation(VERTICAL);
