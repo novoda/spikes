@@ -21,14 +21,32 @@
 
     <activity android:name=".channel.ChannelsActivity" />
 
-    <activity android:name="com.novoda.bonfire.chat.ChatActivity"
-      android:parentActivityName=".channel.ChannelsActivity"/>
+    <activity
+      android:name="com.novoda.bonfire.chat.ChatActivity"
+      android:parentActivityName=".channel.ChannelsActivity" />
 
-    <activity android:name=".channel.NewChannelActivity"
-      android:parentActivityName=".channel.ChannelsActivity"
-      android:label="@string/createChannel"/>
+    <activity
+      android:name=".channel.NewChannelActivity"
+      android:label="@string/createChannel"
+      android:parentActivityName=".channel.ChannelsActivity" />
 
     <activity android:name=".user.UsersActivity" />
+
+    <activity android:name=".welcome.WelcomeActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data
+          android:host="novoda.com"
+          android:pathPrefix="/bonfire/welcome"
+          android:scheme="https" />
+        <data
+          android:host="novoda.com"
+          android:pathPrefix="/bonfire/welcome"
+          android:scheme="http" />
+      </intent-filter>
+    </activity>
 
   </application>
 

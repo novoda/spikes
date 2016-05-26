@@ -3,6 +3,7 @@ package com.novoda.bonfire.navigation;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
+import com.google.android.gms.appinvite.AppInvite;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -44,6 +45,7 @@ public class AndroidLoginNavigator implements LoginNavigator {
                     }
                 })
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .addApi(AppInvite.API)
                 .build();
     }
 
@@ -66,6 +68,11 @@ public class AndroidLoginNavigator implements LoginNavigator {
     @Override
     public void toAddUsersFor(Channel channel) {
         navigator.toAddUsersFor(channel);
+    }
+
+    @Override
+    public void toLogin() {
+        //No op
     }
 
     @Override
@@ -99,4 +106,7 @@ public class AndroidLoginNavigator implements LoginNavigator {
         return true;
     }
 
+    public GoogleApiClient getGoogleApiClient() {
+        return googleApiClient;
+    }
 }

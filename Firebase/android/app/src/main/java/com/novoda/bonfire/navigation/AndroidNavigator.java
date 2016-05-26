@@ -7,6 +7,7 @@ import com.novoda.bonfire.channel.ChannelsActivity;
 import com.novoda.bonfire.channel.NewChannelActivity;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.chat.ChatActivity;
+import com.novoda.bonfire.login.LoginActivity;
 import com.novoda.bonfire.user.UsersActivity;
 
 public class AndroidNavigator implements Navigator {
@@ -35,6 +36,14 @@ public class AndroidNavigator implements Navigator {
     @Override
     public void toAddUsersFor(Channel channel) {
         activity.startActivity(UsersActivity.createIntentFor(activity, channel));
+    }
+
+    @Override
+    public void toLogin() {
+        Intent intent = new Intent(activity, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(intent);
+        activity.finish();
     }
 
 }

@@ -11,4 +11,7 @@ public interface Navigator {
     void toNewChannel();
 
     void toAddUsersFor(Channel channel);
+
+    void toLogin();
+
 }

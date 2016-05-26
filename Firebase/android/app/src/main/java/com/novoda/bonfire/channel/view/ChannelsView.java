@@ -1,6 +1,7 @@
 package com.novoda.bonfire.channel.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,9 +9,12 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.novoda.bonfire.BuildConfig;
+import com.novoda.bonfire.Dependencies;
 import com.novoda.bonfire.R;
 import com.novoda.bonfire.channel.data.model.Channels;
 import com.novoda.bonfire.channel.displayer.ChannelsDisplayer;
+import com.novoda.bonfire.link.FirebaseDynamicLinkFactory;
 import com.novoda.notils.caster.Views;
 
 public class ChannelsView extends FrameLayout implements ChannelsDisplayer {
@@ -30,6 +34,29 @@ public class ChannelsView extends FrameLayout implements ChannelsDisplayer {
         channels.setLayoutManager(new LinearLayoutManager(getContext()));
         channels.setAdapter(channelsAdapter);
         newChannelFab = Views.findById(this, R.id.newChannelFab);
+        final FirebaseDynamicLinkFactory firebaseDynamicLinkFactory = new FirebaseDynamicLinkFactory(
+                getResources().getString(R.string.dynamicLinkDomain),
+                getResources().getString(R.string.deepLinkBaseUrl),
+                getResources().getString(R.string.iosBundleIdentifier),
+                BuildConfig.APPLICATION_ID
+        );
+        newChannelFab.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                String sharingLink = firebaseDynamicLinkFactory.inviteLinkFrom(
+                        Dependencies.INSTANCE.getLoginService()
+                                .getAuthentication()
+                                .toBlocking().first()
+                                .getUser()
+                ).toString();
+                String sharingMessage = "FooTest";
+
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(Intent.EXTRA_TEXT, "Check out Bonfire!\n" + sharingLink);
+                getContext().startActivity(Intent.createChooser(sharingIntent, sharingMessage));
+            }
+        });
     }
 
     @Override
@@ -40,17 +67,17 @@ public class ChannelsView extends FrameLayout implements ChannelsDisplayer {
     @Override
     public void attach(final ChannelsInteractionListener channelsInteractionListener) {
         channelsAdapter.attach(channelsInteractionListener);
-        newChannelFab.setOnClickListener(new OnClickListener() {
+        /*newChannelFab.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 channelsInteractionListener.onAddNewChannel();
             }
-        });
+        });*/
     }
 
     @Override
     public void detach(ChannelsInteractionListener channelsInteractionListener) {
         channelsAdapter.detach(channelsInteractionListener);
-        newChannelFab.setOnClickListener(null);
+        //newChannelFab.setOnClickListener(null);
     }
 }
