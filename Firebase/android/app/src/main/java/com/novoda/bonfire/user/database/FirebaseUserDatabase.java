@@ -13,7 +13,7 @@ import rx.Observable;
 import rx.functions.Func1;
 
 import static com.novoda.bonfire.rx.RxSingleValueListener.listenToSingleValueEvents;
-import static com.novoda.bonfire.rx.RxValueListener.listenToValueEvents;
+import static com.novoda.bonfire.rx.ValueEventObservable.listenToValueEvents;
 
 public class FirebaseUserDatabase implements UserDatabase {
 
