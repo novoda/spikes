@@ -6,6 +6,7 @@ import com.novoda.bonfire.channel.database.ChannelsDatabase;
 import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.user.data.model.User;
 import com.novoda.bonfire.user.data.model.Users;
+import com.novoda.bonfire.user.database.UserDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +18,11 @@ import rx.functions.Func2;
 public class PersistedChannelService implements ChannelService {
 
     private final ChannelsDatabase channelsDatabase;
+    private final UserDatabase userDatabase;
 
-    public PersistedChannelService(ChannelsDatabase channelsDatabase) {
+    public PersistedChannelService(ChannelsDatabase channelsDatabase, UserDatabase userDatabase) {
         this.channelsDatabase = channelsDatabase;
+        this.userDatabase = userDatabase;
     }
 
     @Override
@@ -28,12 +31,12 @@ public class PersistedChannelService implements ChannelService {
     }
 
     private Observable<List<Channel>> publicChannels() {
-        return channelsDatabase.getPublicChannelIds()
+        return channelsDatabase.observePublicChannelIds()
                 .flatMap(channelsFromNames());
     }
 
     private Observable<List<Channel>> privateChannelsFor(User user) {
-        return channelsDatabase.getPrivateChannelIdsFor(user)
+        return channelsDatabase.observePrivateChannelIdsFor(user)
                 .flatMap(channelsFromNames());
     }
 
@@ -52,7 +55,7 @@ public class PersistedChannelService implements ChannelService {
         return new Func1<String, Observable<Channel>>() {
             @Override
             public Observable<Channel> call(final String channelName) {
-                return channelsDatabase.getChannelFor(channelName);
+                return channelsDatabase.readChannelFor(channelName);
             }
         };
     }
@@ -159,7 +162,7 @@ public class PersistedChannelService implements ChannelService {
 
     @Override
     public Observable<DatabaseResult<Users>> getOwnersOfChannel(Channel channel) {
-        return channelsDatabase.getOwnerIdsFor(channel)
+        return channelsDatabase.observeOwnerIdsFor(channel)
                 .flatMap(getUsersFromIds())
                 .onErrorReturn(DatabaseResult.<Users>errorAsDatabaseResult());
     }
@@ -185,7 +188,7 @@ public class PersistedChannelService implements ChannelService {
         return new Func1<String, Observable<User>>() {
             @Override
             public Observable<User> call(final String userId) {
-                return channelsDatabase.getUserFrom(userId);
+                return userDatabase.readUserFrom(userId);
             }
         };
     }

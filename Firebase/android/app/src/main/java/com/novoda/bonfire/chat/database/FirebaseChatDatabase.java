@@ -1,4 +1,4 @@
-package com.novoda.bonfire.chat.service;
+package com.novoda.bonfire.chat.database;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -6,7 +6,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.chat.data.model.Chat;
 import com.novoda.bonfire.chat.data.model.Message;
-import com.novoda.bonfire.database.DatabaseResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,20 +13,19 @@ import java.util.List;
 import rx.Observable;
 import rx.functions.Func1;
 
-import static com.novoda.bonfire.rx.RxValueListener.listenToValueEvents;
+import static com.novoda.bonfire.rx.ValueEventObservable.listenToValueEvents;
 
-public class FirebaseChatService implements ChatService {
+public class FirebaseChatDatabase implements ChatDatabase {
 
     private final DatabaseReference messagesDB;
 
-    public FirebaseChatService(FirebaseDatabase firebaseDatabase) {
+    public FirebaseChatDatabase(FirebaseDatabase firebaseDatabase) {
         messagesDB = firebaseDatabase.getReference("messages");
     }
 
     @Override
-    public Observable<DatabaseResult<Chat>> getChat(final Channel channel) {
-        return listenToValueEvents(messagesInChannel(channel), toChat())
-                .onErrorReturn(DatabaseResult.<Chat>errorAsDatabaseResult());
+    public Observable<Chat> observeChat(Channel channel) {
+        return listenToValueEvents(messagesInChannel(channel), toChat());
     }
 
     @Override
@@ -39,17 +37,17 @@ public class FirebaseChatService implements ChatService {
         return messagesDB.child(channel.getName());
     }
 
-    private Func1<DataSnapshot, DatabaseResult<Chat>> toChat() {
-        return new Func1<DataSnapshot, DatabaseResult<Chat>>() {
+    private Func1<DataSnapshot, Chat> toChat() {
+        return new Func1<DataSnapshot, Chat>() {
             @Override
-            public DatabaseResult<Chat> call(DataSnapshot dataSnapshot) {
+            public Chat call(DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 List<Message> messages = new ArrayList<>();
                 for (DataSnapshot child : children) {
                     Message message = child.getValue(Message.class);
                     messages.add(message);
                 }
-                return new DatabaseResult<Chat>(new Chat(messages));
+                return new Chat(messages);
             }
         };
     }

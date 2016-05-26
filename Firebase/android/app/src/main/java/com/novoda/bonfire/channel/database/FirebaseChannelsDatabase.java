@@ -3,7 +3,6 @@ package com.novoda.bonfire.channel.database;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.novoda.bonfire.channel.data.model.Channel;
-import com.novoda.bonfire.channel.database.provider.ChannelsDatabaseProvider;
 import com.novoda.bonfire.user.data.model.User;
 
 import java.util.ArrayList;
@@ -15,36 +14,39 @@ import rx.functions.Func1;
 import static com.novoda.bonfire.rx.RxCompletionListener.removeValue;
 import static com.novoda.bonfire.rx.RxCompletionListener.setValue;
 import static com.novoda.bonfire.rx.RxSingleValueListener.listenToSingleValueEvents;
-import static com.novoda.bonfire.rx.RxValueListener.listenToValueEvents;
+import static com.novoda.bonfire.rx.ValueEventObservable.listenToValueEvents;
 
-public class ChannelsFirebaseDB implements ChannelsDatabase {
+class FirebaseChannelsDatabase implements ChannelsDatabase {
 
     private final DatabaseReference publicChannelsDB;
     private final DatabaseReference privateChannelsDB;
     private final DatabaseReference channelsDB;
     private final DatabaseReference ownersDB;
-    private final DatabaseReference usersDB;
 
-    public ChannelsFirebaseDB(ChannelsDatabaseProvider channelsDatabaseProvider) {
-        publicChannelsDB = channelsDatabaseProvider.getPublicChannelsDB();
-        privateChannelsDB = channelsDatabaseProvider.getPrivateChannelsDB();
-        channelsDB = channelsDatabaseProvider.getChannelsDB();
-        ownersDB = channelsDatabaseProvider.getOwnersDB();
-        usersDB = channelsDatabaseProvider.getUsersDB();
+    public FirebaseChannelsDatabase(
+            DatabaseReference publicChannelsDB,
+            DatabaseReference privateChannelsDB,
+            DatabaseReference channelsDB,
+            DatabaseReference ownersDB
+    ) {
+        this.publicChannelsDB = publicChannelsDB;
+        this.privateChannelsDB = privateChannelsDB;
+        this.channelsDB = channelsDB;
+        this.ownersDB = ownersDB;
     }
 
     @Override
-    public Observable<List<String>> getPublicChannelIds() {
+    public Observable<List<String>> observePublicChannelIds() {
         return listenToValueEvents(publicChannelsDB, getKeys());
     }
 
     @Override
-    public Observable<List<String>> getPrivateChannelIdsFor(User user) {
+    public Observable<List<String>> observePrivateChannelIdsFor(User user) {
         return listenToValueEvents(privateChannelsDB.child(user.getId()), getKeys());
     }
 
     @Override
-    public Observable<Channel> getChannelFor(String channelName) {
+    public Observable<Channel> readChannelFor(String channelName) {
         return listenToSingleValueEvents(channelsDB.child(channelName), as(Channel.class));
     }
 
@@ -78,13 +80,8 @@ public class ChannelsFirebaseDB implements ChannelsDatabase {
     }
 
     @Override
-    public Observable<List<String>> getOwnerIdsFor(Channel channel) {
+    public Observable<List<String>> observeOwnerIdsFor(Channel channel) {
         return listenToValueEvents(ownersDB.child(channel.getName()), getKeys());
-    }
-
-    @Override
-    public Observable<User> getUserFrom(String userId) {
-        return listenToSingleValueEvents(usersDB.child(userId), as(User.class));
     }
 
     private Func1<DataSnapshot, List<String>> getKeys() {

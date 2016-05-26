@@ -1,4 +1,4 @@
-package com.novoda.bonfire.user.service;
+package com.novoda.bonfire.user.database;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -12,19 +12,30 @@ import java.util.List;
 import rx.Observable;
 import rx.functions.Func1;
 
-import static com.novoda.bonfire.rx.RxValueListener.listenToValueEvents;
+import static com.novoda.bonfire.rx.RxSingleValueListener.listenToSingleValueEvents;
+import static com.novoda.bonfire.rx.ValueEventObservable.listenToValueEvents;
 
-public class FirebaseUserService implements UserService {
+public class FirebaseUserDatabase implements UserDatabase {
 
     private final DatabaseReference usersDB;
 
-    public FirebaseUserService(FirebaseDatabase firebaseDatabase) {
+    public FirebaseUserDatabase(FirebaseDatabase firebaseDatabase) {
         usersDB = firebaseDatabase.getReference("users");
     }
 
     @Override
-    public Observable<Users> getAllUsers() {
+    public Observable<Users> observeUsers() {
         return listenToValueEvents(usersDB, toUsers());
+    }
+
+    @Override
+    public Observable<User> readUserFrom(String userId) {
+        return listenToSingleValueEvents(usersDB.child(userId), as(User.class));
+    }
+
+    @Override
+    public void writeCurrentUser(User user) {
+        usersDB.child(user.getId()).setValue(user); //TODO handle errors
     }
 
     private Func1<DataSnapshot, Users> toUsers() {
@@ -42,4 +53,12 @@ public class FirebaseUserService implements UserService {
         };
     }
 
+    private <T> Func1<DataSnapshot, T> as(final Class<T> tClass) {
+        return new Func1<DataSnapshot, T>() {
+            @Override
+            public T call(DataSnapshot dataSnapshot) {
+                return dataSnapshot.getValue(tClass);
+            }
+        };
+    }
 }
