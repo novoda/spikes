@@ -12,7 +12,7 @@ import java.util.List;
 import rx.Observable;
 import rx.functions.Func1;
 
-import static com.novoda.bonfire.rx.RxValueListener.listenToValueEvents;
+import static com.novoda.bonfire.rx.ValueEventObservable.listenToValueEvents;
 
 public class FirebaseUserService implements UserService {
 
