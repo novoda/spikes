@@ -3,7 +3,6 @@
 
     <item
       android:state_selected="true"
-      android:drawable="@color/colorPrimary"/>
-    <item
-      android:drawable="@android:drawable/list_selector_background"/>
+      android:drawable="@color/selected_item"/>
+
 </selector>
