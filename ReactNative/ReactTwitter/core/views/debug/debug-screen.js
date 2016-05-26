@@ -37,7 +37,8 @@ var DebugScreenView = React.createClass({
         dataSource={this.state.dataSource}
         enableEmptySections={true}
         renderRow={this._renderRow}
-        style={styles.container}
+        style={styles.list}
+        contentContainerStyle={styles.container}
       />
     )
   },
@@ -55,13 +56,16 @@ var DebugScreenView = React.createClass({
 })
 
 const styles = StyleSheet.create({
-  container: {
+  list: {
     backgroundColor: '#F5FCFF'
+  },
+  container: {
+    alignItems: 'flex-start'
   },
   button: {
     fontSize: 20,
     color: 'black',
-    margin: 6
+    margin: 8
   },
   button_disabled: {
     fontSize: 20,
