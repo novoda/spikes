@@ -14,6 +14,15 @@ import AndroidBackNavigationMixin from '../mixins/android-back-navigation'
 
 var DeepLinkingView = React.createClass({
   mixins: [AndroidBackNavigationMixin],
+  statics: {
+    navigatorID () {
+      return 'deep-linking-identifier'
+    },
+    navigatorTitle () {
+      return 'Deep Linking'
+    }
+  },
+
   getInitialState () {
     return {
       facade: new DeepLinkingFacade(),

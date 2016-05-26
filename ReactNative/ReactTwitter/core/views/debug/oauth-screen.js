@@ -16,6 +16,15 @@ var OauthHelper = require('../../service/oauth-helper.js')
 var AuthenticationService = require('../../service/authentication-service.js')
 
 var OauthView = React.createClass({
+  statics: {
+    navigatorID () {
+      return 'oauth-screen-identifier'
+    },
+    navigatorTitle () {
+      return 'Oauth'
+    }
+  },
+
   getInitialState () {
     let authService = new AuthenticationService()
     return {

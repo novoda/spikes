@@ -10,6 +10,14 @@ import {
 var Button = require('react-native-button')
 
 var DebugScreenView = React.createClass({
+  statics: {
+    navigatorID () {
+      return 'debug-screen-identifier'
+    },
+    navigatorTitle () {
+      return 'Debug Screen'
+    }
+  },
   propTypes: {
     navigator: React.PropTypes.instanceOf(Navigator).isRequired
   },

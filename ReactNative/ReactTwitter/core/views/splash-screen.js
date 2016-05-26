@@ -19,6 +19,15 @@ const SCREEN_WIDTH = Dimensions.get('window').width
 const FINAL_LOGO_SIZE = SCREEN_WIDTH * 2
 
 var SplashScreenView = React.createClass({
+  statics: {
+    navigatorID () {
+      return 'splash-screen-identifier'
+    },
+    navigatorTitle () {
+      return 'Splash Screen'
+    }
+  },
+
   propTypes: {
     navigator: React.PropTypes.instanceOf(Navigator).isRequired
   },
