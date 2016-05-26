@@ -29,7 +29,9 @@ public class UserView extends FrameLayout {
     }
 
     public void display(UsersView.SelectableUser user) {
-        Glide.with(getContext()).load(user.user.getPhotoUrl())
+        Glide.with(getContext())
+                .load(user.user.getPhotoUrl())
+                .error(R.drawable.ic_person)
                 .transform(circleCropTransformation)
                 .into(image);
         name.setText(user.user.getName());
