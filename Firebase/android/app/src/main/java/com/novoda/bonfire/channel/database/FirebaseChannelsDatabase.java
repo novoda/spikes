@@ -4,6 +4,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.rx.OnSubscribeDatabaseListener;
+import com.novoda.bonfire.rx.OnSubscribeSingleValueListener;
 import com.novoda.bonfire.user.data.model.User;
 
 import java.util.List;
@@ -13,7 +14,6 @@ import rx.functions.Func1;
 
 import static com.novoda.bonfire.rx.RxCompletionListener.removeValue;
 import static com.novoda.bonfire.rx.RxCompletionListener.setValue;
-import static com.novoda.bonfire.rx.RxSingleValueListener.listenToSingleValueEvents;
 
 class FirebaseChannelsDatabase implements ChannelsDatabase {
 
@@ -45,7 +45,7 @@ class FirebaseChannelsDatabase implements ChannelsDatabase {
 
     @Override
     public Observable<Channel> readChannelFor(String channelName) {
-        return listenToSingleValueEvents(channelsDB.child(channelName), as(Channel.class));
+        return Observable.create(new OnSubscribeSingleValueListener<>(channelsDB.child(channelName), as(Channel.class)));
     }
 
     @Override

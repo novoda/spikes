@@ -4,6 +4,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.bonfire.rx.OnSubscribeDatabaseListener;
+import com.novoda.bonfire.rx.OnSubscribeSingleValueListener;
 import com.novoda.bonfire.user.data.model.User;
 import com.novoda.bonfire.user.data.model.Users;
 
@@ -12,8 +13,6 @@ import java.util.List;
 
 import rx.Observable;
 import rx.functions.Func1;
-
-import static com.novoda.bonfire.rx.RxSingleValueListener.listenToSingleValueEvents;
 
 public class FirebaseUserDatabase implements UserDatabase {
 
@@ -30,7 +29,7 @@ public class FirebaseUserDatabase implements UserDatabase {
 
     @Override
     public Observable<User> readUserFrom(String userId) {
-        return listenToSingleValueEvents(usersDB.child(userId), as(User.class));
+        return Observable.create(new OnSubscribeSingleValueListener<>(usersDB.child(userId), as(User.class)));
     }
 
     @Override
