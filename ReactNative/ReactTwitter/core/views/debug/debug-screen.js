@@ -3,8 +3,8 @@
 import React from 'react'
 import {
   StyleSheet,
-  View,
-  Navigator
+  Navigator,
+  ListView
 } from 'react-native'
 
 var Button = require('react-native-button')
@@ -14,48 +14,54 @@ var DebugScreenView = React.createClass({
     navigator: React.PropTypes.instanceOf(Navigator).isRequired
   },
 
+  getInitialState: function () {
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
+    let rows = [{
+      name: 'Deep Linking',
+      sceneID: 'deep-linking-identifier'
+    }, {
+      name: 'Oauth',
+      sceneID: 'oauth-screen-identifier'
+    }, {
+      name: 'Push Notifications',
+      sceneID: 'push-notifications-screen-identifier'
+    }]
+    return {
+      dataSource: ds.cloneWithRows(rows)
+    }
+  },
+
   render () {
     return (
-      <View style={styles.container}>
-        <Button
-          style={styles.button}
-          styleDisabled={styles.button_disabled}
-          onPress={this._pushDeepLinking}>Deep Linking</Button>
-        <Button
-          style={styles.button}
-          styleDisabled={styles.button_disabled}
-          onPress={this._pushOauth}>Oauth</Button>
-        <Button
-          style={styles.button}
-          styleDisabled={styles.button_disabled}
-          onPress={this._pushPushNotifications}>Push Notifications</Button>
-      </View>
+      <ListView
+        dataSource={this.state.dataSource}
+        enableEmptySections={true}
+        renderRow={this._renderRow}
+        style={styles.container}
+      />
     )
   },
 
-  _pushDeepLinking () {
-    this.props.navigator.push({id: 'deep-linking-identifier'})
+  _renderRow (rowData: any) {
+    return <Button
+      style={styles.button}
+      styleDisabled={styles.button_disabled}
+      onPress={() => this._navigateToScene(rowData.sceneID)}>{rowData.name}</Button>
   },
 
-  _pushOauth () {
-    this.props.navigator.push({id: 'oauth-screen-identifier'})
-  },
-
-  _pushPushNotifications () {
-    this.props.navigator.push({id: 'push-notifications-screen-identifier'})
+  _navigateToScene (sceneID: string) {
+    this.props.navigator.push({id: sceneID})
   }
 })
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
     backgroundColor: '#F5FCFF'
   },
   button: {
     fontSize: 20,
-    color: 'black'
+    color: 'black',
+    margin: 6
   },
   button_disabled: {
     fontSize: 20,
