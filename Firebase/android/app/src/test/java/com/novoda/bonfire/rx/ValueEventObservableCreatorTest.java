@@ -18,7 +18,7 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ValueEventObservableTest {
+public class ValueEventObservableCreatorTest {
 
     private static final String EXPECTED_KEY = "EXPECTED_KEY";
 
@@ -39,7 +39,7 @@ public class ValueEventObservableTest {
             }
         }).when(databaseReference).addValueEventListener(any(ValueEventListener.class));
 
-        Observable<String> observable = ValueEventObservable.listenToValueEvents(databaseReference, new DataSnapshotToStringMarshaller());
+        Observable<String> observable = new ValueEventObservableCreator().listenToValueEvents(databaseReference, new DataSnapshotToStringMarshaller());
 
         TestObserver<String> testObserver = new TestObserver<>();
         observable.subscribe(testObserver);

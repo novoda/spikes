@@ -18,7 +18,7 @@ public class RxSingleValueListener<T> implements ValueEventListener {
         return Observable.create(new Observable.OnSubscribe<T>() {
             @Override
             public void call(Subscriber<? super T> subscriber) {
-                databaseReference.addListenerForSingleValueEvent(new RxSingleValueListener<T>(subscriber, marshaller));
+                databaseReference.addListenerForSingleValueEvent(new RxSingleValueListener<>(subscriber, marshaller));
             }
         });
     }
