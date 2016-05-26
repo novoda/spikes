@@ -15,7 +15,7 @@ jest.setMock('ErrorUtils', {
   }
 })
 
-import NativeModules from './NativeModules'
-import Linking from './Linking'
+import NativeModules from './NativeModules.mock'
+import Linking from './Linking.mock'
 jest.setMock('NativeModules', NativeModules)
 jest.setMock('Linking', Linking)
