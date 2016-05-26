@@ -21,7 +21,7 @@
       android:layout_height="wrap_content"
       android:layout_gravity="bottom|end"
       android:layout_margin="@dimen/activity_horizontal_margin"
-      android:src="@android:drawable/ic_input_add"
+      android:src="@drawable/ic_add_channel"
       app:fabSize="normal" />
   </FrameLayout>
 
