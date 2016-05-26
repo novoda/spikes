@@ -1,7 +1,6 @@
 package com.novoda.bonfire.channel.database;
 
 import com.google.firebase.database.FirebaseDatabase;
-import com.novoda.bonfire.rx.ValueEventObservableCreator;
 
 public final class ChannelsDatabaseFactory {
 
@@ -14,8 +13,7 @@ public final class ChannelsDatabaseFactory {
                 firebaseDatabase.getReference("public-channels-index"),
                 firebaseDatabase.getReference("private-channels-index"),
                 firebaseDatabase.getReference("channels"),
-                firebaseDatabase.getReference("owners"),
-                new ValueEventObservableCreator()
+                firebaseDatabase.getReference("owners")
         );
     }
 }

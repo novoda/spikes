@@ -3,7 +3,7 @@ package com.novoda.bonfire.channel.database;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.novoda.bonfire.channel.data.model.Channel;
-import com.novoda.bonfire.rx.ValueEventObservableCreator;
+import com.novoda.bonfire.rx.OnSubscribeDatabaseListener;
 import com.novoda.bonfire.user.data.model.User;
 
 import java.util.List;
@@ -21,29 +21,26 @@ class FirebaseChannelsDatabase implements ChannelsDatabase {
     private final DatabaseReference privateChannelsDB;
     private final DatabaseReference channelsDB;
     private final DatabaseReference ownersDB;
-    private final ValueEventObservableCreator valueEventObservableCreator;
 
     public FirebaseChannelsDatabase(
             DatabaseReference publicChannelsDB,
             DatabaseReference privateChannelsDB,
             DatabaseReference channelsDB,
-            DatabaseReference ownersDB,
-            ValueEventObservableCreator valueEventObservableCreator) {
+            DatabaseReference ownersDB) {
         this.publicChannelsDB = publicChannelsDB;
         this.privateChannelsDB = privateChannelsDB;
         this.channelsDB = channelsDB;
         this.ownersDB = ownersDB;
-        this.valueEventObservableCreator = valueEventObservableCreator;
     }
 
     @Override
     public Observable<List<String>> observePublicChannelIds() {
-        return valueEventObservableCreator.listenToValueEvents(publicChannelsDB, new DataSnapshotToStringListMarshaller());
+        return Observable.create(new OnSubscribeDatabaseListener<>(publicChannelsDB, new DataSnapshotToStringListMarshaller()));
     }
 
     @Override
     public Observable<List<String>> observePrivateChannelIdsFor(User user) {
-        return valueEventObservableCreator.listenToValueEvents(privateChannelsDB.child(user.getId()), new DataSnapshotToStringListMarshaller());
+        return Observable.create(new OnSubscribeDatabaseListener<>(privateChannelsDB.child(user.getId()), new DataSnapshotToStringListMarshaller()));
     }
 
     @Override
@@ -82,7 +79,7 @@ class FirebaseChannelsDatabase implements ChannelsDatabase {
 
     @Override
     public Observable<List<String>> observeOwnerIdsFor(Channel channel) {
-        return valueEventObservableCreator.listenToValueEvents(ownersDB.child(channel.getName()), new DataSnapshotToStringListMarshaller());
+        return Observable.create(new OnSubscribeDatabaseListener<>(ownersDB.child(channel.getName()), new DataSnapshotToStringListMarshaller()));
     }
 
     private <T> Func1<DataSnapshot, T> as(final Class<T> tClass) {

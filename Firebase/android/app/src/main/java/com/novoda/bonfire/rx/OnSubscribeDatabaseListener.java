@@ -11,20 +11,25 @@ import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.subscriptions.BooleanSubscription;
 
-public class ValueEventObservableCreator {
-    public <T> Observable<T> listenToValueEvents(final DatabaseReference databaseReference, final Func1<DataSnapshot, T> marshaller) {
-        return Observable.create(new Observable.OnSubscribe<T>() {
+public class OnSubscribeDatabaseListener<T> implements Observable.OnSubscribe<T> {
+
+    private final DatabaseReference databaseReference;
+    private final Func1<DataSnapshot, T> marshaller;
+
+    public OnSubscribeDatabaseListener(DatabaseReference databaseReference, Func1<DataSnapshot, T> marshaller) {
+        this.databaseReference = databaseReference;
+        this.marshaller = marshaller;
+    }
+
+    @Override
+    public void call(Subscriber<? super T> subscriber) {
+        final ValueEventListener eventListener = databaseReference.addValueEventListener(new RxValueListener<>(subscriber, marshaller));
+        subscriber.add(BooleanSubscription.create(new Action0() {
             @Override
-            public void call(Subscriber<? super T> subscriber) {
-                final ValueEventListener eventListener = databaseReference.addValueEventListener(new RxValueListener<>(subscriber, marshaller));
-                subscriber.add(BooleanSubscription.create(new Action0() {
-                    @Override
-                    public void call() {
-                        databaseReference.removeEventListener(eventListener);
-                    }
-                }));
+            public void call() {
+                databaseReference.removeEventListener(eventListener);
             }
-        });
+        }));
     }
 
     private static class RxValueListener<T> implements ValueEventListener {

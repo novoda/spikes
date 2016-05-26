@@ -3,7 +3,7 @@ package com.novoda.bonfire.user.database;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.novoda.bonfire.rx.ValueEventObservableCreator;
+import com.novoda.bonfire.rx.OnSubscribeDatabaseListener;
 import com.novoda.bonfire.user.data.model.User;
 import com.novoda.bonfire.user.data.model.Users;
 
@@ -25,7 +25,7 @@ public class FirebaseUserDatabase implements UserDatabase {
 
     @Override
     public Observable<Users> observeUsers() {
-        return new ValueEventObservableCreator().listenToValueEvents(usersDB, toUsers());
+        return Observable.create(new OnSubscribeDatabaseListener<>(usersDB, toUsers()));
     }
 
     @Override

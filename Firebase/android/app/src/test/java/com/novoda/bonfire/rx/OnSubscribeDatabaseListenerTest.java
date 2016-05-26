@@ -14,11 +14,9 @@ import rx.Observable;
 import rx.observers.TestObserver;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-public class ValueEventObservableCreatorTest {
+public class OnSubscribeDatabaseListenerTest {
 
     private static final String EXPECTED_KEY = "EXPECTED_KEY";
 
@@ -39,7 +37,7 @@ public class ValueEventObservableCreatorTest {
             }
         }).when(databaseReference).addValueEventListener(any(ValueEventListener.class));
 
-        Observable<String> observable = new ValueEventObservableCreator().listenToValueEvents(databaseReference, new DataSnapshotToStringMarshaller());
+        Observable<String> observable = Observable.create(new OnSubscribeDatabaseListener<>(databaseReference, new DataSnapshotToStringMarshaller()));
 
         TestObserver<String> testObserver = new TestObserver<>();
         observable.subscribe(testObserver);
