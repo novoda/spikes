@@ -3,7 +3,6 @@ package com.novoda.bonfire.channel.database;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.novoda.bonfire.channel.data.model.Channel;
-import com.novoda.bonfire.channel.database.provider.ChannelsDatabaseProvider;
 import com.novoda.bonfire.user.data.model.User;
 
 import java.util.ArrayList;
@@ -12,23 +11,23 @@ import java.util.List;
 import rx.Observable;
 import rx.functions.Func1;
 
-import static com.novoda.bonfire.rx.ValueEventObservable.listenToValueEvents;
 import static com.novoda.bonfire.rx.RxCompletionListener.removeValue;
 import static com.novoda.bonfire.rx.RxCompletionListener.setValue;
 import static com.novoda.bonfire.rx.RxSingleValueListener.listenToSingleValueEvents;
+import static com.novoda.bonfire.rx.ValueEventObservable.listenToValueEvents;
 
-public class FirebaseChannelsDatabase implements ChannelsDatabase {
+class FirebaseChannelsDatabase implements ChannelsDatabase {
 
     private final DatabaseReference publicChannelsDB;
     private final DatabaseReference privateChannelsDB;
     private final DatabaseReference channelsDB;
     private final DatabaseReference ownersDB;
 
-    public FirebaseChannelsDatabase(ChannelsDatabaseProvider channelsDatabaseProvider) {
-        publicChannelsDB = channelsDatabaseProvider.getPublicChannelsDB();
-        privateChannelsDB = channelsDatabaseProvider.getPrivateChannelsDB();
-        channelsDB = channelsDatabaseProvider.getChannelsDB();
-        ownersDB = channelsDatabaseProvider.getOwnersDB();
+    public FirebaseChannelsDatabase(DatabaseReference publicChannelsDB, DatabaseReference privateChannelsDB, DatabaseReference channelsDB, DatabaseReference ownersDB) {
+        this.publicChannelsDB = publicChannelsDB;
+        this.privateChannelsDB = privateChannelsDB;
+        this.channelsDB = channelsDB;
+        this.ownersDB = ownersDB;
     }
 
     @Override
