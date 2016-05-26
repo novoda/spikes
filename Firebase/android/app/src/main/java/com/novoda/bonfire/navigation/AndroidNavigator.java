@@ -28,17 +28,23 @@ public class AndroidNavigator implements Navigator {
     }
 
     @Override
-    public void toNewChannel() {
+    public void toCreateChannel() {
         activity.startActivity(new Intent(activity, NewChannelActivity.class));
     }
 
     @Override
-    public void toAddUsersFor(Channel channel) {
+    public void toMembersOf(Channel channel) {
         activity.startActivity(UsersActivity.createIntentFor(activity, channel));
     }
 
     @Override
     public void toParent() {
+        activity.finish();
+    }
+
+    @Override
+    public void toChannelWithClearedHistory(Channel channel) {
+        toChannel(channel);
         activity.finish();
     }
 

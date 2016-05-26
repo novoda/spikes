@@ -12,7 +12,6 @@ import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
-import rx.subscriptions.CompositeSubscription;
 
 public class ChannelsPresenter {
 
@@ -74,7 +73,7 @@ public class ChannelsPresenter {
 
         @Override
         public void onAddNewChannel() {
-            navigator.toNewChannel();
+            navigator.toCreateChannel();
         }
 
     };

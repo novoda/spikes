@@ -60,7 +60,7 @@ public class NewChannelPresenter {
                         @Override
                         public void call(DatabaseResult<Channel> databaseResult) {
                             if (databaseResult.isSuccess()) {
-                                navigator.toChannel(databaseResult.getData());
+                                navigator.toChannelWithClearedHistory(databaseResult.getData());
                             } else {
                                 newChannelDisplayer.showChannelCreationError();
                             }

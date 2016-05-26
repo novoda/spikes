@@ -8,9 +8,11 @@ public interface Navigator {
 
     void toChannels();
 
-    void toNewChannel();
+    void toCreateChannel();
 
-    void toAddUsersFor(Channel channel);
+    void toMembersOf(Channel channel);
 
     void toParent();
+
+    void toChannelWithClearedHistory(Channel channel);
 }

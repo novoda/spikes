@@ -99,7 +99,7 @@ public class ChatPresenter {
 
         @Override
         public void onManageOwnersClicked() {
-            navigator.toAddUsersFor(channel);
+            navigator.toMembersOf(channel);
         }
     };
 
