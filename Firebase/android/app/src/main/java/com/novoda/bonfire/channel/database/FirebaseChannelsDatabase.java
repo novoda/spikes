@@ -17,7 +17,7 @@ import static com.novoda.bonfire.rx.RxCompletionListener.setValue;
 import static com.novoda.bonfire.rx.RxSingleValueListener.listenToSingleValueEvents;
 import static com.novoda.bonfire.rx.RxValueListener.listenToValueEvents;
 
-public class ChannelsFirebaseDB implements ChannelsDatabase {
+public class FirebaseChannelsDatabase implements ChannelsDatabase {
 
     private final DatabaseReference publicChannelsDB;
     private final DatabaseReference privateChannelsDB;
@@ -25,7 +25,7 @@ public class ChannelsFirebaseDB implements ChannelsDatabase {
     private final DatabaseReference ownersDB;
     private final DatabaseReference usersDB;
 
-    public ChannelsFirebaseDB(ChannelsDatabaseProvider channelsDatabaseProvider) {
+    public FirebaseChannelsDatabase(ChannelsDatabaseProvider channelsDatabaseProvider) {
         publicChannelsDB = channelsDatabaseProvider.getPublicChannelsDB();
         privateChannelsDB = channelsDatabaseProvider.getPrivateChannelsDB();
         channelsDB = channelsDatabaseProvider.getChannelsDB();
@@ -34,17 +34,17 @@ public class ChannelsFirebaseDB implements ChannelsDatabase {
     }
 
     @Override
-    public Observable<List<String>> getPublicChannelIds() {
+    public Observable<List<String>> observePublicChannelIds() {
         return listenToValueEvents(publicChannelsDB, getKeys());
     }
 
     @Override
-    public Observable<List<String>> getPrivateChannelIdsFor(User user) {
+    public Observable<List<String>> observePrivateChannelIdsFor(User user) {
         return listenToValueEvents(privateChannelsDB.child(user.getId()), getKeys());
     }
 
     @Override
-    public Observable<Channel> getChannelFor(String channelName) {
+    public Observable<Channel> readChannelFor(String channelName) {
         return listenToSingleValueEvents(channelsDB.child(channelName), as(Channel.class));
     }
 
@@ -78,12 +78,12 @@ public class ChannelsFirebaseDB implements ChannelsDatabase {
     }
 
     @Override
-    public Observable<List<String>> getOwnerIdsFor(Channel channel) {
+    public Observable<List<String>> observeOwnerIdsFor(Channel channel) {
         return listenToValueEvents(ownersDB.child(channel.getName()), getKeys());
     }
 
     @Override
-    public Observable<User> getUserFrom(String userId) {
+    public Observable<User> readUserFrom(String userId) {
         return listenToSingleValueEvents(usersDB.child(userId), as(User.class));
     }
 

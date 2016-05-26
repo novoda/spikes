@@ -9,11 +9,11 @@ import rx.Observable;
 
 public interface ChannelsDatabase {
 
-    Observable<List<String>> getPublicChannelIds();
+    Observable<List<String>> observePublicChannelIds();
 
-    Observable<List<String>> getPrivateChannelIdsFor(User user);
+    Observable<List<String>> observePrivateChannelIdsFor(User user);
 
-    Observable<Channel> getChannelFor(String channelName);
+    Observable<Channel> readChannelFor(String channelName);
 
     Observable<Channel> writeChannel(Channel newChannel);
 
@@ -27,8 +27,8 @@ public interface ChannelsDatabase {
 
     Observable<Channel> removeChannelFromUserPrivateChannelIndex(User user, Channel channel);
 
-    Observable<List<String>> getOwnerIdsFor(Channel channel);
+    Observable<List<String>> observeOwnerIdsFor(Channel channel);
 
-    Observable<User> getUserFrom(String userId);
+    Observable<User> readUserFrom(String userId);
 
 }

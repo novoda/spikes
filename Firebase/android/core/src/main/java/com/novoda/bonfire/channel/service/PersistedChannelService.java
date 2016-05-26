@@ -28,12 +28,12 @@ public class PersistedChannelService implements ChannelService {
     }
 
     private Observable<List<Channel>> publicChannels() {
-        return channelsDatabase.getPublicChannelIds()
+        return channelsDatabase.observePublicChannelIds()
                 .flatMap(channelsFromNames());
     }
 
     private Observable<List<Channel>> privateChannelsFor(User user) {
-        return channelsDatabase.getPrivateChannelIdsFor(user)
+        return channelsDatabase.observePrivateChannelIdsFor(user)
                 .flatMap(channelsFromNames());
     }
 
@@ -52,7 +52,7 @@ public class PersistedChannelService implements ChannelService {
         return new Func1<String, Observable<Channel>>() {
             @Override
             public Observable<Channel> call(final String channelName) {
-                return channelsDatabase.getChannelFor(channelName);
+                return channelsDatabase.readChannelFor(channelName);
             }
         };
     }
@@ -159,7 +159,7 @@ public class PersistedChannelService implements ChannelService {
 
     @Override
     public Observable<DatabaseResult<Users>> getOwnersOfChannel(Channel channel) {
-        return channelsDatabase.getOwnerIdsFor(channel)
+        return channelsDatabase.observeOwnerIdsFor(channel)
                 .flatMap(getUsersFromIds())
                 .onErrorReturn(DatabaseResult.<Users>errorAsDatabaseResult());
     }
@@ -185,7 +185,7 @@ public class PersistedChannelService implements ChannelService {
         return new Func1<String, Observable<User>>() {
             @Override
             public Observable<User> call(final String userId) {
-                return channelsDatabase.getUserFrom(userId);
+                return channelsDatabase.readUserFrom(userId);
             }
         };
     }
