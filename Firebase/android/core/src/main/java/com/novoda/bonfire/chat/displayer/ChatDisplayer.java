@@ -8,6 +8,8 @@ public interface ChatDisplayer {
 
     void detach(ChatActionListener actionListener);
 
+    void setTitle(String title);
+
     void display(Chat chat);
 
     void enableInteraction();
@@ -16,9 +18,13 @@ public interface ChatDisplayer {
 
     interface ChatActionListener {
 
+        void onUpPressed();
+
         void onMessageLengthChanged(int messageLength);
 
         void onSubmitMessage(String message);
+
+        void onManageOwnersClicked();
 
     }
 

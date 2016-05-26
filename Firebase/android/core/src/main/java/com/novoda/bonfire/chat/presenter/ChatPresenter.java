@@ -38,6 +38,7 @@ public class ChatPresenter {
     }
 
     public void startPresenting() {
+        chatDisplayer.setTitle(channel.getName());
         chatDisplayer.attach(actionListener);
         chatDisplayer.disableInteraction();
         subscriptions.add(
@@ -74,6 +75,11 @@ public class ChatPresenter {
 
     private final ChatDisplayer.ChatActionListener actionListener = new ChatDisplayer.ChatActionListener() {
         @Override
+        public void onUpPressed() {
+            navigator.toParent();
+        }
+
+        @Override
         public void onMessageLengthChanged(int messageLength) {
             if (userIsAuthenticated() && messageLength > 0) {
                 chatDisplayer.enableInteraction();
@@ -86,6 +92,11 @@ public class ChatPresenter {
         public void onSubmitMessage(String message) {
             chatService.sendMessage(channel, new Message(user, message));
             analytics.trackEvent("message_length", message.length());
+        }
+
+        @Override
+        public void onManageOwnersClicked() {
+            navigator.toAddUsersFor(channel);
         }
     };
 

@@ -30,10 +30,6 @@ public class ChatActivity extends BaseActivity {
         setContentView(R.layout.activity_chat);
         ChatDisplayer chatDisplayer = (ChatDisplayer) findViewById(R.id.chatView);
         Channel channel = (Channel) getIntent().getSerializableExtra(CHANNEL_EXTRA);
-
-        getSupportActionBar().setTitle(channel.getName());
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         presenter = new ChatPresenter(
                 Dependencies.INSTANCE.getLoginService(),
                 Dependencies.INSTANCE.getChatService(),

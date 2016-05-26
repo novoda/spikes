@@ -69,6 +69,11 @@ public class AndroidLoginNavigator implements LoginNavigator {
     }
 
     @Override
+    public void toParent() {
+        navigator.toParent();
+    }
+
+    @Override
     public void toGooglePlusLogin() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         activity.startActivityForResult(signInIntent, RC_SIGN_IN);

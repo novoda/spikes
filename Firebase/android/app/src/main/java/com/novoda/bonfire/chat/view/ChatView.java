@@ -3,9 +3,11 @@ package com.novoda.bonfire.chat.view;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,6 +23,7 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
     private ChatAdapter chatAdapter;
     private View submitButton;
     private RecyclerView recyclerView;
+    private Toolbar toolbar;
 
     private ChatActionListener actionListener;
     public ChatView(Context context, AttributeSet attrs) {
@@ -36,6 +39,8 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
         messageView = Views.findById(this, R.id.messageEdit);
         submitButton = Views.findById(this, R.id.submitButton);
         recyclerView = Views.findById(this, R.id.messagesRecyclerView);
+        toolbar = Views.findById(this, R.id.chatToolbar);
+        toolbar.inflateMenu(R.menu.chat_menu);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
@@ -53,6 +58,22 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
                 messageView.setText("");
             }
         });
+        toolbar.setNavigationOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                actionListener.onUpPressed();
+            }
+        });
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.manageOwners) {
+                    actionListener.onManageOwnersClicked();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -60,6 +81,11 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
         submitButton.setOnClickListener(null);
         messageView.removeTextChangedListener(textWatcher);
         this.actionListener = null;
+    }
+
+    @Override
+    public void setTitle(String title) {
+        toolbar.setTitle(title);
     }
 
     @Override

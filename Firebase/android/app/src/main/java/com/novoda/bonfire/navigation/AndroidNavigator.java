@@ -37,4 +37,9 @@ public class AndroidNavigator implements Navigator {
         activity.startActivity(UsersActivity.createIntentFor(activity, channel));
     }
 
+    @Override
+    public void toParent() {
+        activity.finish();
+    }
+
 }
