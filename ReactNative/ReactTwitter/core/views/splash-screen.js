@@ -6,12 +6,17 @@ import {
   View,
   Navigator,
   Image,
-  Dimensions
+  Dimensions,
+  Animated
 } from 'react-native'
 var AuthenticationService = require('../service/authentication-service.js')
 var TwitterRequestsService = require('../service/twitter-requests-service.js')
 
-const SPLASH_DURATION_MS = 1000
+const SPLASH_DELAY_DURATION_MS = 1000
+const ANIMATION_DURATION_MS = 500
+
+const SCREEN_WIDTH = Dimensions.get('window').width
+const FINAL_LOGO_SIZE = SCREEN_WIDTH * 2
 
 var SplashScreenView = React.createClass({
   propTypes: {
@@ -22,7 +27,9 @@ var SplashScreenView = React.createClass({
     let authService = new AuthenticationService()
     return {
       authenticationService: authService,
-      twitterService: new TwitterRequestsService(authService)
+      twitterService: new TwitterRequestsService(authService),
+      imageSize: new Animated.Value(SCREEN_WIDTH),
+      opacity: new Animated.Value(1)
     }
   },
 
@@ -32,7 +39,13 @@ var SplashScreenView = React.createClass({
     authService.loadData()
       .then(() => {
         return new Promise((resolve, reject) => {
-          setTimeout(resolve, SPLASH_DURATION_MS)
+          setTimeout(resolve, SPLASH_DELAY_DURATION_MS)
+        })
+      })
+      .then(() => {
+        this._animateLogo()
+        return new Promise((resolve, reject) => {
+          setTimeout(resolve, ANIMATION_DURATION_MS)
         })
       })
       .then(() => {
@@ -50,9 +63,15 @@ var SplashScreenView = React.createClass({
   },
 
   render () {
+    let imageAnimatedStyle = {
+      width: this.state.imageSize,
+      height: this.state.imageSize,
+      opacity: this.state.opacity
+    }
+
     return (
       <View style={styles.container}>
-        <Image style={styles.logo} source={require('./assets/twitter-logo.png')} />
+        <Animated.Image style={[styles.logo, imageAnimatedStyle]} source={require('./assets/twitter-logo.png')} />
       </View>
     )
   },
@@ -63,11 +82,27 @@ var SplashScreenView = React.createClass({
 
   _pushTweetsList () {
     this.props.navigator.resetTo({id: 'tweets-list-identifier', twitterService: this.state.twitterService})
+  },
+
+  _animateLogo () {
+    Animated.parallel([
+      Animated.timing(
+        this.state.imageSize,
+        {
+          toValue: FINAL_LOGO_SIZE,
+          duration: ANIMATION_DURATION_MS
+        }
+      ),
+      Animated.timing(
+        this.state.opacity,
+        {
+          toValue: 0,
+          duration: ANIMATION_DURATION_MS
+        }
+      )
+    ]).start()
   }
 })
-
-var screenWidth = Dimensions.get('window').width
-var screenHeight = Dimensions.get('window').height
 
 const styles = StyleSheet.create({
   container: {
@@ -77,8 +112,6 @@ const styles = StyleSheet.create({
   },
   logo: {
     flex: 1,
-    width: screenWidth,
-    height: screenHeight,
     resizeMode: 'contain'
   }
 })

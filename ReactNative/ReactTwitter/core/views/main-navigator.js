@@ -16,6 +16,7 @@ var PushNotificationsScreenView = require('./debug/push-notifications-screen.js'
 var OauthView = require('./debug/oauth-screen.js')
 var TweetsList = require('./tweetsList.js')
 var TweetView = require('./tweetView.js')
+var DebugAnimationScene = require('./debug/debug-animation-scene.js')
 
 const splashScreenID = 'splash-screen-identifier'
 const loginScreenID = 'login-screen-identifier'
@@ -25,6 +26,7 @@ const pushNotificationsScreenID = 'push-notifications-screen-identifier'
 const OauthViewID = 'oauth-screen-identifier'
 const tweetsListID = 'tweets-list-identifier'
 const tweetViewID = 'tweet-view-identifier'
+const debugAnimationSceneID = 'debug-animation-identifier'
 
 var NavigationBarRouteMapper = {
   LeftButton (route, navigator, index, navState) {
@@ -79,6 +81,8 @@ var NavigationBarRouteMapper = {
         return 'Timeline'
       case tweetViewID:
         return 'Tweet Detail'
+      case debugAnimationSceneID:
+        return 'Debug Animation'
       default:
         return ''
     }
@@ -119,6 +123,8 @@ var MainNavigator = React.createClass({
         return (<TweetsList navigator={navigator} twitterService={route.twitterService} />)
       case tweetViewID:
         return (<TweetView navigator={navigator} tweetId={route.tweetId} twitterService={route.twitterService} />)
+      case debugAnimationSceneID:
+        return (<DebugAnimationScene navigator={navigator} />)
     }
   }
 })
