@@ -70,9 +70,19 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 struct SharedServices {
+    private static let firebase = FIRDatabase.database().reference()
+    private static let channelsDatabase = FirebaseChannelsDatabase(
+        publicChannelsDB: firebase.child("public-channels-index"),
+        privateChannelsDB: firebase.child("private-channels-index"),
+        channelsDB: firebase.child("channels"),
+        ownersDB: firebase.child("owners")
+    )
+
+    private static let userDatabase = FirebaseUserDatabase(usersDB: firebase.child("users"))
+
     static let loginService: LoginService = FirebaseLoginService()
     static let usersService: UsersService = FirebaseUsersService()
-    static let channelsService: ChannelsService = FirebaseChannelsService()
+    static let channelsService: ChannelsService = PersistedChannelsService(channelsDatabase: channelsDatabase, userDatabase: userDatabase)
     static let chatService: ChatService = FirebaseChatService()
     static let navigator: Navigator = AppNavigator()
     static let analytics: Analytics = FirebaseAnalytics()

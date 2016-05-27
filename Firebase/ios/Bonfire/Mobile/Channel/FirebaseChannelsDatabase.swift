@@ -24,7 +24,7 @@ class FirebaseChannelsDatabase: ChannelsDatabase {
     }
 
     func observePrivateChannelIdsFor(user: User) -> Observable<[String]> {
-        return privateChannelsDB.rx_readValue().map(getKeys)
+        return privateChannelsDB.child(user.id).rx_readValue().map(getKeys)
     }
 
     func readChannelFor(channelName: String) -> Observable<Channel> {

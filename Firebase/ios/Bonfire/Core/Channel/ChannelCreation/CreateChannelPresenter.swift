@@ -36,7 +36,7 @@ final class CreateChannelPresenter {
                     guard let user = self.loginService.currentUser else {
                         return Observable.just(.Error(NoUserError()))
                     }
-                    return self.channelsService.createPrivateChannel(withName: name, owners: [user])
+                    return self.channelsService.createPrivateChannel(withName: name, owner: user)
                 } else {
                     return self.channelsService.createPublicChannel(withName: name)
                 }

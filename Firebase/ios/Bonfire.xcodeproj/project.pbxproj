@@ -59,6 +59,7 @@
 		B6C054F01CF72A2900B1BB6C /* FirebaseChannelsDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054EF1CF72A2900B1BB6C /* FirebaseChannelsDatabase.swift */; };
 		B6C054F21CF73E6900B1BB6C /* UserDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054F11CF73E6900B1BB6C /* UserDatabase.swift */; };
 		B6C054F41CF73EE800B1BB6C /* FirebaseUserDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054F31CF73EE800B1BB6C /* FirebaseUserDatabase.swift */; };
+		B6C054F61CF749DF00B1BB6C /* PersistedChannelsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054F51CF749DF00B1BB6C /* PersistedChannelsService.swift */; };
 		B6CC1CE91CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CC1CE81CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift */; };
 		B6CC1CEB1CEC992F00BA8500 /* Observable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CC1CEA1CEC992F00BA8500 /* Observable+Extensions.swift */; };
 		B6CC1CEE1CECA83600BA8500 /* CreateChannelPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6CC1CED1CECA83600BA8500 /* CreateChannelPresenter.swift */; };
@@ -135,6 +136,7 @@
 		B6C054EF1CF72A2900B1BB6C /* FirebaseChannelsDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseChannelsDatabase.swift; sourceTree = "<group>"; };
 		B6C054F11CF73E6900B1BB6C /* UserDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDatabase.swift; sourceTree = "<group>"; };
 		B6C054F31CF73EE800B1BB6C /* FirebaseUserDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseUserDatabase.swift; sourceTree = "<group>"; };
+		B6C054F51CF749DF00B1BB6C /* PersistedChannelsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedChannelsService.swift; sourceTree = "<group>"; };
 		B6CC1CE81CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Channel+FirebaseConvertible.swift"; sourceTree = "<group>"; };
 		B6CC1CEA1CEC992F00BA8500 /* Observable+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Extensions.swift"; sourceTree = "<group>"; };
 		B6CC1CED1CECA83600BA8500 /* CreateChannelPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChannelPresenter.swift; sourceTree = "<group>"; };
@@ -415,6 +417,7 @@
 				D0C31879D1AD9CF1461F5956 /* ChannelsDisplayer.swift */,
 				D0C31217E78F04ADE3808836 /* ChannelsPresenter.swift */,
 				D0C318BAA30984F559ACD8D2 /* ChannelsService.swift */,
+				B6C054F51CF749DF00B1BB6C /* PersistedChannelsService.swift */,
 				B6CC1CEC1CECA81C00BA8500 /* ChannelCreation */,
 			);
 			path = Channel;
@@ -565,6 +568,7 @@
 				B6AC7C171CF458E000F96722 /* FirebaseAnalytics.swift in Sources */,
 				B6ECCEAE1CE3477000580434 /* User+FirebaseConvertible.swift in Sources */,
 				B660785C1CE37FAC008E7DD4 /* ReusableView.swift in Sources */,
+				B6C054F61CF749DF00B1BB6C /* PersistedChannelsService.swift in Sources */,
 				B654B2691CE0C38000EEDE0A /* ChatViewController.swift in Sources */,
 				B65C45B91CE0E1EF00B2179D /* ChatView.swift in Sources */,
 				B65C45C31CE0EF5800B2179D /* Message+FirebaseConvertible.swift in Sources */,
