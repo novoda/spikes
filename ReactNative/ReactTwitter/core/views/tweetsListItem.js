@@ -36,7 +36,7 @@ var TweetsListItem = React.createClass({
             <View style={styles.textContainer}>
               <View style={styles.userInfoContainer}>
                 <Text style={styles.tweet_author}>{this.props.author_name}</Text>
-                <Text style={styles.tweet_author_handle}>@{this.props.author_handle}</Text>
+                <Text importantForAccessibility="no" style={styles.tweet_author_handle}>@{this.props.author_handle}</Text>
               </View>
               <Text style={styles.tweet_time}>{formattedTime}</Text>
               <Text style={styles.tweet_text}>{this.props.text}</Text>
