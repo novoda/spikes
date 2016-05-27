@@ -1,9 +1,8 @@
-package com.novoda.bonfire.channels.service;
+package com.novoda.bonfire.channel.service;
 
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.data.model.Channels;
 import com.novoda.bonfire.channel.database.ChannelsDatabase;
-import com.novoda.bonfire.channel.service.PersistedChannelService;
 import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.user.data.model.User;
 import com.novoda.bonfire.user.database.UserDatabase;
@@ -60,7 +59,8 @@ public class PersistedChannelServiceTest {
         channelsTestObserver.assertReceivedOnNext(Collections.singletonList(new Channels(expectedList)));
     }
 
-    @Test @Ignore
+    @Test
+    @Ignore
     public void canCreateAPublicChannel() {
         PersistedChannelService persistedChannelService = buildPersistedChannelService();
 
