@@ -68,7 +68,7 @@ var TweetsView = React.createClass({
         <Text style={styles.tweet_author_handle}>@{this.state.tweet.user.screen_name}</Text>
         <Text style={styles.tweet_time}>Tweeted {formattedTime}</Text>
         <Text style={styles.tweet_text}>{this.state.tweet.text}</Text>
-        <Button text="dadas" style={styles.button} />
+        <Button text="dadass" style={styles.button} onPress={() => {console.warn('Button clicked')}} />
       </View>
     )
   }
