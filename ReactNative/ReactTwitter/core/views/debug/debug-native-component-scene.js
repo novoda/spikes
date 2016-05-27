@@ -4,9 +4,10 @@ import React from 'react'
 import {
   Navigator,
   StyleSheet,
-  ListView,
-  Text
+  ListView
 } from 'react-native'
+
+var IOSButtonComponent = require('../common/button-ios.js')
 
 var DebugNativeComponentScene = React.createClass({
   statics: {
@@ -43,7 +44,7 @@ var DebugNativeComponentScene = React.createClass({
   },
 
   _renderRow (rowData: string) {
-    return <Text style={styles.text}>{rowData}</Text>
+    return <IOSButtonComponent text={rowData} style={{height: 60, width: 160}}/>
   }
 })
 
