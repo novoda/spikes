@@ -35,7 +35,7 @@ public class ChatActivity extends BaseActivity {
                 Dependencies.INSTANCE.getChatService(),
                 chatDisplayer,
                 channel,
-                Dependencies.INSTANCE.getFirebaseAnalytics(),
+                Dependencies.INSTANCE.getAnalytics(),
                 new AndroidNavigator(this)
         );
     }
