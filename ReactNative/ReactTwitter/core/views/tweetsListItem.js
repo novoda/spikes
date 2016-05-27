@@ -27,6 +27,7 @@ var TweetsListItem = React.createClass({
 
   render () {
     var formattedTime = novodaDataFormat.elapsedTime(this.props.time)
+    var textWithoutUrls = this._removeUrls(this.props.text)
     return (
       <TouchableHighlight onPress={() => this._tweetSelected(this.props.id)}
         underlayColor='#dddddd'>
@@ -39,13 +40,19 @@ var TweetsListItem = React.createClass({
                 <Text importantForAccessibility="no" style={styles.tweet_author_handle}>@{this.props.author_handle}</Text>
               </View>
               <Text style={styles.tweet_time}>{formattedTime}</Text>
-              <Text style={styles.tweet_text}>{this.props.text}</Text>
+              <Text style={styles.tweet_text} accessibilityLabel={textWithoutUrls}>{this.props.text}</Text>
             </View>
            </View>
            <View style={styles.separator}/>
          </View>
        </TouchableHighlight>
     )
+  },
+
+  _removeUrls(originalText: string) {
+    // This is not the best user experience, accessibility-wise,
+    // but we want to try different accessibilityLabels, for the sake of the spike
+    return originalText.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '')
   },
 
   _tweetSelected (tweetId: string) {
