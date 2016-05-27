@@ -86,7 +86,7 @@ public class PersistedChannelService implements ChannelService {
                         .map(new Func1<Channel, DatabaseResult<Channel>>() {
                             @Override
                             public DatabaseResult<Channel> call(Channel channel) {
-                                return new DatabaseResult<Channel>(channel);
+                                return new DatabaseResult<>(channel);
                             }
                         });
             }
