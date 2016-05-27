@@ -37,7 +37,7 @@ var TweetsListItem = React.createClass({
             <View style={styles.textContainer}>
               <View style={styles.userInfoContainer}>
                 <Text style={styles.tweet_author}>{this.props.author_name}</Text>
-                <Text importantForAccessibility="no" style={styles.tweet_author_handle}>@{this.props.author_handle}</Text>
+                <Text importantForAccessibility='no' style={styles.tweet_author_handle}>@{this.props.author_handle}</Text>
               </View>
               <Text style={styles.tweet_time}>{formattedTime}</Text>
               <Text style={styles.tweet_text} accessibilityLabel={textWithoutUrls}>{this.props.text}</Text>
@@ -49,7 +49,7 @@ var TweetsListItem = React.createClass({
     )
   },
 
-  _removeUrls(originalText: string) {
+  _removeUrls (originalText: string) {
     // This is not the best user experience, accessibility-wise,
     // but we want to try different accessibilityLabels, for the sake of the spike
     return originalText.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '')
