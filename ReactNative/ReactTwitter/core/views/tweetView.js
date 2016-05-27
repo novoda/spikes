@@ -14,6 +14,16 @@ var AvatarView = require('./common/avatar-view.js')
 
 var TweetsView = React.createClass({
   mixins: [AndroidBackNavigationMixin],
+
+  statics: {
+    navigatorID () {
+      return 'tweet-view-identifier'
+    },
+    navigatorTitle () {
+      return 'Tweet Detail'
+    }
+  },
+
   propTypes: {
     tweetId: React.PropTypes.string.isRequired,
     navigator: React.PropTypes.instanceOf(Navigator).isRequired,

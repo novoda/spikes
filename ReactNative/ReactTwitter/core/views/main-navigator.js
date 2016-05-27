@@ -17,16 +17,20 @@ var OauthView = require('./debug/oauth-screen.js')
 var TweetsList = require('./tweetsList.js')
 var TweetView = require('./tweetView.js')
 var DebugAnimationScene = require('./debug/debug-animation-scene.js')
+var DebugNativeComponentScene = require('./debug/debug-native-component-scene.js')
 
-const splashScreenID = 'splash-screen-identifier'
-const loginScreenID = 'login-screen-identifier'
-const debugScreenID = 'debug-screen-identifier'
-const deepLinkingID = 'deep-linking-identifier'
-const pushNotificationsScreenID = 'push-notifications-screen-identifier'
-const OauthViewID = 'oauth-screen-identifier'
-const tweetsListID = 'tweets-list-identifier'
-const tweetViewID = 'tweet-view-identifier'
-const debugAnimationSceneID = 'debug-animation-identifier'
+const scenes = [
+  SplashScreenView,
+  DebugScreenView,
+  LoginScreenView,
+  DeepLinkingView,
+  PushNotificationsScreenView,
+  OauthView,
+  TweetsList,
+  TweetView,
+  DebugAnimationScene,
+  DebugNativeComponentScene
+]
 
 var NavigationBarRouteMapper = {
   LeftButton (route, navigator, index, navState) {
@@ -50,7 +54,7 @@ var NavigationBarRouteMapper = {
       return null
     }
 
-    return (<TouchableOpacity onPress={() => navigator.push({id: debugScreenID})} style={styles.navBarRightButton}>
+    return (<TouchableOpacity onPress={() => navigator.push({id: DebugScreenView.navigatorID()})} style={styles.navBarRightButton}>
     <Text style={[styles.navBarText, styles.navBarButtonText]}>Debug</Text>
       </TouchableOpacity>)
   },
@@ -64,28 +68,13 @@ var NavigationBarRouteMapper = {
   },
 
   _getTitleByScreenId (screenId) {
-    switch (screenId) {
-      case splashScreenID:
-        return 'SplashScreen'
-      case loginScreenID:
-        return 'Login'
-      case debugScreenID:
-        return 'Debug Screen'
-      case deepLinkingID:
-        return 'Deep Linking'
-      case pushNotificationsScreenID:
-        return 'Push Notifications'
-      case OauthViewID:
-        return 'Oauth'
-      case tweetsListID:
-        return 'Timeline'
-      case tweetViewID:
-        return 'Tweet Detail'
-      case debugAnimationSceneID:
-        return 'Debug Animation'
-      default:
-        return ''
+    for (let scene of scenes) {
+      if (scene.navigatorID() === screenId) {
+        return scene.navigatorTitle()
+      }
     }
+
+    return ''
   }
 }
 
@@ -100,31 +89,33 @@ var MainNavigator = React.createClass({
       <Navigator
         style={styles.appContainer}
         navigationBar={navBar}
-        initialRoute={{id: splashScreenID}}
+        initialRoute={{id: SplashScreenView.navigatorID()}}
         renderScene={this.navigatorRenderScene}
       />)
   },
 
   navigatorRenderScene (route: any, navigator: Navigator) {
     switch (route.id) {
-      case splashScreenID:
+      case SplashScreenView.navigatorID():
         return (<SplashScreenView navigator={navigator} />)
-      case loginScreenID:
+      case LoginScreenView.navigatorID():
         return (<LoginScreenView navigator={navigator} twitterService={route.twitterService}/>)
-      case debugScreenID:
+      case DebugScreenView.navigatorID():
         return (<DebugScreenView navigator={navigator} />)
-      case deepLinkingID:
+      case DeepLinkingView.navigatorID():
         return (<DeepLinkingView navigator={navigator} />)
-      case pushNotificationsScreenID:
+      case PushNotificationsScreenView.navigatorID():
         return (<PushNotificationsScreenView />)
-      case OauthViewID:
+      case OauthView.navigatorID():
         return (<OauthView navigator={navigator} />)
-      case tweetsListID:
+      case TweetsList.navigatorID():
         return (<TweetsList navigator={navigator} twitterService={route.twitterService} />)
-      case tweetViewID:
+      case TweetView.navigatorID():
         return (<TweetView navigator={navigator} tweetId={route.tweetId} twitterService={route.twitterService} />)
-      case debugAnimationSceneID:
+      case DebugAnimationScene.navigatorID():
         return (<DebugAnimationScene navigator={navigator} />)
+      case DebugNativeComponentScene.navigatorID():
+        return (<DebugNativeComponentScene navigator={navigator} />)
     }
   }
 })

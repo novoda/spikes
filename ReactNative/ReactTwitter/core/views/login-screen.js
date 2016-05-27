@@ -16,6 +16,14 @@ var DeepLinkingFacade = require('../service/deep-linking-facade')
 var OauthHelper = require('../service/oauth-helper.js')
 
 var LoginScreenView = React.createClass({
+  statics: {
+    navigatorID () {
+      return 'login-screen-identifier'
+    },
+    navigatorTitle () {
+      return 'Login'
+    }
+  },
   propTypes: {
     navigator: React.PropTypes.instanceOf(Navigator).isRequired,
     twitterService: React.PropTypes.instanceOf(TwitterRequestsService).isRequired
