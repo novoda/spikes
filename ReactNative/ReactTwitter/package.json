@@ -17,31 +17,43 @@
   },
   "devDependencies": {
     "babel-eslint": "^6.0.4",
-    "babel-jest": "^12.0.2",
+    "babel-jest": "^12.1.0",
     "babel-polyfill": "^6.8.0",
-    "babel-preset-react-native": "^1.7.0",
+    "babel-cli": "^6.5.2",
+    "babel-preset-react-native": "^1.8.0",
     "eslint": "^2.9.0",
     "eslint-config-standard": "^5.3.1",
     "eslint-plugin-flowtype": "^2.2.7",
     "eslint-plugin-promise": "^1.1.0",
     "eslint-plugin-react": "^5.0.1",
     "eslint-plugin-standard": "^1.3.2",
-    "jest-cli": "^12.0.2",
+    "jest-cli": "^12.1.1",
     "rnpm-plugin-upgrade": "^0.26.0"
   },
   "jest": {
-    "scriptPreprocessor": "node_modules/react-native/jestSupport/preprocessor.js",
-    "setupEnvScriptFile": "react-env.js",
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "packager/react-packager/src/Activity/"
-    ],
+    "globals": {
+      "__DEV__": true,
+      "__RCTProfileIsProfiling": false
+    },
+    "setupEnvScriptFile": "jestSupport/env.js",
+    "haste": {
+      "defaultPlatform": "ios",
+      "platforms": [
+        "ios",
+        "android"
+      ],
+      "providesModuleNodeModules": [
+        "react",
+        "react-native"
+      ]
+    },
     "testFileExtensions": [
       "js"
     ],
     "unmockedModulePathPatterns": [
       "promise",
-      "source-map"
+      "source-map",
+      "react-native"
     ]
   }
 }
