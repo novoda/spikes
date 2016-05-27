@@ -12,6 +12,7 @@ import {
 var novodaDataFormat = require('./common/data-format.js')
 var TwitterRequestsService = require('../service/twitter-requests-service.js')
 var AvatarView = require('./common/avatar-view.js')
+var TweetView = require('./tweetView.js')
 
 var TweetsListItem = React.createClass({
   propTypes: {
@@ -50,7 +51,7 @@ var TweetsListItem = React.createClass({
 
   _tweetSelected (tweetId: string) {
     this.props.navigator.push({
-      id: 'tweet-view-identifier',
+      id: TweetView.navigatorID(),
       tweetId: tweetId,
       twitterService: this.props.twitterService
     })
