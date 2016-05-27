@@ -133,7 +133,8 @@ public class PersistedChannelService implements ChannelService {
         return new Func1<Channel, Observable<Channel>>() {
             @Override
             public Observable<Channel> call(final Channel channel) {
-                return channelsDatabase.addChannelToUserPrivateChannelIndex(user, channel);
+                Observable<Channel> channelObservable = channelsDatabase.addChannelToUserPrivateChannelIndex(user, channel);
+                return channelObservable;
             }
         };
     }

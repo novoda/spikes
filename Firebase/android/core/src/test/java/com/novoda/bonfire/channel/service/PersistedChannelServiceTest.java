@@ -22,8 +22,7 @@ import rx.Observable;
 import rx.observers.TestObserver;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class PersistedChannelServiceTest {
 
@@ -63,6 +62,22 @@ public class PersistedChannelServiceTest {
                 return Observable.just(channel);
             }
         }).when(mockChannelsDatabase).writeChannelToPublicChannelIndex(any(Channel.class));
+
+        doAnswer(new Answer<Observable<Channel>>() {
+            @Override
+            public Observable<Channel> answer(InvocationOnMock invocation) throws Throwable {
+                Channel channel = (Channel) invocation.getArguments()[1];
+                return Observable.just(channel);
+            }
+        }).when(mockChannelsDatabase).addOwnerToPrivateChannel(any(User.class), any(Channel.class));
+
+        doAnswer(new Answer<Observable<Channel>>() {
+            @Override
+            public Observable<Channel> answer(InvocationOnMock invocation) throws Throwable {
+                Channel channel = (Channel) invocation.getArguments()[1];
+                return Observable.just(channel);
+            }
+        }).when(mockChannelsDatabase).addChannelToUserPrivateChannelIndex(any(User.class), any(Channel.class));
     }
 
     @Test
@@ -87,8 +102,22 @@ public class PersistedChannelServiceTest {
         TestObserver<DatabaseResult<Channel>> channelsTestObserver = new TestObserver<>();
         channelsObservable.subscribe(channelsTestObserver);
 
-        channelsTestObserver.assertReceivedOnNext(Collections.singletonList(new DatabaseResult<>(newChannel)));
-        //verify(channelsDatabase.getChannelsDB()).setValue(eq(true), any(DatabaseReference.CompletionListener.class));
+        verify(mockChannelsDatabase).writeChannel(newChannel);
+        verify(mockChannelsDatabase).writeChannelToPublicChannelIndex(newChannel);
+    }
+
+    @Test
+    public void canCreateAPrivateChannel() {
+        PersistedChannelService persistedChannelService = buildPersistedChannelService();
+
+        Channel newChannel = new Channel("another private channel", false);
+        Observable<DatabaseResult<Channel>> channelsObservable = persistedChannelService.createPrivateChannel(newChannel, user);
+        TestObserver<DatabaseResult<Channel>> channelsTestObserver = new TestObserver<>();
+        channelsObservable.subscribe(channelsTestObserver);
+
+        verify(mockChannelsDatabase).addOwnerToPrivateChannel(user, newChannel);
+        verify(mockChannelsDatabase).addChannelToUserPrivateChannelIndex(user, newChannel);
+        verify(mockChannelsDatabase).writeChannel(newChannel);
     }
 
     private List<Channel> buildExpectedChannelsList() {
