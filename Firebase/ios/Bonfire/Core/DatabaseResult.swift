@@ -1,6 +1,6 @@
 import Foundation
 
-enum DatabaseWriteResult<T> {
+enum DatabaseResult<T> {
     case Success(T)
     case Error(ErrorType)
 }

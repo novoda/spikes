@@ -53,44 +53,44 @@ class PersistedChannelsService: ChannelsService {
 
     // MARK: - Write
 
-    func createPublicChannel(withName name: String) -> Observable<DatabaseWriteResult<Channel>> {
+    func createPublicChannel(withName name: String) -> Observable<DatabaseResult<Channel>> {
         let channel = Channel(name: name, access: .Public)
         return channelsDatabase.writeChannel(channel)
             .flatMap(writeChannelToChannelIndexDB)
-            .catchError({Observable.just(DatabaseWriteResult.Error($0))})
+            .catchError({Observable.just(DatabaseResult.Error($0))})
     }
 
-    func createPrivateChannel(withName name: String, owner: User) -> Observable<DatabaseWriteResult<Channel>> {
+    func createPrivateChannel(withName name: String, owner: User) -> Observable<DatabaseResult<Channel>> {
         let channel = Channel(name: name, access: .Private)
         return channelsDatabase.addOwnerToPrivateChannel(owner, channel: channel)
             .flatMap(addUserAsChannelOwner(owner))
             .flatMap(writeChannel)
-            .catchError({Observable.just(DatabaseWriteResult.Error($0))})
+            .catchError({Observable.just(DatabaseResult.Error($0))})
     }
 
-    func addOwner(owner: User, toPrivateChannel channel: Channel) -> Observable<DatabaseWriteResult<User>> {
+    func addOwner(owner: User, toPrivateChannel channel: Channel) -> Observable<DatabaseResult<User>> {
         return channelsDatabase.addOwnerToPrivateChannel(owner, channel: channel)
             .flatMap(addUserAsChannelOwner(owner))
             .map({_ in .Success(owner)})
-            .catchError({Observable.just(DatabaseWriteResult.Error($0))})
+            .catchError({Observable.just(DatabaseResult.Error($0))})
     }
 
-    func removeOwner(owner: User, fromPrivateChannel channel: Channel) -> Observable<DatabaseWriteResult<User>> {
+    func removeOwner(owner: User, fromPrivateChannel channel: Channel) -> Observable<DatabaseResult<User>> {
         return channelsDatabase.removeOwnerFromPrivateChannel(owner, channel: channel)
             .flatMap({channel in self.channelsDatabase.removeChannelFromUserPrivateChannelIndex(owner, channel: channel)})
             .map({_ in .Success(owner)})
-            .catchError({Observable.just(DatabaseWriteResult.Error($0))})
+            .catchError({Observable.just(DatabaseResult.Error($0))})
     }
 
 
     // MARK: - Write (Private)
 
-    private func writeChannelToChannelIndexDB(channel: Channel) -> Observable<DatabaseWriteResult<Channel>> {
+    private func writeChannelToChannelIndexDB(channel: Channel) -> Observable<DatabaseResult<Channel>> {
         return channelsDatabase.writeChannelToPublicChannelIndex(channel)
             .map({.Success($0)})
     }
 
-    private func writeChannel(channel: Channel) -> Observable<DatabaseWriteResult<Channel>> {
+    private func writeChannel(channel: Channel) -> Observable<DatabaseResult<Channel>> {
         return channelsDatabase.writeChannel(channel)
             .map({.Success($0)})
     }
