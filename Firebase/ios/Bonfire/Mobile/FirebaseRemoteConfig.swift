@@ -1,5 +1,6 @@
 import Foundation
 import Firebase
+import FirebaseRemoteConfig
 
 class FirebaseRemoteConfig: Config {
 
