@@ -9,7 +9,7 @@ import {
   Navigator
 } from 'react-native'
 
-var novodaDataFormat = require('./common/data-format.js')
+var NovodaDataFormat = require('./common/data-format.js')
 var TwitterRequestsService = require('../service/twitter-requests-service.js')
 var AvatarView = require('./common/avatar-view.js')
 
@@ -26,7 +26,7 @@ var TweetsListItem = React.createClass({
   },
 
   render () {
-    var formattedTime = novodaDataFormat.elapsedTime(this.props.time)
+    var formattedTime = NovodaDataFormat.elapsedTime(this.props.time)
     var textWithoutUrls = this._removeUrls(this.props.text)
     return (
       <TouchableHighlight onPress={() => this._tweetSelected(this.props.id)}

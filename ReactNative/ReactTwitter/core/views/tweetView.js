@@ -8,7 +8,7 @@ import {
   Navigator
 } from 'react-native'
 import AndroidBackNavigationMixin from './mixins/android-back-navigation'
-const novodaDataFormat = require('./common/data-format.js')
+const NovodaDataFormat = require('./common/data-format.js')
 const TwitterRequestsService = require('../service/twitter-requests-service.js')
 const AvatarView = require('./common/avatar-view.js')
 const AutoLink = require('react-native-autolink')
@@ -49,7 +49,7 @@ var TweetsView = React.createClass({
       return (<View />)
     }
 
-    let formattedTime = novodaDataFormat.elapsedTime(Date.parse(this.state.tweet.created_at))
+    let formattedTime = NovodaDataFormat.elapsedTime(Date.parse(this.state.tweet.created_at))
     return (
       <View style={styles.mainContainer}>
         <AvatarView uri={this.state.tweet.user.profile_image_url} size={200}/>
