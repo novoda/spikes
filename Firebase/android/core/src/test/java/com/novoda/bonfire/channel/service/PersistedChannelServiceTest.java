@@ -54,6 +54,8 @@ public class PersistedChannelServiceTest {
         doAnswer(new ChannelAsObservableAnswer(1)).when(mockChannelsDatabase).addOwnerToPrivateChannel(any(User.class), any(Channel.class));
 
         doAnswer(new ChannelAsObservableAnswer(1)).when(mockChannelsDatabase).addChannelToUserPrivateChannelIndex(any(User.class), any(Channel.class));
+
+        doAnswer(new ChannelAsObservableAnswer(1)).when(mockChannelsDatabase).removeOwnerFromPrivateChannel(any(User.class), any(Channel.class));
     }
 
     @Test
@@ -106,6 +108,18 @@ public class PersistedChannelServiceTest {
 
         verify(mockChannelsDatabase).addOwnerToPrivateChannel(user, privateChannel);
         verify(mockChannelsDatabase).addChannelToUserPrivateChannelIndex(user, privateChannel);
+    }
+
+    @Test
+    public void canRemoveOwnerFromPrivateChannel() {
+        PersistedChannelService persistedChannelService = buildPersistedChannelService();
+
+        Observable<DatabaseResult<User>> userObservable = persistedChannelService.removeOwnerFromPrivateChannel(privateChannel, user);
+        TestObserver<DatabaseResult<User>> testObserver = new TestObserver<>();
+        userObservable.subscribe(testObserver);
+
+        verify(mockChannelsDatabase).removeOwnerFromPrivateChannel(user, privateChannel);
+        verify(mockChannelsDatabase).removeChannelFromUserPrivateChannelIndex(user, privateChannel);
     }
 
     private List<Channel> buildExpectedChannelsList() {
