@@ -5,9 +5,11 @@ import com.novoda.bonfire.channel.data.model.Channels;
 import com.novoda.bonfire.channel.database.ChannelsDatabase;
 import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.user.data.model.User;
+import com.novoda.bonfire.user.data.model.Users;
 import com.novoda.bonfire.user.database.UserDatabase;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,10 +31,12 @@ public class PersistedChannelServiceTest {
     private static final String FIRST_PUBLIC_CHANNEL = "first public channel";
     private static final String FIRST_PRIVATE_CHANNEL = "first private channel";
     private static final String USER_ID = "test user id";
+    private static final String ANOTHER_USER_ID = "another user id";
 
     private final Channel publicChannel = new Channel(FIRST_PUBLIC_CHANNEL, false);
     private final Channel privateChannel = new Channel(FIRST_PRIVATE_CHANNEL, true);
     private final User user = new User(USER_ID, "test username", "http://test.photo/url");
+    private final User anotherUser = new User(ANOTHER_USER_ID, "another username", "http://another.url");
 
     @Mock
     ChannelsDatabase mockChannelsDatabase;
@@ -56,6 +60,22 @@ public class PersistedChannelServiceTest {
         doAnswer(new ChannelAsObservableAnswer(1)).when(mockChannelsDatabase).addChannelToUserPrivateChannelIndex(any(User.class), any(Channel.class));
 
         doAnswer(new ChannelAsObservableAnswer(1)).when(mockChannelsDatabase).removeOwnerFromPrivateChannel(any(User.class), any(Channel.class));
+
+        when(mockChannelsDatabase.observeOwnerIdsFor(privateChannel)).thenReturn(Observable.just(Arrays.asList(USER_ID, ANOTHER_USER_ID)));
+
+        doAnswer(new Answer<Observable<User>>() {
+            @Override
+            public Observable<User> answer(InvocationOnMock invocation) throws Throwable {
+                return Observable.just(user);
+            }
+        }).when(mockUserDatabase).readUserFrom(USER_ID);
+
+        doAnswer(new Answer<Observable<User>>() {
+            @Override
+            public Observable<User> answer(InvocationOnMock invocation) throws Throwable {
+                return Observable.just(anotherUser);
+            }
+        }).when(mockUserDatabase).readUserFrom(ANOTHER_USER_ID);
     }
 
     @Test
@@ -120,6 +140,23 @@ public class PersistedChannelServiceTest {
 
         verify(mockChannelsDatabase).removeOwnerFromPrivateChannel(user, privateChannel);
         verify(mockChannelsDatabase).removeChannelFromUserPrivateChannelIndex(user, privateChannel);
+    }
+
+    @Test
+    public void canGetOwnersOfSpecificChannel() {
+        Users expectedUsersList = buildExpectedUsers();
+
+        PersistedChannelService persistedChannelService = buildPersistedChannelService();
+
+        Observable<DatabaseResult<Users>> channelsObservable = persistedChannelService.getOwnersOfChannel(privateChannel);
+        TestObserver<DatabaseResult<Users>> usersTestObserver = new TestObserver<>();
+        channelsObservable.subscribe(usersTestObserver);
+
+        usersTestObserver.assertReceivedOnNext(Collections.singletonList(new DatabaseResult<>(expectedUsersList)));
+    }
+
+    private Users buildExpectedUsers() {
+        return new Users(Arrays.asList(user, anotherUser));
     }
 
     private List<Channel> buildExpectedChannelsList() {

@@ -21,4 +21,31 @@ public class Users {
     public User getUserAt(int position) {
         return users.get(position);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Users users1 = (Users) o;
+
+        return users.equals(users1.users);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return users.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Users{" +
+                "users=" + users +
+                '}';
+    }
 }
