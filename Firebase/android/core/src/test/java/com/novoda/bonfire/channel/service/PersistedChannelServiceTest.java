@@ -4,6 +4,7 @@ import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.data.model.Channels;
 import com.novoda.bonfire.channel.database.ChannelsDatabase;
 import com.novoda.bonfire.channel.service.PersistedChannelService;
+import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.user.data.model.User;
 import com.novoda.bonfire.user.database.UserDatabase;
 
@@ -12,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -47,6 +49,31 @@ public class PersistedChannelServiceTest {
 
     @Test
     public void canGetCompleteListOfChannelsForAUser() {
+        List<Channel> expectedList = buildExpectedChannelsList();
+
+        PersistedChannelService persistedChannelService = buildPersistedChannelService();
+
+        Observable<Channels> channelsObservable = persistedChannelService.getChannelsFor(user);
+        TestObserver<Channels> channelsTestObserver = new TestObserver<>();
+        channelsObservable.subscribe(channelsTestObserver);
+
+        channelsTestObserver.assertReceivedOnNext(Collections.singletonList(new Channels(expectedList)));
+    }
+
+    @Test @Ignore
+    public void canCreateAPublicChannel() {
+        PersistedChannelService persistedChannelService = buildPersistedChannelService();
+
+        Channel newChannel = new Channel("another public channel", false);
+        Observable<DatabaseResult<Channel>> channelsObservable = persistedChannelService.createPublicChannel(newChannel);
+        TestObserver<DatabaseResult<Channel>> channelsTestObserver = new TestObserver<>();
+        channelsObservable.subscribe(channelsTestObserver);
+
+        channelsTestObserver.assertReceivedOnNext(Collections.singletonList(new DatabaseResult<>(newChannel)));
+        //verify(channelsDatabase.getChannelsDB()).setValue(eq(true), any(DatabaseReference.CompletionListener.class));
+    }
+
+    private List<Channel> buildExpectedChannelsList() {
         List<Channel> listOfPublicChannels = new ArrayList<>();
         listOfPublicChannels.add(publicChannel);
 
@@ -56,14 +83,11 @@ public class PersistedChannelServiceTest {
         List<Channel> expectedList = new ArrayList<>();
         expectedList.addAll(listOfPublicChannels);
         expectedList.addAll(listOfPrivateChannels);
+        return expectedList;
+    }
 
-        PersistedChannelService persistedChannelService = new PersistedChannelService(mockChannelsDatabase, mockUserDatabase);
-
-        Observable<Channels> channelsObservable = persistedChannelService.getChannelsFor(user);
-        TestObserver<Channels> channelsTestObserver = new TestObserver<>();
-        channelsObservable.subscribe(channelsTestObserver);
-
-        channelsTestObserver.assertReceivedOnNext(Collections.singletonList(new Channels(expectedList)));
+    private PersistedChannelService buildPersistedChannelService() {
+        return new PersistedChannelService(mockChannelsDatabase, mockUserDatabase);
     }
 
     /* Commenting out everything in here so I can see if any of it is salvageable later
