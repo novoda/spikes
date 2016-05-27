@@ -12,14 +12,17 @@ import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import rx.Observable;
 import rx.observers.TestObserver;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
 public class PersistedChannelServiceTest {
@@ -44,6 +47,22 @@ public class PersistedChannelServiceTest {
         when(mockChannelsDatabase.observePrivateChannelIdsFor(user)).thenReturn(Observable.just(Collections.singletonList(FIRST_PRIVATE_CHANNEL)));
         when(mockChannelsDatabase.readChannelFor(FIRST_PUBLIC_CHANNEL)).thenReturn(Observable.just(publicChannel));
         when(mockChannelsDatabase.readChannelFor(FIRST_PRIVATE_CHANNEL)).thenReturn(Observable.just(privateChannel));
+
+        doAnswer(new Answer<Observable<Channel>>() {
+            @Override
+            public Observable<Channel> answer(InvocationOnMock invocation) throws Throwable {
+                Channel channel = (Channel) invocation.getArguments()[0];
+                return Observable.just(channel);
+            }
+        }).when(mockChannelsDatabase).writeChannel(any(Channel.class));
+
+        doAnswer(new Answer<Observable<Channel>>() {
+            @Override
+            public Observable<Channel> answer(InvocationOnMock invocation) throws Throwable {
+                Channel channel = (Channel) invocation.getArguments()[0];
+                return Observable.just(channel);
+            }
+        }).when(mockChannelsDatabase).writeChannelToPublicChannelIndex(any(Channel.class));
     }
 
     @Test
@@ -60,7 +79,6 @@ public class PersistedChannelServiceTest {
     }
 
     @Test
-    @Ignore
     public void canCreateAPublicChannel() {
         PersistedChannelService persistedChannelService = buildPersistedChannelService();
 
