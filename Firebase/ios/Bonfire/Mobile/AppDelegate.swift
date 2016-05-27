@@ -81,7 +81,7 @@ struct SharedServices {
     private static let userDatabase = FirebaseUserDatabase(usersDB: firebase.child("users"))
 
     static let loginService: LoginService = FirebaseLoginService()
-    static let usersService: UsersService = FirebaseUsersService()
+    static let usersService: UsersService = PersistedUserService(userDatabase: userDatabase)
     static let channelsService: ChannelsService = PersistedChannelsService(channelsDatabase: channelsDatabase, userDatabase: userDatabase)
     static let chatService: ChatService = FirebaseChatService()
     static let navigator: Navigator = AppNavigator()

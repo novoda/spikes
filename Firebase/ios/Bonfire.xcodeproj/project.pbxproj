@@ -14,6 +14,7 @@
 		B6210AC61CE21FA500570509 /* FirebaseLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6210AC51CE21FA500570509 /* FirebaseLoginService.swift */; };
 		B6210AC81CE2318B00570509 /* UIViewController+AlertExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6210AC71CE2318B00570509 /* UIViewController+AlertExtensions.swift */; };
 		B6210ACC1CE24AC600570509 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6210ACB1CE24AC600570509 /* Authentication.swift */; };
+		B62BE1C91CF89CF800326B98 /* PersistedUserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62BE1C81CF89CF800326B98 /* PersistedUserService.swift */; };
 		B636BA241CF34D9F009009F2 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = B636BA231CF34D9F009009F2 /* Config.swift */; };
 		B636BA261CF34DDA009009F2 /* FirebaseRemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B636BA251CF34DDA009009F2 /* FirebaseRemoteConfig.swift */; };
 		B654B2671CE0C38000EEDE0A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B654B2661CE0C38000EEDE0A /* AppDelegate.swift */; };
@@ -44,7 +45,6 @@
 		B6962C841CEF537A006A3A9E /* UsersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6962C831CEF537A006A3A9E /* UsersService.swift */; };
 		B6962C861CEF5388006A3A9E /* UsersDisplayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6962C851CEF5388006A3A9E /* UsersDisplayer.swift */; };
 		B6962C881CEF5392006A3A9E /* UsersPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6962C871CEF5392006A3A9E /* UsersPresenter.swift */; };
-		B6962C8B1CEF5686006A3A9E /* FirebaseUsersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6962C8A1CEF5686006A3A9E /* FirebaseUsersService.swift */; };
 		B6962C8D1CEF568E006A3A9E /* UsersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6962C8C1CEF568E006A3A9E /* UsersView.swift */; };
 		B6962C8F1CEF5697006A3A9E /* UsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6962C8E1CEF5697006A3A9E /* UsersViewController.swift */; };
 		B6962C911CEF5742006A3A9E /* Firebase+RxExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6962C901CEF5742006A3A9E /* Firebase+RxExtensions.swift */; };
@@ -88,6 +88,7 @@
 		B6210AC51CE21FA500570509 /* FirebaseLoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseLoginService.swift; sourceTree = "<group>"; };
 		B6210AC71CE2318B00570509 /* UIViewController+AlertExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+AlertExtensions.swift"; sourceTree = "<group>"; };
 		B6210ACB1CE24AC600570509 /* Authentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
+		B62BE1C81CF89CF800326B98 /* PersistedUserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedUserService.swift; sourceTree = "<group>"; };
 		B636BA231CF34D9F009009F2 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		B636BA251CF34DDA009009F2 /* FirebaseRemoteConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseRemoteConfig.swift; sourceTree = "<group>"; };
 		B654B2631CE0C38000EEDE0A /* Bonfire.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bonfire.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -120,7 +121,6 @@
 		B6962C831CEF537A006A3A9E /* UsersService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersService.swift; sourceTree = "<group>"; };
 		B6962C851CEF5388006A3A9E /* UsersDisplayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersDisplayer.swift; sourceTree = "<group>"; };
 		B6962C871CEF5392006A3A9E /* UsersPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersPresenter.swift; sourceTree = "<group>"; };
-		B6962C8A1CEF5686006A3A9E /* FirebaseUsersService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseUsersService.swift; sourceTree = "<group>"; };
 		B6962C8C1CEF568E006A3A9E /* UsersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersView.swift; sourceTree = "<group>"; };
 		B6962C8E1CEF5697006A3A9E /* UsersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersViewController.swift; sourceTree = "<group>"; };
 		B6962C901CEF5742006A3A9E /* Firebase+RxExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Firebase+RxExtensions.swift"; sourceTree = "<group>"; };
@@ -324,6 +324,7 @@
 				B6962C851CEF5388006A3A9E /* UsersDisplayer.swift */,
 				B6962C871CEF5392006A3A9E /* UsersPresenter.swift */,
 				B6962C831CEF537A006A3A9E /* UsersService.swift */,
+				B62BE1C81CF89CF800326B98 /* PersistedUserService.swift */,
 			);
 			path = Users;
 			sourceTree = "<group>";
@@ -331,12 +332,11 @@
 		B6962C891CEF5676006A3A9E /* Users */ = {
 			isa = PBXGroup;
 			children = (
-				B6962C8A1CEF5686006A3A9E /* FirebaseUsersService.swift */,
+				B6C054F31CF73EE800B1BB6C /* FirebaseUserDatabase.swift */,
 				1AF7D1A11CEF659A00B74483 /* UserCell.swift */,
 				1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */,
 				B6962C8C1CEF568E006A3A9E /* UsersView.swift */,
 				B6962C8E1CEF5697006A3A9E /* UsersViewController.swift */,
-				B6C054F31CF73EE800B1BB6C /* FirebaseUserDatabase.swift */,
 			);
 			path = Users;
 			sourceTree = "<group>";
@@ -559,7 +559,6 @@
 				B6C054F01CF72A2900B1BB6C /* FirebaseChannelsDatabase.swift in Sources */,
 				B65C45B41CE0E0F900B2179D /* Chat.swift in Sources */,
 				B6CC1CE91CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift in Sources */,
-				B6962C8B1CEF5686006A3A9E /* FirebaseUsersService.swift in Sources */,
 				1AF7D1A01CEF651600B74483 /* UsersTableViewManager.swift in Sources */,
 				B6C054F41CF73EE800B1BB6C /* FirebaseUserDatabase.swift in Sources */,
 				B6CC1CF01CECA96B00BA8500 /* CreateChannelDisplayer.swift in Sources */,
@@ -589,6 +588,7 @@
 				B6C054E91CF7014500B1BB6C /* FirebaseDynamicLinkFactory.swift in Sources */,
 				B6C054EC1CF708D600B1BB6C /* DynamicLinkFactotry.swift in Sources */,
 				B6962C911CEF5742006A3A9E /* Firebase+RxExtensions.swift in Sources */,
+				B62BE1C91CF89CF800326B98 /* PersistedUserService.swift in Sources */,
 				B636BA261CF34DDA009009F2 /* FirebaseRemoteConfig.swift in Sources */,
 				B654B2671CE0C38000EEDE0A /* AppDelegate.swift in Sources */,
 				B65C45BB1CE0E46B00B2179D /* ChatPresenter.swift in Sources */,

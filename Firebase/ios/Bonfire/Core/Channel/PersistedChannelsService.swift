@@ -44,7 +44,11 @@ class PersistedChannelsService: ChannelsService {
     }
 
     private func getUsersFromIDs(ids: [String]) -> Observable<[User]> {
-        return ids.toObservable().flatMap({self.userDatabase.readUserFrom($0)}).toArray()
+        return ids.toObservable().flatMap(readUserFrom).toArray()
+    }
+
+    private func readUserFrom(identifier: String) -> Observable<User> {
+        return userDatabase.readUserFrom(identifier).catchError({_ in Observable.empty()})
     }
 
     // MARK: - Write
