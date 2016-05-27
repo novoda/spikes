@@ -72,4 +72,24 @@ public enum Dependencies {
     public UserService getUserService() {
         return userService;
     }
+
+    public void setAnalytics(Analytics analytics) {
+        this.analytics = analytics;
+    }
+
+    public void setLoginService(LoginService loginService) {
+        this.loginService = loginService;
+    }
+
+    public void setChatService(ChatService chatService) {
+        this.chatService = chatService;
+    }
+
+    public void setChannelService(ChannelService channelService) {
+        this.channelService = channelService;
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
 }
