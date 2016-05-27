@@ -68,15 +68,13 @@ var NavigationBarRouteMapper = {
   },
 
   _getTitleByScreenId (screenId) {
-    let title = ''
-    scenes.forEach((scene) => {
+    for (let scene of scenes) {
       if (scene.navigatorID() === screenId) {
-        title = scene.navigatorTitle()
-        return
+        return scene.navigatorTitle()
       }
-    })
+    }
 
-    return title
+    return ''
   }
 }
 
