@@ -8,6 +8,7 @@
 
 #import "RCTNovodaButtonManager.h"
 #import "RCTNovodaButton.h"
+#import "UIColor+additions.h"
 
 @implementation RCTNovodaButtonManager
 
@@ -18,9 +19,16 @@ RCT_EXPORT_MODULE()
   return [RCTNovodaButton buttonWithType:UIButtonTypeSystem];
 }
 
+RCT_EXPORT_VIEW_PROPERTY(enabled, BOOL)
+
 RCT_CUSTOM_VIEW_PROPERTY(text, NSString, UIButton)
 {
   [view setTitle:json forState: UIControlStateNormal];
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(textColor, NSString, UIButton)
+{
+  [view setTitleColor:[UIColor colorFromHexString:json] forState:UIControlStateNormal];
 }
 
 @end

@@ -11,6 +11,8 @@ var iface = {
   name: 'RCTNovodaButton',
   propTypes: {
     text: PropTypes.string,
+    enabled: PropTypes.bool,
+    textColor: PropTypes.string,
     ...View.propTypes // include the default view properties
   }
 }
@@ -31,7 +33,7 @@ class Button extends React.Component {
 Button.propTypes = {
   enabled: PropTypes.bool,
   text: PropTypes.string,
-  textColor: PropTypes.number,
+  textColor: PropTypes.string,
   backgroundNormal: PropTypes.string,
   backgroundPressed: PropTypes.string,
   backgroundDisabled: PropTypes.string,

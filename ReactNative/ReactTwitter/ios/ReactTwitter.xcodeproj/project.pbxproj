@@ -23,6 +23,7 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		B856299D1CF742F900FCCF6E /* RCTNovodaButtonManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B856299C1CF742F900FCCF6E /* RCTNovodaButtonManager.m */; };
+		B87127641CFC6DC600EEA78D /* UIColor+additions.m in Sources */ = {isa = PBXBuildFile; fileRef = B87127631CFC6DC600EEA78D /* UIColor+additions.m */; };
 		B8A8009E1CF864ED00867E7A /* RCTNovodaButton.m in Sources */ = {isa = PBXBuildFile; fileRef = B8A8009D1CF864ED00867E7A /* RCTNovodaButton.m */; };
 		B8DDA3801CF5FF2B009D132A /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B8DDA37F1CF5FED2009D132A /* libRCTPushNotification.a */; };
 /* End PBXBuildFile section */
@@ -138,6 +139,8 @@
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		B856299B1CF742F900FCCF6E /* RCTNovodaButtonManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCTNovodaButtonManager.h; path = views/RCTNovodaButtonManager.h; sourceTree = "<group>"; };
 		B856299C1CF742F900FCCF6E /* RCTNovodaButtonManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCTNovodaButtonManager.m; path = views/RCTNovodaButtonManager.m; sourceTree = "<group>"; };
+		B87127621CFC6DC600EEA78D /* UIColor+additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+additions.h"; sourceTree = "<group>"; };
+		B87127631CFC6DC600EEA78D /* UIColor+additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+additions.m"; sourceTree = "<group>"; };
 		B8A8009C1CF864ED00867E7A /* RCTNovodaButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTNovodaButton.h; sourceTree = "<group>"; };
 		B8A8009D1CF864ED00867E7A /* RCTNovodaButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTNovodaButton.m; sourceTree = "<group>"; };
 		B8DDA37A1CF5FED2009D132A /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
@@ -248,6 +251,7 @@
 		13B07FAE1A68108700A75B9A /* ReactTwitter */ = {
 			isa = PBXGroup;
 			children = (
+				B87127561CFC6DB300EEA78D /* additions */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -332,6 +336,15 @@
 				B8A8009D1CF864ED00867E7A /* RCTNovodaButton.m */,
 			);
 			name = views;
+			sourceTree = "<group>";
+		};
+		B87127561CFC6DB300EEA78D /* additions */ = {
+			isa = PBXGroup;
+			children = (
+				B87127621CFC6DC600EEA78D /* UIColor+additions.h */,
+				B87127631CFC6DC600EEA78D /* UIColor+additions.m */,
+			);
+			path = additions;
 			sourceTree = "<group>";
 		};
 		B8DDA37B1CF5FED2009D132A /* Products */ = {
@@ -601,6 +614,7 @@
 				B856299D1CF742F900FCCF6E /* RCTNovodaButtonManager.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				B8A8009E1CF864ED00867E7A /* RCTNovodaButton.m in Sources */,
+				B87127641CFC6DC600EEA78D /* UIColor+additions.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
