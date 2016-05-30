@@ -25,6 +25,7 @@ class AvatarView extends Image {
     return <Image
       source= {source}
       style = {style.image}
+      importantForAccessibility='no'
       resizeMode='contain'/>
   }
 

@@ -8,9 +8,10 @@ import {
   Navigator
 } from 'react-native'
 import AndroidBackNavigationMixin from './mixins/android-back-navigation'
-var NovodaDataFormat = require('./common/data-format.js')
-var TwitterRequestsService = require('../service/twitter-requests-service.js')
-var AvatarView = require('./common/avatar-view.js')
+const NovodaDataFormat = require('./common/data-format.js')
+const TwitterRequestsService = require('../service/twitter-requests-service.js')
+const AvatarView = require('./common/avatar-view.js')
+const AutoLink = require('react-native-autolink')
 
 var TweetsView = React.createClass({
   mixins: [AndroidBackNavigationMixin],
@@ -55,7 +56,7 @@ var TweetsView = React.createClass({
         <Text style={styles.tweet_author}>{this.state.tweet.user.name}</Text>
         <Text style={styles.tweet_author_handle}>@{this.state.tweet.user.screen_name}</Text>
         <Text style={styles.tweet_time}>Tweeted {formattedTime}</Text>
-        <Text style={styles.tweet_text}>{this.state.tweet.text}</Text>
+        <AutoLink style={styles.tweet_text} text={this.state.tweet.text}/>
       </View>
     )
   }
