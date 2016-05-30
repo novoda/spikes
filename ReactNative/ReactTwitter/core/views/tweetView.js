@@ -12,8 +12,6 @@ var novodaDataFormat = require('./common/data-format.js')
 var TwitterRequestsService = require('../service/twitter-requests-service.js')
 var AvatarView = require('./common/avatar-view.js')
 
-import Button from './widgets/button.js'
-
 var TweetsView = React.createClass({
   mixins: [AndroidBackNavigationMixin],
 
@@ -68,7 +66,6 @@ var TweetsView = React.createClass({
         <Text style={styles.tweet_author_handle}>@{this.state.tweet.user.screen_name}</Text>
         <Text style={styles.tweet_time}>Tweeted {formattedTime}</Text>
         <Text style={styles.tweet_text}>{this.state.tweet.text}</Text>
-        <Button text="dadass" style={styles.button} onPress={() => {console.warn('Button clicked')}} />
       </View>
     )
   }
@@ -80,10 +77,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     flex: 1
-  },
-  button: {
-    width: 200,
-    height: 70
   },
   userInfoContainer: {
     flexDirection: 'row'
