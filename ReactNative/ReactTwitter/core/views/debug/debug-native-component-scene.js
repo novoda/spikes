@@ -54,10 +54,10 @@ var DebugNativeComponentScene = React.createClass({
       textColor={textColor}
       backgroundImage={backgrounImage}
       style={{height: 60, width: 160, margin: 10}}
-      onPress={() => { enabled && Alert.alert('clicked', rowData) }}/>
+      onPress={() => { Alert.alert('clicked', rowData) }}/>
   },
 
-  _colorForRowData(rowData: string) {
+  _colorForRowData (rowData: string) {
     switch (rowData) {
       case 'Rick': return '#ff00ff'
       case 'And': return '#000000'

@@ -24,10 +24,16 @@ class Button extends React.Component {
 
   render () {
     return (
-      <TouchableWithoutFeedback onPress={this.props.onPress}>
+      <TouchableWithoutFeedback onPress={() => { this._onPress() }}>
         <RCTNovodaButton {...this.props} />
       </TouchableWithoutFeedback>
     )
+  }
+
+  _onPress () {
+    if (this.props.enabled) {
+      this.props.onPress()
+    }
   }
 }
 
