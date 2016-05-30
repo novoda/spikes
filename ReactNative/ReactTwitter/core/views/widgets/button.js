@@ -13,6 +13,9 @@ var iface = {
     text: PropTypes.string,
     enabled: PropTypes.bool,
     textColor: PropTypes.string,
+    backgroundNormal: PropTypes.string,
+    backgroundPressed: PropTypes.string,
+    backgroundDisabled: PropTypes.string,
     ...View.propTypes // include the default view properties
   }
 }

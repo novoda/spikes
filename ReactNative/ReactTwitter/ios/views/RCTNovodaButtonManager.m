@@ -31,4 +31,25 @@ RCT_CUSTOM_VIEW_PROPERTY(textColor, NSString, UIButton)
   [view setTitleColor:[UIColor colorFromHexString:json] forState:UIControlStateNormal];
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(backgroundNormal, NSString, UIButton)
+{
+  if (json && [(NSString *)json length]) {
+    [view setBackgroundImage:[UIImage imageNamed:json] forState:UIControlStateNormal];
+  }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(backgroundPressed, NSString, UIButton)
+{
+  if (json && [(NSString *)json length]) {
+    [view setBackgroundImage:[UIImage imageNamed:json] forState:UIControlStateHighlighted];
+  }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(backgroundDisabled, NSString, UIButton)
+{
+  if (json && [(NSString *)json length]) {
+    [view setBackgroundImage:[UIImage imageNamed:json] forState:UIControlStateDisabled];
+  }
+}
+
 @end

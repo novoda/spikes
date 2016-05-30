@@ -47,14 +47,24 @@ var DebugNativeComponentScene = React.createClass({
   _renderRow (rowData: string) {
     let enabled = this._enabledForRowData(rowData)
     let textColor = this._colorForRowData(rowData)
-    return <Button text={rowData} enabled={enabled} textColor={textColor} style={{height: 60, width: 160}}
+    let backgroundNormal = this._backgroundNormalForRowData(rowData)
+    let backgroundPressed = this._backgroundPressedForRowData(rowData)
+    let backgroundDisabled =  this._backgroundDisabledForRowData(rowData)
+
+    return <Button text={rowData}
+      enabled={enabled}
+      textColor={textColor}
+      backgroundNormal={backgroundNormal}
+      backgroundPressed={backgroundPressed}
+      backgroundDisabled={backgroundDisabled}
+      style={{height: 60, width: 160, margin: 10}}
       onPress={() => { enabled && Alert.alert('clicked', rowData) }}/>
   },
 
   _colorForRowData(rowData: string) {
     switch (rowData) {
-      case 'Rick': return '#0072bc'
-      case 'And': return '#bc0072'
+      case 'Rick': return '#ff00ff'
+      case 'And': return '#000000'
       case 'Morty': return '#72bc00'
       default: return '#000000'
     }
@@ -65,6 +75,33 @@ var DebugNativeComponentScene = React.createClass({
       case 'Rick': return true
       case 'And': return true
       case 'Morty': return false
+      default: return true
+    }
+  },
+
+  _backgroundNormalForRowData(rowData: string) {
+    switch (rowData) {
+      case 'Rick': return 'button-background-normal1'
+      case 'And': return 'button-background-normal2'
+      case 'Morty': return 'button-background-normal2'
+      default: return true
+    }
+  },
+
+  _backgroundPressedForRowData(rowData: string) {
+    switch (rowData) {
+      case 'Rick': return 'button-background-highlited1'
+      case 'And': return 'button-background-highlited2'
+      case 'Morty': return 'button-background-highlited2'
+      default: return true
+    }
+  },
+
+  _backgroundDisabledForRowData(rowData: string) {
+    switch (rowData) {
+      case 'Rick': return 'button-background-disabled1'
+      case 'And': return 'button-background-disabled2'
+      case 'Morty': return 'button-background-disabled2'
       default: return true
     }
   }
