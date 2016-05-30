@@ -12,8 +12,8 @@ var iface = {
   propTypes: {
     text: PropTypes.string,
     ...View.propTypes // include the default view properties
-  },
-};
+  }
+}
 
 var RCTNovodaButton = requireNativeComponent('RCTNovodaButton', iface)
 
@@ -29,9 +29,9 @@ class Button extends React.Component {
 }
 
 Button.propTypes = {
-    text: PropTypes.string,
-    onPress: PropTypes.func,
-    ...View.propTypes // include the default view properties
+  text: PropTypes.string,
+  onPress: PropTypes.func,
+  ...View.propTypes // include the default view properties
 }
 
 module.exports = Button
