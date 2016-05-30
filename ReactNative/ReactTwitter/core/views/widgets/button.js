@@ -29,7 +29,12 @@ class Button extends React.Component {
 }
 
 Button.propTypes = {
+  enabled: PropTypes.bool,
   text: PropTypes.string,
+  textColor: PropTypes.number,
+  backgroundNormal: PropTypes.string,
+  backgroundPressed: PropTypes.string,
+  backgroundDisabled: PropTypes.string,
   onPress: PropTypes.func,
   ...View.propTypes // include the default view properties
 }
