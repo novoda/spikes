@@ -66,7 +66,7 @@ var DebugNativeComponentScene = React.createClass({
     }
   },
 
-  _enabledForRowData(rowData: string) {
+  _enabledForRowData (rowData: string) {
     switch (rowData) {
       case 'Rick': return true
       case 'And': return true
@@ -75,7 +75,7 @@ var DebugNativeComponentScene = React.createClass({
     }
   },
 
-  _backgroundImageForRowData(rowData: string) {
+  _backgroundImageForRowData (rowData: string) {
     switch (rowData) {
       case 'Rick': return 'buttonBackground1'
       case 'And': return 'buttonBackground2'
