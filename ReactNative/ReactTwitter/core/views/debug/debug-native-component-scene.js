@@ -4,10 +4,11 @@ import React from 'react'
 import {
   Navigator,
   StyleSheet,
-  ListView
+  ListView,
+  Alert
 } from 'react-native'
 
-var IOSButtonComponent = require('../common/button-ios.js')
+var Button = require('../widgets/button.js')
 
 var DebugNativeComponentScene = React.createClass({
   statics: {
@@ -44,7 +45,8 @@ var DebugNativeComponentScene = React.createClass({
   },
 
   _renderRow (rowData: string) {
-    return <IOSButtonComponent text={rowData} style={{height: 60, width: 160}}/>
+    return <Button text={rowData} style={{height: 60, width: 160}}
+      onPress={() => { Alert.alert('clicked', rowData) }}/>
   }
 })
 
