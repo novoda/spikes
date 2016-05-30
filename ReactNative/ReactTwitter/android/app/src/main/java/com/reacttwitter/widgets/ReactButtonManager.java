@@ -18,8 +18,18 @@ public class ReactButtonManager extends SimpleViewManager<ReactButton> {
         return new ReactButton(reactContext);
     }
 
+    @ReactProp(name = "enabled")
+    public void setEnabled(ReactButton reactButton, boolean enabled) {
+        reactButton.setEnabled(enabled);
+    }
+
     @ReactProp(name = "text")
     public void setText(ReactButton reactButton, String text) {
         reactButton.setText(text);
+    }
+
+    @ReactProp(name = "textColor")
+    public void setTextColor(ReactButton reactButton, String color) {
+        reactButton.setTextColor(Color.parseColor(color));
     }
 }

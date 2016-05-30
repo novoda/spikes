@@ -60,7 +60,7 @@ var DebugNativeComponentScene = React.createClass({
     }
   },
 
-  _enabledForRowData(rowData: bool) {
+  _enabledForRowData(rowData: string) {
     switch (rowData) {
       case 'Rick': return true
       case 'And': return true
