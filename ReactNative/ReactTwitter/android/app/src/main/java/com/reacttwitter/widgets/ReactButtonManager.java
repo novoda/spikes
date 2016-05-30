@@ -1,5 +1,7 @@
 package com.reacttwitter.widgets;
 
+import android.graphics.Color;
+
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -31,5 +33,10 @@ public class ReactButtonManager extends SimpleViewManager<ReactButton> {
     @ReactProp(name = "textColor")
     public void setTextColor(ReactButton reactButton, String color) {
         reactButton.setTextColor(Color.parseColor(color));
+    }
+
+    @ReactProp(name = "backgroundImage")
+    public void setBackgroundImage(ReactButton reactButton, String backgroundImage) {
+        reactButton.setBackgroundImage(backgroundImage);
     }
 }
