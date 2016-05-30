@@ -6,7 +6,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 public class ReactButtonManager extends SimpleViewManager<ReactButton> {
 
-    public static final String REACT_CLASS = "RCTButton";
+    public static final String REACT_CLASS = "RCTNovodaButton";
 
     @Override
     public String getName() {

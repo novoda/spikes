@@ -8,21 +8,21 @@ import {
 } from 'react-native'
 
 var iface = {
-  name: 'RCTButton',
+  name: 'RCTNovodaButton',
   propTypes: {
     text: PropTypes.string,
     ...View.propTypes // include the default view properties
   },
 };
 
-var RCTButton = requireNativeComponent('RCTButton', iface)
+var RCTNovodaButton = requireNativeComponent('RCTNovodaButton', iface)
 
 class Button extends React.Component {
 
   render () {
     return (
       <TouchableWithoutFeedback onPress={this.props.onPress}>
-        <RCTButton {...this.props} />
+        <RCTNovodaButton {...this.props} />
       </TouchableWithoutFeedback>
     )
   }
