@@ -47,16 +47,12 @@ var DebugNativeComponentScene = React.createClass({
   _renderRow (rowData: string) {
     let enabled = this._enabledForRowData(rowData)
     let textColor = this._colorForRowData(rowData)
-    let backgroundNormal = this._backgroundNormalForRowData(rowData)
-    let backgroundPressed = this._backgroundPressedForRowData(rowData)
-    let backgroundDisabled =  this._backgroundDisabledForRowData(rowData)
+    let backgrounImage = this._backgroundImageForRowData(rowData)
 
     return <Button text={rowData}
       enabled={enabled}
       textColor={textColor}
-      backgroundNormal={backgroundNormal}
-      backgroundPressed={backgroundPressed}
-      backgroundDisabled={backgroundDisabled}
+      backgroundImage={backgrounImage}
       style={{height: 60, width: 160, margin: 10}}
       onPress={() => { enabled && Alert.alert('clicked', rowData) }}/>
   },
@@ -79,29 +75,11 @@ var DebugNativeComponentScene = React.createClass({
     }
   },
 
-  _backgroundNormalForRowData(rowData: string) {
+  _backgroundImageForRowData(rowData: string) {
     switch (rowData) {
-      case 'Rick': return 'button-background-normal1'
-      case 'And': return 'button-background-normal2'
-      case 'Morty': return 'button-background-normal2'
-      default: return true
-    }
-  },
-
-  _backgroundPressedForRowData(rowData: string) {
-    switch (rowData) {
-      case 'Rick': return 'button-background-highlited1'
-      case 'And': return 'button-background-highlited2'
-      case 'Morty': return 'button-background-highlited2'
-      default: return true
-    }
-  },
-
-  _backgroundDisabledForRowData(rowData: string) {
-    switch (rowData) {
-      case 'Rick': return 'button-background-disabled1'
-      case 'And': return 'button-background-disabled2'
-      case 'Morty': return 'button-background-disabled2'
+      case 'Rick': return 'buttonBackground1'
+      case 'And': return 'buttonBackground2'
+      case 'Morty': return 'buttonBackground2'
       default: return true
     }
   }

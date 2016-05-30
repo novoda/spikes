@@ -31,25 +31,23 @@ RCT_CUSTOM_VIEW_PROPERTY(textColor, NSString, UIButton)
   [view setTitleColor:[UIColor colorFromHexString:json] forState:UIControlStateNormal];
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(backgroundNormal, NSString, UIButton)
+RCT_CUSTOM_VIEW_PROPERTY(backgroundImage, NSString, UIButton)
 {
-  if (json && [(NSString *)json length]) {
-    [view setBackgroundImage:[UIImage imageNamed:json] forState:UIControlStateNormal];
+  UIImage *normalImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@Normal", json]];
+  if (normalImage) {
+    [view setBackgroundImage:normalImage forState:UIControlStateNormal];
   }
-}
 
-RCT_CUSTOM_VIEW_PROPERTY(backgroundPressed, NSString, UIButton)
-{
-  if (json && [(NSString *)json length]) {
-    [view setBackgroundImage:[UIImage imageNamed:json] forState:UIControlStateHighlighted];
+  UIImage *pressedImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@Pressed", json]];
+  if (pressedImage) {
+    [view setBackgroundImage:pressedImage forState:UIControlStateHighlighted];
   }
-}
 
-RCT_CUSTOM_VIEW_PROPERTY(backgroundDisabled, NSString, UIButton)
-{
-  if (json && [(NSString *)json length]) {
-    [view setBackgroundImage:[UIImage imageNamed:json] forState:UIControlStateDisabled];
+  UIImage *disabledImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@Disabled", json]];
+  if (disabledImage) {
+    [view setBackgroundImage:disabledImage forState:UIControlStateDisabled];
   }
+
 }
 
 @end

@@ -13,9 +13,7 @@ var iface = {
     text: PropTypes.string,
     enabled: PropTypes.bool,
     textColor: PropTypes.string,
-    backgroundNormal: PropTypes.string,
-    backgroundPressed: PropTypes.string,
-    backgroundDisabled: PropTypes.string,
+    backgroundImage: PropTypes.string,
     ...View.propTypes // include the default view properties
   }
 }
@@ -37,9 +35,7 @@ Button.propTypes = {
   enabled: PropTypes.bool,
   text: PropTypes.string,
   textColor: PropTypes.string,
-  backgroundNormal: PropTypes.string,
-  backgroundPressed: PropTypes.string,
-  backgroundDisabled: PropTypes.string,
+  backgroundImage: PropTypes.string,
   onPress: PropTypes.func,
   ...View.propTypes // include the default view properties
 }
