@@ -10,9 +10,10 @@ import {
 var iface = {
   name: 'RCTNovodaButton',
   propTypes: {
-    text: PropTypes.string,
     enabled: PropTypes.bool,
+    text: PropTypes.string,
     textColor: PropTypes.string,
+    textSize: PropTypes.number,
     backgroundImage: PropTypes.string,
     ...View.propTypes // include the default view properties
   }
@@ -41,6 +42,7 @@ Button.propTypes = {
   enabled: PropTypes.bool,
   text: PropTypes.string,
   textColor: PropTypes.string,
+  textSize: PropTypes.number,
   backgroundImage: PropTypes.string,
   onPress: PropTypes.func,
   ...View.propTypes // include the default view properties

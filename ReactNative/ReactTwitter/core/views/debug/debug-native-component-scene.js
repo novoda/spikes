@@ -52,6 +52,7 @@ var DebugNativeComponentScene = React.createClass({
     return <Button text={rowData}
       enabled={enabled}
       textColor={textColor}
+      textSize={14}
       backgroundImage={backgrounImage}
       style={{margin: 10, paddingLeft: 10, paddingRight: 10, paddingTop: 7, paddingBottom: 7}}
       onPress={() => { Alert.alert('clicked', rowData) }}/>

@@ -1,5 +1,6 @@
 package com.reacttwitter.widgets;
 
+import android.graphics.Rect;
 import android.text.BoringLayout;
 import android.text.Layout;
 import android.text.StaticLayout;
@@ -17,15 +18,17 @@ import javax.annotation.Nullable;
 
 public class ReactButtonShadowNode extends LayoutShadowNode implements CSSNode.MeasureFunction {
 
-    private String text;
-
     private static final TextPaint textPaintInstance = new TextPaint();
 
     static {
         textPaintInstance.setFlags(TextPaint.ANTI_ALIAS_FLAG);
     }
 
+    private String text;
+    private final Rect padding;
+
     public ReactButtonShadowNode() {
+        padding = new Rect();
         setMeasureFunction(this);
     }
 
@@ -41,6 +44,11 @@ public class ReactButtonShadowNode extends LayoutShadowNode implements CSSNode.M
         markUpdated();
     }
 
+    @ReactProp(name = "textSize", defaultInt = 14)
+    public void setTextSize(int textSize) {
+        textPaintInstance.setTextSize(PixelUtil.toPixelFromSP(textSize));
+    }
+
     @Override
     public void measure(
             CSSNode node,
@@ -53,7 +61,6 @@ public class ReactButtonShadowNode extends LayoutShadowNode implements CSSNode.M
         // TODO(5578671): Handle text direction (see View#getTextDirectionHeuristic)
         TextPaint textPaint = textPaintInstance;
         Layout layout;
-        textPaint.setTextSize(PixelUtil.toPixelFromSP(14));
         BoringLayout.Metrics boring = BoringLayout.isBoring(text, textPaint);
         boolean isBoringLayout = boring != null;
         float desiredWidth = !isBoringLayout ?

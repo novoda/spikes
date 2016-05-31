@@ -1,6 +1,7 @@
 package com.reacttwitter.widgets;
 
 import android.graphics.Color;
+import android.util.TypedValue;
 
 import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -33,6 +34,11 @@ public class ReactButtonManager extends BaseViewManager<ReactButton, ReactButton
     @ReactProp(name = "textColor")
     public void setTextColor(ReactButton reactButton, String color) {
         reactButton.setTextColor(Color.parseColor(color));
+    }
+
+    @ReactProp(name = "textSize", defaultInt = 14)
+    public void setTextSize(ReactButton reactButton, int textSize) {
+        reactButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
     }
 
     @ReactProp(name = "backgroundImage")
