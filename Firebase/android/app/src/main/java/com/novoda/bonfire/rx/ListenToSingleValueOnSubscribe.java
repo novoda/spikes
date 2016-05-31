@@ -9,12 +9,12 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Func1;
 
-public class OnSubscribeSingleValueListener<T> implements Observable.OnSubscribe<T> {
+class ListenToSingleValueOnSubscribe<T> implements Observable.OnSubscribe<T> {
 
     private final DatabaseReference databaseReference;
     private final Func1<DataSnapshot, T> marshaller;
 
-    public OnSubscribeSingleValueListener(DatabaseReference databaseReference, Func1<DataSnapshot, T> marshaller) {
+    ListenToSingleValueOnSubscribe(DatabaseReference databaseReference, Func1<DataSnapshot, T> marshaller) {
         this.databaseReference = databaseReference;
         this.marshaller = marshaller;
     }

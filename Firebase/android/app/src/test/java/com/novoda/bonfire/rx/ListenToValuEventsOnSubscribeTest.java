@@ -16,7 +16,7 @@ import rx.observers.TestObserver;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-public class OnSubscribeDatabaseListenerTest {
+public class ListenToValuEventsOnSubscribeTest {
 
     private static final String EXPECTED_KEY = "EXPECTED_KEY";
 
@@ -37,7 +37,7 @@ public class OnSubscribeDatabaseListenerTest {
             }
         }).when(databaseReference).addValueEventListener(any(ValueEventListener.class));
 
-        Observable<String> observable = Observable.create(new OnSubscribeDatabaseListener<>(databaseReference, new DataSnapshotToStringMarshaller()));
+        Observable<String> observable = Observable.create(new ListenToValuEventsOnSubscribe<>(databaseReference, new DataSnapshotToStringMarshaller()));
 
         TestObserver<String> testObserver = new TestObserver<>();
         observable.subscribe(testObserver);
