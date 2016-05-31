@@ -1,6 +1,8 @@
 package com.reacttwitter.widgets;
 
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.text.BoringLayout;
 import android.text.Layout;
 import android.text.StaticLayout;
@@ -47,6 +49,25 @@ public class ReactButtonShadowNode extends LayoutShadowNode implements CSSNode.M
     @ReactProp(name = "textSize", defaultInt = 14)
     public void setTextSize(int textSize) {
         textPaintInstance.setTextSize(PixelUtil.toPixelFromSP(textSize));
+    }
+
+    @ReactProp(name = "backgroundImage")
+    public void setBackgroundImage(String backgroundImage) {
+        Drawable drawable = getDrawableByName(backgroundImage);
+        if (drawable == null) {
+            padding.set(0, 0, 0, 0);
+            return;
+        }
+        drawable.getPadding(this.padding);
+    }
+
+    private Drawable getDrawableByName(String name) {
+        int resId = getThemedContext().getResources().getIdentifier(name.toLowerCase(), "drawable", getThemedContext().getPackageName());
+        if (resId <= 0) {
+            return null;
+        }
+
+        return ContextCompat.getDrawable(getThemedContext(), resId);
     }
 
     @Override
@@ -109,7 +130,7 @@ public class ReactButtonShadowNode extends LayoutShadowNode implements CSSNode.M
             );
         }
 
-        measureOutput.height = layout.getHeight();
-        measureOutput.width = layout.getWidth();
+        measureOutput.height = layout.getHeight() + (padding.top + padding.bottom) * 1.1f;
+        measureOutput.width = layout.getWidth() + (padding.left + padding.right) * 1.1f;
     }
 }
