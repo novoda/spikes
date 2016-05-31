@@ -9,7 +9,9 @@
 /* Begin PBXBuildFile section */
 		1AF7D1A01CEF651600B74483 /* UsersTableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */; };
 		1AF7D1A21CEF659A00B74483 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF7D1A11CEF659A00B74483 /* UserCell.swift */; };
+		2A9669953EF6713AF4064B53 /* Pods_Bonfire_BonfireTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE09269AA64387314EE925E /* Pods_Bonfire_BonfireTests.framework */; };
 		2C77DC9A3D905A6AE8E74FFB /* Pods_Bonfire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13F2FDE620ACDD8945A96B8C /* Pods_Bonfire.framework */; };
+		B0D0AF80F61C78DA7F00A3F0 /* Pods_BonfireTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E56A1EDC9F2754F0BB08741 /* Pods_BonfireTests.framework */; };
 		B6210AC41CE20CEC00570509 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B6210AC31CE20CEC00570509 /* GoogleService-Info.plist */; };
 		B6210AC61CE21FA500570509 /* FirebaseLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6210AC51CE21FA500570509 /* FirebaseLoginService.swift */; };
 		B6210AC81CE2318B00570509 /* UIViewController+AlertExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6210AC71CE2318B00570509 /* UIViewController+AlertExtensions.swift */; };
@@ -17,6 +19,8 @@
 		B62BE1C91CF89CF800326B98 /* PersistedUserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62BE1C81CF89CF800326B98 /* PersistedUserService.swift */; };
 		B636BA241CF34D9F009009F2 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = B636BA231CF34D9F009009F2 /* Config.swift */; };
 		B636BA261CF34DDA009009F2 /* FirebaseRemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B636BA251CF34DDA009009F2 /* FirebaseRemoteConfig.swift */; };
+		B63B37681CFD95CE00142DC3 /* PersistedChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63B37671CFD95CE00142DC3 /* PersistedChatService.swift */; };
+		B63B37861CFD978500142DC3 /* PersistedChatServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63B37641CFD94BC00142DC3 /* PersistedChatServiceTests.swift */; };
 		B654B2671CE0C38000EEDE0A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B654B2661CE0C38000EEDE0A /* AppDelegate.swift */; };
 		B654B2691CE0C38000EEDE0A /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B654B2681CE0C38000EEDE0A /* ChatViewController.swift */; };
 		B654B26E1CE0C38000EEDE0A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B654B26D1CE0C38000EEDE0A /* Assets.xcassets */; };
@@ -78,12 +82,26 @@
 		D0C31FE2185A206D4B6AB6ED /* ChannelsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C31217E78F04ADE3808836 /* ChannelsPresenter.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		B63B37811CFD975A00142DC3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B654B25B1CE0C38000EEDE0A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B654B2621CE0C38000EEDE0A;
+			remoteInfo = Bonfire;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		0858A88D8E7AB853E0338EF2 /* Pods-Bonfire-BonfireTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bonfire-BonfireTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bonfire-BonfireTests/Pods-Bonfire-BonfireTests.release.xcconfig"; sourceTree = "<group>"; };
 		13F2FDE620ACDD8945A96B8C /* Pods_Bonfire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bonfire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersTableViewManager.swift; sourceTree = "<group>"; };
 		1AF7D1A11CEF659A00B74483 /* UserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
+		4AE09269AA64387314EE925E /* Pods_Bonfire_BonfireTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bonfire_BonfireTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		61C2133CEB958634033B29B5 /* Pods-Bonfire.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bonfire.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bonfire/Pods-Bonfire.release.xcconfig"; sourceTree = "<group>"; };
+		70F10478B44ECEDE0486D095 /* Pods-BonfireTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BonfireTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BonfireTests/Pods-BonfireTests.debug.xcconfig"; sourceTree = "<group>"; };
 		8297D97C9651CE491D681CBF /* Pods-Bonfire.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bonfire.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bonfire/Pods-Bonfire.debug.xcconfig"; sourceTree = "<group>"; };
+		9E56A1EDC9F2754F0BB08741 /* Pods_BonfireTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BonfireTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6210AC31CE20CEC00570509 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B6210AC51CE21FA500570509 /* FirebaseLoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseLoginService.swift; sourceTree = "<group>"; };
 		B6210AC71CE2318B00570509 /* UIViewController+AlertExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+AlertExtensions.swift"; sourceTree = "<group>"; };
@@ -91,6 +109,10 @@
 		B62BE1C81CF89CF800326B98 /* PersistedUserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedUserService.swift; sourceTree = "<group>"; };
 		B636BA231CF34D9F009009F2 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		B636BA251CF34DDA009009F2 /* FirebaseRemoteConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseRemoteConfig.swift; sourceTree = "<group>"; };
+		B63B37641CFD94BC00142DC3 /* PersistedChatServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedChatServiceTests.swift; sourceTree = "<group>"; };
+		B63B37671CFD95CE00142DC3 /* PersistedChatService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedChatService.swift; sourceTree = "<group>"; };
+		B63B377C1CFD975A00142DC3 /* BonfireTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BonfireTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B63B37801CFD975A00142DC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B654B2631CE0C38000EEDE0A /* Bonfire.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bonfire.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B654B2661CE0C38000EEDE0A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B654B2681CE0C38000EEDE0A /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
@@ -144,6 +166,7 @@
 		B6CC1CF21CECB05900BA8500 /* CreateChannelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChannelView.swift; sourceTree = "<group>"; };
 		B6CC1CF41CECB3E500BA8500 /* CreateChannelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChannelViewController.swift; sourceTree = "<group>"; };
 		B6ECCEAD1CE3477000580434 /* User+FirebaseConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+FirebaseConvertible.swift"; sourceTree = "<group>"; };
+		BCAE2630135F277739583219 /* Pods-Bonfire-BonfireTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bonfire-BonfireTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bonfire-BonfireTests/Pods-Bonfire-BonfireTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D0C3118D694918412533A84F /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		D0C3119EA7B34321EC65CBAF /* ChannelsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelsViewController.swift; sourceTree = "<group>"; };
 		D0C31217E78F04ADE3808836 /* ChannelsPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelsPresenter.swift; sourceTree = "<group>"; };
@@ -153,9 +176,19 @@
 		D0C31879D1AD9CF1461F5956 /* ChannelsDisplayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelsDisplayer.swift; sourceTree = "<group>"; };
 		D0C318BAA30984F559ACD8D2 /* ChannelsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelsService.swift; sourceTree = "<group>"; };
 		D0C318C841B6FF1360F3261D /* DatabaseResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseResult.swift; sourceTree = "<group>"; };
+		D9103034951D88BBA60738F1 /* Pods-BonfireTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BonfireTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BonfireTests/Pods-BonfireTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		B63B37791CFD975A00142DC3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0D0AF80F61C78DA7F00A3F0 /* Pods_BonfireTests.framework in Frameworks */,
+				2A9669953EF6713AF4064B53 /* Pods_Bonfire_BonfireTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B654B2601CE0C38000EEDE0A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -171,14 +204,34 @@
 			isa = PBXGroup;
 			children = (
 				13F2FDE620ACDD8945A96B8C /* Pods_Bonfire.framework */,
+				9E56A1EDC9F2754F0BB08741 /* Pods_BonfireTests.framework */,
+				4AE09269AA64387314EE925E /* Pods_Bonfire_BonfireTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B63B37631CFD948700142DC3 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				B63B37641CFD94BC00142DC3 /* PersistedChatServiceTests.swift */,
+			);
+			name = Chat;
+			sourceTree = "<group>";
+		};
+		B63B377D1CFD975A00142DC3 /* BonfireTests */ = {
+			isa = PBXGroup;
+			children = (
+				B63B37631CFD948700142DC3 /* Chat */,
+				B63B37801CFD975A00142DC3 /* Info.plist */,
+			);
+			path = BonfireTests;
 			sourceTree = "<group>";
 		};
 		B654B25A1CE0C38000EEDE0A = {
 			isa = PBXGroup;
 			children = (
 				B654B2651CE0C38000EEDE0A /* Bonfire */,
+				B63B377D1CFD975A00142DC3 /* BonfireTests */,
 				3BACB0D2D89FA686D090BFE1 /* Frameworks */,
 				C843196999D7E46141CC91DC /* Pods */,
 				B654B2641CE0C38000EEDE0A /* Products */,
@@ -189,6 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				B654B2631CE0C38000EEDE0A /* Bonfire.app */,
+				B63B377C1CFD975A00142DC3 /* BonfireTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -228,6 +282,7 @@
 				B65C45BA1CE0E46B00B2179D /* ChatPresenter.swift */,
 				B65C45BC1CE0E48800B2179D /* ChatService.swift */,
 				B654B28B1CE0CE8300EEDE0A /* Message.swift */,
+				B63B37671CFD95CE00142DC3 /* PersistedChatService.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -391,6 +446,10 @@
 			children = (
 				8297D97C9651CE491D681CBF /* Pods-Bonfire.debug.xcconfig */,
 				61C2133CEB958634033B29B5 /* Pods-Bonfire.release.xcconfig */,
+				70F10478B44ECEDE0486D095 /* Pods-BonfireTests.debug.xcconfig */,
+				D9103034951D88BBA60738F1 /* Pods-BonfireTests.release.xcconfig */,
+				BCAE2630135F277739583219 /* Pods-Bonfire-BonfireTests.debug.xcconfig */,
+				0858A88D8E7AB853E0338EF2 /* Pods-Bonfire-BonfireTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -426,6 +485,27 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		B63B377B1CFD975A00142DC3 /* BonfireTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B63B37831CFD975A00142DC3 /* Build configuration list for PBXNativeTarget "BonfireTests" */;
+			buildPhases = (
+				CD3332CD9DD451B8DAB18B40 /* 📦 Check Pods Manifest.lock */,
+				B63B37781CFD975A00142DC3 /* Sources */,
+				B63B37791CFD975A00142DC3 /* Frameworks */,
+				B63B377A1CFD975A00142DC3 /* Resources */,
+				3BD164270703B37BA1CBB8BF /* 📦 Embed Pods Frameworks */,
+				DBF248069E025D350E134FCF /* 📦 Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B63B37821CFD975A00142DC3 /* PBXTargetDependency */,
+			);
+			name = BonfireTests;
+			productName = BonfireTests;
+			productReference = B63B377C1CFD975A00142DC3 /* BonfireTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		B654B2621CE0C38000EEDE0A /* Bonfire */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B654B2801CE0C38000EEDE0A /* Build configuration list for PBXNativeTarget "Bonfire" */;
@@ -456,6 +536,10 @@
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = Novoda;
 				TargetAttributes = {
+					B63B377B1CFD975A00142DC3 = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = B654B2621CE0C38000EEDE0A;
+					};
 					B654B2621CE0C38000EEDE0A = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = 6344MVRY42;
@@ -481,11 +565,19 @@
 			projectRoot = "";
 			targets = (
 				B654B2621CE0C38000EEDE0A /* Bonfire */,
+				B63B377B1CFD975A00142DC3 /* BonfireTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		B63B377A1CFD975A00142DC3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B654B2611CE0C38000EEDE0A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -529,6 +621,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bonfire/Pods-Bonfire-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		3BD164270703B37BA1CBB8BF /* 📦 Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bonfire-BonfireTests/Pods-Bonfire-BonfireTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		95A84718793C98A132AECDD9 /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -544,9 +651,47 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bonfire/Pods-Bonfire-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		CD3332CD9DD451B8DAB18B40 /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		DBF248069E025D350E134FCF /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bonfire-BonfireTests/Pods-Bonfire-BonfireTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		B63B37781CFD975A00142DC3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B63B37861CFD978500142DC3 /* PersistedChatServiceTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B654B25F1CE0C38000EEDE0A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -594,6 +739,7 @@
 				B65C45BB1CE0E46B00B2179D /* ChatPresenter.swift in Sources */,
 				B65C45CF1CE1E40B00B2179D /* LoginDisplayer.swift in Sources */,
 				B6C054EE1CF728BA00B1BB6C /* ChannelsDatabase.swift in Sources */,
+				B63B37681CFD95CE00142DC3 /* PersistedChatService.swift in Sources */,
 				B65C45B21CE0E03F00B2179D /* FirebaseConvertible.swift in Sources */,
 				B65C45D31CE1E4B200B2179D /* User.swift in Sources */,
 				B6210ACC1CE24AC600570509 /* Authentication.swift in Sources */,
@@ -621,6 +767,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		B63B37821CFD975A00142DC3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B654B2621CE0C38000EEDE0A /* Bonfire */;
+			targetProxy = B63B37811CFD975A00142DC3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		B654B26F1CE0C38000EEDE0A /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -634,6 +788,33 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		B63B37841CFD975A00142DC3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BCAE2630135F277739583219 /* Pods-Bonfire-BonfireTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = BonfireTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.novoda.BonfireTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Bonfire.app/Bonfire";
+			};
+			name = Debug;
+		};
+		B63B37851CFD975A00142DC3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0858A88D8E7AB853E0338EF2 /* Pods-Bonfire-BonfireTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = BonfireTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.novoda.BonfireTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Bonfire.app/Bonfire";
+			};
+			name = Release;
+		};
 		B654B27E1CE0C38000EEDE0A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -753,6 +934,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		B63B37831CFD975A00142DC3 /* Build configuration list for PBXNativeTarget "BonfireTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B63B37841CFD975A00142DC3 /* Debug */,
+				B63B37851CFD975A00142DC3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		B654B25E1CE0C38000EEDE0A /* Build configuration list for PBXProject "Bonfire" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
