@@ -3,6 +3,7 @@ package com.novoda.bonfire.user.database;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.novoda.bonfire.rx.FirebaseObservableListeners;
 import com.novoda.bonfire.user.data.model.User;
 import com.novoda.bonfire.user.data.model.Users;
 
@@ -12,25 +13,24 @@ import java.util.List;
 import rx.Observable;
 import rx.functions.Func1;
 
-import static com.novoda.bonfire.rx.FirebaseObservableListeners.listenToSingleValueEvents;
-import static com.novoda.bonfire.rx.FirebaseObservableListeners.listenToValueEvents;
-
 public class FirebaseUserDatabase implements UserDatabase {
 
     private final DatabaseReference usersDB;
+    private final FirebaseObservableListeners firebaseObservableListeners;
 
-    public FirebaseUserDatabase(FirebaseDatabase firebaseDatabase) {
+    public FirebaseUserDatabase(FirebaseDatabase firebaseDatabase, FirebaseObservableListeners firebaseObservableListeners) {
         usersDB = firebaseDatabase.getReference("users");
+        this.firebaseObservableListeners = firebaseObservableListeners;
     }
 
     @Override
     public Observable<Users> observeUsers() {
-        return listenToValueEvents(usersDB, toUsers());
+        return firebaseObservableListeners.listenToValueEvents(usersDB, toUsers());
     }
 
     @Override
     public Observable<User> readUserFrom(String userId) {
-        return listenToSingleValueEvents(usersDB.child(userId), as(User.class));
+        return firebaseObservableListeners.listenToSingleValueEvents(usersDB.child(userId), as(User.class));
     }
 
     @Override

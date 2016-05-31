@@ -16,6 +16,7 @@ import com.novoda.bonfire.chat.service.PersistedChatService;
 import com.novoda.bonfire.login.database.FirebaseAuthDatabase;
 import com.novoda.bonfire.login.service.FirebaseLoginService;
 import com.novoda.bonfire.login.service.LoginService;
+import com.novoda.bonfire.rx.FirebaseObservableListeners;
 import com.novoda.bonfire.user.database.FirebaseUserDatabase;
 import com.novoda.bonfire.user.service.PersistedUserService;
 import com.novoda.bonfire.user.service.UserService;
@@ -37,12 +38,13 @@ public enum Dependencies {
             FirebaseAuth firebaseAuth = FirebaseAuth.getInstance(firebaseApp);
             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(firebaseApp);
             firebaseDatabase.setPersistenceEnabled(true);
-            FirebaseUserDatabase userDatabase = new FirebaseUserDatabase(firebaseDatabase);
+            FirebaseObservableListeners firebaseObservableListeners = new FirebaseObservableListeners();
+            FirebaseUserDatabase userDatabase = new FirebaseUserDatabase(firebaseDatabase, firebaseObservableListeners);
 
             firebaseAnalytics = new FirebaseAnalyticsAnalytics(context);
             loginService = new FirebaseLoginService(new FirebaseAuthDatabase(firebaseAuth), userDatabase);
             chatService = new PersistedChatService(new FirebaseChatDatabase(firebaseDatabase));
-            channelService = new PersistedChannelService(new FirebaseChannelsDatabase(firebaseDatabase), userDatabase);
+            channelService = new PersistedChannelService(new FirebaseChannelsDatabase(firebaseDatabase, firebaseObservableListeners), userDatabase);
             userService = new PersistedUserService(userDatabase);
         }
     }

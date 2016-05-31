@@ -6,14 +6,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.chat.data.model.Chat;
 import com.novoda.bonfire.chat.data.model.Message;
+import com.novoda.bonfire.rx.FirebaseObservableListeners;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
 import rx.functions.Func1;
-
-import static com.novoda.bonfire.rx.FirebaseObservableListeners.listenToValueEvents;
 
 public class FirebaseChatDatabase implements ChatDatabase {
 
@@ -25,7 +24,7 @@ public class FirebaseChatDatabase implements ChatDatabase {
 
     @Override
     public Observable<Chat> observeChat(Channel channel) {
-        return listenToValueEvents(messagesInChannel(channel), toChat());
+        return new FirebaseObservableListeners().listenToValueEvents(messagesInChannel(channel), toChat());
     }
 
     @Override
