@@ -4,16 +4,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.bonfire.channel.data.model.Channel;
-import com.novoda.bonfire.rx.OnSubscribeDatabaseListener;
-import com.novoda.bonfire.rx.OnSubscribeRemoveValueListener;
-import com.novoda.bonfire.rx.OnSubscribeSetValueListener;
-import com.novoda.bonfire.rx.OnSubscribeSingleValueListener;
 import com.novoda.bonfire.user.data.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
 import rx.functions.Func1;
+
+import static com.novoda.bonfire.rx.FirebaseObservableListeners.*;
 
 public class FirebaseChannelsDatabase implements ChannelsDatabase {
 
@@ -31,51 +30,51 @@ public class FirebaseChannelsDatabase implements ChannelsDatabase {
 
     @Override
     public Observable<List<String>> observePublicChannelIds() {
-        return Observable.create(new OnSubscribeDatabaseListener<>(publicChannelsDB, new DataSnapshotToStringListMarshaller()));
+        return listenToValueEvents(publicChannelsDB, getKeys());
     }
 
     @Override
     public Observable<List<String>> observePrivateChannelIdsFor(User user) {
-        return Observable.create(new OnSubscribeDatabaseListener<>(privateChannelsDB.child(user.getId()), new DataSnapshotToStringListMarshaller()));
+        return listenToValueEvents(privateChannelsDB.child(user.getId()), getKeys());
     }
 
     @Override
     public Observable<Channel> readChannelFor(String channelName) {
-        return Observable.create(new OnSubscribeSingleValueListener<>(channelsDB.child(channelName), as(Channel.class)));
+        return listenToSingleValueEvents(channelsDB.child(channelName), as(Channel.class));
     }
 
     @Override
     public Observable<Channel> writeChannel(Channel newChannel) {
-        return Observable.create(new OnSubscribeSetValueListener<>(newChannel, channelsDB.child(newChannel.getName()), newChannel));
+        return setValue(newChannel, channelsDB.child(newChannel.getName()), newChannel);
     }
 
     @Override
     public Observable<Channel> writeChannelToPublicChannelIndex(Channel newChannel) {
-        return Observable.create(new OnSubscribeSetValueListener<>(true, publicChannelsDB.child(newChannel.getName()), newChannel));
+        return setValue(true, publicChannelsDB.child(newChannel.getName()), newChannel);
     }
 
     @Override
     public Observable<Channel> addOwnerToPrivateChannel(User user, Channel channel) {
-        return Observable.create(new OnSubscribeSetValueListener<>(true, ownersDB.child(channel.getName()).child(user.getId()), channel));
+        return setValue(true, ownersDB.child(channel.getName()).child(user.getId()), channel);
     }
 
     public Observable<Channel> removeOwnerFromPrivateChannel(User user, Channel channel) {
-        return Observable.create(new OnSubscribeRemoveValueListener<>(ownersDB.child(channel.getName()).child(user.getId()), channel));
+        return removeValue(ownersDB.child(channel.getName()).child(user.getId()), channel);
     }
 
     @Override
     public Observable<Channel> addChannelToUserPrivateChannelIndex(User user, Channel channel) {
-        return Observable.create(new OnSubscribeSetValueListener<>(true, privateChannelsDB.child(user.getId()).child(channel.getName()), channel));
+        return setValue(true, privateChannelsDB.child(user.getId()).child(channel.getName()), channel);
     }
 
     @Override
     public Observable<Channel> removeChannelFromUserPrivateChannelIndex(User user, Channel channel) {
-        return Observable.create(new OnSubscribeRemoveValueListener<>(privateChannelsDB.child(user.getId()).child(channel.getName()), channel));
+        return removeValue(privateChannelsDB.child(user.getId()).child(channel.getName()), channel);
     }
 
     @Override
     public Observable<List<String>> observeOwnerIdsFor(Channel channel) {
-        return Observable.create(new OnSubscribeDatabaseListener<>(ownersDB.child(channel.getName()), new DataSnapshotToStringListMarshaller()));
+        return listenToValueEvents(ownersDB.child(channel.getName()), getKeys());
     }
 
     private static <T> Func1<DataSnapshot, T> as(final Class<T> tClass) {
@@ -83,6 +82,22 @@ public class FirebaseChannelsDatabase implements ChannelsDatabase {
             @Override
             public T call(DataSnapshot dataSnapshot) {
                 return dataSnapshot.getValue(tClass);
+            }
+        };
+    }
+
+    private static Func1<DataSnapshot, List<String>> getKeys() {
+        return new Func1<DataSnapshot, List<String>>() {
+            @Override
+            public List<String> call(DataSnapshot dataSnapshot) {
+                List<String> keys = new ArrayList<>();
+                if (dataSnapshot.hasChildren()) {
+                    Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                    for (DataSnapshot child : children) {
+                        keys.add(child.getKey());
+                    }
+                }
+                return keys;
             }
         };
     }

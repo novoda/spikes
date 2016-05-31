@@ -11,12 +11,12 @@ import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.subscriptions.BooleanSubscription;
 
-public class OnSubscribeDatabaseListener<T> implements Observable.OnSubscribe<T> {
+class ListenToValuEventsOnSubscribe<T> implements Observable.OnSubscribe<T> {
 
     private final DatabaseReference databaseReference;
     private final Func1<DataSnapshot, T> marshaller;
 
-    public OnSubscribeDatabaseListener(DatabaseReference databaseReference, Func1<DataSnapshot, T> marshaller) {
+    ListenToValuEventsOnSubscribe(DatabaseReference databaseReference, Func1<DataSnapshot, T> marshaller) {
         this.databaseReference = databaseReference;
         this.marshaller = marshaller;
     }
@@ -37,7 +37,7 @@ public class OnSubscribeDatabaseListener<T> implements Observable.OnSubscribe<T>
         private final Subscriber<? super T> subscriber;
         private final Func1<DataSnapshot, T> marshaller;
 
-        public RxValueListener(Subscriber<? super T> subscriber, Func1<DataSnapshot, T> marshaller) {
+        RxValueListener(Subscriber<? super T> subscriber, Func1<DataSnapshot, T> marshaller) {
             this.subscriber = subscriber;
             this.marshaller = marshaller;
         }
@@ -55,4 +55,5 @@ public class OnSubscribeDatabaseListener<T> implements Observable.OnSubscribe<T>
         }
 
     }
+
 }
