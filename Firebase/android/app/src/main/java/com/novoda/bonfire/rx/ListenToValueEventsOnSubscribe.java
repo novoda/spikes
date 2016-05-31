@@ -11,12 +11,12 @@ import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.subscriptions.BooleanSubscription;
 
-class ListenToValuEventsOnSubscribe<T> implements Observable.OnSubscribe<T> {
+class ListenToValueEventsOnSubscribe<T> implements Observable.OnSubscribe<T> {
 
     private final DatabaseReference databaseReference;
     private final Func1<DataSnapshot, T> marshaller;
 
-    ListenToValuEventsOnSubscribe(DatabaseReference databaseReference, Func1<DataSnapshot, T> marshaller) {
+    ListenToValueEventsOnSubscribe(DatabaseReference databaseReference, Func1<DataSnapshot, T> marshaller) {
         this.databaseReference = databaseReference;
         this.marshaller = marshaller;
     }

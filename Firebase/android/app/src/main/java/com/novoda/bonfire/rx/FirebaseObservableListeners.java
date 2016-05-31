@@ -13,7 +13,7 @@ public final class FirebaseObservableListeners {
     }
 
     public static <T> Observable<T> listenToValueEvents(DatabaseReference databaseReference, Func1<DataSnapshot, T> marshaller) {
-        return Observable.create(new ListenToValuEventsOnSubscribe<T>(databaseReference, marshaller));
+        return Observable.create(new ListenToValueEventsOnSubscribe<T>(databaseReference, marshaller));
     }
 
     public static <T> Observable<T> listenToSingleValueEvents(DatabaseReference databaseReference, Func1<DataSnapshot, T> marshaller) {
