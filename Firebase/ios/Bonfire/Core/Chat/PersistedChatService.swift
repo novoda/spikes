@@ -15,6 +15,6 @@ final class PersistedChatService: ChatService {
     }
 
     func sendMessage(message: Message, channel: Channel) {
-        
+        chatDatabase.sendMessage(message, channel: channel)
     }
 }

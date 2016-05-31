@@ -20,13 +20,22 @@ class PersistedChatServiceTests: XCTestCase {
     struct TestErrorType: ErrorType {}
 
     struct MockChatDatabase: ChatDatabase {
-        let chatObservable: TestableObservable<Chat>
+        let chatObservable: Observable<Chat>
+        let sendMessageExpectation: ((Message, Channel) -> Void)?
 
-        func chat(channel: Channel) -> Observable<Chat> {
-            return chatObservable.asObservable()
+        init(chatObservable: Observable<Chat>,
+             sendMessageExpectation: ((Message, Channel) -> Void)? = nil) {
+            self.chatObservable = chatObservable
+            self.sendMessageExpectation = sendMessageExpectation
         }
 
-        func sendMessage(message: Message, channel: Channel) {}
+        func chat(channel: Channel) -> Observable<Chat> {
+            return chatObservable
+        }
+
+        func sendMessage(message: Message, channel: Channel) {
+            sendMessageExpectation?(message, channel)
+        }
     }
 
     func testThatItMapsChatObservableToDatabaseResultObservable() {
@@ -37,7 +46,7 @@ class PersistedChatServiceTests: XCTestCase {
             next(1, chat)
             ])
 
-        let chatDatabase = MockChatDatabase(chatObservable: testChatEvents)
+        let chatDatabase = MockChatDatabase(chatObservable: testChatEvents.asObservable())
         let chatService = PersistedChatService(chatDatabase: chatDatabase)
 
         // When
@@ -58,7 +67,7 @@ class PersistedChatServiceTests: XCTestCase {
             error(1, TestErrorType())
             ])
 
-        let chatDatabase = MockChatDatabase(chatObservable: errorEvent)
+        let chatDatabase = MockChatDatabase(chatObservable: errorEvent.asObservable())
         let chatService = PersistedChatService(chatDatabase: chatDatabase)
 
         // When
@@ -73,5 +82,26 @@ class PersistedChatServiceTests: XCTestCase {
 
         XCTAssertEqual(testableObserver.events, expectedEvents)
     }
+    
+    func testThatItCallsTheSendMessageOnTheDatabase() {
+        // Given
+        let user = User(name: "TestUser", id: "1", photoURL: nil)
+        let message = Message(author: user, body: "Test message")
 
+        let expectation = self.expectationWithDescription("testThatItCallsTheSendMessageOnTheDatabase")
+
+        let chatDatabase = MockChatDatabase(chatObservable: Observable.empty()) { msg, chnl in
+            // Then
+            XCTAssertEqual(msg, message)
+            XCTAssertEqual(chnl, self.channel)
+            expectation.fulfill()
+        }
+
+        let chatService = PersistedChatService(chatDatabase: chatDatabase)
+
+        // When
+        chatService.sendMessage(message, channel: channel)
+        self.waitForExpectationsWithTimeout(0.1, handler: nil)
+    }
+    
 }
