@@ -22,6 +22,7 @@
 		B63B37681CFD95CE00142DC3 /* PersistedChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63B37671CFD95CE00142DC3 /* PersistedChatService.swift */; };
 		B63B37861CFD978500142DC3 /* PersistedChatServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63B37641CFD94BC00142DC3 /* PersistedChatServiceTests.swift */; };
 		B63B37881CFD98A300142DC3 /* ChatDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63B37871CFD98A300142DC3 /* ChatDatabase.swift */; };
+		B63B378A1CFDCF6400142DC3 /* FirebaseChatDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63B37891CFDCF6400142DC3 /* FirebaseChatDatabase.swift */; };
 		B654B2671CE0C38000EEDE0A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B654B2661CE0C38000EEDE0A /* AppDelegate.swift */; };
 		B654B2691CE0C38000EEDE0A /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B654B2681CE0C38000EEDE0A /* ChatViewController.swift */; };
 		B654B26E1CE0C38000EEDE0A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B654B26D1CE0C38000EEDE0A /* Assets.xcassets */; };
@@ -115,6 +116,7 @@
 		B63B377C1CFD975A00142DC3 /* BonfireTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BonfireTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B63B37801CFD975A00142DC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B63B37871CFD98A300142DC3 /* ChatDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatDatabase.swift; sourceTree = "<group>"; };
+		B63B37891CFDCF6400142DC3 /* FirebaseChatDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseChatDatabase.swift; sourceTree = "<group>"; };
 		B654B2631CE0C38000EEDE0A /* Bonfire.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bonfire.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B654B2661CE0C38000EEDE0A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B654B2681CE0C38000EEDE0A /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
@@ -332,6 +334,7 @@
 				B65C45B81CE0E1EF00B2179D /* ChatView.swift */,
 				B654B2681CE0C38000EEDE0A /* ChatViewController.swift */,
 				B65C45BE1CE0E53200B2179D /* FirebaseChatService.swift */,
+				B63B37891CFDCF6400142DC3 /* FirebaseChatDatabase.swift */,
 				B65C45C21CE0EF5800B2179D /* Message+FirebaseConvertible.swift */,
 			);
 			path = Chat;
@@ -706,6 +709,7 @@
 				B6CC1CF51CECB3E500BA8500 /* CreateChannelViewController.swift in Sources */,
 				B6C054F01CF72A2900B1BB6C /* FirebaseChannelsDatabase.swift in Sources */,
 				B65C45B41CE0E0F900B2179D /* Chat.swift in Sources */,
+				B63B378A1CFDCF6400142DC3 /* FirebaseChatDatabase.swift in Sources */,
 				B6CC1CE91CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift in Sources */,
 				1AF7D1A01CEF651600B74483 /* UsersTableViewManager.swift in Sources */,
 				B6C054F41CF73EE800B1BB6C /* FirebaseUserDatabase.swift in Sources */,
