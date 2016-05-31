@@ -51,6 +51,7 @@ public class ReactButtonShadowNode extends LayoutShadowNode implements CSSNode.M
     @ReactProp(name = "textSize", defaultInt = 14)
     public void setTextSize(int textSize) {
         textPaintInstance.setTextSize(PixelUtil.toPixelFromSP(textSize));
+        markUpdated();
     }
 
     @ReactProp(name = "backgroundImage")
@@ -61,6 +62,7 @@ public class ReactButtonShadowNode extends LayoutShadowNode implements CSSNode.M
             return;
         }
         drawable.getPadding(this.padding);
+        markUpdated();
     }
 
     private Drawable getDrawableByName(String name) {
