@@ -22,6 +22,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		B85249031CFDDEEE00B4AEF7 /* ReactTwitterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85249021CFDDEEE00B4AEF7 /* ReactTwitterUITests.swift */; };
 		B856299D1CF742F900FCCF6E /* RCTNovodaButtonManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B856299C1CF742F900FCCF6E /* RCTNovodaButtonManager.m */; };
 		B87127641CFC6DC600EEA78D /* UIColor+additions.m in Sources */ = {isa = PBXBuildFile; fileRef = B87127631CFC6DC600EEA78D /* UIColor+additions.m */; };
 		B8A8009E1CF864ED00867E7A /* RCTNovodaButton.m in Sources */ = {isa = PBXBuildFile; fileRef = B8A8009D1CF864ED00867E7A /* RCTNovodaButton.m */; };
@@ -106,6 +107,13 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
+		B85249051CFDDEEE00B4AEF7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
+			remoteInfo = ReactTwitter;
+		};
 		B8DDA37E1CF5FED2009D132A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B8DDA37A1CF5FED2009D132A /* RCTPushNotification.xcodeproj */;
@@ -137,6 +145,9 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		B85249001CFDDEED00B4AEF7 /* ReactTwitterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReactTwitterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B85249021CFDDEEE00B4AEF7 /* ReactTwitterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactTwitterUITests.swift; sourceTree = "<group>"; };
+		B85249041CFDDEEE00B4AEF7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B856299B1CF742F900FCCF6E /* RCTNovodaButtonManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCTNovodaButtonManager.h; path = views/RCTNovodaButtonManager.h; sourceTree = "<group>"; };
 		B856299C1CF742F900FCCF6E /* RCTNovodaButtonManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCTNovodaButtonManager.m; path = views/RCTNovodaButtonManager.m; sourceTree = "<group>"; };
 		B87127621CFC6DC600EEA78D /* UIColor+additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+additions.h"; sourceTree = "<group>"; };
@@ -169,6 +180,13 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B85248FD1CFDDEED00B4AEF7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -312,6 +330,7 @@
 				13B07FAE1A68108700A75B9A /* ReactTwitter */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* ReactTwitterTests */,
+				B85249011CFDDEEE00B4AEF7 /* ReactTwitterUITests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 			);
 			indentWidth = 2;
@@ -323,8 +342,18 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* ReactTwitter.app */,
 				00E356EE1AD99517003FC87E /* ReactTwitterTests.xctest */,
+				B85249001CFDDEED00B4AEF7 /* ReactTwitterUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		B85249011CFDDEEE00B4AEF7 /* ReactTwitterUITests */ = {
+			isa = PBXGroup;
+			children = (
+				B85249021CFDDEEE00B4AEF7 /* ReactTwitterUITests.swift */,
+				B85249041CFDDEEE00B4AEF7 /* Info.plist */,
+			);
+			path = ReactTwitterUITests;
 			sourceTree = "<group>";
 		};
 		B85629A91CF7430100FCCF6E /* views */ = {
@@ -394,12 +423,31 @@
 			productReference = 13B07F961A680F5B00A75B9A /* ReactTwitter.app */;
 			productType = "com.apple.product-type.application";
 		};
+		B85248FF1CFDDEED00B4AEF7 /* ReactTwitterUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B85249141CFDDEEE00B4AEF7 /* Build configuration list for PBXNativeTarget "ReactTwitterUITests" */;
+			buildPhases = (
+				B85248FC1CFDDEED00B4AEF7 /* Sources */,
+				B85248FD1CFDDEED00B4AEF7 /* Frameworks */,
+				B85248FE1CFDDEED00B4AEF7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B85249061CFDDEEE00B4AEF7 /* PBXTargetDependency */,
+			);
+			name = ReactTwitterUITests;
+			productName = ReactTwitterUITests;
+			productReference = B85249001CFDDEED00B4AEF7 /* ReactTwitterUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
@@ -414,6 +462,10 @@
 								enabled = 1;
 							};
 						};
+					};
+					B85248FF1CFDDEED00B4AEF7 = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 				};
 			};
@@ -478,6 +530,7 @@
 			targets = (
 				13B07F861A680F5B00A75B9A /* ReactTwitter */,
 				00E356ED1AD99517003FC87E /* ReactTwitterTests */,
+				B85248FF1CFDDEED00B4AEF7 /* ReactTwitterUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -579,6 +632,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B85248FE1CFDDEED00B4AEF7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -619,6 +679,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B85248FC1CFDDEED00B4AEF7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B85249031CFDDEEE00B4AEF7 /* ReactTwitterUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -626,6 +694,11 @@
 			isa = PBXTargetDependency;
 			target = 13B07F861A680F5B00A75B9A /* ReactTwitter */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
+		};
+		B85249061CFDDEEE00B4AEF7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 13B07F861A680F5B00A75B9A /* ReactTwitter */;
+			targetProxy = B85249051CFDDEEE00B4AEF7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -837,6 +910,40 @@
 			};
 			name = Release;
 		};
+		B85249071CFDDEEE00B4AEF7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = ReactTwitterUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.pebasile.ReactTwitterUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "e90187b8-9368-493e-ab8b-7b85aa27f7da";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TEST_TARGET_NAME = ReactTwitter;
+			};
+			name = Debug;
+		};
+		B85249081CFDDEEE00B4AEF7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = ReactTwitterUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.pebasile.ReactTwitterUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "e90187b8-9368-493e-ab8b-7b85aa27f7da";
+				TEST_TARGET_NAME = ReactTwitter;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -863,6 +970,15 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B85249141CFDDEEE00B4AEF7 /* Build configuration list for PBXNativeTarget "ReactTwitterUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B85249071CFDDEEE00B4AEF7 /* Debug */,
+				B85249081CFDDEEE00B4AEF7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
