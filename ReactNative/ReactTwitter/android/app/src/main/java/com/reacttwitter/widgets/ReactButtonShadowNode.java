@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 
 public class ReactButtonShadowNode extends LayoutShadowNode implements CSSNode.MeasureFunction {
 
-    private static final float MAGIC_CONSTANT = 1.15f;
+    private static final float PADDING_MULTIPLIER = 1f + PixelUtil.toPixelFromSP(1) / 20f;
 
     private static final TextPaint textPaintInstance = new TextPaint();
 
@@ -132,7 +132,7 @@ public class ReactButtonShadowNode extends LayoutShadowNode implements CSSNode.M
             );
         }
 
-        measureOutput.height = layout.getHeight() + (padding.top + padding.bottom) * MAGIC_CONSTANT;
-        measureOutput.width = layout.getWidth() + (padding.left + padding.right) * MAGIC_CONSTANT;
+        measureOutput.height = layout.getHeight() + (padding.top + padding.bottom) * PADDING_MULTIPLIER;
+        measureOutput.width = layout.getWidth() + (padding.left + padding.right) * PADDING_MULTIPLIER;
     }
 }
