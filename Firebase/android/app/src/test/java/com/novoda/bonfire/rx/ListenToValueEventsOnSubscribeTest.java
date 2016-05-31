@@ -11,6 +11,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import rx.Observable;
+import rx.functions.Func1;
 import rx.observers.TestObserver;
 
 import static org.mockito.Matchers.any;
@@ -37,7 +38,7 @@ public class ListenToValueEventsOnSubscribeTest {
             }
         }).when(databaseReference).addValueEventListener(any(ValueEventListener.class));
 
-        Observable<String> observable = Observable.create(new ListenToValueEventsOnSubscribe<>(databaseReference, new DataSnapshotToStringMarshaller()));
+        Observable<String> observable = Observable.create(new ListenToValueEventsOnSubscribe<>(databaseReference, getKey()));
 
         TestObserver<String> testObserver = new TestObserver<>();
         observable.subscribe(testObserver);
@@ -45,10 +46,13 @@ public class ListenToValueEventsOnSubscribeTest {
         testObserver.assertReceivedOnNext(Collections.singletonList(EXPECTED_KEY));
     }
 
-    private class DataSnapshotToStringMarshaller implements rx.functions.Func1<DataSnapshot, String> {
-        @Override
-        public String call(DataSnapshot dataSnapshot) {
-            return dataSnapshot.getKey();
-        }
+    private static Func1<DataSnapshot, String> getKey() {
+        return new Func1<DataSnapshot, String>() {
+            @Override
+            public String call(DataSnapshot dataSnapshot) {
+                return dataSnapshot.getKey();
+            }
+        };
     }
+
 }
