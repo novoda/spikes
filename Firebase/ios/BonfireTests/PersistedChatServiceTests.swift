@@ -5,6 +5,20 @@ import RxTests
 
 class PersistedChatServiceTests: XCTestCase {
 
+    let channel =  Channel(name: "TestChannel", access: .Public)
+
+    var scheduler: TestScheduler!
+    var testableObserver: TestableObserver<DatabaseResult<Chat>>!
+
+    override func setUp() {
+        super.setUp()
+        scheduler = TestScheduler(initialClock: 0)
+        testableObserver = scheduler.createObserver(DatabaseResult<Chat>)
+    }
+
+
+    struct TestErrorType: ErrorType {}
+
     struct MockChatDatabase: ChatDatabase {
         let chatObservable: TestableObservable<Chat>
 
@@ -17,11 +31,7 @@ class PersistedChatServiceTests: XCTestCase {
 
     func testThatItMapsChatObservableToDatabaseResultObservable() {
         // Given
-        let channel =  Channel(name: "TestChannel", access: .Public)
         let chat = Chat(channel: channel, messages: [])
-
-        let scheduler = TestScheduler(initialClock: 0)
-        let testableObserver = scheduler.createObserver(DatabaseResult<Chat>)
 
         let testChatEvents = scheduler.createHotObservable([
             next(1, chat)
@@ -42,5 +52,26 @@ class PersistedChatServiceTests: XCTestCase {
         XCTAssertEqual(testableObserver.events, expectedEvents)
     }
 
+    func testThatItMapsAnErrorToDatabaseResult() {
+        // Given
+        let errorEvent: TestableObservable<Chat> = scheduler.createHotObservable([
+            error(1, TestErrorType())
+            ])
+
+        let chatDatabase = MockChatDatabase(chatObservable: errorEvent)
+        let chatService = PersistedChatService(chatDatabase: chatDatabase)
+
+        // When
+        chatService.chat(channel).subscribe(testableObserver)
+        scheduler.start()
+
+        // Then
+        let expectedEvents: [Recorded<Event<DatabaseResult<Chat>>>] = [
+            next(1, DatabaseResult.Error(TestErrorType())),
+            completed(1)
+        ]
+
+        XCTAssertEqual(testableObserver.events, expectedEvents)
+    }
 
 }

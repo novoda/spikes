@@ -11,6 +11,7 @@ final class PersistedChatService: ChatService {
     func chat(channel: Channel) -> Observable<DatabaseResult<Chat>> {
         return chatDatabase.chat(channel)
             .map({.Success($0)})
+            .catchError({Observable.just(.Error($0))})
     }
 
     func sendMessage(message: Message, channel: Channel) {
