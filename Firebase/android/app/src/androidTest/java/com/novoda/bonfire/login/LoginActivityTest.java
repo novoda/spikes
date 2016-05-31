@@ -6,15 +6,11 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.common.SignInButton;
-import com.novoda.bonfire.Dependencies;
 import com.novoda.bonfire.R;
-import com.novoda.bonfire.analytics.Analytics;
-import com.novoda.bonfire.channel.service.ChannelService;
-import com.novoda.bonfire.chat.service.ChatService;
+import com.novoda.bonfire.TestDependencies;
 import com.novoda.bonfire.login.data.model.Authentication;
 import com.novoda.bonfire.login.service.LoginService;
 import com.novoda.bonfire.user.data.model.User;
-import com.novoda.bonfire.user.service.UserService;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -43,11 +39,8 @@ public class LoginActivityTest {
         authentication = Mockito.mock(Authentication.class);
         when(loginService.getAuthentication()).thenReturn(Observable.just(authentication));
 
-        Dependencies.INSTANCE.setLoginService(loginService);
-        Dependencies.INSTANCE.setUserService(Mockito.mock(UserService.class));
-        Dependencies.INSTANCE.setChatService(Mockito.mock(ChatService.class));
-        Dependencies.INSTANCE.setChannelService(Mockito.mock(ChannelService.class));
-        Dependencies.INSTANCE.setAnalytics(Mockito.mock(Analytics.class));
+        TestDependencies.init()
+                .withLoginService(loginService);
     }
 
     @Test
