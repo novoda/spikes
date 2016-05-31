@@ -20,6 +20,8 @@ import javax.annotation.Nullable;
 
 public class ReactButtonShadowNode extends LayoutShadowNode implements CSSNode.MeasureFunction {
 
+    private static final float MAGIC_CONSTANT = 1.15f;
+
     private static final TextPaint textPaintInstance = new TextPaint();
 
     static {
@@ -130,7 +132,7 @@ public class ReactButtonShadowNode extends LayoutShadowNode implements CSSNode.M
             );
         }
 
-        measureOutput.height = layout.getHeight() + (padding.top + padding.bottom) * 1.1f;
-        measureOutput.width = layout.getWidth() + (padding.left + padding.right) * 1.1f;
+        measureOutput.height = layout.getHeight() + (padding.top + padding.bottom) * MAGIC_CONSTANT;
+        measureOutput.width = layout.getWidth() + (padding.left + padding.right) * MAGIC_CONSTANT;
     }
 }

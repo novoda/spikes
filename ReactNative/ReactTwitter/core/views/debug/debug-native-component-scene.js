@@ -47,12 +47,13 @@ var DebugNativeComponentScene = React.createClass({
   _renderRow (rowData: string) {
     let enabled = this._enabledForRowData(rowData)
     let textColor = this._colorForRowData(rowData)
+    let textSize = this._sizeForRowData(rowData)
     let backgrounImage = this._backgroundImageForRowData(rowData)
 
     return <Button text={rowData}
       enabled={enabled}
       textColor={textColor}
-      textSize={14}
+      textSize={textSize}
       backgroundImage={backgrounImage}
       style={{margin: 10}}
       onPress={() => { Alert.alert('clicked', rowData) }}/>
@@ -64,6 +65,15 @@ var DebugNativeComponentScene = React.createClass({
       case 'And': return '#000000'
       case 'Morty': return '#72bc00'
       default: return '#000000'
+    }
+  },
+
+  _sizeForRowData (rowData: string) {
+    switch (rowData) {
+      case 'Rick': return 16
+      case 'And': return 20
+      case 'Morty': return 24
+      default: return 14
     }
   },
 
