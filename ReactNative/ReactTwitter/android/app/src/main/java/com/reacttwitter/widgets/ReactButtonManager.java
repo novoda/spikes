@@ -2,11 +2,11 @@ package com.reacttwitter.widgets;
 
 import android.graphics.Color;
 
-import com.facebook.react.uimanager.SimpleViewManager;
+import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
-public class ReactButtonManager extends SimpleViewManager<ReactButton> {
+public class ReactButtonManager extends BaseViewManager<ReactButton, ReactButtonShadowNode> {
 
     public static final String REACT_CLASS = "RCTNovodaButton";
 
@@ -38,5 +38,20 @@ public class ReactButtonManager extends SimpleViewManager<ReactButton> {
     @ReactProp(name = "backgroundImage")
     public void setBackgroundImage(ReactButton reactButton, String backgroundImage) {
         reactButton.setBackgroundImage(backgroundImage);
+    }
+
+    @Override
+    public ReactButtonShadowNode createShadowNodeInstance() {
+        return new ReactButtonShadowNode();
+    }
+
+    @Override
+    public Class<ReactButtonShadowNode> getShadowNodeClass() {
+        return ReactButtonShadowNode.class;
+    }
+
+    @Override
+    public void updateExtraData(ReactButton root, Object extraData) {
+        // noop
     }
 }
