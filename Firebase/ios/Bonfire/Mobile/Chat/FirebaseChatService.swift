@@ -13,7 +13,7 @@ final class FirebaseChatService: ChatService {
         return firebase.child("messages/\(channel.name)")
     }
 
-    func chat(channel: Channel) -> Observable<Chat> {
+    func chat(channel: Channel) -> Observable<DatabaseResult<Chat>> {
         return Observable.create { observer in
             let handle = self.messages(channel).observeEventType(.Value, withBlock: { snapshot in
                 let firebaseMessages = snapshot.children.allObjects
@@ -24,7 +24,7 @@ final class FirebaseChatService: ChatService {
             return AnonymousDisposable() {
                 self.firebase.removeObserverWithHandle(handle)
             }
-        }
+            }.map({.Success($0)})
     }
 
     func sendMessage(message: Message, channel: Channel) {

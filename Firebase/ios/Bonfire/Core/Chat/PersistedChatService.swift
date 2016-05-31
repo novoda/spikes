@@ -1,12 +1,19 @@
 import Foundation
 import RxSwift
 
-class PersistedChatService: ChatService {
-    func chat(channel: Channel) -> Observable<Chat> {
-        return Observable.empty()
+final class PersistedChatService: ChatService {
+    private let chatDatabase: ChatDatabase
+
+    init(chatDatabase: ChatDatabase) {
+        self.chatDatabase = chatDatabase
+    }
+
+    func chat(channel: Channel) -> Observable<DatabaseResult<Chat>> {
+        return chatDatabase.chat(channel)
+            .map({.Success($0)})
     }
 
     func sendMessage(message: Message, channel: Channel) {
-
+        
     }
 }
