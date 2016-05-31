@@ -7,8 +7,7 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.bonfire.analytics.FirebaseAnalyticsAnalytics;
-import com.novoda.bonfire.channel.database.ChannelsDatabase;
-import com.novoda.bonfire.channel.database.ChannelsDatabaseFactory;
+import com.novoda.bonfire.channel.database.FirebaseChannelsDatabase;
 import com.novoda.bonfire.channel.service.ChannelService;
 import com.novoda.bonfire.channel.service.PersistedChannelService;
 import com.novoda.bonfire.chat.database.FirebaseChatDatabase;
@@ -43,8 +42,7 @@ public enum Dependencies {
             firebaseAnalytics = new FirebaseAnalyticsAnalytics(context);
             loginService = new FirebaseLoginService(new FirebaseAuthDatabase(firebaseAuth), userDatabase);
             chatService = new PersistedChatService(new FirebaseChatDatabase(firebaseDatabase));
-            ChannelsDatabase channelsDatabase = ChannelsDatabaseFactory.buildChannelsDatabase(firebaseDatabase);
-            channelService = new PersistedChannelService(channelsDatabase, userDatabase);
+            channelService = new PersistedChannelService(new FirebaseChannelsDatabase(firebaseDatabase), userDatabase);
             userService = new PersistedUserService(userDatabase);
         }
     }
