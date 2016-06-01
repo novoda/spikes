@@ -20,4 +20,5 @@ public interface Navigator {
 
     void toUriWithClearedHistory(String uri);
 
+    void toShareInvite(String sharingLink);
 }

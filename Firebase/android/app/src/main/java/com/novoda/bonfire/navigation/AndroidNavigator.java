@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 
+import com.novoda.bonfire.R;
 import com.novoda.bonfire.channel.ChannelsActivity;
 import com.novoda.bonfire.channel.NewChannelActivity;
 import com.novoda.bonfire.channel.data.model.Channel;
@@ -64,6 +65,15 @@ public class AndroidNavigator implements Navigator {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(intent);
         activity.finish();
+    }
+
+    @Override
+    public void toShareInvite(String sharingLink) {
+        String sharingMessage = activity.getString(R.string.send_invite);
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, activity.getString(R.string.check_out_bonfire, sharingLink));
+        activity.startActivity(Intent.createChooser(sharingIntent, sharingMessage));
     }
 
 }
