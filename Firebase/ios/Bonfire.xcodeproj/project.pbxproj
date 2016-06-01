@@ -217,7 +217,7 @@
 			children = (
 				B63B37641CFD94BC00142DC3 /* PersistedChatServiceTests.swift */,
 			);
-			name = Chat;
+			path = Chat;
 			sourceTree = "<group>";
 		};
 		B63B377D1CFD975A00142DC3 /* BonfireTests */ = {
@@ -318,9 +318,9 @@
 				B654B2871CE0C86200EEDE0A /* Utilities */,
 				B6C054DF1CF5AE9000B1BB6C /* Welcome */,
 				B654B2661CE0C38000EEDE0A /* AppDelegate.swift */,
-				B61BD4C91CFEE65100DD7A70 /* SharedServices.swift */,
 				B6AC7C161CF458E000F96722 /* FirebaseAnalytics.swift */,
 				B636BA251CF34DDA009009F2 /* FirebaseRemoteConfig.swift */,
+				B61BD4C91CFEE65100DD7A70 /* SharedServices.swift */,
 			);
 			path = Mobile;
 			sourceTree = "<group>";
