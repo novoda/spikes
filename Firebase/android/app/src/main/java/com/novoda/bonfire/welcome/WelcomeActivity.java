@@ -20,7 +20,7 @@ public class WelcomeActivity extends BaseActivity {
         TextView textView = new TextView(this);
         setContentView(textView);
         String sender = getIntent().getData().getQueryParameter("sender");
-        textView.setText(sender);
+        textView.setText(sender + " Invited you");
         navigator = new AndroidNavigator(this);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override

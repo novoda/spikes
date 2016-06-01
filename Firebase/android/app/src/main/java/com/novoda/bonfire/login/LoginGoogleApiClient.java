@@ -3,15 +3,11 @@ package com.novoda.bonfire.login;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-import com.google.android.gms.appinvite.AppInvite;
-import com.google.android.gms.appinvite.AppInviteInvitationResult;
-import com.google.android.gms.appinvite.AppInviteReferral;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
 import com.novoda.bonfire.BaseActivity;
 import com.novoda.bonfire.R;
 import com.novoda.notils.logger.simple.Log;
@@ -42,7 +38,6 @@ public class LoginGoogleApiClient {
                             }
                         })
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .addApi(AppInvite.API)
                 .build();
     }
 
@@ -52,28 +47,6 @@ public class LoginGoogleApiClient {
 
     public GoogleSignInResult getSignInResultFromIntent(Intent data) {
         return Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-    }
-
-    public void checkForInvites(final AppInviteDeepLinkListener listener) {
-        AppInvite.AppInviteApi.getInvitation(apiClient, activity, false)
-                .setResultCallback(
-                        new ResultCallback<AppInviteInvitationResult>() {
-                            @Override
-                            public void onResult(@NonNull AppInviteInvitationResult result) {
-                                if (result.getStatus().isSuccess()) {
-                                    Intent intent = result.getInvitationIntent();
-                                    listener.onDeepLinkFound(AppInviteReferral.getDeepLink(intent));
-                                } else {
-                                    Log.d("getInvitation: no deep link found.");
-                                }
-                            }
-                        });
-    }
-
-    public interface AppInviteDeepLinkListener {
-
-        void onDeepLinkFound(String deepLinkUri);
-
     }
 
 }
