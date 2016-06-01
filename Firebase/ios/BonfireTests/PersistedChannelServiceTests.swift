@@ -7,7 +7,7 @@ class PersistedChannelServiceTests: XCTestCase {
 
     var scheduler: TestScheduler!
     var testableChannelsObserver: TestableObserver<Channel>!
-    var testableUsersObserver: TestableObserver<[User]>!
+    var testableUsersObserver: TestableObserver<Users>!
 
     let testUser = User(name: "TestUser", id: "1", photoURL: nil)
 
@@ -15,7 +15,7 @@ class PersistedChannelServiceTests: XCTestCase {
         super.setUp()
         scheduler = TestScheduler(initialClock: 0)
         testableChannelsObserver = scheduler.createObserver(Channel)
-        testableUsersObserver = scheduler.createObserver([User])
+        testableUsersObserver = scheduler.createObserver(Users)
     }
     
     override func tearDown() {
@@ -23,7 +23,7 @@ class PersistedChannelServiceTests: XCTestCase {
     }
 
     struct MockUserDatabase: UserDatabase {
-        func observeUsers() -> Observable<[User]> {
+        func observeUsers() -> Observable<Users> {
             return Observable.empty()
         }
 
@@ -92,12 +92,9 @@ class PersistedChannelServiceTests: XCTestCase {
         // Then
         let users = [testUser]
         let expectedEvents = [
-            next(1, users)
+            next(1, Users(users: users))
         ]
 
         XCTAssertEqual(testableUsersObserver.events, expectedEvents)
     }
-
-
-    
 }

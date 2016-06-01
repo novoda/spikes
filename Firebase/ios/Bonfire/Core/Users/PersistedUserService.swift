@@ -8,7 +8,7 @@ class PersistedUserService: UsersService {
         self.userDatabase = userDatabase
     }
 
-    func allUsers() -> Observable<[User]> {
+    func allUsers() -> Observable<Users> {
         return userDatabase.observeUsers()
     }
 

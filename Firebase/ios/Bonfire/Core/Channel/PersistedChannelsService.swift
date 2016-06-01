@@ -18,7 +18,7 @@ class PersistedChannelsService: ChannelsService {
         }
     }
 
-    func users(forChannel channel: Channel) -> Observable<[User]> {
+    func users(forChannel channel: Channel) -> Observable<Users> {
         return channelsDatabase.observeOwnerIdsFor(channel)
             .flatMap(getUsersFromIDs)
     }
@@ -43,8 +43,8 @@ class PersistedChannelsService: ChannelsService {
         return channelsDatabase.readChannelFor(channelName).catchError({_ in return Observable.empty()})
     }
 
-    private func getUsersFromIDs(ids: [String]) -> Observable<[User]> {
-        return ids.toObservable().flatMap(readUserFrom).toArray()
+    private func getUsersFromIDs(ids: [String]) -> Observable<Users> {
+        return ids.toObservable().flatMap(readUserFrom).toArray().map(Users.init)
     }
 
     private func readUserFrom(identifier: String) -> Observable<User> {

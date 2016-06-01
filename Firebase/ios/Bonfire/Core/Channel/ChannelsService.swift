@@ -10,5 +10,5 @@ protocol ChannelsService {
     func addOwner(owner: User, toPrivateChannel channel: Channel) -> Observable<DatabaseResult<User>>
     func removeOwner(owner: User, fromPrivateChannel channel: Channel) -> Observable<DatabaseResult<User>>
 
-    func users(forChannel channel: Channel) -> Observable<[User]>
+    func users(forChannel channel: Channel) -> Observable<Users>
 }

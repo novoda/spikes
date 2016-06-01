@@ -15,3 +15,4 @@ func ==(lhs: User, rhs: User) -> Bool {
         lhs.id == rhs.id &&
         lhs.photoURL == rhs.photoURL
 }
+
