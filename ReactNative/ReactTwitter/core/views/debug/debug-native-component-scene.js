@@ -45,53 +45,43 @@ var DebugNativeComponentScene = React.createClass({
   },
 
   _renderRow (rowData: string) {
-    let enabled = this._enabledForRowData(rowData)
-    let textColor = this._colorForRowData(rowData)
-    let textSize = this._sizeForRowData(rowData)
-    let backgroundImage = this._backgroundImageForRowData(rowData)
+    let props = this._propsForRowData(rowData)
 
     return <Button text={rowData}
-      enabled={enabled}
-      textColor={textColor}
-      textSize={textSize}
-      backgroundImage={backgroundImage}
+      {...props}
       style={{margin: 10}}
       onPress={() => { Alert.alert('clicked', rowData) }}/>
   },
 
-  _colorForRowData (rowData: string) {
+  _propsForRowData(rowData: string) {
     switch (rowData) {
-      case 'Rick': return '#ff00ff'
-      case 'And': return '#000000'
-      case 'Morty': return '#72bc00'
-      default: return '#000000'
-    }
-  },
+      case 'Rick':
+        return {
+          enabled: true,
+          textColor: '#ff00ff',
+          textSize: 16,
+          backgroundImage: 'buttonBackground1'
 
-  _sizeForRowData (rowData: string) {
-    switch (rowData) {
-      case 'Rick': return 16
-      case 'And': return 20
-      case 'Morty': return 24
-      default: return 14
-    }
-  },
+        }
 
-  _enabledForRowData (rowData: string) {
-    switch (rowData) {
-      case 'Rick': return true
-      case 'And': return true
-      case 'Morty': return false
-      default: return true
-    }
-  },
+      case 'And':
+        return {
+          enabled: true,
+          textColor: '#000000',
+          textSize: 20,
+          backgroundImage: 'buttonBackground2'
 
-  _backgroundImageForRowData (rowData: string) {
-    switch (rowData) {
-      case 'Rick': return 'buttonBackground1'
-      case 'And': return 'buttonBackground2'
-      case 'Morty': return 'buttonBackground2'
-      default: return true
+        }
+
+      case 'Morty':
+        return {
+          enabled: false,
+          textColor: '#72bc00',
+          textSize: 24,
+          backgroundImage: 'buttonBackground2'
+
+        }
+      default: return { }
     }
   }
 })
