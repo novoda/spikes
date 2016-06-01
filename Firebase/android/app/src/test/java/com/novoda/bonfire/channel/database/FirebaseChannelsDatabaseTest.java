@@ -1,7 +1,5 @@
 package com.novoda.bonfire.channel.database;
 
-import android.support.annotation.NonNull;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -27,16 +25,13 @@ import rx.observers.TestObserver;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.anyObject;
 import static org.mockito.Mockito.*;
 
 public class FirebaseChannelsDatabaseTest {
 
-    private static final String TEST_CHANNEL_ID = "new channel";
-
     private final User user = new User("user id", "user", "http://photo");
-    private final Channel newChannel = createPublicChannel(TEST_CHANNEL_ID);
+    private final Channel newChannel = new Channel("new channel", Channel.Access.PUBLIC);
 
     private final List<String> publicChannelIds = Arrays.asList("first public id", "second public id");
     private final List<String> privateChannelIds = Arrays.asList("first private id", "second private id");
@@ -101,7 +96,7 @@ public class FirebaseChannelsDatabaseTest {
 
     @Test
     public void channelDetailsAreReadFromChannelsDatabase() {
-        Observable<Channel> channelObservable = firebaseChannelsDatabase.readChannelFor(TEST_CHANNEL_ID);
+        Observable<Channel> channelObservable = firebaseChannelsDatabase.readChannelFor("new channel");
         assertValueReceivedOnNext(channelObservable, newChannel);
     }
 
@@ -113,38 +108,38 @@ public class FirebaseChannelsDatabaseTest {
 
     @Test
     public void canSetNewChannelInPublicChannelDatabaseAndReturnIt() {
-        firebaseChannelsDatabase.writeChannelToPublicChannelIndex(newChannel);
-        verify(mockListeners).setValue(true, mockPublicChannelsDb, newChannel);
+        Observable<Channel> channelObservable = firebaseChannelsDatabase.writeChannelToPublicChannelIndex(newChannel);
+        assertValueReceivedOnNext(channelObservable, newChannel);
     }
 
     @Test
     public void newChannelIsSetForUserInOwnersDatabase() {
-        firebaseChannelsDatabase.addOwnerToPrivateChannel(user, newChannel);
-        verify(mockListeners).setValue(true, mockOwnersDb, newChannel);
+        Observable<Channel> channelObservable = firebaseChannelsDatabase.addOwnerToPrivateChannel(user, newChannel);
+        assertValueReceivedOnNext(channelObservable, newChannel);
     }
 
     @Test
     public void channelCanBeRemovedFromOwnersDatabase() {
-        firebaseChannelsDatabase.removeOwnerFromPrivateChannel(user, newChannel);
-        verify(mockListeners).removeValue(mockOwnersDb, newChannel);
+        Observable<Channel> channelObservable = firebaseChannelsDatabase.removeOwnerFromPrivateChannel(user, newChannel);
+        assertValueReceivedOnNext(channelObservable, newChannel);
     }
 
     @Test
     public void canAddChannelToPrivateChannelDatabaseForUser() {
-        firebaseChannelsDatabase.addChannelToUserPrivateChannelIndex(user, newChannel);
-        verify(mockListeners).setValue(true, mockPrivateChannelsDb, newChannel);
+        Observable<Channel> channelObservable = firebaseChannelsDatabase.addChannelToUserPrivateChannelIndex(user, newChannel);
+        assertValueReceivedOnNext(channelObservable, newChannel);
     }
 
     @Test
     public void canRemoveChannelFromPrivateChannelDatabaseForUser() {
-        firebaseChannelsDatabase.removeChannelFromUserPrivateChannelIndex(user, newChannel);
-        verify(mockListeners).removeValue(mockPrivateChannelsDb, newChannel);
+        Observable<Channel> channelObservable = firebaseChannelsDatabase.removeChannelFromUserPrivateChannelIndex(user, newChannel);
+        assertValueReceivedOnNext(channelObservable, newChannel);
     }
 
     @Test
     public void canGetOwnerIdsForAChannelFromOwnersDatabase() {
-        firebaseChannelsDatabase.observeOwnerIdsFor(newChannel);
-        verify(mockListeners).listenToValueEvents(eq(mockOwnersDb), isA(typeOfGetKeys()));
+        Observable<List<String>> listObservable = firebaseChannelsDatabase.observeOwnerIdsFor(newChannel);
+        assertValueReceivedOnNext(listObservable, ownerIds);
     }
 
     private <T> void assertValueReceivedOnNext(Observable<T> observable, T expectedValue) {
@@ -159,16 +154,6 @@ public class FirebaseChannelsDatabaseTest {
 
     private Class<Func1<DataSnapshot, Channel>> typeOfAsChannel() {
         return (Class<Func1<DataSnapshot, Channel>>) (Class) Func1.class;
-    }
-
-    @NonNull
-    private static Channel createPublicChannel(String name) {
-        return new Channel(name, Channel.Access.PUBLIC);
-    }
-
-    @NonNull
-    private static FirebaseChannel createPublicFirebaseChannel(String channelId) {
-        return new FirebaseChannel(channelId, "public");
     }
 
     private static class ObservableAnswer<T> implements Answer<Observable<T>> {
