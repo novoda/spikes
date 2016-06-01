@@ -34,7 +34,6 @@
 		B65C45B91CE0E1EF00B2179D /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65C45B81CE0E1EF00B2179D /* ChatView.swift */; };
 		B65C45BB1CE0E46B00B2179D /* ChatPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65C45BA1CE0E46B00B2179D /* ChatPresenter.swift */; };
 		B65C45BD1CE0E48800B2179D /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65C45BC1CE0E48800B2179D /* ChatService.swift */; };
-		B65C45BF1CE0E53200B2179D /* FirebaseChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65C45BE1CE0E53200B2179D /* FirebaseChatService.swift */; };
 		B65C45C11CE0ED8200B2179D /* ChatDisplayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65C45C01CE0ED8200B2179D /* ChatDisplayer.swift */; };
 		B65C45C31CE0EF5800B2179D /* Message+FirebaseConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65C45C21CE0EF5800B2179D /* Message+FirebaseConvertible.swift */; };
 		B65C45C51CE1DF0400B2179D /* ChatTableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65C45C41CE1DF0400B2179D /* ChatTableViewManager.swift */; };
@@ -130,7 +129,6 @@
 		B65C45B81CE0E1EF00B2179D /* ChatView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		B65C45BA1CE0E46B00B2179D /* ChatPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatPresenter.swift; sourceTree = "<group>"; };
 		B65C45BC1CE0E48800B2179D /* ChatService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
-		B65C45BE1CE0E53200B2179D /* FirebaseChatService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseChatService.swift; sourceTree = "<group>"; };
 		B65C45C01CE0ED8200B2179D /* ChatDisplayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatDisplayer.swift; sourceTree = "<group>"; };
 		B65C45C21CE0EF5800B2179D /* Message+FirebaseConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Message+FirebaseConvertible.swift"; sourceTree = "<group>"; };
 		B65C45C41CE1DF0400B2179D /* ChatTableViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatTableViewManager.swift; sourceTree = "<group>"; };
@@ -333,7 +331,6 @@
 				B65C45B81CE0E1EF00B2179D /* ChatView.swift */,
 				B654B2681CE0C38000EEDE0A /* ChatViewController.swift */,
 				B63B37891CFDCF6400142DC3 /* FirebaseChatDatabase.swift */,
-				B65C45BE1CE0E53200B2179D /* FirebaseChatService.swift */,
 				B65C45C21CE0EF5800B2179D /* Message+FirebaseConvertible.swift */,
 			);
 			path = Chat;
@@ -733,7 +730,6 @@
 				B6210AC81CE2318B00570509 /* UIViewController+AlertExtensions.swift in Sources */,
 				B65C45BD1CE0E48800B2179D /* ChatService.swift in Sources */,
 				B6C054E11CF5AE9D00B1BB6C /* WelcomeView.swift in Sources */,
-				B65C45BF1CE0E53200B2179D /* FirebaseChatService.swift in Sources */,
 				B65C45D71CE1EFE100B2179D /* Navigator.swift in Sources */,
 				B65C45D11CE1E41200B2179D /* LoginService.swift in Sources */,
 				B6C054E91CF7014500B1BB6C /* FirebaseDynamicLinkFactory.swift in Sources */,
