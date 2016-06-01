@@ -329,8 +329,8 @@
 				B65C45C41CE1DF0400B2179D /* ChatTableViewManager.swift */,
 				B65C45B81CE0E1EF00B2179D /* ChatView.swift */,
 				B654B2681CE0C38000EEDE0A /* ChatViewController.swift */,
-				B65C45BE1CE0E53200B2179D /* FirebaseChatService.swift */,
 				B63B37891CFDCF6400142DC3 /* FirebaseChatDatabase.swift */,
+				B65C45BE1CE0E53200B2179D /* FirebaseChatService.swift */,
 				B65C45C21CE0EF5800B2179D /* Message+FirebaseConvertible.swift */,
 			);
 			path = Chat;
