@@ -8,7 +8,7 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,10 +19,8 @@ public class OauthIntentPackage implements ReactPackage {
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-        List<NativeModule> modules = new ArrayList<>();
         intentModule = new OauthIntentModule(reactContext);
-        modules.add(intentModule);
-        return modules;
+        return Arrays.asList(new NativeModule[]{intentModule});
     }
 
     @Override

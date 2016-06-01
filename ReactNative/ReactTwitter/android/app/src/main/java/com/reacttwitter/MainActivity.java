@@ -7,6 +7,7 @@ import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
+import com.reacttwitter.widgets.NativeWidgetsPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,6 +44,7 @@ public class MainActivity extends ReactActivity {
         pushNotificationPackage = new ReactNativePushNotificationPackage(this);
         return Arrays.asList(
                 new MainReactPackage(),
+                new NativeWidgetsPackage(),
                 oauthIntentPackage,
                 pushNotificationPackage
         );

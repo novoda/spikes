@@ -5,8 +5,10 @@ import {
   Navigator,
   StyleSheet,
   ListView,
-  Text
+  Alert
 } from 'react-native'
+
+var Button = require('../widgets/button.js')
 
 var DebugNativeComponentScene = React.createClass({
   statics: {
@@ -43,7 +45,44 @@ var DebugNativeComponentScene = React.createClass({
   },
 
   _renderRow (rowData: string) {
-    return <Text style={styles.text}>{rowData}</Text>
+    let props = this._propsForRowData(rowData)
+
+    return <Button text={rowData}
+      {...props}
+      style={{margin: 10}}
+      onPress={() => { Alert.alert('clicked', rowData) }}/>
+  },
+
+  _propsForRowData (rowData: string) {
+    switch (rowData) {
+      case 'Rick':
+        return {
+          enabled: true,
+          textColor: '#ff00ff',
+          textSize: 16,
+          backgroundImage: 'buttonBackground1'
+
+        }
+
+      case 'And':
+        return {
+          enabled: true,
+          textColor: '#000000',
+          textSize: 20,
+          backgroundImage: 'buttonBackground2'
+
+        }
+
+      case 'Morty':
+        return {
+          enabled: false,
+          textColor: '#72bc00',
+          textSize: 24,
+          backgroundImage: 'buttonBackground2'
+
+        }
+      default: return { }
+    }
   }
 })
 
