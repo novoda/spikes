@@ -103,7 +103,7 @@ public class NewChannelActivityTest {
     }
 
     @Test
-    public void channelIsOpenedAfterItIsCreated() throws Exception {
+    public void channelOpensAfterBeingCreated() throws Exception {
         onView(withId(R.id.newChannelName)).perform(typeText(CHANNEL_NAME), closeSoftKeyboard());
         onView(withId(R.id.createButton)).perform(click());
 
