@@ -25,19 +25,10 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         LoginDisplayer loginDisplayer = (LoginDisplayer) findViewById(R.id.loginView);
-
         LoginGoogleApiClient loginGoogleApiClient = new LoginGoogleApiClient(this);
         loginGoogleApiClient.setupGoogleApiClient();
-
         navigator = new AndroidLoginNavigator(this, loginGoogleApiClient, new AndroidNavigator(this));
         presenter = new LoginPresenter(Dependencies.INSTANCE.getLoginService(), loginDisplayer, navigator);
-
-        loginGoogleApiClient.checkForInvites(new LoginGoogleApiClient.AppInviteDeepLinkListener() {
-            @Override
-            public void onDeepLinkFound(String deepLinkUri) {
-                navigator.toUriWithClearedHistory(deepLinkUri);
-            }
-        });
     }
 
     @Override
