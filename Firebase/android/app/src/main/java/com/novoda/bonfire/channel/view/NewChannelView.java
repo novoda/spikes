@@ -16,7 +16,7 @@ import com.novoda.notils.caster.Views;
 
 public class NewChannelView extends LinearLayout implements NewChannelDisplayer {
 
-    private ChannelCreationListener channelCreationListener = ChannelCreationListener.NO_OP;
+    private ChannelCreationListener channelCreationListener;
     private EditText newChannelName;
     private Switch privateChannelSwitch;
     private Button createButton;
@@ -45,10 +45,10 @@ public class NewChannelView extends LinearLayout implements NewChannelDisplayer 
 
     @Override
     public void detach(ChannelCreationListener channelCreationListener) {
-        this.channelCreationListener = ChannelCreationListener.NO_OP;
         newChannelName.removeTextChangedListener(channelNameTextWatcher);
         privateChannelSwitch.setOnCheckedChangeListener(null);
         createButton.setOnClickListener(null);
+        this.channelCreationListener = null;
     }
 
     @Override

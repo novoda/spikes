@@ -22,23 +22,5 @@ public interface UsersDisplayer {
         void onUserDeselected(User user);
 
         void onCompleteClicked();
-
-        SelectionListener NO_OP = new SelectionListener() {
-            @Override
-            public void onUserSelected(User user) {
-                // empty implementation
-            }
-
-            @Override
-            public void onUserDeselected(User user) {
-                // empty implementation
-            }
-
-            @Override
-            public void onCompleteClicked() {
-                // empty implementation
-            }
-        };
-
     }
 }

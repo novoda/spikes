@@ -41,6 +41,6 @@ class UsersAdapter extends RecyclerView.Adapter<UserViewHolder>{
 
     @Override
     public long getItemId(int position) {
-        return users.get(position).hashCode();
+        return users.get(position).user.getId().hashCode();
     }
 }

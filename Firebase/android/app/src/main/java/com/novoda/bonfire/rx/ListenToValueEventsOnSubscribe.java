@@ -7,39 +7,46 @@ import com.google.firebase.database.ValueEventListener;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.functions.Action0;
 import rx.functions.Func1;
+import rx.subscriptions.BooleanSubscription;
 
-public class OnSubscribeSingleValueListener<T> implements Observable.OnSubscribe<T> {
+class ListenToValueEventsOnSubscribe<T> implements Observable.OnSubscribe<T> {
 
     private final DatabaseReference databaseReference;
     private final Func1<DataSnapshot, T> marshaller;
 
-    public OnSubscribeSingleValueListener(DatabaseReference databaseReference, Func1<DataSnapshot, T> marshaller) {
+    ListenToValueEventsOnSubscribe(DatabaseReference databaseReference, Func1<DataSnapshot, T> marshaller) {
         this.databaseReference = databaseReference;
         this.marshaller = marshaller;
     }
 
     @Override
     public void call(Subscriber<? super T> subscriber) {
-        databaseReference.addListenerForSingleValueEvent(new RxSingleValueListener<>(subscriber, marshaller));
+        final ValueEventListener eventListener = databaseReference.addValueEventListener(new RxValueListener<>(subscriber, marshaller));
+        subscriber.add(BooleanSubscription.create(new Action0() {
+            @Override
+            public void call() {
+                databaseReference.removeEventListener(eventListener);
+            }
+        }));
     }
 
-    private static class RxSingleValueListener<T> implements ValueEventListener {
+    private static class RxValueListener<T> implements ValueEventListener {
 
         private final Subscriber<? super T> subscriber;
         private final Func1<DataSnapshot, T> marshaller;
 
-        public RxSingleValueListener(Subscriber<? super T> subscriber, Func1<DataSnapshot, T> marshaller) {
+        RxValueListener(Subscriber<? super T> subscriber, Func1<DataSnapshot, T> marshaller) {
             this.subscriber = subscriber;
             this.marshaller = marshaller;
         }
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            if (dataSnapshot.hasChildren() && !subscriber.isUnsubscribed()) {
+            if (!subscriber.isUnsubscribed()) {
                 subscriber.onNext(marshaller.call(dataSnapshot));
             }
-            subscriber.onCompleted();
         }
 
         @Override
@@ -48,4 +55,5 @@ public class OnSubscribeSingleValueListener<T> implements Observable.OnSubscribe
         }
 
     }
+
 }

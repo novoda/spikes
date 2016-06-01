@@ -1,6 +1,7 @@
 package com.novoda.bonfire.channel.presenter;
 
 import com.novoda.bonfire.channel.data.model.Channel;
+import com.novoda.bonfire.channel.data.model.Channel.Access;
 import com.novoda.bonfire.channel.displayer.NewChannelDisplayer;
 import com.novoda.bonfire.channel.service.ChannelService;
 import com.novoda.bonfire.database.DatabaseResult;
@@ -54,7 +55,7 @@ public class NewChannelPresenter {
 
         @Override
         public void onCreateChannelClicked(String channelName, boolean isPrivate) {
-            Channel newChannel = new Channel(channelName.trim(), isPrivate);
+            Channel newChannel = new Channel(channelName.trim(), isPrivate ? Access.PRIVATE : Access.PUBLIC);
             subscriptions.add(
                     create(newChannel).subscribe(new Action1<DatabaseResult<Channel>>() {
                         @Override

@@ -12,12 +12,5 @@ public interface NewChannelDisplayer {
 
         void onCreateChannelClicked(String channelName, boolean isPrivate);
 
-        ChannelCreationListener NO_OP = new ChannelCreationListener() {
-
-            @Override
-            public void onCreateChannelClicked(String channelName, boolean isPrivate) {
-                // empty implementation
-            }
-        };
     }
 }

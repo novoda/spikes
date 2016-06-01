@@ -2,6 +2,7 @@ package com.novoda.bonfire.chat.presenter;
 
 import com.novoda.bonfire.analytics.Analytics;
 import com.novoda.bonfire.channel.data.model.Channel;
+import com.novoda.bonfire.channel.data.model.Channel.Access;
 import com.novoda.bonfire.chat.data.model.Chat;
 import com.novoda.bonfire.chat.data.model.Message;
 import com.novoda.bonfire.chat.displayer.ChatDisplayer;
@@ -28,12 +29,12 @@ public class ChatPresenter {
 
     private User user;
 
-    public ChatPresenter(LoginService loginService, ChatService chatService, ChatDisplayer chatDisplayer, Channel channel, Analytics analytics, Navigator navigator) {
+    public ChatPresenter(LoginService loginService, ChatService chatService, ChatDisplayer chatDisplayer, String channelName, Access channelAccess, Analytics analytics, Navigator navigator) {
         this.loginService = loginService;
         this.chatService = chatService;
         this.chatDisplayer = chatDisplayer;
         this.analytics = analytics;
-        this.channel = channel;
+        this.channel = new Channel(channelName, channelAccess);
         this.navigator = navigator;
     }
 

@@ -1,13 +1,16 @@
 package com.novoda.bonfire.channel.service;
 
 import com.novoda.bonfire.channel.data.model.Channel;
+import com.novoda.bonfire.channel.data.model.Channel.Access;
 import com.novoda.bonfire.channel.data.model.Channels;
 import com.novoda.bonfire.channel.database.ChannelsDatabase;
 import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.user.data.model.User;
+import com.novoda.bonfire.user.data.model.Users;
 import com.novoda.bonfire.user.database.UserDatabase;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,18 +25,19 @@ import rx.Observable;
 import rx.observers.TestObserver;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class PersistedChannelServiceTest {
 
     private static final String FIRST_PUBLIC_CHANNEL = "first public channel";
     private static final String FIRST_PRIVATE_CHANNEL = "first private channel";
     private static final String USER_ID = "test user id";
+    private static final String ANOTHER_USER_ID = "another user id";
 
-    private final Channel publicChannel = new Channel(FIRST_PUBLIC_CHANNEL, false);
-    private final Channel privateChannel = new Channel(FIRST_PRIVATE_CHANNEL, true);
+    private final Channel publicChannel = new Channel(FIRST_PUBLIC_CHANNEL, Access.PUBLIC);
+    private final Channel privateChannel = new Channel(FIRST_PRIVATE_CHANNEL, Access.PRIVATE);
     private final User user = new User(USER_ID, "test username", "http://test.photo/url");
+    private final User anotherUser = new User(ANOTHER_USER_ID, "another username", "http://another.url");
 
     @Mock
     ChannelsDatabase mockChannelsDatabase;
@@ -48,21 +52,31 @@ public class PersistedChannelServiceTest {
         when(mockChannelsDatabase.readChannelFor(FIRST_PUBLIC_CHANNEL)).thenReturn(Observable.just(publicChannel));
         when(mockChannelsDatabase.readChannelFor(FIRST_PRIVATE_CHANNEL)).thenReturn(Observable.just(privateChannel));
 
-        doAnswer(new Answer<Observable<Channel>>() {
-            @Override
-            public Observable<Channel> answer(InvocationOnMock invocation) throws Throwable {
-                Channel channel = (Channel) invocation.getArguments()[0];
-                return Observable.just(channel);
-            }
-        }).when(mockChannelsDatabase).writeChannel(any(Channel.class));
+        doAnswer(new ChannelAsObservableAnswer(0)).when(mockChannelsDatabase).writeChannel(any(Channel.class));
 
-        doAnswer(new Answer<Observable<Channel>>() {
+        doAnswer(new ChannelAsObservableAnswer(0)).when(mockChannelsDatabase).writeChannelToPublicChannelIndex(any(Channel.class));
+
+        doAnswer(new ChannelAsObservableAnswer(1)).when(mockChannelsDatabase).addOwnerToPrivateChannel(any(User.class), any(Channel.class));
+
+        doAnswer(new ChannelAsObservableAnswer(1)).when(mockChannelsDatabase).addChannelToUserPrivateChannelIndex(any(User.class), any(Channel.class));
+
+        doAnswer(new ChannelAsObservableAnswer(1)).when(mockChannelsDatabase).removeOwnerFromPrivateChannel(any(User.class), any(Channel.class));
+
+        when(mockChannelsDatabase.observeOwnerIdsFor(privateChannel)).thenReturn(Observable.just(Arrays.asList(USER_ID, ANOTHER_USER_ID)));
+
+        doAnswer(new Answer<Observable<User>>() {
             @Override
-            public Observable<Channel> answer(InvocationOnMock invocation) throws Throwable {
-                Channel channel = (Channel) invocation.getArguments()[0];
-                return Observable.just(channel);
+            public Observable<User> answer(InvocationOnMock invocation) throws Throwable {
+                return Observable.just(user);
             }
-        }).when(mockChannelsDatabase).writeChannelToPublicChannelIndex(any(Channel.class));
+        }).when(mockUserDatabase).readUserFrom(USER_ID);
+
+        doAnswer(new Answer<Observable<User>>() {
+            @Override
+            public Observable<User> answer(InvocationOnMock invocation) throws Throwable {
+                return Observable.just(anotherUser);
+            }
+        }).when(mockUserDatabase).readUserFrom(ANOTHER_USER_ID);
     }
 
     @Test
@@ -82,13 +96,68 @@ public class PersistedChannelServiceTest {
     public void canCreateAPublicChannel() {
         PersistedChannelService persistedChannelService = buildPersistedChannelService();
 
-        Channel newChannel = new Channel("another public channel", false);
+        Channel newChannel = new Channel("another public channel", Access.PUBLIC);
         Observable<DatabaseResult<Channel>> channelsObservable = persistedChannelService.createPublicChannel(newChannel);
         TestObserver<DatabaseResult<Channel>> channelsTestObserver = new TestObserver<>();
         channelsObservable.subscribe(channelsTestObserver);
 
-        channelsTestObserver.assertReceivedOnNext(Collections.singletonList(new DatabaseResult<>(newChannel)));
-        //verify(channelsDatabase.getChannelsDB()).setValue(eq(true), any(DatabaseReference.CompletionListener.class));
+        verify(mockChannelsDatabase).writeChannel(newChannel);
+        verify(mockChannelsDatabase).writeChannelToPublicChannelIndex(newChannel);
+    }
+
+    @Test
+    public void canCreateAPrivateChannel() {
+        PersistedChannelService persistedChannelService = buildPersistedChannelService();
+
+        Channel newChannel = new Channel("another private channel", Access.PUBLIC);
+        Observable<DatabaseResult<Channel>> channelsObservable = persistedChannelService.createPrivateChannel(newChannel, user);
+        TestObserver<DatabaseResult<Channel>> channelsTestObserver = new TestObserver<>();
+        channelsObservable.subscribe(channelsTestObserver);
+
+        verify(mockChannelsDatabase).addOwnerToPrivateChannel(user, newChannel);
+        verify(mockChannelsDatabase).addChannelToUserPrivateChannelIndex(user, newChannel);
+        verify(mockChannelsDatabase).writeChannel(newChannel);
+    }
+
+    @Test
+    public void canAddOwnerToPrivateChannel() {
+        PersistedChannelService persistedChannelService = buildPersistedChannelService();
+
+        Observable<DatabaseResult<User>> userObservable = persistedChannelService.addOwnerToPrivateChannel(privateChannel, user);
+        TestObserver<DatabaseResult<User>> testObserver = new TestObserver<>();
+        userObservable.subscribe(testObserver);
+
+        verify(mockChannelsDatabase).addOwnerToPrivateChannel(user, privateChannel);
+        verify(mockChannelsDatabase).addChannelToUserPrivateChannelIndex(user, privateChannel);
+    }
+
+    @Test
+    public void canRemoveOwnerFromPrivateChannel() {
+        PersistedChannelService persistedChannelService = buildPersistedChannelService();
+
+        Observable<DatabaseResult<User>> userObservable = persistedChannelService.removeOwnerFromPrivateChannel(privateChannel, user);
+        TestObserver<DatabaseResult<User>> testObserver = new TestObserver<>();
+        userObservable.subscribe(testObserver);
+
+        verify(mockChannelsDatabase).removeOwnerFromPrivateChannel(user, privateChannel);
+        verify(mockChannelsDatabase).removeChannelFromUserPrivateChannelIndex(user, privateChannel);
+    }
+
+    @Test
+    public void canGetOwnersOfSpecificChannel() {
+        Users expectedUsersList = buildExpectedUsers();
+
+        PersistedChannelService persistedChannelService = buildPersistedChannelService();
+
+        Observable<DatabaseResult<Users>> channelsObservable = persistedChannelService.getOwnersOfChannel(privateChannel);
+        TestObserver<DatabaseResult<Users>> usersTestObserver = new TestObserver<>();
+        channelsObservable.subscribe(usersTestObserver);
+
+        usersTestObserver.assertReceivedOnNext(Collections.singletonList(new DatabaseResult<>(expectedUsersList)));
+    }
+
+    private Users buildExpectedUsers() {
+        return new Users(Arrays.asList(user, anotherUser));
     }
 
     private List<Channel> buildExpectedChannelsList() {
@@ -108,149 +177,18 @@ public class PersistedChannelServiceTest {
         return new PersistedChannelService(mockChannelsDatabase, mockUserDatabase);
     }
 
-    /* Commenting out everything in here so I can see if any of it is salvageable later
-    @Test
-    public void canCreateAPublicChannel() {
-        FakeChannelsDatabaseProvider channelsDatabase = new FakeChannelsDatabaseProvider();
-        PersistedChannelService persistedChannelService = new PersistedChannelService(channelsDatabase, userDatabase);
+    private static class ChannelAsObservableAnswer implements Answer<Observable<Channel>> {
 
-        Channel newChannel = new Channel("another public channel", false);
-        Observable<DatabaseResult<Channel>> channelsObservable = persistedChannelService.createPublicChannel(newChannel);
-        TestObserver<DatabaseResult<Channel>> channelsTestObserver = new TestObserver<>();
-        channelsObservable.subscribe(channelsTestObserver);
+        private final int channelArgPosition;
 
-        channelsTestObserver.assertReceivedOnNext(Collections.singletonList(new DatabaseResult<>(newChannel)));
-        //verify(channelsDatabase.getChannelsDB()).setValue(eq(true), any(DatabaseReference.CompletionListener.class));
-    }
-
-    private class FakeChannelsDatabaseProvider implements ChannelsDatabaseProvider {
-        @Override
-        public DatabaseReference getPublicChannelsDB() {
-            DatabaseReference mockPublicChannelsDBReference = Mockito.mock(DatabaseReference.class);
-            Mockito.when(mockPublicChannelsDBReference.child(Matchers.anyString())).thenReturn(mockPublicChannelsDBReference);
-
-            setupSuccessfulCompletionListenerOn(mockPublicChannelsDBReference);
-
-            DataSnapshot mockDataSnapshot = Mockito.mock(DataSnapshot.class);
-            Mockito.when(mockDataSnapshot.getKey()).thenReturn(FIRST_PUBLIC_CHANNEL);
-            Mockito.when(mockDataSnapshot.hasChildren()).thenReturn(true);
-            Mockito.when(mockDataSnapshot.getChildren()).thenReturn(Collections.singletonList(mockDataSnapshot));
-
-            callValueEventListenerOn(mockPublicChannelsDBReference, mockDataSnapshot);
-            return mockPublicChannelsDBReference;
+        public ChannelAsObservableAnswer(int channelArgPositionInMethodCall) {
+            this.channelArgPosition = channelArgPositionInMethodCall;
         }
 
         @Override
-        public DatabaseReference getPrivateChannelsDB() {
-            DatabaseReference mockPrivateChannelsDBReference = Mockito.mock(DatabaseReference.class);
-            Mockito.when(mockPrivateChannelsDBReference.child(USER_ID)).thenReturn(mockPrivateChannelsDBReference);
-
-            DataSnapshot mockDataSnapshot = Mockito.mock(DataSnapshot.class);
-            Mockito.when(mockDataSnapshot.getKey()).thenReturn(FIRST_PRIVATE_CHANNEL);
-            Mockito.when(mockDataSnapshot.hasChildren()).thenReturn(true);
-            Mockito.when(mockDataSnapshot.getChildren()).thenReturn(Collections.singletonList(mockDataSnapshot));
-
-            callValueEventListenerOn(mockPrivateChannelsDBReference, mockDataSnapshot);
-            return mockPrivateChannelsDBReference;
-        }
-
-        @Override
-        public DatabaseReference getChannelsDB() {
-            DatabaseReference mockChannelsDBReference = Mockito.mock(DatabaseReference.class);
-
-            final DatabaseReference mockPublicChannelsDBReference = Mockito.mock(DatabaseReference.class);
-
-            final DatabaseReference mockPrivateChannelsDBReference = Mockito.mock(DatabaseReference.class);
-
-            final DatabaseReference mockNewChannelDBReference = Mockito.mock(DatabaseReference.class);
-
-            Mockito.doAnswer(new Answer<DatabaseReference>() {
-                @Override
-                public DatabaseReference answer(InvocationOnMock invocation) throws Throwable {
-                    if (invocation.getArguments()[0].equals(FIRST_PUBLIC_CHANNEL)) {
-                        return mockPublicChannelsDBReference;
-                    }
-                    if (invocation.getArguments()[0].equals(FIRST_PRIVATE_CHANNEL)) {
-                        return mockPrivateChannelsDBReference;
-                    }
-                    return mockNewChannelDBReference;
-                }
-            }).when(mockChannelsDBReference).child(Matchers.anyString());
-
-            DataSnapshot mockDataSnapshot = Mockito.mock(DataSnapshot.class);
-            Mockito.when(mockDataSnapshot.hasChildren()).thenReturn(true);
-            Mockito.when(mockDataSnapshot.getValue(Channel.class)).thenReturn(publicChannel);
-            callListenerForSingleValueEventOn(mockPublicChannelsDBReference, mockDataSnapshot);
-
-            DataSnapshot anotherMockDataSnapshot = Mockito.mock(DataSnapshot.class);
-            Mockito.when(anotherMockDataSnapshot.hasChildren()).thenReturn(true);
-            Mockito.when(anotherMockDataSnapshot.getValue(Channel.class)).thenReturn(privateChannel);
-            callListenerForSingleValueEventOn(mockPrivateChannelsDBReference, anotherMockDataSnapshot);
-
-            setupSuccessfulCompletionListenerOn(mockNewChannelDBReference);
-
-            return mockChannelsDBReference;
-        }
-
-        @Override
-        public DatabaseReference getOwnersDB() {
-            return Mockito.mock(DatabaseReference.class);
-        }
-
-        @Override
-        public DatabaseReference getUsersDB() {
-            return Mockito.mock(DatabaseReference.class);
-        }
-
-        private void callValueEventListenerOn(DatabaseReference mockDBReference, final DataSnapshot mockDataSnapshot) {
-            Mockito.doAnswer(new DataSnapshotAnswer(mockDataSnapshot)).when(mockDBReference).addValueEventListener(Matchers.any(ValueEventListener.class));
-        }
-
-        private void callListenerForSingleValueEventOn(DatabaseReference mockChannelsDBReferenceForPublicChannel, final DataSnapshot mockDataSnapshot) {
-            Mockito.doAnswer(new DataSnapshotAnswer(mockDataSnapshot)).when(mockChannelsDBReferenceForPublicChannel).addListenerForSingleValueEvent(Matchers.any(ValueEventListener.class));
-        }
-
-        private void setupSuccessfulCompletionListenerOn(DatabaseReference mockPublicChannelsDBReference) {
-            Mockito.doAnswer(new DatabaseReferenceCompletionListenerAnswer(mockPublicChannelsDBReference))
-                    .when(mockPublicChannelsDBReference)
-                    .setValue(Matchers.anyObject(), Matchers.any(DatabaseReference.CompletionListener.class));
-        }
-
-        private class DataSnapshotAnswer implements Answer<Void> {
-            private final DataSnapshot mockDataSnapshot;
-
-            public DataSnapshotAnswer(DataSnapshot mockDataSnapshot) {
-                this.mockDataSnapshot = mockDataSnapshot;
-            }
-
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                Object[] arguments = invocation.getArguments();
-                ValueEventListener argument = (ValueEventListener) arguments[0];
-
-                argument.onDataChange(mockDataSnapshot);
-                return null;
-            }
-        }
-
-        private class DatabaseReferenceCompletionListenerAnswer implements Answer<Void> {
-            private final DatabaseReference mockDBReference;
-
-            public DatabaseReferenceCompletionListenerAnswer(DatabaseReference mockDBReference) {
-                this.mockDBReference = mockDBReference;
-            }
-
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                Object[] arguments = invocation.getArguments();
-                DatabaseReference.CompletionListener argument = (DatabaseReference.CompletionListener) arguments[1];
-
-                argument.onComplete(null, mockDBReference);
-
-                return null;
-            }
+        public Observable<Channel> answer(InvocationOnMock invocation) throws Throwable {
+            Channel channel = (Channel) invocation.getArguments()[channelArgPosition];
+            return Observable.just(channel);
         }
     }
-
-    */
 }

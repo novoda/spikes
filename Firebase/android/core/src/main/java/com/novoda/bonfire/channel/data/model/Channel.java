@@ -1,31 +1,29 @@
 package com.novoda.bonfire.channel.data.model;
 
-import java.io.Serializable;
+public class Channel {
 
-public class Channel implements Serializable {
-
-    private String name;
-    private String access;
-
-    @SuppressWarnings("unused") // used by Firebase
-    public Channel() {
+    public enum Access {
+        PRIVATE, PUBLIC
     }
 
-    public Channel(String name, boolean isPrivate) {
+    private final String name;
+    private final Access access;
+
+    public Channel(String name, Access access) {
         this.name = name;
-        this.access = isPrivate ? "private" : "public";
+        this.access = access;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getAccess() {
+    public Access getAccess() {
         return access;
     }
 
     public boolean isPrivate() {
-        return access.equals("private");
+        return access == Access.PRIVATE;
     }
 
     @Override
@@ -37,10 +35,10 @@ public class Channel implements Serializable {
             return false;
         }
 
-        Channel that = (Channel) o;
+        Channel channel = (Channel) o;
 
-        return name != null ? name.equals(that.name) : that.name == null
-                && access != null ? access.equals(that.access) : that.access == null;
+        return name != null ? name.equals(channel.name) : channel.name == null
+                && access == channel.access;
     }
 
     @Override
