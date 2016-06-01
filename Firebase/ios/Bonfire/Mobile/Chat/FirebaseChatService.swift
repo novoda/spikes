@@ -18,7 +18,7 @@ final class FirebaseChatService: ChatService {
             let handle = self.messages(channel).observeEventType(.Value, withBlock: { snapshot in
                 let firebaseMessages = snapshot.children.allObjects
                 let messages = try! firebaseMessages.map{$0.value}.map(Message.init)
-                observer.onNext(Chat(messages: messages))
+                observer.onNext(Chat(channel: channel, messages: messages))
             })
 
             return AnonymousDisposable() {
