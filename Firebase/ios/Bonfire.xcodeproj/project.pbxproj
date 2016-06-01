@@ -19,6 +19,7 @@
 		B6210ACC1CE24AC600570509 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6210ACB1CE24AC600570509 /* Authentication.swift */; };
 		B621BEE11CFF1CE100B92F09 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = B621BEE01CFF1CE100B92F09 /* Users.swift */; };
 		B621BEE31CFF2C8B00B92F09 /* Channels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B621BEE21CFF2C8B00B92F09 /* Channels.swift */; };
+		B621BEE51CFF379F00B92F09 /* TestScheduler+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B621BEE41CFF379F00B92F09 /* TestScheduler+Extensions.swift */; };
 		B62BE1C91CF89CF800326B98 /* PersistedUserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62BE1C81CF89CF800326B98 /* PersistedUserService.swift */; };
 		B636BA241CF34D9F009009F2 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = B636BA231CF34D9F009009F2 /* Config.swift */; };
 		B636BA261CF34DDA009009F2 /* FirebaseRemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B636BA251CF34DDA009009F2 /* FirebaseRemoteConfig.swift */; };
@@ -113,6 +114,7 @@
 		B6210ACB1CE24AC600570509 /* Authentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
 		B621BEE01CFF1CE100B92F09 /* Users.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
 		B621BEE21CFF2C8B00B92F09 /* Channels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channels.swift; sourceTree = "<group>"; };
+		B621BEE41CFF379F00B92F09 /* TestScheduler+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TestScheduler+Extensions.swift"; sourceTree = "<group>"; };
 		B62BE1C81CF89CF800326B98 /* PersistedUserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedUserService.swift; sourceTree = "<group>"; };
 		B636BA231CF34D9F009009F2 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		B636BA251CF34DDA009009F2 /* FirebaseRemoteConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseRemoteConfig.swift; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 				B61BD4CB1CFEE91800DD7A70 /* Channel */,
 				B63B37631CFD948700142DC3 /* Chat */,
 				B63B37801CFD975A00142DC3 /* Info.plist */,
+				B621BEE41CFF379F00B92F09 /* TestScheduler+Extensions.swift */,
 			);
 			path = BonfireTests;
 			sourceTree = "<group>";
@@ -708,6 +711,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B63B37861CFD978500142DC3 /* PersistedChatServiceTests.swift in Sources */,
+				B621BEE51CFF379F00B92F09 /* TestScheduler+Extensions.swift in Sources */,
 				B61BD4CD1CFEE93000DD7A70 /* PersistedChannelServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

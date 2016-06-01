@@ -3,21 +3,6 @@ import RxSwift
 import RxTests
 @testable import Bonfire
 
-extension TestScheduler {
-    func singleEventAndComplete<Element>(element: Element) -> Observable<Element> {
-        return self.createColdObservable([
-            next(0, element),
-            completed(0)
-            ]).asObservable()
-    }
-
-    func singleEventAndHang<Element>(element: Element) -> Observable<Element> {
-        return self.createHotObservable([
-            next(0, element)
-            ]).asObservable()
-    }
-}
-
 class PersistedChannelServiceTests: XCTestCase {
 
     var scheduler: TestScheduler!

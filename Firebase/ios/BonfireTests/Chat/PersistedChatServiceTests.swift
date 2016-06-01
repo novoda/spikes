@@ -42,11 +42,9 @@ class PersistedChatServiceTests: XCTestCase {
         // Given
         let chat = Chat(channel: channel, messages: [])
 
-        let testChatEvents = scheduler.createHotObservable([
-            next(1, chat)
-            ])
+        let testChatEvents = scheduler.singleEventAndHang(chat)
 
-        let chatDatabase = MockChatDatabase(chatObservable: testChatEvents.asObservable())
+        let chatDatabase = MockChatDatabase(chatObservable: testChatEvents)
         let chatService = PersistedChatService(chatDatabase: chatDatabase)
 
         // When
@@ -55,7 +53,7 @@ class PersistedChatServiceTests: XCTestCase {
 
         // Then
         let expectedEvents = [
-            next(1, DatabaseResult.Success(chat))
+            next(0, DatabaseResult.Success(chat))
         ]
 
         XCTAssertEqual(testableObserver.events, expectedEvents)
