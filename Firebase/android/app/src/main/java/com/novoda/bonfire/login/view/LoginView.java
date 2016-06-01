@@ -18,7 +18,6 @@ public class LoginView extends LinearLayout implements LoginDisplayer {
     public LoginView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setOrientation(VERTICAL);
-        setGravity(Gravity.CENTER);
     }
 
     @Override

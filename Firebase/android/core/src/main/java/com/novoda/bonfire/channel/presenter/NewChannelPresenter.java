@@ -9,7 +9,9 @@ import com.novoda.bonfire.login.service.LoginService;
 import com.novoda.bonfire.navigation.Navigator;
 import com.novoda.bonfire.user.data.model.User;
 
+import rx.Observable;
 import rx.functions.Action1;
+import rx.subscriptions.CompositeSubscription;
 
 public class NewChannelPresenter {
 
@@ -18,6 +20,7 @@ public class NewChannelPresenter {
     private final LoginService loginService;
     private final Navigator navigator;
     private User user;
+    private CompositeSubscription subscriptions = new CompositeSubscription();
 
     public NewChannelPresenter(NewChannelDisplayer newChannelDisplayer,
                                ChannelService channelService,
@@ -30,62 +33,49 @@ public class NewChannelPresenter {
     }
 
     public void startPresenting() {
-        newChannelDisplayer.attach(interactionListener);
-        newChannelDisplayer.disableChannelCreation();
-        loginService.getAuthentication().subscribe(new Action1<Authentication>() {
-            @Override
-            public void call(Authentication authentication) {
-                user = authentication.getUser();
-            }
-        });
+        newChannelDisplayer.attach(channelCreationListener);
+        subscriptions.add(
+                loginService.getAuthentication().subscribe(new Action1<Authentication>() {
+                    @Override
+                    public void call(Authentication authentication) {
+                        user = authentication.getUser();
+                    }
+                })
+        );
     }
 
     public void stopPresenting() {
-        newChannelDisplayer.detach(interactionListener);
+        newChannelDisplayer.detach(channelCreationListener);
+        subscriptions.clear();
+        subscriptions = new CompositeSubscription();
     }
 
-    private NewChannelDisplayer.InteractionListener interactionListener = new NewChannelDisplayer.InteractionListener() {
-        @Override
-        public void onChannelNameLengthChanged(int length) {
-            if (length > 0) {
-                newChannelDisplayer.enableChannelCreation();
-            } else {
-                newChannelDisplayer.disableChannelCreation();
-            }
-        }
+    private NewChannelDisplayer.ChannelCreationListener channelCreationListener = new NewChannelDisplayer.ChannelCreationListener() {
 
         @Override
         public void onCreateChannelClicked(String channelName, boolean isPrivate) {
-            final Channel newChannel = buildChannel(channelName, isPrivate);
-            if (isPrivate) {
-                channelService.createPrivateChannel(newChannel, user)
-                        .subscribe(new Action1<DatabaseResult<Channel>>() {
-                            @Override
-                            public void call(DatabaseResult<Channel> databaseResult) {
-                                if (databaseResult.isSuccess()) {
-                                    navigator.toAddUsersFor(databaseResult.getData());
-                                } else {
-                                    newChannelDisplayer.showChannelCreationError();
-                                }
+            Channel newChannel = new Channel(channelName.trim(), isPrivate);
+            subscriptions.add(
+                    create(newChannel).subscribe(new Action1<DatabaseResult<Channel>>() {
+                        @Override
+                        public void call(DatabaseResult<Channel> databaseResult) {
+                            if (databaseResult.isSuccess()) {
+                                navigator.toChannelWithClearedHistory(databaseResult.getData());
+                            } else {
+                                newChannelDisplayer.showChannelCreationError();
                             }
-                        });
-            } else {
-                channelService.createPublicChannel(newChannel)
-                        .subscribe(new Action1<DatabaseResult<Channel>>() {
-                            @Override
-                            public void call(DatabaseResult<Channel> databaseResult) {
-                                if (databaseResult.isSuccess()) {
-                                    navigator.toChannel(databaseResult.getData());
-                                } else {
-                                    newChannelDisplayer.showChannelCreationError();
-                                }
-                            }
-                        });
-            }
+                        }
+                    })
+            );
         }
     };
 
-    private Channel buildChannel(String channelName, boolean isPrivate) {
-        return new Channel(channelName.trim(), isPrivate);
+    private Observable<DatabaseResult<Channel>> create(Channel newChannel) {
+        if (newChannel.isPrivate()) {
+            return channelService.createPrivateChannel(newChannel, user);
+        } else {
+            return channelService.createPublicChannel(newChannel);
+        }
     }
+
 }

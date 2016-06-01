@@ -49,7 +49,9 @@ public class MessageView extends LinearLayout {
 
     public void display(Message message) {
         Context context = getContext();
-        Glide.with(context).load(message.getAuthor().getPhotoUrl())
+        Glide.with(context)
+                .load(message.getAuthor().getPhotoUrl())
+                .error(R.drawable.ic_person)
                 .transform(circleCropTransformation)
                 .into(picture);
         body.setText(message.getBody());

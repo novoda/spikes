@@ -5,4 +5,5 @@
   <color name="colorAccent">#FF4081</color>
 
   <color name="hint_light">#A0A0A0</color>
+  <color name="selected_item">#88A0A0A0</color>
 </resources>

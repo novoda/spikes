@@ -20,9 +20,9 @@ public class ChatPresenter {
     private final LoginService loginService;
     private final ChatService chatService;
     private final ChatDisplayer chatDisplayer;
-    private Analytics analytics;
-    private Channel channel;
-    private Navigator navigator;
+    private final Analytics analytics;
+    private final Channel channel;
+    private final Navigator navigator;
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
@@ -38,6 +38,10 @@ public class ChatPresenter {
     }
 
     public void startPresenting() {
+        chatDisplayer.setTitle(channel.getName());
+        if (channel.isPrivate()) {
+            chatDisplayer.showAddMembersButton();
+        }
         chatDisplayer.attach(actionListener);
         chatDisplayer.disableInteraction();
         subscriptions.add(
@@ -74,6 +78,11 @@ public class ChatPresenter {
 
     private final ChatDisplayer.ChatActionListener actionListener = new ChatDisplayer.ChatActionListener() {
         @Override
+        public void onUpPressed() {
+            navigator.toParent();
+        }
+
+        @Override
         public void onMessageLengthChanged(int messageLength) {
             if (userIsAuthenticated() && messageLength > 0) {
                 chatDisplayer.enableInteraction();
@@ -86,6 +95,11 @@ public class ChatPresenter {
         public void onSubmitMessage(String message) {
             chatService.sendMessage(channel, new Message(user, message));
             analytics.trackEvent("message_length", message.length());
+        }
+
+        @Override
+        public void onManageOwnersClicked() {
+            navigator.toMembersOf(channel);
         }
     };
 

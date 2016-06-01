@@ -2,32 +2,15 @@ package com.novoda.bonfire.channel.displayer;
 
 public interface NewChannelDisplayer {
 
-    void attach(InteractionListener interactionListener);
+    void attach(ChannelCreationListener channelCreationListener);
 
-    void detach(InteractionListener interactionListener);
-
-    void enableChannelCreation();
-
-    void disableChannelCreation();
+    void detach(ChannelCreationListener channelCreationListener);
 
     void showChannelCreationError();
 
-    interface InteractionListener {
-
-        void onChannelNameLengthChanged(int length);
+    interface ChannelCreationListener {
 
         void onCreateChannelClicked(String channelName, boolean isPrivate);
 
-        InteractionListener NO_OP = new InteractionListener() {
-            @Override
-            public void onChannelNameLengthChanged(int length) {
-                // empty implementation
-            }
-
-            @Override
-            public void onCreateChannelClicked(String channelName, boolean isPrivate) {
-                // empty implementation
-            }
-        };
     }
 }

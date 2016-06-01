@@ -29,12 +29,12 @@ public class AndroidNavigator implements Navigator {
     }
 
     @Override
-    public void toNewChannel() {
+    public void toCreateChannel() {
         activity.startActivity(new Intent(activity, NewChannelActivity.class));
     }
 
     @Override
-    public void toAddUsersFor(Channel channel) {
+    public void toMembersOf(Channel channel) {
         activity.startActivity(UsersActivity.createIntentFor(activity, channel));
     }
 
@@ -43,6 +43,17 @@ public class AndroidNavigator implements Navigator {
         Intent intent = new Intent(activity, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(intent);
+        activity.finish();
+    }
+
+    @Override
+    public void toParent() {
+        activity.finish();
+    }
+
+    @Override
+    public void toChannelWithClearedHistory(Channel channel) {
+        toChannel(channel);
         activity.finish();
     }
 

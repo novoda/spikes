@@ -3,9 +3,10 @@ package com.novoda.bonfire.user.view;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -22,8 +23,9 @@ public class UsersView extends LinearLayout implements UsersDisplayer {
 
     private UsersAdapter usersAdapter;
     private RecyclerView recyclerView;
-    private Button completeButton;
     private List<SelectableUser> selectableUsers;
+    private Toolbar toolbar;
+    private SelectionListener selectionListener;
 
     public UsersView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -35,26 +37,26 @@ public class UsersView extends LinearLayout implements UsersDisplayer {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_users_view, this);
         recyclerView = Views.findById(this, R.id.usersRecyclerView);
-        completeButton = Views.findById(this, R.id.completeAddingUsersButton);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        toolbar = Views.findById(this, R.id.toolbar);
+        toolbar.setTitle(R.string.members);
+        toolbar.inflateMenu(R.menu.users_menu);
         recyclerView.setLayoutManager(layoutManager);
     }
 
     @Override
     public void attach(final SelectionListener selectionListener) {
+        this.selectionListener = selectionListener;
         usersAdapter = new UsersAdapter(selectionListener);
         recyclerView.setAdapter(usersAdapter);
-        completeButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectionListener.onCompleteClicked();
-            }
-        });
+
+        toolbar.setOnMenuItemClickListener(menuItemClickListener);
     }
 
     @Override
     public void detach(SelectionListener selectionListener) {
-        completeButton.setOnClickListener(null);
+        this.selectionListener = null;
+        toolbar.setOnMenuItemClickListener(null);
     }
 
     @Override
@@ -90,6 +92,16 @@ public class UsersView extends LinearLayout implements UsersDisplayer {
         }
         return foundMatch;
     }
+
+    private Toolbar.OnMenuItemClickListener menuItemClickListener = new Toolbar.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            if (item.getItemId() == R.id.usersDoneButton) {
+                selectionListener.onCompleteClicked();
+            }
+            return false;
+        }
+    };
 
     class SelectableUser {
         public final User user;

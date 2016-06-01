@@ -13,7 +13,7 @@ import java.util.List;
 import rx.Observable;
 import rx.functions.Func1;
 
-import static com.novoda.bonfire.rx.ValueEventObservable.listenToValueEvents;
+import static com.novoda.bonfire.rx.FirebaseObservableListeners.listenToValueEvents;
 
 public class FirebaseChatDatabase implements ChatDatabase {
 

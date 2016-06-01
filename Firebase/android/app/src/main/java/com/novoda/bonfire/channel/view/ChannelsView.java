@@ -7,7 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.novoda.bonfire.BuildConfig;
 import com.novoda.bonfire.Dependencies;
@@ -17,13 +17,14 @@ import com.novoda.bonfire.channel.displayer.ChannelsDisplayer;
 import com.novoda.bonfire.link.FirebaseDynamicLinkFactory;
 import com.novoda.notils.caster.Views;
 
-public class ChannelsView extends FrameLayout implements ChannelsDisplayer {
+public class ChannelsView extends LinearLayout implements ChannelsDisplayer {
 
     private final ChannelsAdapter channelsAdapter = new ChannelsAdapter();
     private FloatingActionButton newChannelFab;
 
     public ChannelsView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setOrientation(VERTICAL);
     }
 
     @Override

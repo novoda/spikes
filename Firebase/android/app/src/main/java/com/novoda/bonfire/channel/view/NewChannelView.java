@@ -6,7 +6,6 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -17,10 +16,11 @@ import com.novoda.notils.caster.Views;
 
 public class NewChannelView extends LinearLayout implements NewChannelDisplayer {
 
-    private InteractionListener interactionListener = InteractionListener.NO_OP;
+    private ChannelCreationListener channelCreationListener;
     private EditText newChannelName;
     private Switch privateChannelSwitch;
     private Button createButton;
+
     public NewChannelView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setOrientation(VERTICAL);
@@ -36,28 +36,19 @@ public class NewChannelView extends LinearLayout implements NewChannelDisplayer 
     }
 
     @Override
-    public void attach(final InteractionListener interactionListener) {
-        this.interactionListener = interactionListener;
+    public void attach(final ChannelCreationListener channelCreationListener) {
+        this.channelCreationListener = channelCreationListener;
         newChannelName.addTextChangedListener(channelNameTextWatcher);
         createButton.setOnClickListener(createButtonClickListener);
+        createButton.setEnabled(false);
     }
 
     @Override
-    public void detach(InteractionListener interactionListener) {
-        this.interactionListener = InteractionListener.NO_OP;
+    public void detach(ChannelCreationListener channelCreationListener) {
         newChannelName.removeTextChangedListener(channelNameTextWatcher);
         privateChannelSwitch.setOnCheckedChangeListener(null);
         createButton.setOnClickListener(null);
-    }
-
-    @Override
-    public void enableChannelCreation() {
-        createButton.setEnabled(true);
-    }
-
-    @Override
-    public void disableChannelCreation() {
-        createButton.setEnabled(false);
+        this.channelCreationListener = null;
     }
 
     @Override
@@ -78,14 +69,18 @@ public class NewChannelView extends LinearLayout implements NewChannelDisplayer 
 
         @Override
         public void afterTextChanged(Editable s) {
-            interactionListener.onChannelNameLengthChanged(s.length());
+            if (s.length() > 0) {
+                createButton.setEnabled(true);
+            } else {
+                createButton.setEnabled(false);
+            }
         }
     };
 
     private final OnClickListener createButtonClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            interactionListener.onCreateChannelClicked(newChannelName.getText().toString(), privateChannelSwitch.isChecked());
+            channelCreationListener.onCreateChannelClicked(newChannelName.getText().toString(), privateChannelSwitch.isChecked());
         }
     };
 }

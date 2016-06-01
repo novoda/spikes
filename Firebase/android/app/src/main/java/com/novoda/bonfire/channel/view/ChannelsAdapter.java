@@ -44,7 +44,7 @@ class ChannelsAdapter extends RecyclerView.Adapter<ChannelViewHolder>  {
     }
 
     public void detach(ChannelsDisplayer.ChannelsInteractionListener channelsInteractionListener) {
-        this.channelsInteractionListener = ChannelsDisplayer.ChannelsInteractionListener.NO_OP;
+        this.channelsInteractionListener = null;
     }
 
     private final ChannelViewHolder.ChannelSelectionListener clickListener = new ChannelViewHolder.ChannelSelectionListener() {

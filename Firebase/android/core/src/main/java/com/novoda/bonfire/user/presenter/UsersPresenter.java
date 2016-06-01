@@ -10,6 +10,7 @@ import com.novoda.bonfire.user.displayer.UsersDisplayer;
 import com.novoda.bonfire.user.service.UserService;
 
 import rx.functions.Action1;
+import rx.subscriptions.CompositeSubscription;
 
 public class UsersPresenter {
     private final UserService userService;
@@ -17,6 +18,7 @@ public class UsersPresenter {
     private final UsersDisplayer usersDisplayer;
     private final Channel channel;
     private final Navigator navigator;
+    private CompositeSubscription subscriptions = new CompositeSubscription();
 
     public UsersPresenter(UserService userService, ChannelService channelService, UsersDisplayer usersDisplayer, Channel channel, Navigator navigator) {
         this.userService = userService;
@@ -28,19 +30,36 @@ public class UsersPresenter {
 
     public void startPresenting() {
         usersDisplayer.attach(selectionListener);
-        userService.getAllUsers().subscribe(new Action1<Users>() {
-            @Override
-            public void call(Users users) {
-                usersDisplayer.display(users);
-            }
-        });
-        channelService.getOwnersOfChannel(channel)
-                .subscribe(updateSelectedUsers());
+
+        subscriptions.add(
+                userService.getAllUsers().subscribe(new Action1<Users>() {
+                    @Override
+                    public void call(Users users) {
+                        usersDisplayer.display(users);
+                    }
+                })
+        );
+        subscriptions.add(
+                channelService.getOwnersOfChannel(channel)
+                        .subscribe(new Action1<DatabaseResult<Users>>() {
+                            @Override
+                            public void call(DatabaseResult<Users> databaseResult) {
+                                if (databaseResult.isSuccess()) {
+                                    usersDisplayer.displaySelectedUsers(databaseResult.getData());
+                                } else {
+                                    usersDisplayer.showFailure();
+                                }
+                            }
+                        })
+        );
     }
 
     public void stopPresenting() {
         usersDisplayer.detach(selectionListener);
+        subscriptions.clear();
+        subscriptions = new CompositeSubscription();
     }
+
     private UsersDisplayer.SelectionListener selectionListener = new UsersDisplayer.SelectionListener() {
         @Override
         public void onUserSelected(final User user) {
@@ -56,7 +75,7 @@ public class UsersPresenter {
 
         @Override
         public void onCompleteClicked() {
-            navigator.toChannel(channel);
+            navigator.toParent();
         }
     };
 
@@ -71,16 +90,4 @@ public class UsersPresenter {
         };
     }
 
-    private Action1<DatabaseResult<Users>> updateSelectedUsers() {
-        return new Action1<DatabaseResult<Users>>() {
-            @Override
-            public void call(DatabaseResult<Users> databaseResult) {
-                if (databaseResult.isSuccess()) {
-                    usersDisplayer.displaySelectedUsers(databaseResult.getData());
-                } else {
-                    usersDisplayer.showFailure();
-                }
-            }
-        };
-    }
 }

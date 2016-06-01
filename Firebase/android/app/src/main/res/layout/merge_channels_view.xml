@@ -4,18 +4,25 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
-  <android.support.v7.widget.RecyclerView
-    android:id="@+id/channels"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+  <include layout="@layout/toolbar_layout" />
 
-  <android.support.design.widget.FloatingActionButton
-    android:id="@+id/newChannelFab"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="bottom|end"
-    android:layout_margin="@dimen/activity_horizontal_margin"
-    android:src="@android:drawable/ic_input_add"
-    app:fabSize="normal" />
+  <FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/channels"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+
+    <android.support.design.widget.FloatingActionButton
+      android:id="@+id/newChannelFab"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom|end"
+      android:layout_margin="@dimen/activity_horizontal_margin"
+      android:src="@drawable/ic_add_channel"
+      app:fabSize="normal" />
+  </FrameLayout>
 
 </merge>

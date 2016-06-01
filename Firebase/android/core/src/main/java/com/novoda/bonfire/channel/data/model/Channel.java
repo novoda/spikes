@@ -24,6 +24,10 @@ public class Channel implements Serializable {
         return access;
     }
 
+    public boolean isPrivate() {
+        return access.equals("private");
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

@@ -11,14 +11,13 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import rx.Observable;
+import rx.functions.Func1;
 import rx.observers.TestObserver;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-public class ValueEventObservableTest {
+public class ListenToValueEventsOnSubscribeTest {
 
     private static final String EXPECTED_KEY = "EXPECTED_KEY";
 
@@ -39,7 +38,7 @@ public class ValueEventObservableTest {
             }
         }).when(databaseReference).addValueEventListener(any(ValueEventListener.class));
 
-        Observable<String> observable = ValueEventObservable.listenToValueEvents(databaseReference, new DataSnapshotToStringMarshaller());
+        Observable<String> observable = Observable.create(new ListenToValueEventsOnSubscribe<>(databaseReference, getKey()));
 
         TestObserver<String> testObserver = new TestObserver<>();
         observable.subscribe(testObserver);
@@ -47,10 +46,13 @@ public class ValueEventObservableTest {
         testObserver.assertReceivedOnNext(Collections.singletonList(EXPECTED_KEY));
     }
 
-    private class DataSnapshotToStringMarshaller implements rx.functions.Func1<DataSnapshot, String> {
-        @Override
-        public String call(DataSnapshot dataSnapshot) {
-            return dataSnapshot.getKey();
-        }
+    private static Func1<DataSnapshot, String> getKey() {
+        return new Func1<DataSnapshot, String>() {
+            @Override
+            public String call(DataSnapshot dataSnapshot) {
+                return dataSnapshot.getKey();
+            }
+        };
     }
+
 }

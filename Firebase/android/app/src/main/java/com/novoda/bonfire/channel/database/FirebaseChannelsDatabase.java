@@ -2,8 +2,8 @@ package com.novoda.bonfire.channel.database;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.bonfire.channel.data.model.Channel;
-import com.novoda.bonfire.channel.database.provider.ChannelsDatabaseProvider;
 import com.novoda.bonfire.user.data.model.User;
 
 import java.util.ArrayList;
@@ -12,10 +12,7 @@ import java.util.List;
 import rx.Observable;
 import rx.functions.Func1;
 
-import static com.novoda.bonfire.rx.ValueEventObservable.listenToValueEvents;
-import static com.novoda.bonfire.rx.RxCompletionListener.removeValue;
-import static com.novoda.bonfire.rx.RxCompletionListener.setValue;
-import static com.novoda.bonfire.rx.RxSingleValueListener.listenToSingleValueEvents;
+import static com.novoda.bonfire.rx.FirebaseObservableListeners.*;
 
 public class FirebaseChannelsDatabase implements ChannelsDatabase {
 
@@ -24,11 +21,11 @@ public class FirebaseChannelsDatabase implements ChannelsDatabase {
     private final DatabaseReference channelsDB;
     private final DatabaseReference ownersDB;
 
-    public FirebaseChannelsDatabase(ChannelsDatabaseProvider channelsDatabaseProvider) {
-        publicChannelsDB = channelsDatabaseProvider.getPublicChannelsDB();
-        privateChannelsDB = channelsDatabaseProvider.getPrivateChannelsDB();
-        channelsDB = channelsDatabaseProvider.getChannelsDB();
-        ownersDB = channelsDatabaseProvider.getOwnersDB();
+    public FirebaseChannelsDatabase(FirebaseDatabase firebaseDatabase) {
+        this.publicChannelsDB = firebaseDatabase.getReference("public-channels-index");
+        this.privateChannelsDB = firebaseDatabase.getReference("private-channels-index");
+        this.channelsDB = firebaseDatabase.getReference("channels");
+        this.ownersDB = firebaseDatabase.getReference("owners");
     }
 
     @Override
@@ -80,7 +77,16 @@ public class FirebaseChannelsDatabase implements ChannelsDatabase {
         return listenToValueEvents(ownersDB.child(channel.getName()), getKeys());
     }
 
-    private Func1<DataSnapshot, List<String>> getKeys() {
+    private static <T> Func1<DataSnapshot, T> as(final Class<T> tClass) {
+        return new Func1<DataSnapshot, T>() {
+            @Override
+            public T call(DataSnapshot dataSnapshot) {
+                return dataSnapshot.getValue(tClass);
+            }
+        };
+    }
+
+    private static Func1<DataSnapshot, List<String>> getKeys() {
         return new Func1<DataSnapshot, List<String>>() {
             @Override
             public List<String> call(DataSnapshot dataSnapshot) {
@@ -96,12 +102,4 @@ public class FirebaseChannelsDatabase implements ChannelsDatabase {
         };
     }
 
-    private <T> Func1<DataSnapshot, T> as(final Class<T> tClass) {
-        return new Func1<DataSnapshot, T>() {
-            @Override
-            public T call(DataSnapshot dataSnapshot) {
-                return dataSnapshot.getValue(tClass);
-            }
-        };
-    }
 }

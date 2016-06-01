@@ -11,20 +11,25 @@ import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.subscriptions.BooleanSubscription;
 
-public class ValueEventObservable {
-    public static <T> Observable<T> listenToValueEvents(final DatabaseReference databaseReference, final Func1<DataSnapshot, T> marshaller) {
-        return Observable.create(new Observable.OnSubscribe<T>() {
+class ListenToValueEventsOnSubscribe<T> implements Observable.OnSubscribe<T> {
+
+    private final DatabaseReference databaseReference;
+    private final Func1<DataSnapshot, T> marshaller;
+
+    ListenToValueEventsOnSubscribe(DatabaseReference databaseReference, Func1<DataSnapshot, T> marshaller) {
+        this.databaseReference = databaseReference;
+        this.marshaller = marshaller;
+    }
+
+    @Override
+    public void call(Subscriber<? super T> subscriber) {
+        final ValueEventListener eventListener = databaseReference.addValueEventListener(new RxValueListener<>(subscriber, marshaller));
+        subscriber.add(BooleanSubscription.create(new Action0() {
             @Override
-            public void call(Subscriber<? super T> subscriber) {
-                final ValueEventListener eventListener = databaseReference.addValueEventListener(new RxValueListener<>(subscriber, marshaller));
-                subscriber.add(BooleanSubscription.create(new Action0() {
-                    @Override
-                    public void call() {
-                        databaseReference.removeEventListener(eventListener);
-                    }
-                }));
+            public void call() {
+                databaseReference.removeEventListener(eventListener);
             }
-        });
+        }));
     }
 
     private static class RxValueListener<T> implements ValueEventListener {
@@ -32,7 +37,7 @@ public class ValueEventObservable {
         private final Subscriber<? super T> subscriber;
         private final Func1<DataSnapshot, T> marshaller;
 
-        public RxValueListener(Subscriber<? super T> subscriber, Func1<DataSnapshot, T> marshaller) {
+        RxValueListener(Subscriber<? super T> subscriber, Func1<DataSnapshot, T> marshaller) {
             this.subscriber = subscriber;
             this.marshaller = marshaller;
         }
@@ -50,4 +55,5 @@ public class ValueEventObservable {
         }
 
     }
+
 }

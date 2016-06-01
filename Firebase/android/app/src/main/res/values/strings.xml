@@ -10,6 +10,8 @@
   <string name="create">Create</string>
   <string name="channel_already_exists">Channel with this name already exists</string>
   <string name="add">Add</string>
+  <string name="add_users">Add users</string>
+  <string name="members">Members</string>
 
   <string name="dynamicLinkDomain">https://t6c2e.app.goo.gl</string>
   <string name="deepLinkBaseUrl">https://novoda.com/bonfire</string>
