@@ -61,6 +61,11 @@ public class AndroidLoginNavigator implements LoginNavigator {
     }
 
     @Override
+    public void toShareInvite(String sharingLink) {
+        navigator.toShareInvite(sharingLink);
+    }
+
+    @Override
     public void toLogin() {
         //No op
     }

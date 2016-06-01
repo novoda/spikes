@@ -16,4 +16,7 @@
   <string name="dynamicLinkDomain">https://t6c2e.app.goo.gl</string>
   <string name="deepLinkBaseUrl">https://novoda.com/bonfire</string>
   <string name="iosBundleIdentifier">com.novoda.bonfire</string>
+  <string name="invite">Invite</string>
+  <string name="send_invite">Send invite</string>
+  <string name="check_out_bonfire">Check out Bonfire!\n%s</string>
 </resources>
