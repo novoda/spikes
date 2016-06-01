@@ -26,7 +26,7 @@ public class LoginActivity extends BaseActivity {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         LoginDisplayer loginDisplayer = (LoginDisplayer) findViewById(R.id.loginView);
         navigator = new AndroidLoginNavigator(this, new AndroidNavigator(this));
-        presenter = new LoginPresenter(Dependencies.INSTANCE.getLoginService(), loginDisplayer, navigator);
+        presenter = new LoginPresenter(Dependencies.INSTANCE.getLoginService(), loginDisplayer, navigator, Dependencies.INSTANCE.getErrorLogger());
     }
 
     @Override

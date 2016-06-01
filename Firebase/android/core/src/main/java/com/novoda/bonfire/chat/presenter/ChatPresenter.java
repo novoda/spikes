@@ -1,6 +1,7 @@
 package com.novoda.bonfire.chat.presenter;
 
 import com.novoda.bonfire.analytics.Analytics;
+import com.novoda.bonfire.analytics.ErrorLogger;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.chat.data.model.Chat;
 import com.novoda.bonfire.chat.data.model.Message;
@@ -23,18 +24,20 @@ public class ChatPresenter {
     private final Analytics analytics;
     private final Channel channel;
     private final Navigator navigator;
+    private final ErrorLogger errorLogger;
+
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
-
     private User user;
 
-    public ChatPresenter(LoginService loginService, ChatService chatService, ChatDisplayer chatDisplayer, Channel channel, Analytics analytics, Navigator navigator) {
+    public ChatPresenter(LoginService loginService, ChatService chatService, ChatDisplayer chatDisplayer, Channel channel, Analytics analytics, Navigator navigator, ErrorLogger errorLogger) {
         this.loginService = loginService;
         this.chatService = chatService;
         this.chatDisplayer = chatDisplayer;
         this.analytics = analytics;
         this.channel = channel;
         this.navigator = navigator;
+        this.errorLogger = errorLogger;
     }
 
     public void startPresenting() {
@@ -51,6 +54,7 @@ public class ChatPresenter {
                         if (result.isSuccess()) {
                             chatDisplayer.display(result.getData());
                         } else {
+                            errorLogger.reportError("Cannot open chat", result.getFailure());
                             navigator.toChannels();
                         }
                     }

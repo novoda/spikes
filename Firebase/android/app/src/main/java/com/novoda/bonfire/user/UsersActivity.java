@@ -41,7 +41,8 @@ public class UsersActivity extends BaseActivity {
                 Dependencies.INSTANCE.getChannelService(),
                 usersDisplayer,
                 channel,
-                new AndroidNavigator(this)
+                new AndroidNavigator(this),
+                Dependencies.INSTANCE.getErrorLogger()
         );
     }
 
