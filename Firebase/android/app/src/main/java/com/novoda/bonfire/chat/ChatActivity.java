@@ -22,7 +22,7 @@ public class ChatActivity extends BaseActivity {
         Intent intent = new Intent(context, ChatActivity.class);
 
         intent.putExtra(NAME_EXTRA, channel.getName());
-        intent.putExtra(ACCESS_EXTRA, channel.getAccess());
+        intent.putExtra(ACCESS_EXTRA, channel.getAccess().name());
         return intent;
     }
 
@@ -31,12 +31,13 @@ public class ChatActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         ChatDisplayer chatDisplayer = (ChatDisplayer) findViewById(R.id.chatView);
+        Channel channel = new Channel(getIntent().getStringExtra(NAME_EXTRA),
+                                      Channel.Access.valueOf(getIntent().getStringExtra(ACCESS_EXTRA)));
         presenter = new ChatPresenter(
                 Dependencies.INSTANCE.getLoginService(),
                 Dependencies.INSTANCE.getChatService(),
                 chatDisplayer,
-                getIntent().getStringExtra(NAME_EXTRA),
-                (Channel.Access) getIntent().getSerializableExtra(ACCESS_EXTRA),
+                channel,
                 Dependencies.INSTANCE.getAnalytics(),
                 new AndroidNavigator(this)
         );

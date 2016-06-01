@@ -2,16 +2,15 @@ package com.novoda.bonfire.chat.presenter;
 
 import com.novoda.bonfire.analytics.Analytics;
 import com.novoda.bonfire.channel.data.model.Channel;
-import com.novoda.bonfire.channel.data.model.Channel.Access;
 import com.novoda.bonfire.chat.data.model.Chat;
 import com.novoda.bonfire.chat.data.model.Message;
 import com.novoda.bonfire.chat.displayer.ChatDisplayer;
 import com.novoda.bonfire.chat.service.ChatService;
 import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.login.data.model.Authentication;
+import com.novoda.bonfire.login.service.LoginService;
 import com.novoda.bonfire.navigation.Navigator;
 import com.novoda.bonfire.user.data.model.User;
-import com.novoda.bonfire.login.service.LoginService;
 
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
@@ -29,12 +28,12 @@ public class ChatPresenter {
 
     private User user;
 
-    public ChatPresenter(LoginService loginService, ChatService chatService, ChatDisplayer chatDisplayer, String channelName, Access channelAccess, Analytics analytics, Navigator navigator) {
+    public ChatPresenter(LoginService loginService, ChatService chatService, ChatDisplayer chatDisplayer, Channel channel, Analytics analytics, Navigator navigator) {
         this.loginService = loginService;
         this.chatService = chatService;
         this.chatDisplayer = chatDisplayer;
         this.analytics = analytics;
-        this.channel = new Channel(channelName, channelAccess);
+        this.channel = channel;
         this.navigator = navigator;
     }
 
