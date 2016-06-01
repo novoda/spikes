@@ -53,7 +53,7 @@ var DebugNativeComponentScene = React.createClass({
       onPress={() => { Alert.alert('clicked', rowData) }}/>
   },
 
-  _propsForRowData(rowData: string) {
+  _propsForRowData (rowData: string) {
     switch (rowData) {
       case 'Rick':
         return {
