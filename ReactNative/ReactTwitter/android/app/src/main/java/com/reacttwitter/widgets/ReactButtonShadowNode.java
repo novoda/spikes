@@ -19,7 +19,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
-public class ReactButtonShadowNode extends LayoutShadowNode implements CSSNode.MeasureFunction {
+class ReactButtonShadowNode extends LayoutShadowNode implements CSSNode.MeasureFunction {
 
     private static final TextPaint textPaintInstance = new TextPaint();
 
@@ -31,7 +31,7 @@ public class ReactButtonShadowNode extends LayoutShadowNode implements CSSNode.M
     private String text;
     private final Rect padding;
 
-    public ReactButtonShadowNode() {
+    ReactButtonShadowNode() {
         padding = new Rect();
         setMeasureFunction(this);
     }

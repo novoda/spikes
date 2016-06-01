@@ -7,9 +7,9 @@ import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
-public class ReactButtonManager extends BaseViewManager<ReactButton, ReactButtonShadowNode> {
+class ReactButtonManager extends BaseViewManager<ReactButton, ReactButtonShadowNode> {
 
-    public static final String REACT_CLASS = "RCTNovodaButton";
+    private static final String REACT_CLASS = "RCTNovodaButton";
 
     @Override
     public String getName() {
