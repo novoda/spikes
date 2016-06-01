@@ -1,18 +1,12 @@
 package com.novoda.bonfire.navigation;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 
-import com.google.android.gms.appinvite.AppInvite;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.novoda.bonfire.BaseActivity;
-import com.novoda.bonfire.R;
 import com.novoda.bonfire.channel.data.model.Channel;
+import com.novoda.bonfire.login.LoginGoogleApiClient;
 import com.novoda.notils.logger.simple.Log;
 
 public class AndroidLoginNavigator implements LoginNavigator {
@@ -20,33 +14,14 @@ public class AndroidLoginNavigator implements LoginNavigator {
     private static final int RC_SIGN_IN = 242;
 
     private final BaseActivity activity;
-    private final GoogleApiClient googleApiClient;
+    private final LoginGoogleApiClient googleApiClient;
     private final Navigator navigator;
     private LoginResultListener loginResultListener;
 
-    public AndroidLoginNavigator(BaseActivity activity, Navigator navigator) {
+    public AndroidLoginNavigator(BaseActivity activity, LoginGoogleApiClient googleApiClient, Navigator navigator) {
         this.activity = activity;
+        this.googleApiClient = googleApiClient;
         this.navigator = navigator;
-        this.googleApiClient = setupGoogleApiClient(); //TODO improve this creation
-    }
-
-    private GoogleApiClient setupGoogleApiClient() {
-        String string = activity.getString(R.string.default_web_client_id);
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(string)
-                .requestEmail()
-                .build();
-        return new GoogleApiClient.Builder(activity)
-                .enableAutoManage(activity, new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        Log.d("FireChat", "Failed to connect to GMS");
-                        //TODO handle error
-                    }
-                })
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .addApi(AppInvite.API)
-                .build();
     }
 
     @Override
@@ -81,13 +56,18 @@ public class AndroidLoginNavigator implements LoginNavigator {
     }
 
     @Override
+    public void toUriWithClearedHistory(String uri) {
+        navigator.toUriWithClearedHistory(uri);
+    }
+
+    @Override
     public void toLogin() {
         //No op
     }
 
     @Override
     public void toGooglePlusLogin() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+        Intent signInIntent = googleApiClient.getSignInIntent();
         activity.startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
@@ -105,7 +85,7 @@ public class AndroidLoginNavigator implements LoginNavigator {
         if (requestCode != RC_SIGN_IN) {
             return false;
         }
-        GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+        GoogleSignInResult result = googleApiClient.getSignInResultFromIntent(data);
         if (result.isSuccess()) {
             GoogleSignInAccount account = result.getSignInAccount();
             loginResultListener.onGooglePlusLoginSuccess(account.getIdToken());
@@ -114,9 +94,5 @@ public class AndroidLoginNavigator implements LoginNavigator {
             loginResultListener.onGooglePlusLoginFailed(result.getStatus().getStatusMessage());
         }
         return true;
-    }
-
-    public GoogleApiClient getGoogleApiClient() {
-        return googleApiClient;
     }
 }

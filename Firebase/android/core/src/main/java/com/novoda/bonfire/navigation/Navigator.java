@@ -18,4 +18,6 @@ public interface Navigator {
 
     void toChannelWithClearedHistory(Channel channel);
 
+    void toUriWithClearedHistory(String uri);
+
 }
