@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <include layout="@layout/toolbar_layout" />
+
+  <EditText
+    android:id="@+id/newChannelName"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="@string/insert_channel_name" />
+
+  <Switch
+    android:id="@+id/privateChannel"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/private_channel" />
+
+  <Button
+    android:id="@+id/createButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="end"
+    android:text="@string/create" />
+
+</merge>

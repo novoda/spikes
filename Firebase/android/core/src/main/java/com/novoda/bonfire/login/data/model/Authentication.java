@@ -1,5 +1,7 @@
 package com.novoda.bonfire.login.data.model;
 
+import com.novoda.bonfire.user.data.model.User;
+
 public class Authentication {
 
     private final User user;

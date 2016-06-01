@@ -1,4 +1,4 @@
-package com.novoda.bonfire.login.data.model;
+package com.novoda.bonfire.user.data.model;
 
 public class User {
 

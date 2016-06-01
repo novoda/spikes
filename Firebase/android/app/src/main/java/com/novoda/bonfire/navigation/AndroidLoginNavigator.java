@@ -50,12 +50,32 @@ public class AndroidLoginNavigator implements LoginNavigator {
     @Override
     public void toChannel(Channel channel) {
         navigator.toChannel(channel);
-        activity.finish();
     }
 
     @Override
     public void toChannels() {
         navigator.toChannels();
+        activity.finish();
+    }
+
+    @Override
+    public void toCreateChannel() {
+        navigator.toCreateChannel();
+    }
+
+    @Override
+    public void toMembersOf(Channel channel) {
+        navigator.toMembersOf(channel);
+    }
+
+    @Override
+    public void toParent() {
+        navigator.toParent();
+    }
+
+    @Override
+    public void toChannelWithClearedHistory(Channel channel) {
+        navigator.toChannelWithClearedHistory(channel);
     }
 
     @Override

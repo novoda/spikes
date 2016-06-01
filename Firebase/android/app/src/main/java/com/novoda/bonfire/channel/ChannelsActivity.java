@@ -2,6 +2,7 @@ package com.novoda.bonfire.channel;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 
 import com.novoda.bonfire.BaseActivity;
 import com.novoda.bonfire.Dependencies;
@@ -18,7 +19,7 @@ public class ChannelsActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_channels);
-
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         Dependencies dependencies = Dependencies.INSTANCE;
         channelsPresenter = new ChannelsPresenter((ChannelsDisplayer) findViewById(R.id.channelsView),
                                                   dependencies.getChannelService(),

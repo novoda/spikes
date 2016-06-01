@@ -7,4 +7,12 @@ public interface Navigator {
     void toChannel(Channel channel);
 
     void toChannels();
+
+    void toCreateChannel();
+
+    void toMembersOf(Channel channel);
+
+    void toParent();
+
+    void toChannelWithClearedHistory(Channel channel);
 }
