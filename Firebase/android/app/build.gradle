@@ -8,12 +8,23 @@ android {
         applicationId "com.novoda.bonfire"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 1
+        versionCode 2
         versionName "0.0.1"
+    }
+    signingConfigs {
+        release {
+            Properties props = new Properties()
+            props.load(new FileInputStream(file("signing.properties")))
+            storeFile file(props['storeFile'])
+            storePassword props['storePassword']
+            keyAlias props['keyAlias']
+            keyPassword props['keyPassword']
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -23,6 +34,7 @@ android {
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/rxjava.properties'
     }
+    lintOptions { warning 'InvalidPackage' }
 }
 
 dependencies {
