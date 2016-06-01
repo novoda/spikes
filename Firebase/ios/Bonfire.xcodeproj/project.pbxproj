@@ -11,6 +11,7 @@
 		1AF7D1A21CEF659A00B74483 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF7D1A11CEF659A00B74483 /* UserCell.swift */; };
 		2A9669953EF6713AF4064B53 /* Pods_Bonfire_BonfireTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE09269AA64387314EE925E /* Pods_Bonfire_BonfireTests.framework */; };
 		2C77DC9A3D905A6AE8E74FFB /* Pods_Bonfire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13F2FDE620ACDD8945A96B8C /* Pods_Bonfire.framework */; };
+		B61BD4CA1CFEE65100DD7A70 /* SharedServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61BD4C91CFEE65100DD7A70 /* SharedServices.swift */; };
 		B6210AC41CE20CEC00570509 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B6210AC31CE20CEC00570509 /* GoogleService-Info.plist */; };
 		B6210AC61CE21FA500570509 /* FirebaseLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6210AC51CE21FA500570509 /* FirebaseLoginService.swift */; };
 		B6210AC81CE2318B00570509 /* UIViewController+AlertExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6210AC71CE2318B00570509 /* UIViewController+AlertExtensions.swift */; };
@@ -102,6 +103,7 @@
 		61C2133CEB958634033B29B5 /* Pods-Bonfire.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bonfire.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bonfire/Pods-Bonfire.release.xcconfig"; sourceTree = "<group>"; };
 		70F10478B44ECEDE0486D095 /* Pods-BonfireTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BonfireTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BonfireTests/Pods-BonfireTests.debug.xcconfig"; sourceTree = "<group>"; };
 		8297D97C9651CE491D681CBF /* Pods-Bonfire.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bonfire.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bonfire/Pods-Bonfire.debug.xcconfig"; sourceTree = "<group>"; };
+		B61BD4C91CFEE65100DD7A70 /* SharedServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedServices.swift; sourceTree = "<group>"; };
 		B6210AC31CE20CEC00570509 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B6210AC51CE21FA500570509 /* FirebaseLoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseLoginService.swift; sourceTree = "<group>"; };
 		B6210AC71CE2318B00570509 /* UIViewController+AlertExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+AlertExtensions.swift"; sourceTree = "<group>"; };
@@ -316,6 +318,7 @@
 				B654B2871CE0C86200EEDE0A /* Utilities */,
 				B6C054DF1CF5AE9000B1BB6C /* Welcome */,
 				B654B2661CE0C38000EEDE0A /* AppDelegate.swift */,
+				B61BD4C91CFEE65100DD7A70 /* SharedServices.swift */,
 				B6AC7C161CF458E000F96722 /* FirebaseAnalytics.swift */,
 				B636BA251CF34DDA009009F2 /* FirebaseRemoteConfig.swift */,
 			);
@@ -753,6 +756,7 @@
 				B6C054F21CF73E6900B1BB6C /* UserDatabase.swift in Sources */,
 				D0C31FE2185A206D4B6AB6ED /* ChannelsPresenter.swift in Sources */,
 				B6962C8F1CEF5697006A3A9E /* UsersViewController.swift in Sources */,
+				B61BD4CA1CFEE65100DD7A70 /* SharedServices.swift in Sources */,
 				D0C31D0085982E1BA7EB3638 /* ChannelsDisplayer.swift in Sources */,
 				D0C319895F726FA2DAECFC21 /* ChannelsViewController.swift in Sources */,
 				B6AC7C151CF4589500F96722 /* Analytics.swift in Sources */,
@@ -862,7 +866,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_SWIFT_FLAGS = "-Xfrontend -debug-time-function-bodies";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;

@@ -1,8 +1,5 @@
 import Foundation
 import Firebase
-import FirebaseAnalytics
-import FirebaseInstanceID
-import FirebaseDatabase
 import RxSwift
 
 final class FirebaseChatService: ChatService {
