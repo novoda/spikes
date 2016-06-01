@@ -14,13 +14,15 @@ import com.novoda.bonfire.navigation.AndroidNavigator;
 
 public class ChatActivity extends BaseActivity {
 
-    private static final String CHANNEL_EXTRA = "CHANNEL_EXTRA";
+    private static final String NAME_EXTRA = "channel_name";
+    private static final String ACCESS_EXTRA = "channel_access";
     private ChatPresenter presenter;
 
     public static Intent createIntentFor(Context context, Channel channel) {
         Intent intent = new Intent(context, ChatActivity.class);
 
-        intent.putExtra(CHANNEL_EXTRA, channel);
+        intent.putExtra(NAME_EXTRA, channel.getName());
+        intent.putExtra(ACCESS_EXTRA, channel.getAccess());
         return intent;
     }
 
@@ -29,12 +31,12 @@ public class ChatActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         ChatDisplayer chatDisplayer = (ChatDisplayer) findViewById(R.id.chatView);
-        Channel channel = (Channel) getIntent().getSerializableExtra(CHANNEL_EXTRA);
         presenter = new ChatPresenter(
                 Dependencies.INSTANCE.getLoginService(),
                 Dependencies.INSTANCE.getChatService(),
                 chatDisplayer,
-                channel,
+                getIntent().getStringExtra(NAME_EXTRA),
+                (Channel.Access) getIntent().getSerializableExtra(ACCESS_EXTRA),
                 Dependencies.INSTANCE.getFirebaseAnalytics(),
                 new AndroidNavigator(this)
         );

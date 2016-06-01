@@ -1,6 +1,7 @@
 package com.novoda.bonfire.user.presenter;
 
 import com.novoda.bonfire.channel.data.model.Channel;
+import com.novoda.bonfire.channel.data.model.Channel.Access;
 import com.novoda.bonfire.channel.service.ChannelService;
 import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.navigation.Navigator;
@@ -20,11 +21,11 @@ public class UsersPresenter {
     private final Navigator navigator;
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
-    public UsersPresenter(UserService userService, ChannelService channelService, UsersDisplayer usersDisplayer, Channel channel, Navigator navigator) {
+    public UsersPresenter(UserService userService, ChannelService channelService, UsersDisplayer usersDisplayer, String channelName, Navigator navigator) {
         this.userService = userService;
         this.channelService = channelService;
         this.usersDisplayer = usersDisplayer;
-        this.channel = channel;
+        this.channel = new Channel(channelName, Access.PRIVATE);
         this.navigator = navigator;
     }
 

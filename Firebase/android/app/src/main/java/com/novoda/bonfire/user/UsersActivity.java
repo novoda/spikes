@@ -15,13 +15,13 @@ import com.novoda.bonfire.user.presenter.UsersPresenter;
 
 public class UsersActivity extends BaseActivity {
 
-    private static final String CHANNEL_EXTRA = "CHANNEL_EXTRA";
+    private static final String NAME_EXTRA = "channel_name_extra";
     private UsersPresenter presenter;
 
     public static Intent createIntentFor(Context context, Channel channel) {
         Intent intent = new Intent(context, UsersActivity.class);
 
-        intent.putExtra(CHANNEL_EXTRA, channel);
+        intent.putExtra(NAME_EXTRA, channel.getName());
         return intent;
     }
 
@@ -30,12 +30,11 @@ public class UsersActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users);
         UsersDisplayer usersDisplayer = (UsersDisplayer) findViewById(R.id.usersView);
-        Channel channel = (Channel) getIntent().getSerializableExtra(CHANNEL_EXTRA);
         presenter = new UsersPresenter(
                 Dependencies.INSTANCE.getUserService(),
                 Dependencies.INSTANCE.getChannelService(),
                 usersDisplayer,
-                channel,
+                getIntent().getStringExtra(NAME_EXTRA),
                 new AndroidNavigator(this)
         );
     }
