@@ -2,7 +2,6 @@ package com.novoda.bonfire.navigation;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 
 import com.novoda.bonfire.R;
 import com.novoda.bonfire.channel.ChannelsActivity;
@@ -56,14 +55,6 @@ public class AndroidNavigator implements Navigator {
     @Override
     public void toChannelWithClearedHistory(Channel channel) {
         toChannel(channel);
-        activity.finish();
-    }
-
-    @Override
-    public void toUriWithClearedHistory(String uri) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        activity.startActivity(intent);
         activity.finish();
     }
 

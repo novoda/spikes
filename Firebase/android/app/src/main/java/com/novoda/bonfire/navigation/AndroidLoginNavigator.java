@@ -56,11 +56,6 @@ public class AndroidLoginNavigator implements LoginNavigator {
     }
 
     @Override
-    public void toUriWithClearedHistory(String uri) {
-        navigator.toUriWithClearedHistory(uri);
-    }
-
-    @Override
     public void toShareInvite(String sharingLink) {
         navigator.toShareInvite(sharingLink);
     }
