@@ -53,17 +53,13 @@ public class FirebaseChannelsDatabaseTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        when(mockFirebaseDatabase.getReference("public-channels-index")).thenReturn(mockPublicChannelsDb);
-        when(mockPublicChannelsDb.child(anyString())).thenReturn(mockPublicChannelsDb);
+        setupDatabaseStubsFor("public-channels-index", mockPublicChannelsDb, mockFirebaseDatabase);
 
-        when(mockFirebaseDatabase.getReference("private-channels-index")).thenReturn(mockPrivateChannelsDb);
-        when(mockPrivateChannelsDb.child(anyString())).thenReturn(mockPrivateChannelsDb);
+        setupDatabaseStubsFor("private-channels-index", mockPrivateChannelsDb, mockFirebaseDatabase);
 
-        when(mockFirebaseDatabase.getReference("channels")).thenReturn(mockChannelsDb);
-        when(mockChannelsDb.child(anyString())).thenReturn(mockChannelsDb);
+        setupDatabaseStubsFor("channels", mockChannelsDb, mockFirebaseDatabase);
 
-        when(mockFirebaseDatabase.getReference("owners")).thenReturn(mockOwnersDb);
-        when(mockOwnersDb.child(anyString())).thenReturn(mockOwnersDb);
+        setupDatabaseStubsFor("owners", mockOwnersDb, mockFirebaseDatabase);
 
         doAnswer(new Answer<Observable<List<String>>>() {
             @Override
@@ -73,6 +69,11 @@ public class FirebaseChannelsDatabaseTest {
         }).when(mockListeners).listenToValueEvents(any(DatabaseReference.class), any(typeOfGetKeys()));
 
         firebaseChannelsDatabase = new FirebaseChannelsDatabase(mockFirebaseDatabase, mockListeners);
+    }
+
+    private static void setupDatabaseStubsFor(String databaseName, DatabaseReference databaseReference, FirebaseDatabase firebaseDatabase) {
+        when(firebaseDatabase.getReference(databaseName)).thenReturn(databaseReference);
+        when(databaseReference.child(anyString())).thenReturn(databaseReference);
     }
 
     @Test
@@ -144,13 +145,4 @@ public class FirebaseChannelsDatabaseTest {
     private <T> Class<Func1<DataSnapshot, T>> typeOfAs() {
         return (Class<Func1<DataSnapshot, T>>) (Class) Func1.class;
     }
-
-    private static class SomeAnswer<T> implements Answer<Observable<T>> {
-
-        @Override
-        public Observable<T> answer(InvocationOnMock invocation) throws Throwable {
-            return null;
-        }
-    }
-
 }
