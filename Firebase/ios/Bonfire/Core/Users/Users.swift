@@ -25,11 +25,3 @@ extension Users: Equatable {}
 func ==(lhs: Users, rhs: Users) -> Bool {
     return lhs.users == rhs.users
 }
-
-//extension Users: ArrayLiteralConvertible {
-//    typealias Element = User
-//
-//    init(arrayLiteral elements: Users.Element...) {
-//        self.users = elements
-//    }
-//}

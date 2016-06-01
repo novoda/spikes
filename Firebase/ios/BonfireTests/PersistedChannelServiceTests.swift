@@ -6,7 +6,7 @@ import RxTests
 class PersistedChannelServiceTests: XCTestCase {
 
     var scheduler: TestScheduler!
-    var testableChannelsObserver: TestableObserver<Channel>!
+    var testableChannelsObserver: TestableObserver<Channels>!
     var testableUsersObserver: TestableObserver<Users>!
 
     let testUser1 = User(name: "TestUser1", id: "1", photoURL: nil)
@@ -15,7 +15,7 @@ class PersistedChannelServiceTests: XCTestCase {
     override func setUp() {
         super.setUp()
         scheduler = TestScheduler(initialClock: 0)
-        testableChannelsObserver = scheduler.createObserver(Channel)
+        testableChannelsObserver = scheduler.createObserver(Channels)
         testableUsersObserver = scheduler.createObserver(Users)
     }
 
@@ -63,15 +63,35 @@ class PersistedChannelServiceTests: XCTestCase {
         }
 
         func observePublicChannelIds() -> Observable<[String]> {
-            return Observable.empty()
+            return scheduler.createColdObservable([
+                    next(0, ["💣"])
+                ]).asObservable()
         }
 
         func observePrivateChannelIdsFor(user: User) -> Observable<[String]> {
-            return Observable.empty()
+            if user.id == "1" {
+                return scheduler.createColdObservable([
+                    next(0, ["🙈"])
+                    ]).asObservable()
+            } else {
+                return Observable.empty()
+            }
         }
 
         func readChannelFor(channelName: String) -> Observable<Channel> {
-            return Observable.empty()
+            if channelName == "💣" {
+                return scheduler.createColdObservable([
+                        next(0, Channel(name: "💣", access: .Public)),
+                        completed(0)
+                    ]).asObservable()
+            } else if channelName == "🙈" {
+                return scheduler.createColdObservable([
+                    next(0, Channel(name: "🙈", access: .Private)),
+                    completed(0)
+                    ]).asObservable()
+            } else {
+                return Observable.empty()
+            }
         }
 
         func writeChannel(newChannel: Channel) -> Observable<Channel> {
@@ -99,7 +119,7 @@ class PersistedChannelServiceTests: XCTestCase {
         }
 
         func observeOwnerIdsFor(channel: Channel) -> Observable<[String]> {
-            if channel.name == "Test Channel" {
+            if channel.name == "💣" {
                 return scheduler.createHotObservable([
                     next(0, ["1", "2"])
                     ]).asObservable()
@@ -111,15 +131,33 @@ class PersistedChannelServiceTests: XCTestCase {
     }
 
     func testThatItReturnsChannelsForUser() {
+        // Given
         let user = User(name: "Test User", id: "1", photoURL: nil)
+        let publicChannel = Channel(name: "💣", access: .Public)
+        let privateChannel = Channel(name: "🙈", access: .Private)
 
+        let mockChannelDatabase = MockChannelDatabase(scheduler: scheduler)
+        let mockUserDatabase = MockUserDatabase(scheduler: scheduler)
 
+        let channelService = PersistedChannelsService(channelsDatabase: mockChannelDatabase, userDatabase: mockUserDatabase)
+
+        // When
+        channelService.channels(forUser: user).subscribe(testableChannelsObserver)
+        scheduler.start()
+
+        // Then
+        let channels = [publicChannel, privateChannel]
+        let expectedEvents = [
+            next(0, Channels(channels: channels))
+        ]
+
+        XCTAssertEqual(testableChannelsObserver.events, expectedEvents)
     }
 
 
     func testThatItReturnsUsersForChannel() {
         // Given
-        let channel = Channel(name: "Test Channel", access: .Private)
+        let channel = Channel(name: "💣", access: .Private)
 
         let mockChannelDatabase = MockChannelDatabase(scheduler: scheduler)
         let mockUserDatabase = MockUserDatabase(scheduler: scheduler)
@@ -139,3 +177,4 @@ class PersistedChannelServiceTests: XCTestCase {
         XCTAssertEqual(testableUsersObserver.events, expectedEvents)
     }
 }
+

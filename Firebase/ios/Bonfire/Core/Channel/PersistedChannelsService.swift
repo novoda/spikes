@@ -12,9 +12,9 @@ class PersistedChannelsService: ChannelsService {
         self.userDatabase = userDatabase
     }
 
-    func channels(forUser user: User) -> Observable<[Channel]> {
+    func channels(forUser user: User) -> Observable<Channels> {
         return Observable.combineLatest(publicChannels(), privateChannels(forUser: user)) { publicChannels, privateChannels in
-            return publicChannels + privateChannels
+            return Channels(channels: publicChannels.channels + privateChannels.channels)
         }
     }
 
@@ -25,18 +25,18 @@ class PersistedChannelsService: ChannelsService {
 
     // MARK: - Read (Private)
 
-    private func publicChannels() -> Observable<[Channel]> {
+    private func publicChannels() -> Observable<Channels> {
         return channelsDatabase.observePublicChannelIds()
             .flatMap(channelsFromNames)
     }
 
-    private func privateChannels(forUser user: User) -> Observable<[Channel]> {
+    private func privateChannels(forUser user: User) -> Observable<Channels> {
         return channelsDatabase.observePrivateChannelIdsFor(user)
             .flatMap(channelsFromNames)
     }
 
-    private func channelsFromNames(channelNames: [String]) -> Observable<[Channel]> {
-        return channelNames.toObservable().flatMap(channelFromName).toArray()
+    private func channelsFromNames(channelNames: [String]) -> Observable<Channels> {
+        return channelNames.toObservable().flatMap(channelFromName).toArray().map(Channels.init)
     }
 
     private func channelFromName(channelName: String) -> Observable<Channel> {

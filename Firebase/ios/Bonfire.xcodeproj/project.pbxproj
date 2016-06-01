@@ -18,6 +18,7 @@
 		B6210AC81CE2318B00570509 /* UIViewController+AlertExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6210AC71CE2318B00570509 /* UIViewController+AlertExtensions.swift */; };
 		B6210ACC1CE24AC600570509 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6210ACB1CE24AC600570509 /* Authentication.swift */; };
 		B621BEE11CFF1CE100B92F09 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = B621BEE01CFF1CE100B92F09 /* Users.swift */; };
+		B621BEE31CFF2C8B00B92F09 /* Channels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B621BEE21CFF2C8B00B92F09 /* Channels.swift */; };
 		B62BE1C91CF89CF800326B98 /* PersistedUserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62BE1C81CF89CF800326B98 /* PersistedUserService.swift */; };
 		B636BA241CF34D9F009009F2 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = B636BA231CF34D9F009009F2 /* Config.swift */; };
 		B636BA261CF34DDA009009F2 /* FirebaseRemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B636BA251CF34DDA009009F2 /* FirebaseRemoteConfig.swift */; };
@@ -111,6 +112,7 @@
 		B6210AC71CE2318B00570509 /* UIViewController+AlertExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+AlertExtensions.swift"; sourceTree = "<group>"; };
 		B6210ACB1CE24AC600570509 /* Authentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
 		B621BEE01CFF1CE100B92F09 /* Users.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
+		B621BEE21CFF2C8B00B92F09 /* Channels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channels.swift; sourceTree = "<group>"; };
 		B62BE1C81CF89CF800326B98 /* PersistedUserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedUserService.swift; sourceTree = "<group>"; };
 		B636BA231CF34D9F009009F2 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		B636BA251CF34DDA009009F2 /* FirebaseRemoteConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseRemoteConfig.swift; sourceTree = "<group>"; };
@@ -494,6 +496,7 @@
 				D0C31217E78F04ADE3808836 /* ChannelsPresenter.swift */,
 				D0C318BAA30984F559ACD8D2 /* ChannelsService.swift */,
 				B6C054F51CF749DF00B1BB6C /* PersistedChannelsService.swift */,
+				B621BEE21CFF2C8B00B92F09 /* Channels.swift */,
 			);
 			path = Channel;
 			sourceTree = "<group>";
@@ -782,6 +785,7 @@
 				B6962C861CEF5388006A3A9E /* UsersDisplayer.swift in Sources */,
 				B6962C8D1CEF568E006A3A9E /* UsersView.swift in Sources */,
 				D0C3182DE2D857AA460FCFA9 /* DatabaseResult.swift in Sources */,
+				B621BEE31CFF2C8B00B92F09 /* Channels.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
