@@ -67,7 +67,7 @@ class ReactButtonShadowNode extends LayoutShadowNode implements CSSNode.MeasureF
 
     private Drawable getDrawableByName(String name) {
         int resId = getThemedContext().getResources().getIdentifier(name.toLowerCase(), "drawable", getThemedContext().getPackageName());
-        if (resId <= 0) {
+        if (resId == 0) {
             return null;
         }
 
