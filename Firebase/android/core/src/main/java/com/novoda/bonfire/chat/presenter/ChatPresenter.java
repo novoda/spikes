@@ -8,9 +8,9 @@ import com.novoda.bonfire.chat.displayer.ChatDisplayer;
 import com.novoda.bonfire.chat.service.ChatService;
 import com.novoda.bonfire.database.DatabaseResult;
 import com.novoda.bonfire.login.data.model.Authentication;
+import com.novoda.bonfire.login.service.LoginService;
 import com.novoda.bonfire.navigation.Navigator;
 import com.novoda.bonfire.user.data.model.User;
-import com.novoda.bonfire.login.service.LoginService;
 
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;

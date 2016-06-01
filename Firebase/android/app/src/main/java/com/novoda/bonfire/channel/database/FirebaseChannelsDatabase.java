@@ -13,6 +13,9 @@ import java.util.List;
 import rx.Observable;
 import rx.functions.Func1;
 
+import static com.novoda.bonfire.channel.database.ChannelConverter.fromFirebaseChannel;
+import static com.novoda.bonfire.channel.database.ChannelConverter.toFirebaseChannel;
+
 public class FirebaseChannelsDatabase implements ChannelsDatabase {
 
     private final DatabaseReference publicChannelsDB;
@@ -41,12 +44,12 @@ public class FirebaseChannelsDatabase implements ChannelsDatabase {
 
     @Override
     public Observable<Channel> readChannelFor(String channelName) {
-        return firebaseObservableListeners.listenToSingleValueEvents(channelsDB.child(channelName), as(Channel.class));
+        return firebaseObservableListeners.listenToSingleValueEvents(channelsDB.child(channelName), asChannel());
     }
 
     @Override
     public Observable<Channel> writeChannel(Channel newChannel) {
-        return firebaseObservableListeners.setValue(newChannel, channelsDB.child(newChannel.getName()), newChannel);
+        return firebaseObservableListeners.setValue(toFirebaseChannel(newChannel), channelsDB.child(newChannel.getName()), newChannel);
     }
 
     @Override
@@ -79,11 +82,11 @@ public class FirebaseChannelsDatabase implements ChannelsDatabase {
         return firebaseObservableListeners.listenToValueEvents(ownersDB.child(channel.getName()), getKeys());
     }
 
-    private static <T> Func1<DataSnapshot, T> as(final Class<T> tClass) {
-        return new Func1<DataSnapshot, T>() {
+    private static Func1<DataSnapshot, Channel> asChannel() {
+        return new Func1<DataSnapshot, Channel>() {
             @Override
-            public T call(DataSnapshot dataSnapshot) {
-                return dataSnapshot.getValue(tClass);
+            public Channel call(DataSnapshot dataSnapshot) {
+                return fromFirebaseChannel(dataSnapshot.getValue(FirebaseChannel.class));
             }
         };
     }

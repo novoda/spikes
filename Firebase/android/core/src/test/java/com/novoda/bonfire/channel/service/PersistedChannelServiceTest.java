@@ -1,6 +1,7 @@
 package com.novoda.bonfire.channel.service;
 
 import com.novoda.bonfire.channel.data.model.Channel;
+import com.novoda.bonfire.channel.data.model.Channel.Access;
 import com.novoda.bonfire.channel.data.model.Channels;
 import com.novoda.bonfire.channel.database.ChannelsDatabase;
 import com.novoda.bonfire.database.DatabaseResult;
@@ -33,8 +34,8 @@ public class PersistedChannelServiceTest {
     private static final String USER_ID = "test user id";
     private static final String ANOTHER_USER_ID = "another user id";
 
-    private final Channel publicChannel = new Channel(FIRST_PUBLIC_CHANNEL, false);
-    private final Channel privateChannel = new Channel(FIRST_PRIVATE_CHANNEL, true);
+    private final Channel publicChannel = new Channel(FIRST_PUBLIC_CHANNEL, Access.PUBLIC);
+    private final Channel privateChannel = new Channel(FIRST_PRIVATE_CHANNEL, Access.PRIVATE);
     private final User user = new User(USER_ID, "test username", "http://test.photo/url");
     private final User anotherUser = new User(ANOTHER_USER_ID, "another username", "http://another.url");
 
@@ -95,7 +96,7 @@ public class PersistedChannelServiceTest {
     public void canCreateAPublicChannel() {
         PersistedChannelService persistedChannelService = buildPersistedChannelService();
 
-        Channel newChannel = new Channel("another public channel", false);
+        Channel newChannel = new Channel("another public channel", Access.PUBLIC);
         Observable<DatabaseResult<Channel>> channelsObservable = persistedChannelService.createPublicChannel(newChannel);
         TestObserver<DatabaseResult<Channel>> channelsTestObserver = new TestObserver<>();
         channelsObservable.subscribe(channelsTestObserver);
@@ -108,7 +109,7 @@ public class PersistedChannelServiceTest {
     public void canCreateAPrivateChannel() {
         PersistedChannelService persistedChannelService = buildPersistedChannelService();
 
-        Channel newChannel = new Channel("another private channel", false);
+        Channel newChannel = new Channel("another private channel", Access.PUBLIC);
         Observable<DatabaseResult<Channel>> channelsObservable = persistedChannelService.createPrivateChannel(newChannel, user);
         TestObserver<DatabaseResult<Channel>> channelsTestObserver = new TestObserver<>();
         channelsObservable.subscribe(channelsTestObserver);

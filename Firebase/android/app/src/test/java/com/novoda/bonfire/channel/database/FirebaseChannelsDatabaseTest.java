@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 public class FirebaseChannelsDatabaseTest {
 
     private final User user = new User("user id", "user", "http://photo");
-    private final Channel newChannel = new Channel("new channel", false);
+    private final Channel newChannel = new Channel("new channel", Channel.Access.PUBLIC);
     private final List<String> publicChannelIds = Arrays.asList("first channel id", "second channel id");
 
     @Mock
@@ -68,9 +68,6 @@ public class FirebaseChannelsDatabaseTest {
         doAnswer(new Answer<Observable<List<String>>>() {
             @Override
             public Observable<List<String>> answer(InvocationOnMock invocation) throws Throwable {
-                DatabaseReference databaseReferenceArgument = (DatabaseReference) invocation.getArguments()[0];
-                Func1<DataSnapshot, String> marshallerArgument = (Func1<DataSnapshot, String>) invocation.getArguments()[1];
-
                 return Observable.just(publicChannelIds);
             }
         }).when(mockListeners).listenToValueEvents(any(DatabaseReference.class), any(typeOfGetKeys()));
@@ -84,8 +81,6 @@ public class FirebaseChannelsDatabaseTest {
         TestObserver<List<String>> observer = new TestObserver<>();
         listObservable.subscribe(observer);
         observer.assertReceivedOnNext(Collections.singletonList(publicChannelIds));
-//        verify(mockListeners).listenToValueEvents(eq(mockPublicChannelsDb), isA(typeOfGetKeys()));
-
     }
 
     @Test
