@@ -1,5 +1,7 @@
 package com.novoda.bonfire.channel.database;
 
+import android.support.annotation.NonNull;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -30,8 +32,11 @@ import static org.mockito.Mockito.*;
 
 public class FirebaseChannelsDatabaseTest {
 
+    private static final String TEST_CHANNEL_ID = "new channel";
+
     private final User user = new User("user id", "user", "http://photo");
-    private final Channel newChannel = new Channel("new channel", Channel.Access.PUBLIC);
+    private final Channel newChannel = createPublicChannel(TEST_CHANNEL_ID);
+
     private final List<String> publicChannelIds = Arrays.asList("first channel id", "second channel id");
 
     @Mock
@@ -66,7 +71,7 @@ public class FirebaseChannelsDatabaseTest {
             public Observable<List<String>> answer(InvocationOnMock invocation) throws Throwable {
                 return Observable.just(publicChannelIds);
             }
-        }).when(mockListeners).listenToValueEvents(any(DatabaseReference.class), any(typeOfGetKeys()));
+        }).when(mockListeners).listenToValueEvents(eq(mockPublicChannelsDb), any(typeOfGetKeys()));
 
         firebaseChannelsDatabase = new FirebaseChannelsDatabase(mockFirebaseDatabase, mockListeners);
     }
@@ -92,14 +97,14 @@ public class FirebaseChannelsDatabaseTest {
 
     @Test
     public void channelDetailsAreReadFromChannelsDatabase() {
-        firebaseChannelsDatabase.readChannelFor("channel name");
+        firebaseChannelsDatabase.readChannelFor("channel TEST_CHANNEL_ID");
         verify(mockListeners).listenToSingleValueEvents(eq(mockChannelsDb), isA(typeOfAs()));
     }
 
     @Test
     public void canSetNewChannelInChannelsDatabaseAndReturnIt() {
         firebaseChannelsDatabase.writeChannel(newChannel);
-        verify(mockListeners).setValue(newChannel, mockChannelsDb, newChannel);
+        verify(mockListeners).setValue(createPublicFirebaseChannel(TEST_CHANNEL_ID), mockChannelsDb, newChannel);
     }
 
     @Test
@@ -144,5 +149,15 @@ public class FirebaseChannelsDatabaseTest {
 
     private <T> Class<Func1<DataSnapshot, T>> typeOfAs() {
         return (Class<Func1<DataSnapshot, T>>) (Class) Func1.class;
+    }
+
+    @NonNull
+    private static Channel createPublicChannel(String name) {
+        return new Channel(name, Channel.Access.PUBLIC);
+    }
+
+    @NonNull
+    private static FirebaseChannel createPublicFirebaseChannel(String channelId) {
+        return new FirebaseChannel(channelId, "public");
     }
 }
