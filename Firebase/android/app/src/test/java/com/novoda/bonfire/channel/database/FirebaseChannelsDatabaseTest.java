@@ -28,6 +28,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.anyObject;
 import static org.mockito.Mockito.*;
 
 public class FirebaseChannelsDatabaseTest {
@@ -37,7 +38,9 @@ public class FirebaseChannelsDatabaseTest {
     private final User user = new User("user id", "user", "http://photo");
     private final Channel newChannel = createPublicChannel(TEST_CHANNEL_ID);
 
-    private final List<String> publicChannelIds = Arrays.asList("first channel id", "second channel id");
+    private final List<String> publicChannelIds = Arrays.asList("first public id", "second public id");
+    private final List<String> privateChannelIds = Arrays.asList("first private id", "second private id");
+    private final List<String> ownerIds = Arrays.asList("first owner id", "second owner id");
 
     @Mock
     DatabaseReference mockPublicChannelsDb;
@@ -66,12 +69,15 @@ public class FirebaseChannelsDatabaseTest {
 
         setupDatabaseStubsFor("owners", mockOwnersDb, mockFirebaseDatabase);
 
-        doAnswer(new Answer<Observable<List<String>>>() {
-            @Override
-            public Observable<List<String>> answer(InvocationOnMock invocation) throws Throwable {
-                return Observable.just(publicChannelIds);
-            }
-        }).when(mockListeners).listenToValueEvents(eq(mockPublicChannelsDb), any(typeOfGetKeys()));
+        doAnswer(new ObservableAnswer<>(publicChannelIds)).when(mockListeners).listenToValueEvents(eq(mockPublicChannelsDb), any(typeOfGetKeys()));
+        doAnswer(new ObservableAnswer<>(privateChannelIds)).when(mockListeners).listenToValueEvents(eq(mockPrivateChannelsDb), any(typeOfGetKeys()));
+        doAnswer(new ObservableAnswer<>(ownerIds)).when(mockListeners).listenToValueEvents(eq(mockOwnersDb), any(typeOfGetKeys()));
+
+        doAnswer(new ObservableAnswer<>(newChannel)).when(mockListeners).listenToSingleValueEvents(eq(mockChannelsDb), any(typeOfAsChannel()));
+
+        doAnswer(new ObservableAnswer<>(newChannel)).when(mockListeners).setValue(anyObject(), any(DatabaseReference.class), any(Channel.class));
+
+        doAnswer(new ObservableAnswer<>(newChannel)).when(mockListeners).removeValue(any(DatabaseReference.class), any(Channel.class));
 
         firebaseChannelsDatabase = new FirebaseChannelsDatabase(mockFirebaseDatabase, mockListeners);
     }
@@ -84,27 +90,25 @@ public class FirebaseChannelsDatabaseTest {
     @Test
     public void publicChannelsIdsAreObservedFromPublicChannelDatabase() {
         Observable<List<String>> listObservable = firebaseChannelsDatabase.observePublicChannelIds();
-        TestObserver<List<String>> observer = new TestObserver<>();
-        listObservable.subscribe(observer);
-        observer.assertReceivedOnNext(Collections.singletonList(publicChannelIds));
+        assertValueReceivedOnNext(listObservable, publicChannelIds);
     }
 
     @Test
     public void privateChannelsIdsForAUserAreObservedFromPrivateChannelDatabase() {
-        firebaseChannelsDatabase.observePrivateChannelIdsFor(user);
-        verify(mockListeners).listenToValueEvents(eq(mockPrivateChannelsDb), isA(typeOfGetKeys()));
+        Observable<List<String>> listObservable = firebaseChannelsDatabase.observePrivateChannelIdsFor(user);
+        assertValueReceivedOnNext(listObservable, privateChannelIds);
     }
 
     @Test
     public void channelDetailsAreReadFromChannelsDatabase() {
-        firebaseChannelsDatabase.readChannelFor("channel TEST_CHANNEL_ID");
-        verify(mockListeners).listenToSingleValueEvents(eq(mockChannelsDb), isA(typeOfAs()));
+        Observable<Channel> channelObservable = firebaseChannelsDatabase.readChannelFor(TEST_CHANNEL_ID);
+        assertValueReceivedOnNext(channelObservable, newChannel);
     }
 
     @Test
     public void canSetNewChannelInChannelsDatabaseAndReturnIt() {
-        firebaseChannelsDatabase.writeChannel(newChannel);
-        verify(mockListeners).setValue(createPublicFirebaseChannel(TEST_CHANNEL_ID), mockChannelsDb, newChannel);
+        Observable<Channel> channelObservable = firebaseChannelsDatabase.writeChannel(newChannel);
+        assertValueReceivedOnNext(channelObservable, newChannel);
     }
 
     @Test
@@ -143,12 +147,18 @@ public class FirebaseChannelsDatabaseTest {
         verify(mockListeners).listenToValueEvents(eq(mockOwnersDb), isA(typeOfGetKeys()));
     }
 
+    private <T> void assertValueReceivedOnNext(Observable<T> observable, T expectedValue) {
+        TestObserver<T> observer = new TestObserver<>();
+        observable.subscribe(observer);
+        observer.assertReceivedOnNext(Collections.singletonList(expectedValue));
+    }
+
     private Class<Func1<DataSnapshot, List<String>>> typeOfGetKeys() {
         return (Class<Func1<DataSnapshot, List<String>>>) (Class) Func1.class;
     }
 
-    private <T> Class<Func1<DataSnapshot, T>> typeOfAs() {
-        return (Class<Func1<DataSnapshot, T>>) (Class) Func1.class;
+    private Class<Func1<DataSnapshot, Channel>> typeOfAsChannel() {
+        return (Class<Func1<DataSnapshot, Channel>>) (Class) Func1.class;
     }
 
     @NonNull
@@ -159,5 +169,18 @@ public class FirebaseChannelsDatabaseTest {
     @NonNull
     private static FirebaseChannel createPublicFirebaseChannel(String channelId) {
         return new FirebaseChannel(channelId, "public");
+    }
+
+    private static class ObservableAnswer<T> implements Answer<Observable<T>> {
+        private T stubData;
+
+        public ObservableAnswer(T stubData) {
+            this.stubData = stubData;
+        }
+
+        @Override
+        public Observable<T> answer(InvocationOnMock invocation) throws Throwable {
+            return Observable.just(stubData);
+        }
     }
 }
