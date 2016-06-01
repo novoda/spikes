@@ -19,4 +19,21 @@ final class AppNavigator: Navigator {
         let createChannelViewController = CreateChannelViewController.withDependencies()
         navigationController.pushViewController(createChannelViewController, animated: true)
     }
+
+    func toAddUsers(channel: Channel) {
+        let usersViewController = UsersViewController.withDependencies(channel: channel)
+        navigationController.pushViewController(usersViewController, animated: true)
+    }
+
+    func toWelcome(sender: String?) {
+        let welcomeViewController = WelcomeViewController.withDependencies(sender: sender)
+        let container = UINavigationController()
+        container.viewControllers = [welcomeViewController]
+        navigationController.presentViewController(container, animated: true, completion: nil)
+    }
+
+    func showShareSheet(activityItems: [AnyObject]) {
+        let activityController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        navigationController.presentViewController(activityController, animated: true, completion: nil)
+    }
 }

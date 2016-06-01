@@ -2,11 +2,16 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+protocol ChatViewNavigationItemDelegate: class {
+    func updateNavigationItem(withChat chat: Chat)
+}
+
 final class ChatView: UIView {
     private let textField = UITextField()
     private let tableView = UITableView()
     private let tableViewManager = ChatTableViewManager()
     weak var actionListener: ChatActionListener?
+    weak var navigationItemDelegate: ChatViewNavigationItemDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -52,14 +57,24 @@ final class ChatView: UIView {
 extension ChatView: ChatDisplayer {
     func display(chat: Chat) {
         tableViewManager.updateTableView(tableView, withChat: chat)
+        navigationItemDelegate?.updateNavigationItem(withChat: chat)
+    }
+}
+
+extension ChatView {
+    func updateNavigationItem(navigationItem: UINavigationItem, chat: Chat) {
+        navigationItem.title = chat.channel.name
+
+        if chat.channel.access == .Private {
+            let barButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(addUsers))
+            navigationItem.rightBarButtonItem = barButtonItem
+        } else {
+            navigationItem.rightBarButtonItem = nil
+        }
     }
 
-    func attach(actionListener: ChatActionListener) {
-        self.actionListener = actionListener
-    }
-
-    func detach(actionListener: ChatActionListener) {
-        self.actionListener = nil
+    func addUsers() {
+        actionListener?.addUsers()
     }
 }
 

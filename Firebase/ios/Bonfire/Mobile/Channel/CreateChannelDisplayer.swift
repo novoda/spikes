@@ -1,7 +1,7 @@
 import Foundation
 
 protocol CreateChannelActionListener: class {
-    func createChannel(withName name: String)
+    func createChannel(withName name: String, privateChannel: Bool)
 }
 
 protocol CreateChannelDisplayer: class {

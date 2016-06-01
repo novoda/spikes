@@ -8,16 +8,19 @@ enum ChannelCreationState {
     case Error(ErrorType)
 }
 
+struct NoUserError: ErrorType {}
+
 final class CreateChannelPresenter {
     let channelsService: ChannelsService
+    let loginService: LoginService
     let createChannelDisplayer: CreateChannelDisplayer
     let navigator: Navigator
-
     var disposeBag: DisposeBag!
 
-    private let createChannelSubject = PublishSubject<String>()
+    private let createChannelSubject = PublishSubject<(String, Bool)>()
 
-    init(channelsService: ChannelsService, createChannelDisplayer: CreateChannelDisplayer, navigator: Navigator) {
+    init(loginService: LoginService, channelsService: ChannelsService, createChannelDisplayer: CreateChannelDisplayer, navigator: Navigator) {
+        self.loginService = loginService
         self.channelsService = channelsService
         self.createChannelDisplayer = createChannelDisplayer
         self.navigator = navigator
@@ -28,10 +31,15 @@ final class CreateChannelPresenter {
         createChannelDisplayer.actionListener = self
 
         createChannelSubject
-            .flatMap ({ name in
-
-                self.channelsService.createPublicChannel(withName: name)
-
+            .flatMap ({ (name, privateChannel) -> Observable<DatabaseWriteResult<Channel>> in
+                if privateChannel {
+                    guard let user = self.loginService.currentUser else {
+                        return Observable.just(.Error(NoUserError()))
+                    }
+                    return self.channelsService.createPrivateChannel(withName: name, owners: [user])
+                } else {
+                    return self.channelsService.createPublicChannel(withName: name)
+                }
             }).subscribe(onNext: { result in
 
                 switch result {
@@ -51,8 +59,8 @@ final class CreateChannelPresenter {
 }
 
 extension CreateChannelPresenter: CreateChannelActionListener {
-    func createChannel(withName name: String) {
-        createChannelSubject.on(.Next(name))
+    func createChannel(withName name: String, privateChannel: Bool) {
+            createChannelSubject.on(.Next((name, privateChannel)))
     }
 }
 
