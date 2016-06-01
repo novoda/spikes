@@ -3,20 +3,46 @@ import RxSwift
 import RxTests
 @testable import Bonfire
 
+extension TestScheduler {
+    func singleEventAndComplete<Element>(element: Element) -> Observable<Element> {
+        return self.createColdObservable([
+            next(0, element),
+            completed(0)
+            ]).asObservable()
+    }
+
+    func singleEventAndHang<Element>(element: Element) -> Observable<Element> {
+        return self.createHotObservable([
+            next(0, element)
+            ]).asObservable()
+    }
+}
+
 class PersistedChannelServiceTests: XCTestCase {
 
     var scheduler: TestScheduler!
     var testableChannelsObserver: TestableObserver<Channels>!
     var testableUsersObserver: TestableObserver<Users>!
+    var mockChannelDatabase: ChannelsDatabase!
+    var mockUserDatabase: UserDatabase!
+    var channelService: PersistedChannelsService!
 
     let testUser1 = User(name: "TestUser1", id: "1", photoURL: nil)
     let testUser2 = User(name: "TestUser2", id: "2", photoURL: nil)
+
+    let publicChannel = Channel(name: "💣", access: .Public)
+    let privateChannel = Channel(name: "🙈", access: .Private)
 
     override func setUp() {
         super.setUp()
         scheduler = TestScheduler(initialClock: 0)
         testableChannelsObserver = scheduler.createObserver(Channels)
         testableUsersObserver = scheduler.createObserver(Users)
+
+        mockChannelDatabase = MockChannelDatabase(scheduler: scheduler)
+        mockUserDatabase = MockUserDatabase(scheduler: scheduler)
+
+        channelService = PersistedChannelsService(channelsDatabase: mockChannelDatabase, userDatabase: mockUserDatabase)
     }
 
     override func tearDown() {
@@ -31,21 +57,13 @@ class PersistedChannelServiceTests: XCTestCase {
             self.scheduler = scheduler
         }
 
-        func observeUsers() -> Observable<Users> {
-            return Observable.empty()
-        }
+        func observeUsers() -> Observable<Users> { return Observable.empty() }
 
         func readUserFrom(userID: String) -> Observable<User> {
             if userID == "1" {
-                return scheduler.createColdObservable([
-                    next(0, User(name: "TestUser1", id: "1", photoURL: nil)),
-                    completed(0)
-                    ]).asObservable()
+                return scheduler.singleEventAndComplete(User(name: "TestUser1", id: "1", photoURL: nil))
             } else if userID == "2" {
-                return scheduler.createColdObservable([
-                    next(0, User(name: "TestUser2", id: "2", photoURL: nil)),
-                    completed(0)
-                    ]).asObservable().debug("wtf")
+                return scheduler.singleEventAndComplete(User(name: "TestUser2", id: "2", photoURL: nil))
             } else {
                 return Observable.empty()
             }
@@ -63,16 +81,12 @@ class PersistedChannelServiceTests: XCTestCase {
         }
 
         func observePublicChannelIds() -> Observable<[String]> {
-            return scheduler.createColdObservable([
-                    next(0, ["💣"])
-                ]).asObservable()
+            return scheduler.singleEventAndHang(["💣"])
         }
 
         func observePrivateChannelIdsFor(user: User) -> Observable<[String]> {
             if user.id == "1" {
-                return scheduler.createColdObservable([
-                    next(0, ["🙈"])
-                    ]).asObservable()
+                return scheduler.singleEventAndHang(["🙈"])
             } else {
                 return Observable.empty()
             }
@@ -80,49 +94,29 @@ class PersistedChannelServiceTests: XCTestCase {
 
         func readChannelFor(channelName: String) -> Observable<Channel> {
             if channelName == "💣" {
-                return scheduler.createColdObservable([
-                        next(0, Channel(name: "💣", access: .Public)),
-                        completed(0)
-                    ]).asObservable()
+                return scheduler.singleEventAndComplete(Channel(name: "💣", access: .Public))
             } else if channelName == "🙈" {
-                return scheduler.createColdObservable([
-                    next(0, Channel(name: "🙈", access: .Private)),
-                    completed(0)
-                    ]).asObservable()
+                return scheduler.singleEventAndComplete(Channel(name: "🙈", access: .Private))
             } else {
                 return Observable.empty()
             }
         }
 
-        func writeChannel(newChannel: Channel) -> Observable<Channel> {
-            return Observable.empty()
-        }
+        func writeChannel(newChannel: Channel) -> Observable<Channel> { return Observable.empty() }
 
-        func writeChannelToPublicChannelIndex(newChannel: Channel) -> Observable<Channel> {
-            return Observable.empty()
-        }
+        func writeChannelToPublicChannelIndex(newChannel: Channel) -> Observable<Channel> { return Observable.empty() }
 
-        func addOwnerToPrivateChannel(user: User, channel: Channel) -> Observable<Channel> {
-            return Observable.empty()
-        }
+        func addOwnerToPrivateChannel(user: User, channel: Channel) -> Observable<Channel> { return Observable.empty() }
 
-        func removeOwnerFromPrivateChannel(user: User, channel: Channel) -> Observable<Channel> {
-            return Observable.empty()
-        }
+        func removeOwnerFromPrivateChannel(user: User, channel: Channel) -> Observable<Channel> { return Observable.empty() }
 
-        func addChannelToUserPrivateChannelIndex(user: User, channel: Channel) -> Observable<Channel> {
-            return Observable.empty()
-        }
+        func addChannelToUserPrivateChannelIndex(user: User, channel: Channel) -> Observable<Channel> { return Observable.empty() }
 
-        func removeChannelFromUserPrivateChannelIndex(user: User, channel: Channel) -> Observable<Channel> {
-            return Observable.empty()
-        }
+        func removeChannelFromUserPrivateChannelIndex(user: User, channel: Channel) -> Observable<Channel> { return Observable.empty() }
 
         func observeOwnerIdsFor(channel: Channel) -> Observable<[String]> {
-            if channel.name == "💣" {
-                return scheduler.createHotObservable([
-                    next(0, ["1", "2"])
-                    ]).asObservable()
+            if channel.name == "🙈" {
+                return scheduler.singleEventAndHang(["1", "2"])
             } else {
                 return Observable.empty()
             }
@@ -133,13 +127,6 @@ class PersistedChannelServiceTests: XCTestCase {
     func testThatItReturnsChannelsForUser() {
         // Given
         let user = User(name: "Test User", id: "1", photoURL: nil)
-        let publicChannel = Channel(name: "💣", access: .Public)
-        let privateChannel = Channel(name: "🙈", access: .Private)
-
-        let mockChannelDatabase = MockChannelDatabase(scheduler: scheduler)
-        let mockUserDatabase = MockUserDatabase(scheduler: scheduler)
-
-        let channelService = PersistedChannelsService(channelsDatabase: mockChannelDatabase, userDatabase: mockUserDatabase)
 
         // When
         channelService.channels(forUser: user).subscribe(testableChannelsObserver)
@@ -156,16 +143,8 @@ class PersistedChannelServiceTests: XCTestCase {
 
 
     func testThatItReturnsUsersForChannel() {
-        // Given
-        let channel = Channel(name: "💣", access: .Private)
-
-        let mockChannelDatabase = MockChannelDatabase(scheduler: scheduler)
-        let mockUserDatabase = MockUserDatabase(scheduler: scheduler)
-
-        let channelService = PersistedChannelsService(channelsDatabase: mockChannelDatabase, userDatabase: mockUserDatabase)
-
         // When
-        channelService.users(forChannel: channel).subscribe(testableUsersObserver)
+        channelService.users(forChannel: privateChannel).subscribe(testableUsersObserver)
         scheduler.start()
 
         // Then
