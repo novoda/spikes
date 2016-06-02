@@ -52,10 +52,14 @@ class PersistedChannelServiceTests: XCTestCase {
     let publicChannel = Channel(name: "💣", access: .Public)
     let privateChannel = Channel(name: "🙈", access: .Private)
 
+    var disposeBag: DisposeBag!
+
+
     override func setUp() {
         super.setUp()
         scheduler = TestScheduler(initialClock: 0)
         remembrance = Remembrancer()
+        disposeBag = DisposeBag()
         testableChannelsObserver = scheduler.createObserver(Channels)
         testableUsersObserver = scheduler.createObserver(Users)
 
@@ -139,14 +143,21 @@ class PersistedChannelServiceTests: XCTestCase {
             return Observable.just(channel)
         }
 
-        func removeOwnerFromPrivateChannel(user: User, channel: Channel) -> Observable<Channel> { return Observable.empty() }
+        func removeOwnerFromPrivateChannel(user: User, channel: Channel) -> Observable<Channel> {
+            remembrance.callStack.append(MethodCall(identifier: "ChannelsDatabase - removeOwnerFromPrivateChannel", arguments: [user, channel]))
+            return Observable.just(channel)
+        }
 
         func addChannelToUserPrivateChannelIndex(user: User, channel: Channel) -> Observable<Channel> {
             remembrance.callStack.append(MethodCall(identifier: "ChannelsDatabase - addChannelToUserPrivateChannelIndex", arguments: [user, channel]))
             return Observable.just(channel)
         }
 
-        func removeChannelFromUserPrivateChannelIndex(user: User, channel: Channel) -> Observable<Channel> { return Observable.empty() }
+        func removeChannelFromUserPrivateChannelIndex(user: User, channel: Channel) -> Observable<Channel> {
+            remembrance.callStack.append(MethodCall(identifier: "ChannelsDatabase - removeChannelFromUserPrivateChannelIndex", arguments: [user, channel]))
+
+            return Observable.empty()
+        }
 
         func observeOwnerIdsFor(channel: Channel) -> Observable<[String]> {
             if channel.name == "🙈" {
@@ -188,7 +199,6 @@ class PersistedChannelServiceTests: XCTestCase {
     }
 
     func testThatItCallsTheRightThingsForCreatingAPublicChannel() {
-        let disposeBag = DisposeBag()
         channelService.createPublicChannel(withName: "🐣").subscribe().addDisposableTo(disposeBag)
 
         let expectedChannel = Channel(name: "🐣", access: .Public)
@@ -200,11 +210,10 @@ class PersistedChannelServiceTests: XCTestCase {
         XCTAssertEqual(remembrance.callStack, expectedMethodStack)
     }
 
-    func testThatItCallsTheRightThingForCreatingAPrivateChannel() {
-        let disposeBag = DisposeBag()
-        channelService.createPrivateChannel(withName: "💣", owner: testUser1).subscribe().addDisposableTo(disposeBag)
+    func testThatItCallsTheRightThingsForCreatingAPrivateChannel() {
+        channelService.createPrivateChannel(withName: "🙈", owner: testUser1).subscribe().addDisposableTo(disposeBag)
 
-        let expectedChannel = Channel(name: "💣", access: .Private)
+        let expectedChannel = privateChannel
         let expectedMethodStack = [
             MethodCall(identifier: "ChannelsDatabase - addOwnerToPrivateChannel", arguments: [testUser1, expectedChannel]),
             MethodCall(identifier: "ChannelsDatabase - writeChannel", arguments: [expectedChannel]),
@@ -212,7 +221,33 @@ class PersistedChannelServiceTests: XCTestCase {
         ]
 
         XCTAssertEqual(remembrance.callStack, expectedMethodStack)
+    }
 
+    func testThatItCallsTheRightThingsForAddingOwnerToChannel() {
+        channelService.addOwner(testUser1, toPrivateChannel: privateChannel).subscribe().addDisposableTo(disposeBag)
+
+        let expectedChannel = privateChannel
+        let expectedMethodStack = [
+            MethodCall(identifier: "ChannelsDatabase - addOwnerToPrivateChannel", arguments: [testUser1, expectedChannel]),
+            MethodCall(identifier: "ChannelsDatabase - addChannelToUserPrivateChannelIndex", arguments: [testUser1, expectedChannel])
+        ]
+
+        XCTAssertEqual(remembrance.callStack, expectedMethodStack)
+
+    }
+
+
+    func testThatItCallsTheRightThingsForRemovingOwnerFromChannel() {
+        channelService.removeOwner(testUser1, fromPrivateChannel: privateChannel).subscribe().addDisposableTo(disposeBag)
+
+        let expectedChannel = privateChannel
+        let expectedMethodStack = [
+            MethodCall(identifier: "ChannelsDatabase - removeOwnerFromPrivateChannel", arguments: [testUser1, expectedChannel]),
+            MethodCall(identifier: "ChannelsDatabase - removeChannelFromUserPrivateChannelIndex", arguments: [testUser1, expectedChannel])
+        ]
+
+        XCTAssertEqual(remembrance.callStack, expectedMethodStack)
+        
     }
 }
 
