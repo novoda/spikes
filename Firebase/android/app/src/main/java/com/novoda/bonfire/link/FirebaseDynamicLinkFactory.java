@@ -8,6 +8,7 @@ import java.net.URI;
 
 public class FirebaseDynamicLinkFactory implements LinkFactory {
 
+    public static final String SENDER = "sender";
     private final String dynamicLinkDomain;
     private final String deepLinkBaseUrl;
     private final String iosBundleIdentifier;
@@ -35,7 +36,7 @@ public class FirebaseDynamicLinkFactory implements LinkFactory {
         return Uri.parse(deepLinkBaseUrl)
                 .buildUpon()
                 .appendPath("welcome")
-                .appendQueryParameter("sender", user.getName())
+                .appendQueryParameter(SENDER, user.getName())
                 .build();
     }
 

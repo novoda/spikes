@@ -5,10 +5,10 @@ import android.support.annotation.Nullable;
 
 import com.novoda.bonfire.BaseActivity;
 import com.novoda.bonfire.R;
+import com.novoda.bonfire.link.FirebaseDynamicLinkFactory;
 import com.novoda.bonfire.navigation.AndroidNavigator;
 import com.novoda.bonfire.welcome.displayer.WelcomeDisplayer;
 import com.novoda.bonfire.welcome.presenter.WelcomePresenter;
-import com.novoda.notils.logger.simple.Log;
 
 public class WelcomeActivity extends BaseActivity {
 
@@ -17,9 +17,8 @@ public class WelcomeActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("Got it!");
         setContentView(R.layout.activity_welcome);
-        String sender = getIntent().getData().getQueryParameter("sender");
+        String sender = getIntent().getData().getQueryParameter(FirebaseDynamicLinkFactory.SENDER);
         welcomePresenter = new WelcomePresenter((WelcomeDisplayer) findViewById(R.id.welcomeView),
                                                 new AndroidNavigator(this),
                                                 sender);
