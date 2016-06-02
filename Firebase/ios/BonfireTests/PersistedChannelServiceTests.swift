@@ -3,9 +3,37 @@ import RxSwift
 import RxTests
 @testable import Bonfire
 
+
+class Remembrancer {
+    var callStack = [MethodCall]()
+}
+
+struct MethodCall {
+    let identifier: String
+    let arguments: [MethodArgument]
+}
+
+extension MethodCall: Equatable {}
+
+func ==(lhs: MethodCall, rhs: MethodCall) -> Bool {
+    return lhs.identifier == rhs.identifier &&
+        lhs.arguments.map({$0.asMethodArgument()}) == rhs.arguments.map({$0.asMethodArgument()})
+}
+
+protocol MethodArgument {
+    func asMethodArgument() -> String
+}
+
+extension Channel: MethodArgument {
+    func asMethodArgument() -> String {
+        return "Channel: \(name) / \(access.rawValue)"
+    }
+}
+
 class PersistedChannelServiceTests: XCTestCase {
 
     var scheduler: TestScheduler!
+    var remembrance: Remembrancer!
     var testableChannelsObserver: TestableObserver<Channels>!
     var testableUsersObserver: TestableObserver<Users>!
     var mockChannelDatabase: ChannelsDatabase!
@@ -21,10 +49,11 @@ class PersistedChannelServiceTests: XCTestCase {
     override func setUp() {
         super.setUp()
         scheduler = TestScheduler(initialClock: 0)
+        remembrance = Remembrancer()
         testableChannelsObserver = scheduler.createObserver(Channels)
         testableUsersObserver = scheduler.createObserver(Users)
 
-        mockChannelDatabase = MockChannelDatabase(scheduler: scheduler)
+        mockChannelDatabase = MockChannelDatabase(scheduler: scheduler, remembrance: remembrance)
         mockUserDatabase = MockUserDatabase(scheduler: scheduler)
 
         channelService = PersistedChannelsService(channelsDatabase: mockChannelDatabase, userDatabase: mockUserDatabase)
@@ -57,12 +86,14 @@ class PersistedChannelServiceTests: XCTestCase {
         func writeCurrentUser(user: User) {}
     }
 
-    struct MockChannelDatabase: ChannelsDatabase {
+    class MockChannelDatabase: ChannelsDatabase {
 
         let scheduler: TestScheduler
+        let remembrance: Remembrancer
 
-        init(scheduler: TestScheduler) {
+        init(scheduler: TestScheduler, remembrance: Remembrancer) {
             self.scheduler = scheduler
+            self.remembrance = remembrance
         }
 
         func observePublicChannelIds() -> Observable<[String]> {
@@ -87,9 +118,15 @@ class PersistedChannelServiceTests: XCTestCase {
             }
         }
 
-        func writeChannel(newChannel: Channel) -> Observable<Channel> { return Observable.empty() }
+        func writeChannel(newChannel: Channel) -> Observable<Channel> {
+            remembrance.callStack.append(MethodCall(identifier: "ChannelsDatabase - writeChannel", arguments: [newChannel]))
+            return Observable.just(newChannel)
+        }
 
-        func writeChannelToPublicChannelIndex(newChannel: Channel) -> Observable<Channel> { return Observable.empty() }
+        func writeChannelToPublicChannelIndex(newChannel: Channel) -> Observable<Channel> {
+            remembrance.callStack.append(MethodCall(identifier: "ChannelsDatabase - writeChannelToPublicChannelIndex", arguments: [newChannel]))
+            return Observable.empty()
+        }
 
         func addOwnerToPrivateChannel(user: User, channel: Channel) -> Observable<Channel> { return Observable.empty() }
 
@@ -110,11 +147,8 @@ class PersistedChannelServiceTests: XCTestCase {
     }
 
     func testThatItReturnsChannelsForUser() {
-        // Given
-        let user = User(name: "Test User", id: "1", photoURL: nil)
-
         // When
-        channelService.channels(forUser: user).subscribe(testableChannelsObserver)
+        channelService.channels(forUser: testUser1).subscribe(testableChannelsObserver)
         scheduler.start()
 
         // Then
@@ -139,6 +173,19 @@ class PersistedChannelServiceTests: XCTestCase {
         ]
         
         XCTAssertEqual(testableUsersObserver.events, expectedEvents)
+    }
+
+    func testThatItCallsTheRightThingsForCreatingAPublicChannel() {
+        let disposeBag = DisposeBag()
+        channelService.createPublicChannel(withName: "🐣").subscribe().addDisposableTo(disposeBag)
+
+        let expectedChannel = Channel(name: "🐣", access: .Public)
+        let expectedMethodStack = [
+            MethodCall(identifier: "ChannelsDatabase - writeChannel", arguments: [expectedChannel]),
+            MethodCall(identifier: "ChannelsDatabase - writeChannelToPublicChannelIndex", arguments: [expectedChannel])
+        ]
+
+        XCTAssertEqual(remembrance.callStack, expectedMethodStack)
     }
 }
 
