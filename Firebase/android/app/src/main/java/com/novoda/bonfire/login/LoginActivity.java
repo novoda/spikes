@@ -25,7 +25,9 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         LoginDisplayer loginDisplayer = (LoginDisplayer) findViewById(R.id.loginView);
-        navigator = new AndroidLoginNavigator(this, new AndroidNavigator(this));
+        LoginGoogleApiClient loginGoogleApiClient = new LoginGoogleApiClient(this);
+        loginGoogleApiClient.setupGoogleApiClient();
+        navigator = new AndroidLoginNavigator(this, loginGoogleApiClient, new AndroidNavigator(this));
         presenter = new LoginPresenter(Dependencies.INSTANCE.getLoginService(), loginDisplayer, navigator, Dependencies.INSTANCE.getErrorLogger());
     }
 
