@@ -15,18 +15,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import rx.Observable;
 import rx.functions.Func1;
 import rx.observers.TestObserver;
 
+import static com.novoda.bonfire.helpers.FirebaseTestHelpers.setupDatabaseStubsFor;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.anyObject;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 public class FirebaseChannelsDatabaseTest {
 
@@ -64,22 +62,18 @@ public class FirebaseChannelsDatabaseTest {
 
         setupDatabaseStubsFor("owners", mockOwnersDb, mockFirebaseDatabase);
 
-        doAnswer(new ObservableAnswer<>(publicChannelIds)).when(mockListeners).listenToValueEvents(eq(mockPublicChannelsDb), any(typeOfGetKeys()));
-        doAnswer(new ObservableAnswer<>(privateChannelIds)).when(mockListeners).listenToValueEvents(eq(mockPrivateChannelsDb), any(typeOfGetKeys()));
-        doAnswer(new ObservableAnswer<>(ownerIds)).when(mockListeners).listenToValueEvents(eq(mockOwnersDb), any(typeOfGetKeys()));
+        when(mockListeners.listenToValueEvents(eq(mockPublicChannelsDb), any(typeOfGetKeys()))).thenReturn(Observable.just(publicChannelIds));
 
-        doAnswer(new ObservableAnswer<>(newChannel)).when(mockListeners).listenToSingleValueEvents(eq(mockChannelsDb), any(typeOfAsChannel()));
+        when(mockListeners.listenToValueEvents(eq(mockPrivateChannelsDb), any(typeOfGetKeys()))).thenReturn(Observable.just(privateChannelIds));
+        when(mockListeners.listenToValueEvents(eq(mockOwnersDb), any(typeOfGetKeys()))).thenReturn(Observable.just(ownerIds));
 
-        doAnswer(new ObservableAnswer<>(newChannel)).when(mockListeners).setValue(anyObject(), any(DatabaseReference.class), any(Channel.class));
+        when(mockListeners.listenToSingleValueEvents(eq(mockChannelsDb), any(typeOfAsChannel()))).thenReturn(Observable.just(newChannel));
 
-        doAnswer(new ObservableAnswer<>(newChannel)).when(mockListeners).removeValue(any(DatabaseReference.class), any(Channel.class));
+        when(mockListeners.setValue(anyObject(), any(DatabaseReference.class), any(Channel.class))).thenReturn(Observable.just(newChannel));
+
+        when(mockListeners.removeValue(any(DatabaseReference.class), any(Channel.class))).thenReturn(Observable.just(newChannel));
 
         firebaseChannelsDatabase = new FirebaseChannelsDatabase(mockFirebaseDatabase, mockListeners);
-    }
-
-    private static void setupDatabaseStubsFor(String databaseName, DatabaseReference databaseReference, FirebaseDatabase firebaseDatabase) {
-        when(firebaseDatabase.getReference(databaseName)).thenReturn(databaseReference);
-        when(databaseReference.child(anyString())).thenReturn(databaseReference);
     }
 
     @Test
@@ -154,18 +148,5 @@ public class FirebaseChannelsDatabaseTest {
 
     private Class<Func1<DataSnapshot, Channel>> typeOfAsChannel() {
         return (Class<Func1<DataSnapshot, Channel>>) (Class) Func1.class;
-    }
-
-    private static class ObservableAnswer<T> implements Answer<Observable<T>> {
-        private T stubData;
-
-        public ObservableAnswer(T stubData) {
-            this.stubData = stubData;
-        }
-
-        @Override
-        public Observable<T> answer(InvocationOnMock invocation) throws Throwable {
-            return Observable.just(stubData);
-        }
     }
 }
