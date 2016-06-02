@@ -63,8 +63,9 @@ class PersistedChannelsService: ChannelsService {
     func createPrivateChannel(withName name: String, owner: User) -> Observable<DatabaseResult<Channel>> {
         let channel = Channel(name: name, access: .Private)
         return channelsDatabase.addOwnerToPrivateChannel(owner, channel: channel)
+            .flatMap({self.channelsDatabase.writeChannel($0)})
             .flatMap(addUserAsChannelOwner(owner))
-            .flatMap(writeChannel)
+            .map({.Success($0)})
             .catchError({Observable.just(DatabaseResult.Error($0))})
     }
 

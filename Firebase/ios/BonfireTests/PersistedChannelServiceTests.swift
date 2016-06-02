@@ -30,6 +30,12 @@ extension Channel: MethodArgument {
     }
 }
 
+extension User: MethodArgument {
+    func asMethodArgument() -> String {
+        return "User: \(name)"
+    }
+}
+
 class PersistedChannelServiceTests: XCTestCase {
 
     var scheduler: TestScheduler!
@@ -125,14 +131,20 @@ class PersistedChannelServiceTests: XCTestCase {
 
         func writeChannelToPublicChannelIndex(newChannel: Channel) -> Observable<Channel> {
             remembrance.callStack.append(MethodCall(identifier: "ChannelsDatabase - writeChannelToPublicChannelIndex", arguments: [newChannel]))
-            return Observable.empty()
+            return Observable.just(newChannel)
         }
 
-        func addOwnerToPrivateChannel(user: User, channel: Channel) -> Observable<Channel> { return Observable.empty() }
+        func addOwnerToPrivateChannel(user: User, channel: Channel) -> Observable<Channel> {
+            remembrance.callStack.append(MethodCall(identifier: "ChannelsDatabase - addOwnerToPrivateChannel", arguments: [user, channel]))
+            return Observable.just(channel)
+        }
 
         func removeOwnerFromPrivateChannel(user: User, channel: Channel) -> Observable<Channel> { return Observable.empty() }
 
-        func addChannelToUserPrivateChannelIndex(user: User, channel: Channel) -> Observable<Channel> { return Observable.empty() }
+        func addChannelToUserPrivateChannelIndex(user: User, channel: Channel) -> Observable<Channel> {
+            remembrance.callStack.append(MethodCall(identifier: "ChannelsDatabase - addChannelToUserPrivateChannelIndex", arguments: [user, channel]))
+            return Observable.just(channel)
+        }
 
         func removeChannelFromUserPrivateChannelIndex(user: User, channel: Channel) -> Observable<Channel> { return Observable.empty() }
 
@@ -186,6 +198,21 @@ class PersistedChannelServiceTests: XCTestCase {
         ]
 
         XCTAssertEqual(remembrance.callStack, expectedMethodStack)
+    }
+
+    func testThatItCallsTheRightThingForCreatingAPrivateChannel() {
+        let disposeBag = DisposeBag()
+        channelService.createPrivateChannel(withName: "💣", owner: testUser1).subscribe().addDisposableTo(disposeBag)
+
+        let expectedChannel = Channel(name: "💣", access: .Private)
+        let expectedMethodStack = [
+            MethodCall(identifier: "ChannelsDatabase - addOwnerToPrivateChannel", arguments: [testUser1, expectedChannel]),
+            MethodCall(identifier: "ChannelsDatabase - writeChannel", arguments: [expectedChannel]),
+            MethodCall(identifier: "ChannelsDatabase - addChannelToUserPrivateChannelIndex", arguments: [testUser1, expectedChannel])
+        ]
+
+        XCTAssertEqual(remembrance.callStack, expectedMethodStack)
+
     }
 }
 
