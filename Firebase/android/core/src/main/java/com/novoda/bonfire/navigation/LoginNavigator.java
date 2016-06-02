@@ -8,11 +8,11 @@ public interface LoginNavigator extends Navigator {
 
     void detach(LoginResultListener loginResultListener);
 
-    public interface LoginResultListener {
+    interface LoginResultListener {
 
-        public void onGooglePlusLoginSuccess(String tokenId);
+        void onGooglePlusLoginSuccess(String tokenId);
 
-        public void onGooglePlusLoginFailed(String statusMessage);
+        void onGooglePlusLoginFailed(String statusMessage);
 
     }
 
