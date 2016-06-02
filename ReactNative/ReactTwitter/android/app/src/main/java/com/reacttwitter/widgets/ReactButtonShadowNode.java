@@ -1,6 +1,7 @@
 package com.reacttwitter.widgets;
 
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.text.BoringLayout;
@@ -18,20 +19,19 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 import javax.annotation.Nullable;
 
-public class ReactButtonShadowNode extends LayoutShadowNode implements CSSNode.MeasureFunction {
-
-    private static final float PADDING_MULTIPLIER = 1f + PixelUtil.toPixelFromSP(1) / 20f;
+class ReactButtonShadowNode extends LayoutShadowNode implements CSSNode.MeasureFunction {
 
     private static final TextPaint textPaintInstance = new TextPaint();
 
     static {
         textPaintInstance.setFlags(TextPaint.ANTI_ALIAS_FLAG);
+        textPaintInstance.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD)); // our button has a bold typeface by default
     }
 
     private String text;
     private final Rect padding;
 
-    public ReactButtonShadowNode() {
+    ReactButtonShadowNode() {
         padding = new Rect();
         setMeasureFunction(this);
     }
@@ -67,7 +67,7 @@ public class ReactButtonShadowNode extends LayoutShadowNode implements CSSNode.M
 
     private Drawable getDrawableByName(String name) {
         int resId = getThemedContext().getResources().getIdentifier(name.toLowerCase(), "drawable", getThemedContext().getPackageName());
-        if (resId <= 0) {
+        if (resId == 0) {
             return null;
         }
 
@@ -134,7 +134,7 @@ public class ReactButtonShadowNode extends LayoutShadowNode implements CSSNode.M
             );
         }
 
-        measureOutput.height = layout.getHeight() + (padding.top + padding.bottom) * PADDING_MULTIPLIER;
-        measureOutput.width = layout.getWidth() + (padding.left + padding.right) * PADDING_MULTIPLIER;
+        measureOutput.height = layout.getHeight() + (padding.top + padding.bottom);
+        measureOutput.width = layout.getWidth() + (padding.left + padding.right);
     }
 }

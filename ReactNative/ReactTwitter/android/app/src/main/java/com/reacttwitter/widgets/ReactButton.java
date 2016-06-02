@@ -8,7 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.widget.Button;
 
-public class ReactButton extends Button {
+class ReactButton extends Button {
 
     public ReactButton(Context context) {
         super(context);
