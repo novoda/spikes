@@ -1,9 +1,9 @@
 package com.novoda.bonfire.channel.database;
 
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.bonfire.channel.data.model.Channel;
+import com.novoda.bonfire.helpers.FirebaseTestHelpers;
 import com.novoda.bonfire.rx.FirebaseObservableListeners;
 import com.novoda.bonfire.user.data.model.User;
 
@@ -17,10 +17,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import rx.Observable;
-import rx.functions.Func1;
 import rx.observers.TestObserver;
 
 import static com.novoda.bonfire.helpers.FirebaseTestHelpers.setupDatabaseStubsFor;
+import static com.novoda.bonfire.helpers.FirebaseTestHelpers.setupValueEventListenerFor;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.anyObject;
@@ -62,12 +62,14 @@ public class FirebaseChannelsDatabaseTest {
 
         setupDatabaseStubsFor("owners", mockOwnersDb, mockFirebaseDatabase);
 
-        when(mockListeners.listenToValueEvents(eq(mockPublicChannelsDb), any(typeOfGetKeys()))).thenReturn(Observable.just(publicChannelIds));
+        setupValueEventListenerFor(mockListeners, mockPublicChannelsDb, publicChannelIds);
+        setupValueEventListenerFor(mockListeners, mockPrivateChannelsDb, privateChannelIds);
+        setupValueEventListenerFor(mockListeners, mockOwnersDb, ownerIds);
 
-        when(mockListeners.listenToValueEvents(eq(mockPrivateChannelsDb), any(typeOfGetKeys()))).thenReturn(Observable.just(privateChannelIds));
-        when(mockListeners.listenToValueEvents(eq(mockOwnersDb), any(typeOfGetKeys()))).thenReturn(Observable.just(ownerIds));
+        setupValueEventListenerFor(mockListeners, mockPrivateChannelsDb, privateChannelIds);
+        setupValueEventListenerFor(mockListeners, mockOwnersDb, ownerIds);
 
-        when(mockListeners.listenToSingleValueEvents(eq(mockChannelsDb), any(typeOfAsChannel()))).thenReturn(Observable.just(newChannel));
+        when(mockListeners.listenToSingleValueEvents(eq(mockChannelsDb), any(FirebaseTestHelpers.<Channel>marshallerType()))).thenReturn(Observable.just(newChannel));
 
         when(mockListeners.setValue(anyObject(), any(DatabaseReference.class), any(Channel.class))).thenReturn(Observable.just(newChannel));
 
@@ -140,13 +142,5 @@ public class FirebaseChannelsDatabaseTest {
         TestObserver<T> observer = new TestObserver<>();
         observable.subscribe(observer);
         observer.assertReceivedOnNext(Collections.singletonList(expectedValue));
-    }
-
-    private Class<Func1<DataSnapshot, List<String>>> typeOfGetKeys() {
-        return (Class<Func1<DataSnapshot, List<String>>>) (Class) Func1.class;
-    }
-
-    private Class<Func1<DataSnapshot, Channel>> typeOfAsChannel() {
-        return (Class<Func1<DataSnapshot, Channel>>) (Class) Func1.class;
     }
 }
