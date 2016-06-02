@@ -20,9 +20,7 @@ public class ChannelView extends LinearLayout {
         configureViewParams();
         View view = inflate(context, R.layout.merge_channel_item_view, this);
         title = Views.findById(view, R.id.channelTitle);
-        TypedValue outValue = new TypedValue();
-        context.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
-        setBackgroundResource(outValue.resourceId);
+        setSelectableBackgroundFromAttributes(context);
     }
 
     private void configureViewParams() {
@@ -32,6 +30,12 @@ public class ChannelView extends LinearLayout {
         int horizontalMargin = getResources().getDimensionPixelSize(R.dimen.list_item_horizontal_margin);
         int verticalMargin = getResources().getDimensionPixelSize(R.dimen.list_item_vertical_margin);
         setPadding(horizontalMargin, verticalMargin, horizontalMargin, verticalMargin);
+    }
+
+    private void setSelectableBackgroundFromAttributes(Context context) {
+        TypedValue outValue = new TypedValue();
+        context.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
+        setBackgroundResource(outValue.resourceId);
     }
 
     public void display(Channel channel) {

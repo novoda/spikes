@@ -21,6 +21,7 @@ struct SharedServices {
     static let dynamicLinkFactory: DynamicLinkFactory = FirebaseDynamicLinkFactory(
         dynamicLinkDomain: "https://t6c2e.app.goo.gl",
         bundleIdentifier: "com.novoda.bonfire",
-        deepLinkBaseURL: NSURL(string: "https://novoda.com/bonfire/welcome")!)
+        androidPackageName: "com.novoda.bonfire",
+        deepLinkBaseURL: NSURL(string: "https://novoda.com/bonfire")!)
     static let config: Config = FirebaseRemoteConfig()
 }
