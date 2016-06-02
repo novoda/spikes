@@ -43,7 +43,7 @@ public enum Dependencies {
 
             firebaseAnalytics = new FirebaseAnalyticsAnalytics(context);
             loginService = new FirebaseLoginService(new FirebaseAuthDatabase(firebaseAuth), userDatabase);
-            chatService = new PersistedChatService(new FirebaseChatDatabase(firebaseDatabase));
+            chatService = new PersistedChatService(new FirebaseChatDatabase(firebaseDatabase, firebaseObservableListeners));
             channelService = new PersistedChannelService(new FirebaseChannelsDatabase(firebaseDatabase, firebaseObservableListeners), userDatabase);
             userService = new PersistedUserService(userDatabase);
         }

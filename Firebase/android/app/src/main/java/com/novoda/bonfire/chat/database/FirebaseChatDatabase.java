@@ -17,14 +17,16 @@ import rx.functions.Func1;
 public class FirebaseChatDatabase implements ChatDatabase {
 
     private final DatabaseReference messagesDB;
+    private final FirebaseObservableListeners firebaseObservableListeners;
 
-    public FirebaseChatDatabase(FirebaseDatabase firebaseDatabase) {
+    public FirebaseChatDatabase(FirebaseDatabase firebaseDatabase, FirebaseObservableListeners firebaseObservableListeners) {
         messagesDB = firebaseDatabase.getReference("messages");
+        this.firebaseObservableListeners = firebaseObservableListeners;
     }
 
     @Override
     public Observable<Chat> observeChat(Channel channel) {
-        return new FirebaseObservableListeners().listenToValueEvents(messagesInChannel(channel), toChat());
+        return firebaseObservableListeners.listenToValueEvents(messagesInChannel(channel), toChat());
     }
 
     @Override
