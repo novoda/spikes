@@ -10,9 +10,13 @@ public interface Navigator {
 
     void toCreateChannel();
 
+    void toLogin();
+
     void toMembersOf(Channel channel);
 
     void toParent();
 
     void toChannelWithClearedHistory(Channel channel);
+
+    void toShareInvite(String sharingLink);
 }

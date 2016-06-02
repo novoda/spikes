@@ -4,9 +4,11 @@ import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.data.model.Channels;
 import com.novoda.bonfire.channel.displayer.ChannelsDisplayer;
 import com.novoda.bonfire.channel.service.ChannelService;
+import com.novoda.bonfire.link.LinkFactory;
 import com.novoda.bonfire.login.data.model.Authentication;
 import com.novoda.bonfire.login.service.LoginService;
 import com.novoda.bonfire.navigation.Navigator;
+import com.novoda.bonfire.user.data.model.User;
 
 import rx.Observable;
 import rx.Subscription;
@@ -19,20 +21,29 @@ public class ChannelsPresenter {
     private final ChannelService channelService;
     private final LoginService loginService;
     private final Navigator navigator;
+    private final LinkFactory linkFactory;
 
     private Subscription subscription;
+    private User user;
 
-    public ChannelsPresenter(ChannelsDisplayer channelsDisplayer, ChannelService channelService, LoginService loginService, Navigator navigator) {
+    public ChannelsPresenter(ChannelsDisplayer channelsDisplayer, ChannelService channelService, LoginService loginService, Navigator navigator, LinkFactory linkFactory) {
         this.channelsDisplayer = channelsDisplayer;
         this.channelService = channelService;
         this.loginService = loginService;
         this.navigator = navigator;
+        this.linkFactory = linkFactory;
     }
 
     public void startPresenting() {
         channelsDisplayer.attach(channelsInteractionListener);
         subscription = loginService.getAuthentication()
                 .filter(successfullyAuthenticated())
+                .doOnNext(new Action1<Authentication>() {
+                    @Override
+                    public void call(Authentication authentication) {
+                        user = authentication.getUser();
+                    }
+                })
                 .flatMap(channelsForUser())
                 .subscribe(new Action1<Channels>() {
                     @Override
@@ -76,5 +87,9 @@ public class ChannelsPresenter {
             navigator.toCreateChannel();
         }
 
+        @Override
+        public void onInviteUsersClicked() {
+            navigator.toShareInvite(linkFactory.inviteLinkFrom(user).toString());
+        }
     };
 }

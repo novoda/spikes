@@ -8,14 +8,24 @@ android {
         applicationId "com.novoda.bonfire"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
-
+        versionCode 5
+        versionName "0.0.3"
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+    }
+    signingConfigs {
+        release {
+            Properties props = new Properties()
+            props.load(new FileInputStream(file("signing.properties")))
+            storeFile file(props['storeFile'])
+            storePassword props['storePassword']
+            keyAlias props['keyAlias']
+            keyPassword props['keyPassword']
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -25,6 +35,7 @@ android {
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/rxjava.properties'
     }
+    lintOptions { warning 'InvalidPackage' }
 }
 
 dependencies {
@@ -37,6 +48,7 @@ dependencies {
     compile 'com.google.firebase:firebase-core:9.0.0'
     compile 'com.google.firebase:firebase-database:9.0.0'
     compile 'com.google.firebase:firebase-auth:9.0.0'
+    compile 'com.google.firebase:firebase-invites:9.0.0'
     compile 'com.google.android.gms:play-services-auth:9.0.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
 

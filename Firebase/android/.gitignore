@@ -7,3 +7,5 @@
 /build
 /captures
 app/google-services.json
+*.keystore
+signing.properties
