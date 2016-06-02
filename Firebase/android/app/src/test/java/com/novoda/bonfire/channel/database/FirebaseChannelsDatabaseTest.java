@@ -8,7 +8,6 @@ import com.novoda.bonfire.rx.FirebaseObservableListeners;
 import com.novoda.bonfire.user.data.model.User;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
@@ -17,8 +16,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import rx.Observable;
-import rx.observers.TestObserver;
 
+import static com.novoda.bonfire.helpers.FirebaseTestHelpers.assertValueReceivedOnNext;
 import static com.novoda.bonfire.helpers.FirebaseTestHelpers.setupDatabaseStubsFor;
 import static com.novoda.bonfire.helpers.FirebaseTestHelpers.setupValueEventListenerFor;
 import static org.mockito.Matchers.any;
@@ -138,9 +137,4 @@ public class FirebaseChannelsDatabaseTest {
         assertValueReceivedOnNext(listObservable, ownerIds);
     }
 
-    private <T> void assertValueReceivedOnNext(Observable<T> observable, T expectedValue) {
-        TestObserver<T> observer = new TestObserver<>();
-        observable.subscribe(observer);
-        observer.assertReceivedOnNext(Collections.singletonList(expectedValue));
-    }
 }
