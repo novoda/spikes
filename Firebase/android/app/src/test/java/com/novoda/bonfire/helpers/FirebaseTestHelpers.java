@@ -29,18 +29,25 @@ public class FirebaseTestHelpers {
             FirebaseObservableListeners listeners,
             DatabaseReference databaseReference,
             T returnValue) {
-        when(listeners.listenToValueEvents(
-                eq(databaseReference),
-                any(FirebaseTestHelpers.<T>marshallerType())
-             )
-        ).thenReturn(Observable.just(returnValue));
+        setupValueEventListenerWithObservable(listeners, databaseReference, Observable.just(returnValue));
     }
 
     public static void setupErroringValueEventListenerFor(
             FirebaseObservableListeners listeners,
             DatabaseReference databaseReference,
-            Throwable testThrowable) {
-        when(listeners.listenToValueEvents(eq(databaseReference), any(marshallerType()))).thenReturn(Observable.error(testThrowable));
+            Throwable throwable) {
+        setupValueEventListenerWithObservable(listeners, databaseReference, Observable.error(throwable));
+    }
+
+    private static <T> void setupValueEventListenerWithObservable(
+            FirebaseObservableListeners listeners,
+            DatabaseReference databaseReference,
+            Observable<T> observable) {
+        when(listeners.listenToValueEvents(
+                eq(databaseReference),
+                any(FirebaseTestHelpers.<T>marshallerType())
+             )
+        ).thenReturn(observable);
     }
 
     public static <T> void setupSingleValueEventListenerFor(
