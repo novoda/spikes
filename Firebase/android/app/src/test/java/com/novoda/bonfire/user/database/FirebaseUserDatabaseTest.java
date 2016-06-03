@@ -1,7 +1,5 @@
 package com.novoda.bonfire.user.database;
 
-import android.support.annotation.NonNull;
-
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.bonfire.rx.FirebaseObservableListeners;
@@ -18,8 +16,6 @@ import org.mockito.MockitoAnnotations;
 import rx.Observable;
 
 import static com.novoda.bonfire.helpers.FirebaseTestHelpers.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 
 public class FirebaseUserDatabaseTest {
@@ -41,7 +37,7 @@ public class FirebaseUserDatabaseTest {
     FirebaseUserDatabase firebaseUserDatabase;
 
     @Before
-    public void setUp() {
+    public void setup() {
         MockitoAnnotations.initMocks(this);
 
         setupDatabaseStubsFor("users", mockUsersDatabase, mockFirebaseDatabase);
@@ -50,7 +46,7 @@ public class FirebaseUserDatabaseTest {
 
         setupSingleValueEventListenerFor(mockListeners, mockUsersDatabase, user);
 
-        firebaseUserDatabase = buildFirebaseUserDatabase();
+        firebaseUserDatabase = new FirebaseUserDatabase(mockFirebaseDatabase, mockListeners);
     }
 
     @Test
@@ -64,9 +60,8 @@ public class FirebaseUserDatabaseTest {
         Throwable testThrowable = new Throwable("test error");
         setupErroringValueEventListenerFor(mockListeners, mockUsersDatabase, testThrowable);
 
-        firebaseUserDatabase = buildFirebaseUserDatabase();
-
         Observable<Users> usersObservable = firebaseUserDatabase.observeUsers();
+
         assertThrowableReceivedOnError(usersObservable, testThrowable);
     }
 
@@ -80,10 +75,5 @@ public class FirebaseUserDatabaseTest {
     public void canSetNewUserValue() {
         firebaseUserDatabase.writeCurrentUser(anotherUser);
         verify(mockUsersDatabase).setValue(anotherUser);
-    }
-
-    @NonNull
-    private FirebaseUserDatabase buildFirebaseUserDatabase() {
-        return new FirebaseUserDatabase(mockFirebaseDatabase, mockListeners);
     }
 }

@@ -53,6 +53,16 @@ public class FirebaseChatDatabaseTest {
     }
 
     @Test
+    public void subscriberReceivesErrorWhenChatCannotBeObserved() {
+        Throwable testThrowable = new Throwable("test throwable");
+        setupErroringValueEventListenerFor(mockListeners, mockMessagesDatabase, testThrowable);
+
+        Observable<Chat> observable = firebaseChatDatabase.observeChat(channel);
+
+        assertThrowableReceivedOnError(observable, testThrowable);
+    }
+
+    @Test
     public void newMessagesArePushedThenSet() {
         Message message = new Message(anotherUser, "another message");
 
@@ -61,4 +71,5 @@ public class FirebaseChatDatabaseTest {
         verify(mockMessagesDatabase).push();
         verify(mockMessagesDatabase).setValue(message);
     }
+
 }

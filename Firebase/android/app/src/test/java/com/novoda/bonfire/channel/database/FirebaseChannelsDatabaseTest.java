@@ -80,6 +80,16 @@ public class FirebaseChannelsDatabaseTest {
     }
 
     @Test
+    public void onErrorIsCalledWhenPublicChannelIdsCannotBeObserved() {
+        Throwable testThrowable = new Throwable("test throwable");
+        setupErroringValueEventListenerFor(mockListeners, mockPublicChannelsDb, testThrowable);
+
+        Observable<List<String>> listObservable = firebaseChannelsDatabase.observePublicChannelIds();
+
+        assertThrowableReceivedOnError(listObservable, testThrowable);
+    }
+
+    @Test
     public void privateChannelsIdsForAUserAreObservedFromPrivateChannelDatabase() {
         Observable<List<String>> listObservable = firebaseChannelsDatabase.observePrivateChannelIdsFor(user);
         assertValueReceivedOnNext(listObservable, privateChannelIds);

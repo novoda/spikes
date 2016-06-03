@@ -66,10 +66,10 @@ public class FirebaseTestHelpers {
         observer.assertReceivedOnNext(Collections.singletonList(expectedValue));
     }
 
-    public static <T> void assertThrowableReceivedOnError(Observable<T> observable, Throwable testThrowable) {
+    public static <T> void assertThrowableReceivedOnError(Observable<T> observable, Throwable throwable) {
         TestObserver<T> testObserver = testObserverSubscribedTo(observable);
         List<Throwable> errorEvents = testObserver.getOnErrorEvents();
-        assertTrue(errorEvents.contains(testThrowable));
+        assertTrue(errorEvents.contains(throwable));
     }
 
     @NonNull
