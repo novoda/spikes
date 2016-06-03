@@ -1,5 +1,7 @@
 package com.novoda.bonfire.user.database;
 
+import android.support.annotation.NonNull;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.bonfire.rx.FirebaseObservableListeners;
@@ -7,7 +9,6 @@ import com.novoda.bonfire.user.data.model.User;
 import com.novoda.bonfire.user.data.model.Users;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,15 +16,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import rx.Observable;
-import rx.functions.Func1;
-import rx.observers.TestObserver;
 
 import static com.novoda.bonfire.helpers.FirebaseTestHelpers.*;
-import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class FirebaseUserDatabaseTest {
     private static final String USER_ID = "test user id";
@@ -53,7 +50,7 @@ public class FirebaseUserDatabaseTest {
 
         setupSingleValueEventListenerFor(mockListeners, mockUsersDatabase, user);
 
-        firebaseUserDatabase = new FirebaseUserDatabase(mockFirebaseDatabase, mockListeners);
+        firebaseUserDatabase = buildFirebaseUserDatabase();
     }
 
     @Test
@@ -65,14 +62,12 @@ public class FirebaseUserDatabaseTest {
     @Test
     public void whenUsersCannotBeObservedOnErrorIsCalled() {
         Throwable testThrowable = new Throwable("test error");
-        when(mockListeners.listenToValueEvents(eq(mockUsersDatabase), any(Func1.class))).thenReturn(Observable.error(testThrowable));
+        setupErroringValueEventListenerFor(mockListeners, mockUsersDatabase, testThrowable);
 
-        firebaseUserDatabase = new FirebaseUserDatabase(mockFirebaseDatabase, mockListeners);
+        firebaseUserDatabase = buildFirebaseUserDatabase();
 
-        TestObserver<Users> testObserver = testObserverSubscribedTo(firebaseUserDatabase.observeUsers());
-
-        List<Throwable> onErrorEvents = testObserver.getOnErrorEvents();
-        assertTrue(onErrorEvents.contains(testThrowable));
+        Observable<Users> usersObservable = firebaseUserDatabase.observeUsers();
+        assertThrowableReceivedOnError(usersObservable, testThrowable);
     }
 
     @Test
@@ -85,5 +80,10 @@ public class FirebaseUserDatabaseTest {
     public void canSetNewUserValue() {
         firebaseUserDatabase.writeCurrentUser(anotherUser);
         verify(mockUsersDatabase).setValue(anotherUser);
+    }
+
+    @NonNull
+    private FirebaseUserDatabase buildFirebaseUserDatabase() {
+        return new FirebaseUserDatabase(mockFirebaseDatabase, mockListeners);
     }
 }

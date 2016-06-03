@@ -8,11 +8,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.bonfire.rx.FirebaseObservableListeners;
 
 import java.util.Collections;
+import java.util.List;
 
 import rx.Observable;
 import rx.functions.Func1;
 import rx.observers.TestObserver;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.when;
 
@@ -21,10 +23,6 @@ public class FirebaseTestHelpers {
         when(firebaseDatabase.getReference(databaseName)).thenReturn(databaseReference);
         when(databaseReference.child(anyString())).thenReturn(databaseReference);
         when(databaseReference.push()).thenReturn(databaseReference);
-    }
-
-    public static <T> Class<Func1<DataSnapshot, T>> marshallerType() {
-        return (Class<Func1<DataSnapshot, T>>) (Class) Func1.class;
     }
 
     public static <T> void setupValueEventListenerFor(
@@ -38,16 +36,11 @@ public class FirebaseTestHelpers {
         ).thenReturn(Observable.just(returnValue));
     }
 
-    public static <T> void assertValueReceivedOnNext(Observable<T> observable, T expectedValue) {
-        TestObserver<T> observer = testObserverSubscribedTo(observable);
-        observer.assertReceivedOnNext(Collections.singletonList(expectedValue));
-    }
-
-    @NonNull
-    public static <T> TestObserver<T> testObserverSubscribedTo(Observable<T> observable) {
-        TestObserver<T> observer = new TestObserver<>();
-        observable.subscribe(observer);
-        return observer;
+    public static void setupErroringValueEventListenerFor(
+            FirebaseObservableListeners listeners,
+            DatabaseReference databaseReference,
+            Throwable testThrowable) {
+        when(listeners.listenToValueEvents(eq(databaseReference), any(marshallerType()))).thenReturn(Observable.error(testThrowable));
     }
 
     public static <T> void setupSingleValueEventListenerFor(
@@ -59,5 +52,27 @@ public class FirebaseTestHelpers {
                 any(FirebaseTestHelpers.<T>marshallerType())
              )
         ).thenReturn(Observable.just(returnValue));
+    }
+
+    public static <T> void assertValueReceivedOnNext(Observable<T> observable, T expectedValue) {
+        TestObserver<T> observer = testObserverSubscribedTo(observable);
+        observer.assertReceivedOnNext(Collections.singletonList(expectedValue));
+    }
+
+    public static <T> void assertThrowableReceivedOnError(Observable<T> observable, Throwable testThrowable) {
+        TestObserver<T> testObserver = testObserverSubscribedTo(observable);
+        List<Throwable> errorEvents = testObserver.getOnErrorEvents();
+        assertTrue(errorEvents.contains(testThrowable));
+    }
+
+    @NonNull
+    private static <T> TestObserver<T> testObserverSubscribedTo(Observable<T> observable) {
+        TestObserver<T> observer = new TestObserver<>();
+        observable.subscribe(observer);
+        return observer;
+    }
+
+    private static <T> Class<Func1<DataSnapshot, T>> marshallerType() {
+        return (Class<Func1<DataSnapshot, T>>) (Class) Func1.class;
     }
 }
