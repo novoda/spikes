@@ -17,9 +17,7 @@ import org.mockito.MockitoAnnotations;
 
 import rx.Observable;
 
-import static com.novoda.bonfire.helpers.FirebaseTestHelpers.assertValueReceivedOnNext;
-import static com.novoda.bonfire.helpers.FirebaseTestHelpers.setupDatabaseStubsFor;
-import static com.novoda.bonfire.helpers.FirebaseTestHelpers.setupValueEventListenerFor;
+import static com.novoda.bonfire.helpers.FirebaseTestHelpers.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.anyObject;
@@ -68,7 +66,11 @@ public class FirebaseChannelsDatabaseTest {
         setupValueEventListenerFor(mockListeners, mockPrivateChannelsDb, privateChannelIds);
         setupValueEventListenerFor(mockListeners, mockOwnersDb, ownerIds);
 
-        when(mockListeners.listenToSingleValueEvents(eq(mockChannelsDb), any(FirebaseTestHelpers.<Channel>marshallerType()))).thenReturn(Observable.just(newChannel));
+        when(mockListeners.listenToSingleValueEvents(
+                eq(mockChannelsDb),
+                any(FirebaseTestHelpers.<Channel>marshallerType())
+             )
+        ).thenReturn(Observable.just(newChannel));
 
         when(mockListeners.setValue(anyObject(), any(DatabaseReference.class), any(Channel.class))).thenReturn(Observable.just(newChannel));
 
