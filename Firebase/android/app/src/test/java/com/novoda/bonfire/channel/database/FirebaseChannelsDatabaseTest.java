@@ -3,7 +3,6 @@ package com.novoda.bonfire.channel.database;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.bonfire.channel.data.model.Channel;
-import com.novoda.bonfire.helpers.FirebaseTestHelpers;
 import com.novoda.bonfire.rx.FirebaseObservableListeners;
 import com.novoda.bonfire.user.data.model.User;
 
@@ -19,7 +18,6 @@ import rx.Observable;
 
 import static com.novoda.bonfire.helpers.FirebaseTestHelpers.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.anyObject;
 import static org.mockito.Mockito.when;
 
@@ -66,11 +64,7 @@ public class FirebaseChannelsDatabaseTest {
         setupValueEventListenerFor(mockListeners, mockPrivateChannelsDb, privateChannelIds);
         setupValueEventListenerFor(mockListeners, mockOwnersDb, ownerIds);
 
-        when(mockListeners.listenToSingleValueEvents(
-                eq(mockChannelsDb),
-                any(FirebaseTestHelpers.<Channel>marshallerType())
-             )
-        ).thenReturn(Observable.just(newChannel));
+        setupSingleValueEventListenerFor(mockListeners, mockChannelsDb, newChannel);
 
         when(mockListeners.setValue(anyObject(), any(DatabaseReference.class), any(Channel.class))).thenReturn(Observable.just(newChannel));
 

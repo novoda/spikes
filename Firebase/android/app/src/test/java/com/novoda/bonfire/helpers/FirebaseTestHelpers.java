@@ -11,9 +11,7 @@ import rx.Observable;
 import rx.functions.Func1;
 import rx.observers.TestObserver;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.when;
 
 public class FirebaseTestHelpers {
@@ -31,12 +29,27 @@ public class FirebaseTestHelpers {
             FirebaseObservableListeners listeners,
             DatabaseReference databaseReference,
             T returnValue) {
-        when(listeners.listenToValueEvents(eq(databaseReference), any(FirebaseTestHelpers.<T>marshallerType()))).thenReturn(Observable.just(returnValue));
+        when(listeners.listenToValueEvents(
+                eq(databaseReference),
+                any(FirebaseTestHelpers.<T>marshallerType())
+             )
+        ).thenReturn(Observable.just(returnValue));
     }
 
     public static <T> void assertValueReceivedOnNext(Observable<T> observable, T expectedValue) {
         TestObserver<T> observer = new TestObserver<>();
         observable.subscribe(observer);
         observer.assertReceivedOnNext(Collections.singletonList(expectedValue));
+    }
+
+    public static <T> void setupSingleValueEventListenerFor(
+            FirebaseObservableListeners listeners,
+            DatabaseReference databaseReference,
+            T returnValue) {
+        when(listeners.listenToSingleValueEvents(
+                eq(databaseReference),
+                any(FirebaseTestHelpers.<T>marshallerType())
+             )
+        ).thenReturn(Observable.just(returnValue));
     }
 }
