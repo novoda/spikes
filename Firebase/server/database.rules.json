@@ -4,7 +4,7 @@
       "$channel_id": {
         ".read": "!root.child('owners').child($channel_id).exists() || root.child('owners').child($channel_id).child(auth.uid).exists()",
         ".write": "(!root.child('owners').child($channel_id).exists() || root.child('owners').child($channel_id).child(auth.uid).exists()) && !data.exists()",
-        ".validate": "newData.hasChildren(['name', 'access'])"
+        ".validate": "newData.hasChildren(['name', 'access']) && $channel_id.matches(/^([\\u2b00-\\u2bfe]|\\ud83c[\\udf00-\\udfff]|\\ud83d[\\udc00-\\uddfe\\ude00-\\ude4e\\ude80-\\udefe])$/)"
       }
     },
     "messages": {
@@ -33,7 +33,8 @@
     "owners": {
       "$channel_id": {
         ".read": "!root.child('owners').child($channel_id).exists() || root.child('owners').child($channel_id).child(auth.uid).exists()",
-        ".write": "!(root.child('channels').child($channel_id).exists() || root.child('owners').child($channel_id).exists()) || root.child('owners').child($channel_id).child(auth.uid).exists()"
+        ".write": "!(root.child('channels').child($channel_id).exists() || root.child('owners').child($channel_id).exists()) || root.child('owners').child($channel_id).child(auth.uid).exists()",
+        ".validate": "$channel_id.matches(/^([\\u2b00-\\u2bfe]|\\ud83c[\\udf00-\\udfff]|\\ud83d[\\udc00-\\uddfe\\ude00-\\ude4e\\ude80-\\udefe])$/)"
       }
     },
     "users": {
