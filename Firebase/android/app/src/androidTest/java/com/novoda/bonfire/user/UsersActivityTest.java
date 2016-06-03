@@ -32,7 +32,6 @@ import org.mockito.stubbing.Answer;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action2;
 import rx.subjects.PublishSubject;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -115,12 +114,9 @@ public class UsersActivityTest {
             }
 
             @Override
-            protected boolean matchesSafely(final RecyclerView view) {
+            protected boolean matchesSafely(RecyclerView view) {
                 RecyclerView.ViewHolder viewHolder = view.findViewHolderForAdapterPosition(position);
-                if (viewHolder == null) {
-                    return false;
-                }
-                return itemMatcher.matches(viewHolder.itemView);
+                return viewHolder != null && itemMatcher.matches(viewHolder.itemView);
             }
         };
     }
@@ -135,35 +131,24 @@ public class UsersActivityTest {
             }
         }).when(channelService).getOwnersOfChannel(any(Channel.class));
 
-        doAnswer(new OwnerListModifyingAnswer(new Action2<ArrayList<User>, User>() {
+        doAnswer(new Answer<Observable<DatabaseResult<User>>>() {
             @Override
-            public void call(ArrayList<User> users, User user) {
-                users.add(user);
+            public Observable<DatabaseResult<User>> answer(InvocationOnMock invocation) throws Throwable {
+                User user = (User) invocation.getArguments()[1];
+                channelOwners.add(user);
+                subject.onNext(new DatabaseResult<>(new Users(channelOwners)));
+                return Observable.just(new DatabaseResult<>(user));
             }
-        })).when(channelService).addOwnerToPrivateChannel(any(Channel.class), any(User.class));
+        }).when(channelService).addOwnerToPrivateChannel(any(Channel.class), any(User.class));
 
-        doAnswer(new OwnerListModifyingAnswer(new Action2<ArrayList<User>, User>() {
+        doAnswer(new Answer<Observable<DatabaseResult<User>>>() {
             @Override
-            public void call(ArrayList<User> users, User user) {
-                users.remove(user);
+            public Observable<DatabaseResult<User>> answer(InvocationOnMock invocation) throws Throwable {
+                User user = (User) invocation.getArguments()[1];
+                channelOwners.remove(user);
+                subject.onNext(new DatabaseResult<>(new Users(channelOwners)));
+                return Observable.just(new DatabaseResult<>(user));
             }
-        })).when(channelService).removeOwnerFromPrivateChannel(any(Channel.class), any(User.class));
-    }
-
-    private class OwnerListModifyingAnswer implements Answer<Observable<DatabaseResult<User>>> {
-
-        private final Action2<ArrayList<User>, User> ownerListAction;
-
-        private OwnerListModifyingAnswer(Action2<ArrayList<User>, User> ownerListAction) {
-            this.ownerListAction = ownerListAction;
-        }
-
-        @Override
-        public Observable<DatabaseResult<User>> answer(InvocationOnMock invocation) throws Throwable {
-            User user = (User) invocation.getArguments()[1];
-            ownerListAction.call(channelOwners, user);
-            subject.onNext(new DatabaseResult<>(new Users(channelOwners)));
-            return Observable.just(new DatabaseResult<>(user));
-        }
+        }).when(channelService).removeOwnerFromPrivateChannel(any(Channel.class), any(User.class));
     }
 }
