@@ -96,6 +96,16 @@ public class FirebaseChannelsDatabaseTest {
     }
 
     @Test
+    public void onErrorIsCalledWhenPrivateChannelIdsCannotBeObserved() {
+        Throwable testThrowable = new Throwable("test throwable");
+        setupErroringValueEventListenerFor(mockListeners, mockPrivateChannelsDb, testThrowable);
+
+        Observable<List<String>> listObservable = firebaseChannelsDatabase.observePrivateChannelIdsFor(user);
+
+        assertThrowableReceivedOnError(listObservable, testThrowable);
+    }
+
+    @Test
     public void channelDetailsAreReadFromChannelsDatabase() {
         Observable<Channel> channelObservable = firebaseChannelsDatabase.readChannelFor("new channel");
         assertValueReceivedOnNext(channelObservable, newChannel);
@@ -141,6 +151,16 @@ public class FirebaseChannelsDatabaseTest {
     public void canGetOwnerIdsForAChannelFromOwnersDatabase() {
         Observable<List<String>> listObservable = firebaseChannelsDatabase.observeOwnerIdsFor(newChannel);
         assertValueReceivedOnNext(listObservable, ownerIds);
+    }
+
+    @Test
+    public void onErrorIsCalledWhenOwnerIdsCannotBeObserved() {
+        Throwable testThrowable = new Throwable("test throwable");
+        setupErroringValueEventListenerFor(mockListeners, mockOwnersDb, testThrowable);
+
+        Observable<List<String>> listObservable = firebaseChannelsDatabase.observeOwnerIdsFor(newChannel);
+
+        assertThrowableReceivedOnError(listObservable, testThrowable);
     }
 
 }
