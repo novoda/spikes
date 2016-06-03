@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import rx.Observable;
 
 import static com.novoda.bonfire.helpers.FirebaseTestHelpers.*;
+import static org.mockito.Mockito.verify;
 
 public class FirebaseUserDatabaseTest {
     private static final String USER_ID = "test user id";
@@ -62,6 +63,7 @@ public class FirebaseUserDatabaseTest {
 
     @Test
     public void canSetNewUserValue() {
-
+        firebaseUserDatabase.writeCurrentUser(anotherUser);
+        verify(mockUsersDatabase).setValue(anotherUser);
     }
 }
