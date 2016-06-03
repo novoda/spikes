@@ -1,5 +1,7 @@
 package com.novoda.bonfire.helpers;
 
+import android.support.annotation.NonNull;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -37,9 +39,15 @@ public class FirebaseTestHelpers {
     }
 
     public static <T> void assertValueReceivedOnNext(Observable<T> observable, T expectedValue) {
+        TestObserver<T> observer = testObserverSubscribedTo(observable);
+        observer.assertReceivedOnNext(Collections.singletonList(expectedValue));
+    }
+
+    @NonNull
+    public static <T> TestObserver<T> testObserverSubscribedTo(Observable<T> observable) {
         TestObserver<T> observer = new TestObserver<>();
         observable.subscribe(observer);
-        observer.assertReceivedOnNext(Collections.singletonList(expectedValue));
+        return observer;
     }
 
     public static <T> void setupSingleValueEventListenerFor(
