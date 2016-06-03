@@ -15,5 +15,7 @@ public interface ChannelsDisplayer {
         void onChannelSelected(Channel channel);
 
         void onAddNewChannel();
+
+        void onInviteUsersClicked();
     }
 }

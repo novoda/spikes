@@ -6,6 +6,7 @@ final class ChannelsView: UIView {
     private weak var actionListener: ChannelsActionListener?
 
     let newChannelBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: nil, action: nil)
+    let shareBonfireBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Action, target: nil, action: nil)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -13,6 +14,8 @@ final class ChannelsView: UIView {
         setupLayout()
         newChannelBarButtonItem.target = self
         newChannelBarButtonItem.action = #selector(newChannel)
+        shareBonfireBarButtonItem.target = self
+        shareBonfireBarButtonItem.action = #selector(shareBonfire)
     }
 
     convenience init() {
@@ -40,6 +43,10 @@ final class ChannelsView: UIView {
 
     @objc private func newChannel() {
         actionListener?.goToNewChannel()
+    }
+
+    @objc private func shareBonfire() {
+        actionListener?.shareBonfire()
     }
 }
 

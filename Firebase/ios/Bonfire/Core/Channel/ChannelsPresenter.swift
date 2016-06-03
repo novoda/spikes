@@ -6,14 +6,18 @@ class ChannelsPresenter {
     let channelsService: ChannelsService
     let channelsDisplayer: ChannelsDisplayer
     let navigator: Navigator
+    let dynamicLinkFactory: DynamicLinkFactory
+    let config: Config
 
     var disposeBag: DisposeBag!
 
-    init(loginService: LoginService, channelsService: ChannelsService, channelsDisplayer: ChannelsDisplayer, navigator: Navigator) {
+    init(loginService: LoginService, channelsService: ChannelsService, channelsDisplayer: ChannelsDisplayer, navigator: Navigator, dynamicLinkFactory: DynamicLinkFactory, config: Config) {
         self.loginService = loginService
         self.channelsService = channelsService
         self.channelsDisplayer = channelsDisplayer
         self.navigator = navigator
+        self.dynamicLinkFactory = dynamicLinkFactory
+        self.config = config
     }
 
     func startPresenting() {
@@ -25,6 +29,12 @@ class ChannelsPresenter {
             auth.isSuccess()
         }).flatMap({ auth in
             return self.channelsService.channels(forUser: auth.user!)
+        }).map({ channels in
+            if self.config.orderChannelsByName() {
+                return channels.sort({$0.name < $1.name})
+            } else {
+                return channels
+            }
         }).subscribe(
             onNext: { [weak self] channels in
                 self?.channelsDisplayer.display(channels)
@@ -44,5 +54,13 @@ extension ChannelsPresenter: ChannelsActionListener {
 
     func goToNewChannel() {
         navigator.toCreateChannel()
+    }
+
+    func shareBonfire() {
+        guard let user = loginService.currentUser else { return }
+        let shareURL = dynamicLinkFactory.inviteLinkFromUser(user)
+        let message = "Check out Bonfire!"
+        let parameters = [message, shareURL]
+        navigator.showShareSheet(parameters)
     }
 }

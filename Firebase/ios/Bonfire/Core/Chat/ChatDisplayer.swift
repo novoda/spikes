@@ -2,10 +2,10 @@ import Foundation
 
 protocol ChatActionListener: class {
     func submitMessage(message: String)
+    func addUsers()
 }
 
-protocol ChatDisplayer {
+protocol ChatDisplayer: class {
     func display(chat: Chat)
-    func attach(actionListener: ChatActionListener)
-    func detach(actionListener: ChatActionListener)
+    weak var actionListener: ChatActionListener? { get set }
 }
