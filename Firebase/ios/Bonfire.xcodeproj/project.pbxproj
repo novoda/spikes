@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A0A41A21D0184640053A547 /* PersistedUserServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0A41A11D0184640053A547 /* PersistedUserServiceTests.swift */; };
+		1A0A41A41D018D810053A547 /* Rememberancer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0A41A31D018D810053A547 /* Rememberancer.swift */; };
 		1AF7D1A01CEF651600B74483 /* UsersTableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */; };
 		1AF7D1A21CEF659A00B74483 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF7D1A11CEF659A00B74483 /* UserCell.swift */; };
 		2A9669953EF6713AF4064B53 /* Pods_Bonfire_BonfireTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE09269AA64387314EE925E /* Pods_Bonfire_BonfireTests.framework */; };
@@ -100,6 +102,8 @@
 /* Begin PBXFileReference section */
 		0858A88D8E7AB853E0338EF2 /* Pods-Bonfire-BonfireTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bonfire-BonfireTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bonfire-BonfireTests/Pods-Bonfire-BonfireTests.release.xcconfig"; sourceTree = "<group>"; };
 		13F2FDE620ACDD8945A96B8C /* Pods_Bonfire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bonfire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A0A41A11D0184640053A547 /* PersistedUserServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedUserServiceTests.swift; sourceTree = "<group>"; };
+		1A0A41A31D018D810053A547 /* Rememberancer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rememberancer.swift; sourceTree = "<group>"; };
 		1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersTableViewManager.swift; sourceTree = "<group>"; };
 		1AF7D1A11CEF659A00B74483 /* UserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		4AE09269AA64387314EE925E /* Pods_Bonfire_BonfireTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bonfire_BonfireTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -209,6 +213,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A0A41A01D01844C0053A547 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				1A0A41A11D0184640053A547 /* PersistedUserServiceTests.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
 		3BACB0D2D89FA686D090BFE1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -237,10 +249,12 @@
 		B63B377D1CFD975A00142DC3 /* BonfireTests */ = {
 			isa = PBXGroup;
 			children = (
+				1A0A41A01D01844C0053A547 /* User */,
 				B61BD4CB1CFEE91800DD7A70 /* Channel */,
 				B63B37631CFD948700142DC3 /* Chat */,
 				B63B37801CFD975A00142DC3 /* Info.plist */,
 				B621BEE41CFF379F00B92F09 /* TestScheduler+Extensions.swift */,
+				1A0A41A31D018D810053A547 /* Rememberancer.swift */,
 			);
 			path = BonfireTests;
 			sourceTree = "<group>";
@@ -710,7 +724,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A0A41A21D0184640053A547 /* PersistedUserServiceTests.swift in Sources */,
 				B63B37861CFD978500142DC3 /* PersistedChatServiceTests.swift in Sources */,
+				1A0A41A41D018D810053A547 /* Rememberancer.swift in Sources */,
 				B621BEE51CFF379F00B92F09 /* TestScheduler+Extensions.swift in Sources */,
 				B61BD4CD1CFEE93000DD7A70 /* PersistedChannelServiceTests.swift in Sources */,
 			);

@@ -3,43 +3,10 @@ import RxSwift
 import RxTests
 @testable import Bonfire
 
-
-class Remembrancer {
-    var callStack = [MethodCall]()
-}
-
-struct MethodCall {
-    let identifier: String
-    let arguments: [MethodArgument]
-}
-
-extension MethodCall: Equatable {}
-
-func ==(lhs: MethodCall, rhs: MethodCall) -> Bool {
-    return lhs.identifier == rhs.identifier &&
-        lhs.arguments.map({$0.asMethodArgument()}) == rhs.arguments.map({$0.asMethodArgument()})
-}
-
-protocol MethodArgument {
-    func asMethodArgument() -> String
-}
-
-extension Channel: MethodArgument {
-    func asMethodArgument() -> String {
-        return "Channel: \(name) / \(access.rawValue)"
-    }
-}
-
-extension User: MethodArgument {
-    func asMethodArgument() -> String {
-        return "User: \(name)"
-    }
-}
-
 class PersistedChannelServiceTests: XCTestCase {
 
     var scheduler: TestScheduler!
-    var remembrance: Remembrancer!
+    var remembrancer: Remembrancer!
     var testableChannelsObserver: TestableObserver<Channels>!
     var testableUsersObserver: TestableObserver<Users>!
     var mockChannelDatabase: ChannelsDatabase!
@@ -58,12 +25,12 @@ class PersistedChannelServiceTests: XCTestCase {
     override func setUp() {
         super.setUp()
         scheduler = TestScheduler(initialClock: 0)
-        remembrance = Remembrancer()
+        remembrancer = Remembrancer()
         disposeBag = DisposeBag()
         testableChannelsObserver = scheduler.createObserver(Channels)
         testableUsersObserver = scheduler.createObserver(Users)
 
-        mockChannelDatabase = MockChannelDatabase(scheduler: scheduler, remembrance: remembrance)
+        mockChannelDatabase = MockChannelDatabase(scheduler: scheduler, remembrance: remembrancer)
         mockUserDatabase = MockUserDatabase(scheduler: scheduler)
 
         channelService = PersistedChannelsService(channelsDatabase: mockChannelDatabase, userDatabase: mockUserDatabase)
@@ -99,11 +66,11 @@ class PersistedChannelServiceTests: XCTestCase {
     class MockChannelDatabase: ChannelsDatabase {
 
         let scheduler: TestScheduler
-        let remembrance: Remembrancer
+        let remembrancer: Remembrancer
 
         init(scheduler: TestScheduler, remembrance: Remembrancer) {
             self.scheduler = scheduler
-            self.remembrance = remembrance
+            self.remembrancer = remembrance
         }
 
         func observePublicChannelIds() -> Observable<[String]> {
@@ -129,32 +96,32 @@ class PersistedChannelServiceTests: XCTestCase {
         }
 
         func writeChannel(newChannel: Channel) -> Observable<Channel> {
-            remembrance.callStack.append(MethodCall(identifier: "ChannelsDatabase - writeChannel", arguments: [newChannel]))
+            remembrancer.callStack.append(MethodCall(identifier: "ChannelsDatabase - writeChannel", arguments: [newChannel]))
             return Observable.just(newChannel)
         }
 
         func writeChannelToPublicChannelIndex(newChannel: Channel) -> Observable<Channel> {
-            remembrance.callStack.append(MethodCall(identifier: "ChannelsDatabase - writeChannelToPublicChannelIndex", arguments: [newChannel]))
+            remembrancer.callStack.append(MethodCall(identifier: "ChannelsDatabase - writeChannelToPublicChannelIndex", arguments: [newChannel]))
             return Observable.just(newChannel)
         }
 
         func addOwnerToPrivateChannel(user: User, channel: Channel) -> Observable<Channel> {
-            remembrance.callStack.append(MethodCall(identifier: "ChannelsDatabase - addOwnerToPrivateChannel", arguments: [user, channel]))
+            remembrancer.callStack.append(MethodCall(identifier: "ChannelsDatabase - addOwnerToPrivateChannel", arguments: [user, channel]))
             return Observable.just(channel)
         }
 
         func removeOwnerFromPrivateChannel(user: User, channel: Channel) -> Observable<Channel> {
-            remembrance.callStack.append(MethodCall(identifier: "ChannelsDatabase - removeOwnerFromPrivateChannel", arguments: [user, channel]))
+            remembrancer.callStack.append(MethodCall(identifier: "ChannelsDatabase - removeOwnerFromPrivateChannel", arguments: [user, channel]))
             return Observable.just(channel)
         }
 
         func addChannelToUserPrivateChannelIndex(user: User, channel: Channel) -> Observable<Channel> {
-            remembrance.callStack.append(MethodCall(identifier: "ChannelsDatabase - addChannelToUserPrivateChannelIndex", arguments: [user, channel]))
+            remembrancer.callStack.append(MethodCall(identifier: "ChannelsDatabase - addChannelToUserPrivateChannelIndex", arguments: [user, channel]))
             return Observable.just(channel)
         }
 
         func removeChannelFromUserPrivateChannelIndex(user: User, channel: Channel) -> Observable<Channel> {
-            remembrance.callStack.append(MethodCall(identifier: "ChannelsDatabase - removeChannelFromUserPrivateChannelIndex", arguments: [user, channel]))
+            remembrancer.callStack.append(MethodCall(identifier: "ChannelsDatabase - removeChannelFromUserPrivateChannelIndex", arguments: [user, channel]))
 
             return Observable.empty()
         }
@@ -207,7 +174,7 @@ class PersistedChannelServiceTests: XCTestCase {
             MethodCall(identifier: "ChannelsDatabase - writeChannelToPublicChannelIndex", arguments: [expectedChannel])
         ]
 
-        XCTAssertEqual(remembrance.callStack, expectedMethodStack)
+        XCTAssertEqual(remembrancer.callStack, expectedMethodStack)
     }
 
     func testThatItCallsTheRightThingsForCreatingAPrivateChannel() {
@@ -220,7 +187,7 @@ class PersistedChannelServiceTests: XCTestCase {
             MethodCall(identifier: "ChannelsDatabase - addChannelToUserPrivateChannelIndex", arguments: [testUser1, expectedChannel])
         ]
 
-        XCTAssertEqual(remembrance.callStack, expectedMethodStack)
+        XCTAssertEqual(remembrancer.callStack, expectedMethodStack)
     }
 
     func testThatItCallsTheRightThingsForAddingOwnerToChannel() {
@@ -232,7 +199,7 @@ class PersistedChannelServiceTests: XCTestCase {
             MethodCall(identifier: "ChannelsDatabase - addChannelToUserPrivateChannelIndex", arguments: [testUser1, expectedChannel])
         ]
 
-        XCTAssertEqual(remembrance.callStack, expectedMethodStack)
+        XCTAssertEqual(remembrancer.callStack, expectedMethodStack)
 
     }
 
@@ -246,7 +213,7 @@ class PersistedChannelServiceTests: XCTestCase {
             MethodCall(identifier: "ChannelsDatabase - removeChannelFromUserPrivateChannelIndex", arguments: [testUser1, expectedChannel])
         ]
 
-        XCTAssertEqual(remembrance.callStack, expectedMethodStack)
+        XCTAssertEqual(remembrancer.callStack, expectedMethodStack)
         
     }
 }
