@@ -39,7 +39,7 @@ final class UsersView: UIView {
 
 extension UsersView: UsersDisplayer {
 
-    func display(allUsers: [User], channelOwners: [User]) {
+    func display(allUsers: Users, channelOwners: Users) {
         tableViewManager.updateTableView(tableView, withUsers: allUsers, withOwners: channelOwners)
     }
 

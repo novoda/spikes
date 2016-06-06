@@ -6,11 +6,11 @@ protocol UsersTableViewActionListener: class {
 }
 
 final class UsersTableViewManager: NSObject, UITableViewDataSource, UITableViewDelegate {
-    private var users = [User]()
-    private var owners = [User]()
+    private var users = Users()
+    private var owners = Users()
     weak var actionListener: UsersTableViewActionListener?
 
-    func updateTableView(tableView: UITableView, withUsers users: [User], withOwners owners: [User]) {
+    func updateTableView(tableView: UITableView, withUsers users: Users, withOwners owners: Users) {
         self.users = users
         self.owners = owners
         tableView.reloadData()
@@ -34,7 +34,7 @@ final class UsersTableViewManager: NSObject, UITableViewDataSource, UITableViewD
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell: UserCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
 
-        let user = users[indexPath.row]
+        let user = users.users[indexPath.row]
         let highlighted = owners.contains(user)
         cell.updateWithUser(user, selected: highlighted)
 
@@ -46,7 +46,7 @@ final class UsersTableViewManager: NSObject, UITableViewDataSource, UITableViewD
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let user = users[indexPath.row]
+        let user = users.users[indexPath.row]
         if owners.contains(user) {
             actionListener?.didDeselectUser(user)
         } else {

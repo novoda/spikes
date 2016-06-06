@@ -7,7 +7,7 @@ protocol ChannelsActionListener: class {
 }
 
 protocol ChannelsDisplayer {
-    func display(channels: [Channel])
+    func display(channels: Channels)
     func attach(actionListener: ChannelsActionListener)
     func detach(actionListener: ChannelsActionListener)
 }

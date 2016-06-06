@@ -1,5 +1,3 @@
-source 'https://github.com/CocoaPods/Specs.git'
-
 platform :ios, '9.0'
 use_frameworks!
 
@@ -12,4 +10,9 @@ target 'Bonfire' do
     pod 'Firebase/RemoteConfig'
     pod 'Firebase/DynamicLinks'
     pod 'GoogleSignIn'
+
+    target 'BonfireTests' do
+        pod 'RxTests',    '~> 2.0'
+    end
 end
+

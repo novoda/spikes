@@ -1,10 +1,5 @@
 import UIKit
 import Firebase
-import FirebaseAnalytics
-import FirebaseInstanceID
-import FirebaseDatabase
-import FirebaseAuth
-import FirebaseDynamicLinks
 import GoogleSignIn
 import RxSwift
 
@@ -68,19 +63,4 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             SharedServices.navigator.toWelcome(sender)
         }
     }
-}
-
-struct SharedServices {
-    static let loginService: LoginService = FirebaseLoginService()
-    static let usersService: UsersService = FirebaseUsersService()
-    static let channelsService: ChannelsService = FirebaseChannelsService()
-    static let chatService: ChatService = FirebaseChatService()
-    static let navigator: Navigator = AppNavigator()
-    static let analytics: Analytics = FirebaseAnalytics()
-    static let dynamicLinkFactory: DynamicLinkFactory = FirebaseDynamicLinkFactory(
-        dynamicLinkDomain: "https://t6c2e.app.goo.gl",
-        bundleIdentifier: "com.novoda.bonfire",
-        androidPackageName: "com.novoda.bonfire",
-        deepLinkBaseURL: NSURL(string: "https://novoda.com/bonfire")!)
-    static let config: Config = FirebaseRemoteConfig()
 }

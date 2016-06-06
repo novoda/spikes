@@ -31,12 +31,12 @@ final class CreateChannelPresenter {
         createChannelDisplayer.actionListener = self
 
         createChannelSubject
-            .flatMap ({ (name, privateChannel) -> Observable<DatabaseWriteResult<Channel>> in
+            .flatMap ({ (name, privateChannel) -> Observable<DatabaseResult<Channel>> in
                 if privateChannel {
                     guard let user = self.loginService.currentUser else {
                         return Observable.just(.Error(NoUserError()))
                     }
-                    return self.channelsService.createPrivateChannel(withName: name, owners: [user])
+                    return self.channelsService.createPrivateChannel(withName: name, owner: user)
                 } else {
                     return self.channelsService.createPublicChannel(withName: name)
                 }

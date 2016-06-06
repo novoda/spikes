@@ -1,8 +1,5 @@
 import Foundation
 import Firebase
-import FirebaseAnalytics
-import FirebaseInstanceID
-import FirebaseDatabase
 import RxSwift
 
 extension FIRDatabaseReference {
@@ -56,10 +53,13 @@ extension FIRDatabaseReference {
             self.observeSingleEventOfType(.Value, withBlock: { snapshot in
                 observer.on(.Next(snapshot))
                 observer.on(.Completed)
-            })
-
+                }, withCancelBlock: { error in
+                    observer.onCompleted()
+                }
+            )
+            
             return AnonymousDisposable() {}
         })
     }
-
+    
 }
