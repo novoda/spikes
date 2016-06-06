@@ -38,6 +38,11 @@ public class ChannelView extends LinearLayout {
         setBackgroundResource(outValue.resourceId);
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+    }
+
     public void display(Channel channel) {
         title.setText(channel.getName());
     }
