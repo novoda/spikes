@@ -1,8 +1,8 @@
 import UIKit
 
 final class ChannelsView: UIView {
-    private let tableView = UITableView()
-    private let tableViewManager = ChannelsTableViewManager()
+    private let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
+    private let collectionViewManager = ChannelsCollectionViewManager()
     private weak var actionListener: ChannelsActionListener?
 
     let newChannelBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: nil, action: nil)
@@ -27,18 +27,23 @@ final class ChannelsView: UIView {
     }
 
     private func setupViews() {
-        tableViewManager.setupTableView(tableView)
-        tableViewManager.actionListener = self
+        collectionViewManager.setupCollectionView(collectionView)
+        collectionViewManager.actionListener = self
+
+        let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        flowLayout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+
+        collectionView.backgroundColor = .whiteColor()
     }
 
     private func setupLayout() {
-        addSubview(tableView)
+        addSubview(collectionView)
 
-        tableView.pinToSuperviewTop()
-        tableView.pinToSuperviewBottom()
+        collectionView.pinToSuperviewTop()
+        collectionView.pinToSuperviewBottom()
 
-        tableView.pinToSuperviewLeading()
-        tableView.pinToSuperviewTrailing()
+        collectionView.pinToSuperviewLeading()
+        collectionView.pinToSuperviewTrailing()
     }
 
     @objc private func newChannel() {
@@ -52,7 +57,7 @@ final class ChannelsView: UIView {
 
 extension ChannelsView: ChannelsDisplayer {
     func display(channels: Channels) {
-        tableViewManager.updateTableView(tableView, withChannels: channels)
+        collectionViewManager.updateCollectionView(collectionView, withChannels: channels)
     }
 
     func attach(actionListener: ChannelsActionListener) {
@@ -64,7 +69,7 @@ extension ChannelsView: ChannelsDisplayer {
     }
 }
 
-extension ChannelsView: ChannelsTableViewActionListener {
+extension ChannelsView: ChannelsCollectionViewActionListener {
     func didSelectChannel(channel: Channel) {
         actionListener?.viewChannel(channel)
     }
