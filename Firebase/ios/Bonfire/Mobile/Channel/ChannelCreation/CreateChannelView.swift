@@ -4,7 +4,9 @@ import RxCocoa
 
 final class CreateChannelView: UIView {
 
-    private let textField = UITextField()
+    private let errorLabel = UILabel()
+    private let channelNameLabel = UILabel()
+    private let channelNameField = UITextField()
     private let privacySwitch = UISwitch()
     private let privacyLabel = UILabel()
     private let submitButton = UIButton()
@@ -31,32 +33,50 @@ final class CreateChannelView: UIView {
     func setupViews() {
         backgroundColor = .whiteColor()
 
-        textField.backgroundColor = .lightGrayColor()
-        textField.clearButtonMode = .Always
-        textField.placeholder = "Channel name here!"
+        channelNameLabel.text = "Channel emoji name"
+
+        channelNameField.backgroundColor = .clearColor()
+        channelNameField.borderStyle = .RoundedRect
+        channelNameField.clearButtonMode = .Always
+        channelNameField.placeholder = ":-)"
+
+        errorLabel.textColor = .redColor()
+        errorLabel.numberOfLines = 0
+        errorLabel.font = UIFont.systemFontOfSize(12)
+        errorLabel.text = ""
 
         privacyLabel.text = "Private"
 
-        submitButton.setTitleColor(.blackColor(), forState: .Normal)
+        submitButton.setTitleColor(.blueColor(), forState: .Normal)
         submitButton.setTitle("Create Channel", forState: .Normal)
     }
 
     func setupLayout() {
-        addSubview(textField)
+        addSubview(errorLabel)
+        addSubview(channelNameLabel)
+        addSubview(channelNameField)
         addSubview(privacyLabel)
         addSubview(privacySwitch)
         addSubview(submitButton)
 
-        textField.pinToSuperviewTop(withConstant: 20)
-        textField.pinToSuperviewLeading(withConstant: 8)
-        textField.pinToSuperviewTrailing(withConstant: 8)
-        textField.addHeightConstraint(withConstant: 44)
+        errorLabel.pinToSuperviewTop(withConstant: 10)
+        errorLabel.pinToSuperviewLeading(withConstant: 16)
+        errorLabel.pinToSuperviewTrailing(withConstant: 16)
 
-        privacySwitch.attachToBottomOf(textField, withConstant: 20)
-        privacySwitch.pinToSuperviewTrailing(withConstant: 8)
+        channelNameLabel.attachToBottomOf(errorLabel, withConstant: 10)
+        channelNameLabel.pinToSuperviewLeading(withConstant: 16)
+        channelNameLabel.addHeightConstraint(withConstant: 44)
 
-        privacySwitch.attachToRightOf(privacyLabel, withConstant: 8)
-        privacyLabel.attachToBottomOf(textField, withConstant: 20)
+        channelNameField.attachToRightOf(channelNameLabel)
+        channelNameField.attachToBottomOf(errorLabel, withConstant: 16)
+        channelNameField.pinToSuperviewTrailing(withConstant: 16)
+        channelNameField.addWidthConstraint(withConstant: 100)
+
+        privacySwitch.attachToBottomOf(channelNameField, withConstant: 20)
+        privacySwitch.pinToSuperviewTrailing(withConstant: 16)
+        privacySwitch.attachToRightOf(privacyLabel, withConstant: 16)
+
+        privacyLabel.attachToBottomOf(channelNameField, withConstant: 24)
 
         submitButton.attachToBottomOf(privacySwitch, withConstant: 20)
         submitButton.pinToSuperviewLeading(withConstant: 8)
@@ -72,7 +92,7 @@ final class CreateChannelView: UIView {
     }
 
     func createChannel() {
-        guard let newChannelName = self.textField.text
+        guard let newChannelName = self.channelNameField.text
             where !newChannelName.isEmpty
             else {
                 return
@@ -84,6 +104,6 @@ final class CreateChannelView: UIView {
 
 extension CreateChannelView: CreateChannelDisplayer {
     func displayError(error: ErrorType) {
-        print("\(error)")
+        errorLabel.text = "Sorry that channel name is either already in use, or is invalid. Please try another name with a single emoji."
     }
 }
