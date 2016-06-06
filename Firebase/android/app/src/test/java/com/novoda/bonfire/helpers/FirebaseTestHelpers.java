@@ -7,14 +7,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.bonfire.rx.FirebaseObservableListeners;
 
-import java.util.Collections;
-import java.util.List;
-
 import rx.Observable;
 import rx.functions.Func1;
-import rx.observers.TestObserver;
+import rx.observers.TestSubscriber;
 
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.when;
 
@@ -62,21 +58,20 @@ public class FirebaseTestHelpers {
     }
 
     public static <T> void assertValueReceivedOnNext(Observable<T> observable, T expectedValue) {
-        TestObserver<T> observer = testObserverSubscribedTo(observable);
-        observer.assertReceivedOnNext(Collections.singletonList(expectedValue));
+        TestSubscriber<T> testSubscriber = testSubscriberFor(observable);
+        testSubscriber.assertValue(expectedValue);
     }
 
     public static <T> void assertThrowableReceivedOnError(Observable<T> observable, Throwable throwable) {
-        TestObserver<T> testObserver = testObserverSubscribedTo(observable);
-        List<Throwable> errorEvents = testObserver.getOnErrorEvents();
-        assertTrue(errorEvents.contains(throwable));
+        TestSubscriber<T> testSubscriber = testSubscriberFor(observable);
+        testSubscriber.assertError(throwable);
     }
 
     @NonNull
-    private static <T> TestObserver<T> testObserverSubscribedTo(Observable<T> observable) {
-        TestObserver<T> observer = new TestObserver<>();
-        observable.subscribe(observer);
-        return observer;
+    private static <T> TestSubscriber<T> testSubscriberFor(Observable<T> observable) {
+        TestSubscriber<T> testSubscriber = new TestSubscriber<>();
+        observable.subscribe(testSubscriber);
+        return testSubscriber;
     }
 
     private static <T> Class<Func1<DataSnapshot, T>> marshallerType() {
