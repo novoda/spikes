@@ -2,6 +2,7 @@ package com.novoda.bonfire.rx;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 
 import rx.Observable;
 import rx.functions.Func1;
@@ -12,12 +13,12 @@ public final class FirebaseObservableListeners {
         throw new IllegalStateException("Non instantiable class");
     }
 
-    public static <T> Observable<T> listenToValueEvents(DatabaseReference databaseReference, Func1<DataSnapshot, T> marshaller) {
-        return Observable.create(new ListenToValueEventsOnSubscribe<T>(databaseReference, marshaller));
+    public static <T> Observable<T> listenToValueEvents(Query query, Func1<DataSnapshot, T> marshaller) {
+        return Observable.create(new ListenToValueEventsOnSubscribe<T>(query, marshaller));
     }
 
-    public static <T> Observable<T> listenToSingleValueEvents(DatabaseReference databaseReference, Func1<DataSnapshot, T> marshaller) {
-        return Observable.create(new ListenToSingleValueOnSubscribe<T>(databaseReference, marshaller));
+    public static <T> Observable<T> listenToSingleValueEvents(Query query, Func1<DataSnapshot, T> marshaller) {
+        return Observable.create(new ListenToSingleValueOnSubscribe<T>(query, marshaller));
     }
 
     public static <T> Observable<T> removeValue(DatabaseReference databaseReference, T returnValue) {

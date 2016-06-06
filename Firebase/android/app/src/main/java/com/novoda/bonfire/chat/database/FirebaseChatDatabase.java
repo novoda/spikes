@@ -17,6 +17,8 @@ import static com.novoda.bonfire.rx.FirebaseObservableListeners.listenToValueEve
 
 public class FirebaseChatDatabase implements ChatDatabase {
 
+    private static final int DEFAULT_LIMIT = 1000;
+
     private final DatabaseReference messagesDB;
 
     public FirebaseChatDatabase(FirebaseDatabase firebaseDatabase) {
@@ -25,7 +27,7 @@ public class FirebaseChatDatabase implements ChatDatabase {
 
     @Override
     public Observable<Chat> observeChat(Channel channel) {
-        return listenToValueEvents(messagesInChannel(channel), toChat());
+        return listenToValueEvents(messagesInChannel(channel).limitToLast(DEFAULT_LIMIT), toChat());
     }
 
     @Override

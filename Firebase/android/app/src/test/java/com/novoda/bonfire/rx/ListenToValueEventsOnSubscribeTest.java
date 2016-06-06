@@ -1,7 +1,7 @@
 package com.novoda.bonfire.rx;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Collections;
@@ -27,7 +27,7 @@ public class ListenToValueEventsOnSubscribeTest {
         final DataSnapshot expectedKeyData = mock(DataSnapshot.class);
         when(expectedKeyData.getKey()).thenReturn(EXPECTED_KEY);
 
-        DatabaseReference databaseReference = mock(DatabaseReference.class);
+        Query query = mock(Query.class);
 
         doAnswer(new Answer<ValueEventListener>() {
             @Override
@@ -36,9 +36,9 @@ public class ListenToValueEventsOnSubscribeTest {
                 valueEventListener.onDataChange(expectedKeyData);
                 return valueEventListener;
             }
-        }).when(databaseReference).addValueEventListener(any(ValueEventListener.class));
+        }).when(query).addValueEventListener(any(ValueEventListener.class));
 
-        Observable<String> observable = Observable.create(new ListenToValueEventsOnSubscribe<>(databaseReference, getKey()));
+        Observable<String> observable = Observable.create(new ListenToValueEventsOnSubscribe<>(query, getKey()));
 
         TestObserver<String> testObserver = new TestObserver<>();
         observable.subscribe(testObserver);
