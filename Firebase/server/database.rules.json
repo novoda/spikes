@@ -4,7 +4,7 @@
       "$channel_id": {
         ".read": "!root.child('owners').child($channel_id).exists() || root.child('owners').child($channel_id).child(auth.uid).exists()",
         ".write": "(!root.child('owners').child($channel_id).exists() || root.child('owners').child($channel_id).child(auth.uid).exists()) && !data.exists()",
-        ".validate": "newData.hasChildren(['name', 'access']) && $channel_id.matches(/^([\u2190-\u21ff\u2300-\u23fe\u2600-\u26ff\u2700-\u27bf\u27f0-\u27ff\u2900-\u297f\u2b00-\u2bfe]|\ud834[\udd00-\uddfe]|\ud83c[\udc00-\udc2e\udca0-\udcfe\udd00-\uddfe\udf00-\udfff]\ud83c[\udc00-\udc2e\udca0-\udcfe\udd00-\uddfe\udf00-\udfff]|\ud83d[\udc00-\uddfe\ude00-\ude4e\ude80-\udefe])$/)"
+        ".validate": "newData.hasChildren(['name', 'access']) && $channel_id.matches(/^([\u2190-\u21ff\u2300-\u23ff\u2600-\u26ff\u2700-\u27bf\u27f0-\u27ff\u2900-\u297f\u2b00-\u2bff]|\ud834[\udd00-\uddff]|(\ud83c[\udc00-\udc2f\udca0-\udcff\udd00-\uddff\udf00-\udfff]){2}|\ud83d[\udc00-\uddff\ude00-\ude4f\ude80-\udeff]|\ud83e[\udd00-\uddff])$/)"
       }
     },
     "messages": {
@@ -34,7 +34,7 @@
       "$channel_id": {
         ".read": "!root.child('owners').child($channel_id).exists() || root.child('owners').child($channel_id).child(auth.uid).exists()",
         ".write": "!(root.child('channels').child($channel_id).exists() || root.child('owners').child($channel_id).exists()) || root.child('owners').child($channel_id).child(auth.uid).exists()",
-        ".validate": "$channel_id.matches(/^([\u2190-\u21ff\u2300-\u23fe\u2600-\u26ff\u2700-\u27bf\u27f0-\u27ff\u2900-\u297f\u2b00-\u2bfe]|\ud834[\udd00-\uddfe]|\ud83c[\udc00-\udc2e\udca0-\udcfe\udd00-\uddfe\udf00-\udfff]\ud83c[\udc00-\udc2e\udca0-\udcfe\udd00-\uddfe\udf00-\udfff]|\ud83d[\udc00-\uddfe\ude00-\ude4e\ude80-\udefe])$/)"
+        ".validate": "$channel_id.matches(/^([\u2190-\u21ff\u2300-\u23ff\u2600-\u26ff\u2700-\u27bf\u27f0-\u27ff\u2900-\u297f\u2b00-\u2bff]|\ud834[\udd00-\uddff]|(\ud83c[\udc00-\udc2f\udca0-\udcff\udd00-\uddff\udf00-\udfff]){2}|\ud83d[\udc00-\uddff\ude00-\ude4f\ude80-\udeff]|\ud83e[\udd00-\uddff])$/)"
       }
     },
     "users": {
