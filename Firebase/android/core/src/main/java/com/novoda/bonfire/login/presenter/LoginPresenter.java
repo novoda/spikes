@@ -35,7 +35,7 @@ public class LoginPresenter {
                         if (authentication.isSuccess()) {
                             navigator.toChannels();
                         } else {
-                            errorLogger.reportError("Authentication failed", authentication.getFailure());
+                            errorLogger.reportError(authentication.getFailure(), "Authentication failed");
                             loginDisplayer.showAuthenticationError(authentication.getFailure().getLocalizedMessage()); //TODO improve error display
                         }
                     }

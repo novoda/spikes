@@ -54,7 +54,7 @@ public class ChatPresenter {
                         if (result.isSuccess()) {
                             chatDisplayer.display(result.getData());
                         } else {
-                            errorLogger.reportError("Cannot open chat", result.getFailure());
+                            errorLogger.reportError(result.getFailure(), "Cannot open chat");
                             navigator.toChannels();
                         }
                     }

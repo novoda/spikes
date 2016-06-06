@@ -50,7 +50,7 @@ public class UsersPresenter {
                                 if (databaseResult.isSuccess()) {
                                     usersDisplayer.displaySelectedUsers(databaseResult.getData());
                                 } else {
-                                    errorLogger.reportError("Cannot fetch channel owners", databaseResult.getFailure());
+                                    errorLogger.reportError(databaseResult.getFailure(), "Cannot fetch channel owners");
                                     usersDisplayer.showFailure();
                                 }
                             }
@@ -88,7 +88,7 @@ public class UsersPresenter {
             @Override
             public void call(DatabaseResult<User> userDatabaseResult) {
                 if (!userDatabaseResult.isSuccess()) {
-                    errorLogger.reportError("Cannot update channel owners", userDatabaseResult.getFailure());
+                    errorLogger.reportError(userDatabaseResult.getFailure(), "Cannot update channel owners");
                     usersDisplayer.showFailure();
                 }
             }

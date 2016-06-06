@@ -67,7 +67,7 @@ public class NewChannelPresenter {
                             if (databaseResult.isSuccess()) {
                                 navigator.toChannelWithClearedHistory(databaseResult.getData());
                             } else {
-                                errorLogger.reportError("Channel creation failed", databaseResult.getFailure());
+                                errorLogger.reportError(databaseResult.getFailure(), "Channel creation failed");
                                 newChannelDisplayer.showChannelCreationError();
                             }
                         }
