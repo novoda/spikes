@@ -1,6 +1,7 @@
 package com.novoda.bonfire;
 
 import com.novoda.bonfire.analytics.Analytics;
+import com.novoda.bonfire.analytics.ErrorLogger;
 import com.novoda.bonfire.channel.service.ChannelService;
 import com.novoda.bonfire.chat.service.ChatService;
 import com.novoda.bonfire.login.service.LoginService;
@@ -23,7 +24,8 @@ public class TestDependencies {
                 .withUserService(Mockito.mock(UserService.class))
                 .withChatService(Mockito.mock(ChatService.class))
                 .withChannelService(Mockito.mock(ChannelService.class))
-                .withAnalytics(Mockito.mock(Analytics.class));
+                .withAnalytics(Mockito.mock(Analytics.class))
+                .withErrorLogger(Mockito.mock(ErrorLogger.class));
     }
 
     public TestDependencies withLoginService(LoginService loginService) {
@@ -48,6 +50,11 @@ public class TestDependencies {
 
     public TestDependencies withAnalytics(Analytics analytics) {
         setDependency("analytics", analytics);
+        return this;
+    }
+
+    private TestDependencies withErrorLogger(ErrorLogger errorLogger) {
+        setDependency("errorLogger", errorLogger);
         return this;
     }
 
