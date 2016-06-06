@@ -34,8 +34,8 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.*;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
@@ -146,7 +146,7 @@ public class ChatActivityTest {
     private void assertThatMessageFromUserIsShownInChat(String userName, String message) {
         onView(withId(R.id.messageAuthorImage)).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.messageAuthorName), withText(userName))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.messageBody), withText(message))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.messageBody), withText(equalToIgnoringCase(message)))).check(matches(isDisplayed()));
     }
 
     private void submitMessage(String message) {
