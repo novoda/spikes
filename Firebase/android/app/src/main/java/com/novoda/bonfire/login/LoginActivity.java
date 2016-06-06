@@ -28,7 +28,7 @@ public class LoginActivity extends BaseActivity {
         LoginGoogleApiClient loginGoogleApiClient = new LoginGoogleApiClient(this);
         loginGoogleApiClient.setupGoogleApiClient();
         navigator = new AndroidLoginNavigator(this, loginGoogleApiClient, new AndroidNavigator(this));
-        presenter = new LoginPresenter(Dependencies.INSTANCE.getLoginService(), loginDisplayer, navigator);
+        presenter = new LoginPresenter(Dependencies.INSTANCE.getLoginService(), loginDisplayer, navigator, Dependencies.INSTANCE.getErrorLogger());
     }
 
     @Override

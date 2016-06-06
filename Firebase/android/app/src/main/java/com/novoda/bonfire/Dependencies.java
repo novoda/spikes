@@ -7,7 +7,9 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.bonfire.analytics.Analytics;
+import com.novoda.bonfire.analytics.ErrorLogger;
 import com.novoda.bonfire.analytics.FirebaseAnalyticsAnalytics;
+import com.novoda.bonfire.analytics.FirebaseErrorLogger;
 import com.novoda.bonfire.channel.database.FirebaseChannelsDatabase;
 import com.novoda.bonfire.channel.service.ChannelService;
 import com.novoda.bonfire.channel.service.PersistedChannelService;
@@ -25,6 +27,8 @@ public enum Dependencies {
     INSTANCE;
 
     private Analytics analytics;
+    private ErrorLogger errorLogger;
+
     private LoginService loginService;
     private ChatService chatService;
     private ChannelService channelService;
@@ -40,6 +44,7 @@ public enum Dependencies {
             FirebaseUserDatabase userDatabase = new FirebaseUserDatabase(firebaseDatabase);
 
             analytics = new FirebaseAnalyticsAnalytics(context);
+            errorLogger = new FirebaseErrorLogger();
             loginService = new FirebaseLoginService(new FirebaseAuthDatabase(firebaseAuth), userDatabase);
             chatService = new PersistedChatService(new FirebaseChatDatabase(firebaseDatabase));
             channelService = new PersistedChannelService(new FirebaseChannelsDatabase(firebaseDatabase), userDatabase);
@@ -48,7 +53,8 @@ public enum Dependencies {
     }
 
     private boolean needsInitialisation() {
-        return loginService == null || chatService == null || channelService == null || analytics == null;
+        return loginService == null || chatService == null || channelService == null
+                || userService == null || analytics == null || errorLogger == null;
     }
 
     public Analytics getAnalytics() {
@@ -69,5 +75,9 @@ public enum Dependencies {
 
     public UserService getUserService() {
         return userService;
+    }
+
+    public ErrorLogger getErrorLogger() {
+        return errorLogger;
     }
 }

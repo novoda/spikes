@@ -1,5 +1,6 @@
 package com.novoda.bonfire.login.presenter;
 
+import com.novoda.bonfire.analytics.ErrorLogger;
 import com.novoda.bonfire.login.data.model.Authentication;
 import com.novoda.bonfire.login.displayer.LoginDisplayer;
 import com.novoda.bonfire.login.service.LoginService;
@@ -13,13 +14,15 @@ public class LoginPresenter {
     private final LoginService loginService;
     private final LoginDisplayer loginDisplayer;
     private final LoginNavigator navigator;
+    private final ErrorLogger errorLogger;
 
     private Subscription subscription;
 
-    public LoginPresenter(LoginService loginService, LoginDisplayer loginDisplayer, LoginNavigator navigator) {
+    public LoginPresenter(LoginService loginService, LoginDisplayer loginDisplayer, LoginNavigator navigator, ErrorLogger errorLogger) {
         this.loginService = loginService;
         this.loginDisplayer = loginDisplayer;
         this.navigator = navigator;
+        this.errorLogger = errorLogger;
     }
 
     public void startPresenting() {
@@ -32,6 +35,7 @@ public class LoginPresenter {
                         if (authentication.isSuccess()) {
                             navigator.toChannels();
                         } else {
+                            errorLogger.reportError(authentication.getFailure(), "Authentication failed");
                             loginDisplayer.showAuthenticationError(authentication.getFailure().getLocalizedMessage()); //TODO improve error display
                         }
                     }

@@ -39,7 +39,8 @@ public class ChatActivity extends BaseActivity {
                 chatDisplayer,
                 channel,
                 Dependencies.INSTANCE.getAnalytics(),
-                new AndroidNavigator(this)
+                new AndroidNavigator(this),
+                Dependencies.INSTANCE.getErrorLogger()
         );
     }
 
