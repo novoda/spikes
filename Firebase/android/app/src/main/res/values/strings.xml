@@ -8,7 +8,7 @@
   <string name="private_channel">Private channel</string>
   <string name="add_channel_members">Add channel members</string>
   <string name="create">Create</string>
-  <string name="channel_already_exists">Channel with this name already exists</string>
+  <string name="channel_cannot_be_created">Cannot create channel with this name, try a different emoji</string>
   <string name="add">Add</string>
   <string name="add_users">Add users</string>
   <string name="members">Members</string>
@@ -19,4 +19,5 @@
   <string name="invite">Invite</string>
   <string name="send_invite">Send invite</string>
   <string name="check_out_bonfire">Check out Bonfire!\n%s</string>
+  <string name="only_single_emoji_allowed">Channel name must be one emoji character</string>
 </resources>
