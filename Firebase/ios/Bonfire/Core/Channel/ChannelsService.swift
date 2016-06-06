@@ -2,12 +2,13 @@ import Foundation
 import RxSwift
 
 protocol ChannelsService {
-    func channels(forUser user: User) -> Observable<[Channel]>
-    func users(forChannel channel: Channel) -> Observable<[User]>
+    func channels(forUser user: User) -> Observable<Channels>
 
-    func createPublicChannel(withName name: String) -> Observable<DatabaseWriteResult<Channel>>
-    func createPrivateChannel(withName name: String, owners: [User]) -> Observable<DatabaseWriteResult<Channel>>
+    func createPublicChannel(withName name: String) -> Observable<DatabaseResult<Channel>>
+    func createPrivateChannel(withName name: String, owner: User) -> Observable<DatabaseResult<Channel>>
 
-    func addOwners(owners: [User], channel: Channel) -> Observable<DatabaseWriteResult<[User]>>
-    func removeOwners(owners: [User], channel: Channel) -> Observable<DatabaseWriteResult<[User]>>
+    func addOwner(owner: User, toPrivateChannel channel: Channel) -> Observable<DatabaseResult<User>>
+    func removeOwner(owner: User, fromPrivateChannel channel: Channel) -> Observable<DatabaseResult<User>>
+
+    func users(forChannel channel: Channel) -> Observable<Users>
 }

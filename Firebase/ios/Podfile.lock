@@ -75,6 +75,8 @@ PODS:
   - RxCocoa (2.5.0):
     - RxSwift (~> 2.5)
   - RxSwift (2.5.0)
+  - RxTests (2.5.0):
+    - RxSwift (~> 2.5)
 
 DEPENDENCIES:
   - Firebase
@@ -85,6 +87,7 @@ DEPENDENCIES:
   - GoogleSignIn
   - RxCocoa (~> 2.0)
   - RxSwift (~> 2.0)
+  - RxTests (~> 2.0)
 
 SPEC CHECKSUMS:
   Firebase: 6d4012da1598732a2b43f16d8355eca90f94ed59
@@ -106,7 +109,8 @@ SPEC CHECKSUMS:
   GoogleUtilities: 56c5ac05b7aa5dc417a1bb85221a9516e04d7032
   RxCocoa: e1b1562e57a554d0fb2aabf9d71b637f177257c7
   RxSwift: 402b41a50e922a0368fc14cb3bc9f4427920e8ae
+  RxTests: 1b13bea0a138552b52aeead549ef08d578bcda9e
 
-PODFILE CHECKSUM: 74fed947d68ed7b7762984936b8e7772b1828535
+PODFILE CHECKSUM: d2043226244a585ee06b4e1bba2cac8068cf3e20
 
 COCOAPODS: 1.0.0

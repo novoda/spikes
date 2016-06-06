@@ -1,10 +1,6 @@
 import Foundation
 import RxSwift
 import Firebase
-import FirebaseAnalytics
-import FirebaseInstanceID
-import FirebaseDatabase
-import FirebaseAuth
 import GoogleSignIn
 
 struct NoAuthAvailable: ErrorType {}

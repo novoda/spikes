@@ -1,6 +1,5 @@
 import UIKit
 import Firebase
-import FirebaseAuth
 
 final class ChannelsViewController: UIViewController {
     let channelsView = ChannelsView()

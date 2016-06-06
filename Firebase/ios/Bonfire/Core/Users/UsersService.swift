@@ -2,5 +2,5 @@ import Foundation
 import RxSwift
 
 protocol UsersService {
-    func allUsers() -> Observable<[User]>
+    func allUsers() -> Observable<Users>
 }

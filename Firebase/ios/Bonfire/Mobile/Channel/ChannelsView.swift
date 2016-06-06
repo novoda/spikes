@@ -51,7 +51,7 @@ final class ChannelsView: UIView {
 }
 
 extension ChannelsView: ChannelsDisplayer {
-    func display(channels: [Channel]) {
+    func display(channels: Channels) {
         tableViewManager.updateTableView(tableView, withChannels: channels)
     }
 
