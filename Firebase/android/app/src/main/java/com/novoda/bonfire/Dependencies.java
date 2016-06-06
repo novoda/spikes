@@ -6,7 +6,9 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.novoda.bonfire.analytics.ErrorLogger;
 import com.novoda.bonfire.analytics.FirebaseAnalyticsAnalytics;
+import com.novoda.bonfire.analytics.FirebaseErrorLogger;
 import com.novoda.bonfire.channel.database.FirebaseChannelsDatabase;
 import com.novoda.bonfire.channel.service.ChannelService;
 import com.novoda.bonfire.channel.service.PersistedChannelService;
@@ -25,6 +27,7 @@ public enum Dependencies {
     INSTANCE;
 
     private FirebaseAnalyticsAnalytics firebaseAnalytics;
+    private ErrorLogger errorLogger;
 
     private LoginService loginService;
     private ChatService chatService;
@@ -42,6 +45,7 @@ public enum Dependencies {
             FirebaseUserDatabase userDatabase = new FirebaseUserDatabase(firebaseDatabase, firebaseObservableListeners);
 
             firebaseAnalytics = new FirebaseAnalyticsAnalytics(context);
+            errorLogger = new FirebaseErrorLogger();
             loginService = new FirebaseLoginService(new FirebaseAuthDatabase(firebaseAuth), userDatabase);
             chatService = new PersistedChatService(new FirebaseChatDatabase(firebaseDatabase, firebaseObservableListeners));
             channelService = new PersistedChannelService(new FirebaseChannelsDatabase(firebaseDatabase, firebaseObservableListeners), userDatabase);
@@ -71,5 +75,9 @@ public enum Dependencies {
 
     public UserService getUserService() {
         return userService;
+    }
+
+    public ErrorLogger getErrorLogger() {
+        return errorLogger;
     }
 }

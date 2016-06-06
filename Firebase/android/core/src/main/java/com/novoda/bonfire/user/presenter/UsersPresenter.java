@@ -1,5 +1,6 @@
 package com.novoda.bonfire.user.presenter;
 
+import com.novoda.bonfire.analytics.ErrorLogger;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.service.ChannelService;
 import com.novoda.bonfire.database.DatabaseResult;
@@ -18,14 +19,16 @@ public class UsersPresenter {
     private final UsersDisplayer usersDisplayer;
     private final Channel channel;
     private final Navigator navigator;
+    private final ErrorLogger errorLogger;
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
-    public UsersPresenter(UserService userService, ChannelService channelService, UsersDisplayer usersDisplayer, Channel channel, Navigator navigator) {
+    public UsersPresenter(UserService userService, ChannelService channelService, UsersDisplayer usersDisplayer, Channel channel, Navigator navigator, ErrorLogger errorLogger) {
         this.userService = userService;
         this.channelService = channelService;
         this.usersDisplayer = usersDisplayer;
         this.channel = channel;
         this.navigator = navigator;
+        this.errorLogger = errorLogger;
     }
 
     public void startPresenting() {
@@ -47,6 +50,7 @@ public class UsersPresenter {
                                 if (databaseResult.isSuccess()) {
                                     usersDisplayer.displaySelectedUsers(databaseResult.getData());
                                 } else {
+                                    errorLogger.reportError(databaseResult.getFailure(), "Cannot fetch channel owners");
                                     usersDisplayer.showFailure();
                                 }
                             }
@@ -84,6 +88,7 @@ public class UsersPresenter {
             @Override
             public void call(DatabaseResult<User> userDatabaseResult) {
                 if (!userDatabaseResult.isSuccess()) {
+                    errorLogger.reportError(userDatabaseResult.getFailure(), "Cannot update channel owners");
                     usersDisplayer.showFailure();
                 }
             }
