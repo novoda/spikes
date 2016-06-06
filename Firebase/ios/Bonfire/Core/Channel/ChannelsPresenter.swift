@@ -31,7 +31,7 @@ class ChannelsPresenter {
             return self.channelsService.channels(forUser: auth.user!)
         }).map({ channels in
             if self.config.orderChannelsByName() {
-                return channels.sort({$0.name < $1.name})
+                return channels.sorted()
             } else {
                 return channels
             }

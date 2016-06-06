@@ -4,6 +4,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.bonfire.channel.data.model.Channel;
+import com.novoda.bonfire.rx.FirebaseObservableListeners;
 import com.novoda.bonfire.user.data.model.User;
 
 import java.util.ArrayList;
@@ -12,8 +13,8 @@ import java.util.List;
 import rx.Observable;
 import rx.functions.Func1;
 
-import static com.novoda.bonfire.channel.database.ChannelConverter.*;
-import static com.novoda.bonfire.rx.FirebaseObservableListeners.*;
+import static com.novoda.bonfire.channel.database.ChannelConverter.fromFirebaseChannel;
+import static com.novoda.bonfire.channel.database.ChannelConverter.toFirebaseChannel;
 
 public class FirebaseChannelsDatabase implements ChannelsDatabase {
 
@@ -21,61 +22,64 @@ public class FirebaseChannelsDatabase implements ChannelsDatabase {
     private final DatabaseReference privateChannelsDB;
     private final DatabaseReference channelsDB;
     private final DatabaseReference ownersDB;
+    private final FirebaseObservableListeners firebaseObservableListeners;
 
-    public FirebaseChannelsDatabase(FirebaseDatabase firebaseDatabase) {
+    public FirebaseChannelsDatabase(FirebaseDatabase firebaseDatabase, FirebaseObservableListeners firebaseObservableListeners) {
         this.publicChannelsDB = firebaseDatabase.getReference("public-channels-index");
         this.privateChannelsDB = firebaseDatabase.getReference("private-channels-index");
         this.channelsDB = firebaseDatabase.getReference("channels");
         this.ownersDB = firebaseDatabase.getReference("owners");
+        this.firebaseObservableListeners = firebaseObservableListeners;
     }
 
     @Override
     public Observable<List<String>> observePublicChannelIds() {
-        return listenToValueEvents(publicChannelsDB, getKeys());
+        return firebaseObservableListeners.listenToValueEvents(publicChannelsDB, getKeys());
     }
 
     @Override
     public Observable<List<String>> observePrivateChannelIdsFor(User user) {
-        return listenToValueEvents(privateChannelsDB.child(user.getId()), getKeys());
+        return firebaseObservableListeners.listenToValueEvents(privateChannelsDB.child(user.getId()), getKeys());
     }
 
     @Override
     public Observable<Channel> readChannelFor(String channelName) {
-        return listenToSingleValueEvents(channelsDB.child(channelName), asChannel());
+        return firebaseObservableListeners.listenToSingleValueEvents(channelsDB.child(channelName), asChannel());
     }
 
     @Override
     public Observable<Channel> writeChannel(Channel newChannel) {
-        return setValue(toFirebaseChannel(newChannel), channelsDB.child(newChannel.getName()), newChannel);
+        return firebaseObservableListeners.setValue(toFirebaseChannel(newChannel), channelsDB.child(newChannel.getName()), newChannel);
     }
 
     @Override
     public Observable<Channel> writeChannelToPublicChannelIndex(Channel newChannel) {
-        return setValue(true, publicChannelsDB.child(newChannel.getName()), newChannel);
+        return firebaseObservableListeners.setValue(true, publicChannelsDB.child(newChannel.getName()), newChannel);
     }
 
     @Override
     public Observable<Channel> addOwnerToPrivateChannel(User user, Channel channel) {
-        return setValue(true, ownersDB.child(channel.getName()).child(user.getId()), channel);
+        return firebaseObservableListeners.setValue(true, ownersDB.child(channel.getName()).child(user.getId()), channel);
     }
 
+    @Override
     public Observable<Channel> removeOwnerFromPrivateChannel(User user, Channel channel) {
-        return removeValue(ownersDB.child(channel.getName()).child(user.getId()), channel);
+        return firebaseObservableListeners.removeValue(ownersDB.child(channel.getName()).child(user.getId()), channel);
     }
 
     @Override
     public Observable<Channel> addChannelToUserPrivateChannelIndex(User user, Channel channel) {
-        return setValue(true, privateChannelsDB.child(user.getId()).child(channel.getName()), channel);
+        return firebaseObservableListeners.setValue(true, privateChannelsDB.child(user.getId()).child(channel.getName()), channel);
     }
 
     @Override
     public Observable<Channel> removeChannelFromUserPrivateChannelIndex(User user, Channel channel) {
-        return removeValue(privateChannelsDB.child(user.getId()).child(channel.getName()), channel);
+        return firebaseObservableListeners.removeValue(privateChannelsDB.child(user.getId()).child(channel.getName()), channel);
     }
 
     @Override
     public Observable<List<String>> observeOwnerIdsFor(Channel channel) {
-        return listenToValueEvents(ownersDB.child(channel.getName()), getKeys());
+        return firebaseObservableListeners.listenToValueEvents(ownersDB.child(channel.getName()), getKeys());
     }
 
     private static Func1<DataSnapshot, Channel> asChannel() {

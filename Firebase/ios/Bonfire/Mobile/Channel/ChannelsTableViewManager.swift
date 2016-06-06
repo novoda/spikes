@@ -6,10 +6,10 @@ protocol ChannelsTableViewActionListener: class {
 
 final class ChannelsTableViewManager: NSObject, UITableViewDataSource, UITableViewDelegate {
 
-    private var channels = [Channel]()
+    private var channels = Channels()
     weak var actionListener: ChannelsTableViewActionListener?
 
-    func updateTableView(tableView: UITableView, withChannels channels: [Channel]) {
+    func updateTableView(tableView: UITableView, withChannels channels: Channels) {
         self.channels = channels
         tableView.reloadData()
     }
@@ -30,7 +30,7 @@ final class ChannelsTableViewManager: NSObject, UITableViewDataSource, UITableVi
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell: ChannelCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
 
-        let channel = channels[indexPath.row]
+        let channel = channels.channels[indexPath.row]
         cell.updateWithChannel(channel)
 
         return cell
@@ -41,7 +41,7 @@ final class ChannelsTableViewManager: NSObject, UITableViewDataSource, UITableVi
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let channel = channels[indexPath.row]
+        let channel = channels.channels[indexPath.row]
         actionListener?.didSelectChannel(channel)
     }
 

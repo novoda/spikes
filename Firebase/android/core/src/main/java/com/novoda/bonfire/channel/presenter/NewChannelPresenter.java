@@ -1,5 +1,6 @@
 package com.novoda.bonfire.channel.presenter;
 
+import com.novoda.bonfire.analytics.ErrorLogger;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.data.model.Channel.Access;
 import com.novoda.bonfire.channel.displayer.NewChannelDisplayer;
@@ -20,17 +21,20 @@ public class NewChannelPresenter {
     private final ChannelService channelService;
     private final LoginService loginService;
     private final Navigator navigator;
+    private final ErrorLogger errorLogger;
     private User user;
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
     public NewChannelPresenter(NewChannelDisplayer newChannelDisplayer,
                                ChannelService channelService,
                                LoginService loginService,
-                               Navigator navigator) {
+                               Navigator navigator,
+                               ErrorLogger errorLogger) {
         this.newChannelDisplayer = newChannelDisplayer;
         this.channelService = channelService;
         this.loginService = loginService;
         this.navigator = navigator;
+        this.errorLogger = errorLogger;
     }
 
     public void startPresenting() {
@@ -63,6 +67,7 @@ public class NewChannelPresenter {
                             if (databaseResult.isSuccess()) {
                                 navigator.toChannelWithClearedHistory(databaseResult.getData());
                             } else {
+                                errorLogger.reportError(databaseResult.getFailure(), "Channel creation failed");
                                 newChannelDisplayer.showChannelCreationError();
                             }
                         }

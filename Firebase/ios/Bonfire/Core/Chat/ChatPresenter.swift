@@ -35,8 +35,12 @@ final class ChatPresenter {
         }).addDisposableTo(disposeBag)
 
         chatService.chat(channel).subscribe(
-            onNext: { [weak self] chat in
-                self?.chatDisplayer.display(chat)
+            onNext: { [weak self] result in
+                switch result {
+                case .Success(let chat):
+                    self?.chatDisplayer.display(chat)
+                default: break
+                }
         }).addDisposableTo(disposeBag)
     }
 

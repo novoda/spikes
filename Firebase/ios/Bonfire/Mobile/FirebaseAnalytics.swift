@@ -1,6 +1,5 @@
 import Foundation
 import Firebase
-import FirebaseAnalytics
 
 class FirebaseAnalytics: Analytics {
     func viewChannel(channel: Channel) {

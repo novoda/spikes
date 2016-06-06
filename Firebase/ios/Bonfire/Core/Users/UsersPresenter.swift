@@ -57,12 +57,12 @@ class UsersPresenter {
         disposeBag = nil
     }
 
-    private func applyUserAction(userAction: UserAction) -> Observable<DatabaseWriteResult<[User]>> {
+    private func applyUserAction(userAction: UserAction) -> Observable<DatabaseResult<User>> {
         switch userAction {
         case .Add(let user):
-            return channelsService.addOwners([user], channel: channel)
+            return channelsService.addOwner(user, toPrivateChannel: channel)
         case .Remove(let user):
-            return channelsService.removeOwners([user], channel: channel)
+            return channelsService.removeOwner(user, fromPrivateChannel: channel)
         }
     }
 }

@@ -6,6 +6,6 @@ protocol UsersActionListener: class {
 }
 
 protocol UsersDisplayer: class {
-    func display(allUsers: [User], channelOwners: [User])
+    func display(allUsers: Users, channelOwners: Users)
     weak var actionListener: UsersActionListener? { get set }
 }
