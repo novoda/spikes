@@ -26,6 +26,7 @@ You can find the application on the [Play Store][2]. If you are interested in th
 4. Click *Add Firebase to your Android app*
   * provide a **unique package name** 
   * use the same package name for the **applicationId** in your `build.gradle`
+  * insert SHA-1 fingerprint of your debug certificate, otherwise you won't be able to log in
 
 5. Copy the generated *google-services.json* to the `app` folder of your project.
 
