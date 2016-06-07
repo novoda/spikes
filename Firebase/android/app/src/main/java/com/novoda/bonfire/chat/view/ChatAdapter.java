@@ -1,8 +1,10 @@
 package com.novoda.bonfire.chat.view;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.novoda.bonfire.R;
 import com.novoda.bonfire.chat.data.model.Chat;
 import com.novoda.bonfire.chat.data.model.Message;
 
@@ -23,7 +25,8 @@ class ChatAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
     @Override
     public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MessageViewHolder(new MessageView(parent.getContext()));
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        return new MessageViewHolder((MessageView) inflater.inflate(R.layout.message_item_layout, parent, false));
     }
 
     @Override

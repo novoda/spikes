@@ -1,8 +1,10 @@
 package com.novoda.bonfire.user.view;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.novoda.bonfire.R;
 import com.novoda.bonfire.user.displayer.UsersDisplayer;
 
 import java.util.ArrayList;
@@ -25,7 +27,8 @@ class UsersAdapter extends RecyclerView.Adapter<UserViewHolder>{
 
     @Override
     public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new UserViewHolder(new UserView(parent.getContext()));
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        return new UserViewHolder((UserView) inflater.inflate(R.layout.user_item_layout, parent, false));
     }
 
     @Override
