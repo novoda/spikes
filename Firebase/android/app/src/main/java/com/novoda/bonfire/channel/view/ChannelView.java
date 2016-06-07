@@ -25,6 +25,11 @@ public class ChannelView extends LinearLayout {
         title = Views.findById(this, R.id.channelTitle);
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+    }
+
     public void display(Channel channel) {
         title.setText(channel.getName());
     }

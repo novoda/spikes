@@ -1,8 +1,9 @@
 package com.novoda.bonfire.channel.view;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
@@ -30,12 +31,16 @@ public class ChannelsView extends LinearLayout implements ChannelsDisplayer {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_channels_view, this);
         RecyclerView channels = Views.findById(this, R.id.channels);
-        channels.setLayoutManager(new LinearLayoutManager(getContext()));
+        channels.setLayoutManager(new GridLayoutManager(getContext(), getSpanCount()));
         channels.setAdapter(channelsAdapter);
         newChannelFab = Views.findById(this, R.id.newChannelFab);
         toolbar = Views.findById(this, R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
         toolbar.inflateMenu(R.menu.channels_menu);
+    }
+
+    private int getSpanCount() {
+        return getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? 2 : 4;
     }
 
     @Override
