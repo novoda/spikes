@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.novoda.bonfire.chat.view.MessageView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="horizontal"
+  android:gravity="center_vertical"
+  android:paddingLeft="@dimen/list_item_horizontal_margin"
+  android:paddingRight="@dimen/list_item_horizontal_margin"
+  android:paddingTop="@dimen/list_item_vertical_margin"
+  android:paddingBottom="@dimen/list_item_vertical_margin"
+  />
+

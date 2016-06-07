@@ -16,6 +16,8 @@ import rx.functions.Func1;
 
 public class FirebaseChatDatabase implements ChatDatabase {
 
+    private static final int DEFAULT_LIMIT = 1000;
+
     private final DatabaseReference messagesDB;
     private final FirebaseObservableListeners firebaseObservableListeners;
 
@@ -26,7 +28,7 @@ public class FirebaseChatDatabase implements ChatDatabase {
 
     @Override
     public Observable<Chat> observeChat(Channel channel) {
-        return firebaseObservableListeners.listenToValueEvents(messagesInChannel(channel), toChat());
+        return firebaseObservableListeners.listenToValueEvents(messagesInChannel(channel).limitToLast(DEFAULT_LIMIT), toChat());
     }
 
     @Override
