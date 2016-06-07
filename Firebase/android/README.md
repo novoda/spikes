@@ -32,7 +32,7 @@ You can find the application on the [Play Store][2]. If you are interested in th
 
 6. You should be able to successfully sync the project now.
 
-6. Copy contents of the `database.rules.json` into your *Firebase -> Database -> Rules* and publish them.
+6. Copy contents of the `../server/database.rules.json` into your *Firebase -> Database -> Rules* and publish them.
 
 7. Enable **Google sign-in** in your *Firebase -> Auth -> Sign-in Method*.
  
