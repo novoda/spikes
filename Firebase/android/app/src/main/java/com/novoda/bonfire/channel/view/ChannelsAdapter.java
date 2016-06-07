@@ -2,7 +2,6 @@ package com.novoda.bonfire.channel.view;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.novoda.bonfire.R;
@@ -16,6 +15,11 @@ class ChannelsAdapter extends RecyclerView.Adapter<ChannelViewHolder>  {
 
     private Channels channels = new Channels(new ArrayList<Channel>());
     private ChannelsDisplayer.ChannelsInteractionListener channelsInteractionListener;
+    private final LayoutInflater inflater;
+
+    ChannelsAdapter(LayoutInflater inflater) {
+        this.inflater = inflater;
+    }
 
     public void update(Channels channels){
         this.channels = channels;
@@ -24,7 +28,6 @@ class ChannelsAdapter extends RecyclerView.Adapter<ChannelViewHolder>  {
 
     @Override
     public ChannelViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         return new ChannelViewHolder((ChannelView) inflater.inflate(R.layout.channel_item_layout, parent, false));
     }
 

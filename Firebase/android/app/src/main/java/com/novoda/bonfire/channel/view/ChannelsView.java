@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -18,12 +19,14 @@ import com.novoda.notils.caster.Views;
 
 public class ChannelsView extends LinearLayout implements ChannelsDisplayer {
 
-    private final ChannelsAdapter channelsAdapter = new ChannelsAdapter();
+    private final ChannelsAdapter channelsAdapter;
     private FloatingActionButton newChannelFab;
     private Toolbar toolbar;
     private ChannelsInteractionListener channelsInteractionListener;
+
     public ChannelsView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        channelsAdapter = new ChannelsAdapter(LayoutInflater.from(context));
         setOrientation(VERTICAL);
     }
     @Override

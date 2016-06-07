@@ -13,8 +13,10 @@ import java.util.ArrayList;
 class ChatAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
     private Chat chat = new Chat(new ArrayList<Message>());
+    private final LayoutInflater inflater;
 
-    ChatAdapter() {
+    ChatAdapter(LayoutInflater inflater) {
+        this.inflater = inflater;
         setHasStableIds(true);
     }
 
@@ -25,7 +27,6 @@ class ChatAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
     @Override
     public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         return new MessageViewHolder((MessageView) inflater.inflate(R.layout.message_item_layout, parent, false));
     }
 

@@ -14,9 +14,11 @@ class UsersAdapter extends RecyclerView.Adapter<UserViewHolder>{
 
     private List<UsersView.SelectableUser> users = new ArrayList<>();
     private final UsersDisplayer.SelectionListener selectionListener;
+    private final LayoutInflater inflater;
 
-    UsersAdapter(UsersDisplayer.SelectionListener selectionListener) {
+    UsersAdapter(UsersDisplayer.SelectionListener selectionListener, LayoutInflater inflater) {
         this.selectionListener = selectionListener;
+        this.inflater = inflater;
         setHasStableIds(true);
     }
 
@@ -27,7 +29,6 @@ class UsersAdapter extends RecyclerView.Adapter<UserViewHolder>{
 
     @Override
     public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         return new UserViewHolder((UserView) inflater.inflate(R.layout.user_item_layout, parent, false));
     }
 

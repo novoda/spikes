@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -19,8 +20,8 @@ import com.novoda.notils.caster.Views;
 
 public class ChatView extends LinearLayout implements ChatDisplayer {
 
+    private final ChatAdapter chatAdapter;
     private TextView messageView;
-    private ChatAdapter chatAdapter;
     private View submitButton;
     private RecyclerView recyclerView;
     private Toolbar toolbar;
@@ -30,13 +31,13 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
     public ChatView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setOrientation(VERTICAL);
+        chatAdapter = new ChatAdapter(LayoutInflater.from(context));
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_chat_view, this);
-        chatAdapter = new ChatAdapter();
         messageView = Views.findById(this, R.id.messageEdit);
         submitButton = Views.findById(this, R.id.submitButton);
         recyclerView = Views.findById(this, R.id.messagesRecyclerView);
