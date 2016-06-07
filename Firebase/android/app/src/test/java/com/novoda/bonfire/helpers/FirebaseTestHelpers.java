@@ -19,6 +19,7 @@ public class FirebaseTestHelpers {
         when(firebaseDatabase.getReference(databaseName)).thenReturn(databaseReference);
         when(databaseReference.child(anyString())).thenReturn(databaseReference);
         when(databaseReference.push()).thenReturn(databaseReference);
+        when(databaseReference.limitToLast(anyInt())).thenReturn(databaseReference);
     }
 
     public static <T> void setupValueEventListenerFor(
