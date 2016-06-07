@@ -10,9 +10,9 @@ You can find the application on the [Play Store][2]. If you are interested in th
 
 ## Use the project with your own Firebase instance
 
-1. Clone this repository
+1. Clone this repository.
 
-2. Create `signing.properties` file in your `app` folder with the following contents
+2. Create `signing.properties` file in your `app` folder with the following contents:
 
     ```
     storeFile=~/android/debug.keystore  # path to your debug.keystore
@@ -21,16 +21,21 @@ You can find the application on the [Play Store][2]. If you are interested in th
     keyPassword=android
     ```
 
-3. Create a new project in the [Firebase console][4]
+3. Create a new project in the [Firebase console][4].
 
 4. Click *Add Firebase to your Android app*
-  * provide a unique package name (and use the same package name as **applicationId** in your `build.gradle`)
+  * provide a **unique package name** 
+  * use the same package name for the **applicationId** in your `build.gradle`
 
-5. Copy the *google-services.json* to the `app` folder of your project
+5. Copy the generated *google-services.json* to the `app` folder of your project.
 
-6. Copy contents of the `database.rules.json` into your *Firebase -> Database -> Rules* and publish them
+6. You should be able to successfully sync the project now.
 
-7. Enable Google sign-in in *Firebase -> Auth -> Sign-in Method* 
+6. Copy contents of the `database.rules.json` into your *Firebase -> Database -> Rules* and publish them.
+
+7. Enable **Google sign-in** in your *Firebase -> Auth -> Sign-in Method*.
+ 
+8. Build and run the app.
 
 
 [1]: https://firebase.google.com/
