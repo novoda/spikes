@@ -36,6 +36,10 @@ DerivedData
 ## Gradle
 .gradle/
 
+## Fastlane
+fastlane/test_output/*
+fastlane/report.xml
+
 ## AppCode settings and files
 .idea/
 *.iml
