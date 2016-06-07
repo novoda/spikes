@@ -68,5 +68,3 @@ extension LoginViewController: GIDSignInDelegate {
 
     }
 }
-
-

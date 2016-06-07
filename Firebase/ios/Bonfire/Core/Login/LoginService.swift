@@ -6,4 +6,3 @@ protocol LoginService {
     func loginWithGoogle(idToken idToken: String, accessToken: String)
     var currentUser: User? { get }
 }
-

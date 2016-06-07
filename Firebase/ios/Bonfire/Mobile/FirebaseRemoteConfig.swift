@@ -15,10 +15,10 @@ class FirebaseRemoteConfig: Config {
         remoteConfig.configSettings = remoteConfigSettings!
 
         var expirationDuration: Double = 3600
-        if (remoteConfig.configSettings.isDeveloperModeEnabled) {
+        if remoteConfig.configSettings.isDeveloperModeEnabled {
             expirationDuration = 0
         }
-        
+
         remoteConfig.fetchWithExpirationDuration(expirationDuration) { (status, error) in
             if status == .Success {
                 self.remoteConfig.activateFetched()

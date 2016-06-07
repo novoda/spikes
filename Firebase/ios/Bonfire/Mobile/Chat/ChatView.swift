@@ -66,7 +66,11 @@ extension ChatView {
         navigationItem.title = chat.channel.name
 
         if chat.channel.access == .Private {
-            let barButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(addUsers))
+            let barButtonItem = UIBarButtonItem(
+                barButtonSystemItem: .Add,
+                target: self,
+                action: #selector(addUsers)
+            )
             navigationItem.rightBarButtonItem = barButtonItem
         } else {
             navigationItem.rightBarButtonItem = nil
