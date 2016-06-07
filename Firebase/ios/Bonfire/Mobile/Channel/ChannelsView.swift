@@ -5,7 +5,7 @@ final class ChannelsView: UIView {
     private let collectionViewManager = ChannelsCollectionViewManager()
     private weak var actionListener: ChannelsActionListener?
 
-    let newChannelBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: nil, action: nil)
+    let newChannelBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Compose, target: nil, action: nil)
     let shareBonfireBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Action, target: nil, action: nil)
 
     override init(frame: CGRect) {
@@ -31,7 +31,7 @@ final class ChannelsView: UIView {
         collectionViewManager.actionListener = self
 
         let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        flowLayout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        flowLayout.sectionInset = UIEdgeInsets(top: 25, left: 25, bottom: 25, right: 25)
 
         collectionView.backgroundColor = .whiteColor()
     }

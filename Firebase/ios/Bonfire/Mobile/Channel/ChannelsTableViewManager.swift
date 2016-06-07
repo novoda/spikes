@@ -49,16 +49,4 @@ final class ChannelsCollectionViewManager: NSObject, UICollectionViewDataSource,
         return CGSize(width: 90, height: 90)
     }
 
-    func collectionView(collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                               minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 10.0
-    }
-
-    func collectionView(collectionView: UICollectionView, layout
-        collectionViewLayout: UICollectionViewLayout,
-        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return 10.0
-    }
-
 }
