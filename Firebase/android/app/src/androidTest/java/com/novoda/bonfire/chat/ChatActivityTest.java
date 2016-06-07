@@ -115,9 +115,10 @@ public class ChatActivityTest {
         givenChatUpdatesAfterEveryMessage();
         launchChatActivityWithAccess(Access.PRIVATE);
 
-        submitMessage("test message");
+        String message = "test message";
+        submitMessage(message);
 
-        assertThatMessageFromUserIsShownInChat(AUTHENTICATED_USER.getName(), "test message");
+        assertThatMessageFromUserIsShownInChat(AUTHENTICATED_USER.getName(), message);
     }
 
     private void launchChatActivityWithAccess(Access access) {
