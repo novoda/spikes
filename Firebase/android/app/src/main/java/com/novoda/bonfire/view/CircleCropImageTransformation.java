@@ -21,23 +21,25 @@ public class CircleCropImageTransformation extends BitmapTransformation {
 
     @Override
     protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
-        Bitmap bitmap = getBitmap(pool, outWidth, outHeight);
+        int width = toTransform.getWidth();
+        int height = toTransform.getHeight();
+        Bitmap bitmap = getBitmap(pool, width, height);
 
         BitmapShader shader = new BitmapShader(toTransform, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
 
         paint.setAntiAlias(true);
         paint.setShader(shader);
 
-        RectF rect = new RectF(0.0f, 0.0f, outWidth, outHeight);
+        RectF rect = new RectF(0.0f, 0.0f, width, height);
         Canvas canvas = new Canvas(bitmap);
-        canvas.drawRoundRect(rect, outWidth / 2.0f, outHeight / 2.0f, paint);
+        canvas.drawRoundRect(rect, width / 2.0f, height / 2.0f, paint);
         return bitmap;
     }
 
-    private Bitmap getBitmap(BitmapPool pool, int outWidth, int outHeight) {
-        Bitmap bitmap = pool.get(outWidth, outHeight, Bitmap.Config.ARGB_8888);
+    private Bitmap getBitmap(BitmapPool pool, int width, int height) {
+        Bitmap bitmap = pool.get(width, height, Bitmap.Config.ARGB_8888);
         if (bitmap == null) {
-            bitmap = Bitmap.createBitmap(outWidth, outHeight, Bitmap.Config.ARGB_8888);
+            bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         }
         return bitmap;
     }
