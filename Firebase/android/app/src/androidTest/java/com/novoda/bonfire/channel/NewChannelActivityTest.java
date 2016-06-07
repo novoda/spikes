@@ -33,9 +33,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.*;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
@@ -44,7 +42,7 @@ import static org.mockito.Mockito.when;
 @RunWith(AndroidJUnit4.class)
 public class NewChannelActivityTest {
 
-    private static final String CHANNEL_NAME = "new channel";
+    private static final String VALID_CHANNEL_NAME = "\uD83C\uDDEB\uD83C\uDDF7"; // French flag
 
     @Rule
     public ActivityTestRule<NewChannelActivity> activity = new ActivityTestRule<>(NewChannelActivity.class, false, false);
@@ -82,33 +80,39 @@ public class NewChannelActivityTest {
 
     @Test
     public void canCreatePublicChannel() throws Exception {
-        onView(withId(R.id.newChannelName)).perform(typeText(CHANNEL_NAME), closeSoftKeyboard());
+        onView(withId(R.id.newChannelName)).perform(replaceText(VALID_CHANNEL_NAME), closeSoftKeyboard());
         onView(withId(R.id.createButton)).perform(click());
 
         ArgumentCaptor<Channel> channelArgumentCaptor = ArgumentCaptor.forClass(Channel.class);
         verify(channelService).createPublicChannel(channelArgumentCaptor.capture());
         assertThat(channelArgumentCaptor.getValue().isPrivate(), equalTo(false));
-        assertThat(channelArgumentCaptor.getValue().getName(), equalToIgnoringCase(CHANNEL_NAME));
+        assertThat(channelArgumentCaptor.getValue().getName(), equalToIgnoringCase(VALID_CHANNEL_NAME));
     }
 
     @Test
     public void canCreatePrivateChannel() throws Exception {
         onView(withId(R.id.privateChannelSwitch)).perform(click());
-        onView(withId(R.id.newChannelName)).perform(typeText(CHANNEL_NAME), closeSoftKeyboard());
+        onView(withId(R.id.newChannelName)).perform(replaceText(VALID_CHANNEL_NAME), closeSoftKeyboard());
         onView(withId(R.id.createButton)).perform(click());
 
         ArgumentCaptor<Channel> channelArgumentCaptor = ArgumentCaptor.forClass(Channel.class);
         verify(channelService).createPrivateChannel(channelArgumentCaptor.capture(), any(User.class));
         assertThat(channelArgumentCaptor.getValue().isPrivate(), equalTo(true));
-        assertThat(channelArgumentCaptor.getValue().getName(), equalToIgnoringCase(CHANNEL_NAME));
+        assertThat(channelArgumentCaptor.getValue().getName(), equalToIgnoringCase(VALID_CHANNEL_NAME));
     }
 
     @Test
     public void channelOpensAfterBeingCreated() throws Exception {
-        onView(withId(R.id.newChannelName)).perform(typeText(CHANNEL_NAME), closeSoftKeyboard());
+        onView(withId(R.id.newChannelName)).perform(replaceText(VALID_CHANNEL_NAME), closeSoftKeyboard());
         onView(withId(R.id.createButton)).perform(click());
 
-        onView(allOf(withText(equalToIgnoringCase(CHANNEL_NAME)), isDescendantOfA(withId(R.id.toolbar)))).check(matches(isDisplayed()));
+        onView(allOf(withText(equalToIgnoringCase(VALID_CHANNEL_NAME)), isDescendantOfA(withId(R.id.toolbar)))).check(matches(isDisplayed()));
     }
 
+    @Test
+    public void whenChannelNameIsTextThenAnErrorIsShown() throws Exception {
+        onView(withId(R.id.newChannelName)).perform(typeText("name"), closeSoftKeyboard());
+
+        onView(withId(R.id.newChannelName)).check(matches(hasErrorText(activity.getActivity().getString(R.string.only_single_emoji_allowed))));
+    }
 }
