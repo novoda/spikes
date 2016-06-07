@@ -2,7 +2,7 @@ package com.novoda.bonfire.rx;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import rx.Observable;
@@ -13,21 +13,21 @@ import rx.subscriptions.BooleanSubscription;
 
 class ListenToValueEventsOnSubscribe<T> implements Observable.OnSubscribe<T> {
 
-    private final DatabaseReference databaseReference;
+    private final Query query;
     private final Func1<DataSnapshot, T> marshaller;
 
-    ListenToValueEventsOnSubscribe(DatabaseReference databaseReference, Func1<DataSnapshot, T> marshaller) {
-        this.databaseReference = databaseReference;
+    ListenToValueEventsOnSubscribe(Query query, Func1<DataSnapshot, T> marshaller) {
+        this.query = query;
         this.marshaller = marshaller;
     }
 
     @Override
     public void call(Subscriber<? super T> subscriber) {
-        final ValueEventListener eventListener = databaseReference.addValueEventListener(new RxValueListener<>(subscriber, marshaller));
+        final ValueEventListener eventListener = query.addValueEventListener(new RxValueListener<>(subscriber, marshaller));
         subscriber.add(BooleanSubscription.create(new Action0() {
             @Override
             public void call() {
-                databaseReference.removeEventListener(eventListener);
+                query.removeEventListener(eventListener);
             }
         }));
     }

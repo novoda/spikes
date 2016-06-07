@@ -1,8 +1,7 @@
 package com.novoda.bonfire.channel.view;
 
 import android.content.Context;
-import android.util.TypedValue;
-import android.view.Gravity;
+import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,29 +12,22 @@ import com.novoda.notils.caster.Views;
 
 public class ChannelView extends LinearLayout {
 
-    private final TextView title;
+    private TextView title;
 
-    public ChannelView(Context context) {
-        super(context);
-        configureViewParams();
-        View view = inflate(context, R.layout.merge_channel_item_view, this);
-        title = Views.findById(view, R.id.channelTitle);
-        setSelectableBackgroundFromAttributes(context);
+    public ChannelView(Context context, AttributeSet attrs) {
+        super(context, attrs);
     }
 
-    private void configureViewParams() {
-        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        setOrientation(HORIZONTAL);
-        setGravity(Gravity.CENTER_VERTICAL);
-        int horizontalMargin = getResources().getDimensionPixelSize(R.dimen.list_item_horizontal_margin);
-        int verticalMargin = getResources().getDimensionPixelSize(R.dimen.list_item_vertical_margin);
-        setPadding(horizontalMargin, verticalMargin, horizontalMargin, verticalMargin);
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        View.inflate(getContext(), R.layout.merge_channel_item_view, this);
+        title = Views.findById(this, R.id.channelTitle);
     }
 
-    private void setSelectableBackgroundFromAttributes(Context context) {
-        TypedValue outValue = new TypedValue();
-        context.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
-        setBackgroundResource(outValue.resourceId);
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, widthMeasureSpec);
     }
 
     public void display(Channel channel) {

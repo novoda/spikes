@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -47,7 +48,7 @@ public class UsersView extends LinearLayout implements UsersDisplayer {
     @Override
     public void attach(final SelectionListener selectionListener) {
         this.selectionListener = selectionListener;
-        usersAdapter = new UsersAdapter(selectionListener);
+        usersAdapter = new UsersAdapter(selectionListener, LayoutInflater.from(getContext()));
         recyclerView.setAdapter(usersAdapter);
 
         toolbar.setOnMenuItemClickListener(menuItemClickListener);

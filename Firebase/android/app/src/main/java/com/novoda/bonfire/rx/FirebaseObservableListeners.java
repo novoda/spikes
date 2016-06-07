@@ -2,18 +2,19 @@ package com.novoda.bonfire.rx;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 
 import rx.Observable;
 import rx.functions.Func1;
 
 public class FirebaseObservableListeners {
 
-    public <T> Observable<T> listenToValueEvents(DatabaseReference databaseReference, Func1<DataSnapshot, T> marshaller) {
-        return Observable.create(new ListenToValueEventsOnSubscribe<>(databaseReference, marshaller));
+    public <T> Observable<T> listenToValueEvents(Query query, Func1<DataSnapshot, T> marshaller) {
+        return Observable.create(new ListenToValueEventsOnSubscribe<>(query, marshaller));
     }
 
-    public <T> Observable<T> listenToSingleValueEvents(DatabaseReference databaseReference, Func1<DataSnapshot, T> marshaller) {
-        return Observable.create(new ListenToSingleValueOnSubscribe<>(databaseReference, marshaller));
+    public <T> Observable<T> listenToSingleValueEvents(Query query, Func1<DataSnapshot, T> marshaller) {
+        return Observable.create(new ListenToSingleValueOnSubscribe<>(query, marshaller));
     }
 
     public <T> Observable<T> removeValue(DatabaseReference databaseReference, T returnValue) {
