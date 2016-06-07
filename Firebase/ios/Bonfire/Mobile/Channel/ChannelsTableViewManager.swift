@@ -1,48 +1,52 @@
 import UIKit
 
-protocol ChannelsTableViewActionListener: class {
+protocol ChannelsCollectionViewActionListener: class {
     func didSelectChannel(channel: Channel)
 }
 
-final class ChannelsTableViewManager: NSObject, UITableViewDataSource, UITableViewDelegate {
+final class ChannelsCollectionViewManager: NSObject, UICollectionViewDataSource, UICollectionViewDelegate {
 
     private var channels = Channels()
-    weak var actionListener: ChannelsTableViewActionListener?
+    weak var actionListener: ChannelsCollectionViewActionListener?
 
-    func updateTableView(tableView: UITableView, withChannels channels: Channels) {
+    func updateCollectionView(collectionView: UICollectionView, withChannels channels: Channels) {
         self.channels = channels
-        tableView.reloadData()
+        collectionView.reloadData()
     }
 
-    func setupTableView(tableView: UITableView) {
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 100
+    func setupCollectionView(collectionView: UICollectionView) {
 
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(ChannelCell)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(ChannelCell)
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return channels.count
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell: ChannelCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell: ChannelCell = collectionView.dequeueReusableCell(forIndexPath: indexPath)
 
         let channel = channels.channels[indexPath.row]
         cell.updateWithChannel(channel)
-
+        
         return cell
     }
 
-    func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func collectionView(collectionView: UICollectionView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
     }
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let channel = channels.channels[indexPath.row]
         actionListener?.didSelectChannel(channel)
+    }
+
+    func collectionView(collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                               sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        return CGSize(width: 90, height: 90)
     }
 
 }

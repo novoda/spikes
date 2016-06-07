@@ -10,8 +10,7 @@ extension ReusableView where Self: UIView {
     }
 }
 
-extension UITableViewCell: ReusableView {
-}
+extension UITableViewCell: ReusableView {}
 
 extension UITableView {
 
@@ -25,6 +24,24 @@ extension UITableView {
             fatalError("Could not dequeue cell with identifier: \(T.defaultReuseIdentifier)")
         }
         
+        return cell
+    }
+}
+
+extension UICollectionViewCell: ReusableView {}
+
+extension UICollectionView {
+
+    func register<T: UICollectionViewCell where T: ReusableView>(type: T.Type) {
+        let reuseIdentifier = type.defaultReuseIdentifier
+        registerClass(type.self, forCellWithReuseIdentifier: reuseIdentifier)
+    }
+
+    func dequeueReusableCell<T: UICollectionViewCell where T: ReusableView>(forIndexPath indexPath: NSIndexPath) -> T {
+        guard let cell = dequeueReusableCellWithReuseIdentifier(T.defaultReuseIdentifier, forIndexPath: indexPath) as? T else {
+            fatalError("Could not dequeue cell with identifier: \(T.defaultReuseIdentifier)")
+        }
+
         return cell
     }
 }
