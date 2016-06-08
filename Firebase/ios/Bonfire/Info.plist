@@ -27,7 +27,7 @@
 			<string></string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.11920327464-4g2fsijp0eebpdkni4smqh3j0dr5t4kb</string>
+				<string>com.googleusercontent.apps.388117800093-cqnb8rel922ebe7ike9b26tpiopiptsm</string>
 			</array>
 		</dict>
 		<dict>
@@ -35,7 +35,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.novoda.bonfire</string>
+				<string>com.blah.bonfire</string>
 			</array>
 		</dict>
 	</array>
