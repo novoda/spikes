@@ -6,4 +6,6 @@
 
   <color name="hint_light">#A0A0A0</color>
   <color name="selected_item">#88A0A0A0</color>
+
+  <color name="background_grey">#e4e4e4</color>
 </resources>
