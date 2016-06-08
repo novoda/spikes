@@ -56,7 +56,8 @@ public enum Dependencies {
     }
 
     private boolean needsInitialisation() {
-        return loginService == null || chatService == null || channelService == null || analytics == null;
+        return loginService == null || chatService == null || channelService == null
+                || userService == null || analytics == null || errorLogger == null;
     }
 
     public Analytics getAnalytics() {
