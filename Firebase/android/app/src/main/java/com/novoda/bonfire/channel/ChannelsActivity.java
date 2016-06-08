@@ -32,7 +32,8 @@ public class ChannelsActivity extends BaseActivity {
                                                   dependencies.getChannelService(),
                                                   dependencies.getLoginService(),
                                                   new AndroidNavigator(this),
-                                                  firebaseDynamicLinkFactory
+                                                  firebaseDynamicLinkFactory,
+                                                  dependencies.getAnalytics()
         );
     }
 
