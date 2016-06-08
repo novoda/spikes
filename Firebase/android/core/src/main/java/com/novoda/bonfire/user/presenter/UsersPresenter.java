@@ -1,5 +1,6 @@
 package com.novoda.bonfire.user.presenter;
 
+import com.novoda.bonfire.analytics.Analytics;
 import com.novoda.bonfire.analytics.ErrorLogger;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.service.ChannelService;
@@ -20,15 +21,23 @@ public class UsersPresenter {
     private final Channel channel;
     private final Navigator navigator;
     private final ErrorLogger errorLogger;
+    private final Analytics analytics;
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
-    public UsersPresenter(UserService userService, ChannelService channelService, UsersDisplayer usersDisplayer, Channel channel, Navigator navigator, ErrorLogger errorLogger) {
+    public UsersPresenter(UserService userService,
+                          ChannelService channelService,
+                          UsersDisplayer usersDisplayer,
+                          Channel channel,
+                          Navigator navigator,
+                          ErrorLogger errorLogger,
+                          Analytics analytics) {
         this.userService = userService;
         this.channelService = channelService;
         this.usersDisplayer = usersDisplayer;
         this.channel = channel;
         this.navigator = navigator;
         this.errorLogger = errorLogger;
+        this.analytics = analytics;
     }
 
     public void startPresenting() {
@@ -67,12 +76,14 @@ public class UsersPresenter {
     private UsersDisplayer.SelectionListener selectionListener = new UsersDisplayer.SelectionListener() {
         @Override
         public void onUserSelected(final User user) {
+            analytics.trackAddChannelOwner(channel.getName(), user.getId());
             channelService.addOwnerToPrivateChannel(channel, user)
                     .subscribe(updateOnActionResult());
         }
 
         @Override
         public void onUserDeselected(User user) {
+            analytics.trackRemoveChannelOwner(channel.getName(), user.getId());
             channelService.removeOwnerFromPrivateChannel(channel, user)
                     .subscribe(updateOnActionResult());
         }

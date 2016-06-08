@@ -98,11 +98,12 @@ public class ChatPresenter {
         @Override
         public void onSubmitMessage(String message) {
             chatService.sendMessage(channel, new Message(user, message));
-            analytics.trackEvent("message_length", message.length());
+            analytics.trackMessageLength(message.length(), user.getId(), channel.getName());
         }
 
         @Override
         public void onManageOwnersClicked() {
+            analytics.trackManageOwners(user.getId(), channel.getName());
             navigator.toMembersOf(channel);
         }
     };

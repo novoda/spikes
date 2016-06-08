@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.novoda.bonfire.analytics.Analytics;
@@ -45,7 +46,7 @@ public enum Dependencies {
             FirebaseObservableListeners firebaseObservableListeners = new FirebaseObservableListeners();
             FirebaseUserDatabase userDatabase = new FirebaseUserDatabase(firebaseDatabase, firebaseObservableListeners);
 
-            analytics = new FirebaseAnalyticsAnalytics(context);
+            analytics = new FirebaseAnalyticsAnalytics(FirebaseAnalytics.getInstance(appContext));
             errorLogger = new FirebaseErrorLogger();
             loginService = new FirebaseLoginService(new FirebaseAuthDatabase(firebaseAuth), userDatabase);
             chatService = new PersistedChatService(new FirebaseChatDatabase(firebaseDatabase, firebaseObservableListeners));
