@@ -9,9 +9,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:minHeight="48dp"
     android:textColor="@android:color/primary_text_light"
-    android:textSize="48sp" />
+    android:textSize="36sp" />
 
   <ImageView
     android:id="@+id/lockIcon"

@@ -3,7 +3,8 @@
   android:layout_width="72dp"
   android:layout_height="72dp"
   android:orientation="horizontal"
-  android:gravity="center_vertical"
+  android:gravity="center"
   android:background="@drawable/circle_shape"
+  android:layout_margin="4dp"
   />
 
