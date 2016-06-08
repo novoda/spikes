@@ -39,6 +39,7 @@ final class CreateChannelView: UIView {
         channelNameField.borderStyle = .RoundedRect
         channelNameField.clearButtonMode = .Always
         channelNameField.placeholder = ":-)"
+        channelNameField.accessibilityIdentifier = "NameField"
 
         errorLabel.textColor = .redColor()
         errorLabel.numberOfLines = 0
