@@ -2,6 +2,7 @@ package com.novoda.bonfire.channel.view;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Rect;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,7 +35,7 @@ public class ChannelsView extends LinearLayout implements ChannelsDisplayer {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_channels_view, this);
         RecyclerView channels = Views.findById(this, R.id.channels);
-        channels.setLayoutManager(new GridLayoutManager(getContext(), getSpanCount()));
+        channels.addItemDecoration(new ChannelItemDecoration());
         channels.setAdapter(channelsAdapter);
         newChannelFab = Views.findById(this, R.id.newChannelFab);
         toolbar = Views.findById(this, R.id.toolbar);
@@ -84,4 +85,47 @@ public class ChannelsView extends LinearLayout implements ChannelsDisplayer {
             channelsInteractionListener.onAddNewChannel();
         }
     };
+
+    private class ChannelItemDecoration extends RecyclerView.ItemDecoration {
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            int itemPaddingInPixel = getResources().getDimensionPixelOffset(R.dimen.channel_item_padding);
+            outRect.top = itemPaddingInPixel;
+            outRect.bottom = itemPaddingInPixel;
+            outRect.left = itemPaddingInPixel;
+            outRect.right = itemPaddingInPixel;
+
+            int position = parent.getChildAdapterPosition(view);
+            int spanCount = ((GridLayoutManager) parent.getLayoutManager()).getSpanCount();
+            int gridPaddingInPixel = getResources().getDimensionPixelOffset(R.dimen.list_item_vertical_margin);
+
+            if (isTopRow(position, spanCount)) {
+                outRect.top += gridPaddingInPixel;
+            } else if (isBottomRow(parent, position, spanCount)) {
+                outRect.bottom += gridPaddingInPixel;
+            }
+
+            if (isLeftEdge(position, spanCount)) {
+                outRect.left += gridPaddingInPixel;
+            } else if (isRightEdge(position, spanCount)) {
+                outRect.right += gridPaddingInPixel;
+            }
+        }
+
+        private boolean isTopRow(int position, int spanCount) {
+            return position < spanCount;
+        }
+
+        private boolean isBottomRow(RecyclerView parent, int position, int spanCount) {
+            return position >= parent.getAdapter().getItemCount() - spanCount;
+        }
+
+        private boolean isLeftEdge(int position, int spanCount) {
+            return (position % spanCount) == 0;
+        }
+
+        private boolean isRightEdge(int position, int spanCount) {
+            return (position % spanCount) == (spanCount - 1);
+        }
+    }
 }
