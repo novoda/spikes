@@ -1,5 +1,6 @@
 package com.novoda.bonfire.channel.presenter;
 
+import com.novoda.bonfire.analytics.Analytics;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.data.model.Channels;
 import com.novoda.bonfire.channel.displayer.ChannelsDisplayer;
@@ -22,16 +23,18 @@ public class ChannelsPresenter {
     private final LoginService loginService;
     private final Navigator navigator;
     private final LinkFactory linkFactory;
+    private final Analytics analytics;
 
     private Subscription subscription;
     private User user;
 
-    public ChannelsPresenter(ChannelsDisplayer channelsDisplayer, ChannelService channelService, LoginService loginService, Navigator navigator, LinkFactory linkFactory) {
+    public ChannelsPresenter(ChannelsDisplayer channelsDisplayer, ChannelService channelService, LoginService loginService, Navigator navigator, LinkFactory linkFactory, Analytics analytics) {
         this.channelsDisplayer = channelsDisplayer;
         this.channelService = channelService;
         this.loginService = loginService;
         this.navigator = navigator;
         this.linkFactory = linkFactory;
+        this.analytics = analytics;
     }
 
     public void startPresenting() {
@@ -79,16 +82,19 @@ public class ChannelsPresenter {
     private final ChannelsDisplayer.ChannelsInteractionListener channelsInteractionListener = new ChannelsDisplayer.ChannelsInteractionListener() {
         @Override
         public void onChannelSelected(Channel channel) {
+            analytics.trackSelectChannel(channel.getName());
             navigator.toChannel(channel);
         }
 
         @Override
         public void onAddNewChannel() {
+            analytics.trackCreateChannel(user.getId());
             navigator.toCreateChannel();
         }
 
         @Override
         public void onInviteUsersClicked() {
+            analytics.trackSendInvitesSelected(user.getId());
             navigator.toShareInvite(linkFactory.inviteLinkFrom(user).toString());
         }
     };

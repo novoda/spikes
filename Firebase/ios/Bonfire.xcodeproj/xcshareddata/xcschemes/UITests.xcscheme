@@ -32,26 +32,11 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B63B377B1CFD975A00142DC3"
-               BuildableName = "BonfireTests.xctest"
-               BlueprintName = "BonfireTests"
-               ReferencedContainer = "container:Bonfire.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "1AB3DE181D0704F400F8EAF5"
                BuildableName = "BonfireUITests.xctest"
                BlueprintName = "BonfireUITests"
                ReferencedContainer = "container:Bonfire.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "SnapshotProcess">
-               </Test>
-            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>

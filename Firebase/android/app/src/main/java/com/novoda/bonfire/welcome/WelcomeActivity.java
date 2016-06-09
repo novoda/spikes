@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.novoda.bonfire.BaseActivity;
+import com.novoda.bonfire.Dependencies;
 import com.novoda.bonfire.R;
 import com.novoda.bonfire.link.FirebaseDynamicLinkFactory;
 import com.novoda.bonfire.navigation.AndroidNavigator;
@@ -21,6 +22,7 @@ public class WelcomeActivity extends BaseActivity {
         String sender = getIntent().getData().getQueryParameter(FirebaseDynamicLinkFactory.SENDER);
         welcomePresenter = new WelcomePresenter((WelcomeDisplayer) findViewById(R.id.welcomeView),
                                                 new AndroidNavigator(this),
+                                                Dependencies.INSTANCE.getAnalytics(),
                                                 sender);
     }
 

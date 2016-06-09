@@ -4,8 +4,10 @@ import android.content.Context;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.novoda.bonfire.analytics.Analytics;
 import com.novoda.bonfire.analytics.ErrorLogger;
 import com.novoda.bonfire.analytics.FirebaseAnalyticsAnalytics;
 import com.novoda.bonfire.analytics.FirebaseErrorLogger;
@@ -26,7 +28,7 @@ import com.novoda.bonfire.user.service.UserService;
 public enum Dependencies {
     INSTANCE;
 
-    private FirebaseAnalyticsAnalytics firebaseAnalytics;
+    private Analytics analytics;
     private ErrorLogger errorLogger;
 
     private LoginService loginService;
@@ -44,7 +46,7 @@ public enum Dependencies {
             FirebaseObservableListeners firebaseObservableListeners = new FirebaseObservableListeners();
             FirebaseUserDatabase userDatabase = new FirebaseUserDatabase(firebaseDatabase, firebaseObservableListeners);
 
-            firebaseAnalytics = new FirebaseAnalyticsAnalytics(context);
+            analytics = new FirebaseAnalyticsAnalytics(FirebaseAnalytics.getInstance(appContext));
             errorLogger = new FirebaseErrorLogger();
             loginService = new FirebaseLoginService(new FirebaseAuthDatabase(firebaseAuth), userDatabase);
             chatService = new PersistedChatService(new FirebaseChatDatabase(firebaseDatabase, firebaseObservableListeners));
@@ -54,11 +56,12 @@ public enum Dependencies {
     }
 
     private boolean needsInitialisation() {
-        return loginService == null || chatService == null || channelService == null || firebaseAnalytics == null;
+        return loginService == null || chatService == null || channelService == null
+                || userService == null || analytics == null || errorLogger == null;
     }
 
-    public FirebaseAnalyticsAnalytics getFirebaseAnalytics() {
-        return firebaseAnalytics;
+    public Analytics getAnalytics() {
+        return analytics;
     }
 
     public LoginService getLoginService() {
