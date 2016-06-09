@@ -5,5 +5,6 @@
   <item
     android:id="@+id/actionInvite"
     android:title="@string/invite"
+    android:icon="@drawable/ic_share_white_24dp"
     app:showAsAction="ifRoom"/>
 </menu>

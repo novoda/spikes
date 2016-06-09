@@ -6,4 +6,7 @@
 
   <dimen name="list_item_vertical_margin">8dp</dimen>
   <dimen name="list_item_horizontal_margin">16dp</dimen>
+
+  <dimen name="channel_item_padding">7dp</dimen>
+  <dimen name="channel_grid_padding">9dp</dimen>
 </resources>
