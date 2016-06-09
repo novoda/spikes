@@ -28,6 +28,7 @@ public class MessageView extends LinearLayout {
 
     public MessageView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setOrientation(VERTICAL);
     }
 
     @Override

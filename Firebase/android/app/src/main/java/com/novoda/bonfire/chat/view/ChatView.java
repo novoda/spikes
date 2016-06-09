@@ -1,6 +1,7 @@
 package com.novoda.bonfire.chat.view;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -41,6 +42,7 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
         messageView = Views.findById(this, R.id.messageEdit);
         submitButton = Views.findById(this, R.id.submitButton);
         recyclerView = Views.findById(this, R.id.messagesRecyclerView);
+        recyclerView.addItemDecoration(new ChatItemDecoration());
         toolbar = Views.findById(this, R.id.toolbar);
         toolbar.inflateMenu(R.menu.chat_menu);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
@@ -133,4 +135,15 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
         }
     };
 
+    private class ChatItemDecoration extends RecyclerView.ItemDecoration {
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            int horizontalMargin = getResources().getDimensionPixelOffset(R.dimen.list_item_horizontal_margin);
+            int verticalMargin = getResources().getDimensionPixelOffset(R.dimen.list_item_vertical_margin);
+            outRect.left = horizontalMargin;
+            outRect.right = horizontalMargin;
+            outRect.top = verticalMargin;
+            outRect.bottom = verticalMargin;
+        }
+    }
 }

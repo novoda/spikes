@@ -1,48 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <ImageView
-    android:id="@+id/messageAuthorImage"
-    android:layout_width="40dp"
-    android:layout_height="40dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginRight="16dp"
-    android:scaleType="centerInside"/>
-
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    android:paddingLeft="70dp">
 
-    <LinearLayout
-      android:layout_width="match_parent"
+    <TextView
+      android:id="@+id/messageAuthorName"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="4dp"
-      android:orientation="horizontal">
+      android:textColor="@android:color/primary_text_light"
+      android:textSize="12sp"
+      android:textStyle="bold" />
 
-      <TextView
-        android:id="@+id/messageAuthorName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/primary_text_light"
-        android:textStyle="bold"
-        android:textSize="12sp"/>
+    <TextView
+      android:id="@+id/messageTime"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingLeft="@dimen/list_item_horizontal_margin"
+      android:paddingRight="@dimen/list_item_horizontal_margin"
+      android:textColor="@color/hint_light"
+      android:textSize="12sp" />
 
-      <TextView
-        android:id="@+id/messageTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/hint_light"
-        android:textSize="12sp"
-        android:paddingLeft="@dimen/list_item_horizontal_margin"
-        android:paddingRight="@dimen/list_item_horizontal_margin"/>
-    </LinearLayout>
+  </LinearLayout>
+
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="6dp">
+
+    <ImageView
+      android:id="@+id/messageAuthorImage"
+      android:layout_width="36sp"
+      android:layout_height="36sp"
+      android:layout_alignParentLeft="true"
+      android:scaleType="centerInside" />
 
     <TextView
       android:id="@+id/messageBody"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_alignTop="@id/messageAuthorImage"
+      android:layout_marginLeft="8dp"
+      android:layout_toRightOf="@id/messageAuthorImage"
+      android:background="@drawable/bubble_shape_grey"
+      android:paddingBottom="8dp"
+      android:paddingLeft="26dp"
+      android:paddingRight="8dp"
+      android:paddingTop="8dp"
       android:textColor="@android:color/primary_text_light"
-      android:textSize="16sp"/>
-  </LinearLayout>
+      android:textSize="16sp" />
+
+  </RelativeLayout>
+
 </merge>

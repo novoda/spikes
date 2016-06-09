@@ -10,5 +10,6 @@
   <color name="background_grey">#eeeeee</color>
   <color name="text_grey">#80000000</color>
   <color name="background_grey_alt">#e4e4e4</color>
+  <color name="bubble_grey">#dcdcdc</color>
 
 </resources>
