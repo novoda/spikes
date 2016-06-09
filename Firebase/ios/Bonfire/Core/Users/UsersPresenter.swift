@@ -19,7 +19,11 @@ class UsersPresenter {
 
     private let updateUserSubject = PublishSubject<UserAction>()
 
-    init(channel: Channel, usersService: UsersService, channelsService: ChannelsService, usersDisplayer: UsersDisplayer, navigator: Navigator) {
+    init(channel: Channel,
+         usersService: UsersService,
+         channelsService: ChannelsService,
+         usersDisplayer: UsersDisplayer,
+         navigator: Navigator) {
         self.channel = channel
         self.usersService = usersService
         self.channelsService = channelsService
@@ -32,7 +36,10 @@ class UsersPresenter {
 
         usersDisplayer.actionListener = self
 
-        let usersObservable = Observable.combineLatest(usersService.allUsers(), channelsService.users(forChannel: channel)) { (allUsers, channelOwners) in
+        let usersObservable = Observable.combineLatest(
+            usersService.allUsers(),
+            channelsService.users(forChannel: channel)
+        ) { (allUsers, channelOwners) in
             return (allUsers, channelOwners)
         }
 
@@ -76,5 +83,5 @@ extension UsersPresenter: UsersActionListener {
     func removeOwner(user: User) {
         updateUserSubject.onNext(.Remove(user))
     }
-    
+
 }

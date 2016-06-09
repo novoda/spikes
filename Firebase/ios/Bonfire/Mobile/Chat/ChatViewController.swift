@@ -8,7 +8,15 @@ final class ChatViewController: UIViewController {
 
     static func withDependencies(channel channel: Channel) -> ChatViewController {
         let chatView = ChatView()
-        let presenter = ChatPresenter(channel: channel, loginService: SharedServices.loginService, chatService: SharedServices.chatService, chatDisplayer: chatView, navigator: SharedServices.navigator, analytics: SharedServices.analytics)
+        let presenter = ChatPresenter(
+            channel: channel,
+            loginService: SharedServices.loginService,
+            chatService: SharedServices.chatService,
+            chatDisplayer: chatView,
+            navigator: SharedServices.navigator,
+            analytics: SharedServices.analytics
+        )
+
         return ChatViewController(presenter: presenter, view: chatView)
     }
 
@@ -67,40 +75,52 @@ extension ChatViewController: ChatViewNavigationItemDelegate {
 // MARK: - Keyboard Handling
 extension ChatViewController {
     func setupKeyboardNotifcationListener() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.addObserver(self,
+                                       selector: #selector(keyboardWillShow(_:)),
+                                       name: UIKeyboardWillShowNotification,
+                                       object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(keyboardWillHide(_:)),
+                                       name: UIKeyboardWillHideNotification,
+                                       object: nil)
     }
 
     func removeKeyboardNotificationListeners() {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        notificationCenter.removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
     }
 
     func keyboardWillShow(notification: NSNotification) {
-        let userInfo = notification.userInfo as! Dictionary<String, AnyObject>
-        let animationDuration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSTimeInterval
-        let animationCurve = userInfo[UIKeyboardAnimationCurveUserInfoKey]!.intValue
-        let keyboardFrame = userInfo[UIKeyboardFrameEndUserInfoKey]?.CGRectValue
-        let keyboardFrameConvertedToViewFrame = view.convertRect(keyboardFrame!, fromView: nil)
+        guard let userInfo = notification.userInfo as? Dictionary<String, AnyObject>,
+            let animationDuration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSTimeInterval,
+            let animationCurve = userInfo[UIKeyboardAnimationCurveUserInfoKey]?.intValue,
+            let keyboardFrame = userInfo[UIKeyboardFrameEndUserInfoKey]?.CGRectValue
+            else { return }
+
+        let keyboardFrameConvertedToViewFrame = view.convertRect(keyboardFrame, fromView: nil)
         let curveAnimationOption = UIViewAnimationOptions(rawValue: UInt(animationCurve))
         let options = UIViewAnimationOptions.BeginFromCurrentState.union(curveAnimationOption)
 
         UIView.animateWithDuration(animationDuration, delay: 0, options:options, animations: { () -> Void in
             self.bottomConstraint.constant = keyboardFrameConvertedToViewFrame.height
             self.view.layoutIfNeeded()
-        }, completion: nil)
+            }, completion: nil)
     }
 
     func keyboardWillHide(notification: NSNotification) {
-        let userInfo = notification.userInfo as! Dictionary<String, AnyObject>
-        let animationDuration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSTimeInterval
-        let animationCurve = userInfo[UIKeyboardAnimationCurveUserInfoKey]!.intValue
+        guard let userInfo = notification.userInfo as? Dictionary<String, AnyObject>,
+            let animationDuration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSTimeInterval,
+            let animationCurve = userInfo[UIKeyboardAnimationCurveUserInfoKey]?.intValue
+            else { return }
+
         let curveAnimationOption = UIViewAnimationOptions(rawValue: UInt(animationCurve))
         let options = UIViewAnimationOptions.BeginFromCurrentState.union(curveAnimationOption)
 
         UIView.animateWithDuration(animationDuration, delay: 0, options:options, animations: { () -> Void in
             self.bottomConstraint.constant = 0
             self.view.layoutIfNeeded()
-        }, completion: nil)
+            }, completion: nil)
     }
 }

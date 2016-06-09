@@ -13,8 +13,8 @@ class PersistedChannelServiceTests: XCTestCase {
     var mockUserDatabase: UserDatabase!
     var channelService: PersistedChannelsService!
 
-    let testUser1 = User(name: "TestUser1", id: "1", photoURL: nil)
-    let testUser2 = User(name: "TestUser2", id: "2", photoURL: nil)
+    let testUser1 = User(name: "TestUser1", identifier: "1", photoURL: nil)
+    let testUser2 = User(name: "TestUser2", identifier: "2", photoURL: nil)
 
     let publicChannel = Channel(name: "💣", access: .Public)
     let privateChannel = Channel(name: "🙈", access: .Private)
@@ -52,9 +52,9 @@ class PersistedChannelServiceTests: XCTestCase {
 
         func readUserFrom(userID: String) -> Observable<User> {
             if userID == "1" {
-                return scheduler.singleEventAndComplete(User(name: "TestUser1", id: "1", photoURL: nil))
+                return scheduler.singleEventAndComplete(User(name: "TestUser1", identifier: "1", photoURL: nil))
             } else if userID == "2" {
-                return scheduler.singleEventAndComplete(User(name: "TestUser2", id: "2", photoURL: nil))
+                return scheduler.singleEventAndComplete(User(name: "TestUser2", identifier: "2", photoURL: nil))
             } else {
                 return Observable.empty()
             }
@@ -78,7 +78,7 @@ class PersistedChannelServiceTests: XCTestCase {
         }
 
         func observePrivateChannelIdsFor(user: User) -> Observable<[String]> {
-            if user.id == "1" {
+            if user.identifier == "1" {
                 return scheduler.singleEventAndHang(["🙈"])
             } else {
                 return Observable.empty()

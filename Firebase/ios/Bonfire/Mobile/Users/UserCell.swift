@@ -81,7 +81,7 @@ final class UserCell: UITableViewCell {
             guard let image = UIImage(data: data) else {
                 throw HTTPImageServiceError()
             }
-            
+
             return image
         }
     }

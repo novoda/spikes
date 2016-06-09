@@ -18,11 +18,11 @@ class FirebaseUserDatabase: UserDatabase {
     }
 
     func writeCurrentUser(user: User) {
-        usersDB.child(user.id).setValue(user.asFirebaseValue())
+        usersDB.child(user.identifier).setValue(user.asFirebaseValue())
     }
 
     private func toUsers(snapshot: FIRDataSnapshot) throws -> Users {
-        let users = try snapshot.children.allObjects.map({try User(snapshot: $0 as! FIRDataSnapshot)})
+        let users = try snapshot.children.allObjects.map(asFIRDataSnapshot).map(User.init)
         return Users(users: users)
     }
 }

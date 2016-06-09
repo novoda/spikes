@@ -10,8 +10,8 @@ class PersistedUserServiceTests: XCTestCase {
     var mockUserDatabase: UserDatabase!
     var userService: PersistedUserService!
 
-    let testUser1 = User(name: "TestUser1", id: "1", photoURL: nil)
-    let testUser2 = User(name: "TestUser2", id: "2", photoURL: nil)
+    let testUser1 = User(name: "TestUser1", identifier: "1", photoURL: nil)
+    let testUser2 = User(name: "TestUser2", identifier: "2", photoURL: nil)
 
     var disposeBag: DisposeBag!
 
@@ -35,7 +35,7 @@ class PersistedUserServiceTests: XCTestCase {
         }
 
         func observeUsers() -> Observable<Users> {
-            return scheduler.singleEventAndHang(Users(users: [ User(name: "TestUser1", id: "1", photoURL: nil), User(name: "TestUser2", id: "2", photoURL: nil) ]))
+            return scheduler.singleEventAndHang(Users(users: [ User(name: "TestUser1", identifier: "1", photoURL: nil), User(name: "TestUser2", identifier: "2", photoURL: nil) ]))
         }
 
         func readUserFrom(userID: String) -> Observable<User> { return Observable.empty() }

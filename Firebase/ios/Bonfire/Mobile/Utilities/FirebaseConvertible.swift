@@ -18,3 +18,11 @@ extension FirebaseConvertible {
 }
 
 struct FirebaseConvertibleError: ErrorType {}
+
+func asFIRDataSnapshot(object: AnyObject) throws -> FIRDataSnapshot {
+    guard let snapshot = object as? FIRDataSnapshot else {
+        throw FirebaseConvertibleError()
+    }
+
+    return snapshot
+}

@@ -83,7 +83,7 @@ class PersistedChatServiceTests: XCTestCase {
     
     func testThatItCallsTheSendMessageOnTheDatabase() {
         // Given
-        let user = User(name: "TestUser", id: "1", photoURL: nil)
+        let user = User(name: "TestUser", identifier: "1", photoURL: nil)
         let message = Message(author: user, body: "Test message")
 
         let expectation = self.expectationWithDescription("testThatItCallsTheSendMessageOnTheDatabase")
