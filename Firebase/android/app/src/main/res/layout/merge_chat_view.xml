@@ -2,35 +2,53 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools">
 
-  <include layout="@layout/toolbar_inverted_layout"/>
+  <include layout="@layout/toolbar_inverted_layout" />
 
-  <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/messagesRecyclerView"
+  <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="0dp"
-    android:layout_weight="1"
-    tools:context="com.novoda.bonfire.chat.ChatActivity"/>
+    android:layout_weight="1">
 
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/list_item_horizontal_margin"
-    android:paddingRight="@dimen/list_item_horizontal_margin"
-    android:orientation="horizontal">
+    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      android:id="@+id/messagesRecyclerView"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:clipToPadding="false"
+      tools:context="com.novoda.bonfire.chat.ChatActivity"
+      android:paddingBottom="72dp"/>
 
-    <EditText
-      android:id="@+id/messageEdit"
-      android:layout_width="0dp"
+    <LinearLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_weight="1"/>
+      android:layout_gravity="bottom"
+      android:layout_marginBottom="@dimen/chat_entry_margin"
+      android:layout_marginLeft="@dimen/chat_entry_margin"
+      android:layout_marginRight="@dimen/chat_entry_margin"
+      android:background="@drawable/oval_shape_white"
+      android:elevation="4dp"
+      android:gravity="center_vertical"
+      android:orientation="horizontal"
+      android:paddingBottom="@dimen/chat_entry_padding_vertical"
+      android:paddingLeft="@dimen/chat_entry_padding_horizontal"
+      android:paddingRight="@dimen/chat_entry_padding_horizontal"
+      android:paddingTop="@dimen/chat_entry_padding_vertical">
 
-    <Button
-      android:id="@+id/submitButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/submit"/>
+      <EditText
+        android:id="@+id/messageEdit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="12sp" />
 
-  </LinearLayout>
+      <ImageView
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_send" />
+
+    </LinearLayout>
+
+  </FrameLayout>
 
 </merge>

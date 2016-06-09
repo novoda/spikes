@@ -9,4 +9,7 @@
 
   <dimen name="channel_item_padding">7dp</dimen>
   <dimen name="channel_grid_padding">9dp</dimen>
+  <dimen name="chat_entry_margin">8dp</dimen>
+  <dimen name="chat_entry_padding_horizontal">16dp</dimen>
+  <dimen name="chat_entry_padding_vertical">12dp</dimen>
 </resources>
