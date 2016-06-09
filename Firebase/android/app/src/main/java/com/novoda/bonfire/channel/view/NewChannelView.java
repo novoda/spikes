@@ -123,12 +123,11 @@ public class NewChannelView extends LinearLayout implements NewChannelDisplayer 
     private final Toolbar.OnMenuItemClickListener menuItemClickListener = new Toolbar.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.actionCreate:
-                    channelCreationListener.onCreateChannelClicked(newChannelName.getText().toString(), privateChannelSwitch.isChecked());
-                    return true;
-                default:
-                    return false;
+            if (item.getItemId() == R.id.actionCreate) {
+                channelCreationListener.onCreateChannelClicked(newChannelName.getText().toString(), privateChannelSwitch.isChecked());
+                return true;
+            } else {
+                return false;
             }
         }
     };
