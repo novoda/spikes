@@ -31,9 +31,10 @@ final class ChannelsView: UIView {
         collectionViewManager.actionListener = self
 
         let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        flowLayout.sectionInset = UIEdgeInsets(top: 25, left: 25, bottom: 25, right: 25)
+        flowLayout.sectionInset = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
 
-        collectionView.backgroundColor = .whiteColor()
+        collectionView.backgroundColor = UIColor(red: 244/255.0, green: 244/255.0, blue: 244/255.0, alpha: 1.0)
+
     }
 
     private func setupLayout() {

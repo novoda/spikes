@@ -4,11 +4,14 @@ import RxCocoa
 
 final class CreateChannelView: UIView {
 
+    private let privacySwitch = UISwitch()
+    private let privacyLabel = UILabel()
+    private let privacyBackground = UIView()
+
     private let errorLabel = UILabel()
     private let channelNameLabel = UILabel()
     private let channelNameField = UITextField()
-    private let privacySwitch = UISwitch()
-    private let privacyLabel = UILabel()
+
     private let submitButton = UIButton()
 
     weak var actionListener: CreateChannelActionListener?
@@ -33,6 +36,12 @@ final class CreateChannelView: UIView {
     func setupViews() {
         backgroundColor = .whiteColor()
 
+        privacyLabel.text = "Private Channel"
+
+//        privacyBackground.backgroundColor = BonfireColors.lightGrey
+        privacyBackground.backgroundColor = UIColor.redColor()
+
+
         channelNameLabel.text = "Channel emoji name"
 
         channelNameField.backgroundColor = .clearColor()
@@ -45,19 +54,23 @@ final class CreateChannelView: UIView {
         errorLabel.font = UIFont.systemFontOfSize(12)
         errorLabel.text = ""
 
-        privacyLabel.text = "Private"
-
         submitButton.setTitleColor(.blueColor(), forState: .Normal)
         submitButton.setTitle("Create Channel", forState: .Normal)
     }
 
     func setupLayout() {
+        addSubview(privacyBackground)
         addSubview(errorLabel)
         addSubview(channelNameLabel)
         addSubview(channelNameField)
         addSubview(privacyLabel)
         addSubview(privacySwitch)
         addSubview(submitButton)
+
+        privacyBackground.pinToSuperviewTop(withConstant: 100)
+        privacyBackground.pinToSuperviewLeading()
+        privacyBackground.pinToSuperviewTrailing()
+        privacyBackground.addHeightConstraint(withConstant: 100)
 
         errorLabel.pinToSuperviewTop(withConstant: 10)
         errorLabel.pinToSuperviewLeading(withConstant: 16)
@@ -82,6 +95,13 @@ final class CreateChannelView: UIView {
         submitButton.pinToSuperviewLeading(withConstant: 8)
         submitButton.pinToSuperviewTrailing(withConstant: 8)
         submitButton.addHeightConstraint(withConstant: 44)
+
+        let privacyBackgroundBottomBorder = UIView()
+        //        privacyBackgroundBottomBorder.backgroundColor = BonfireColors.greyHighlight.CGColor
+        privacyBackgroundBottomBorder.backgroundColor = UIColor.greenColor()
+        privacyBackgroundBottomBorder.frame = CGRect(x: privacyBackground.frame.minX, y: privacyBackground.frame.minY, width: privacyBackground.frame.width, height: 100.0)
+        privacyBackground.addSubview(privacyBackgroundBottomBorder)
+
     }
 
     func setupActions() {
