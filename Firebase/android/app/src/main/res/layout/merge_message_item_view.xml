@@ -11,16 +11,15 @@
       android:id="@+id/messageAuthorName"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:fontFamily="sans-serif-medium"
       android:textColor="@color/text_grey"
-      android:textSize="10sp"
-      android:textStyle="bold" />
+      android:textSize="10sp" />
 
     <TextView
       android:id="@+id/messageTime"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:paddingLeft="@dimen/list_item_horizontal_margin"
-      android:paddingRight="@dimen/list_item_horizontal_margin"
+      android:paddingLeft="8dp"
       android:textColor="@color/text_grey_light"
       android:textSize="10sp" />
 
