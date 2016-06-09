@@ -12,5 +12,6 @@ public interface NewChannelDisplayer {
 
         void onCreateChannelClicked(String channelName, boolean isPrivate);
 
+        void onCancel();
     }
 }
