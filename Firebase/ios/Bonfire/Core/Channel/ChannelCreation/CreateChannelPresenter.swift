@@ -19,7 +19,10 @@ final class CreateChannelPresenter {
 
     private let createChannelSubject = PublishSubject<(String, Bool)>()
 
-    init(loginService: LoginService, channelsService: ChannelsService, createChannelDisplayer: CreateChannelDisplayer, navigator: Navigator) {
+    init(loginService: LoginService,
+         channelsService: ChannelsService,
+         createChannelDisplayer: CreateChannelDisplayer,
+         navigator: Navigator) {
         self.loginService = loginService
         self.channelsService = channelsService
         self.createChannelDisplayer = createChannelDisplayer
@@ -63,5 +66,3 @@ extension CreateChannelPresenter: CreateChannelActionListener {
             createChannelSubject.on(.Next((name, privateChannel)))
     }
 }
-
-

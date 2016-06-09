@@ -1,0 +1,29 @@
+fastlane_version "1.94.1"
+
+default_platform :ios
+
+platform :ios do
+  before_all do
+    cocoapods
+  end
+
+  desc "Run the tests"
+  lane :test do
+    scan(scheme: "Bonfire")
+  end
+
+  desc "Build for beta"
+  lane :beta do
+    prepare_for_beta
+    match(type: "appstore", readonly: true)
+    gym
+    pilot
+  end
+
+  def prepare_for_beta
+    increment_build_number
+    commit_version_bump
+    push_to_git_remote(local_branch: git_branch)
+  end
+
+end

@@ -1,7 +1,7 @@
 import UIKit
 
 final class ChannelsView: UIView {
-    private let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
+    private let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
     private let collectionViewManager = ChannelsCollectionViewManager()
     private weak var actionListener: ChannelsActionListener?
 
@@ -30,8 +30,9 @@ final class ChannelsView: UIView {
         collectionViewManager.setupCollectionView(collectionView)
         collectionViewManager.actionListener = self
 
-        let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        flowLayout.sectionInset = UIEdgeInsets(top: 25, left: 25, bottom: 25, right: 25)
+        if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            flowLayout.sectionInset = UIEdgeInsets(top: 25, left: 25, bottom: 25, right: 25)
+        }
 
         collectionView.backgroundColor = .whiteColor()
     }
