@@ -30,7 +30,7 @@ final class ChannelsCollectionViewManager: NSObject, UICollectionViewDataSource,
 
         let channel = channels.channels[indexPath.row]
         cell.updateWithChannel(channel)
-        
+
         return cell
     }
 

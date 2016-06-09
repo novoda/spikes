@@ -23,7 +23,7 @@ extension UITableView {
         guard let cell = dequeueReusableCellWithIdentifier(T.defaultReuseIdentifier, forIndexPath: indexPath) as? T else {
             fatalError("Could not dequeue cell with identifier: \(T.defaultReuseIdentifier)")
         }
-        
+
         return cell
     }
 }

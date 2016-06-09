@@ -104,6 +104,7 @@ final class CreateChannelView: UIView {
 
 extension CreateChannelView: CreateChannelDisplayer {
     func displayError(error: ErrorType) {
-        errorLabel.text = "Sorry that channel name is either already in use, or is invalid. Please try another name with a single emoji."
+        errorLabel.text = "Sorry that channel name is either already in use, or is invalid. " +
+        "Please try another name with a single emoji."
     }
 }

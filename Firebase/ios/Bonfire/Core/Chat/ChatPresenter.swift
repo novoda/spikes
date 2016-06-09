@@ -13,7 +13,14 @@ final class ChatPresenter {
     private var user: User?
     private let channel: Channel
 
-    init(channel: Channel, loginService: LoginService, chatService: ChatService, chatDisplayer: ChatDisplayer, navigator: Navigator, analytics: Analytics) {
+    init(
+        channel: Channel,
+        loginService: LoginService,
+        chatService: ChatService,
+        chatDisplayer: ChatDisplayer,
+        navigator: Navigator,
+        analytics: Analytics
+        ) {
         self.channel = channel
         self.loginService = loginService
         self.chatService = chatService
@@ -32,7 +39,7 @@ final class ChatPresenter {
         loginService.user().subscribe(
             onNext: { [weak self] authentication in
                 self?.user = authentication.user
-        }).addDisposableTo(disposeBag)
+            }).addDisposableTo(disposeBag)
 
         chatService.chat(channel).subscribe(
             onNext: { [weak self] result in
@@ -41,7 +48,7 @@ final class ChatPresenter {
                     self?.chatDisplayer.display(chat)
                 default: break
                 }
-        }).addDisposableTo(disposeBag)
+            }).addDisposableTo(disposeBag)
     }
 
     func stopPresenting() {

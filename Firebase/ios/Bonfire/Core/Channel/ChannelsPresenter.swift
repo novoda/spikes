@@ -11,7 +11,12 @@ class ChannelsPresenter {
 
     var disposeBag: DisposeBag!
 
-    init(loginService: LoginService, channelsService: ChannelsService, channelsDisplayer: ChannelsDisplayer, navigator: Navigator, dynamicLinkFactory: DynamicLinkFactory, config: Config) {
+    init(loginService: LoginService,
+         channelsService: ChannelsService,
+         channelsDisplayer: ChannelsDisplayer,
+         navigator: Navigator,
+         dynamicLinkFactory: DynamicLinkFactory,
+         config: Config) {
         self.loginService = loginService
         self.channelsService = channelsService
         self.channelsDisplayer = channelsDisplayer

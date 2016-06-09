@@ -19,7 +19,7 @@ final class FirebaseLoginService: NSObject, LoginService {
 
     func user() -> Observable<Authentication> {
         let auth = authentication.asObservable()
-            .filter{ $0 != nil }
+            .filter { $0 != nil }
             .map { $0! }
 
         return initAuthentication().concat(auth)
@@ -58,7 +58,7 @@ final class FirebaseLoginService: NSObject, LoginService {
         FIRAuth.auth()?.signInWithCredential(credential, completion: { firebaseUser, error in
             if let user = firebaseUser {
                 let user = User(firebaseUser: user)
-                self.usersDB.child(user.id).setValue(user.asFirebaseValue())
+                self.usersDB.child(user.identifier).setValue(user.asFirebaseValue())
                 self.authentication.value = Authentication(user: user)
             } else if let error = error {
                 self.authentication.value = Authentication(failure: error)
@@ -70,6 +70,6 @@ final class FirebaseLoginService: NSObject, LoginService {
 
 extension User {
     init(firebaseUser: FIRUser) {
-        self.init(name: firebaseUser.displayName!, id: firebaseUser.uid, photoURL: firebaseUser.photoURL)
+        self.init(name: firebaseUser.displayName!, identifier: firebaseUser.uid, photoURL: firebaseUser.photoURL)
     }
 }

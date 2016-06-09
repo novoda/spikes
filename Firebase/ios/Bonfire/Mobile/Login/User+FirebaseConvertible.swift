@@ -18,15 +18,15 @@ extension User: FirebaseConvertible {
             photoURL = nil
         }
 
-        self.init(name: name, id: id, photoURL: photoURL)
+        self.init(name: name, identifier: id, photoURL: photoURL)
     }
 
     func asFirebaseValue() -> AnyObject {
         return [
             "name": name,
-            "id": id,
+            "id": identifier,
             "photoUrl": photoURL?.absoluteString ?? ""
         ]
     }
-    
+
 }
