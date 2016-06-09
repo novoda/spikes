@@ -1,11 +1,12 @@
 package com.novoda.bonfire.channel.view;
 
 import android.content.Context;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -19,7 +20,7 @@ public class NewChannelView extends LinearLayout implements NewChannelDisplayer 
     private ChannelCreationListener channelCreationListener;
     private EditText newChannelName;
     private Switch privateChannelSwitch;
-    private Button createButton;
+    private Toolbar toolbar;
 
     public NewChannelView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -32,22 +33,35 @@ public class NewChannelView extends LinearLayout implements NewChannelDisplayer 
         View.inflate(getContext(), R.layout.merge_create_channel_view, this);
         newChannelName = Views.findById(this, R.id.newChannelName);
         privateChannelSwitch = Views.findById(this, R.id.privateChannelSwitch);
-        createButton = Views.findById(this, R.id.createButton);
+        setupToolbar();
+    }
+
+    private void setupToolbar() {
+        toolbar = Views.findById(this, R.id.toolbar);
+        toolbar.setTitle(R.string.createChannel);
+        toolbar.inflateMenu(R.menu.new_channel_menu);
+        toolbar.setNavigationIcon(R.drawable.ic_clear_white_24dp);
     }
 
     @Override
     public void attach(final ChannelCreationListener channelCreationListener) {
         this.channelCreationListener = channelCreationListener;
         newChannelName.addTextChangedListener(channelNameTextWatcher);
-        createButton.setOnClickListener(createButtonClickListener);
-        createButton.setEnabled(false);
+        toolbar.setOnMenuItemClickListener(menuItemClickListener);
+        toolbar.setNavigationOnClickListener(navigationOnClickListener);
+        getCreateItem().setEnabled(false);
+    }
+
+    private MenuItem getCreateItem() {
+        return toolbar.getMenu().findItem(R.id.actionCreate);
     }
 
     @Override
     public void detach(ChannelCreationListener channelCreationListener) {
         newChannelName.removeTextChangedListener(channelNameTextWatcher);
         privateChannelSwitch.setOnCheckedChangeListener(null);
-        createButton.setOnClickListener(null);
+        toolbar.setOnMenuItemClickListener(null);
+        toolbar.setNavigationOnClickListener(null);
         this.channelCreationListener = null;
     }
 
@@ -99,17 +113,29 @@ public class NewChannelView extends LinearLayout implements NewChannelDisplayer 
 
         @Override
         public void afterTextChanged(Editable s) {
-            createButton.setEnabled(s.length() > 0 && isValidInput);
+            getCreateItem().setEnabled(s.length() > 0 && isValidInput);
             if (!isValidInput) {
                 setChannelNameError(R.string.only_single_emoji_allowed);
             }
         }
     };
 
-    private final OnClickListener createButtonClickListener = new OnClickListener() {
+    private final Toolbar.OnMenuItemClickListener menuItemClickListener = new Toolbar.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            if (item.getItemId() == R.id.actionCreate) {
+                channelCreationListener.onCreateChannelClicked(newChannelName.getText().toString(), privateChannelSwitch.isChecked());
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+    private final OnClickListener navigationOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            channelCreationListener.onCreateChannelClicked(newChannelName.getText().toString(), privateChannelSwitch.isChecked());
+            channelCreationListener.onCancel();
         }
     };
 }
