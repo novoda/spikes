@@ -2,7 +2,6 @@ package com.novoda.bonfire.channel;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
 
 import com.novoda.bonfire.BaseActivity;
 import com.novoda.bonfire.Dependencies;
@@ -14,7 +13,6 @@ import com.novoda.bonfire.navigation.AndroidNavigator;
 public class NewChannelActivity extends BaseActivity {
 
     private NewChannelPresenter newChannelPresenter;
-    private Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

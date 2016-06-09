@@ -33,6 +33,10 @@ public class NewChannelView extends LinearLayout implements NewChannelDisplayer 
         View.inflate(getContext(), R.layout.merge_create_channel_view, this);
         newChannelName = Views.findById(this, R.id.newChannelName);
         privateChannelSwitch = Views.findById(this, R.id.privateChannelSwitch);
+        setupToolbar();
+    }
+
+    private void setupToolbar() {
         toolbar = Views.findById(this, R.id.toolbar);
         toolbar.setTitle(R.string.createChannel);
         toolbar.inflateMenu(R.menu.new_channel_menu);
@@ -45,7 +49,11 @@ public class NewChannelView extends LinearLayout implements NewChannelDisplayer 
         newChannelName.addTextChangedListener(channelNameTextWatcher);
         toolbar.setOnMenuItemClickListener(menuItemClickListener);
         toolbar.setNavigationOnClickListener(navigationOnClickListener);
-        toolbar.getMenu().getItem(0).setEnabled(false);
+        getCreateItem().setEnabled(false);
+    }
+
+    private MenuItem getCreateItem() {
+        return toolbar.getMenu().findItem(R.id.actionCreate);
     }
 
     @Override
@@ -105,7 +113,7 @@ public class NewChannelView extends LinearLayout implements NewChannelDisplayer 
 
         @Override
         public void afterTextChanged(Editable s) {
-            toolbar.getMenu().getItem(0).setEnabled(s.length() > 0 && isValidInput);
+            getCreateItem().setEnabled(s.length() > 0 && isValidInput);
             if (!isValidInput) {
                 setChannelNameError(R.string.only_single_emoji_allowed);
             }
