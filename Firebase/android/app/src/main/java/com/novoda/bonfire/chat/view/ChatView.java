@@ -1,6 +1,7 @@
 package com.novoda.bonfire.chat.view;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,7 +25,7 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
 
     private final ChatAdapter chatAdapter;
     private TextView messageView;
-    private View submitButton;
+    private ImageView submitButton;
     private RecyclerView recyclerView;
     private Toolbar toolbar;
 
@@ -89,11 +91,13 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
     @Override
     public void enableInteraction() {
         submitButton.setEnabled(true);
+        submitButton.setColorFilter(null);
     }
 
     @Override
     public void disableInteraction() {
         submitButton.setEnabled(false);
+        submitButton.setColorFilter(getResources().getColor(R.color.disabled_grey), PorterDuff.Mode.SRC_ATOP);
     }
 
     private final TextWatcher textWatcher = new TextWatcher() {
