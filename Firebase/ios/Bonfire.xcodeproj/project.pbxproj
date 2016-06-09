@@ -9,13 +9,14 @@
 /* Begin PBXBuildFile section */
 		1A0A41A21D0184640053A547 /* PersistedUserServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0A41A11D0184640053A547 /* PersistedUserServiceTests.swift */; };
 		1A0A41A41D018D810053A547 /* Rememberancer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0A41A31D018D810053A547 /* Rememberancer.swift */; };
+		1ABEAC661D08573D00A85CE2 /* FirebaseIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABEAC651D08573D00A85CE2 /* FirebaseIdentifiers.swift */; };
+		1ABEAC681D08730B00A85CE2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1ABEAC671D08730B00A85CE2 /* GoogleService-Info.plist */; };
 		1AF7D1A01CEF651600B74483 /* UsersTableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */; };
 		1AF7D1A21CEF659A00B74483 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF7D1A11CEF659A00B74483 /* UserCell.swift */; };
 		2A9669953EF6713AF4064B53 /* Pods_Bonfire_BonfireTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE09269AA64387314EE925E /* Pods_Bonfire_BonfireTests.framework */; };
 		2C77DC9A3D905A6AE8E74FFB /* Pods_Bonfire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13F2FDE620ACDD8945A96B8C /* Pods_Bonfire.framework */; };
 		B61BD4CA1CFEE65100DD7A70 /* SharedServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61BD4C91CFEE65100DD7A70 /* SharedServices.swift */; };
 		B61BD4CD1CFEE93000DD7A70 /* PersistedChannelServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61BD4CC1CFEE93000DD7A70 /* PersistedChannelServiceTests.swift */; };
-		B6210AC41CE20CEC00570509 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B6210AC31CE20CEC00570509 /* GoogleService-Info.plist */; };
 		B6210AC61CE21FA500570509 /* FirebaseLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6210AC51CE21FA500570509 /* FirebaseLoginService.swift */; };
 		B6210AC81CE2318B00570509 /* UIViewController+AlertExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6210AC71CE2318B00570509 /* UIViewController+AlertExtensions.swift */; };
 		B6210ACC1CE24AC600570509 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6210ACB1CE24AC600570509 /* Authentication.swift */; };
@@ -104,6 +105,8 @@
 		13F2FDE620ACDD8945A96B8C /* Pods_Bonfire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bonfire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A0A41A11D0184640053A547 /* PersistedUserServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedUserServiceTests.swift; sourceTree = "<group>"; };
 		1A0A41A31D018D810053A547 /* Rememberancer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rememberancer.swift; sourceTree = "<group>"; };
+		1ABEAC651D08573D00A85CE2 /* FirebaseIdentifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseIdentifiers.swift; sourceTree = "<group>"; };
+		1ABEAC671D08730B00A85CE2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersTableViewManager.swift; sourceTree = "<group>"; };
 		1AF7D1A11CEF659A00B74483 /* UserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		4AE09269AA64387314EE925E /* Pods_Bonfire_BonfireTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bonfire_BonfireTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,7 +115,6 @@
 		8297D97C9651CE491D681CBF /* Pods-Bonfire.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bonfire.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bonfire/Pods-Bonfire.debug.xcconfig"; sourceTree = "<group>"; };
 		B61BD4C91CFEE65100DD7A70 /* SharedServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedServices.swift; sourceTree = "<group>"; };
 		B61BD4CC1CFEE93000DD7A70 /* PersistedChannelServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedChannelServiceTests.swift; sourceTree = "<group>"; };
-		B6210AC31CE20CEC00570509 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B6210AC51CE21FA500570509 /* FirebaseLoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseLoginService.swift; sourceTree = "<group>"; };
 		B6210AC71CE2318B00570509 /* UIViewController+AlertExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+AlertExtensions.swift"; sourceTree = "<group>"; };
 		B6210ACB1CE24AC600570509 /* Authentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
@@ -286,8 +288,8 @@
 				B65C45B61CE0E1D000B2179D /* Mobile */,
 				B654B26D1CE0C38000EEDE0A /* Assets.xcassets */,
 				B6C054E21CF5B10200B1BB6C /* Bonfire.entitlements */,
-				B6210AC31CE20CEC00570509 /* GoogleService-Info.plist */,
 				B654B2721CE0C38000EEDE0A /* Info.plist */,
+				1ABEAC671D08730B00A85CE2 /* GoogleService-Info.plist */,
 				B654B26F1CE0C38000EEDE0A /* LaunchScreen.storyboard */,
 			);
 			path = Bonfire;
@@ -351,6 +353,7 @@
 				B6AC7C161CF458E000F96722 /* FirebaseAnalytics.swift */,
 				B636BA251CF34DDA009009F2 /* FirebaseRemoteConfig.swift */,
 				B61BD4C91CFEE65100DD7A70 /* SharedServices.swift */,
+				1ABEAC651D08573D00A85CE2 /* FirebaseIdentifiers.swift */,
 			);
 			path = Mobile;
 			sourceTree = "<group>";
@@ -620,7 +623,7 @@
 			files = (
 				B654B2711CE0C38000EEDE0A /* LaunchScreen.storyboard in Resources */,
 				B654B26E1CE0C38000EEDE0A /* Assets.xcassets in Resources */,
-				B6210AC41CE20CEC00570509 /* GoogleService-Info.plist in Resources */,
+				1ABEAC681D08730B00A85CE2 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -793,6 +796,7 @@
 				B6962C8F1CEF5697006A3A9E /* UsersViewController.swift in Sources */,
 				B61BD4CA1CFEE65100DD7A70 /* SharedServices.swift in Sources */,
 				D0C31D0085982E1BA7EB3638 /* ChannelsDisplayer.swift in Sources */,
+				1ABEAC661D08573D00A85CE2 /* FirebaseIdentifiers.swift in Sources */,
 				D0C319895F726FA2DAECFC21 /* ChannelsViewController.swift in Sources */,
 				B6AC7C151CF4589500F96722 /* Analytics.swift in Sources */,
 				B6CC1CEE1CECA83600BA8500 /* CreateChannelPresenter.swift in Sources */,
