@@ -14,9 +14,10 @@
       android:id="@+id/messagesRecyclerView"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:background="@color/background_grey"
       android:clipToPadding="false"
-      tools:context="com.novoda.bonfire.chat.ChatActivity"
-      android:paddingBottom="72dp"/>
+      android:paddingBottom="72dp"
+      tools:context="com.novoda.bonfire.chat.ChatActivity" />
 
     <LinearLayout
       android:layout_width="match_parent"
@@ -42,10 +43,10 @@
         android:textSize="12sp" />
 
       <ImageView
-        android:paddingLeft="@dimen/chat_entry_padding_horizontal"
         android:id="@+id/submitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/chat_entry_padding_horizontal"
         android:src="@drawable/ic_send" />
 
     </LinearLayout>
