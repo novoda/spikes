@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.novoda.bonfire.R;
 import com.novoda.bonfire.chat.data.model.Chat;
 import com.novoda.bonfire.chat.displayer.ChatDisplayer;
+import com.novoda.bonfire.user.data.model.User;
 import com.novoda.notils.caster.Views;
 
 public class ChatView extends LinearLayout implements ChatDisplayer {
@@ -82,8 +83,8 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
     }
 
     @Override
-    public void display(Chat chat) {
-        chatAdapter.update(chat);
+    public void display(Chat chat, User user) {
+        chatAdapter.update(chat, user);
         int lastMessagePosition = chatAdapter.getItemCount() == 0 ? 0 : chatAdapter.getItemCount() - 1;
         recyclerView.smoothScrollToPosition(lastMessagePosition);
     }

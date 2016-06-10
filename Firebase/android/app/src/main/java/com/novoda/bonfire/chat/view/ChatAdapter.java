@@ -7,12 +7,14 @@ import android.view.ViewGroup;
 import com.novoda.bonfire.R;
 import com.novoda.bonfire.chat.data.model.Chat;
 import com.novoda.bonfire.chat.data.model.Message;
+import com.novoda.bonfire.user.data.model.User;
 
 import java.util.ArrayList;
 
 class ChatAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
     private Chat chat = new Chat(new ArrayList<Message>());
+    private User user = new User("", "", "");
     private final LayoutInflater inflater;
 
     ChatAdapter(LayoutInflater inflater) {
@@ -20,14 +22,19 @@ class ChatAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         setHasStableIds(true);
     }
 
-    public void update(Chat chat) {
+    public void update(Chat chat, User user) {
         this.chat = chat;
+        this.user = user;
         notifyDataSetChanged();
     }
 
     @Override
     public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MessageViewHolder((MessageView) inflater.inflate(R.layout.message_item_layout, parent, false));
+        if (viewType == 0) {
+            return new MessageViewHolder((MessageView) inflater.inflate(R.layout.self_message_item_layout, parent, false));
+        } else {
+            return new MessageViewHolder((MessageView) inflater.inflate(R.layout.message_item_layout, parent, false));
+        }
     }
 
     @Override
@@ -45,4 +52,8 @@ class ChatAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         return chat.get(position).getTimestamp();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return chat.get(position).getAuthor().getId().equals(user.getId()) ? 0 : 1;
+    }
 }
