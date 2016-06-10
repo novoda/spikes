@@ -13,8 +13,12 @@ import com.novoda.bonfire.login.service.LoginService;
 import com.novoda.bonfire.navigation.Navigator;
 import com.novoda.bonfire.user.data.model.User;
 
+import rx.Observable;
 import rx.functions.Action1;
+import rx.functions.Func2;
 import rx.subscriptions.CompositeSubscription;
+
+import static com.novoda.bonfire.chat.presenter.ChatPresenter.Pair.asPair;
 
 public class ChatPresenter {
 
@@ -26,11 +30,18 @@ public class ChatPresenter {
     private final Navigator navigator;
     private final ErrorLogger errorLogger;
 
-
     private CompositeSubscription subscriptions = new CompositeSubscription();
     private User user;
 
-    public ChatPresenter(LoginService loginService, ChatService chatService, ChatDisplayer chatDisplayer, Channel channel, Analytics analytics, Navigator navigator, ErrorLogger errorLogger) {
+    public ChatPresenter(
+            LoginService loginService,
+            ChatService chatService,
+            ChatDisplayer chatDisplayer,
+            Channel channel,
+            Analytics analytics,
+            Navigator navigator,
+            ErrorLogger errorLogger
+    ) {
         this.loginService = loginService;
         this.chatService = chatService;
         this.chatDisplayer = chatDisplayer;
@@ -48,26 +59,29 @@ public class ChatPresenter {
         chatDisplayer.attach(actionListener);
         chatDisplayer.disableInteraction();
         subscriptions.add(
-                chatService.getChat(channel).subscribe(new Action1<DatabaseResult<Chat>>() {
-                    @Override
-                    public void call(DatabaseResult<Chat> result) {
-                        if (result.isSuccess()) {
-                            chatDisplayer.display(result.getData());
-                        } else {
-                            errorLogger.reportError(result.getFailure(), "Cannot open chat");
-                            navigator.toChannels();
-                        }
-                    }
-                })
+                Observable.combineLatest(chatService.getChat(channel), loginService.getAuthentication(), asPair())
+                        .subscribe(new Action1<Pair>() {
+                            @Override
+                            public void call(Pair pair) {
+                                if (pair.auth.isSuccess()) {
+                                    user = pair.auth.getUser();
+                                    displayChat(pair);
+                                } else {
+                                    errorLogger.reportError(pair.auth.getFailure(), "Not logged in when opening chat");
+                                    navigator.toLogin();
+                                }
+                            }
+                        })
         );
-        subscriptions.add(
-                loginService.getAuthentication().subscribe(new Action1<Authentication>() {
-                    @Override
-                    public void call(Authentication authentication) {
-                        ChatPresenter.this.user = authentication.getUser(); //TODO handle missing auth
-                    }
-                })
-        );
+    }
+
+    private void displayChat(ChatPresenter.Pair pair) {
+        if (pair.chatResult.isSuccess()) {
+            chatDisplayer.display(pair.chatResult.getData(), user);
+        } else {
+            errorLogger.reportError(pair.chatResult.getFailure(), "Cannot open chat");
+            navigator.toChannels();
+        }
     }
 
     public void stopPresenting() {
@@ -107,5 +121,26 @@ public class ChatPresenter {
             navigator.toMembersOf(channel);
         }
     };
+
+    static class Pair {
+
+        public final DatabaseResult<Chat> chatResult;
+        public final Authentication auth;
+
+        private Pair(DatabaseResult<Chat> chatResult, Authentication auth) {
+            this.chatResult = chatResult;
+            this.auth = auth;
+        }
+
+        static Func2<DatabaseResult<Chat>, Authentication, Pair> asPair() {
+            return new Func2<DatabaseResult<Chat>, Authentication, Pair>() {
+                @Override
+                public ChatPresenter.Pair call(DatabaseResult<Chat> chatDatabaseResult, Authentication authentication) {
+                    return new ChatPresenter.Pair(chatDatabaseResult, authentication);
+                }
+            };
+        }
+
+    }
 
 }

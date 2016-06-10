@@ -4,8 +4,9 @@
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="right"
     android:orientation="horizontal"
-    android:paddingLeft="70dp">
+    android:paddingRight="70dp">
 
     <TextView
       android:id="@+id/messageAuthorName"
@@ -13,7 +14,8 @@
       android:layout_height="wrap_content"
       android:fontFamily="sans-serif-medium"
       android:textColor="@color/text_grey"
-      android:textSize="10sp" />
+      android:textSize="10sp"
+      android:visibility="gone" />
 
     <TextView
       android:id="@+id/messageTime"
@@ -34,7 +36,7 @@
       android:id="@+id/messageAuthorImage"
       android:layout_width="36sp"
       android:layout_height="36sp"
-      android:layout_alignParentLeft="true"
+      android:layout_alignParentRight="true"
       android:scaleType="fitCenter" />
 
     <TextView
@@ -42,12 +44,12 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignTop="@id/messageAuthorImage"
-      android:layout_marginLeft="8dp"
-      android:layout_toRightOf="@id/messageAuthorImage"
-      android:background="@drawable/bubble_shape_grey"
+      android:layout_marginRight="8dp"
+      android:layout_toLeftOf="@id/messageAuthorImage"
+      android:background="@drawable/bubble_shape_primary"
       android:paddingBottom="8dp"
-      android:paddingLeft="26dp"
-      android:paddingRight="13dp"
+      android:paddingLeft="10dp"
+      android:paddingRight="26dp"
       android:paddingTop="8dp"
       android:textColor="@color/text_black"
       android:textSize="14sp" />
