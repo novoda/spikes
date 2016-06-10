@@ -50,7 +50,7 @@
       android:paddingRight="8dp"
       android:paddingTop="8dp"
       android:textColor="@color/text_black"
-      android:textSize="12sp" />
+      android:textSize="14sp" />
 
   </RelativeLayout>
 
