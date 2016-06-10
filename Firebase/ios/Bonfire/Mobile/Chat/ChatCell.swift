@@ -2,6 +2,12 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+extension UIColor {
+    convenience init(red: Int, green: Int, blue: Int) {
+        self.init(red: CGFloat(red)/255, green: CGFloat(green)/255, blue: CGFloat(blue)/255, alpha: 1.0)
+    }
+}
+
 struct HTTPImageServiceError: ErrorType {}
 
 final class ChatCell: UITableViewCell {
@@ -9,18 +15,31 @@ final class ChatCell: UITableViewCell {
     let authorLabel = UILabel()
     let timestampLabel = UILabel()
     let photoView = UIImageView()
+    let smallDot = UIView()
+    let bigDot = UIView()
+    let bubbleView = UIView()
     let messageLabel = UILabel()
 
-    let verticalMargin: CGFloat = 5
+    let smallDotSize: CGFloat = 6
+    let bigDotSize: CGFloat = 12
+    let bigDotOverlap: CGFloat = 7
+    let verticalSpacing: CGFloat = 5
+    let verticalMargin: CGFloat = 10
     let horizontalMargin: CGFloat = 16
-    let imageSize: CGFloat = 28
+    let imageSize: CGFloat = 36
+
+    let messageFont = UIFont.systemFontOfSize(12)
+    let authorFont = UIFont.boldSystemFontOfSize(10)
+    let timestampFont = UIFont.systemFontOfSize(10)
+    let bubbleColor = UIColor(red: 220, green: 220, blue: 220)
 
     var disposeBag: DisposeBag! = nil
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupLayout()
         setupViews()
+        setupHierarchy()
+        setupLayout()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -30,47 +49,86 @@ final class ChatCell: UITableViewCell {
     func setupViews() {
         messageLabel.numberOfLines = 0
         authorLabel.numberOfLines = 0
-        messageLabel.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Vertical)
-        authorLabel.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Vertical)
-        timestampLabel.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Vertical)
-        timestampLabel.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Horizontal)
-        timestampLabel.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: .Horizontal)
 
         photoView.contentMode = .ScaleAspectFit
         photoView.layer.cornerRadius = imageSize/2
         photoView.layer.masksToBounds = true
 
-        authorLabel.font = UIFont.boldSystemFontOfSize(12)
-        timestampLabel.font = UIFont.italicSystemFontOfSize(10)
-        timestampLabel.textColor = .lightGrayColor()
-        messageLabel.font = UIFont.systemFontOfSize(12)
+        authorLabel.font = authorFont
+        authorLabel.textColor = .darkGrayColor()
+        timestampLabel.font = timestampFont
+        timestampLabel.textColor = .darkGrayColor()
+        timestampLabel.textAlignment = .Left
+
+        messageLabel.font = messageFont
+
+        bubbleView.backgroundColor = bubbleColor
+        smallDot.backgroundColor = bubbleColor
+        bigDot.backgroundColor = bubbleColor
+        let cornerRadius: CGFloat = verticalSpacing * 2 + messageFont.lineHeight/2
+        bubbleView.layer.cornerRadius = cornerRadius
+        smallDot.layer.cornerRadius = smallDotSize/2
+        bigDot.layer.cornerRadius = bigDotSize/2
     }
 
-    func setupLayout() {
+    func setupHierarchy() {
+        addSubview(smallDot)
+        addSubview(bigDot)
+        addSubview(bubbleView)
         addSubview(photoView)
-        addSubview(messageLabel)
         addSubview(authorLabel)
         addSubview(timestampLabel)
 
-        photoView.pinToSuperviewLeading(withConstant: horizontalMargin)
-        messageLabel.attachToRightOf(photoView, withConstant: 10)
-        messageLabel.pinToSuperviewTrailing(withConstant: horizontalMargin)
+        bubbleView.addSubview(messageLabel)
+    }
 
-        photoView.pinToSuperviewTop(withConstant: verticalMargin)
+    func setupLayout() {
+        smallDot.addHeightConstraint(withConstant: smallDotSize)
+        smallDot.addWidthConstraint(withConstant: smallDotSize)
+        smallDot.alignVerticalCenter(withView: photoView)
+
+        bigDot.addHeightConstraint(withConstant: bigDotSize)
+        bigDot.addWidthConstraint(withConstant: bigDotSize)
+        bigDot.alignVerticalCenter(withView: smallDot)
+
+        messageLabel.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Vertical)
+        authorLabel.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Vertical)
+        authorLabel.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: .Horizontal)
+
+        timestampLabel.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Vertical)
+        timestampLabel.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Horizontal)
+
+        messageLabel.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: .Horizontal)
+        messageLabel.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Vertical)
+
+        photoView.pinToSuperviewLeading(withConstant: horizontalMargin)
+        smallDot.attachToRightOf(photoView, withConstant: horizontalMargin/2)
+        bigDot.attachToRightOf(smallDot, withConstant: horizontalMargin/4)
+        bubbleView.attachToRightOf(bigDot, withConstant: -bigDotOverlap)
+        bubbleView.pinToSuperviewTrailing(withConstant: horizontalMargin, priority: UILayoutPriorityDefaultHigh)
+
+        authorLabel.pinToSuperviewTop(withConstant: verticalMargin)
+        authorLabel.alignLeading(withView: messageLabel)
+        photoView.attachToBottomOf(authorLabel, withConstant: verticalSpacing)
         photoView.pinToSuperviewBottom(withConstant: verticalMargin, priority: UILayoutPriorityDefaultHigh)
 
-        authorLabel.attachToRightOf(photoView, withConstant: 10)
-        authorLabel.pinToSuperviewTop(withConstant: verticalMargin)
-
-        timestampLabel.attachToRightOf(authorLabel, withConstant: 10)
+        timestampLabel.attachToRightOf(authorLabel, withConstant: horizontalMargin/2)
         timestampLabel.pinToSuperviewTop(withConstant: verticalMargin)
         timestampLabel.pinToSuperviewTrailing(withConstant: horizontalMargin)
 
-        messageLabel.attachToBottomOf(authorLabel, withConstant: 6)
-        messageLabel.pinToSuperviewBottom(withConstant: verticalMargin)
+        bubbleView.attachToBottomOf(authorLabel, withConstant: verticalSpacing)
+        bubbleView.pinToSuperviewBottom(withConstant: verticalMargin)
 
         photoView.addHeightConstraint(withConstant: imageSize)
         photoView.addWidthConstraint(withConstant: imageSize)
+
+        messageLabel.pinToSuperviewEdges(withInsets: UIEdgeInsets(
+            top: verticalSpacing,
+            left: horizontalMargin - (bigDotSize - bigDotOverlap),
+            bottom: verticalSpacing,
+            right: horizontalMargin
+            )
+        )
     }
 
     override func prepareForReuse() {
@@ -81,7 +139,7 @@ final class ChatCell: UITableViewCell {
     func updateWithMessage(message: Message) {
         let date = NSDate(timeIntervalSince1970: NSTimeInterval(message.timestamp / 1000))
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = .NoStyle
+        dateFormatter.dateStyle = .MediumStyle
         dateFormatter.timeStyle = .ShortStyle
 
         authorLabel.text = message.author.name
@@ -96,11 +154,10 @@ final class ChatCell: UITableViewCell {
     private func setUserPhoto(url: NSURL) {
         disposeBag = DisposeBag()
 
-        photoView.hidden = true
+        photoView.image = UIImage(named: "ic_person")
         imageForURL(url)
             .observeOn(MainScheduler.instance)
             .subscribeNext({ [weak self] image in
-                self?.photoView.hidden = false
                 self?.photoView.image = image
                 }).addDisposableTo(disposeBag)
     }
