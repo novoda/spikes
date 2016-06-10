@@ -47,7 +47,7 @@
       android:background="@drawable/bubble_shape_grey"
       android:paddingBottom="8dp"
       android:paddingLeft="26dp"
-      android:paddingRight="8dp"
+      android:paddingRight="13dp"
       android:paddingTop="8dp"
       android:textColor="@color/text_black"
       android:textSize="14sp" />
