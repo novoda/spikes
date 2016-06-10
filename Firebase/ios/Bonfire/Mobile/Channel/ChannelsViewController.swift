@@ -38,7 +38,14 @@ final class ChannelsViewController: UIViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+
         channelsPresenter.startPresenting()
+        navigationController?.navigationBar.barTintColor = BonfireColors.orange
+        navigationController?.navigationBar.tintColor = .whiteColor()
+        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+        UIApplication.sharedApplication().statusBarStyle = .LightContent
+
+        self.setNeedsStatusBarAppearanceUpdate()
     }
 
     override func viewDidDisappear(animated: Bool) {

@@ -30,15 +30,25 @@ final class ChatViewController: UIViewController {
     }
 
     override func viewDidLoad() {
+        navigationController?.navigationBar.barTintColor = nil
+        navigationController?.navigationBar.tintColor = BonfireColors.orange
+        navigationController?.navigationBar.titleTextAttributes = nil
+        navigationController?.navigationBar.barStyle = .Default
+        navigationController?.view.backgroundColor = UIColor.clearColor()
+        
         super.viewDidLoad()
         setupLayout()
     }
 
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .Default
+    }
+
     private func setupLayout() {
-        automaticallyAdjustsScrollViewInsets = false
+        automaticallyAdjustsScrollViewInsets = true
 
         view.addSubview(chatView)
-        chatView.pinToTopLayoutGuide(viewController: self)
+        chatView.pinToSuperviewTop()
         chatView.pinToSuperviewLeading()
         chatView.pinToSuperviewTrailing()
 
