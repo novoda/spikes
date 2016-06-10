@@ -1,7 +1,7 @@
 package com.novoda.bonfire.chat.view;
 
 import android.content.Context;
-import android.view.Gravity;
+import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,30 +21,23 @@ public class MessageView extends LinearLayout {
 
     private final DateFormat timeFormat = SimpleDateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
     private final Date date = new Date();
-    private final ImageView picture;
-    private final TextView body;
-    private final TextView time;
-    private final TextView name;
-    private CircleCropImageTransformation circleCropTransformation;
+    private ImageView picture;
+    private TextView body;
+    private TextView time;
+    private TextView name;
 
-    public MessageView(Context context) {
-        super(context);
-        configureViewParams();
-        View.inflate(context, R.layout.merge_message_item_view, this);
+    public MessageView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        View.inflate(getContext(), R.layout.merge_message_item_view, this);
         this.picture = Views.findById(this, R.id.messageAuthorImage);
         this.body = Views.findById(this, R.id.messageBody);
         this.time = Views.findById(this, R.id.messageTime);
         this.name = Views.findById(this, R.id.messageAuthorName);
-        circleCropTransformation = new CircleCropImageTransformation(context);
-    }
-
-    private void configureViewParams() {
-        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        setOrientation(HORIZONTAL);
-        setGravity(Gravity.CENTER_VERTICAL);
-        int horizontalMargin = getResources().getDimensionPixelSize(R.dimen.list_item_horizontal_margin);
-        int verticalMargin = getResources().getDimensionPixelSize(R.dimen.list_item_vertical_margin);
-        setPadding(horizontalMargin, verticalMargin, horizontalMargin, verticalMargin);
     }
 
     public void display(Message message) {
@@ -52,7 +45,7 @@ public class MessageView extends LinearLayout {
         Glide.with(context)
                 .load(message.getAuthor().getPhotoUrl())
                 .error(R.drawable.ic_person)
-                .transform(circleCropTransformation)
+                .transform(new CircleCropImageTransformation(context))
                 .into(picture);
         body.setText(message.getBody());
         time.setText(formattedTimeFrom(message.getTimestamp()));

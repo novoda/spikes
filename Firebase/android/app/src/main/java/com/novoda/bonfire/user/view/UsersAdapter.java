@@ -1,8 +1,10 @@
 package com.novoda.bonfire.user.view;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.novoda.bonfire.R;
 import com.novoda.bonfire.user.displayer.UsersDisplayer;
 
 import java.util.ArrayList;
@@ -12,9 +14,11 @@ class UsersAdapter extends RecyclerView.Adapter<UserViewHolder>{
 
     private List<UsersView.SelectableUser> users = new ArrayList<>();
     private final UsersDisplayer.SelectionListener selectionListener;
+    private final LayoutInflater inflater;
 
-    UsersAdapter(UsersDisplayer.SelectionListener selectionListener) {
+    UsersAdapter(UsersDisplayer.SelectionListener selectionListener, LayoutInflater inflater) {
         this.selectionListener = selectionListener;
+        this.inflater = inflater;
         setHasStableIds(true);
     }
 
@@ -25,7 +29,7 @@ class UsersAdapter extends RecyclerView.Adapter<UserViewHolder>{
 
     @Override
     public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new UserViewHolder(new UserView(parent.getContext()));
+        return new UserViewHolder((UserView) inflater.inflate(R.layout.user_item_layout, parent, false));
     }
 
     @Override

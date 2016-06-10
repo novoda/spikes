@@ -4,8 +4,10 @@ import android.content.Context;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.novoda.bonfire.analytics.Analytics;
 import com.novoda.bonfire.analytics.ErrorLogger;
 import com.novoda.bonfire.analytics.FirebaseAnalyticsAnalytics;
 import com.novoda.bonfire.analytics.FirebaseErrorLogger;
@@ -18,6 +20,7 @@ import com.novoda.bonfire.chat.service.PersistedChatService;
 import com.novoda.bonfire.login.database.FirebaseAuthDatabase;
 import com.novoda.bonfire.login.service.FirebaseLoginService;
 import com.novoda.bonfire.login.service.LoginService;
+import com.novoda.bonfire.rx.FirebaseObservableListeners;
 import com.novoda.bonfire.user.database.FirebaseUserDatabase;
 import com.novoda.bonfire.user.service.PersistedUserService;
 import com.novoda.bonfire.user.service.UserService;
@@ -25,7 +28,7 @@ import com.novoda.bonfire.user.service.UserService;
 public enum Dependencies {
     INSTANCE;
 
-    private FirebaseAnalyticsAnalytics firebaseAnalytics;
+    private Analytics analytics;
     private ErrorLogger errorLogger;
 
     private LoginService loginService;
@@ -40,23 +43,25 @@ public enum Dependencies {
             FirebaseAuth firebaseAuth = FirebaseAuth.getInstance(firebaseApp);
             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(firebaseApp);
             firebaseDatabase.setPersistenceEnabled(true);
-            FirebaseUserDatabase userDatabase = new FirebaseUserDatabase(firebaseDatabase);
+            FirebaseObservableListeners firebaseObservableListeners = new FirebaseObservableListeners();
+            FirebaseUserDatabase userDatabase = new FirebaseUserDatabase(firebaseDatabase, firebaseObservableListeners);
 
-            firebaseAnalytics = new FirebaseAnalyticsAnalytics(context);
+            analytics = new FirebaseAnalyticsAnalytics(FirebaseAnalytics.getInstance(appContext));
             errorLogger = new FirebaseErrorLogger();
             loginService = new FirebaseLoginService(new FirebaseAuthDatabase(firebaseAuth), userDatabase);
-            chatService = new PersistedChatService(new FirebaseChatDatabase(firebaseDatabase));
-            channelService = new PersistedChannelService(new FirebaseChannelsDatabase(firebaseDatabase), userDatabase);
+            chatService = new PersistedChatService(new FirebaseChatDatabase(firebaseDatabase, firebaseObservableListeners));
+            channelService = new PersistedChannelService(new FirebaseChannelsDatabase(firebaseDatabase, firebaseObservableListeners), userDatabase);
             userService = new PersistedUserService(userDatabase);
         }
     }
 
     private boolean needsInitialisation() {
-        return loginService == null || chatService == null || channelService == null || firebaseAnalytics == null;
+        return loginService == null || chatService == null || channelService == null
+                || userService == null || analytics == null || errorLogger == null;
     }
 
-    public FirebaseAnalyticsAnalytics getFirebaseAnalytics() {
-        return firebaseAnalytics;
+    public Analytics getAnalytics() {
+        return analytics;
     }
 
     public LoginService getLoginService() {

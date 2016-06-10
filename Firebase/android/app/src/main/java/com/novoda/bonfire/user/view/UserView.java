@@ -1,8 +1,8 @@
 package com.novoda.bonfire.user.view;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,25 +14,27 @@ import com.novoda.notils.caster.Views;
 
 public class UserView extends FrameLayout {
 
-    private final TextView name;
-    private final ImageView image;
-    private final CircleCropImageTransformation circleCropTransformation;
+    private TextView name;
+    private ImageView image;
 
-    public UserView(Context context) {
-        super(context);
-        setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        View.inflate(context, R.layout.merge_user_item_view, this);
+    public UserView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        View.inflate(getContext(), R.layout.merge_user_item_view, this);
         name = Views.findById(this, R.id.userName);
         image = Views.findById(this, R.id.userImage);
-        setBackgroundResource(R.drawable.user_item_selector);
-        circleCropTransformation = new CircleCropImageTransformation(context);
     }
 
     public void display(UsersView.SelectableUser user) {
-        Glide.with(getContext())
+        Context context = getContext();
+        Glide.with(context)
                 .load(user.user.getPhotoUrl())
                 .error(R.drawable.ic_person)
-                .transform(circleCropTransformation)
+                .transform(new CircleCropImageTransformation(context))
                 .into(image);
         name.setText(user.user.getName());
         setSelected(user.isSelected);
