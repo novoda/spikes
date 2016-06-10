@@ -19,6 +19,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let navigationController = (SharedServices.navigator as! AppNavigator).navigationController
         navigationController.pushViewController(LoginViewController.withDependencies(), animated: false)
+
         navigationController.navigationBar.barTintColor = BonfireColors.orange
         navigationController.navigationBar.tintColor = .whiteColor()
         navigationController.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]

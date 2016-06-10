@@ -73,6 +73,7 @@ final class CreateChannelView: UIView {
         errorLabel.numberOfLines = 0
         errorLabel.font = UIFont.systemFontOfSize(12)
         errorLabel.text = ""
+        errorLabel.textAlignment = .Center
 
         submitButton.setImage(UIImage(named: "ic_tick"), forState: .Normal)
         submitButton.backgroundColor = BonfireColors.greyHighlight
