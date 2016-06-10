@@ -61,11 +61,11 @@ extension UIView {
         superview.addConstraint(NSLayoutConstraint(item: self, attribute: .Left, relatedBy: .Equal,
             toItem: superview, attribute: .Left, multiplier: 1.0, constant: insets.left))
 
-        superview.addConstraint(NSLayoutConstraint(item: self, attribute: .Bottom, relatedBy: .Equal,
-            toItem: superview, attribute: .Bottom, multiplier: 1.0, constant: insets.bottom))
+        superview.addConstraint(NSLayoutConstraint(item: superview, attribute: .Bottom, relatedBy: .Equal,
+            toItem: self, attribute: .Bottom, multiplier: 1.0, constant: insets.bottom))
 
-        superview.addConstraint(NSLayoutConstraint(item: self, attribute: .Right, relatedBy: .Equal,
-            toItem: superview, attribute: .Right, multiplier: 1.0, constant: insets.right))
+        superview.addConstraint(NSLayoutConstraint(item: superview, attribute: .Right, relatedBy: .Equal,
+            toItem: self, attribute: .Right, multiplier: 1.0, constant: insets.right))
     }
 
     public func pinToSuperviewLeading(
@@ -258,5 +258,48 @@ extension UIView {
         }
 
         superview.addConstraint(constraint)
+    }
+}
+
+// MARK: - Align With Siblings
+
+extension UIView {
+    public func alignVerticalCenter(withView view: UIView) -> NSLayoutConstraint {
+        let constraint = NSLayoutConstraint(
+            item: self, attribute: .CenterY,
+            relatedBy: .Equal,
+            toItem: view, attribute: .CenterY,
+            multiplier: 1.0, constant: 0
+        )
+
+        addSiblingConstraint(constraint)
+
+        return constraint
+    }
+
+    public func alignLeading(withView view: UIView) -> NSLayoutConstraint {
+        let constraint = NSLayoutConstraint(
+            item: self, attribute: .Leading,
+            relatedBy: .Equal,
+            toItem: view, attribute: .Leading,
+            multiplier: 1.0, constant: 0
+        )
+
+        addSiblingConstraint(constraint)
+
+        return constraint
+    }
+
+    public func alignTrailing(withView view: UIView) -> NSLayoutConstraint {
+        let constraint = NSLayoutConstraint(
+            item: self, attribute: .Trailing,
+            relatedBy: .Equal,
+            toItem: view, attribute: .Trailing,
+            multiplier: 1.0, constant: 0
+        )
+
+        addSiblingConstraint(constraint)
+
+        return constraint
     }
 }
