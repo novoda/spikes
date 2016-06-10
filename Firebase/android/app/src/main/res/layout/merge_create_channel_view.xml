@@ -26,7 +26,7 @@
     <TextView
       android:layout_width="100dp"
       android:layout_height="wrap_content"
-      android:layout_marginTop="24dp"
+      android:layout_marginTop="80dp"
       android:text="@string/channel_name"
       android:textColor="@color/text_grey"
       android:textSize="14sp" />

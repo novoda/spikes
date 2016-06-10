@@ -40,7 +40,7 @@ public class NewChannelView extends LinearLayout implements NewChannelDisplayer 
         toolbar = Views.findById(this, R.id.toolbar);
         toolbar.setTitle(R.string.createChannel);
         toolbar.inflateMenu(R.menu.new_channel_menu);
-        toolbar.setNavigationIcon(R.drawable.ic_clear_white_24dp);
+        toolbar.setNavigationIcon(R.drawable.ic_clear_white);
     }
 
     @Override

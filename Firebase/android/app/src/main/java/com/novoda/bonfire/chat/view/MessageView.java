@@ -12,6 +12,7 @@ import com.novoda.bonfire.R;
 import com.novoda.bonfire.chat.data.model.Message;
 import com.novoda.bonfire.view.CircleCropImageTransformation;
 import com.novoda.notils.caster.Views;
+import com.novoda.notils.exception.DeveloperError;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -28,6 +29,12 @@ public class MessageView extends LinearLayout {
 
     public MessageView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        super.setOrientation(VERTICAL);
+    }
+
+    @Override
+    public void setOrientation(int orientation) {
+        throw new DeveloperError("This view only supports vertical orientation");
     }
 
     @Override

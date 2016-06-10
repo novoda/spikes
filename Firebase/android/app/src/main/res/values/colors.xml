@@ -4,11 +4,14 @@
   <color name="colorPrimaryDark">#f85636</color>
   <color name="colorAccent">#f85636</color>
 
-  <color name="hint_light">#A0A0A0</color>
+  <color name="disabled_grey">#A0A0A0</color>
   <color name="selected_item">#88A0A0A0</color>
 
   <color name="background_grey">#eeeeee</color>
-  <color name="text_grey">#80000000</color>
+  <color name="text_grey">#8B000000</color>
+  <color name="text_grey_light">#59000000</color>
   <color name="background_grey_alt">#e4e4e4</color>
+  <color name="bubble_grey">#dcdcdc</color>
+  <color name="text_black">#E3000000</color>
 
 </resources>
