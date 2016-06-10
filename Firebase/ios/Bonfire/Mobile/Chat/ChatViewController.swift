@@ -30,18 +30,8 @@ final class ChatViewController: UIViewController {
     }
 
     override func viewDidLoad() {
-        navigationController?.navigationBar.barTintColor = nil
-        navigationController?.navigationBar.tintColor = BonfireColors.orange
-        navigationController?.navigationBar.titleTextAttributes = nil
-        navigationController?.navigationBar.barStyle = .Default
-        navigationController?.view.backgroundColor = UIColor.clearColor()
-        
         super.viewDidLoad()
         setupLayout()
-    }
-
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .Default
     }
 
     private func setupLayout() {
@@ -57,14 +47,26 @@ final class ChatViewController: UIViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+
         setupKeyboardNotifcationListener()
         chatPresenter.startPresenting()
+        styleNavigationBar()
     }
 
     override func viewDidDisappear(animated: Bool) {
         chatPresenter.stopPresenting()
         removeKeyboardNotificationListeners()
         super.viewDidDisappear(animated)
+    }
+
+    func styleNavigationBar() {
+        navigationController?.navigationBar.barTintColor = nil
+        navigationController?.navigationBar.tintColor = BonfireColors.orange
+        navigationController?.navigationBar.titleTextAttributes = nil
+        navigationController?.navigationBar.barStyle = .Default
+        navigationController?.view.backgroundColor = UIColor.clearColor()
+
+        UIApplication.sharedApplication().statusBarStyle = .Default
     }
 }
 

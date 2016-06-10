@@ -22,8 +22,6 @@ final class ChannelsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
-        title = "Channels"
-        addBarButtonItem()
     }
 
     private func setupLayout() {
@@ -40,12 +38,7 @@ final class ChannelsViewController: UIViewController {
         super.viewWillAppear(animated)
 
         channelsPresenter.startPresenting()
-        navigationController?.navigationBar.barTintColor = BonfireColors.orange
-        navigationController?.navigationBar.tintColor = .whiteColor()
-        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
-        UIApplication.sharedApplication().statusBarStyle = .LightContent
-
-        self.setNeedsStatusBarAppearanceUpdate()
+        styleNavigationBar()
     }
 
     override func viewDidDisappear(animated: Bool) {
@@ -58,6 +51,16 @@ final class ChannelsViewController: UIViewController {
         let shareBarButtonItem = channelsView.shareBonfireBarButtonItem
         navigationItem.setRightBarButtonItem(newChannelBarButtonItem, animated: false)
         navigationItem.setLeftBarButtonItem(shareBarButtonItem, animated: false)
+    }
+
+    func styleNavigationBar() {
+        navigationController?.navigationBar.barTintColor = BonfireColors.orange
+        navigationController?.navigationBar.tintColor = .whiteColor()
+        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+        UIApplication.sharedApplication().statusBarStyle = .LightContent
+
+        title = "Channels"
+        addBarButtonItem()
     }
 
 }
