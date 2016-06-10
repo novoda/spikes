@@ -3,8 +3,8 @@ import RxSwift
 import RxCocoa
 
 extension UIColor {
-    convenience init(red: Int, green: Int, blue: Int) {
-        self.init(red: CGFloat(red)/255, green: CGFloat(green)/255, blue: CGFloat(blue)/255, alpha: 1.0)
+    convenience init(RGBred red: Int, green: Int, blue: Int, alpha: CGFloat = 1.0) {
+        self.init(red: CGFloat(red)/255, green: CGFloat(green)/255, blue: CGFloat(blue)/255, alpha: alpha)
     }
 }
 
@@ -31,7 +31,7 @@ final class ChatCell: UITableViewCell {
     let messageFont = UIFont.systemFontOfSize(12)
     let authorFont = UIFont.boldSystemFontOfSize(10)
     let timestampFont = UIFont.systemFontOfSize(10)
-    let bubbleColor = UIColor(red: 220, green: 220, blue: 220)
+    let bubbleColor = UIColor(RGBred: 220, green: 220, blue: 220)
 
     var disposeBag: DisposeBag! = nil
 

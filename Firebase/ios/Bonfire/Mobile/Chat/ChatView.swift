@@ -7,15 +7,25 @@ protocol ChatViewNavigationItemDelegate: class {
 }
 
 final class ChatView: UIView {
-    private let textField = UITextField()
-    private let tableView = UITableView()
     private let tableViewManager = ChatTableViewManager()
+    private let tableView = UITableView()
+
+    private let textField = UITextField()
+    private let sendButton = UIButton(type: .System)
+    private let textFieldBackgroundView = UIView()
+    private let messageEntryView = UIView()
+
+    private let horizontalSpacing: CGFloat = 8
+    private let verticalSpacing: CGFloat = 12
+    private let textEntryHeight: CGFloat = 48
+
     weak var actionListener: ChatActionListener?
     weak var navigationItemDelegate: ChatViewNavigationItemDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
+        setupHierarchy()
         setupLayout()
     }
 
@@ -28,29 +38,57 @@ final class ChatView: UIView {
     }
 
     private func setupViews() {
+        tintColor = UIColor(RGBred: 248, green: 86, blue: 54)
         tableViewManager.setupTableView(tableView)
 
-        textField.backgroundColor = .lightGrayColor()
+        textField.backgroundColor = .clearColor()
         textField.clearButtonMode = .Always
-        textField.placeholder = "Type here!"
+        textField.placeholder = "Message"
         textField.delegate = self
+        textField.font = UIFont.systemFontOfSize(14)
+
+        textFieldBackgroundView.backgroundColor = .whiteColor()
+        textFieldBackgroundView.layer.cornerRadius = textEntryHeight / 2
+
+        messageEntryView.backgroundColor = UIColor(RGBred: 242, green: 242, blue: 242)
+
+        sendButton.setTitle("Send", forState: .Normal)
+        sendButton.titleLabel?.font = UIFont.boldSystemFontOfSize(17)
+    }
+
+    private func setupHierarchy() {
+        addSubview(tableView)
+        addSubview(messageEntryView)
+        messageEntryView.addSubview(textFieldBackgroundView)
+        messageEntryView.addSubview(sendButton)
+        textFieldBackgroundView.addSubview(textField)
     }
 
     private func setupLayout() {
-        addSubview(tableView)
-        addSubview(textField)
 
         tableView.pinToSuperviewTop()
-        textField.attachToBottomOf(tableView)
-        textField.pinToSuperviewBottom()
+        messageEntryView.attachToBottomOf(tableView)
+        messageEntryView.pinToSuperviewBottom()
 
         tableView.pinToSuperviewLeading()
         tableView.pinToSuperviewTrailing()
 
-        textField.pinToSuperviewLeading()
-        textField.pinToSuperviewTrailing()
+        messageEntryView.pinToSuperviewLeading()
+        messageEntryView.pinToSuperviewTrailing()
 
-        textField.addHeightConstraint(withConstant: 44)
+        textFieldBackgroundView.addHeightConstraint(withConstant: textEntryHeight, priority: UILayoutPriorityDefaultHigh)
+        
+        textFieldBackgroundView.pinToSuperviewTop(withConstant: verticalSpacing)
+        textFieldBackgroundView.pinToSuperviewBottom(withConstant: verticalSpacing)
+
+        textFieldBackgroundView.pinToSuperviewLeading(withConstant: horizontalSpacing)
+        sendButton.attachToRightOf(textFieldBackgroundView, withConstant: horizontalSpacing)
+        sendButton.pinToSuperviewTrailing(withConstant: horizontalSpacing)
+
+        sendButton.alignVerticalCenter(withView: textField)
+
+        textField.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Vertical)
+        textField.pinToSuperviewEdges(withInsets: UIEdgeInsets(top: 12, left: 24, bottom: 12, right: 12))
     }
 }
 
