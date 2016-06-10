@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1A0A41A21D0184640053A547 /* PersistedUserServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0A41A11D0184640053A547 /* PersistedUserServiceTests.swift */; };
 		1A0A41A41D018D810053A547 /* Rememberancer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0A41A31D018D810053A547 /* Rememberancer.swift */; };
+		1A2439281D0ACC390021B547 /* UIView+BorderExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2439271D0ACC390021B547 /* UIView+BorderExtensions.swift */; };
 		1AECA3371D0974EC00E4D856 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AECA3361D0974EC00E4D856 /* Assets.xcassets */; };
 		1AECA3391D09B41700E4D856 /* BonfireColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AECA3381D09B41700E4D856 /* BonfireColors.swift */; };
 		1AF7D1A01CEF651600B74483 /* UsersTableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */; };
@@ -105,6 +106,7 @@
 		13F2FDE620ACDD8945A96B8C /* Pods_Bonfire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bonfire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A0A41A11D0184640053A547 /* PersistedUserServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedUserServiceTests.swift; sourceTree = "<group>"; };
 		1A0A41A31D018D810053A547 /* Rememberancer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rememberancer.swift; sourceTree = "<group>"; };
+		1A2439271D0ACC390021B547 /* UIView+BorderExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+BorderExtensions.swift"; sourceTree = "<group>"; };
 		1AECA3361D0974EC00E4D856 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Bonfire/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		1AECA3381D09B41700E4D856 /* BonfireColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonfireColors.swift; sourceTree = "<group>"; };
 		1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersTableViewManager.swift; sourceTree = "<group>"; };
@@ -302,6 +304,7 @@
 				B6CC1CEA1CEC992F00BA8500 /* Observable+Extensions.swift */,
 				B660785B1CE37FAC008E7DD4 /* ReusableView.swift */,
 				B654B2881CE0C86200EEDE0A /* UIView+AutolayoutExtensions.swift */,
+				1A2439271D0ACC390021B547 /* UIView+BorderExtensions.swift */,
 				B6210AC71CE2318B00570509 /* UIViewController+AlertExtensions.swift */,
 			);
 			path = Utilities;
@@ -805,6 +808,7 @@
 				B6CC1CEB1CEC992F00BA8500 /* Observable+Extensions.swift in Sources */,
 				D0C31B830B0684A6D238C842 /* ChannelsView.swift in Sources */,
 				B6C054E61CF5DE7300B1BB6C /* WelcomeViewActionListener.swift in Sources */,
+				1A2439281D0ACC390021B547 /* UIView+BorderExtensions.swift in Sources */,
 				D0C317C9CD54BDC5F4607BCD /* ChannelsTableViewManager.swift in Sources */,
 				B6962C861CEF5388006A3A9E /* UsersDisplayer.swift in Sources */,
 				B6962C8D1CEF568E006A3A9E /* UsersView.swift in Sources */,
