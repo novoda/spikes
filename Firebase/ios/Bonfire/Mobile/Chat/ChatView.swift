@@ -54,6 +54,8 @@ final class ChatView: UIView {
 
         sendButton.setTitle("Send", forState: .Normal)
         sendButton.titleLabel?.font = UIFont.boldSystemFontOfSize(17)
+
+        sendButton.addTarget(self, action: #selector(submitMessage), forControlEvents: .TouchUpInside)
     }
 
     private func setupHierarchy() {
@@ -77,7 +79,7 @@ final class ChatView: UIView {
         messageEntryView.pinToSuperviewTrailing()
 
         textFieldBackgroundView.addHeightConstraint(withConstant: textEntryHeight, priority: UILayoutPriorityDefaultHigh)
-        
+
         textFieldBackgroundView.pinToSuperviewTop(withConstant: verticalSpacing)
         textFieldBackgroundView.pinToSuperviewBottom(withConstant: verticalSpacing)
 
@@ -118,12 +120,16 @@ extension ChatView {
     func addUsers() {
         actionListener?.addUsers()
     }
+
+    func submitMessage() {
+        actionListener?.submitMessage(textField.text ?? "")
+        textField.text = ""
+    }
 }
 
 extension ChatView: UITextFieldDelegate {
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        actionListener?.submitMessage(textField.text ?? "")
-        textField.text = ""
+        submitMessage()
         return true
     }
 }
