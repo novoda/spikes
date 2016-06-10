@@ -3,8 +3,6 @@ import RxSwift
 import RxCocoa
 
 final class MyMessageCell: UITableViewCell {
-
-    let authorLabel = UILabel()
     let timestampLabel = UILabel()
     let photoView = UIImageView()
     let smallDot = UIView()
@@ -21,7 +19,6 @@ final class MyMessageCell: UITableViewCell {
     let imageSize: CGFloat = 36
 
     let messageFont = UIFont.systemFontOfSize(12)
-    let authorFont = UIFont.boldSystemFontOfSize(10)
     let timestampFont = UIFont.systemFontOfSize(10)
     let bubbleColor = UIColor(RGBred: 254, green: 133, blue: 80)
 
@@ -40,17 +37,14 @@ final class MyMessageCell: UITableViewCell {
 
     func setupViews() {
         messageLabel.numberOfLines = 0
-        authorLabel.numberOfLines = 0
 
         photoView.contentMode = .ScaleAspectFit
         photoView.layer.cornerRadius = imageSize/2
         photoView.layer.masksToBounds = true
 
-        authorLabel.font = authorFont
-        authorLabel.textColor = .darkGrayColor()
         timestampLabel.font = timestampFont
         timestampLabel.textColor = .darkGrayColor()
-        timestampLabel.textAlignment = .Left
+        timestampLabel.textAlignment = .Right
 
         messageLabel.font = messageFont
         messageLabel.textColor = .whiteColor()
@@ -69,7 +63,6 @@ final class MyMessageCell: UITableViewCell {
         addSubview(bigDot)
         addSubview(bubbleView)
         addSubview(photoView)
-        addSubview(authorLabel)
         addSubview(timestampLabel)
 
         bubbleView.addSubview(messageLabel)
@@ -85,8 +78,6 @@ final class MyMessageCell: UITableViewCell {
         bigDot.alignVerticalCenter(withView: smallDot)
 
         messageLabel.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Vertical)
-        authorLabel.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Vertical)
-        authorLabel.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: .Horizontal)
 
         timestampLabel.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Vertical)
         timestampLabel.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Horizontal)
@@ -94,22 +85,20 @@ final class MyMessageCell: UITableViewCell {
         messageLabel.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: .Horizontal)
         messageLabel.setContentCompressionResistancePriority(UILayoutPriorityRequired, forAxis: .Vertical)
 
-        photoView.pinToSuperviewLeading(withConstant: horizontalMargin)
-        smallDot.attachToRightOf(photoView, withConstant: horizontalMargin/2)
-        bigDot.attachToRightOf(smallDot, withConstant: horizontalMargin/4)
-        bubbleView.attachToRightOf(bigDot, withConstant: -bigDotOverlap)
-        bubbleView.pinToSuperviewTrailing(withConstant: horizontalMargin, priority: UILayoutPriorityDefaultHigh)
+        bubbleView.pinToSuperviewLeading(withConstant: horizontalMargin, priority: UILayoutPriorityDefaultHigh)
+        bigDot.attachToRightOf(bubbleView, withConstant: -bigDotOverlap)
+        smallDot.attachToRightOf(bigDot, withConstant: horizontalMargin/4)
+        photoView.attachToRightOf(smallDot, withConstant: horizontalMargin/2)
+        photoView.pinToSuperviewTrailing(withConstant: horizontalMargin)
 
-        authorLabel.pinToSuperviewTop(withConstant: verticalMargin)
-        authorLabel.alignLeading(withView: messageLabel)
-        photoView.attachToBottomOf(authorLabel, withConstant: verticalSpacing)
+        photoView.attachToBottomOf(timestampLabel, withConstant: verticalSpacing)
         photoView.pinToSuperviewBottom(withConstant: verticalMargin, priority: UILayoutPriorityDefaultHigh)
 
-        timestampLabel.attachToRightOf(authorLabel, withConstant: horizontalMargin/2)
+        timestampLabel.pinToSuperviewLeading(withConstant: horizontalMargin)
         timestampLabel.pinToSuperviewTop(withConstant: verticalMargin)
-        timestampLabel.pinToSuperviewTrailing(withConstant: horizontalMargin)
+        timestampLabel.alignTrailing(withView: messageLabel)
 
-        bubbleView.attachToBottomOf(authorLabel, withConstant: verticalSpacing)
+        bubbleView.attachToBottomOf(timestampLabel, withConstant: verticalSpacing)
         bubbleView.pinToSuperviewBottom(withConstant: verticalMargin)
 
         photoView.addHeightConstraint(withConstant: imageSize)
@@ -135,7 +124,6 @@ final class MyMessageCell: UITableViewCell {
         dateFormatter.dateStyle = .MediumStyle
         dateFormatter.timeStyle = .ShortStyle
 
-        authorLabel.text = message.author.name
         messageLabel.text = message.body
         timestampLabel.text = dateFormatter.stringFromDate(date)
 

@@ -289,4 +289,17 @@ extension UIView {
 
         return constraint
     }
+
+    public func alignTrailing(withView view: UIView) -> NSLayoutConstraint {
+        let constraint = NSLayoutConstraint(
+            item: self, attribute: .Trailing,
+            relatedBy: .Equal,
+            toItem: view, attribute: .Trailing,
+            multiplier: 1.0, constant: 0
+        )
+
+        addSiblingConstraint(constraint)
+
+        return constraint
+    }
 }
