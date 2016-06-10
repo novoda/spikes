@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.novoda.bonfire.R;
+import com.novoda.bonfire.user.data.model.User;
 import com.novoda.bonfire.welcome.displayer.WelcomeDisplayer;
 import com.novoda.notils.caster.Views;
 
@@ -47,7 +48,7 @@ public class WelcomeView extends LinearLayout implements WelcomeDisplayer {
     }
 
     @Override
-    public void display(String sender) {
-        welcomeMessage.setText(sender + " invited you to Bonfire.\nTap to login and enjoy the emoji awesomeness.");
+    public void display(User sender) {
+        welcomeMessage.setText(sender.getName() + " invited you to Bonfire.\nTap to login and enjoy the emoji awesomeness.");
     }
 }
