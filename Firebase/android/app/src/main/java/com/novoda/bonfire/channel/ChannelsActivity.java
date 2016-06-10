@@ -28,12 +28,14 @@ public class ChannelsActivity extends BaseActivity {
                 getResources().getString(R.string.iosBundleIdentifier),
                 BuildConfig.APPLICATION_ID
         );
-        channelsPresenter = new ChannelsPresenter((ChannelsDisplayer) findViewById(R.id.channelsView),
-                                                  dependencies.getChannelService(),
-                                                  dependencies.getLoginService(),
-                                                  new AndroidNavigator(this),
-                                                  firebaseDynamicLinkFactory,
-                                                  dependencies.getAnalytics()
+        channelsPresenter = new ChannelsPresenter(
+                (ChannelsDisplayer) findViewById(R.id.channelsView),
+                dependencies.getChannelService(),
+                dependencies.getLoginService(),
+                dependencies.getConfig(),
+                new AndroidNavigator(this),
+                firebaseDynamicLinkFactory,
+                dependencies.getAnalytics()
         );
     }
 
