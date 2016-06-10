@@ -1,0 +1,2 @@
+scheme "Bonfire"
+output_directory "./build"

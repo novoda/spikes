@@ -24,7 +24,7 @@ class FirebaseChannelsDatabase: ChannelsDatabase {
     }
 
     func observePrivateChannelIdsFor(user: User) -> Observable<[String]> {
-        return privateChannelsDB.child(user.id).rx_readValue().map(getKeys)
+        return privateChannelsDB.child(user.identifier).rx_readValue().map(getKeys)
     }
 
     func readChannelFor(channelName: String) -> Observable<Channel> {
@@ -32,27 +32,27 @@ class FirebaseChannelsDatabase: ChannelsDatabase {
     }
 
     func writeChannel(newChannel: Channel) -> Observable<Channel> {
-        return channelsDB.child(newChannel.name).rx_write(newChannel.asFirebaseValue()).map{newChannel}
+        return channelsDB.child(newChannel.name).rx_write(newChannel.asFirebaseValue()).map {newChannel}
     }
 
     func writeChannelToPublicChannelIndex(newChannel: Channel) -> Observable<Channel> {
-        return publicChannelsDB.child(newChannel.name).rx_write(true).map{newChannel}
+        return publicChannelsDB.child(newChannel.name).rx_write(true).map {newChannel}
     }
 
     func addOwnerToPrivateChannel(user: User, channel: Channel) -> Observable<Channel> {
-        return ownersDB.child(channel.name).child(user.id).rx_write(true).map{channel}
+        return ownersDB.child(channel.name).child(user.identifier).rx_write(true).map {channel}
     }
 
     func removeOwnerFromPrivateChannel(user: User, channel: Channel) -> Observable<Channel> {
-        return ownersDB.child(channel.name).child(user.id).rx_delete().map{channel}
+        return ownersDB.child(channel.name).child(user.identifier).rx_delete().map {channel}
     }
 
     func addChannelToUserPrivateChannelIndex(user: User, channel: Channel) -> Observable<Channel> {
-        return privateChannelsDB.child(user.id).child(channel.name).rx_write(true).map{channel}
+        return privateChannelsDB.child(user.identifier).child(channel.name).rx_write(true).map {channel}
     }
 
     func removeChannelFromUserPrivateChannelIndex(user: User, channel: Channel) -> Observable<Channel> {
-        return privateChannelsDB.child(user.id).child(channel.name).rx_delete().map{channel}
+        return privateChannelsDB.child(user.identifier).child(channel.name).rx_delete().map {channel}
     }
 
     func observeOwnerIdsFor(channel: Channel) -> Observable<[String]> {
@@ -60,6 +60,6 @@ class FirebaseChannelsDatabase: ChannelsDatabase {
     }
 
     private func getKeys(snapshot: FIRDataSnapshot) -> [String] {
-        return snapshot.children.allObjects.map{$0.key!}
+        return snapshot.children.allObjects.map {$0.key!}
     }
 }

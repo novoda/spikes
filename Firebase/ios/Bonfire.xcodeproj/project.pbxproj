@@ -12,13 +12,14 @@
 		1A2439281D0ACC390021B547 /* UIView+BorderExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2439271D0ACC390021B547 /* UIView+BorderExtensions.swift */; };
 		1AECA3371D0974EC00E4D856 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AECA3361D0974EC00E4D856 /* Assets.xcassets */; };
 		1AECA3391D09B41700E4D856 /* BonfireColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AECA3381D09B41700E4D856 /* BonfireColors.swift */; };
+		1ABEAC661D08573D00A85CE2 /* FirebaseIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABEAC651D08573D00A85CE2 /* FirebaseIdentifiers.swift */; };
+		1ABEAC681D08730B00A85CE2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1ABEAC671D08730B00A85CE2 /* GoogleService-Info.plist */; };
 		1AF7D1A01CEF651600B74483 /* UsersTableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */; };
 		1AF7D1A21CEF659A00B74483 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF7D1A11CEF659A00B74483 /* UserCell.swift */; };
 		2A9669953EF6713AF4064B53 /* Pods_Bonfire_BonfireTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE09269AA64387314EE925E /* Pods_Bonfire_BonfireTests.framework */; };
 		2C77DC9A3D905A6AE8E74FFB /* Pods_Bonfire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13F2FDE620ACDD8945A96B8C /* Pods_Bonfire.framework */; };
 		B61BD4CA1CFEE65100DD7A70 /* SharedServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61BD4C91CFEE65100DD7A70 /* SharedServices.swift */; };
 		B61BD4CD1CFEE93000DD7A70 /* PersistedChannelServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61BD4CC1CFEE93000DD7A70 /* PersistedChannelServiceTests.swift */; };
-		B6210AC41CE20CEC00570509 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B6210AC31CE20CEC00570509 /* GoogleService-Info.plist */; };
 		B6210AC61CE21FA500570509 /* FirebaseLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6210AC51CE21FA500570509 /* FirebaseLoginService.swift */; };
 		B6210AC81CE2318B00570509 /* UIViewController+AlertExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6210AC71CE2318B00570509 /* UIViewController+AlertExtensions.swift */; };
 		B6210ACC1CE24AC600570509 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6210ACB1CE24AC600570509 /* Authentication.swift */; };
@@ -54,7 +55,7 @@
 		B65C45D71CE1EFE100B2179D /* Navigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65C45D61CE1EFE100B2179D /* Navigator.swift */; };
 		B65C45DB1CE1F06E00B2179D /* AppNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65C45DA1CE1F06E00B2179D /* AppNavigator.swift */; };
 		B660785C1CE37FAC008E7DD4 /* ReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B660785B1CE37FAC008E7DD4 /* ReusableView.swift */; };
-		B660785E1CE38078008E7DD4 /* ChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B660785D1CE38078008E7DD4 /* ChatCell.swift */; };
+		B660785E1CE38078008E7DD4 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B660785D1CE38078008E7DD4 /* MessageCell.swift */; };
 		B6962C841CEF537A006A3A9E /* UsersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6962C831CEF537A006A3A9E /* UsersService.swift */; };
 		B6962C861CEF5388006A3A9E /* UsersDisplayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6962C851CEF5388006A3A9E /* UsersDisplayer.swift */; };
 		B6962C881CEF5392006A3A9E /* UsersPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6962C871CEF5392006A3A9E /* UsersPresenter.swift */; };
@@ -63,6 +64,7 @@
 		B6962C911CEF5742006A3A9E /* Firebase+RxExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6962C901CEF5742006A3A9E /* Firebase+RxExtensions.swift */; };
 		B6AC7C151CF4589500F96722 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AC7C141CF4589500F96722 /* Analytics.swift */; };
 		B6AC7C171CF458E000F96722 /* FirebaseAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AC7C161CF458E000F96722 /* FirebaseAnalytics.swift */; };
+		B6BF03C11D0B0E1D001FC160 /* MyMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF03C01D0B0E1D001FC160 /* MyMessageCell.swift */; };
 		B6C054E11CF5AE9D00B1BB6C /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054E01CF5AE9D00B1BB6C /* WelcomeView.swift */; };
 		B6C054E41CF5BE5600B1BB6C /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054E31CF5BE5600B1BB6C /* WelcomeViewController.swift */; };
 		B6C054E61CF5DE7300B1BB6C /* WelcomeViewActionListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054E51CF5DE7300B1BB6C /* WelcomeViewActionListener.swift */; };
@@ -109,6 +111,8 @@
 		1A2439271D0ACC390021B547 /* UIView+BorderExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+BorderExtensions.swift"; sourceTree = "<group>"; };
 		1AECA3361D0974EC00E4D856 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Bonfire/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		1AECA3381D09B41700E4D856 /* BonfireColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonfireColors.swift; sourceTree = "<group>"; };
+		1ABEAC651D08573D00A85CE2 /* FirebaseIdentifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseIdentifiers.swift; sourceTree = "<group>"; };
+		1ABEAC671D08730B00A85CE2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersTableViewManager.swift; sourceTree = "<group>"; };
 		1AF7D1A11CEF659A00B74483 /* UserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		4AE09269AA64387314EE925E /* Pods_Bonfire_BonfireTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bonfire_BonfireTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -117,7 +121,6 @@
 		8297D97C9651CE491D681CBF /* Pods-Bonfire.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bonfire.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bonfire/Pods-Bonfire.debug.xcconfig"; sourceTree = "<group>"; };
 		B61BD4C91CFEE65100DD7A70 /* SharedServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedServices.swift; sourceTree = "<group>"; };
 		B61BD4CC1CFEE93000DD7A70 /* PersistedChannelServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedChannelServiceTests.swift; sourceTree = "<group>"; };
-		B6210AC31CE20CEC00570509 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B6210AC51CE21FA500570509 /* FirebaseLoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseLoginService.swift; sourceTree = "<group>"; };
 		B6210AC71CE2318B00570509 /* UIViewController+AlertExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+AlertExtensions.swift"; sourceTree = "<group>"; };
 		B6210ACB1CE24AC600570509 /* Authentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
@@ -157,7 +160,7 @@
 		B65C45D61CE1EFE100B2179D /* Navigator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Navigator.swift; sourceTree = "<group>"; };
 		B65C45DA1CE1F06E00B2179D /* AppNavigator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppNavigator.swift; sourceTree = "<group>"; };
 		B660785B1CE37FAC008E7DD4 /* ReusableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReusableView.swift; sourceTree = "<group>"; };
-		B660785D1CE38078008E7DD4 /* ChatCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatCell.swift; sourceTree = "<group>"; };
+		B660785D1CE38078008E7DD4 /* MessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		B6962C831CEF537A006A3A9E /* UsersService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersService.swift; sourceTree = "<group>"; };
 		B6962C851CEF5388006A3A9E /* UsersDisplayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersDisplayer.swift; sourceTree = "<group>"; };
 		B6962C871CEF5392006A3A9E /* UsersPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersPresenter.swift; sourceTree = "<group>"; };
@@ -166,6 +169,7 @@
 		B6962C901CEF5742006A3A9E /* Firebase+RxExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Firebase+RxExtensions.swift"; sourceTree = "<group>"; };
 		B6AC7C141CF4589500F96722 /* Analytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 		B6AC7C161CF458E000F96722 /* FirebaseAnalytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseAnalytics.swift; sourceTree = "<group>"; };
+		B6BF03C01D0B0E1D001FC160 /* MyMessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyMessageCell.swift; sourceTree = "<group>"; };
 		B6C054E01CF5AE9D00B1BB6C /* WelcomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		B6C054E21CF5B10200B1BB6C /* Bonfire.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Bonfire.entitlements; sourceTree = "<group>"; };
 		B6C054E31CF5BE5600B1BB6C /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
@@ -289,8 +293,8 @@
 				B65C45B51CE0E1B800B2179D /* Core */,
 				B65C45B61CE0E1D000B2179D /* Mobile */,
 				B6C054E21CF5B10200B1BB6C /* Bonfire.entitlements */,
-				B6210AC31CE20CEC00570509 /* GoogleService-Info.plist */,
 				B654B2721CE0C38000EEDE0A /* Info.plist */,
+				1ABEAC671D08730B00A85CE2 /* GoogleService-Info.plist */,
 				B654B26F1CE0C38000EEDE0A /* LaunchScreen.storyboard */,
 			);
 			path = Bonfire;
@@ -357,6 +361,7 @@
 				B61BD4C91CFEE65100DD7A70 /* SharedServices.swift */,
 				1AECA3381D09B41700E4D856 /* BonfireColors.swift */,
 				1AECA3361D0974EC00E4D856 /* Assets.xcassets */,
+				1ABEAC651D08573D00A85CE2 /* FirebaseIdentifiers.swift */,
 			);
 			path = Mobile;
 			sourceTree = "<group>";
@@ -364,12 +369,13 @@
 		B65C45B71CE0E1E000B2179D /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				B660785D1CE38078008E7DD4 /* ChatCell.swift */,
 				B65C45C41CE1DF0400B2179D /* ChatTableViewManager.swift */,
 				B65C45B81CE0E1EF00B2179D /* ChatView.swift */,
 				B654B2681CE0C38000EEDE0A /* ChatViewController.swift */,
 				B63B37891CFDCF6400142DC3 /* FirebaseChatDatabase.swift */,
 				B65C45C21CE0EF5800B2179D /* Message+FirebaseConvertible.swift */,
+				B660785D1CE38078008E7DD4 /* MessageCell.swift */,
+				B6BF03C01D0B0E1D001FC160 /* MyMessageCell.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -558,6 +564,7 @@
 				B654B2611CE0C38000EEDE0A /* Resources */,
 				2B107E072EC8FF16E08F96F0 /* 📦 Embed Pods Frameworks */,
 				95A84718793C98A132AECDD9 /* 📦 Copy Pods Resources */,
+				B65A74021D071062000A052B /* Run SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -584,7 +591,6 @@
 					};
 					B654B2621CE0C38000EEDE0A = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = 6344MVRY42;
 						SystemCapabilities = {
 							com.apple.SafariKeychain = {
 								enabled = 1;
@@ -627,6 +633,8 @@
 				B654B2711CE0C38000EEDE0A /* LaunchScreen.storyboard in Resources */,
 				1AECA3371D0974EC00E4D856 /* Assets.xcassets in Resources */,
 				B6210AC41CE20CEC00570509 /* GoogleService-Info.plist in Resources */,
+				B654B26E1CE0C38000EEDE0A /* Assets.xcassets in Resources */,
+				1ABEAC681D08730B00A85CE2 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -693,6 +701,20 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bonfire/Pods-Bonfire-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		B65A74021D071062000A052B /* Run SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run SwiftLint";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\ncd Bonfire\nswiftlint\ncd ..\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+		};
 		CD3332CD9DD451B8DAB18B40 /* 📦 Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -752,6 +774,7 @@
 				B65C45B41CE0E0F900B2179D /* Chat.swift in Sources */,
 				B63B378A1CFDCF6400142DC3 /* FirebaseChatDatabase.swift in Sources */,
 				B6CC1CE91CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift in Sources */,
+				B6BF03C11D0B0E1D001FC160 /* MyMessageCell.swift in Sources */,
 				1AF7D1A01CEF651600B74483 /* UsersTableViewManager.swift in Sources */,
 				B6C054F41CF73EE800B1BB6C /* FirebaseUserDatabase.swift in Sources */,
 				B6CC1CF01CECA96B00BA8500 /* CreateChannelDisplayer.swift in Sources */,
@@ -766,7 +789,7 @@
 				B65C45C31CE0EF5800B2179D /* Message+FirebaseConvertible.swift in Sources */,
 				B6C054E41CF5BE5600B1BB6C /* WelcomeViewController.swift in Sources */,
 				B621BEE11CFF1CE100B92F09 /* Users.swift in Sources */,
-				B660785E1CE38078008E7DD4 /* ChatCell.swift in Sources */,
+				B660785E1CE38078008E7DD4 /* MessageCell.swift in Sources */,
 				B6962C841CEF537A006A3A9E /* UsersService.swift in Sources */,
 				B65C45C51CE1DF0400B2179D /* ChatTableViewManager.swift in Sources */,
 				B65C45C81CE1E14400B2179D /* LoginView.swift in Sources */,
@@ -800,6 +823,7 @@
 				B6962C8F1CEF5697006A3A9E /* UsersViewController.swift in Sources */,
 				B61BD4CA1CFEE65100DD7A70 /* SharedServices.swift in Sources */,
 				D0C31D0085982E1BA7EB3638 /* ChannelsDisplayer.swift in Sources */,
+				1ABEAC661D08573D00A85CE2 /* FirebaseIdentifiers.swift in Sources */,
 				D0C319895F726FA2DAECFC21 /* ChannelsViewController.swift in Sources */,
 				B6AC7C151CF4589500F96722 /* Analytics.swift in Sources */,
 				B6CC1CEE1CECA83600BA8500 /* CreateChannelPresenter.swift in Sources */,
@@ -963,10 +987,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Bonfire/Bonfire.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 12;
 				INFOPLIST_FILE = Bonfire/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.novoda.bonfire;
 				PRODUCT_NAME = Bonfire;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
@@ -976,10 +1003,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Bonfire/Bonfire.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 12;
 				INFOPLIST_FILE = Bonfire/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.novoda.bonfire;
 				PRODUCT_NAME = Bonfire;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};

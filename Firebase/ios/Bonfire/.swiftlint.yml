@@ -1,0 +1,5 @@
+disabled_rules:
+  - operator_whitespace
+  - conditional_binding_cascade
+line_length: 130
+function_parameter_count: 6

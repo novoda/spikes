@@ -4,7 +4,7 @@
   <string name="login">Login</string>
   <string name="selectLoginProvider">Please select your login provider</string>
   <string name="createChannel">Create channel</string>
-  <string name="insert_channel_name">Insert channel name…</string>
+  <string name="insert_channel_name">\uD83D\uDE18</string>
   <string name="private_channel">Private channel</string>
   <string name="add_channel_members">Add channel members</string>
   <string name="create">Create</string>
@@ -20,4 +20,5 @@
   <string name="send_invite">Send invite</string>
   <string name="check_out_bonfire">Check out Bonfire!\n%s</string>
   <string name="only_single_emoji_allowed">Channel name must be one emoji character</string>
+  <string name="channel_name">Channel Name</string>
 </resources>

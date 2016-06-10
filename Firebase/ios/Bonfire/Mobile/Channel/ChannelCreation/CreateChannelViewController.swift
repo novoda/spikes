@@ -9,7 +9,13 @@ final class CreateChannelViewController: UIViewController {
 
     static func withDependencies() -> CreateChannelViewController {
         let view = CreateChannelView()
-        let presenter = CreateChannelPresenter(loginService: SharedServices.loginService, channelsService: SharedServices.channelsService, createChannelDisplayer: view, navigator: SharedServices.navigator)
+        let presenter = CreateChannelPresenter(
+            loginService: SharedServices.loginService,
+            channelsService: SharedServices.channelsService,
+            createChannelDisplayer: view,
+            navigator: SharedServices.navigator
+        )
+
         return CreateChannelViewController(createChannelPresenter: presenter, createChannelView: view)
     }
 
@@ -61,21 +67,31 @@ final class CreateChannelViewController: UIViewController {
 // MARK: - Keyboard Handling
 extension CreateChannelViewController {
     func setupKeyboardNotifcationListener() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.addObserver(self,
+                                       selector: #selector(keyboardWillShow(_:)),
+                                       name: UIKeyboardWillShowNotification,
+                                       object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(keyboardWillHide(_:)),
+                                       name: UIKeyboardWillHideNotification,
+                                       object: nil)
     }
 
     func removeKeyboardNotificationListeners() {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        notificationCenter.removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
     }
 
     func keyboardWillShow(notification: NSNotification) {
-        let userInfo = notification.userInfo as! Dictionary<String, AnyObject>
-        let animationDuration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSTimeInterval
-        let animationCurve = userInfo[UIKeyboardAnimationCurveUserInfoKey]!.intValue
-        let keyboardFrame = userInfo[UIKeyboardFrameEndUserInfoKey]?.CGRectValue
-        let keyboardFrameConvertedToViewFrame = view.convertRect(keyboardFrame!, fromView: nil)
+        guard let userInfo = notification.userInfo as? Dictionary<String, AnyObject>,
+            let animationDuration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSTimeInterval,
+            let animationCurve = userInfo[UIKeyboardAnimationCurveUserInfoKey]?.intValue,
+            let keyboardFrame = userInfo[UIKeyboardFrameEndUserInfoKey]?.CGRectValue
+            else { return }
+
+        let keyboardFrameConvertedToViewFrame = view.convertRect(keyboardFrame, fromView: nil)
         let curveAnimationOption = UIViewAnimationOptions(rawValue: UInt(animationCurve))
         let options = UIViewAnimationOptions.BeginFromCurrentState.union(curveAnimationOption)
 
@@ -86,9 +102,11 @@ extension CreateChannelViewController {
     }
 
     func keyboardWillHide(notification: NSNotification) {
-        let userInfo = notification.userInfo as! Dictionary<String, AnyObject>
-        let animationDuration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSTimeInterval
-        let animationCurve = userInfo[UIKeyboardAnimationCurveUserInfoKey]!.intValue
+        guard let userInfo = notification.userInfo as? Dictionary<String, AnyObject>,
+            let animationDuration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSTimeInterval,
+            let animationCurve = userInfo[UIKeyboardAnimationCurveUserInfoKey]?.intValue
+            else { return }
+
         let curveAnimationOption = UIViewAnimationOptions(rawValue: UInt(animationCurve))
         let options = UIViewAnimationOptions.BeginFromCurrentState.union(curveAnimationOption)
 
@@ -98,4 +116,3 @@ extension CreateChannelViewController {
             }, completion: nil)
     }
 }
-

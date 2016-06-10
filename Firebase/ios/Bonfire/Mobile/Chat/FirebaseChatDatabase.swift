@@ -3,7 +3,7 @@ import RxSwift
 import Firebase
 
 class FirebaseChatDatabase: ChatDatabase {
-    
+
     private let messagesDB: FIRDatabaseReference
 
     init(messagesDB: FIRDatabaseReference) {
@@ -27,7 +27,7 @@ class FirebaseChatDatabase: ChatDatabase {
     private func toChat(forChannel channel: Channel) -> (FIRDataSnapshot throws -> Chat) {
         return { snapshot in
             let firebaseMessages = snapshot.children.allObjects
-            let messages = try firebaseMessages.map{$0.value}.map(Message.init)
+            let messages = try firebaseMessages.map {$0.value}.map(Message.init)
             return Chat(channel: channel, messages: messages)
         }
     }

@@ -6,15 +6,32 @@ final class ChannelsViewController: UIViewController {
     let channelsPresenter: ChannelsPresenter
 
     static func withDependencies() -> ChannelsViewController {
-        return ChannelsViewController(loginService: SharedServices.loginService, channelsService: SharedServices.channelsService, navigator: SharedServices.navigator, dynamicLinkFactory: SharedServices.dynamicLinkFactory, config: SharedServices.config)
+        return ChannelsViewController(
+            loginService: SharedServices.loginService,
+            channelsService: SharedServices.channelsService,
+            navigator: SharedServices.navigator,
+            dynamicLinkFactory: SharedServices.dynamicLinkFactory,
+            config: SharedServices.config
+        )
     }
 
-    init(loginService: LoginService, channelsService: ChannelsService, navigator: Navigator, dynamicLinkFactory: DynamicLinkFactory, config: Config) {
-        self.channelsPresenter = ChannelsPresenter(loginService: loginService, channelsService: channelsService, channelsDisplayer: channelsView, navigator: navigator, dynamicLinkFactory: dynamicLinkFactory, config: config)
+    init(loginService: LoginService,
+         channelsService: ChannelsService,
+         navigator: Navigator,
+         dynamicLinkFactory: DynamicLinkFactory,
+         config: Config
+        ) {
+        self.channelsPresenter = ChannelsPresenter(
+            loginService: loginService,
+            channelsService: channelsService,
+            channelsDisplayer: channelsView,
+            navigator: navigator,
+            dynamicLinkFactory: dynamicLinkFactory,
+            config: config)
 
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

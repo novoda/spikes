@@ -14,18 +14,16 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         FIRApp.configure()
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
 
-//        try! FIRAuth.auth()?.signOut()
-//        GIDSignIn.sharedInstance().signOut()
-
-        let navigationController = (SharedServices.navigator as! AppNavigator).navigationController
-        navigationController.pushViewController(LoginViewController.withDependencies(), animated: false)
-
+        //        try! FIRAuth.auth()?.signOut()
+        //        GIDSignIn.sharedInstance().signOut()
         UIApplication.sharedApplication().statusBarStyle = .LightContent
 
-
-        window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        window?.rootViewController = navigationController
-        window?.makeKeyAndVisible()
+        if let navigationController = (SharedServices.navigator as? AppNavigator)?.navigationController {
+            navigationController.pushViewController(LoginViewController.withDependencies(), animated: false)
+            window = UIWindow(frame: UIScreen.mainScreen().bounds)
+            window?.rootViewController = navigationController
+            window?.makeKeyAndVisible()
+        }
 
         return true
     }
@@ -39,26 +37,34 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         if url.scheme.hasPrefix("com.googleusercontent.apps") {
-            return GIDSignIn.sharedInstance().handleURL(url, sourceApplication: options[UIApplicationOpenURLOptionsSourceApplicationKey] as? String, annotation: options[UIApplicationOpenURLOptionsAnnotationKey])
+            return GIDSignIn.sharedInstance()
+                .handleURL(url,
+                           sourceApplication: options[UIApplicationOpenURLOptionsSourceApplicationKey] as? String,
+                           annotation: options[UIApplicationOpenURLOptionsAnnotationKey])
         }
 
         return false
     }
 
-    func application(application: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler: ([AnyObject]?) -> Void) -> Bool {
+    func application(
+        application: UIApplication,
+        continueUserActivity userActivity: NSUserActivity,
+        restorationHandler: ([AnyObject]?) -> Void
+        ) -> Bool {
+
         let handled = FIRDynamicLinks.dynamicLinks()?.handleUniversalLink(userActivity.webpageURL!) { (dynamiclink, error) in
             if let dynamiclink = dynamiclink {
                 self.handleDynamicLink(dynamiclink)
             }
         }
 
-        
+
         return handled!
     }
 
     func handleDynamicLink(dynamicLink: FIRDynamicLink) {
         if let url = dynamicLink.url,
-        let path = url.lastPathComponent where path == "welcome" {
+            let path = url.lastPathComponent where path == "welcome" {
             print(url)
             let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: true)
             let sender = components?.queryItems?.first?.value

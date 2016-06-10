@@ -2,7 +2,7 @@ import Foundation
 
 struct User {
     let name: String
-    let id: String
+    let identifier: String
     let photoURL: NSURL?
 }
 
@@ -12,7 +12,6 @@ extension User: Equatable {}
 
 func ==(lhs: User, rhs: User) -> Bool {
     return lhs.name == rhs.name &&
-        lhs.id == rhs.id &&
+        lhs.identifier == rhs.identifier &&
         lhs.photoURL == rhs.photoURL
 }
-

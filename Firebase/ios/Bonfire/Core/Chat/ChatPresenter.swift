@@ -13,7 +13,14 @@ final class ChatPresenter {
     private var user: User?
     private let channel: Channel
 
-    init(channel: Channel, loginService: LoginService, chatService: ChatService, chatDisplayer: ChatDisplayer, navigator: Navigator, analytics: Analytics) {
+    init(
+        channel: Channel,
+        loginService: LoginService,
+        chatService: ChatService,
+        chatDisplayer: ChatDisplayer,
+        navigator: Navigator,
+        analytics: Analytics
+        ) {
         self.channel = channel
         self.loginService = loginService
         self.chatService = chatService
@@ -29,19 +36,28 @@ final class ChatPresenter {
 
         chatDisplayer.actionListener = self
 
-        loginService.user().subscribe(
-            onNext: { [weak self] authentication in
-                self?.user = authentication.user
-        }).addDisposableTo(disposeBag)
+        let user = loginService.user()
+            .map({ authentication in
+                return authentication.user
+            })
+            .doOnNext({ user in
+                self.user = user
+            })
 
-        chatService.chat(channel).subscribe(
-            onNext: { [weak self] result in
+        Observable.combineLatest(
+            chatService.chat(channel),
+            user
+        ) { return ($0, $1) }
+        .subscribe(
+            onNext: { [weak self] (result, user) in
                 switch result {
                 case .Success(let chat):
-                    self?.chatDisplayer.display(chat)
+                    if let user = user {
+                        self?.chatDisplayer.display(chat, forUser: user)
+                    }
                 default: break
                 }
-        }).addDisposableTo(disposeBag)
+            }).addDisposableTo(disposeBag)
     }
 
     func stopPresenting() {

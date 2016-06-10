@@ -1,6 +1,8 @@
 package com.novoda.bonfire.chat.view;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -10,19 +12,21 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.novoda.bonfire.R;
 import com.novoda.bonfire.chat.data.model.Chat;
 import com.novoda.bonfire.chat.displayer.ChatDisplayer;
+import com.novoda.bonfire.user.data.model.User;
 import com.novoda.notils.caster.Views;
 
 public class ChatView extends LinearLayout implements ChatDisplayer {
 
     private final ChatAdapter chatAdapter;
     private TextView messageView;
-    private View submitButton;
+    private ImageView submitButton;
     private RecyclerView recyclerView;
     private Toolbar toolbar;
 
@@ -41,6 +45,7 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
         messageView = Views.findById(this, R.id.messageEdit);
         submitButton = Views.findById(this, R.id.submitButton);
         recyclerView = Views.findById(this, R.id.messagesRecyclerView);
+        recyclerView.addItemDecoration(new ChatItemDecoration());
         toolbar = Views.findById(this, R.id.toolbar);
         toolbar.inflateMenu(R.menu.chat_menu);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
@@ -78,8 +83,8 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
     }
 
     @Override
-    public void display(Chat chat) {
-        chatAdapter.update(chat);
+    public void display(Chat chat, User user) {
+        chatAdapter.update(chat, user);
         int lastMessagePosition = chatAdapter.getItemCount() == 0 ? 0 : chatAdapter.getItemCount() - 1;
         recyclerView.smoothScrollToPosition(lastMessagePosition);
     }
@@ -87,11 +92,13 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
     @Override
     public void enableInteraction() {
         submitButton.setEnabled(true);
+        submitButton.setColorFilter(null);
     }
 
     @Override
     public void disableInteraction() {
         submitButton.setEnabled(false);
+        submitButton.setColorFilter(getResources().getColor(R.color.disabled_grey), PorterDuff.Mode.SRC_ATOP);
     }
 
     private final TextWatcher textWatcher = new TextWatcher() {
@@ -133,4 +140,18 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
         }
     };
 
+    private class ChatItemDecoration extends RecyclerView.ItemDecoration {
+
+        private final int horizontalMargin = getResources().getDimensionPixelOffset(R.dimen.list_item_horizontal_margin);
+        private final int verticalMargin = getResources().getDimensionPixelOffset(R.dimen.list_item_vertical_margin);
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            outRect.left = horizontalMargin;
+            outRect.right = horizontalMargin;
+            outRect.top = verticalMargin;
+            outRect.bottom = verticalMargin;
+        }
+
+    }
 }

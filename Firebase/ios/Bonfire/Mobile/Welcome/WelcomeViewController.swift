@@ -54,5 +54,5 @@ class WelcomeViewController: UIViewController, WelcomeActionListener {
     func welcomeDone() {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-    
+
 }

@@ -56,5 +56,3 @@ final class UsersTableViewManager: NSObject, UITableViewDataSource, UITableViewD
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 }
-
-
