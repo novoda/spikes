@@ -140,14 +140,17 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
     };
 
     private class ChatItemDecoration extends RecyclerView.ItemDecoration {
+
+        private final int horizontalMargin = getResources().getDimensionPixelOffset(R.dimen.list_item_horizontal_margin);
+        private final int verticalMargin = getResources().getDimensionPixelOffset(R.dimen.list_item_vertical_margin);
+
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int horizontalMargin = getResources().getDimensionPixelOffset(R.dimen.list_item_horizontal_margin);
-            int verticalMargin = getResources().getDimensionPixelOffset(R.dimen.list_item_vertical_margin);
             outRect.left = horizontalMargin;
             outRect.right = horizontalMargin;
             outRect.top = verticalMargin;
             outRect.bottom = verticalMargin;
         }
+
     }
 }

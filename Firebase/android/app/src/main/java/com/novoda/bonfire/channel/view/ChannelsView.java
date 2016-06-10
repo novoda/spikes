@@ -87,9 +87,12 @@ public class ChannelsView extends LinearLayout implements ChannelsDisplayer {
     };
 
     private class ChannelItemDecoration extends RecyclerView.ItemDecoration {
+
+        private final int itemPaddingInPixel = getResources().getDimensionPixelOffset(R.dimen.channel_item_padding);
+        private final int gridPaddingInPixel = getResources().getDimensionPixelOffset(R.dimen.list_item_vertical_margin);
+
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int itemPaddingInPixel = getResources().getDimensionPixelOffset(R.dimen.channel_item_padding);
             outRect.top = itemPaddingInPixel;
             outRect.bottom = itemPaddingInPixel;
             outRect.left = itemPaddingInPixel;
@@ -97,7 +100,6 @@ public class ChannelsView extends LinearLayout implements ChannelsDisplayer {
 
             int position = parent.getChildAdapterPosition(view);
             int spanCount = ((GridLayoutManager) parent.getLayoutManager()).getSpanCount();
-            int gridPaddingInPixel = getResources().getDimensionPixelOffset(R.dimen.list_item_vertical_margin);
 
             if (isTopRow(position, spanCount)) {
                 outRect.top += gridPaddingInPixel;
