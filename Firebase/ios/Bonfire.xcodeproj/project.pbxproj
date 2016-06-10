@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		1A0A41A21D0184640053A547 /* PersistedUserServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0A41A11D0184640053A547 /* PersistedUserServiceTests.swift */; };
 		1A0A41A41D018D810053A547 /* Rememberancer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0A41A31D018D810053A547 /* Rememberancer.swift */; };
+		1A2439281D0ACC390021B547 /* UIView+BorderExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2439271D0ACC390021B547 /* UIView+BorderExtensions.swift */; };
+		1AECA3371D0974EC00E4D856 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AECA3361D0974EC00E4D856 /* Assets.xcassets */; };
+		1AECA3391D09B41700E4D856 /* BonfireColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AECA3381D09B41700E4D856 /* BonfireColors.swift */; };
 		1ABEAC661D08573D00A85CE2 /* FirebaseIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABEAC651D08573D00A85CE2 /* FirebaseIdentifiers.swift */; };
 		1ABEAC681D08730B00A85CE2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1ABEAC671D08730B00A85CE2 /* GoogleService-Info.plist */; };
 		1AF7D1A01CEF651600B74483 /* UsersTableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */; };
@@ -32,7 +35,6 @@
 		B63B378A1CFDCF6400142DC3 /* FirebaseChatDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63B37891CFDCF6400142DC3 /* FirebaseChatDatabase.swift */; };
 		B654B2671CE0C38000EEDE0A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B654B2661CE0C38000EEDE0A /* AppDelegate.swift */; };
 		B654B2691CE0C38000EEDE0A /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B654B2681CE0C38000EEDE0A /* ChatViewController.swift */; };
-		B654B26E1CE0C38000EEDE0A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B654B26D1CE0C38000EEDE0A /* Assets.xcassets */; };
 		B654B2711CE0C38000EEDE0A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B654B26F1CE0C38000EEDE0A /* LaunchScreen.storyboard */; };
 		B654B2891CE0C86200EEDE0A /* UIView+AutolayoutExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B654B2881CE0C86200EEDE0A /* UIView+AutolayoutExtensions.swift */; };
 		B654B28C1CE0CE8300EEDE0A /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = B654B28B1CE0CE8300EEDE0A /* Message.swift */; };
@@ -106,6 +108,9 @@
 		13F2FDE620ACDD8945A96B8C /* Pods_Bonfire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bonfire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A0A41A11D0184640053A547 /* PersistedUserServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedUserServiceTests.swift; sourceTree = "<group>"; };
 		1A0A41A31D018D810053A547 /* Rememberancer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rememberancer.swift; sourceTree = "<group>"; };
+		1A2439271D0ACC390021B547 /* UIView+BorderExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+BorderExtensions.swift"; sourceTree = "<group>"; };
+		1AECA3361D0974EC00E4D856 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Bonfire/Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		1AECA3381D09B41700E4D856 /* BonfireColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonfireColors.swift; sourceTree = "<group>"; };
 		1ABEAC651D08573D00A85CE2 /* FirebaseIdentifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseIdentifiers.swift; sourceTree = "<group>"; };
 		1ABEAC671D08730B00A85CE2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersTableViewManager.swift; sourceTree = "<group>"; };
@@ -134,7 +139,6 @@
 		B654B2631CE0C38000EEDE0A /* Bonfire.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bonfire.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B654B2661CE0C38000EEDE0A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B654B2681CE0C38000EEDE0A /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
-		B654B26D1CE0C38000EEDE0A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B654B2701CE0C38000EEDE0A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B654B2721CE0C38000EEDE0A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B654B2881CE0C86200EEDE0A /* UIView+AutolayoutExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+AutolayoutExtensions.swift"; sourceTree = "<group>"; };
@@ -288,7 +292,6 @@
 			children = (
 				B65C45B51CE0E1B800B2179D /* Core */,
 				B65C45B61CE0E1D000B2179D /* Mobile */,
-				B654B26D1CE0C38000EEDE0A /* Assets.xcassets */,
 				B6C054E21CF5B10200B1BB6C /* Bonfire.entitlements */,
 				B654B2721CE0C38000EEDE0A /* Info.plist */,
 				1ABEAC671D08730B00A85CE2 /* GoogleService-Info.plist */,
@@ -305,6 +308,7 @@
 				B6CC1CEA1CEC992F00BA8500 /* Observable+Extensions.swift */,
 				B660785B1CE37FAC008E7DD4 /* ReusableView.swift */,
 				B654B2881CE0C86200EEDE0A /* UIView+AutolayoutExtensions.swift */,
+				1A2439271D0ACC390021B547 /* UIView+BorderExtensions.swift */,
 				B6210AC71CE2318B00570509 /* UIViewController+AlertExtensions.swift */,
 			);
 			path = Utilities;
@@ -355,6 +359,8 @@
 				B6AC7C161CF458E000F96722 /* FirebaseAnalytics.swift */,
 				B636BA251CF34DDA009009F2 /* FirebaseRemoteConfig.swift */,
 				B61BD4C91CFEE65100DD7A70 /* SharedServices.swift */,
+				1AECA3381D09B41700E4D856 /* BonfireColors.swift */,
+				1AECA3361D0974EC00E4D856 /* Assets.xcassets */,
 				1ABEAC651D08573D00A85CE2 /* FirebaseIdentifiers.swift */,
 			);
 			path = Mobile;
@@ -625,6 +631,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				B654B2711CE0C38000EEDE0A /* LaunchScreen.storyboard in Resources */,
+				1AECA3371D0974EC00E4D856 /* Assets.xcassets in Resources */,
+				B6210AC41CE20CEC00570509 /* GoogleService-Info.plist in Resources */,
 				B654B26E1CE0C38000EEDE0A /* Assets.xcassets in Resources */,
 				1ABEAC681D08730B00A85CE2 /* GoogleService-Info.plist in Resources */,
 			);
@@ -760,6 +768,7 @@
 				B654B2891CE0C86200EEDE0A /* UIView+AutolayoutExtensions.swift in Sources */,
 				B6CC1CF31CECB05900BA8500 /* CreateChannelView.swift in Sources */,
 				B65C45C11CE0ED8200B2179D /* ChatDisplayer.swift in Sources */,
+				1AECA3391D09B41700E4D856 /* BonfireColors.swift in Sources */,
 				B6CC1CF51CECB3E500BA8500 /* CreateChannelViewController.swift in Sources */,
 				B6C054F01CF72A2900B1BB6C /* FirebaseChannelsDatabase.swift in Sources */,
 				B65C45B41CE0E0F900B2179D /* Chat.swift in Sources */,
@@ -823,6 +832,7 @@
 				B6CC1CEB1CEC992F00BA8500 /* Observable+Extensions.swift in Sources */,
 				D0C31B830B0684A6D238C842 /* ChannelsView.swift in Sources */,
 				B6C054E61CF5DE7300B1BB6C /* WelcomeViewActionListener.swift in Sources */,
+				1A2439281D0ACC390021B547 /* UIView+BorderExtensions.swift in Sources */,
 				D0C317C9CD54BDC5F4607BCD /* ChannelsTableViewManager.swift in Sources */,
 				B6962C861CEF5388006A3A9E /* UsersDisplayer.swift in Sources */,
 				B6962C8D1CEF568E006A3A9E /* UsersView.swift in Sources */,

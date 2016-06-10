@@ -16,6 +16,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
         //        try! FIRAuth.auth()?.signOut()
         //        GIDSignIn.sharedInstance().signOut()
+        UIApplication.sharedApplication().statusBarStyle = .LightContent
 
         if let navigationController = (SharedServices.navigator as? AppNavigator)?.navigationController {
             navigationController.pushViewController(LoginViewController.withDependencies(), animated: false)

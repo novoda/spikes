@@ -26,6 +26,8 @@ class WelcomeViewController: UIViewController, WelcomeActionListener {
 
     override func loadView() {
         self.view = UIView()
+
+        navigationController?.navigationBarHidden = true
     }
 
     override func viewDidLoad() {

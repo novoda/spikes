@@ -4,14 +4,24 @@ import RxCocoa
 
 final class CreateChannelView: UIView {
 
-    private let errorLabel = UILabel()
-    private let channelNameLabel = UILabel()
-    private let channelNameField = UITextField()
     private let privacySwitch = UISwitch()
     private let privacyLabel = UILabel()
+    private let privacyBackground = UIView()
+
+    private let errorLabel = UILabel()
+
+    private let channelNameLabel = UILabel()
+    private let channelNameField = UITextField()
+    private let channelNameFieldMask = UIView()
+    private let channelNamePlaceholder = UILabel()
+
     private let submitButton = UIButton()
 
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
+
     weak var actionListener: CreateChannelActionListener?
+    weak var viewController: UIViewController?
 
     private let disposeBag = DisposeBag()
 
@@ -31,57 +41,101 @@ final class CreateChannelView: UIView {
     }
 
     func setupViews() {
-        backgroundColor = .whiteColor()
+        backgroundColor = BonfireColors.lightGrey
 
-        channelNameLabel.text = "Channel emoji name"
+        privacyBackground.backgroundColor = BonfireColors.mediumGrey
 
-        channelNameField.backgroundColor = .clearColor()
-        channelNameField.borderStyle = .RoundedRect
+        privacyLabel.text = "Private Channel"
+
+        privacySwitch.onTintColor = BonfireColors.orange
+
+        channelNameLabel.text = "Channel Name"
+        channelNameLabel.font = UIFont.systemFontOfSize(12)
+        channelNameLabel.textColor = UIColor.darkGrayColor()
+
+        channelNameField.backgroundColor = UIColor(white: 1.0, alpha: 0.78)
+        channelNameField.borderStyle = .None
         channelNameField.clearButtonMode = .Always
-        channelNameField.placeholder = ":-)"
+        channelNameField.textAlignment = .Center
+        channelNameField.font = UIFont.systemFontOfSize(45)
+
+        channelNameField.delegate = self
+
+        channelNamePlaceholder.text = "😘"
+        channelNamePlaceholder.font = UIFont.systemFontOfSize(45)
+        channelNamePlaceholder.textAlignment = .Center
+
+        channelNameFieldMask.layer.cornerRadius = 50
+        channelNameFieldMask.backgroundColor = .whiteColor()
+        channelNameFieldMask.clipsToBounds = true
 
         errorLabel.textColor = .redColor()
         errorLabel.numberOfLines = 0
         errorLabel.font = UIFont.systemFontOfSize(12)
         errorLabel.text = ""
+        errorLabel.textAlignment = .Center
 
-        privacyLabel.text = "Private"
+        submitButton.setImage(UIImage(named: "ic_tick"), forState: .Normal)
+        submitButton.backgroundColor = BonfireColors.greyHighlight
+        submitButton.layer.cornerRadius = 25
 
-        submitButton.setTitleColor(.blueColor(), forState: .Normal)
-        submitButton.setTitle("Create Channel", forState: .Normal)
     }
 
+
     func setupLayout() {
-        addSubview(errorLabel)
-        addSubview(channelNameLabel)
-        addSubview(channelNameField)
-        addSubview(privacyLabel)
-        addSubview(privacySwitch)
-        addSubview(submitButton)
+        addSubview(scrollView)
+        scrollView.pinToSuperviewEdges()
+        scrollView.addSubview(contentView)
+        contentView.pinToSuperviewEdges()
+        contentView.addEqualWidthConstraint(withView: scrollView)
 
-        errorLabel.pinToSuperviewTop(withConstant: 10)
-        errorLabel.pinToSuperviewLeading(withConstant: 16)
-        errorLabel.pinToSuperviewTrailing(withConstant: 16)
+        scrollView.alignHorizontalCenter(withView: contentView)
 
-        channelNameLabel.attachToBottomOf(errorLabel, withConstant: 10)
-        channelNameLabel.pinToSuperviewLeading(withConstant: 16)
-        channelNameLabel.addHeightConstraint(withConstant: 44)
 
-        channelNameField.attachToRightOf(channelNameLabel)
-        channelNameField.attachToBottomOf(errorLabel, withConstant: 16)
-        channelNameField.pinToSuperviewTrailing(withConstant: 16)
-        channelNameField.addWidthConstraint(withConstant: 100)
+        contentView.addSubview(privacyBackground)
+        contentView.addSubview(errorLabel)
+        contentView.addSubview(channelNameLabel)
+        contentView.addSubview(submitButton)
+        contentView.addSubview(channelNameFieldMask)
 
-        privacySwitch.attachToBottomOf(channelNameField, withConstant: 20)
-        privacySwitch.pinToSuperviewTrailing(withConstant: 16)
-        privacySwitch.attachToRightOf(privacyLabel, withConstant: 16)
+        channelNameFieldMask.addSubview(channelNamePlaceholder)
+        channelNameFieldMask.addSubview(channelNameField)
 
-        privacyLabel.attachToBottomOf(channelNameField, withConstant: 24)
+        privacyBackground.addSubview(privacyLabel)
+        privacyBackground.addSubview(privacySwitch)
 
-        submitButton.attachToBottomOf(privacySwitch, withConstant: 20)
-        submitButton.pinToSuperviewLeading(withConstant: 8)
-        submitButton.pinToSuperviewTrailing(withConstant: 8)
-        submitButton.addHeightConstraint(withConstant: 44)
+        privacyBackground.pinToSuperviewTop()
+        privacyBackground.pinToSuperviewLeading()
+        privacyBackground.pinToSuperviewTrailing()
+        privacyBackground.addBottomBorder(withColor: BonfireColors.greyHighlight, height: 1)
+
+        privacyLabel.pinToSuperviewTop(withConstant: 14)
+        privacyLabel.pinToSuperviewBottom(withConstant: 14)
+        privacyLabel.pinToSuperviewLeading(withConstant: 20)
+
+        privacySwitch.pinToSuperviewTop(withConstant: 10)
+        privacySwitch.pinToSuperviewTrailing(withConstant: 20)
+
+        channelNameLabel.attachToBottomOf(privacyBackground, withConstant: 25)
+        channelNameLabel.alignHorizontalCenterWithSuperview()
+
+        channelNameFieldMask.attachToBottomOf(channelNameLabel, withConstant: 25)
+        channelNameFieldMask.addHeightConstraint(withConstant: 100)
+        channelNameFieldMask.addWidthConstraint(withConstant: 100)
+        channelNameFieldMask.alignHorizontalCenterWithSuperview()
+
+        channelNameField.pinToSuperviewEdges()
+        channelNamePlaceholder.pinToSuperviewEdges()
+
+        errorLabel.attachToBottomOf(channelNameFieldMask, withConstant: 15)
+        errorLabel.pinToSuperviewLeading(withConstant: 30)
+        errorLabel.pinToSuperviewTrailing(withConstant: 30)
+
+        submitButton.attachToBottomOf(errorLabel, withConstant: 15)
+        submitButton.alignHorizontalCenterWithSuperview()
+        submitButton.addWidthConstraint(withConstant: 200)
+        submitButton.addHeightConstraint(withConstant: 50)
+        submitButton.pinToSuperviewBottom(withConstant: 10)
     }
 
     func setupActions() {
@@ -98,6 +152,15 @@ final class CreateChannelView: UIView {
                 return
         }
         self.actionListener?.createChannel(withName: newChannelName, privateChannel: self.privacySwitch.on)
+    }
+
+}
+
+extension CreateChannelView: UITextFieldDelegate {
+
+    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        channelNamePlaceholder.hidden = true
+        return true
     }
 
 }

@@ -4,8 +4,11 @@ import RxCocoa
 
 final class WelcomeView: UIView {
 
+    private let senderProfileImage = UIImageView()
+    private let senderLabel = UILabel()
     private let welcomeMessageLabel = UILabel()
-    private let doneButton = UIButton()
+    private let loginButton = UIButton()
+
     private var sender: String?
 
     weak var actionListener: WelcomeActionListener?
@@ -30,33 +33,55 @@ final class WelcomeView: UIView {
 
     private func setupViews() {
         backgroundColor = .whiteColor()
-        welcomeMessageLabel.numberOfLines = 0
+
+        senderLabel.numberOfLines = 0
+        senderLabel.textAlignment = .Center
+        senderLabel.font = UIFont.systemFontOfSize(16)
+
         if let sender = sender {
-            welcomeMessageLabel.text = "Welcome to Bonfire. \(sender) invited you!"
+            senderLabel.text = "\(sender) invited you to Bonfire "
         } else {
-            welcomeMessageLabel.text = "Welcome to Bonfire"
+            senderLabel.text = "Welcome to Bonfire!"
         }
 
-        doneButton.setTitle("Get Started", forState: .Normal)
-        doneButton.setTitleColor(.blackColor(), forState: .Normal)
+        welcomeMessageLabel.numberOfLines = 0
+        welcomeMessageLabel.text = "Login and enjoy the emoji awesomeness"
+        welcomeMessageLabel.textAlignment = .Center
+        welcomeMessageLabel.font = UIFont.systemFontOfSize(16)
+
+        loginButton.setTitle("Login", forState: .Normal)
+        loginButton.setTitleColor(.whiteColor(), forState: .Normal)
+        loginButton.layer.cornerRadius = 24
+        loginButton.backgroundColor = BonfireColors.orange
     }
 
     private func setupLayout() {
+        addSubview(senderProfileImage)
         addSubview(welcomeMessageLabel)
-        addSubview(doneButton)
+        addSubview(loginButton)
+        addSubview(senderLabel)
 
-        welcomeMessageLabel.pinToSuperviewTop(withConstant: 20)
+        senderProfileImage.addHeightConstraint(withConstant: 86)
+        senderProfileImage.addWidthConstraint(withConstant: 86)
+        senderProfileImage.alignHorizontalCenterWithSuperview()
+
+        senderLabel.attachToBottomOf(senderProfileImage, withConstant: 15)
+        senderLabel.pinToSuperviewLeading(withConstant: 50)
+        senderLabel.pinToSuperviewTrailing(withConstant: 50)
+
+        welcomeMessageLabel.alignVerticalCenterWithSuperview()
+        welcomeMessageLabel.attachToBottomOf(senderLabel, withConstant: 50)
         welcomeMessageLabel.pinToSuperviewLeading(withConstant: 20)
         welcomeMessageLabel.pinToSuperviewTrailing(withConstant: 20)
 
-        doneButton.attachToBottomOf(welcomeMessageLabel, withConstant: 10)
-        doneButton.pinToSuperviewLeading(withConstant: 20)
-        doneButton.pinToSuperviewTrailing(withConstant: 20)
-        doneButton.addHeightConstraint(withConstant: 44)
+        loginButton.attachToBottomOf(welcomeMessageLabel, withConstant: 35)
+        loginButton.pinToSuperviewLeading(withConstant: 75)
+        loginButton.pinToSuperviewTrailing(withConstant: 75)
+        loginButton.addHeightConstraint(withConstant: 48)
     }
 
     private func setupActions() {
-        doneButton.rx_tap.subscribe(
+        loginButton.rx_tap.subscribe(
             onNext: { [weak self] in
                 self?.welcomeDone()
             }).addDisposableTo(disposeBag)
