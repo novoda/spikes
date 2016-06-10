@@ -67,11 +67,10 @@ final class UserCell: UITableViewCell {
     private func setUserPhoto(url: NSURL) {
         disposeBag = DisposeBag()
 
-        photoView.hidden = true
+        photoView.image = UIImage(named: "ic_person")
         imageForURL(url)
             .observeOn(MainScheduler.instance)
             .subscribeNext({ [weak self] image in
-                self?.photoView.hidden = false
                 self?.photoView.image = image
                 }).addDisposableTo(disposeBag)
     }
