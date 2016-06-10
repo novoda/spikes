@@ -5,17 +5,23 @@ final class ChatTableViewManager: NSObject, UITableViewDataSource, UITableViewDe
     private var currentUser: User?
 
     func updateTableView(tableView: UITableView, withChat chat: Chat, andUser user: User) {
+        let animated = messages.count > 0
+
         messages = chat.messages
         currentUser = user
 
         tableView.reloadData()
-//        let indexPath = NSIndexPath(forItem: messages.count - 1, inSection: 0)
-//        tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Bottom, animated: true)
+
+        if messages.count > 0 {
+            let indexPath = NSIndexPath(forItem: messages.count - 1, inSection: 0)
+            tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Bottom, animated: animated)
+        }
     }
 
     func setupTableView(tableView: UITableView) {
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 100
+        tableView.separatorStyle = .None
 
         tableView.delegate = self
         tableView.dataSource = self
