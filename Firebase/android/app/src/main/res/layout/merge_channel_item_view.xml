@@ -11,7 +11,7 @@
     android:background="@drawable/circle_shape_white"
     android:gravity="center"
     android:textColor="@android:color/primary_text_light"
-    android:textSize="46sp" />
+    android:textSize="40sp" />
 
   <ImageView
     android:id="@+id/lockIcon"
