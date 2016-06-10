@@ -6,6 +6,6 @@ protocol ChatActionListener: class {
 }
 
 protocol ChatDisplayer: class {
-    func display(chat: Chat)
+    func display(chat: Chat, forUser user: User)
     weak var actionListener: ChatActionListener? { get set }
 }

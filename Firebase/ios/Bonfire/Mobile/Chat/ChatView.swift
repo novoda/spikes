@@ -95,8 +95,8 @@ final class ChatView: UIView {
 }
 
 extension ChatView: ChatDisplayer {
-    func display(chat: Chat) {
-        tableViewManager.updateTableView(tableView, withChat: chat)
+    func display(chat: Chat, forUser user: User) {
+        tableViewManager.updateTableView(tableView, withChat: chat, andUser: user)
         navigationItemDelegate?.updateNavigationItem(withChat: chat)
     }
 }

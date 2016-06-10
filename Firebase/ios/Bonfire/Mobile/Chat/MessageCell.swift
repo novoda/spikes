@@ -10,7 +10,7 @@ extension UIColor {
 
 struct HTTPImageServiceError: ErrorType {}
 
-final class ChatCell: UITableViewCell {
+final class MessageCell: UITableViewCell {
 
     let authorLabel = UILabel()
     let timestampLabel = UILabel()
