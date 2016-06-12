@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:paddingBottom="@dimen/activity_vertical_margin"
+  android:paddingLeft="@dimen/activity_horizontal_margin"
+  android:paddingRight="@dimen/activity_horizontal_margin"
+  android:paddingTop="@dimen/activity_vertical_margin"
+  tools:context="com.novoda.simonsays.game.GameActivity">
+
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/simon_says" />
+
+  <TextView
+    android:id="@+id/game_label_instructions"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:text="Ready to start? 3 .. 2 .. 1" />
+
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <android.support.v7.widget.AppCompatButton
+      android:id="@+id/game_button_a"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="#FF0000"
+      android:layerType="hardware"
+      android:text="@string/a"
+      android:visibility="invisible" />
+
+    <android.support.v7.widget.AppCompatButton
+      android:id="@+id/game_button_b"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="#00FF00"
+      android:layerType="hardware"
+      android:text="@string/b"
+      android:visibility="invisible" />
+
+    <android.support.v7.widget.AppCompatButton
+      android:id="@+id/game_button_c"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="#0000FF"
+      android:layerType="hardware"
+      android:text="@string/c"
+      android:visibility="invisible" />
+
+    <android.support.v7.widget.AppCompatButton
+      android:id="@+id/game_button_d"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="#FFFF00"
+      android:layerType="hardware"
+      android:text="@string/d"
+      android:visibility="invisible" />
+  </LinearLayout>
+
+  <TextView
+    android:id="@+id/game_label_score"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/score_x" />
+
+</LinearLayout>
