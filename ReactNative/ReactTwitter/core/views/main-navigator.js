@@ -18,7 +18,7 @@ var TweetsList = require('./tweetsList.js')
 var TweetView = require('./tweetView.js')
 var DebugAnimationScene = require('./debug/debug-animation-scene.js')
 var DebugNativeComponentScene = require('./debug/debug-native-component-scene.js')
-var DebugUITestingScene = require('./debug/debug-uitesting-ios.js')
+var DebugUITestingScene = require('./debug/debug-uitesting.js')
 
 const scenes = [
   SplashScreenView,

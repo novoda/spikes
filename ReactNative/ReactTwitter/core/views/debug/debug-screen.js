@@ -14,7 +14,7 @@ var PushNotificationsScreenView = require('./push-notifications-screen.js')
 var OauthView = require('./oauth-screen.js')
 var DebugAnimationScene = require('./debug-animation-scene.js')
 var DebugNativeComponentScene = require('./debug-native-component-scene.js')
-var DebugUITestingScene = require('./debug-uitesting-ios.js')
+var DebugUITestingScene = require('./debug-uitesting.js')
 
 const scenes = [
   DeepLinkingView,
