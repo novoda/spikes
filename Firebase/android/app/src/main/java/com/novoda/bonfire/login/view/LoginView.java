@@ -2,18 +2,18 @@ package com.novoda.bonfire.login.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.common.SignInButton;
 import com.novoda.bonfire.R;
 import com.novoda.bonfire.login.displayer.LoginDisplayer;
 import com.novoda.notils.caster.Views;
 
 public class LoginView extends LinearLayout implements LoginDisplayer {
 
-    private View loginButton;
+    private SignInButton loginButton;
 
     public LoginView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -25,6 +25,7 @@ public class LoginView extends LinearLayout implements LoginDisplayer {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_login_view, this);
         loginButton = Views.findById(this, R.id.sign_in_button);
+        loginButton.setSize(SignInButton.SIZE_WIDE);
     }
 
     @Override
