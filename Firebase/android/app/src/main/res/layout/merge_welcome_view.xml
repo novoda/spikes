@@ -43,7 +43,7 @@
     android:gravity="center"
     android:textColor="@android:color/white"
     android:textSize="18sp"
-    android:text="@string/login"
+    android:text="@string/go_to_login"
     android:paddingBottom="14dp"
     android:paddingTop="14dp"
     android:paddingRight="90dp"
