@@ -32,7 +32,6 @@ public class GameActivity extends AppCompatActivity {
 
     private ToastDisplayer toastDisplayer;
     private Handler gameHandler;
-    private SequenceShower sequenceShower;
     private Round currentRound;
     private State state;
 
@@ -64,7 +63,7 @@ public class GameActivity extends AppCompatActivity {
 
         state = State.PAUSED;
         gameHandler = new Handler(getMainLooper());
-        sequenceShower = new SequenceShower(
+        SequenceShower sequenceShower = new SequenceShower(
                 gameHandler,
                 currentRound.getViewSequence(),
                 currentRound.getSpeed()
@@ -143,6 +142,7 @@ public class GameActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(this, GameActivity.class);
                     intent.putExtra(EXTRA_ROUND_NUMBER, currentRound.getNextLevel());
+                    gameHandler.removeCallbacksAndMessages(null);
                     startActivity(intent);
                     finish();
                 }
@@ -155,6 +155,7 @@ public class GameActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(this, HighscoresActivity.class);
                 intent.putExtra(HighscoresActivity.EXTRA_SCORE, currentRound.getScore());
+                gameHandler.removeCallbacksAndMessages(null);
                 startActivity(intent);
                 finish();
             }
@@ -164,6 +165,6 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        gameHandler.removeCallbacks(sequenceShower);
+        gameHandler.removeCallbacksAndMessages(null);
     }
 }
