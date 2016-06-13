@@ -13,4 +13,6 @@ public interface UserDatabase {
 
     void writeCurrentUser(User user);
 
+    Observable<User> observeUser(String userId);
+
 }

@@ -1,5 +1,8 @@
 package com.novoda.bonfire.channel.data.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Channels {
@@ -16,6 +19,21 @@ public class Channels {
 
     public int size() {
         return channels.size();
+    }
+
+    public Channels sortedByName() {
+        List<Channel> sortedList = new ArrayList<>(channels);
+        Collections.sort(sortedList, byName());
+        return new Channels(sortedList);
+    }
+
+    private static Comparator<? super Channel> byName() {
+        return new Comparator<Channel>() {
+            @Override
+            public int compare(Channel o1, Channel o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        };
     }
 
     @Override
