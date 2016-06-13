@@ -34,7 +34,10 @@ var DebugUITestingScene = React.createClass({
   render () {
     return (
       <View style={styles.container}>
-        <Button style={styles.button} testID='button' styleDisabled={styles.button_disabled} onPress={this._updateText}>Update Label</Button>
+        <Button style={styles.button}
+          testID='button'
+          styleDisabled={styles.button_disabled}
+          onPress={this._updateText}>Update Label</Button>
         <Text style={styles.label} testID='label'>{this.state.text}</Text>
       </View>
     )
