@@ -13,6 +13,14 @@ var TwitterRequestsService = require('../service/twitter-requests-service.js')
 
 var TweetsList = React.createClass({
   mixins: [AndroidBackNavigationMixin],
+  statics: {
+    navigatorID () {
+      return 'tweets-list-identifier'
+    },
+    navigatorTitle () {
+      return 'Timeline'
+    }
+  },
   propTypes: {
     twitterService: React.PropTypes.instanceOf(TwitterRequestsService).isRequired,
     navigator: React.PropTypes.instanceOf(Navigator).isRequired

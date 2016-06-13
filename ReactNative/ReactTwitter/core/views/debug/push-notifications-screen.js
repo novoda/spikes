@@ -15,6 +15,14 @@ const PUSH_DELAY_MS = 2000
 const PUSH_AUTHORIZATION_KEY = 'key=AIzaSyDiQB51T00e8s6JCkLYuvl0Ac05R0Dc4iY'
 
 var PushNotificationsScreenView = React.createClass({
+  statics: {
+    navigatorID () {
+      return 'push-notifications-screen-identifier'
+    },
+    navigatorTitle () {
+      return 'Push Notifications'
+    }
+  },
 
   getInitialState () {
     return {

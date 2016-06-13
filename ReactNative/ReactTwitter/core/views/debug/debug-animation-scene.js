@@ -16,6 +16,15 @@ const OPACITY_TRANSPARENT = 0
 const DELAY = 50
 
 var DebugAnimationScene = React.createClass({
+  statics: {
+    navigatorID () {
+      return 'debug-animation-identifier'
+    },
+    navigatorTitle () {
+      return 'Animation Playground'
+    }
+  },
+
   propTypes: {
     navigator: React.PropTypes.instanceOf(Navigator).isRequired
   },
