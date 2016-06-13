@@ -1,7 +1,7 @@
 <resources>
   <string name="app_name">Bonfire</string>
   <string name="submit">Submit</string>
-  <string name="login">Login</string>
+  <string name="go_to_login">Go to Login</string>
   <string name="selectLoginProvider">Please select your login provider</string>
   <string name="createChannel">Create channel</string>
   <string name="insert_channel_name">\uD83D\uDE18</string>
@@ -21,4 +21,5 @@
   <string name="check_out_bonfire">Check out Bonfire!\n%s</string>
   <string name="only_single_emoji_allowed">Channel name must be one emoji character</string>
   <string name="channel_name">Channel Name</string>
+  <string name="enjoy_the_awesomness">Login and enjoy the emoji awesomeness.</string>
 </resources>

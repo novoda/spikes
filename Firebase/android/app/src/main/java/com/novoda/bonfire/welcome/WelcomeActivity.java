@@ -20,10 +20,13 @@ public class WelcomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         String sender = getIntent().getData().getQueryParameter(FirebaseDynamicLinkFactory.SENDER);
-        welcomePresenter = new WelcomePresenter((WelcomeDisplayer) findViewById(R.id.welcomeView),
-                                                new AndroidNavigator(this),
-                                                Dependencies.INSTANCE.getAnalytics(),
-                                                sender);
+        welcomePresenter = new WelcomePresenter(
+                Dependencies.INSTANCE.getUserService(),
+                (WelcomeDisplayer) findViewById(R.id.welcomeView),
+                new AndroidNavigator(this),
+                Dependencies.INSTANCE.getAnalytics(),
+                sender
+        );
     }
 
     @Override
