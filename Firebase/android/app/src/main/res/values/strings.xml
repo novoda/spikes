@@ -22,4 +22,8 @@
   <string name="only_single_emoji_allowed">Channel name must be one emoji character</string>
   <string name="channel_name">Channel Name</string>
   <string name="enjoy_the_awesomness">Login and enjoy the emoji awesomeness.</string>
+  <string name="login_disclaimer">This application is for demo purposes only.
+    Your name and profile picture will be visible to all other users of the application.
+    Messages are not encrypted and Novoda developers can see them.
+    The database can be erased at any time.</string>
 </resources>

@@ -14,5 +14,6 @@
   <color name="background_grey_alt">#e4e4e4</color>
   <color name="bubble_grey">#dcdcdc</color>
   <color name="text_black">#E3000000</color>
+  <color name="white">#FFFFFF</color>
 
 </resources>
