@@ -13,7 +13,8 @@
     <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:hint="@string/selectLoginProvider" />
+      android:text="@string/login_disclaimer"
+      android:textSize="14sp" />
 
     <com.google.android.gms.common.SignInButton
       android:id="@+id/sign_in_button"
