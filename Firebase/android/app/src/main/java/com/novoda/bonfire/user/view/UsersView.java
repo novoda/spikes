@@ -81,6 +81,7 @@ public class UsersView extends LinearLayout implements UsersDisplayer {
         }
         selectableUsers = usersWithUpdatedSelection;
         usersAdapter.update(selectableUsers);
+        toolbar.setTitle(selectedUsers.size() + " Selected");
     }
 
     private boolean isUserSelected(Users selectedUsers, SelectableUser selectableUser) {

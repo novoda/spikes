@@ -6,7 +6,7 @@
   <color name="colorAccent">#f85636</color>
 
   <color name="disabled_grey">#A0A0A0</color>
-  <color name="selected_item">#88A0A0A0</color>
+  <color name="selected_item">#fff0e9</color>
 
   <color name="background_grey">#eeeeee</color>
   <color name="text_grey">#8B000000</color>
