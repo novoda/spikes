@@ -3,6 +3,8 @@ import GoogleSignIn
 
 final class LoginView: UIView {
 
+    let bubblesBackground = BubbleBackgroundView()
+
     private let googleButton = GIDSignInButton()
     weak var alertDelegate: AlertDelegate?
 
@@ -21,15 +23,20 @@ final class LoginView: UIView {
     }
 
     func setupViews() {
-        backgroundColor = .whiteColor()
+        backgroundColor = .orangeColor()
         googleButton.style = .Wide
     }
 
     func setupLayout() {
+        addSubview(bubblesBackground)
         addSubview(googleButton)
 
-        googleButton.pinToSuperviewTop(withConstant: 20)
+        bubblesBackground.pinToSuperviewTop()
+        bubblesBackground.pinToSuperviewLeading()
+        bubblesBackground.pinToSuperviewTrailing()
+        bubblesBackground.pinToSuperviewBottom()
 
+        googleButton.pinToSuperviewTop(withConstant: 20)
         googleButton.pinToSuperviewLeading(withConstant: 16)
         googleButton.pinToSuperviewTrailing(withConstant: 16)
     }
