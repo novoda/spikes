@@ -12,4 +12,7 @@ class PersistedUserService: UsersService {
         return userDatabase.observeUsers()
     }
 
+    func user(userID: String) -> Observable<User> {
+        return userDatabase.observeUser(userID)
+    }
 }
