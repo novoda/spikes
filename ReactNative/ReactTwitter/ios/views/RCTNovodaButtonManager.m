@@ -1,11 +1,3 @@
-//
-//  iOSButton.m
-//  ReactTwitter
-//
-//  Created by Giuseppe Basile on 26/05/2016.
-//  Copyright © 2016 Facebook. All rights reserved.
-//
-
 #import "RCTNovodaButtonManager.h"
 #import "RCTNovodaButton.h"
 #import "UIColor+additions.h"

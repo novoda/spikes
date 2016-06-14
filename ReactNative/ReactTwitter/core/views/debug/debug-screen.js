@@ -14,13 +14,15 @@ var PushNotificationsScreenView = require('./push-notifications-screen.js')
 var OauthView = require('./oauth-screen.js')
 var DebugAnimationScene = require('./debug-animation-scene.js')
 var DebugNativeComponentScene = require('./debug-native-component-scene.js')
+var DebugUITestingScene = require('./debug-uitesting.js')
 
 const scenes = [
   DeepLinkingView,
   PushNotificationsScreenView,
   OauthView,
   DebugAnimationScene,
-  DebugNativeComponentScene
+  DebugNativeComponentScene,
+  DebugUITestingScene
 ]
 
 var DebugScreenView = React.createClass({
@@ -57,6 +59,7 @@ var DebugScreenView = React.createClass({
         enableEmptySections={true}
         renderRow={this._renderRow}
         style={styles.list}
+        testID='debug-list'
         contentContainerStyle={styles.container}
       />
     )
@@ -66,6 +69,7 @@ var DebugScreenView = React.createClass({
     return <Button
       style={styles.button}
       styleDisabled={styles.button_disabled}
+      testID={rowData.sceneID}
       onPress={() => this._navigateToScene(rowData.sceneID)}>{rowData.name}</Button>
   },
 

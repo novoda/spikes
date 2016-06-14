@@ -18,6 +18,7 @@ var TweetsList = require('./tweetsList.js')
 var TweetView = require('./tweetView.js')
 var DebugAnimationScene = require('./debug/debug-animation-scene.js')
 var DebugNativeComponentScene = require('./debug/debug-native-component-scene.js')
+var DebugUITestingScene = require('./debug/debug-uitesting.js')
 
 const scenes = [
   SplashScreenView,
@@ -29,7 +30,8 @@ const scenes = [
   TweetsList,
   TweetView,
   DebugAnimationScene,
-  DebugNativeComponentScene
+  DebugNativeComponentScene,
+  DebugUITestingScene
 ]
 
 var NavigationBarRouteMapper = {
@@ -54,7 +56,7 @@ var NavigationBarRouteMapper = {
       return null
     }
 
-    return (<TouchableOpacity onPress={() => navigator.push({id: DebugScreenView.navigatorID()})} style={styles.navBarRightButton}>
+    return (<TouchableOpacity testID='debug' onPress={() => navigator.push({id: DebugScreenView.navigatorID()})} style={styles.navBarRightButton}>
     <Text style={[styles.navBarText, styles.navBarButtonText]}>Debug</Text>
       </TouchableOpacity>)
   },
@@ -116,6 +118,8 @@ var MainNavigator = React.createClass({
         return (<DebugAnimationScene navigator={navigator} />)
       case DebugNativeComponentScene.navigatorID():
         return (<DebugNativeComponentScene navigator={navigator} />)
+      case DebugUITestingScene.navigatorID():
+        return (<DebugUITestingScene navigator={navigator} />)
     }
   }
 })

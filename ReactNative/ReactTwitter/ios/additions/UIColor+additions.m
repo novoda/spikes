@@ -1,11 +1,3 @@
-//
-//  UIColor+additions.m
-//  ReactTwitter
-//
-//  Created by Giuseppe Basile on 30/05/2016.
-//  Copyright © 2016 Facebook. All rights reserved.
-//
-
 #import "UIColor+additions.h"
 
 @implementation UIColor (additions)
