@@ -1,11 +1,3 @@
-//
-//  ReactTwitterUITests.swift
-//  ReactTwitterUITests
-//
-//  Created by Giuseppe Basile on 31/05/2016.
-//  Copyright © 2016 Facebook. All rights reserved.
-//
-
 import XCTest
 
 class ReactTwitterUITests: XCTestCase {
