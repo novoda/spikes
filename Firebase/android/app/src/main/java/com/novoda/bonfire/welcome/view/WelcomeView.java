@@ -19,7 +19,7 @@ public class WelcomeView extends LinearLayout implements WelcomeDisplayer {
 
     private TextView welcomeMessage;
     private ImageView userAvatar;
-    private View loginButton;
+    private View proceedButton;
 
     public WelcomeView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -33,12 +33,12 @@ public class WelcomeView extends LinearLayout implements WelcomeDisplayer {
         inflate(getContext(), R.layout.merge_welcome_view, this);
         welcomeMessage = Views.findById(this, R.id.welcomeMessageView);
         userAvatar = Views.findById(this, R.id.userAvatar);
-        loginButton = Views.findById(this, R.id.loginButton);
+        proceedButton = Views.findById(this, R.id.proceedButton);
     }
 
     @Override
     public void attach(final InteractionListener interactionListener) {
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        proceedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 interactionListener.onGetStartedClicked();
@@ -48,7 +48,7 @@ public class WelcomeView extends LinearLayout implements WelcomeDisplayer {
 
     @Override
     public void detach(InteractionListener interactionListener) {
-        loginButton.setOnClickListener(null);
+        proceedButton.setOnClickListener(null);
     }
 
     @Override
