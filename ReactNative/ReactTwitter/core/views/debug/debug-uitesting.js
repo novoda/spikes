@@ -16,7 +16,7 @@ var DebugUITestingScene = React.createClass({
       return 'debug-uitesting-ios-scene-identifier'
     },
     navigatorTitle () {
-      return 'iOS UI Testing'
+      return 'UI Testing'
     }
   },
 
