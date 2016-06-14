@@ -34,7 +34,7 @@
     android:textSize="16sp" />
 
   <TextView
-    android:id="@+id/loginButton"
+    android:id="@+id/proceedButton"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
@@ -43,7 +43,7 @@
     android:gravity="center"
     android:textColor="@android:color/white"
     android:textSize="18sp"
-    android:text="@string/go_to_login"
+    android:text="@string/start_chatting"
     android:paddingBottom="14dp"
     android:paddingTop="14dp"
     android:paddingRight="90dp"
