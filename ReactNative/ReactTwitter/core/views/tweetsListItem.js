@@ -9,7 +9,7 @@ import {
   Navigator
 } from 'react-native'
 
-var novodaDataFormat = require('./common/data-format.js')
+var NovodaDataFormat = require('./common/data-format.js')
 var TwitterRequestsService = require('../service/twitter-requests-service.js')
 var AvatarView = require('./common/avatar-view.js')
 var TweetView = require('./tweetView.js')
@@ -27,7 +27,8 @@ var TweetsListItem = React.createClass({
   },
 
   render () {
-    var formattedTime = novodaDataFormat.elapsedTime(this.props.time)
+    let formattedTime = NovodaDataFormat.elapsedTime(this.props.time)
+    let textWithoutUrls = this._removeUrls(this.props.text)
     return (
       <TouchableHighlight onPress={() => this._tweetSelected(this.props.id)}
         underlayColor='#dddddd'>
@@ -37,16 +38,22 @@ var TweetsListItem = React.createClass({
             <View style={styles.textContainer}>
               <View style={styles.userInfoContainer}>
                 <Text style={styles.tweet_author}>{this.props.author_name}</Text>
-                <Text style={styles.tweet_author_handle}>@{this.props.author_handle}</Text>
+                <Text importantForAccessibility='no' style={styles.tweet_author_handle}>@{this.props.author_handle}</Text>
               </View>
               <Text style={styles.tweet_time}>{formattedTime}</Text>
-              <Text style={styles.tweet_text}>{this.props.text}</Text>
+              <Text style={styles.tweet_text} accessibilityLabel={textWithoutUrls}>{this.props.text}</Text>
             </View>
            </View>
            <View style={styles.separator}/>
          </View>
        </TouchableHighlight>
     )
+  },
+
+  _removeUrls (originalText: string) {
+    // This is not the best user experience, accessibility-wise,
+    // but we want to try different accessibilityLabels, for the sake of the spike
+    return originalText.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '')
   },
 
   _tweetSelected (tweetId: string) {
