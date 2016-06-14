@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <dimen name="chat_message_author_image">36sp</dimen>
+  <dimen name="chat_message_metadata_text_size">10sp</dimen>
+  <dimen name="chat_message_body_padding">6dp</dimen>
+  <dimen name="chat_message_body_margin">8dp</dimen>
+
+</resources>

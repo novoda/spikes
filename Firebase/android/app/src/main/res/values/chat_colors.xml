@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <color name="chat_message_body">@color/text_black</color>
+  <color name="chat_message_author">@color/text_grey</color>
+  <color name="chat_message_time">@color/text_grey_light</color>
+
+</resources>

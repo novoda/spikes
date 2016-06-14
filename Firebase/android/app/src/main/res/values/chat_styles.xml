@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <style name="Chat" />
+
+  <style name="Chat.Message"/>
+
+  <style name="Chat.Message.Body">
+    <item name="android:background">@drawable/bubble_shape_grey</item>
+    <item name="android:paddingStart">26dp</item>
+    <item name="android:paddingEnd">10dp</item>
+    <item name="android:paddingBottom">8dp</item>
+    <item name="android:paddingTop">8dp</item>
+    <item name="android:textColor">@color/chat_message_body</item>
+    <item name="android:textSize">14sp</item>
+  </style>
+
+  <style name="Chat.Message.Body.Self">
+    <item name="android:background">@drawable/bubble_shape_primary</item>
+    <item name="android:paddingStart">10dp</item>
+    <item name="android:paddingEnd">26dp</item>
+  </style>
+
+  <style name="Chat.Message.Metadata">
+    <item name="android:gravity">end</item>
+    <item name="android:orientation">horizontal</item>
+    <item name="android:paddingEnd">70dp</item>
+  </style>
+
+  <style name="Chat.Message.Metadata.Self">
+    <item name="android:gravity">end</item>
+  </style>
+
+  <style name="Chat.Message.Author">
+    <item name="android:fontFamily">sans-serif-medium</item>
+    <item name="android:textColor">@color/chat_message_author</item>
+    <item name="android:textSize">@dimen/chat_message_metadata_text_size</item>
+  </style>
+
+  <style name="Chat.Message.Time">
+    <item name="android:paddingStart">8dp</item>
+    <item name="android:textColor">@color/chat_message_time</item>
+    <item name="android:textSize">@dimen/chat_message_metadata_text_size</item>
+  </style>
+
+</resources>
