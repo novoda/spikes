@@ -3,6 +3,24 @@
 
   <style name="Chat" />
 
+
+  <style name="Chat.RecyclerView">
+    <item name="android:background">@color/background_grey</item>
+    <item name="android:clipToPadding">false</item>
+    <item name="android:paddingBottom">72dp</item>
+  </style>
+
+  <style name="Chat.NewMessage">
+    <item name="android:background">@drawable/oval_shape_white</item>
+    <item name="android:elevation">4dp</item>
+    <item name="android:gravity">center_vertical</item>
+    <item name="android:orientation">horizontal</item>
+    <item name="android:paddingBottom">16dp</item>
+    <item name="android:paddingTop">16dp</item>
+    <item name="android:paddingStart">12dp</item>
+    <item name="android:paddingEnd">12dp</item>
+  </style>
+
   <style name="Chat.Message"/>
 
   <style name="Chat.Message.Body">
@@ -11,7 +29,7 @@
     <item name="android:paddingEnd">10dp</item>
     <item name="android:paddingBottom">8dp</item>
     <item name="android:paddingTop">8dp</item>
-    <item name="android:textColor">@color/chat_message_body</item>
+    <item name="android:textColor">@color/text_black</item>
     <item name="android:textSize">14sp</item>
   </style>
 
@@ -33,14 +51,14 @@
 
   <style name="Chat.Message.Author">
     <item name="android:fontFamily">sans-serif-medium</item>
-    <item name="android:textColor">@color/chat_message_author</item>
-    <item name="android:textSize">@dimen/chat_message_metadata_text_size</item>
+    <item name="android:textColor">@color/text_grey</item>
+    <item name="android:textSize">10sp</item>
   </style>
 
   <style name="Chat.Message.Time">
     <item name="android:paddingStart">8dp</item>
-    <item name="android:textColor">@color/chat_message_time</item>
-    <item name="android:textSize">@dimen/chat_message_metadata_text_size</item>
+    <item name="android:textColor">@color/text_grey_light</item>
+    <item name="android:textSize">10sp</item>
   </style>
 
 </resources>

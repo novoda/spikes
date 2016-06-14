@@ -2,8 +2,12 @@
 <resources>
 
   <dimen name="chat_message_author_image">36sp</dimen>
-  <dimen name="chat_message_metadata_text_size">10sp</dimen>
   <dimen name="chat_message_body_padding">6dp</dimen>
   <dimen name="chat_message_body_margin">8dp</dimen>
+  <dimen name="chat_new_message_margin">12dp</dimen>
+  <dimen name="chat_new_message_text_size">14sp</dimen>
+
+  <dimen name="chat_item_vertical_margin">8dp</dimen>
+  <dimen name="chat_item_horizontal_margin">16dp</dimen>
 
 </resources>

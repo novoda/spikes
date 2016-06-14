@@ -5,48 +5,27 @@
 
   <ImageView
     android:id="@+id/userAvatar"
+    style="@style/Welcome.SenderImage"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="86dp"
-    android:minHeight="86dp"
-    android:minWidth="86dp"
-    android:scaleType="fitCenter" />
+    android:layout_height="wrap_content" />
 
   <TextView
     android:id="@+id/welcomeMessageView"
+    style="@style/Welcome.Message"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="16dp"
-    android:gravity="center"
-    android:textColor="@color/text_black"
-    android:textSize="16sp" />
+    android:layout_height="wrap_content" />
 
   <TextView
+    style="@style/Welcome.Message.Static"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="24dp"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_marginTop="48dp"
-    android:gravity="center"
-    android:text="@string/enjoy_the_awesomness"
-    android:textColor="@color/text_black"
-    android:textSize="16sp" />
+    android:text="@string/enjoy_the_awesomness" />
 
   <TextView
     android:id="@+id/proceedButton"
+    style="@style/Welcome.ProceedButton"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
-    android:background="@drawable/oval_shape_primary"
-    android:fontFamily="sans-serif-medium"
-    android:gravity="center"
-    android:textColor="@android:color/white"
-    android:textSize="18sp"
-    android:text="@string/start_chatting"
-    android:paddingBottom="14dp"
-    android:paddingTop="14dp"
-    android:paddingRight="90dp"
-    android:paddingLeft="90dp"/>
+    android:text="@string/start_chatting" />
 
 </merge>

@@ -2,21 +2,15 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
   <LinearLayout
+    style="@style/User.Item"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:paddingBottom="@dimen/list_item_vertical_margin"
-    android:paddingEnd="@dimen/list_item_horizontal_margin"
-    android:paddingStart="@dimen/list_item_horizontal_margin"
-    android:paddingTop="@dimen/list_item_vertical_margin">
+    android:layout_height="wrap_content">
 
     <ImageView
       android:id="@+id/userImage"
-      android:layout_width="36dp"
-      android:layout_height="36dp"
-      android:layout_marginEnd="16dp"
-      android:layout_marginRight="16dp" />
+      android:layout_width="@dimen/user_image_size"
+      android:layout_height="@dimen/user_image_size"
+      android:layout_marginEnd="@dimen/user_image_margin" />
 
     <TextView
       android:id="@+id/userName"

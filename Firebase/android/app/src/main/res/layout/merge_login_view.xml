@@ -3,45 +3,34 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <LinearLayout
+    style="@style/Login.Layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    android:gravity="top"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <FrameLayout
       android:id="@+id/pic_background"
       android:layout_width="match_parent"
-      android:layout_height="260dp"
+      android:layout_height="@dimen/login_icon_layout_height"
       android:background="@drawable/bubble_shape_background">
 
       <ImageView
+        style="@style/Login.AppIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:minHeight="86dp"
-        android:minWidth="86dp"
-        android:scaleType="fitCenter"
         android:src="@mipmap/ic_launcher" />
     </FrameLayout>
 
     <TextView
+      style="@style/Login.Disclaimer"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="24dp"
-      android:layout_marginLeft="16dp"
-      android:layout_marginRight="16dp"
-      android:layout_marginTop="48dp"
-      android:gravity="center"
-      android:text="@string/login_disclaimer"
-      android:textColor="@color/white"
-      android:textSize="14sp" />
+      android:text="@string/login_disclaimer" />
 
     <com.google.android.gms.common.SignInButton
       android:id="@+id/sign_in_button"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      app:buttonSize="wide"
-      android:layout_margin="16dp" />
+      android:layout_margin="@dimen/login_sign_in_button_margin"
+      app:buttonSize="wide" />
   </LinearLayout>
 </merge>

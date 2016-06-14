@@ -17,7 +17,7 @@ public class NewChannelActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_channel);
+        setContentView(R.layout.activity_new_channel);
         Dependencies dependencies = Dependencies.INSTANCE;
         newChannelPresenter = new NewChannelPresenter((NewChannelDisplayer) findViewById(R.id.createChannelView),
                                                       dependencies.getChannelService(),
