@@ -21,6 +21,8 @@ final class LoginViewController: UIViewController {
 
     override func loadView() {
         self.view = UIView()
+
+        navigationController?.navigationBarHidden = true
     }
 
     override func viewDidLoad() {
