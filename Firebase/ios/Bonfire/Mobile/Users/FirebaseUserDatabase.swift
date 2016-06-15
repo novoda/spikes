@@ -13,6 +13,10 @@ class FirebaseUserDatabase: UserDatabase {
         return usersDB.rx_readValue().map(toUsers)
     }
 
+    func observeUser(userID: String) -> Observable<User> {
+        return usersDB.child(userID).rx_readValue().map(User.init)
+    }
+
     func readUserFrom(userID: String) -> Observable<User> {
         return usersDB.child(userID).rx_readOnce().map(User.init)
     }

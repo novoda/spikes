@@ -9,22 +9,19 @@ final class WelcomeView: UIView {
     private let welcomeMessageLabel = UILabel()
     private let loginButton = UIButton()
 
-    private var sender: String?
-
     weak var actionListener: WelcomeActionListener?
 
     private let disposeBag = DisposeBag()
 
-    init(frame: CGRect, sender: String? = nil) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
-        self.sender = sender
         setupViews()
         setupLayout()
         setupActions()
     }
 
-    convenience init(sender: String? = nil) {
-        self.init(frame: CGRect.zero, sender: sender)
+    convenience init() {
+        self.init(frame: CGRect.zero)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -38,11 +35,7 @@ final class WelcomeView: UIView {
         senderLabel.textAlignment = .Center
         senderLabel.font = UIFont.systemFontOfSize(16)
 
-        if let sender = sender {
-            senderLabel.text = "\(sender) invited you to Bonfire "
-        } else {
-            senderLabel.text = "Welcome to Bonfire!"
-        }
+        senderLabel.text = "Welcome to Bonfire!"
 
         welcomeMessageLabel.numberOfLines = 0
         welcomeMessageLabel.text = "Login and enjoy the emoji awesomeness"
@@ -89,5 +82,11 @@ final class WelcomeView: UIView {
 
     private func welcomeDone() {
         actionListener?.welcomeDone()
+    }
+}
+
+extension WelcomeView: WelcomeDisplayer {
+    func display(user: User) {
+        senderLabel.text = "\(user.name) invited you to Bonfire "
     }
 }
