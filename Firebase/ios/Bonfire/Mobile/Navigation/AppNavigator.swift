@@ -25,11 +25,15 @@ final class AppNavigator: Navigator {
         navigationController.pushViewController(usersViewController, animated: true)
     }
 
-    func toWelcome(sender: String?) {
-        let welcomeViewController = WelcomeViewController.withDependencies(sender: sender)
+    func toWelcome(senderID: String?) {
+        let welcomeViewController = WelcomeViewController.withDependencies(senderID: senderID)
         let container = UINavigationController()
         container.viewControllers = [welcomeViewController]
         navigationController.presentViewController(container, animated: true, completion: nil)
+    }
+
+    func dismissWelcome() {
+        navigationController.dismissViewControllerAnimated(true, completion: nil)
     }
 
     func showShareSheet(activityItems: [AnyObject]) {

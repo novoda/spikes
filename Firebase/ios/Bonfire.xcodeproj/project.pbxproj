@@ -10,8 +10,11 @@
 		1A0A41A21D0184640053A547 /* PersistedUserServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0A41A11D0184640053A547 /* PersistedUserServiceTests.swift */; };
 		1A0A41A41D018D810053A547 /* Rememberancer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0A41A31D018D810053A547 /* Rememberancer.swift */; };
 		1A9FB9101D1063B1009F032B /* BubblesBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9FB90F1D1063B1009F032B /* BubblesBackgroundView.swift */; };
+		1A2439281D0ACC390021B547 /* UIView+BorderExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2439271D0ACC390021B547 /* UIView+BorderExtensions.swift */; };
 		1ABEAC661D08573D00A85CE2 /* FirebaseIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABEAC651D08573D00A85CE2 /* FirebaseIdentifiers.swift */; };
 		1ABEAC681D08730B00A85CE2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1ABEAC671D08730B00A85CE2 /* GoogleService-Info.plist */; };
+		1AECA3371D0974EC00E4D856 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AECA3361D0974EC00E4D856 /* Assets.xcassets */; };
+		1AECA3391D09B41700E4D856 /* BonfireColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AECA3381D09B41700E4D856 /* BonfireColors.swift */; };
 		1AF7D1A01CEF651600B74483 /* UsersTableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */; };
 		1AF7D1A21CEF659A00B74483 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF7D1A11CEF659A00B74483 /* UserCell.swift */; };
 		2A9669953EF6713AF4064B53 /* Pods_Bonfire_BonfireTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE09269AA64387314EE925E /* Pods_Bonfire_BonfireTests.framework */; };
@@ -33,7 +36,6 @@
 		B63B378A1CFDCF6400142DC3 /* FirebaseChatDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63B37891CFDCF6400142DC3 /* FirebaseChatDatabase.swift */; };
 		B654B2671CE0C38000EEDE0A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B654B2661CE0C38000EEDE0A /* AppDelegate.swift */; };
 		B654B2691CE0C38000EEDE0A /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B654B2681CE0C38000EEDE0A /* ChatViewController.swift */; };
-		B654B26E1CE0C38000EEDE0A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B654B26D1CE0C38000EEDE0A /* Assets.xcassets */; };
 		B654B2711CE0C38000EEDE0A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B654B26F1CE0C38000EEDE0A /* LaunchScreen.storyboard */; };
 		B654B2891CE0C86200EEDE0A /* UIView+AutolayoutExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B654B2881CE0C86200EEDE0A /* UIView+AutolayoutExtensions.swift */; };
 		B654B28C1CE0CE8300EEDE0A /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = B654B28B1CE0CE8300EEDE0A /* Message.swift */; };
@@ -55,6 +57,8 @@
 		B65C45DB1CE1F06E00B2179D /* AppNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65C45DA1CE1F06E00B2179D /* AppNavigator.swift */; };
 		B660785C1CE37FAC008E7DD4 /* ReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B660785B1CE37FAC008E7DD4 /* ReusableView.swift */; };
 		B660785E1CE38078008E7DD4 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B660785D1CE38078008E7DD4 /* MessageCell.swift */; };
+		B683CB521D1092F100941922 /* WelcomePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B683CB511D1092F100941922 /* WelcomePresenter.swift */; };
+		B683CB541D1094BF00941922 /* WelcomeDisplayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B683CB531D1094BF00941922 /* WelcomeDisplayer.swift */; };
 		B6962C841CEF537A006A3A9E /* UsersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6962C831CEF537A006A3A9E /* UsersService.swift */; };
 		B6962C861CEF5388006A3A9E /* UsersDisplayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6962C851CEF5388006A3A9E /* UsersDisplayer.swift */; };
 		B6962C881CEF5392006A3A9E /* UsersPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6962C871CEF5392006A3A9E /* UsersPresenter.swift */; };
@@ -66,7 +70,6 @@
 		B6BF03C11D0B0E1D001FC160 /* MyMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BF03C01D0B0E1D001FC160 /* MyMessageCell.swift */; };
 		B6C054E11CF5AE9D00B1BB6C /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054E01CF5AE9D00B1BB6C /* WelcomeView.swift */; };
 		B6C054E41CF5BE5600B1BB6C /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054E31CF5BE5600B1BB6C /* WelcomeViewController.swift */; };
-		B6C054E61CF5DE7300B1BB6C /* WelcomeViewActionListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054E51CF5DE7300B1BB6C /* WelcomeViewActionListener.swift */; };
 		B6C054E91CF7014500B1BB6C /* FirebaseDynamicLinkFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054E81CF7014500B1BB6C /* FirebaseDynamicLinkFactory.swift */; };
 		B6C054EC1CF708D600B1BB6C /* DynamicLinkFactotry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054EB1CF708D600B1BB6C /* DynamicLinkFactotry.swift */; };
 		B6C054EE1CF728BA00B1BB6C /* ChannelsDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C054ED1CF728BA00B1BB6C /* ChannelsDatabase.swift */; };
@@ -108,8 +111,11 @@
 		1A0A41A11D0184640053A547 /* PersistedUserServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedUserServiceTests.swift; sourceTree = "<group>"; };
 		1A0A41A31D018D810053A547 /* Rememberancer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rememberancer.swift; sourceTree = "<group>"; };
 		1A9FB90F1D1063B1009F032B /* BubblesBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BubblesBackgroundView.swift; sourceTree = "<group>"; };
+		1A2439271D0ACC390021B547 /* UIView+BorderExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+BorderExtensions.swift"; sourceTree = "<group>"; };
 		1ABEAC651D08573D00A85CE2 /* FirebaseIdentifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseIdentifiers.swift; sourceTree = "<group>"; };
 		1ABEAC671D08730B00A85CE2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+		1AECA3361D0974EC00E4D856 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Bonfire/Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		1AECA3381D09B41700E4D856 /* BonfireColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonfireColors.swift; sourceTree = "<group>"; };
 		1AF7D19F1CEF651600B74483 /* UsersTableViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersTableViewManager.swift; sourceTree = "<group>"; };
 		1AF7D1A11CEF659A00B74483 /* UserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		4AE09269AA64387314EE925E /* Pods_Bonfire_BonfireTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bonfire_BonfireTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -136,7 +142,6 @@
 		B654B2631CE0C38000EEDE0A /* Bonfire.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bonfire.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B654B2661CE0C38000EEDE0A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B654B2681CE0C38000EEDE0A /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
-		B654B26D1CE0C38000EEDE0A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B654B2701CE0C38000EEDE0A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B654B2721CE0C38000EEDE0A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B654B2881CE0C86200EEDE0A /* UIView+AutolayoutExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+AutolayoutExtensions.swift"; sourceTree = "<group>"; };
@@ -159,6 +164,8 @@
 		B65C45DA1CE1F06E00B2179D /* AppNavigator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppNavigator.swift; sourceTree = "<group>"; };
 		B660785B1CE37FAC008E7DD4 /* ReusableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReusableView.swift; sourceTree = "<group>"; };
 		B660785D1CE38078008E7DD4 /* MessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
+		B683CB511D1092F100941922 /* WelcomePresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomePresenter.swift; sourceTree = "<group>"; };
+		B683CB531D1094BF00941922 /* WelcomeDisplayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeDisplayer.swift; sourceTree = "<group>"; };
 		B6962C831CEF537A006A3A9E /* UsersService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersService.swift; sourceTree = "<group>"; };
 		B6962C851CEF5388006A3A9E /* UsersDisplayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersDisplayer.swift; sourceTree = "<group>"; };
 		B6962C871CEF5392006A3A9E /* UsersPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersPresenter.swift; sourceTree = "<group>"; };
@@ -171,7 +178,6 @@
 		B6C054E01CF5AE9D00B1BB6C /* WelcomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		B6C054E21CF5B10200B1BB6C /* Bonfire.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Bonfire.entitlements; sourceTree = "<group>"; };
 		B6C054E31CF5BE5600B1BB6C /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
-		B6C054E51CF5DE7300B1BB6C /* WelcomeViewActionListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewActionListener.swift; sourceTree = "<group>"; };
 		B6C054E81CF7014500B1BB6C /* FirebaseDynamicLinkFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseDynamicLinkFactory.swift; sourceTree = "<group>"; };
 		B6C054EB1CF708D600B1BB6C /* DynamicLinkFactotry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicLinkFactotry.swift; sourceTree = "<group>"; };
 		B6C054ED1CF728BA00B1BB6C /* ChannelsDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelsDatabase.swift; sourceTree = "<group>"; };
@@ -290,7 +296,6 @@
 			children = (
 				B65C45B51CE0E1B800B2179D /* Core */,
 				B65C45B61CE0E1D000B2179D /* Mobile */,
-				B654B26D1CE0C38000EEDE0A /* Assets.xcassets */,
 				B6C054E21CF5B10200B1BB6C /* Bonfire.entitlements */,
 				B654B2721CE0C38000EEDE0A /* Info.plist */,
 				1ABEAC671D08730B00A85CE2 /* GoogleService-Info.plist */,
@@ -307,6 +312,7 @@
 				B6CC1CEA1CEC992F00BA8500 /* Observable+Extensions.swift */,
 				B660785B1CE37FAC008E7DD4 /* ReusableView.swift */,
 				B654B2881CE0C86200EEDE0A /* UIView+AutolayoutExtensions.swift */,
+				1A2439271D0ACC390021B547 /* UIView+BorderExtensions.swift */,
 				B6210AC71CE2318B00570509 /* UIViewController+AlertExtensions.swift */,
 			);
 			path = Utilities;
@@ -335,6 +341,7 @@
 				B65C45CB1CE1E3D900B2179D /* Login */,
 				B65C45D81CE1F00000B2179D /* Navigation */,
 				B6962C821CEF5358006A3A9E /* Users */,
+				B683CB501D1092CA00941922 /* Welcome */,
 				B6AC7C141CF4589500F96722 /* Analytics.swift */,
 				B636BA231CF34D9F009009F2 /* Config.swift */,
 				D0C318C841B6FF1360F3261D /* DatabaseResult.swift */,
@@ -357,6 +364,8 @@
 				B6AC7C161CF458E000F96722 /* FirebaseAnalytics.swift */,
 				B636BA251CF34DDA009009F2 /* FirebaseRemoteConfig.swift */,
 				B61BD4C91CFEE65100DD7A70 /* SharedServices.swift */,
+				1AECA3381D09B41700E4D856 /* BonfireColors.swift */,
+				1AECA3361D0974EC00E4D856 /* Assets.xcassets */,
 				1ABEAC651D08573D00A85CE2 /* FirebaseIdentifiers.swift */,
 			);
 			path = Mobile;
@@ -416,6 +425,15 @@
 			path = Navigation;
 			sourceTree = "<group>";
 		};
+		B683CB501D1092CA00941922 /* Welcome */ = {
+			isa = PBXGroup;
+			children = (
+				B683CB531D1094BF00941922 /* WelcomeDisplayer.swift */,
+				B683CB511D1092F100941922 /* WelcomePresenter.swift */,
+			);
+			path = Welcome;
+			sourceTree = "<group>";
+		};
 		B6962C821CEF5358006A3A9E /* Users */ = {
 			isa = PBXGroup;
 			children = (
@@ -445,7 +463,6 @@
 			isa = PBXGroup;
 			children = (
 				B6C054E01CF5AE9D00B1BB6C /* WelcomeView.swift */,
-				B6C054E51CF5DE7300B1BB6C /* WelcomeViewActionListener.swift */,
 				B6C054E31CF5BE5600B1BB6C /* WelcomeViewController.swift */,
 			);
 			path = Welcome;
@@ -628,7 +645,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B654B2711CE0C38000EEDE0A /* LaunchScreen.storyboard in Resources */,
-				B654B26E1CE0C38000EEDE0A /* Assets.xcassets in Resources */,
+				1AECA3371D0974EC00E4D856 /* Assets.xcassets in Resources */,
 				1ABEAC681D08730B00A85CE2 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -763,11 +780,13 @@
 				B654B2891CE0C86200EEDE0A /* UIView+AutolayoutExtensions.swift in Sources */,
 				B6CC1CF31CECB05900BA8500 /* CreateChannelView.swift in Sources */,
 				B65C45C11CE0ED8200B2179D /* ChatDisplayer.swift in Sources */,
+				1AECA3391D09B41700E4D856 /* BonfireColors.swift in Sources */,
 				B6CC1CF51CECB3E500BA8500 /* CreateChannelViewController.swift in Sources */,
 				B6C054F01CF72A2900B1BB6C /* FirebaseChannelsDatabase.swift in Sources */,
 				B65C45B41CE0E0F900B2179D /* Chat.swift in Sources */,
 				B63B378A1CFDCF6400142DC3 /* FirebaseChatDatabase.swift in Sources */,
 				B6CC1CE91CEC74CC00BA8500 /* Channel+FirebaseConvertible.swift in Sources */,
+				B683CB541D1094BF00941922 /* WelcomeDisplayer.swift in Sources */,
 				B6BF03C11D0B0E1D001FC160 /* MyMessageCell.swift in Sources */,
 				1AF7D1A01CEF651600B74483 /* UsersTableViewManager.swift in Sources */,
 				B6C054F41CF73EE800B1BB6C /* FirebaseUserDatabase.swift in Sources */,
@@ -805,6 +824,7 @@
 				B65C45BB1CE0E46B00B2179D /* ChatPresenter.swift in Sources */,
 				B65C45CF1CE1E40B00B2179D /* LoginDisplayer.swift in Sources */,
 				B6C054EE1CF728BA00B1BB6C /* ChannelsDatabase.swift in Sources */,
+				B683CB521D1092F100941922 /* WelcomePresenter.swift in Sources */,
 				B63B37881CFD98A300142DC3 /* ChatDatabase.swift in Sources */,
 				B63B37681CFD95CE00142DC3 /* PersistedChatService.swift in Sources */,
 				B65C45B21CE0E03F00B2179D /* FirebaseConvertible.swift in Sources */,
@@ -826,7 +846,7 @@
 				B636BA241CF34D9F009009F2 /* Config.swift in Sources */,
 				B6CC1CEB1CEC992F00BA8500 /* Observable+Extensions.swift in Sources */,
 				D0C31B830B0684A6D238C842 /* ChannelsView.swift in Sources */,
-				B6C054E61CF5DE7300B1BB6C /* WelcomeViewActionListener.swift in Sources */,
+				1A2439281D0ACC390021B547 /* UIView+BorderExtensions.swift in Sources */,
 				D0C317C9CD54BDC5F4607BCD /* ChannelsTableViewManager.swift in Sources */,
 				B6962C861CEF5388006A3A9E /* UsersDisplayer.swift in Sources */,
 				B6962C8D1CEF568E006A3A9E /* UsersView.swift in Sources */,
@@ -982,7 +1002,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Bonfire/Bonfire.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				INFOPLIST_FILE = Bonfire/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.novoda.bonfire;
@@ -998,7 +1018,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Bonfire/Bonfire.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				INFOPLIST_FILE = Bonfire/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.novoda.bonfire;

@@ -35,6 +35,7 @@ public enum Dependencies {
     private ChatService chatService;
     private ChannelService channelService;
     private UserService userService;
+    private Config config;
 
     public void init(Context context) {
         if (needsInitialisation()) {
@@ -52,6 +53,7 @@ public enum Dependencies {
             chatService = new PersistedChatService(new FirebaseChatDatabase(firebaseDatabase, firebaseObservableListeners));
             channelService = new PersistedChannelService(new FirebaseChannelsDatabase(firebaseDatabase, firebaseObservableListeners), userDatabase);
             userService = new PersistedUserService(userDatabase);
+            config = FirebaseConfig.newInstance().init(errorLogger);
         }
     }
 
@@ -82,5 +84,9 @@ public enum Dependencies {
 
     public ErrorLogger getErrorLogger() {
         return errorLogger;
+    }
+
+    public Config getConfig() {
+        return config;
     }
 }

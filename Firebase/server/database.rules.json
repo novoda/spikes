@@ -40,6 +40,7 @@
     "users": {
       ".read": "auth != null",
       "$user_id": {
+        ".read": "true",
         ".write": "auth.uid === $user_id",
         ".validate": "newData.hasChildren(['id', 'name'])",
         "id": {

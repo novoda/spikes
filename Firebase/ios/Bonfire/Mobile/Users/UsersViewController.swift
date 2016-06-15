@@ -45,7 +45,7 @@ class UsersViewController: UIViewController {
         automaticallyAdjustsScrollViewInsets = false
 
         view.addSubview(usersView)
-        usersView.pinToTopLayoutGuide(viewController: self)
+        usersView.pinToSuperviewTop()
         usersView.pinToSuperviewLeading()
         usersView.pinToSuperviewTrailing()
 
@@ -55,10 +55,23 @@ class UsersViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         usersPresenter.startPresenting()
+
+        styleNavigationBar()
     }
 
     override func viewDidDisappear(animated: Bool) {
         usersPresenter.stopPresenting()
         super.viewDidDisappear(animated)
+    }
+
+
+    func styleNavigationBar() {
+        navigationController?.navigationBar.barTintColor = nil
+        navigationController?.navigationBar.tintColor = BonfireColors.orange
+        navigationController?.navigationBar.titleTextAttributes = nil
+        navigationController?.navigationBar.barStyle = .Default
+        navigationController?.view.backgroundColor = UIColor.clearColor()
+
+        UIApplication.sharedApplication().statusBarStyle = .Default
     }
 }

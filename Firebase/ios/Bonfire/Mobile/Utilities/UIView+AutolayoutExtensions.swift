@@ -201,7 +201,7 @@ extension UIView {
 
 }
 
-// MARK: - Attach to Sibbling
+// MARK: - Attach to Sibling
 
 extension UIView {
     public func attachToBottomOf(
@@ -261,9 +261,29 @@ extension UIView {
     }
 }
 
+
 // MARK: - Align With Siblings
 
 extension UIView {
+    public func alignHorizontalCenter(withView view: UIView) -> NSLayoutConstraint {
+        let constraint = NSLayoutConstraint(
+            item: self, attribute: .CenterX,
+            relatedBy: .Equal,
+            toItem: view, attribute: .CenterX,
+            multiplier: 1.0, constant: 0
+        )
+
+        addSiblingConstraint(constraint)
+
+        return constraint
+    }
+
+    public func alignHorizontalCenterWithSuperview() -> NSLayoutConstraint {
+        let superview = unWrappedSuperview()
+        return alignHorizontalCenter(withView: superview)
+    }
+
+
     public func alignVerticalCenter(withView view: UIView) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: self, attribute: .CenterY,
@@ -277,6 +297,11 @@ extension UIView {
         return constraint
     }
 
+    public func alignVerticalCenterWithSuperview() -> NSLayoutConstraint {
+        let superview = unWrappedSuperview()
+        return alignVerticalCenter(withView: superview)
+    }
+
     public func alignLeading(withView view: UIView) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: self, attribute: .Leading,
@@ -284,17 +309,35 @@ extension UIView {
             toItem: view, attribute: .Leading,
             multiplier: 1.0, constant: 0
         )
-
         addSiblingConstraint(constraint)
 
         return constraint
     }
+
 
     public func alignTrailing(withView view: UIView) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: self, attribute: .Trailing,
             relatedBy: .Equal,
             toItem: view, attribute: .Trailing,
+            multiplier: 1.0, constant: 0
+        )
+
+        addSiblingConstraint(constraint)
+
+        return constraint
+    }
+}
+
+// MARK: Equal Dimensions
+
+extension UIView {
+
+    public func addEqualWidthConstraint(withView view: UIView) -> NSLayoutConstraint {
+        let constraint = NSLayoutConstraint(
+            item: self, attribute: .Width,
+            relatedBy: .Equal,
+            toItem: view, attribute: .Width,
             multiplier: 1.0, constant: 0
         )
 

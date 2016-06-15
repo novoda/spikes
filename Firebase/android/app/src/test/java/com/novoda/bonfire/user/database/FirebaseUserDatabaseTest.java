@@ -72,6 +72,13 @@ public class FirebaseUserDatabaseTest {
     }
 
     @Test
+    public void canObserveUserObjectFromId() {
+        setupValueEventListenerFor(mockListeners, mockUsersDatabase, user);
+        Observable<User> userObservable = firebaseUserDatabase.observeUser(USER_ID);
+        assertValueReceivedOnNext(userObservable, user);
+    }
+
+    @Test
     public void canSetNewUserValue() {
         firebaseUserDatabase.writeCurrentUser(anotherUser);
         verify(mockUsersDatabase).setValue(anotherUser);

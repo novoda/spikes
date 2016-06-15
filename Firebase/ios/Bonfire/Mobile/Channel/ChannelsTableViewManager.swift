@@ -15,7 +15,6 @@ final class ChannelsCollectionViewManager: NSObject, UICollectionViewDataSource,
     }
 
     func setupCollectionView(collectionView: UICollectionView) {
-
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(ChannelCell)
@@ -46,7 +45,7 @@ final class ChannelsCollectionViewManager: NSObject, UICollectionViewDataSource,
     func collectionView(collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                                sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return CGSize(width: 90, height: 90)
+        return CGSize(width: 70, height: 70)
     }
 
 }
