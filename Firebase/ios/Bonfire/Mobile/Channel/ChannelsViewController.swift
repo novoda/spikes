@@ -78,6 +78,8 @@ final class ChannelsViewController: UIViewController {
 
         title = "Channels"
         addBarButtonItem()
+
+        navigationController?.navigationBarHidden = false
     }
 
 }
