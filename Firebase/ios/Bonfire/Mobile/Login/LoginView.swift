@@ -3,7 +3,9 @@ import GoogleSignIn
 
 final class LoginView: UIView {
 
+    let logo = UIImageView()
     let bubblesBackground = BubbleBackgroundView()
+    let disclaimerLabel = UILabel()
 
     private let googleButton = GIDSignInButton()
     weak var alertDelegate: AlertDelegate?
@@ -24,11 +26,21 @@ final class LoginView: UIView {
 
     func setupViews() {
         backgroundColor = .orangeColor()
+
+        logo.image = UIImage(named: "logo")
+
+        disclaimerLabel.text = "This application is for demo purposes only. Signing in via your Google account will give us access to your name and profile image only, which will be publicly available to all other users of the application. The messages are not encrypted and any Novoda employee can potentially see them. The database, including all channels and messages can be erased at anytime."
+        disclaimerLabel.textAlignment = .Center
+        disclaimerLabel.numberOfLines = 0
+        disclaimerLabel.font = UIFont.systemFontOfSize(12)
+        disclaimerLabel.textColor = .whiteColor()
+
         googleButton.style = .Wide
     }
 
     func setupLayout() {
         addSubview(bubblesBackground)
+        addSubview(disclaimerLabel)
         addSubview(googleButton)
 
         bubblesBackground.pinToSuperviewTop()
@@ -36,9 +48,17 @@ final class LoginView: UIView {
         bubblesBackground.pinToSuperviewTrailing()
         bubblesBackground.pinToSuperviewBottom()
 
-        googleButton.pinToSuperviewTop(withConstant: 20)
+        logo.addHeightConstraint(withConstant: 110)
+        logo.addWidthConstraint(withConstant: 100)
+        logo.a
+
+        disclaimerLabel.pinToSuperviewLeading(withConstant: 25)
+        disclaimerLabel.pinToSuperviewTrailing(withConstant: 25)
+
+        googleButton.attachToBottomOf(disclaimerLabel, withConstant: 40)
         googleButton.pinToSuperviewLeading(withConstant: 16)
         googleButton.pinToSuperviewTrailing(withConstant: 16)
+        googleButton.pinToSuperviewBottom(withConstant: 50)
     }
 
 }
