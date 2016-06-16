@@ -199,6 +199,25 @@ extension UIView {
         return constraint
     }
 
+    public func addAspectRatio(
+        withMultiplier multiplier: CGFloat,
+                     priority: UILayoutPriority = UILayoutPriorityRequired
+        ) -> NSLayoutConstraint {
+
+        translatesAutoresizingMaskIntoConstraints = false
+
+        let constraint = NSLayoutConstraint(
+            item: self, attribute: .Height,
+            relatedBy: .Equal,
+            toItem: self, attribute: .Width,
+            multiplier: multiplier, constant: 0.0
+        )
+
+        constraint.priority = priority
+        addConstraint(constraint)
+        return constraint
+    }
+
 }
 
 // MARK: - Attach to Sibling
@@ -333,16 +352,30 @@ extension UIView {
 
 extension UIView {
 
-    public func addEqualWidthConstraint(withView view: UIView) -> NSLayoutConstraint {
+    public func addEqualWidthConstraint(withView view: UIView, withMultiplier multiplier: CGFloat = 1.0) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: self, attribute: .Width,
             relatedBy: .Equal,
             toItem: view, attribute: .Width,
-            multiplier: 1.0, constant: 0
+            multiplier: multiplier, constant: 0
         )
 
         addSiblingConstraint(constraint)
 
         return constraint
     }
+
+    public func addEqualHeightConstraint(withView view: UIView, withMultiplier multiplier: CGFloat = 1.0) -> NSLayoutConstraint {
+        let constraint = NSLayoutConstraint(
+            item: self, attribute: .Height,
+            relatedBy: .Equal,
+            toItem: view, attribute: .Height,
+            multiplier: multiplier, constant: 0
+        )
+
+        addSiblingConstraint(constraint)
+
+        return constraint
+    }
+
 }

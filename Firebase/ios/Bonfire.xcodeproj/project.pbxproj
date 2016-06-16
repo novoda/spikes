@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1A0A41A21D0184640053A547 /* PersistedUserServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0A41A11D0184640053A547 /* PersistedUserServiceTests.swift */; };
 		1A0A41A41D018D810053A547 /* Rememberancer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0A41A31D018D810053A547 /* Rememberancer.swift */; };
+		1A9FB9101D1063B1009F032B /* BubblesBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9FB90F1D1063B1009F032B /* BubblesBackgroundView.swift */; };
 		1A2439281D0ACC390021B547 /* UIView+BorderExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2439271D0ACC390021B547 /* UIView+BorderExtensions.swift */; };
 		1ABEAC661D08573D00A85CE2 /* FirebaseIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABEAC651D08573D00A85CE2 /* FirebaseIdentifiers.swift */; };
 		1ABEAC681D08730B00A85CE2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1ABEAC671D08730B00A85CE2 /* GoogleService-Info.plist */; };
@@ -109,6 +110,7 @@
 		13F2FDE620ACDD8945A96B8C /* Pods_Bonfire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bonfire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A0A41A11D0184640053A547 /* PersistedUserServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedUserServiceTests.swift; sourceTree = "<group>"; };
 		1A0A41A31D018D810053A547 /* Rememberancer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rememberancer.swift; sourceTree = "<group>"; };
+		1A9FB90F1D1063B1009F032B /* BubblesBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BubblesBackgroundView.swift; sourceTree = "<group>"; };
 		1A2439271D0ACC390021B547 /* UIView+BorderExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+BorderExtensions.swift"; sourceTree = "<group>"; };
 		1ABEAC651D08573D00A85CE2 /* FirebaseIdentifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseIdentifiers.swift; sourceTree = "<group>"; };
 		1ABEAC671D08730B00A85CE2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
@@ -390,6 +392,7 @@
 				B65C45C71CE1E14400B2179D /* LoginView.swift */,
 				B65C45C91CE1E31A00B2179D /* LoginViewController.swift */,
 				B6ECCEAD1CE3477000580434 /* User+FirebaseConvertible.swift */,
+				1A9FB90F1D1063B1009F032B /* BubblesBackgroundView.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -812,6 +815,7 @@
 				B65C45D71CE1EFE100B2179D /* Navigator.swift in Sources */,
 				B65C45D11CE1E41200B2179D /* LoginService.swift in Sources */,
 				B6C054E91CF7014500B1BB6C /* FirebaseDynamicLinkFactory.swift in Sources */,
+				1A9FB9101D1063B1009F032B /* BubblesBackgroundView.swift in Sources */,
 				B6C054EC1CF708D600B1BB6C /* DynamicLinkFactotry.swift in Sources */,
 				B6962C911CEF5742006A3A9E /* Firebase+RxExtensions.swift in Sources */,
 				B62BE1C91CF89CF800326B98 /* PersistedUserService.swift in Sources */,
