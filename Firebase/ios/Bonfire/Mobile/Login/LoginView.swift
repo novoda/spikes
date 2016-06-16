@@ -1,9 +1,11 @@
 import UIKit
 import GoogleSignIn
 
+
 final class LoginView: UIView {
 
     let bubblesBackground = BubbleBackgroundView()
+    let logoView = LogoView()
     let disclaimerLabel = UILabel()
 
     private let googleButton = GIDSignInButton()
@@ -34,8 +36,7 @@ final class LoginView: UIView {
 
         googleButton.style = .Wide
 
-        let logoImage = UIImage(named: "logo")
-        bubblesBackground.updateWithImage(logoImage!)
+        bubblesBackground.updateWithView(logoView)
     }
 
     func setupLayout() {

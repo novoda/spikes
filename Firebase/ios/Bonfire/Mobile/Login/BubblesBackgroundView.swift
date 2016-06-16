@@ -5,7 +5,7 @@ class BubbleBackgroundView: UIView {
     var mediumBubble = UIView()
     var smallBubble = UIView()
 
-    var imageInBubble = UIImageView()
+    var containerView = UIView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,12 +22,12 @@ class BubbleBackgroundView: UIView {
         setupBigBubble()
         setupMediumBubble(withYAnchor: bigBubble.frame.maxY)
         setupSmallBubble(withYAnchor: mediumBubble.frame.maxY)
-        setupImageInBubble()
+        setupContainerView()
     }
 
-    func updateWithImage(image: UIImage) {
-        addSubview(imageInBubble)
-        imageInBubble.image = image
+    func updateWithView(view: UIView) {
+        containerView = view
+        addSubview(containerView)
     }
 
     private func setupHierarchy() {
@@ -62,15 +62,12 @@ class BubbleBackgroundView: UIView {
         smallBubble.layer.cornerRadius = smallBubbleDimensions / 2
     }
 
-    private func setupImageInBubble() {
+    private func setupContainerView() {
         let visibleBigBubbleFrame = CGRectIntersection(bigBubble.frame, self.frame)
 
-        imageInBubble.addEqualWidthConstraint(withView: self, withMultiplier: 0.3)
-        imageInBubble.addAspectRatio(withMultiplier: 1.0)
-
-        imageInBubble.contentMode = .ScaleAspectFit
-        imageInBubble.center = CGPointMake(visibleBigBubbleFrame.midX, visibleBigBubbleFrame.midY * 0.9)
+        containerView.addEqualWidthConstraint(withView: self, withMultiplier: 0.6)
+        containerView.addAspectRatio(withMultiplier: 1.0)
+        containerView.center = CGPointMake(visibleBigBubbleFrame.midX, visibleBigBubbleFrame.midY * 0.9)
     }
-
 
 }

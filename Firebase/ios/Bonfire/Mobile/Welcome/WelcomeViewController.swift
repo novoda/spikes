@@ -33,6 +33,7 @@ class WelcomeViewController: UIViewController {
     override func loadView() {
         self.view = UIView()
 
+        UIApplication.sharedApplication().statusBarStyle = .Default
         navigationController?.navigationBarHidden = true
     }
 
