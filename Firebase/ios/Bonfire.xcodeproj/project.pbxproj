@@ -9,8 +9,9 @@
 /* Begin PBXBuildFile section */
 		1A0A41A21D0184640053A547 /* PersistedUserServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0A41A11D0184640053A547 /* PersistedUserServiceTests.swift */; };
 		1A0A41A41D018D810053A547 /* Rememberancer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0A41A31D018D810053A547 /* Rememberancer.swift */; };
-		1A9FB9101D1063B1009F032B /* BubblesBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9FB90F1D1063B1009F032B /* BubblesBackgroundView.swift */; };
 		1A2439281D0ACC390021B547 /* UIView+BorderExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2439271D0ACC390021B547 /* UIView+BorderExtensions.swift */; };
+		1A9FB9101D1063B1009F032B /* BubblesBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9FB90F1D1063B1009F032B /* BubblesBackgroundView.swift */; };
+		1AAC91DD1D127E9400A00238 /* SenderInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAC91DC1D127E9400A00238 /* SenderInfoView.swift */; };
 		1ABEAC661D08573D00A85CE2 /* FirebaseIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABEAC651D08573D00A85CE2 /* FirebaseIdentifiers.swift */; };
 		1ABEAC681D08730B00A85CE2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1ABEAC671D08730B00A85CE2 /* GoogleService-Info.plist */; };
 		1AECA3371D0974EC00E4D856 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AECA3361D0974EC00E4D856 /* Assets.xcassets */; };
@@ -110,8 +111,9 @@
 		13F2FDE620ACDD8945A96B8C /* Pods_Bonfire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bonfire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A0A41A11D0184640053A547 /* PersistedUserServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedUserServiceTests.swift; sourceTree = "<group>"; };
 		1A0A41A31D018D810053A547 /* Rememberancer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rememberancer.swift; sourceTree = "<group>"; };
-		1A9FB90F1D1063B1009F032B /* BubblesBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BubblesBackgroundView.swift; sourceTree = "<group>"; };
 		1A2439271D0ACC390021B547 /* UIView+BorderExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+BorderExtensions.swift"; sourceTree = "<group>"; };
+		1A9FB90F1D1063B1009F032B /* BubblesBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BubblesBackgroundView.swift; sourceTree = "<group>"; };
+		1AAC91DC1D127E9400A00238 /* SenderInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SenderInfoView.swift; sourceTree = "<group>"; };
 		1ABEAC651D08573D00A85CE2 /* FirebaseIdentifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseIdentifiers.swift; sourceTree = "<group>"; };
 		1ABEAC671D08730B00A85CE2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		1AECA3361D0974EC00E4D856 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Bonfire/Assets.xcassets; sourceTree = SOURCE_ROOT; };
@@ -463,6 +465,7 @@
 			isa = PBXGroup;
 			children = (
 				B6C054E01CF5AE9D00B1BB6C /* WelcomeView.swift */,
+				1AAC91DC1D127E9400A00238 /* SenderInfoView.swift */,
 				B6C054E31CF5BE5600B1BB6C /* WelcomeViewController.swift */,
 			);
 			path = Welcome;
@@ -829,6 +832,7 @@
 				B63B37681CFD95CE00142DC3 /* PersistedChatService.swift in Sources */,
 				B65C45B21CE0E03F00B2179D /* FirebaseConvertible.swift in Sources */,
 				B65C45D31CE1E4B200B2179D /* User.swift in Sources */,
+				1AAC91DD1D127E9400A00238 /* SenderInfoView.swift in Sources */,
 				B6210ACC1CE24AC600570509 /* Authentication.swift in Sources */,
 				D0C317D2ED38A77789D6B864 /* Channel.swift in Sources */,
 				D0C31583D21898285630F157 /* ChannelsService.swift in Sources */,
