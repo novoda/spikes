@@ -12,7 +12,7 @@ final class WelcomeView: UIView {
 
     weak var actionListener: WelcomeActionListener?
 
-    private var disposeBag = DisposeBag()
+    private var imageRequestDisposeBag = DisposeBag()
     private let actionDisposeBag = DisposeBag()
 
 
@@ -88,13 +88,13 @@ extension WelcomeView: WelcomeDisplayer {
 
 
     private func setUserPhoto(url: NSURL) {
-        disposeBag = DisposeBag()
+        imageRequestDisposeBag = DisposeBag()
 
         imageForURL(url)
             .observeOn(MainScheduler.instance)
             .subscribeNext({ [weak self] image in
                 self?.senderInfoView.updateWithProfileImage(image!)
-                }).addDisposableTo(disposeBag)
+                }).addDisposableTo(imageRequestDisposeBag)
     }
 
     //TODO: Pull into utilities

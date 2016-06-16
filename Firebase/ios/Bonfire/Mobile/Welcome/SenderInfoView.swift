@@ -4,6 +4,8 @@ class SenderInfoView: UIView {
     let profileImage = UIImageView()
     let userNameLabel = UILabel()
 
+    let profileImageDimensions: CGFloat = 86
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -19,7 +21,7 @@ class SenderInfoView: UIView {
     }
 
     func setupViews() {
-        profileImage.layer.cornerRadius = 43
+        profileImage.layer.cornerRadius = profileImageDimensions / 2
 
         userNameLabel.font = UIFont.systemFontOfSize(14)
         userNameLabel.numberOfLines = 0
@@ -30,8 +32,8 @@ class SenderInfoView: UIView {
         addSubview(profileImage)
         addSubview(userNameLabel)
 
-        profileImage.addHeightConstraint(withConstant: 86)
-        profileImage.addWidthConstraint(withConstant: 86)
+        profileImage.addHeightConstraint(withConstant: profileImageDimensions)
+        profileImage.addWidthConstraint(withConstant: profileImageDimensions)
         profileImage.alignVerticalCenterWithSuperview(withMultiplier: 0.9)
         profileImage.alignHorizontalCenterWithSuperview()
 

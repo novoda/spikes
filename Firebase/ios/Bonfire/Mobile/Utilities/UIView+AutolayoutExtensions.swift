@@ -199,7 +199,7 @@ extension UIView {
         return constraint
     }
 
-    public func addAspectRatio(
+    public func addAspectRatioConstraint(
         withMultiplier multiplier: CGFloat,
                      priority: UILayoutPriority = UILayoutPriorityRequired
         ) -> NSLayoutConstraint {

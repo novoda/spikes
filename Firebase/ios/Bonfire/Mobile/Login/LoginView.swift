@@ -1,38 +1,6 @@
 import UIKit
 import GoogleSignIn
 
-class LogoView: UIView  {
-
-    let logoImage = UIImageView()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupViews()
-        setupLayout()
-    }
-
-    convenience init() {
-        self.init(frame: CGRect.zero)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func setupViews() {
-        logoImage.image = UIImage(named: "logo")
-    }
-
-    func setupLayout() {
-        addSubview(logoImage)
-
-        logoImage.addHeightConstraint(withConstant: 110)
-        logoImage.addWidthConstraint(withConstant: 110)
-        logoImage.alignVerticalCenterWithSuperview()
-        logoImage.alignHorizontalCenterWithSuperview()
-    }
-
-}
 
 final class LoginView: UIView {
 
