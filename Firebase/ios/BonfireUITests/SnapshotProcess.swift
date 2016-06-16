@@ -33,7 +33,7 @@ class SnapshotProcess: XCTestCase {
         sleep(10)
         app.navigationBars["Channels"].buttons["Compose"].tap()
         app.textFields["NameField"].tap()
-        app.textFields["NameField"].typeText("Blah")
+        app.textFields["NameField"].typeText("😎")
         snapshot("02CreateChannel")
     }
 

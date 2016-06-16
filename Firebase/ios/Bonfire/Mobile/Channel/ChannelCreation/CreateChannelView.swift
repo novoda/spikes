@@ -58,6 +58,7 @@ final class CreateChannelView: UIView {
         channelNameField.clearButtonMode = .Always
         channelNameField.textAlignment = .Center
         channelNameField.font = UIFont.systemFontOfSize(45)
+        channelNameField.accessibilityIdentifier = "NameField"
 
         channelNameField.delegate = self
 
