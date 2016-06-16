@@ -1,6 +1,7 @@
 package com.novoda.bonfire.chat.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,6 +13,7 @@ import com.novoda.bonfire.R;
 import com.novoda.bonfire.chat.data.model.Message;
 import com.novoda.bonfire.view.CircleCropImageTransformation;
 import com.novoda.notils.caster.Views;
+import com.novoda.notils.exception.DeveloperError;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,14 +28,34 @@ public class MessageView extends LinearLayout {
     private TextView time;
     private TextView name;
 
+    private int layoutResId;
+
     public MessageView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init(context, attrs);
+        super.setOrientation(VERTICAL);
+    }
+
+    private void init(Context context, AttributeSet attrs) {
+        if (attrs != null) {
+            int[] attrsArray = {
+                    android.R.attr.layout
+            };
+            TypedArray array = context.obtainStyledAttributes(attrs, attrsArray);
+            layoutResId = array.getResourceId(0, R.layout.merge_message_item_view);
+            array.recycle();
+        }
+    }
+
+    @Override
+    public void setOrientation(int orientation) {
+        throw new DeveloperError("This view only supports vertical orientation");
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        View.inflate(getContext(), R.layout.merge_message_item_view, this);
+        View.inflate(getContext(), layoutResId, this);
         this.picture = Views.findById(this, R.id.messageAuthorImage);
         this.body = Views.findById(this, R.id.messageBody);
         this.time = Views.findById(this, R.id.messageTime);

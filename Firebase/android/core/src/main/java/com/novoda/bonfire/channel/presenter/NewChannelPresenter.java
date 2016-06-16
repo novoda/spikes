@@ -74,6 +74,11 @@ public class NewChannelPresenter {
                     })
             );
         }
+
+        @Override
+        public void onCancel() {
+            navigator.toParent();
+        }
     };
 
     private Observable<DatabaseResult<Channel>> create(Channel newChannel) {

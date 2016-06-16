@@ -13,16 +13,20 @@ class FirebaseUserDatabase: UserDatabase {
         return usersDB.rx_readValue().map(toUsers)
     }
 
+    func observeUser(userID: String) -> Observable<User> {
+        return usersDB.child(userID).rx_readValue().map(User.init)
+    }
+
     func readUserFrom(userID: String) -> Observable<User> {
         return usersDB.child(userID).rx_readOnce().map(User.init)
     }
 
     func writeCurrentUser(user: User) {
-        usersDB.child(user.id).setValue(user.asFirebaseValue())
+        usersDB.child(user.identifier).setValue(user.asFirebaseValue())
     }
 
     private func toUsers(snapshot: FIRDataSnapshot) throws -> Users {
-        let users = try snapshot.children.allObjects.map({try User(snapshot: $0 as! FIRDataSnapshot)})
+        let users = try snapshot.children.allObjects.map(asFIRDataSnapshot).map(User.init)
         return Users(users: users)
     }
 }

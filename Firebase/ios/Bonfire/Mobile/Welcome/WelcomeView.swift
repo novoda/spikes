@@ -2,26 +2,29 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+
 final class WelcomeView: UIView {
 
+    private let bubblesBackground = BubbleBackgroundView()
+    private var senderInfoView = SenderInfoView()
     private let welcomeMessageLabel = UILabel()
-    private let doneButton = UIButton()
-    private var sender: String?
+    private let loginButton = UIButton()
 
     weak var actionListener: WelcomeActionListener?
 
-    private let disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
+    private let actionDisposeBag = DisposeBag()
 
-    init(frame: CGRect, sender: String? = nil) {
+
+    override init(frame: CGRect) {
         super.init(frame: frame)
-        self.sender = sender
         setupViews()
         setupLayout()
         setupActions()
     }
 
-    convenience init(sender: String? = nil) {
-        self.init(frame: CGRect.zero, sender: sender)
+    convenience init() {
+        self.init(frame: CGRect.zero)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -29,40 +32,82 @@ final class WelcomeView: UIView {
     }
 
     private func setupViews() {
-        backgroundColor = .whiteColor()
-        welcomeMessageLabel.numberOfLines = 0
-        if let sender = sender {
-            welcomeMessageLabel.text = "Welcome to Bonfire. \(sender) invited you!"
-        } else {
-            welcomeMessageLabel.text = "Welcome to Bonfire"
-        }
+        backgroundColor = BonfireColors.orange
 
-        doneButton.setTitle("Get Started", forState: .Normal)
-        doneButton.setTitleColor(.blackColor(), forState: .Normal)
+        welcomeMessageLabel.numberOfLines = 0
+        welcomeMessageLabel.text = "Get started and enjoy the emoji awesomeness"
+        welcomeMessageLabel.textAlignment = .Center
+        welcomeMessageLabel.font = UIFont.systemFontOfSize(16)
+        welcomeMessageLabel.textColor = .whiteColor()
+
+        loginButton.setTitle("Get Started", forState: .Normal)
+        loginButton.setTitleColor(.darkGrayColor(), forState: .Normal)
+        loginButton.layer.cornerRadius = 24
+        loginButton.backgroundColor = .whiteColor()
+
+        bubblesBackground.updateWithView(senderInfoView)
     }
 
     private func setupLayout() {
+        addSubview(bubblesBackground)
         addSubview(welcomeMessageLabel)
-        addSubview(doneButton)
+        addSubview(loginButton)
 
-        welcomeMessageLabel.pinToSuperviewTop(withConstant: 20)
-        welcomeMessageLabel.pinToSuperviewLeading(withConstant: 20)
-        welcomeMessageLabel.pinToSuperviewTrailing(withConstant: 20)
+        bubblesBackground.pinToSuperviewTop()
+        bubblesBackground.pinToSuperviewLeading()
+        bubblesBackground.pinToSuperviewTrailing()
+        bubblesBackground.pinToSuperviewBottom()
 
-        doneButton.attachToBottomOf(welcomeMessageLabel, withConstant: 10)
-        doneButton.pinToSuperviewLeading(withConstant: 20)
-        doneButton.pinToSuperviewTrailing(withConstant: 20)
-        doneButton.addHeightConstraint(withConstant: 44)
+        welcomeMessageLabel.alignVerticalCenterWithSuperview()
+        welcomeMessageLabel.pinToSuperviewLeading(withConstant: 40)
+        welcomeMessageLabel.pinToSuperviewTrailing(withConstant: 40)
+
+        loginButton.attachToBottomOf(welcomeMessageLabel, withConstant: 35)
+        loginButton.pinToSuperviewLeading(withConstant: 75)
+        loginButton.pinToSuperviewTrailing(withConstant: 75)
+        loginButton.addHeightConstraint(withConstant: 48)
     }
 
     private func setupActions() {
-        doneButton.rx_tap.subscribe(
+        loginButton.rx_tap.subscribe(
             onNext: { [weak self] in
                 self?.welcomeDone()
-            }).addDisposableTo(disposeBag)
+            }).addDisposableTo(actionDisposeBag)
     }
 
     private func welcomeDone() {
         actionListener?.welcomeDone()
     }
 }
+
+extension WelcomeView: WelcomeDisplayer {
+    func display(user: User) {
+        setUserPhoto(user.photoURL!)
+        senderInfoView.updateWithUserName(user.name)
+    }
+
+
+    private func setUserPhoto(url: NSURL) {
+        disposeBag = DisposeBag()
+
+        imageForURL(url)
+            .observeOn(MainScheduler.instance)
+            .subscribeNext({ [weak self] image in
+                self?.senderInfoView.updateWithProfileImage(image!)
+                }).addDisposableTo(disposeBag)
+    }
+
+    //TODO: Pull into utilities
+    func imageForURL(url: NSURL) -> Observable<UIImage?> {
+        let request = NSURLRequest(URL: url)
+        return NSURLSession.sharedSession().rx_data(request).map { data in
+            guard let image = UIImage(data: data) else {
+                throw HTTPImageServiceError()
+            }
+
+            return image
+        }
+    }
+}
+
+

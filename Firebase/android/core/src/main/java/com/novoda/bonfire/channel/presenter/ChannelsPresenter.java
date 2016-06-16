@@ -1,5 +1,6 @@
 package com.novoda.bonfire.channel.presenter;
 
+import com.novoda.bonfire.Config;
 import com.novoda.bonfire.analytics.Analytics;
 import com.novoda.bonfire.channel.data.model.Channel;
 import com.novoda.bonfire.channel.data.model.Channels;
@@ -21,6 +22,7 @@ public class ChannelsPresenter {
     private final ChannelsDisplayer channelsDisplayer;
     private final ChannelService channelService;
     private final LoginService loginService;
+    private final Config config;
     private final Navigator navigator;
     private final LinkFactory linkFactory;
     private final Analytics analytics;
@@ -28,10 +30,19 @@ public class ChannelsPresenter {
     private Subscription subscription;
     private User user;
 
-    public ChannelsPresenter(ChannelsDisplayer channelsDisplayer, ChannelService channelService, LoginService loginService, Navigator navigator, LinkFactory linkFactory, Analytics analytics) {
+    public ChannelsPresenter(
+            ChannelsDisplayer channelsDisplayer,
+            ChannelService channelService,
+            LoginService loginService,
+            Config config,
+            Navigator navigator,
+            LinkFactory linkFactory,
+            Analytics analytics
+    ) {
         this.channelsDisplayer = channelsDisplayer;
         this.channelService = channelService;
         this.loginService = loginService;
+        this.config = config;
         this.navigator = navigator;
         this.linkFactory = linkFactory;
         this.analytics = analytics;
@@ -48,6 +59,7 @@ public class ChannelsPresenter {
                     }
                 })
                 .flatMap(channelsForUser())
+                .map(sortIfConfigured())
                 .subscribe(new Action1<Channels>() {
                     @Override
                     public void call(Channels channels) {
@@ -61,6 +73,19 @@ public class ChannelsPresenter {
             @Override
             public Observable<Channels> call(Authentication authentication) {
                 return channelService.getChannelsFor(authentication.getUser());
+            }
+        };
+    }
+
+    private Func1<Channels, Channels> sortIfConfigured() {
+        return new Func1<Channels, Channels>() {
+            @Override
+            public Channels call(Channels channels) {
+                if (config.orderChannelsByName()) {
+                    return channels.sortedByName();
+                } else {
+                    return channels;
+                }
             }
         };
     }

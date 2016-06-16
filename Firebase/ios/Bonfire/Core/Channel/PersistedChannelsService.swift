@@ -13,7 +13,10 @@ class PersistedChannelsService: ChannelsService {
     }
 
     func channels(forUser user: User) -> Observable<Channels> {
-        return Observable.combineLatest(publicChannels(), privateChannels(forUser: user)) { publicChannels, privateChannels in
+        return Observable.combineLatest(
+            publicChannels(),
+            privateChannels(forUser: user)
+        ) { publicChannels, privateChannels in
             return Channels(channels: publicChannels.channels + privateChannels.channels)
         }
     }
@@ -78,8 +81,9 @@ class PersistedChannelsService: ChannelsService {
 
     func removeOwner(owner: User, fromPrivateChannel channel: Channel) -> Observable<DatabaseResult<User>> {
         return channelsDatabase.removeOwnerFromPrivateChannel(owner, channel: channel)
-            .flatMap({channel in self.channelsDatabase.removeChannelFromUserPrivateChannelIndex(owner, channel: channel)})
-            .map({_ in .Success(owner)})
+            .flatMap({channel in
+                self.channelsDatabase.removeChannelFromUserPrivateChannelIndex(owner, channel: channel)
+            }).map({_ in .Success(owner)})
             .catchError({Observable.just(DatabaseResult.Error($0))})
     }
 

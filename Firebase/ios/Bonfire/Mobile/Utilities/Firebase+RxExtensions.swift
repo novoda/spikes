@@ -57,9 +57,9 @@ extension FIRDatabaseReference {
                     observer.onCompleted()
                 }
             )
-            
+
             return AnonymousDisposable() {}
         })
     }
-    
+
 }

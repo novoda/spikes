@@ -6,15 +6,32 @@ final class ChannelsViewController: UIViewController {
     let channelsPresenter: ChannelsPresenter
 
     static func withDependencies() -> ChannelsViewController {
-        return ChannelsViewController(loginService: SharedServices.loginService, channelsService: SharedServices.channelsService, navigator: SharedServices.navigator, dynamicLinkFactory: SharedServices.dynamicLinkFactory, config: SharedServices.config)
+        return ChannelsViewController(
+            loginService: SharedServices.loginService,
+            channelsService: SharedServices.channelsService,
+            navigator: SharedServices.navigator,
+            dynamicLinkFactory: SharedServices.dynamicLinkFactory,
+            config: SharedServices.config
+        )
     }
 
-    init(loginService: LoginService, channelsService: ChannelsService, navigator: Navigator, dynamicLinkFactory: DynamicLinkFactory, config: Config) {
-        self.channelsPresenter = ChannelsPresenter(loginService: loginService, channelsService: channelsService, channelsDisplayer: channelsView, navigator: navigator, dynamicLinkFactory: dynamicLinkFactory, config: config)
+    init(loginService: LoginService,
+         channelsService: ChannelsService,
+         navigator: Navigator,
+         dynamicLinkFactory: DynamicLinkFactory,
+         config: Config
+        ) {
+        self.channelsPresenter = ChannelsPresenter(
+            loginService: loginService,
+            channelsService: channelsService,
+            channelsDisplayer: channelsView,
+            navigator: navigator,
+            dynamicLinkFactory: dynamicLinkFactory,
+            config: config)
 
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -22,8 +39,6 @@ final class ChannelsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
-        title = "Channels"
-        addBarButtonItem()
     }
 
     private func setupLayout() {
@@ -38,7 +53,9 @@ final class ChannelsViewController: UIViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+
         channelsPresenter.startPresenting()
+        styleNavigationBar()
     }
 
     override func viewDidDisappear(animated: Bool) {
@@ -51,6 +68,18 @@ final class ChannelsViewController: UIViewController {
         let shareBarButtonItem = channelsView.shareBonfireBarButtonItem
         navigationItem.setRightBarButtonItem(newChannelBarButtonItem, animated: false)
         navigationItem.setLeftBarButtonItem(shareBarButtonItem, animated: false)
+    }
+
+    func styleNavigationBar() {
+        navigationController?.navigationBar.barTintColor = BonfireColors.orange
+        navigationController?.navigationBar.tintColor = .whiteColor()
+        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+        UIApplication.sharedApplication().statusBarStyle = .LightContent
+
+        title = "Channels"
+        addBarButtonItem()
+
+        navigationController?.navigationBarHidden = false
     }
 
 }

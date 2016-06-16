@@ -36,7 +36,7 @@ public class FirebaseDynamicLinkFactory implements LinkFactory {
         return Uri.parse(deepLinkBaseUrl)
                 .buildUpon()
                 .appendPath("welcome")
-                .appendQueryParameter(SENDER, user.getName())
+                .appendQueryParameter(SENDER, user.getId())
                 .build();
     }
 

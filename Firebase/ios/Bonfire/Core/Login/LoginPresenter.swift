@@ -31,7 +31,7 @@ final class LoginPresenter {
         if auth.isSuccess() {
             navigator.toChannels()
         } else {
-            let error = auth.failure as! NSError
+            guard let error = auth.failure as? NSError else { return }
             loginDisplayer.shouldShowAuthenticationError(error.localizedDescription)
         }
     }

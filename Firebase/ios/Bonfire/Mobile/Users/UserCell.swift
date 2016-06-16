@@ -7,9 +7,9 @@ final class UserCell: UITableViewCell {
     let userLabel = UILabel()
     let photoView = UIImageView()
 
-    let verticalMargin: CGFloat = 5
+    let verticalMargin: CGFloat = 14
     let horizontalMargin: CGFloat = 16
-    let imageSize: CGFloat = 28
+    let imageSize: CGFloat = 36
 
     var disposeBag: DisposeBag! = nil
 
@@ -27,10 +27,10 @@ final class UserCell: UITableViewCell {
         userLabel.numberOfLines = 0
 
         photoView.contentMode = .ScaleAspectFit
-        photoView.layer.cornerRadius = imageSize/2
+        photoView.layer.cornerRadius = imageSize / 2
         photoView.layer.masksToBounds = true
 
-        userLabel.font = UIFont.boldSystemFontOfSize(12)
+        userLabel.font = UIFont.systemFontOfSize(14)
     }
 
     func setupLayout() {
@@ -38,11 +38,12 @@ final class UserCell: UITableViewCell {
         addSubview(userLabel)
 
         photoView.pinToSuperviewLeading(withConstant: horizontalMargin)
-        userLabel.attachToRightOf(photoView, withConstant: 10)
-        userLabel.pinToSuperviewTrailing(withConstant: horizontalMargin)
-
         photoView.pinToSuperviewTop(withConstant: verticalMargin)
         photoView.pinToSuperviewBottom(withConstant: verticalMargin, priority: UILayoutPriorityDefaultHigh)
+
+        userLabel.attachToRightOf(photoView, withConstant: horizontalMargin)
+        userLabel.pinToSuperviewTrailing(withConstant: horizontalMargin)
+        userLabel.alignVerticalCenterWithSuperview()
 
         photoView.addHeightConstraint(withConstant: imageSize)
         photoView.addWidthConstraint(withConstant: imageSize)
@@ -60,17 +61,16 @@ final class UserCell: UITableViewCell {
             setUserPhoto(url)
         }
 
-        backgroundColor = selected ? .yellowColor() : .clearColor()
+        backgroundColor = selected ? BonfireColors.veryLightPink : .clearColor()
     }
 
     private func setUserPhoto(url: NSURL) {
         disposeBag = DisposeBag()
 
-        photoView.hidden = true
+        photoView.image = UIImage(named: "ic_person")
         imageForURL(url)
             .observeOn(MainScheduler.instance)
             .subscribeNext({ [weak self] image in
-                self?.photoView.hidden = false
                 self?.photoView.image = image
                 }).addDisposableTo(disposeBag)
     }
@@ -81,7 +81,7 @@ final class UserCell: UITableViewCell {
             guard let image = UIImage(data: data) else {
                 throw HTTPImageServiceError()
             }
-            
+
             return image
         }
     }

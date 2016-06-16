@@ -1,21 +1,27 @@
 import UIKit
 
-class WelcomeViewController: UIViewController, WelcomeActionListener {
-
+class WelcomeViewController: UIViewController {
+    let welcomePresenter: WelcomePresenter
     let welcomeView: WelcomeView
-    let navigator: Navigator
 
     var bottomConstraint: NSLayoutConstraint!
 
-    static func withDependencies(sender sender: String?) -> WelcomeViewController {
-        let welcomeView = WelcomeView(sender: sender)
-        let navigator = SharedServices.navigator
-        return WelcomeViewController(view: welcomeView, navigator: navigator)
+    static func withDependencies(senderID senderID: String?) -> WelcomeViewController {
+        let welcomeView = WelcomeView()
+        let presenter = WelcomePresenter(
+            senderID: senderID!,
+            userService: SharedServices.usersService,
+            welcomeDisplayer: welcomeView,
+            navigator: SharedServices.navigator,
+            analytics: SharedServices.analytics
+        )
+
+        return WelcomeViewController(presenter: presenter, view: welcomeView)
     }
 
-    init(view: WelcomeView, navigator: Navigator) {
+    init(presenter: WelcomePresenter, view: WelcomeView) {
+        self.welcomePresenter = presenter
         self.welcomeView = view
-        self.navigator = navigator
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -26,6 +32,9 @@ class WelcomeViewController: UIViewController, WelcomeActionListener {
 
     override func loadView() {
         self.view = UIView()
+
+        UIApplication.sharedApplication().statusBarStyle = .Default
+        navigationController?.navigationBarHidden = true
     }
 
     override func viewDidLoad() {
@@ -33,9 +42,16 @@ class WelcomeViewController: UIViewController, WelcomeActionListener {
         setupLayout()
     }
 
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(true)
-        welcomeView.actionListener = self
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        welcomePresenter.startPresenting()
+        welcomeView.actionListener = welcomePresenter
+    }
+
+    override func viewDidDisappear(animated: Bool) {
+        welcomePresenter.stopPresenting()
+        welcomeView.actionListener = nil
+        super.viewDidDisappear(animated)
     }
 
     private func setupLayout() {
@@ -49,8 +65,4 @@ class WelcomeViewController: UIViewController, WelcomeActionListener {
         bottomConstraint = welcomeView.pinToSuperviewBottom()
     }
 
-    func welcomeDone() {
-        self.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
 }

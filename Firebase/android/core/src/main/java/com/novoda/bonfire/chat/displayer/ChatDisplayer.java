@@ -1,6 +1,7 @@
 package com.novoda.bonfire.chat.displayer;
 
 import com.novoda.bonfire.chat.data.model.Chat;
+import com.novoda.bonfire.user.data.model.User;
 
 public interface ChatDisplayer {
 
@@ -12,7 +13,7 @@ public interface ChatDisplayer {
 
     void showAddMembersButton();
 
-    void display(Chat chat);
+    void display(Chat chat, User user);
 
     void enableInteraction();
 

@@ -32,7 +32,7 @@ class FirebaseDynamicLinkFactory: DynamicLinkFactory {
         let deeplinkURL = deepLinkBaseURL.URLByAppendingPathComponent("welcome")
         let deeplinkURLComponents = NSURLComponents(URL: deeplinkURL, resolvingAgainstBaseURL: true)!
         deeplinkURLComponents.queryItems = [
-            NSURLQueryItem(name: "sender", value: user.name)
+            NSURLQueryItem(name: "sender", value: user.identifier)
         ]
         return deeplinkURLComponents.URL!
     }
