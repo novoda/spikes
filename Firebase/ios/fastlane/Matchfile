@@ -1,0 +1,4 @@
+git_url "git@github.com:novoda/ios-credentials.git"
+git_branch "novoda/bonfire"
+
+type "development"

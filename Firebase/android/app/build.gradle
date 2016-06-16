@@ -6,14 +6,26 @@ android {
 
     defaultConfig {
         applicationId "com.novoda.bonfire"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 8
+        versionName "0.0.6"
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+    }
+    signingConfigs {
+        release {
+            Properties props = new Properties()
+            props.load(new FileInputStream(file("signing.properties")))
+            storeFile file(props['storeFile'])
+            storePassword props['storePassword']
+            keyAlias props['keyAlias']
+            keyPassword props['keyPassword']
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -23,21 +35,44 @@ android {
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/rxjava.properties'
     }
+    lintOptions { warning 'InvalidPackage' }
 }
 
 dependencies {
     compile project(':core')
-    compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'com.android.support:recyclerview-v7:23.3.0'
-    compile 'com.android.support:support-v4:23.3.0'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:design:23.4.0'
     compile 'com.novoda:notils:2.2.16'
-    compile 'com.google.firebase:firebase-database:8.5.6'
-    compile 'com.google.firebase:firebase-auth-api:8.5.6'
-    compile 'com.google.android.gms:play-services-auth:8.5.6'
-    compile 'com.google.android.gms:play-services-auth-api:8.5.6'
+    compile 'com.google.firebase:firebase-core:9.0.2'
+    compile 'com.google.firebase:firebase-database:9.0.2'
+    compile 'com.google.firebase:firebase-auth:9.0.2'
+    compile 'com.google.firebase:firebase-crash:9.0.2'
+    compile 'com.google.firebase:firebase-invites:9.0.2'
+    compile 'com.google.firebase:firebase-config:9.0.2'
+    compile 'com.google.android.gms:play-services-auth:9.0.2'
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'io.reactivex:rxandroid:1.2.0'
 
     testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.9.5'
+
+    androidTestCompile 'junit:junit:4.12'
+    androidTestCompile 'org.mockito:mockito-core:1.9.5'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.2'){
+        exclude module: 'appcompat-v7'
+        exclude module: 'support-v4'
+        exclude module: 'design'
+        exclude module: 'recyclerview-v7'
+    }
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile 'com.android.support:support-annotations:23.4.0'
+
+    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
 }
 
 

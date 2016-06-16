@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.novoda.notils.logger.simple.Log;
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -14,5 +14,4 @@ public class BaseActivity extends AppCompatActivity {
         Log.setShowLogs(BuildConfig.DEBUG);
         Dependencies.INSTANCE.init(this);
     }
-
 }

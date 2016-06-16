@@ -3,4 +3,9 @@ apply plugin: 'java'
 dependencies {
     compile 'io.reactivex:rxjava:1.1.5'
     compile 'com.jakewharton.rxrelay:rxrelay:1.1.0'
+    compile 'junit:junit:4.12'
+    compile 'org.mockito:mockito-core:1.9.5'
 }
+
+targetCompatibility = '1.7'
+sourceCompatibility = '1.7'

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <ImageView
+    android:id="@+id/userAvatar"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="86dp"
+    android:minHeight="86dp"
+    android:minWidth="86dp"
+    android:scaleType="fitCenter" />
+
+  <TextView
+    android:id="@+id/welcomeMessageView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:gravity="center"
+    android:textColor="@color/text_black"
+    android:textSize="16sp" />
+
+  <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="24dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="48dp"
+    android:gravity="center"
+    android:text="@string/enjoy_the_awesomness"
+    android:textColor="@color/text_black"
+    android:textSize="16sp" />
+
+  <TextView
+    android:id="@+id/proceedButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:background="@drawable/oval_shape_primary"
+    android:fontFamily="sans-serif-medium"
+    android:gravity="center"
+    android:textColor="@android:color/white"
+    android:textSize="18sp"
+    android:text="@string/start_chatting"
+    android:paddingBottom="14dp"
+    android:paddingTop="14dp"
+    android:paddingRight="90dp"
+    android:paddingLeft="90dp"/>
+
+</merge>

@@ -2,7 +2,14 @@
   <!-- Default screen margins, per the Android Design guidelines. -->
   <dimen name="activity_horizontal_margin">16dp</dimen>
   <dimen name="activity_vertical_margin">16dp</dimen>
+  <dimen name="fab_margin">16dp</dimen>
 
-  <dimen name="message_vertical_margin">8dp</dimen>
-  <dimen name="message_horizontal_margin">16dp</dimen>
+  <dimen name="list_item_vertical_margin">8dp</dimen>
+  <dimen name="list_item_horizontal_margin">16dp</dimen>
+
+  <dimen name="channel_item_padding">7dp</dimen>
+  <dimen name="channel_grid_padding">9dp</dimen>
+  <dimen name="chat_entry_margin">12dp</dimen>
+  <dimen name="chat_entry_padding_horizontal">16dp</dimen>
+  <dimen name="chat_entry_padding_vertical">12dp</dimen>
 </resources>

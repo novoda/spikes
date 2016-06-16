@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <TextView
+    android:id="@+id/channelTitle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@drawable/circle_shape_white"
+    android:gravity="center"
+    android:textColor="@android:color/primary_text_light"
+    android:textSize="40sp" />
+
+  <ImageView
+    android:id="@+id/lockIcon"
+    android:layout_width="22dp"
+    android:layout_height="22dp"
+    android:layout_gravity="bottom|right"
+    android:background="@drawable/circle_shape_accent"
+    android:padding="3dp"
+    android:src="@drawable/ic_lock_white" />
+
+</merge>

@@ -1,0 +1,18 @@
+platform :ios, '9.0'
+use_frameworks!
+
+target 'Bonfire' do
+    pod 'RxSwift',    '~> 2.0'
+    pod 'RxCocoa',    '~> 2.0'
+    pod 'Firebase'
+    pod 'Firebase/Database'
+    pod 'Firebase/Auth'
+    pod 'Firebase/RemoteConfig'
+    pod 'Firebase/DynamicLinks'
+    pod 'GoogleSignIn'
+
+    target 'BonfireTests' do
+        pod 'RxTests',    '~> 2.0'
+    end
+end
+

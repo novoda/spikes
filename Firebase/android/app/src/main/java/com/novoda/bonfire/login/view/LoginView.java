@@ -2,7 +2,6 @@ package com.novoda.bonfire.login.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -18,7 +17,6 @@ public class LoginView extends LinearLayout implements LoginDisplayer {
     public LoginView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setOrientation(VERTICAL);
-        setGravity(Gravity.CENTER);
     }
 
     @Override

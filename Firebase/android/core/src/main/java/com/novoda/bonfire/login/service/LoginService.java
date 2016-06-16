@@ -4,7 +4,7 @@ import com.novoda.bonfire.login.data.model.Authentication;
 
 import rx.Observable;
 
-public interface LoginService<T> {
+public interface LoginService {
 
     Observable<Authentication> getAuthentication();
 

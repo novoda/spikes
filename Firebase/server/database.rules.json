@@ -1,17 +1,50 @@
 {
   "rules": {
     "channels": {
-      "global": {
-        ".read": "auth != null",
-        "$message": {
-          ".write": "!data.exists() && newData.exists()",
-          ".validate": "newData.hasChildren(['author', 'body', 'timestamp'])",
-          "author": {
-            ".validate": "newData.hasChildren(['id', 'name', 'photoUrl'])",
-            "id": {
-              ".validate": "newData.val() === auth.uid"
+      "$channel_id": {
+        ".read": "!root.child('owners').child($channel_id).exists() || root.child('owners').child($channel_id).child(auth.uid).exists()",
+        ".write": "(!root.child('owners').child($channel_id).exists() || root.child('owners').child($channel_id).child(auth.uid).exists()) && !data.exists()",
+        ".validate": "newData.hasChildren(['name', 'access']) && $channel_id.matches(/^([\u2190-\u21ff\u2300-\u23ff\u2600-\u26ff\u2700-\u27bf\u27f0-\u27ff\u2900-\u297f\u2b00-\u2bff]|\ud834[\udd00-\uddff]|(\ud83c[\udc00-\udc2f\udca0-\udcff\udd00-\uddff\udf00-\udfff]){2}|\ud83d[\udc00-\uddff\ude00-\ude4f\ude80-\udeff]|\ud83e[\udd00-\uddff])[\ufe00-\ufeff]{0,1}$/)"
+      }
+    },
+    "messages": {
+      "$channel_id": {
+        ".read": "!root.child('owners').child($channel_id).exists() || root.child('owners').child($channel_id).child(auth.uid).exists()",
+        "$message_id": {
+            ".write": "root.child('channels').child($channel_id).exists() && (!root.child('owners').child($channel_id).exists() || root.child('owners').child($channel_id).child(auth.uid).exists()) && !data.exists() && newData.exists()",
+            ".validate": "newData.hasChildren(['author', 'body', 'timestamp'])",
+            "author": {
+              ".validate": "newData.hasChildren(['id', 'name'])",
+              "id": {
+                ".validate": "newData.val() === auth.uid"
+              }
             }
           }
+      }
+    },
+    "public-channels-index": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "private-channels-index": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+    },
+    "owners": {
+      "$channel_id": {
+        ".read": "!root.child('owners').child($channel_id).exists() || root.child('owners').child($channel_id).child(auth.uid).exists()",
+        ".write": "!(root.child('channels').child($channel_id).exists() || root.child('owners').child($channel_id).exists()) || root.child('owners').child($channel_id).child(auth.uid).exists()",
+        ".validate": "$channel_id.matches(/^([\u2190-\u21ff\u2300-\u23ff\u2600-\u26ff\u2700-\u27bf\u27f0-\u27ff\u2900-\u297f\u2b00-\u2bff]|\ud834[\udd00-\uddff]|(\ud83c[\udc00-\udc2f\udca0-\udcff\udd00-\uddff\udf00-\udfff]){2}|\ud83d[\udc00-\uddff\ude00-\ude4f\ude80-\udeff]|\ud83e[\udd00-\uddff])[\ufe00-\ufeff]{0,1}$/)"
+      }
+    },
+    "users": {
+      ".read": "auth != null",
+      "$user_id": {
+        ".read": "true",
+        ".write": "auth.uid === $user_id",
+        ".validate": "newData.hasChildren(['id', 'name'])",
+        "id": {
+          ".validate": "newData.val() === auth.uid"
         }
       }
     }

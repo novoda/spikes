@@ -2,6 +2,7 @@ package com.novoda.bonfire.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 
 import com.novoda.bonfire.BaseActivity;
 import com.novoda.bonfire.Dependencies;
@@ -22,9 +23,16 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         LoginDisplayer loginDisplayer = (LoginDisplayer) findViewById(R.id.loginView);
-        navigator = new AndroidLoginNavigator(this, new AndroidNavigator(this));
-        presenter = new LoginPresenter(Dependencies.INSTANCE.getLoginService(), loginDisplayer, navigator);
+        LoginGoogleApiClient loginGoogleApiClient = new LoginGoogleApiClient(this);
+        loginGoogleApiClient.setupGoogleApiClient();
+        navigator = new AndroidLoginNavigator(this, loginGoogleApiClient, new AndroidNavigator(this));
+        presenter = new LoginPresenter(Dependencies.INSTANCE.getLoginService(),
+                                       loginDisplayer,
+                                       navigator,
+                                       Dependencies.INSTANCE.getErrorLogger(),
+                                       Dependencies.INSTANCE.getAnalytics());
     }
 
     @Override
