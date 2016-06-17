@@ -607,7 +607,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B63B37831CFD975A00142DC3 /* Build configuration list for PBXNativeTarget "BonfireTests" */;
 			buildPhases = (
-				560F650F37188E0CB0241991 /* 📦 Check Pods Manifest.lock */,
+				560F650F37188E0CB0241991 /* [CP] Check Pods Manifest.lock */,
 				CD3332CD9DD451B8DAB18B40 /* [CP] Check Pods Manifest.lock */,
 				B63B37781CFD975A00142DC3 /* Sources */,
 				B63B37791CFD975A00142DC3 /* Frameworks */,
@@ -631,7 +631,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B654B2801CE0C38000EEDE0A /* Build configuration list for PBXNativeTarget "Bonfire" */;
 			buildPhases = (
-				CB1A6F4AFBC0D9146FAB8E33 /* 📦 Check Pods Manifest.lock */,
+				CB1A6F4AFBC0D9146FAB8E33 /* [CP] Check Pods Manifest.lock */,
 				0D338B1A730B7D59B08CC1E1 /* [CP] Check Pods Manifest.lock */,
 				B654B25F1CE0C38000EEDE0A /* Sources */,
 				B654B2601CE0C38000EEDE0A /* Frameworks */,
@@ -817,14 +817,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bonfire-BonfireTests/Pods-Bonfire-BonfireTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		560F650F37188E0CB0241991 /* 📦 Check Pods Manifest.lock */ = {
+		560F650F37188E0CB0241991 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -861,14 +861,14 @@
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\ncd Bonfire\nswiftlint\ncd ..\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
 		};
-		CB1A6F4AFBC0D9146FAB8E33 /* 📦 Check Pods Manifest.lock */ = {
+		CB1A6F4AFBC0D9146FAB8E33 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1204,7 +1204,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Bonfire/Bonfire.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				INFOPLIST_FILE = Bonfire/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.novoda.bonfire;
@@ -1220,7 +1220,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Bonfire/Bonfire.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				INFOPLIST_FILE = Bonfire/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.novoda.bonfire;
