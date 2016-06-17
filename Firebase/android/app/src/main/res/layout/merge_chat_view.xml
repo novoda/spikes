@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
   <include layout="@layout/toolbar_inverted_layout" />
 
@@ -13,25 +12,24 @@
       android:id="@+id/messages_recycler_view"
       style="@style/Chat.RecyclerView"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      tools:context="com.novoda.bonfire.chat.ChatActivity" />
+      android:layout_height="match_parent" />
 
     <LinearLayout
-      style="@style/Chat.NewMessage"
+      style="@style/Chat.NewMessage.Layout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="bottom"
       android:layout_marginBottom="@dimen/chat_new_message_margin"
+      android:layout_marginEnd="@dimen/chat_new_message_margin"
       android:layout_marginStart="@dimen/chat_new_message_margin"
-      android:layout_marginEnd="@dimen/chat_new_message_margin">
+      android:orientation="horizontal">
 
       <EditText
         android:id="@+id/message_edit"
+        style="@style/Chat.NewMessage.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@android:color/transparent"
-        android:textSize="@dimen/chat_new_message_text_size" />
+        android:layout_weight="1" />
 
       <ImageView
         android:id="@+id/submit_button"

@@ -5,7 +5,8 @@
   <LinearLayout
     style="@style/Login.Layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <FrameLayout
       android:layout_width="match_parent"
@@ -16,6 +17,7 @@
         style="@style/Login.AppIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:src="@mipmap/ic_launcher" />
     </FrameLayout>
 
@@ -23,6 +25,10 @@
       style="@style/Login.Disclaimer"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginBottom="@dimen/login_disclaimer_bottom_margin"
+      android:layout_marginLeft="@dimen/login_disclaimer_horizontal_margin"
+      android:layout_marginRight="@dimen/login_disclaimer_horizontal_margin"
+      android:layout_marginTop="@dimen/login_disclaimer_top_margin"
       android:text="@string/login_disclaimer" />
 
     <com.google.android.gms.common.SignInButton

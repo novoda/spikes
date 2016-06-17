@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <style name="NewChannel"/>
+  <style name="NewChannel" />
 
   <style name="NewChannel.Layout">
     <item name="android:background">@color/background_grey</item>
     <item name="android:gravity">center_horizontal</item>
-    <item name="android:orientation">vertical</item>
   </style>
 
   <style name="NewChannel.PrivateSwitch">
@@ -18,7 +17,6 @@
   </style>
 
   <style name="NewChannel.Hint">
-    <item name="android:layout_marginTop">80dp</item>
     <item name="android:textColor">@color/text_grey</item>
     <item name="android:textSize">14sp</item>
   </style>
@@ -29,6 +27,6 @@
     <item name="android:gravity">center</item>
     <item name="android:maxLines">1</item>
     <item name="android:textSize">56sp</item>
-    <item name="android:layout_marginTop">16dp</item>
   </style>
+
 </resources>
