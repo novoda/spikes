@@ -1,32 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical"
-  android:paddingBottom="@dimen/activity_vertical_margin_large"
-  android:paddingLeft="@dimen/activity_horizontal_margin"
-  android:paddingRight="@dimen/activity_horizontal_margin"
-  android:paddingTop="@dimen/activity_vertical_margin_large"
-  tools:context="com.novoda.simonsays.highscores.HighscoresActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin_large"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin_large"
+    tools:context="com.novoda.simonsays.highscores.HighscoresActivity">
 
-  <TextView
-    android:id="@+id/highscores_congratulations_label"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/congratulations_you_got_the_new_highscore"
-    android:visibility="invisible" />
+    <TextView
+        android:id="@+id/highscores_high_score_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceLarge"
+        tools:text="Highest score is: 99" />
 
-  <TextView
-    android:id="@+id/highscores_your_score_label"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:text="Your score was 3" />
+    <TextView
+        android:id="@+id/highscores_your_score_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:textAppearance="?android:textAppearanceLarge"
+        tools:text="Your score was: 3" />
 
-  <TextView
-    android:id="@+id/highscores_high_score_label"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:text="Highest score is 99" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center">
+
+        <blink
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/highscores_congratulations_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/congratulations_you_got_the_new_highscore"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textColor="@color/green"
+                android:visibility="gone" />
+        </blink>
+    </LinearLayout>
 
 </LinearLayout>
