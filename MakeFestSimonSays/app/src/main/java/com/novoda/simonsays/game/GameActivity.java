@@ -57,7 +57,11 @@ public class GameActivity extends AppCompatActivity {
         int roundNumber = getIntent().getIntExtra(EXTRA_ROUND_NUMBER, 1);
 
         RoundCreator roundCreator = new RoundCreator(views);
-        currentRound = roundCreator.createRound(roundNumber);
+        if (savedInstanceState == null) {
+            currentRound = roundCreator.createRound(roundNumber);
+        } else {
+            currentRound = roundCreator.resumeRound(roundNumber);
+        }
 
         state = State.PAUSED;
         gameHandler = new Handler(getMainLooper());
@@ -93,10 +97,10 @@ public class GameActivity extends AppCompatActivity {
                 return;
             }
             final View view = viewSequence.next();
-            view.animate().alpha(1).setDuration(130).withEndAction(new Runnable() {
+            view.animate().alpha(1).setDuration(130).setStartDelay(0).withEndAction(new Runnable() {
                 @Override
                 public void run() {
-                    view.animate().alpha(0.33f).setDuration(50).start();
+                    view.animate().alpha(0.33f).setDuration(50).setStartDelay(100).start();
                 }
             }).start();
             gameHandler.postDelayed(this, roundSpeed);

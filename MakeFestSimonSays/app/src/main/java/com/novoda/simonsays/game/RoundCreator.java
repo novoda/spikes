@@ -1,16 +1,20 @@
 package com.novoda.simonsays.game;
 
+import static android.view.KeyEvent.KEYCODE_1;
+import static android.view.KeyEvent.KEYCODE_2;
+import static android.view.KeyEvent.KEYCODE_3;
+import static android.view.KeyEvent.KEYCODE_4;
+
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static android.view.KeyEvent.*;
-
 class RoundCreator {
-    private static final int[] keys = {KEYCODE_1, KEYCODE_2, KEYCODE_3, KEYCODE_4};
-    private static final List<Integer> sequence = new ArrayList<>();
+
+    private static final int[] KEYS = {KEYCODE_1, KEYCODE_2, KEYCODE_3, KEYCODE_4};
+    private static final List<Integer> SEQUENCE = new ArrayList<>();
 
     private final Random random = new Random();
 
@@ -22,11 +26,15 @@ class RoundCreator {
 
     public Round createRound(int roundNumber) {
         incrementSequence(roundNumber);
+        return resumeRound(roundNumber);
+    }
+
+    public Round resumeRound(int roundNumber) {
         List<View> orderedViews = new ArrayList<>();
         List<Integer> orderedKeys = new ArrayList<>();
-        for (Integer position : sequence) {
+        for (Integer position : SEQUENCE) {
             orderedViews.add(this.views.get(position));
-            orderedKeys.add(keys[position]);
+            orderedKeys.add(KEYS[position]);
         }
         Round.ViewSequence viewSequence = new Round.ViewSequence(orderedViews);
         Round.KeySequence keySequence = new Round.KeySequence(orderedKeys);
@@ -35,10 +43,10 @@ class RoundCreator {
 
     private void incrementSequence(int roundNumber) {
         if (roundNumber == 1) {
-            sequence.clear();
+            SEQUENCE.clear();
         }
         int randomPosition = random.nextInt(this.views.size());
-        sequence.add(randomPosition);
+        SEQUENCE.add(randomPosition);
     }
 
     private long getSpeedInMillis(int roundNumber) {
