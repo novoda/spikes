@@ -81,7 +81,7 @@ public class NewChannelActivityTest {
 
     @Test
     public void canCreatePublicChannel() throws Exception {
-        onView(withId(R.id.newChannelName)).perform(replaceText(VALID_CHANNEL_NAME), closeSoftKeyboard());
+        onView(withId(R.id.new_channel_name)).perform(replaceText(VALID_CHANNEL_NAME), closeSoftKeyboard());
         onView(withText(activity.getActivity().getString(R.string.create))).perform(click());
 
         ArgumentCaptor<Channel> channelArgumentCaptor = ArgumentCaptor.forClass(Channel.class);
@@ -92,8 +92,8 @@ public class NewChannelActivityTest {
 
     @Test
     public void canCreatePrivateChannel() throws Exception {
-        onView(withId(R.id.privateChannelSwitch)).perform(click());
-        onView(withId(R.id.newChannelName)).perform(replaceText(VALID_CHANNEL_NAME), closeSoftKeyboard());
+        onView(withId(R.id.private_channel_switch)).perform(click());
+        onView(withId(R.id.new_channel_name)).perform(replaceText(VALID_CHANNEL_NAME), closeSoftKeyboard());
         onView(withText(activity.getActivity().getString(R.string.create))).perform(click());
 
         ArgumentCaptor<Channel> channelArgumentCaptor = ArgumentCaptor.forClass(Channel.class);
@@ -104,7 +104,7 @@ public class NewChannelActivityTest {
 
     @Test
     public void channelOpensAfterBeingCreated() throws Exception {
-        onView(withId(R.id.newChannelName)).perform(replaceText(VALID_CHANNEL_NAME), closeSoftKeyboard());
+        onView(withId(R.id.new_channel_name)).perform(replaceText(VALID_CHANNEL_NAME), closeSoftKeyboard());
         onView(withText(activity.getActivity().getString(R.string.create))).perform(click());
 
         onView(allOf(withText(equalToIgnoringCase(VALID_CHANNEL_NAME)), isDescendantOfA(withId(R.id.toolbar)))).check(matches(isDisplayed()));
@@ -112,8 +112,8 @@ public class NewChannelActivityTest {
 
     @Test
     public void whenChannelNameIsTextThenAnErrorIsShown() throws Exception {
-        onView(withId(R.id.newChannelName)).perform(typeText("name"), closeSoftKeyboard());
+        onView(withId(R.id.new_channel_name)).perform(typeText("name"), closeSoftKeyboard());
 
-        onView(withId(R.id.newChannelName)).check(matches(hasErrorText(activity.getActivity().getString(R.string.only_single_emoji_allowed))));
+        onView(withId(R.id.new_channel_name)).check(matches(hasErrorText(activity.getActivity().getString(R.string.only_single_emoji_allowed))));
     }
 }

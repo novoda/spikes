@@ -6,7 +6,7 @@
   <include layout="@layout/toolbar_non_elelvated_layout" />
 
   <Switch
-    android:id="@+id/privateChannelSwitch"
+    android:id="@+id/private_channel_switch"
     style="@style/NewChannel.PrivateSwitch"
     android:layout_width="match_parent"
     android:layout_height="@dimen/new_channel_switch_height"
@@ -24,7 +24,7 @@
       android:text="@string/channel_name" />
 
     <EditText
-      android:id="@+id/newChannelName"
+      android:id="@+id/new_channel_name"
       style="@style/NewChannel.Name"
       android:layout_width="@dimen/new_channel_name_width"
       android:layout_height="@dimen/new_channel_name_width"

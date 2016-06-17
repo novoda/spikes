@@ -23,8 +23,8 @@ public class ChannelView extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_channel_item_view, this);
-        title = Views.findById(this, R.id.channelTitle);
-        lockIcon = Views.findById(this, R.id.lockIcon);
+        title = Views.findById(this, R.id.channel_title);
+        lockIcon = Views.findById(this, R.id.lock_icon);
     }
 
     @Override

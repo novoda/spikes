@@ -31,7 +31,7 @@ public class UsersActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users);
-        UsersDisplayer usersDisplayer = (UsersDisplayer) findViewById(R.id.usersView);
+        UsersDisplayer usersDisplayer = (UsersDisplayer) findViewById(R.id.users_view);
         Channel channel = new Channel(
                 getIntent().getStringExtra(NAME_EXTRA),
                 Channel.Access.valueOf(getIntent().getStringExtra(ACCESS_EXTRA))

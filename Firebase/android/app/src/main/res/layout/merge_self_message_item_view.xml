@@ -7,14 +7,14 @@
     android:layout_height="wrap_content">
 
     <TextView
-      android:id="@+id/messageAuthorName"
+      android:id="@+id/message_author_name"
       style="@style/Chat.Message.Author"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:visibility="gone" />
 
     <TextView
-      android:id="@+id/messageTime"
+      android:id="@+id/message_time"
       style="@style/Chat.Message.Time"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content" />
@@ -27,20 +27,20 @@
     android:paddingTop="@dimen/chat_message_body_padding">
 
     <ImageView
-      android:id="@+id/messageAuthorImage"
+      android:id="@+id/message_author_image"
       android:layout_width="@dimen/chat_message_author_image"
       android:layout_height="@dimen/chat_message_author_image"
       android:layout_alignParentEnd="true"
       android:scaleType="fitCenter" />
 
     <TextView
-      android:id="@+id/messageBody"
+      android:id="@+id/message_body"
       style="@style/Chat.Message.Body.Self"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_alignTop="@id/messageAuthorImage"
+      android:layout_alignTop="@id/message_author_image"
       android:layout_marginEnd="@dimen/chat_message_body_margin"
-      android:layout_toStartOf="@id/messageAuthorImage" />
+      android:layout_toStartOf="@id/message_author_image" />
 
   </RelativeLayout>
 

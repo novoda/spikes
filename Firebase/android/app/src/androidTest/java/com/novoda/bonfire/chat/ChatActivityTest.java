@@ -93,9 +93,9 @@ public class ChatActivityTest {
         givenChatIsEmpty();
         launchChatActivityWithAccess(Access.PUBLIC);
 
-        onView(withId(R.id.submitButton)).check(matches(not(isEnabled())));
-        onView(withId(R.id.messageEdit)).perform(typeText("random message text"), closeSoftKeyboard(), clearText());
-        onView(withId(R.id.submitButton)).check(matches(not(isEnabled())));
+        onView(withId(R.id.submit_button)).check(matches(not(isEnabled())));
+        onView(withId(R.id.message_edit)).perform(typeText("random message text"), closeSoftKeyboard(), clearText());
+        onView(withId(R.id.submit_button)).check(matches(not(isEnabled())));
     }
 
     @Test
@@ -103,8 +103,8 @@ public class ChatActivityTest {
         givenChatIsEmpty();
         launchChatActivityWithAccess(Access.PRIVATE);
 
-        onView(withId(R.id.messageEdit)).perform(typeText("not so random message text"), closeSoftKeyboard());
-        onView(withId(R.id.submitButton)).check(matches(isEnabled()));
+        onView(withId(R.id.message_edit)).perform(typeText("not so random message text"), closeSoftKeyboard());
+        onView(withId(R.id.submit_button)).check(matches(isEnabled()));
     }
 
     private void givenChatIsEmpty() {
@@ -148,12 +148,12 @@ public class ChatActivityTest {
     }
 
     private void assertThatMessageFromUserIsShownInChat(String userName, String message) {
-        onView(withId(R.id.messageAuthorImage)).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.messageBody), withText(equalToIgnoringCase(message)))).check(matches(isDisplayed()));
+        onView(withId(R.id.message_author_image)).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.message_body), withText(equalToIgnoringCase(message)))).check(matches(isDisplayed()));
     }
 
     private void submitMessage(String message) {
-        onView(withId(R.id.messageEdit)).perform(typeText(message), closeSoftKeyboard());
-        onView(withId(R.id.submitButton)).perform(click());
+        onView(withId(R.id.message_edit)).perform(typeText(message), closeSoftKeyboard());
+        onView(withId(R.id.submit_button)).perform(click());
     }
 }

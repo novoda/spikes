@@ -19,7 +19,7 @@ public class NewChannelActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_channel);
         Dependencies dependencies = Dependencies.INSTANCE;
-        newChannelPresenter = new NewChannelPresenter((NewChannelDisplayer) findViewById(R.id.createChannelView),
+        newChannelPresenter = new NewChannelPresenter((NewChannelDisplayer) findViewById(R.id.create_channel_view),
                                                       dependencies.getChannelService(),
                                                       dependencies.getLoginService(),
                                                       new AndroidNavigator(this),
