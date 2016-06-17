@@ -164,6 +164,12 @@ public class GameActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        gameHandler.removeCallbacks(sequenceShower);
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         gameHandler.removeCallbacks(sequenceShower);
