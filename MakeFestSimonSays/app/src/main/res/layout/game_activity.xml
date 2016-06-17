@@ -12,9 +12,12 @@
 
     <TextView
         android:id="@+id/game_label_score"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/score_x" />
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:gravity="right"
+        android:text="@string/score_x"
+        android:textAppearance="?android:textAppearanceMedium" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -29,69 +32,55 @@
 
         <TextView
             android:id="@+id/game_button_a"
+            style="@style/Simon.Green.Game"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/center"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@id/center"
-            android:alpha="0.33"
-            android:background="@color/green"
-            android:gravity="center"
-            android:text="@string/a"
-            android:textColor="@color/black"
-            android:textSize="@dimen/button_text_size" />
+            android:text="@string/a" />
 
         <TextView
             android:id="@+id/game_button_b"
+            style="@style/Simon.Blue.Game"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/center"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@id/center"
-            android:alpha="0.33"
-            android:background="@color/blue"
-            android:gravity="center"
-            android:text="@string/b"
-            android:textColor="@color/white"
-            android:textSize="@dimen/button_text_size" />
+            android:text="@string/b" />
 
         <TextView
             android:id="@+id/game_button_c"
+            style="@style/Simon.Yellow.Game"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/center"
             android:layout_toLeftOf="@id/center"
-            android:alpha="0.33"
-            android:background="@color/yellow"
-            android:gravity="center"
-            android:text="@string/c"
-            android:textColor="@color/black"
-            android:textSize="@dimen/button_text_size" />
+            android:text="@string/c" />
 
         <TextView
             android:id="@+id/game_button_d"
+            style="@style/Simon.Red.Game"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_below="@id/center"
             android:layout_toRightOf="@id/center"
-            android:alpha="0.33"
-            android:background="@color/red"
-            android:gravity="center"
-            android:text="@string/d"
-            android:textColor="@color/white"
-            android:textSize="@dimen/button_text_size" />
+            android:text="@string/d" />
     </RelativeLayout>
 
     <TextView
         android:id="@+id/game_label_instructions"
         android:layout_width="wrap_content"
         android:layout_height="200dp"
-        android:text="@string/ready_to_start_3_2_1" />
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/ready_to_start_3_2_1"
+        android:textAppearance="?android:textAppearanceMedium" />
 
 </LinearLayout>
