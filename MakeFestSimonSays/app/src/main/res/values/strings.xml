@@ -1,14 +1,15 @@
 <resources>
-  <string name="app_name">MakeFestSimonSays</string>
-  <string name="new_game">New Game</string>
-  <string name="highscores">Highscores</string>
-  <string name="simon_says">Simon Says</string>
-  <string name="a">1</string>
-  <string name="b">2</string>
-  <string name="c">3</string>
-  <string name="d">4</string>
-  <string name="score_x">Score %1$s</string>
-  <string name="your_score_was_x">Your score was %1$s</string>
-  <string name="highscore_is_x">Highscore is %1$s</string>
-  <string name="congratulations_you_got_the_new_highscore">Congratulations you got the new highscore!</string>
+    <string name="app_name">MakeFestSimonSays</string>
+    <string name="new_game">New Game</string>
+    <string name="highscores">Highscores</string>
+    <string name="simon_says">The Simon Says Game!</string>
+    <string name="made_with_heart_by_novoda">Made with &#129302; by Novoda</string>
+    <string name="a">1</string>
+    <string name="b">2</string>
+    <string name="c">3</string>
+    <string name="d">4</string>
+    <string name="score_x">Score %1$s</string>
+    <string name="your_score_was_x">Your score was %1$s</string>
+    <string name="highscore_is_x">Highscore is %1$s</string>
+    <string name="congratulations_you_got_the_new_highscore">Congratulations you got the new highscore!</string>
 </resources>

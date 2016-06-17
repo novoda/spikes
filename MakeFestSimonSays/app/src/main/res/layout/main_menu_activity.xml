@@ -1,31 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical"
-  android:paddingBottom="@dimen/activity_vertical_margin"
-  android:paddingLeft="@dimen/activity_horizontal_margin"
-  android:paddingRight="@dimen/activity_horizontal_margin"
-  android:paddingTop="@dimen/activity_vertical_margin"
-  tools:context=".mainmenu.MainMenuActivity">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".mainmenu.MainMenuActivity">
 
-  <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/simon_says" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/simon_says" />
 
-  <android.support.v7.widget.AppCompatButton
-    android:id="@+id/main_menu_button_new_game"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/new_game" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
-  <android.support.v7.widget.AppCompatButton
-    android:id="@+id/main_menu_button_highscores"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/highscores" />
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/main_menu_button_new_game"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/new_game" />
 
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/main_menu_button_highscores"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/highscores" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/made_with_heart_by_novoda" />
+
+    </LinearLayout>
+
+</RelativeLayout>
