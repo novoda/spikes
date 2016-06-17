@@ -37,6 +37,7 @@ class RoundCreator {
 
         Round.ViewSequence viewSequence = new Round.ViewSequence(orderedViews);
         Round.KeySequence keySequence = new Round.KeySequence(orderedKeys);
-        return new Round(roundNumber, viewSequence, keySequence);
+        long speedInMillis = 3000 / roundNumber;
+        return new Round(roundNumber, viewSequence, keySequence, speedInMillis);
     }
 }
