@@ -2,35 +2,35 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
   <LinearLayout
-    style="@style/Welcome.Layout"
+    style="@style/Welcome.Sender.Layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <ImageView
       android:id="@+id/user_avatar"
-      style="@style/Welcome.SenderImage"
+      style="@style/Welcome.Sender.Image"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/welcome_user_avatar_top_margin" />
 
     <TextView
       android:id="@+id/welcome_message_view"
-      style="@style/Welcome.Message"
+      style="@style/Welcome.Sender.Message"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/welcome_message_margin"
-      android:layout_marginBottom="86dp" />
+      android:layout_marginBottom="@dimen/welcome_sender_message_bottom_margin"
+      android:layout_marginTop="@dimen/welcome_sender_message_top_margin" />
   </LinearLayout>
 
   <TextView
-    style="@style/Welcome.Message.Static"
+    style="@style/Welcome.Message"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/welcome_message_top_margin"
     android:layout_marginBottom="@dimen/welcome_message_bottom_margin"
     android:layout_marginLeft="@dimen/welcome_horizontal_margin"
     android:layout_marginRight="@dimen/welcome_horizontal_margin"
+    android:layout_marginTop="@dimen/welcome_message_top_margin"
     android:text="@string/enjoy_the_awesomeness" />
 
   <TextView
