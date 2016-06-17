@@ -21,22 +21,27 @@ class RoundCreator {
     }
 
     public Round createRound(int roundNumber) {
-        if (roundNumber == 1) {
-            sequence.clear();
-        }
+        incrementSequence(roundNumber);
         List<View> orderedViews = new ArrayList<>();
         List<Integer> orderedKeys = new ArrayList<>();
         for (Integer position : sequence) {
             orderedViews.add(this.views.get(position));
             orderedKeys.add(keys[position]);
         }
-        int randomPosition = random.nextInt(this.views.size());
-        sequence.add(randomPosition);
-        orderedViews.add(this.views.get(randomPosition));
-        orderedKeys.add(keys[randomPosition]);
-
         Round.ViewSequence viewSequence = new Round.ViewSequence(orderedViews);
         Round.KeySequence keySequence = new Round.KeySequence(orderedKeys);
-        return new Round(roundNumber, viewSequence, keySequence);
+        return new Round(roundNumber, viewSequence, keySequence, getSpeedInMillis(roundNumber));
+    }
+
+    private void incrementSequence(int roundNumber) {
+        if (roundNumber == 1) {
+            sequence.clear();
+        }
+        int randomPosition = random.nextInt(this.views.size());
+        sequence.add(randomPosition);
+    }
+
+    private long getSpeedInMillis(int roundNumber) {
+        return (long) (3000 / roundNumber);
     }
 }

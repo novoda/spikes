@@ -4,18 +4,19 @@ import android.view.View;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class Round {
 
     private final int level;
     private final ViewSequence viewSequence;
     private final KeySequence keySequence;
+    private long speed;
 
-    public Round(int level, ViewSequence viewSequence, KeySequence keySequence) {
+    public Round(int level, ViewSequence viewSequence, KeySequence keySequence, long speed) {
         this.level = level;
         this.viewSequence = viewSequence;
         this.keySequence = keySequence;
+        this.speed = speed;
     }
 
     public ViewSequence getViewSequence() {
@@ -35,7 +36,7 @@ public class Round {
     }
 
     public long getSpeed() {
-        return TimeUnit.SECONDS.toMillis(2);
+        return speed;
     }
 
     public static class ViewSequence implements Iterable<View> {
