@@ -3,23 +3,40 @@
 
   <style name="Welcome" />
 
-  <style name="Welcome.SenderImage">
+  <style name="Welcome.View">
+    <item name="android:background">@color/colorPrimary</item>
+  </style>
+
+  <style name="Welcome.Sender" />
+
+  <style name="Welcome.Sender.Layout">
+    <item name="android:background">@drawable/bubble_shape_background</item>
+    <item name="android:gravity">center</item>
+  </style>
+
+  <style name="Welcome.Sender.Image">
     <item name="android:minHeight">86dp</item>
     <item name="android:minWidth">86dp</item>
     <item name="android:scaleType">fitCenter</item>
   </style>
 
-  <style name="Welcome.Message">
+  <style name="Welcome.Sender.Message">
     <item name="android:gravity">center</item>
     <item name="android:textColor">@color/text_black</item>
     <item name="android:textSize">16sp</item>
   </style>
 
+  <style name="Welcome.Message">
+    <item name="android:textColor">@android:color/white</item>
+    <item name="android:gravity">center</item>
+    <item name="android:textSize">16sp</item>
+  </style>
+
   <style name="Welcome.ProceedButton">
-    <item name="android:background">@drawable/oval_shape_primary</item>
+    <item name="android:background">@drawable/oval_shape_white</item>
     <item name="android:fontFamily">sans-serif-medium</item>
     <item name="android:gravity">center</item>
-    <item name="android:textColor">@android:color/white</item>
+    <item name="android:textColor">@color/text_black</item>
     <item name="android:textSize">18sp</item>
     <item name="android:paddingBottom">14dp</item>
     <item name="android:paddingTop">14dp</item>
