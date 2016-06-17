@@ -97,7 +97,7 @@ public class GameActivity extends AppCompatActivity {
             view.animate().alpha(1).setDuration(130).withEndAction(new Runnable() {
                 @Override
                 public void run() {
-                    view.animate().alpha(0.25f).setDuration(50).start();
+                    view.animate().alpha(0.33f).setDuration(50).start();
                 }
             }).start();
             gameHandler.postDelayed(this, roundSpeed);
@@ -141,6 +141,7 @@ public class GameActivity extends AppCompatActivity {
                     gameHandler.removeCallbacks(sequenceShower);
                     startActivity(intent);
                     finish();
+                    overridePendingTransition(0, 0);
                 }
 
             } else {
