@@ -66,7 +66,7 @@ class BubbleBackgroundView: UIView {
         let visibleBigBubbleFrame = CGRectIntersection(bigBubble.frame, self.frame)
 
         containerView.addEqualWidthConstraint(withView: self, withMultiplier: 0.6)
-        containerView.addAspectRatio(withMultiplier: 1.0)
+        containerView.addAspectRatioConstraint(withMultiplier: 1.0)
         containerView.center = CGPointMake(visibleBigBubbleFrame.midX, visibleBigBubbleFrame.midY * 0.9)
     }
 

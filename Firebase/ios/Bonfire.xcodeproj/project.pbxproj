@@ -607,12 +607,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B63B37831CFD975A00142DC3 /* Build configuration list for PBXNativeTarget "BonfireTests" */;
 			buildPhases = (
+				560F650F37188E0CB0241991 /* 📦 Check Pods Manifest.lock */,
 				CD3332CD9DD451B8DAB18B40 /* [CP] Check Pods Manifest.lock */,
 				B63B37781CFD975A00142DC3 /* Sources */,
 				B63B37791CFD975A00142DC3 /* Frameworks */,
 				B63B377A1CFD975A00142DC3 /* Resources */,
 				3BD164270703B37BA1CBB8BF /* [CP] Embed Pods Frameworks */,
 				DBF248069E025D350E134FCF /* [CP] Copy Pods Resources */,
+				2D00BEBD74CA791CC5AF2E46 /* 📦 Embed Pods Frameworks */,
+				3D8A7E4E796D2A0AF189B3B6 /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -628,6 +631,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B654B2801CE0C38000EEDE0A /* Build configuration list for PBXNativeTarget "Bonfire" */;
 			buildPhases = (
+				CB1A6F4AFBC0D9146FAB8E33 /* 📦 Check Pods Manifest.lock */,
 				0D338B1A730B7D59B08CC1E1 /* [CP] Check Pods Manifest.lock */,
 				B654B25F1CE0C38000EEDE0A /* Sources */,
 				B654B2601CE0C38000EEDE0A /* Frameworks */,
@@ -635,6 +639,8 @@
 				2B107E072EC8FF16E08F96F0 /* [CP] Embed Pods Frameworks */,
 				95A84718793C98A132AECDD9 /* [CP] Copy Pods Resources */,
 				B65A74021D071062000A052B /* Run SwiftLint */,
+				1F74391910F2A043D19B990F /* 📦 Embed Pods Frameworks */,
+				E2818FBEDF2A5D44AC873D8A /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -736,6 +742,21 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		1F74391910F2A043D19B990F /* 📦 Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bonfire/Pods-Bonfire-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		2B107E072EC8FF16E08F96F0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -751,6 +772,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bonfire/Pods-Bonfire-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		2D00BEBD74CA791CC5AF2E46 /* 📦 Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bonfire-BonfireTests/Pods-Bonfire-BonfireTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		3BD164270703B37BA1CBB8BF /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -764,6 +800,36 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bonfire-BonfireTests/Pods-Bonfire-BonfireTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3D8A7E4E796D2A0AF189B3B6 /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bonfire-BonfireTests/Pods-Bonfire-BonfireTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		560F650F37188E0CB0241991 /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		95A84718793C98A132AECDD9 /* [CP] Copy Pods Resources */ = {
@@ -795,6 +861,21 @@
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\ncd Bonfire\nswiftlint\ncd ..\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
 		};
+		CB1A6F4AFBC0D9146FAB8E33 /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		CD3332CD9DD451B8DAB18B40 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -823,6 +904,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bonfire-BonfireTests/Pods-Bonfire-BonfireTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E2818FBEDF2A5D44AC873D8A /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bonfire/Pods-Bonfire-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
