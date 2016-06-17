@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <dimen name="channel_fab_margin">16dp</dimen>
+  <dimen name="channel_grid_padding">8dp</dimen>
+  <dimen name="channel_item_lock_icon_size">22dp</dimen>
+  <dimen name="channel_item_padding">8dp</dimen>
+
+</resources>

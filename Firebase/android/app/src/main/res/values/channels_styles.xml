@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <style name="Channels" />
+
+  <style name="Channels.Name">
+    <item name="android:background">@drawable/circle_shape_white</item>
+    <item name="android:gravity">center</item>
+    <item name="android:textColor">@color/text_black</item>
+    <item name="android:textSize">40sp</item>
+  </style>
+
+  <style name="Channels.RecyclerView">
+    <item name="android:background">@color/background_grey</item>
+    <item name="android:clipToPadding">false</item>
+    <item name="android:columnWidth">86dp</item>
+    <item name="android:paddingBottom">43dp</item>
+  </style>
+
+  <style name="Channels.LockIcon">
+    <item name="android:background">@drawable/circle_shape_accent</item>
+    <item name="android:padding">3dp</item>
+  </style>
+
+</resources>

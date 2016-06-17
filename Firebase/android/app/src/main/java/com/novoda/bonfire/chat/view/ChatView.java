@@ -42,9 +42,9 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
     protected void onFinishInflate() {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_chat_view, this);
-        messageView = Views.findById(this, R.id.messageEdit);
-        submitButton = Views.findById(this, R.id.submitButton);
-        recyclerView = Views.findById(this, R.id.messagesRecyclerView);
+        messageView = Views.findById(this, R.id.message_edit);
+        submitButton = Views.findById(this, R.id.submit_button);
+        recyclerView = Views.findById(this, R.id.messages_recycler_view);
         recyclerView.addItemDecoration(new ChatItemDecoration());
         toolbar = Views.findById(this, R.id.toolbar);
         toolbar.inflateMenu(R.menu.chat_menu);
@@ -142,8 +142,8 @@ public class ChatView extends LinearLayout implements ChatDisplayer {
 
     private class ChatItemDecoration extends RecyclerView.ItemDecoration {
 
-        private final int horizontalMargin = getResources().getDimensionPixelOffset(R.dimen.list_item_horizontal_margin);
-        private final int verticalMargin = getResources().getDimensionPixelOffset(R.dimen.list_item_vertical_margin);
+        private final int horizontalMargin = getResources().getDimensionPixelOffset(R.dimen.chat_item_horizontal_margin);
+        private final int verticalMargin = getResources().getDimensionPixelOffset(R.dimen.chat_item_vertical_margin);
 
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {

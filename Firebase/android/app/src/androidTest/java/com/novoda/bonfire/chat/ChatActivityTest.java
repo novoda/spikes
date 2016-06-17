@@ -34,7 +34,8 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.*;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -92,9 +93,9 @@ public class ChatActivityTest {
         givenChatIsEmpty();
         launchChatActivityWithAccess(Access.PUBLIC);
 
-        onView(withId(R.id.submitButton)).check(matches(not(isEnabled())));
-        onView(withId(R.id.messageEdit)).perform(typeText("random message text"), closeSoftKeyboard(), clearText());
-        onView(withId(R.id.submitButton)).check(matches(not(isEnabled())));
+        onView(withId(R.id.submit_button)).check(matches(not(isEnabled())));
+        onView(withId(R.id.message_edit)).perform(typeText("random message text"), closeSoftKeyboard(), clearText());
+        onView(withId(R.id.submit_button)).check(matches(not(isEnabled())));
     }
 
     @Test
@@ -102,8 +103,8 @@ public class ChatActivityTest {
         givenChatIsEmpty();
         launchChatActivityWithAccess(Access.PRIVATE);
 
-        onView(withId(R.id.messageEdit)).perform(typeText("not so random message text"), closeSoftKeyboard());
-        onView(withId(R.id.submitButton)).check(matches(isEnabled()));
+        onView(withId(R.id.message_edit)).perform(typeText("not so random message text"), closeSoftKeyboard());
+        onView(withId(R.id.submit_button)).check(matches(isEnabled()));
     }
 
     private void givenChatIsEmpty() {
@@ -131,7 +132,9 @@ public class ChatActivityTest {
         doAnswer(new Answer<Observable<DatabaseResult<Chat>>>() {
             @Override
             public Observable<DatabaseResult<Chat>> answer(InvocationOnMock invocation) throws Throwable {
-                return subject.asObservable().observeOn(AndroidSchedulers.mainThread());
+                return subject.asObservable()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .startWith(CHAT);
             }
         }).when(chatService).getChat(any(Channel.class));
         doAnswer(new Answer() {
@@ -145,13 +148,12 @@ public class ChatActivityTest {
     }
 
     private void assertThatMessageFromUserIsShownInChat(String userName, String message) {
-        onView(withId(R.id.messageAuthorImage)).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.messageAuthorName), withText(userName))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.messageBody), withText(equalToIgnoringCase(message)))).check(matches(isDisplayed()));
+        onView(withId(R.id.message_author_image)).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.message_body), withText(equalToIgnoringCase(message)))).check(matches(isDisplayed()));
     }
 
     private void submitMessage(String message) {
-        onView(withId(R.id.messageEdit)).perform(typeText(message), closeSoftKeyboard());
-        onView(withId(R.id.submitButton)).perform(click());
+        onView(withId(R.id.message_edit)).perform(typeText(message), closeSoftKeyboard());
+        onView(withId(R.id.submit_button)).perform(click());
     }
 }

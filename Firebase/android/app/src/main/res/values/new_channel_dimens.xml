@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <dimen name="new_channel_name_width">100dp</dimen>
+  <dimen name="new_channel_switch_height">48dp</dimen>
+  <dimen name="new_channel_hint_top_margin">80dp</dimen>
+  <dimen name="new_channel_name_top_margin">16dp</dimen>
+
+</resources>

@@ -22,7 +22,7 @@ public class WelcomeActivity extends BaseActivity {
         String sender = getIntent().getData().getQueryParameter(FirebaseDynamicLinkFactory.SENDER);
         welcomePresenter = new WelcomePresenter(
                 Dependencies.INSTANCE.getUserService(),
-                (WelcomeDisplayer) findViewById(R.id.welcomeView),
+                (WelcomeDisplayer) findViewById(R.id.welcome_view),
                 new AndroidNavigator(this),
                 Dependencies.INSTANCE.getAnalytics(),
                 sender

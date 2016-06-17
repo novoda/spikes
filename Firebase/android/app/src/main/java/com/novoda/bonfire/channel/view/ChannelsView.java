@@ -37,7 +37,7 @@ public class ChannelsView extends LinearLayout implements ChannelsDisplayer {
         RecyclerView channels = Views.findById(this, R.id.channels);
         channels.addItemDecoration(new ChannelItemDecoration());
         channels.setAdapter(channelsAdapter);
-        newChannelFab = Views.findById(this, R.id.newChannelFab);
+        newChannelFab = Views.findById(this, R.id.new_channel_fab);
         toolbar = Views.findById(this, R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
         toolbar.inflateMenu(R.menu.channels_menu);
@@ -89,7 +89,7 @@ public class ChannelsView extends LinearLayout implements ChannelsDisplayer {
     private class ChannelItemDecoration extends RecyclerView.ItemDecoration {
 
         private final int itemPaddingInPixel = getResources().getDimensionPixelOffset(R.dimen.channel_item_padding);
-        private final int gridPaddingInPixel = getResources().getDimensionPixelOffset(R.dimen.list_item_vertical_margin);
+        private final int gridPaddingInPixel = getResources().getDimensionPixelOffset(R.dimen.channel_grid_padding);
 
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {

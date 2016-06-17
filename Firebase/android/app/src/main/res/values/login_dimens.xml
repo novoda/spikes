@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <dimen name="login_icon_layout_height">260dp</dimen>
+  <dimen name="login_app_icon_size">86dp</dimen>
+  <dimen name="login_disclaimer_horizontal_margin">16dp</dimen>
+  <dimen name="login_sign_in_button_margin">@dimen/login_disclaimer_horizontal_margin</dimen>
+  <dimen name="login_disclaimer_top_margin">48dp</dimen>
+  <dimen name="login_disclaimer_bottom_margin">24dp</dimen>
+
+</resources>

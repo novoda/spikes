@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <include layout="@layout/toolbar_non_elevated_layout" />
+
+  <Switch
+    android:id="@+id/private_channel_switch"
+    style="@style/NewChannel.PrivateSwitch"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/new_channel_switch_height"
+    android:text="@string/private_channel" />
+
+  <LinearLayout
+    style="@style/NewChannel.Layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+      style="@style/NewChannel.Hint"
+      android:layout_width="@dimen/new_channel_name_width"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/new_channel_hint_top_margin"
+      android:text="@string/channel_name" />
+
+    <EditText
+      android:id="@+id/new_channel_name"
+      style="@style/NewChannel.Name"
+      android:layout_width="@dimen/new_channel_name_width"
+      android:layout_height="@dimen/new_channel_name_width"
+      android:layout_marginTop="@dimen/new_channel_name_top_margin"
+      android:hint="@string/insert_channel_name" />
+
+  </LinearLayout>
+
+</merge>

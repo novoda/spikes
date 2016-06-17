@@ -31,9 +31,9 @@ public class WelcomeView extends LinearLayout implements WelcomeDisplayer {
     protected void onFinishInflate() {
         super.onFinishInflate();
         inflate(getContext(), R.layout.merge_welcome_view, this);
-        welcomeMessage = Views.findById(this, R.id.welcomeMessageView);
-        userAvatar = Views.findById(this, R.id.userAvatar);
-        proceedButton = Views.findById(this, R.id.proceedButton);
+        welcomeMessage = Views.findById(this, R.id.welcome_message_view);
+        userAvatar = Views.findById(this, R.id.user_avatar);
+        proceedButton = Views.findById(this, R.id.proceed_button);
     }
 
     @Override

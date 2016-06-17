@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <style name="Login" />
+
+  <style name="Login.Layout">
+    <item name="android:background">@color/colorPrimary</item>
+    <item name="android:gravity">top</item>
+  </style>
+
+  <style name="Login.Disclaimer">
+    <item name="android:gravity">center</item>
+    <item name="android:textColor">@color/white</item>
+    <item name="android:textSize">14sp</item>
+  </style>
+
+  <style name="Login.AppIcon">
+    <item name="android:minHeight">@dimen/login_app_icon_size</item>
+    <item name="android:minWidth">@dimen/login_app_icon_size</item>
+    <item name="android:scaleType">fitCenter</item>
+  </style>
+
+</resources>

@@ -43,6 +43,7 @@ import static org.mockito.Mockito.when;
 public class NewChannelActivityTest {
 
     private static final String VALID_CHANNEL_NAME = "\uD83C\uDDEB\uD83C\uDDF7"; // French flag
+    private static final User AUTHENTICATED_USER = new User("user_id", "Test User", "http://invalid.url");
 
     @Rule
     public ActivityTestRule<NewChannelActivity> activity = new ActivityTestRule<>(NewChannelActivity.class, false, false);
@@ -60,7 +61,7 @@ public class NewChannelActivityTest {
         ChatService chatService = Mockito.mock(ChatService.class);
         LoginService loginService = Mockito.mock(LoginService.class);
 
-        when(loginService.getAuthentication()).thenReturn(Observable.just(Mockito.mock(Authentication.class)));
+        when(loginService.getAuthentication()).thenReturn(Observable.just(new Authentication(AUTHENTICATED_USER)));
         when(chatService.getChat(any(Channel.class))).thenReturn(Observable.just(new DatabaseResult<>(new Chat(new ArrayList<Message>()))));
         when(channelService.createPublicChannel(any(Channel.class))).thenAnswer(observableWithCreatedChannel);
         when(channelService.createPrivateChannel(any(Channel.class), any(User.class))).thenAnswer(observableWithCreatedChannel);
@@ -75,13 +76,13 @@ public class NewChannelActivityTest {
 
     @Test
     public void channelWithEmptyNameCannotBeCreated() throws Exception {
-        onView(withId(R.id.createButton)).check(matches(not(isEnabled())));
+        onView(withText(activity.getActivity().getString(R.string.create))).check(matches(not(isEnabled())));
     }
 
     @Test
     public void canCreatePublicChannel() throws Exception {
-        onView(withId(R.id.newChannelName)).perform(replaceText(VALID_CHANNEL_NAME), closeSoftKeyboard());
-        onView(withId(R.id.createButton)).perform(click());
+        onView(withId(R.id.new_channel_name)).perform(replaceText(VALID_CHANNEL_NAME), closeSoftKeyboard());
+        onView(withText(activity.getActivity().getString(R.string.create))).perform(click());
 
         ArgumentCaptor<Channel> channelArgumentCaptor = ArgumentCaptor.forClass(Channel.class);
         verify(channelService).createPublicChannel(channelArgumentCaptor.capture());
@@ -91,9 +92,9 @@ public class NewChannelActivityTest {
 
     @Test
     public void canCreatePrivateChannel() throws Exception {
-        onView(withId(R.id.privateChannelSwitch)).perform(click());
-        onView(withId(R.id.newChannelName)).perform(replaceText(VALID_CHANNEL_NAME), closeSoftKeyboard());
-        onView(withId(R.id.createButton)).perform(click());
+        onView(withId(R.id.private_channel_switch)).perform(click());
+        onView(withId(R.id.new_channel_name)).perform(replaceText(VALID_CHANNEL_NAME), closeSoftKeyboard());
+        onView(withText(activity.getActivity().getString(R.string.create))).perform(click());
 
         ArgumentCaptor<Channel> channelArgumentCaptor = ArgumentCaptor.forClass(Channel.class);
         verify(channelService).createPrivateChannel(channelArgumentCaptor.capture(), any(User.class));
@@ -103,16 +104,16 @@ public class NewChannelActivityTest {
 
     @Test
     public void channelOpensAfterBeingCreated() throws Exception {
-        onView(withId(R.id.newChannelName)).perform(replaceText(VALID_CHANNEL_NAME), closeSoftKeyboard());
-        onView(withId(R.id.createButton)).perform(click());
+        onView(withId(R.id.new_channel_name)).perform(replaceText(VALID_CHANNEL_NAME), closeSoftKeyboard());
+        onView(withText(activity.getActivity().getString(R.string.create))).perform(click());
 
         onView(allOf(withText(equalToIgnoringCase(VALID_CHANNEL_NAME)), isDescendantOfA(withId(R.id.toolbar)))).check(matches(isDisplayed()));
     }
 
     @Test
     public void whenChannelNameIsTextThenAnErrorIsShown() throws Exception {
-        onView(withId(R.id.newChannelName)).perform(typeText("name"), closeSoftKeyboard());
+        onView(withId(R.id.new_channel_name)).perform(typeText("name"), closeSoftKeyboard());
 
-        onView(withId(R.id.newChannelName)).check(matches(hasErrorText(activity.getActivity().getString(R.string.only_single_emoji_allowed))));
+        onView(withId(R.id.new_channel_name)).check(matches(hasErrorText(activity.getActivity().getString(R.string.only_single_emoji_allowed))));
     }
 }

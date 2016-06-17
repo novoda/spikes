@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <style name="NewChannel" />
+
+  <style name="NewChannel.Layout">
+    <item name="android:background">@color/background_grey</item>
+    <item name="android:gravity">center_horizontal</item>
+  </style>
+
+  <style name="NewChannel.PrivateSwitch">
+    <item name="android:background">@color/background_grey_alt</item>
+    <item name="android:paddingStart">16dp</item>
+    <item name="android:paddingEnd">16dp</item>
+    <item name="android:textColor">@color/text_grey</item>
+    <item name="android:textSize">14sp</item>
+  </style>
+
+  <style name="NewChannel.Hint">
+    <item name="android:textColor">@color/text_grey</item>
+    <item name="android:textSize">14sp</item>
+  </style>
+
+  <style name="NewChannel.Name">
+    <item name="android:background">@drawable/circle_shape_white</item>
+    <item name="android:cursorVisible">false</item>
+    <item name="android:gravity">center</item>
+    <item name="android:maxLines">1</item>
+    <item name="android:textSize">56sp</item>
+  </style>
+
+</resources>

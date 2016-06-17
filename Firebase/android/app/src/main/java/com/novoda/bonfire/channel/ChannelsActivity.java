@@ -29,7 +29,7 @@ public class ChannelsActivity extends BaseActivity {
                 BuildConfig.APPLICATION_ID
         );
         channelsPresenter = new ChannelsPresenter(
-                (ChannelsDisplayer) findViewById(R.id.channelsView),
+                (ChannelsDisplayer) findViewById(R.id.channels_view),
                 dependencies.getChannelService(),
                 dependencies.getLoginService(),
                 dependencies.getConfig(),
