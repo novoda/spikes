@@ -41,8 +41,6 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.game_activity);
 
         toastDisplayer = ToastDisplayers.noPendingToastsToastDisplayer(this);
-
-        TextView instructionsWidget = Views.findById(this, R.id.game_label_instructions);
         TextView scoreWidget = Views.findById(this, R.id.game_label_score);
 
         View gameButtonA = Views.findById(this, R.id.game_button_a);
@@ -86,6 +84,7 @@ public class GameActivity extends AppCompatActivity {
 
         @Override
         public void run() {
+            Views.findById(GameActivity.this, R.id.game_label_instructions).setVisibility(View.INVISIBLE);
             state = State.PLAYING_SEQUENCE;
             if (viewSequence.isComplete()) {
                 state = State.AWAITING_PLAYER;
@@ -127,36 +126,41 @@ public class GameActivity extends AppCompatActivity {
             int inputtedKey = playerInput.get(i);
             if (expectedKey == inputtedKey) {
                 // input so far is correct
-                toastDisplayer
-                        .display(KeyEvent.keyCodeToString(inputtedKey) + ", yes!");
+                toastDisplayer.display(getString(R.string.aw_yes, KeyEvent.keyCodeToString(inputtedKey)));
 
                 if (playerInput.size() == currentRoundKeySequence.size()) {
                     // whole sequence is correct
                     state = State.PAUSED;
-                    toastDisplayer
-                            .display("NICE. Moving to the next level!");
-
-                    Intent intent = new Intent(this, GameActivity.class);
-                    intent.putExtra(EXTRA_ROUND_NUMBER, currentRound.getNextLevel());
-                    gameHandler.removeCallbacks(sequenceShower);
-                    startActivity(intent);
-                    finish();
-                    overridePendingTransition(0, 0);
+                    toastDisplayer.display(getString(R.string.moving_to_next_level));
+                    continueToNextLevel();
+                    return;
                 }
 
             } else {
                 state = State.PAUSED;
                 // Game over
-                toastDisplayer
-                        .displayLong(KeyEvent.keyCodeToString(inputtedKey) + ", is incorrect :-(");
-
-                Intent intent = new Intent(this, HighscoresActivity.class);
-                intent.putExtra(HighscoresActivity.EXTRA_SCORE, currentRound.getScore());
-                gameHandler.removeCallbacks(sequenceShower);
-                startActivity(intent);
-                finish();
+                toastDisplayer.displayLong(getString(R.string.incorrect_key, KeyEvent.keyCodeToString(inputtedKey)));
+                continueToHighscores();
+                return;
             }
         }
+    }
+
+    private void continueToNextLevel() {
+        Intent intent = new Intent(this, GameActivity.class);
+        intent.putExtra(EXTRA_ROUND_NUMBER, currentRound.getNextLevel());
+        gameHandler.removeCallbacks(sequenceShower);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(0, 0);
+    }
+
+    private void continueToHighscores() {
+        Intent intent = new Intent(this, HighscoresActivity.class);
+        intent.putExtra(HighscoresActivity.EXTRA_SCORE, currentRound.getScore());
+        gameHandler.removeCallbacks(sequenceShower);
+        startActivity(intent);
+        finish();
     }
 
     @Override

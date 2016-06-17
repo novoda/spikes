@@ -10,10 +10,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.novoda.simonsays.game.GameActivity">
 
+    <TextView
+        android:id="@+id/game_label_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/score_x" />
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="200dp">
+        android:layout_height="0dp"
+        android:layout_weight="100">
 
         <Space
             android:id="@+id/center"
@@ -85,13 +91,7 @@
     <TextView
         android:id="@+id/game_label_instructions"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Ready to start? 3 .. 2 .. 1" />
-
-    <TextView
-        android:id="@+id/game_label_score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/score_x" />
+        android:layout_height="200dp"
+        android:text="@string/ready_to_start_3_2_1" />
 
 </LinearLayout>
