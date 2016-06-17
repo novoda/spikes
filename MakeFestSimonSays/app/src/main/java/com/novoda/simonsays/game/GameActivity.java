@@ -1,14 +1,5 @@
 package com.novoda.simonsays.game;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-
 import com.novoda.notils.caster.Views;
 import com.novoda.notils.logger.toast.ToastDisplayer;
 import com.novoda.notils.logger.toast.ToastDisplayers;
@@ -16,6 +7,14 @@ import com.novoda.notils.meta.AndroidUtils;
 import com.novoda.simonsays.BuildConfig;
 import com.novoda.simonsays.R;
 import com.novoda.simonsays.highscores.HighscoresActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +45,12 @@ public class GameActivity extends AppCompatActivity {
         TextView instructionsWidget = Views.findById(this, R.id.game_label_instructions);
         TextView scoreWidget = Views.findById(this, R.id.game_label_score);
 
-        Button gameButtonA = Views.findById(this, R.id.game_button_a);
-        Button gameButtonB = Views.findById(this, R.id.game_button_b);
-        Button gameButtonC = Views.findById(this, R.id.game_button_c);
-        Button gameButtonD = Views.findById(this, R.id.game_button_d);
+        View gameButtonA = Views.findById(this, R.id.game_button_a);
+        View gameButtonB = Views.findById(this, R.id.game_button_b);
+        View gameButtonC = Views.findById(this, R.id.game_button_c);
+        View gameButtonD = Views.findById(this, R.id.game_button_d);
 
-        List<View> views = new ArrayList<>();
+        final List<View> views = new ArrayList<>();
         views.add(gameButtonA);
         views.add(gameButtonB);
         views.add(gameButtonC);
@@ -88,10 +87,6 @@ public class GameActivity extends AppCompatActivity {
         @Override
         public void run() {
             state = State.PLAYING_SEQUENCE;
-            for (final View view : viewSequence) {
-                view.setVisibility(View.INVISIBLE);
-                view.setAlpha(0);
-            }
             if (viewSequence.isComplete()) {
                 state = State.AWAITING_PLAYER;
                 playerInput.clear();
@@ -99,10 +94,10 @@ public class GameActivity extends AppCompatActivity {
                 return;
             }
             final View view = viewSequence.next();
-            view.animate().alpha(1).withStartAction(new Runnable() {
+            view.animate().alpha(1).setDuration(130).withEndAction(new Runnable() {
                 @Override
                 public void run() {
-                    view.setVisibility(View.VISIBLE);
+                    view.animate().alpha(0.25f).setDuration(50).start();
                 }
             }).start();
             gameHandler.postDelayed(this, roundSpeed);

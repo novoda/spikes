@@ -10,58 +10,83 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.novoda.simonsays.game.GameActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/simon_says" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="200dp">
+
+        <Space
+            android:id="@+id/center"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            android:id="@+id/game_button_a"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/center"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@id/center"
+            android:alpha="0.33"
+            android:background="@color/green"
+            android:gravity="center"
+            android:text="@string/a"
+            android:textColor="@color/black"
+            android:textSize="@dimen/button_text_size" />
+
+        <TextView
+            android:id="@+id/game_button_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/center"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/center"
+            android:alpha="0.33"
+            android:background="@color/blue"
+            android:gravity="center"
+            android:text="@string/b"
+            android:textColor="@color/white"
+            android:textSize="@dimen/button_text_size" />
+
+        <TextView
+            android:id="@+id/game_button_c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/center"
+            android:layout_toLeftOf="@id/center"
+            android:alpha="0.33"
+            android:background="@color/yellow"
+            android:gravity="center"
+            android:text="@string/c"
+            android:textColor="@color/black"
+            android:textSize="@dimen/button_text_size" />
+
+        <TextView
+            android:id="@+id/game_button_d"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/center"
+            android:layout_toRightOf="@id/center"
+            android:alpha="0.33"
+            android:background="@color/red"
+            android:gravity="center"
+            android:text="@string/d"
+            android:textColor="@color/white"
+            android:textSize="@dimen/button_text_size" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/game_label_instructions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Ready to start? 3 .. 2 .. 1" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/game_button_a"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#FF0000"
-            android:layerType="hardware"
-            android:text="@string/a"
-            android:visibility="invisible" />
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/game_button_b"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#00FF00"
-            android:layerType="hardware"
-            android:text="@string/b"
-            android:visibility="invisible" />
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/game_button_c"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#0000FF"
-            android:layerType="hardware"
-            android:text="@string/c"
-            android:visibility="invisible" />
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/game_button_d"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#FFFF00"
-            android:layerType="hardware"
-            android:text="@string/d"
-            android:visibility="invisible" />
-    </LinearLayout>
 
     <TextView
         android:id="@+id/game_label_score"
