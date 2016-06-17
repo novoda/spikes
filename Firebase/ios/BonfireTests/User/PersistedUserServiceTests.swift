@@ -40,6 +40,8 @@ class PersistedUserServiceTests: XCTestCase {
 
         func readUserFrom(userID: String) -> Observable<User> { return Observable.empty() }
         func writeCurrentUser(user: User) { }
+        func observeUser(userID: String) -> Observable<User> { return Observable.empty() }
+
     }
 
     override func tearDown() {

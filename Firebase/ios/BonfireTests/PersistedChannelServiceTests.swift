@@ -61,6 +61,7 @@ class PersistedChannelServiceTests: XCTestCase {
         }
 
         func writeCurrentUser(user: User) {}
+        func observeUser(userID: String) -> Observable<User> { return Observable.empty() }
     }
 
     class MockChannelDatabase: ChannelsDatabase {
