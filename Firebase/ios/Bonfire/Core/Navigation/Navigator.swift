@@ -6,5 +6,6 @@ protocol Navigator {
     func toCreateChannel()
     func toAddUsers(channel: Channel)
     func toWelcome(sender: String?)
+    func dismissWelcome()
     func showShareSheet(parameters: [AnyObject])
 }

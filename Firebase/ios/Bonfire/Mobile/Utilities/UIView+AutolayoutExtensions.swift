@@ -199,6 +199,25 @@ extension UIView {
         return constraint
     }
 
+    public func addAspectRatioConstraint(
+        withMultiplier multiplier: CGFloat,
+                     priority: UILayoutPriority = UILayoutPriorityRequired
+        ) -> NSLayoutConstraint {
+
+        translatesAutoresizingMaskIntoConstraints = false
+
+        let constraint = NSLayoutConstraint(
+            item: self, attribute: .Height,
+            relatedBy: .Equal,
+            toItem: self, attribute: .Width,
+            multiplier: multiplier, constant: 0.0
+        )
+
+        constraint.priority = priority
+        addConstraint(constraint)
+        return constraint
+    }
+
 }
 
 // MARK: - Attach to Sibling
@@ -265,12 +284,12 @@ extension UIView {
 // MARK: - Align With Siblings
 
 extension UIView {
-    public func alignHorizontalCenter(withView view: UIView) -> NSLayoutConstraint {
+    public func alignHorizontalCenter(withView view: UIView, withMultiplier multiplier: CGFloat = 1.0) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: self, attribute: .CenterX,
             relatedBy: .Equal,
             toItem: view, attribute: .CenterX,
-            multiplier: 1.0, constant: 0
+            multiplier: multiplier, constant: 0
         )
 
         addSiblingConstraint(constraint)
@@ -278,18 +297,18 @@ extension UIView {
         return constraint
     }
 
-    public func alignHorizontalCenterWithSuperview() -> NSLayoutConstraint {
+    public func alignHorizontalCenterWithSuperview(withMultiplier multiplier: CGFloat = 1.0) -> NSLayoutConstraint {
         let superview = unWrappedSuperview()
-        return alignHorizontalCenter(withView: superview)
+        return alignHorizontalCenter(withView: superview, withMultiplier: multiplier)
     }
 
 
-    public func alignVerticalCenter(withView view: UIView) -> NSLayoutConstraint {
+    public func alignVerticalCenter(withView view: UIView, withMultiplier multiplier: CGFloat = 1.0) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: self, attribute: .CenterY,
             relatedBy: .Equal,
             toItem: view, attribute: .CenterY,
-            multiplier: 1.0, constant: 0
+            multiplier: multiplier, constant: 0
         )
 
         addSiblingConstraint(constraint)
@@ -297,17 +316,17 @@ extension UIView {
         return constraint
     }
 
-    public func alignVerticalCenterWithSuperview() -> NSLayoutConstraint {
+    public func alignVerticalCenterWithSuperview(withMultiplier multiplier: CGFloat = 1.0) -> NSLayoutConstraint {
         let superview = unWrappedSuperview()
-        return alignVerticalCenter(withView: superview)
+        return alignVerticalCenter(withView: superview, withMultiplier: multiplier)
     }
 
-    public func alignLeading(withView view: UIView) -> NSLayoutConstraint {
+    public func alignLeading(withView view: UIView, withMultiplier multiplier: CGFloat = 1.0) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: self, attribute: .Leading,
             relatedBy: .Equal,
             toItem: view, attribute: .Leading,
-            multiplier: 1.0, constant: 0
+            multiplier: multiplier, constant: 0
         )
         addSiblingConstraint(constraint)
 
@@ -333,16 +352,30 @@ extension UIView {
 
 extension UIView {
 
-    public func addEqualWidthConstraint(withView view: UIView) -> NSLayoutConstraint {
+    public func addEqualWidthConstraint(withView view: UIView, withMultiplier multiplier: CGFloat = 1.0) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(
             item: self, attribute: .Width,
             relatedBy: .Equal,
             toItem: view, attribute: .Width,
-            multiplier: 1.0, constant: 0
+            multiplier: multiplier, constant: 0
         )
 
         addSiblingConstraint(constraint)
 
         return constraint
     }
+
+    public func addEqualHeightConstraint(withView view: UIView, withMultiplier multiplier: CGFloat = 1.0) -> NSLayoutConstraint {
+        let constraint = NSLayoutConstraint(
+            item: self, attribute: .Height,
+            relatedBy: .Equal,
+            toItem: view, attribute: .Height,
+            multiplier: multiplier, constant: 0
+        )
+
+        addSiblingConstraint(constraint)
+
+        return constraint
+    }
+
 }
