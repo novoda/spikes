@@ -1,0 +1,19 @@
+<resources>
+  <string name="app_name">TodoApp</string>
+  <string name="action_settings">Settings</string>
+  <string name="title_hint">Title</string>
+  <string name="description_hint">Enter your TO-DO here.</string>
+  <string name="empty_task_message">TO DOs cannot be empty</string>
+  <string name="menu_filter">Filter</string>
+  <string name="menu_clear">Clear completed</string>
+  <string name="menu_delete_task">Delete task</string>
+  <string name="refresh">Refresh</string>
+  <string name="nav_all">All</string>
+  <string name="nav_active">Active</string>
+  <string name="nav_completed">Completed</string>
+  <string name="no_tasks_all">You have no TO-DOs!</string>
+  <string name="no_tasks_active">You have no active TO-DOs!</string>
+  <string name="no_tasks_completed">You have no completed TO-DOs!</string>
+  <string name="loading_tasks">Loading TO-DOs...</string>
+  <string name="error_tasks">Error fetching your TO-DOs</string>
+</resources>

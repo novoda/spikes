@@ -1,0 +1,14 @@
+apply plugin: 'java'
+apply plugin: JavaAptPlugin.class
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+dependencies {
+    compile "com.google.guava:guava:$rootProject.guavaVersion"
+    compile "io.reactivex:rxjava:$rootProject.rxJavaVersion"
+    compile "com.jakewharton.rxrelay:rxrelay:$rootProject.rxJavaVersion"
+
+    compileOnly "com.jakewharton.auto.value:auto-value-annotations:$rootProject.autoValueAnnotationsVersion"
+    javapt "com.google.auto.value:auto-value:$rootProject.autoValueVersion"
+}

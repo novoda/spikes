@@ -1,0 +1,28 @@
+{
+	"parser": "babel-eslint",
+    "extends": ["standard", "plugin:react/recommended"],
+    "plugins": [
+        "standard",
+        "react",
+        "flowtype"
+    ], 
+    "rules": {
+        "flowtype/space-after-type-colon": [
+            1,
+            "always"
+        ],
+        "flowtype/space-before-type-colon": [
+            1,
+            "never"
+        ],
+        "flowtype/type-id-match": [
+            1,
+            "^([A-Z][a-z0-9]+)+Type$"
+        ]
+    },
+    "settings": {
+        "flowtype": {
+            "onlyFilesWithFlowAnnotation": false
+        }
+    }
+}

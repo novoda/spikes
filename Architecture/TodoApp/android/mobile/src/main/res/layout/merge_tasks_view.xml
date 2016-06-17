@@ -1,0 +1,37 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+      android:id="@+id/contentContainer"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+
+      <com.novoda.todoapp.views.TodoAppBar
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+      <android.support.v7.widget.RecyclerView
+        android:id="@+id/tasks_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+      <com.novoda.todoapp.tasks.view.loading.TasksLoadingView
+        android:id="@+id/loading_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+      android:id="@+id/fab_add_task"
+      app:fabSize="normal"
+      app:layout_anchor="@id/contentContainer"
+      app:layout_anchorGravity="bottom|right|end"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/fab_margin"
+      android:src="@drawable/ic_add" />
+
+</merge>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.novoda.todoapp.tasks.view.TaskItemView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="?android:attr/listPreferredItemHeight"
+  android:background="@drawable/touch_feedback"
+  android:orientation="horizontal"
+  android:paddingBottom="@dimen/list_item_padding"
+  android:paddingLeft="@dimen/activity_horizontal_margin"
+  android:paddingRight="@dimen/activity_horizontal_margin"
+  android:paddingTop="@dimen/list_item_padding" />
