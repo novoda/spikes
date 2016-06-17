@@ -24,16 +24,15 @@ class RoundCreator {
         if (roundNumber == 1) {
             sequence.clear();
         }
+        int randomPosition = random.nextInt(this.views.size());
+        sequence.add(randomPosition);
+
         List<View> orderedViews = new ArrayList<>();
         List<Integer> orderedKeys = new ArrayList<>();
         for (Integer position : sequence) {
             orderedViews.add(this.views.get(position));
             orderedKeys.add(keys[position]);
         }
-        int randomPosition = random.nextInt(this.views.size());
-        sequence.add(randomPosition);
-        orderedViews.add(this.views.get(randomPosition));
-        orderedKeys.add(keys[randomPosition]);
 
         Round.ViewSequence viewSequence = new Round.ViewSequence(orderedViews);
         Round.KeySequence keySequence = new Round.KeySequence(orderedKeys);
