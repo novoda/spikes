@@ -9,12 +9,12 @@
 /* Begin PBXBuildFile section */
 		1A0A41A21D0184640053A547 /* PersistedUserServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0A41A11D0184640053A547 /* PersistedUserServiceTests.swift */; };
 		1A0A41A41D018D810053A547 /* Rememberancer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0A41A31D018D810053A547 /* Rememberancer.swift */; };
-		1AB3DE241D07056700F8EAF5 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB3DE231D07056700F8EAF5 /* SnapshotHelper.swift */; };
-		1AB3DE261D07057F00F8EAF5 /* SnapshotProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB3DE251D07057F00F8EAF5 /* SnapshotProcess.swift */; };
 		1A2439281D0ACC390021B547 /* UIView+BorderExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2439271D0ACC390021B547 /* UIView+BorderExtensions.swift */; };
 		1A9567CF1D12D7100052030B /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9567CE1D12D7100052030B /* LogoView.swift */; };
 		1A9FB9101D1063B1009F032B /* BubblesBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9FB90F1D1063B1009F032B /* BubblesBackgroundView.swift */; };
 		1AAC91DD1D127E9400A00238 /* SenderInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AAC91DC1D127E9400A00238 /* SenderInfoView.swift */; };
+		1AB3DE241D07056700F8EAF5 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB3DE231D07056700F8EAF5 /* SnapshotHelper.swift */; };
+		1AB3DE261D07057F00F8EAF5 /* SnapshotProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB3DE251D07057F00F8EAF5 /* SnapshotProcess.swift */; };
 		1ABEAC661D08573D00A85CE2 /* FirebaseIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABEAC651D08573D00A85CE2 /* FirebaseIdentifiers.swift */; };
 		1ABEAC681D08730B00A85CE2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1ABEAC671D08730B00A85CE2 /* GoogleService-Info.plist */; };
 		1AECA3371D0974EC00E4D856 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1AECA3361D0974EC00E4D856 /* Assets.xcassets */; };
@@ -121,14 +121,14 @@
 		13F2FDE620ACDD8945A96B8C /* Pods_Bonfire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bonfire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A0A41A11D0184640053A547 /* PersistedUserServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedUserServiceTests.swift; sourceTree = "<group>"; };
 		1A0A41A31D018D810053A547 /* Rememberancer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rememberancer.swift; sourceTree = "<group>"; };
-		1AB3DE191D0704F400F8EAF5 /* BonfireUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BonfireUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		1AB3DE1D1D0704F500F8EAF5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1AB3DE231D07056700F8EAF5 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = "<group>"; };
-		1AB3DE251D07057F00F8EAF5 /* SnapshotProcess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotProcess.swift; sourceTree = "<group>"; };
 		1A2439271D0ACC390021B547 /* UIView+BorderExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+BorderExtensions.swift"; sourceTree = "<group>"; };
 		1A9567CE1D12D7100052030B /* LogoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		1A9FB90F1D1063B1009F032B /* BubblesBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BubblesBackgroundView.swift; sourceTree = "<group>"; };
 		1AAC91DC1D127E9400A00238 /* SenderInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SenderInfoView.swift; sourceTree = "<group>"; };
+		1AB3DE191D0704F400F8EAF5 /* BonfireUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BonfireUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1AB3DE1D1D0704F500F8EAF5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1AB3DE231D07056700F8EAF5 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = "<group>"; };
+		1AB3DE251D07057F00F8EAF5 /* SnapshotProcess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotProcess.swift; sourceTree = "<group>"; };
 		1ABEAC651D08573D00A85CE2 /* FirebaseIdentifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseIdentifiers.swift; sourceTree = "<group>"; };
 		1ABEAC671D08730B00A85CE2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		1AECA3361D0974EC00E4D856 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Bonfire/Assets.xcassets; sourceTree = SOURCE_ROOT; };
@@ -607,12 +607,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B63B37831CFD975A00142DC3 /* Build configuration list for PBXNativeTarget "BonfireTests" */;
 			buildPhases = (
-				CD3332CD9DD451B8DAB18B40 /* 📦 Check Pods Manifest.lock */,
+				CD3332CD9DD451B8DAB18B40 /* [CP] Check Pods Manifest.lock */,
 				B63B37781CFD975A00142DC3 /* Sources */,
 				B63B37791CFD975A00142DC3 /* Frameworks */,
 				B63B377A1CFD975A00142DC3 /* Resources */,
-				3BD164270703B37BA1CBB8BF /* 📦 Embed Pods Frameworks */,
-				DBF248069E025D350E134FCF /* 📦 Copy Pods Resources */,
+				3BD164270703B37BA1CBB8BF /* [CP] Embed Pods Frameworks */,
+				DBF248069E025D350E134FCF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -628,12 +628,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B654B2801CE0C38000EEDE0A /* Build configuration list for PBXNativeTarget "Bonfire" */;
 			buildPhases = (
-				0D338B1A730B7D59B08CC1E1 /* 📦 Check Pods Manifest.lock */,
+				0D338B1A730B7D59B08CC1E1 /* [CP] Check Pods Manifest.lock */,
 				B654B25F1CE0C38000EEDE0A /* Sources */,
 				B654B2601CE0C38000EEDE0A /* Frameworks */,
 				B654B2611CE0C38000EEDE0A /* Resources */,
-				2B107E072EC8FF16E08F96F0 /* 📦 Embed Pods Frameworks */,
-				95A84718793C98A132AECDD9 /* 📦 Copy Pods Resources */,
+				2B107E072EC8FF16E08F96F0 /* [CP] Embed Pods Frameworks */,
+				95A84718793C98A132AECDD9 /* [CP] Copy Pods Resources */,
 				B65A74021D071062000A052B /* Run SwiftLint */,
 			);
 			buildRules = (
@@ -721,14 +721,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0D338B1A730B7D59B08CC1E1 /* 📦 Check Pods Manifest.lock */ = {
+		0D338B1A730B7D59B08CC1E1 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -736,14 +736,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		2B107E072EC8FF16E08F96F0 /* 📦 Embed Pods Frameworks */ = {
+		2B107E072EC8FF16E08F96F0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -751,14 +751,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bonfire/Pods-Bonfire-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		3BD164270703B37BA1CBB8BF /* 📦 Embed Pods Frameworks */ = {
+		3BD164270703B37BA1CBB8BF /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -766,14 +766,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Bonfire-BonfireTests/Pods-Bonfire-BonfireTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		95A84718793C98A132AECDD9 /* 📦 Copy Pods Resources */ = {
+		95A84718793C98A132AECDD9 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -795,14 +795,14 @@
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\ncd Bonfire\nswiftlint\ncd ..\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
 		};
-		CD3332CD9DD451B8DAB18B40 /* 📦 Check Pods Manifest.lock */ = {
+		CD3332CD9DD451B8DAB18B40 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -810,14 +810,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		DBF248069E025D350E134FCF /* 📦 Copy Pods Resources */ = {
+		DBF248069E025D350E134FCF /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1108,7 +1108,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Bonfire/Bonfire.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				INFOPLIST_FILE = Bonfire/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.novoda.bonfire;
@@ -1124,7 +1124,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Bonfire/Bonfire.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				INFOPLIST_FILE = Bonfire/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.novoda.bonfire;
