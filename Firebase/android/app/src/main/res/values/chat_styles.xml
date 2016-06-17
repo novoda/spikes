@@ -3,25 +3,34 @@
 
   <style name="Chat" />
 
-
   <style name="Chat.RecyclerView">
     <item name="android:background">@color/background_grey</item>
     <item name="android:clipToPadding">false</item>
     <item name="android:paddingBottom">72dp</item>
   </style>
 
-  <style name="Chat.NewMessage">
+  <style name="Chat.NewMessage" />
+
+  <style name="Chat.NewMessage.Layout">
     <item name="android:background">@drawable/oval_shape_white</item>
     <item name="android:elevation">4dp</item>
     <item name="android:gravity">center_vertical</item>
-    <item name="android:orientation">horizontal</item>
     <item name="android:paddingBottom">16dp</item>
     <item name="android:paddingTop">16dp</item>
     <item name="android:paddingStart">12dp</item>
     <item name="android:paddingEnd">12dp</item>
   </style>
 
-  <style name="Chat.Message"/>
+  <style name="Chat.NewMessage.Text">
+    <item name="android:background">@android:color/transparent</item>
+    <item name="android:textSize">@dimen/chat_new_message_text_size</item>
+  </style>
+
+  <style name="Chat.Message" />
+
+  <style name="Chat.Message.BodyLayout">
+    <item name="android:paddingTop">@dimen/chat_message_body_padding</item>
+  </style>
 
   <style name="Chat.Message.Body">
     <item name="android:background">@drawable/bubble_shape_grey</item>
@@ -39,9 +48,12 @@
     <item name="android:paddingEnd">26dp</item>
   </style>
 
+  <style name="Chat.Message.Photo">
+    <item name="android:scaleType">fitCenter</item>
+  </style>
+
   <style name="Chat.Message.Metadata">
     <item name="android:gravity">end</item>
-    <item name="android:orientation">horizontal</item>
     <item name="android:paddingEnd">70dp</item>
   </style>
 

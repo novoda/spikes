@@ -1,39 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
   <LinearLayout
+    style="@style/Welcome.Layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:background="@drawable/bubble_shape_background">
+    android:orientation="vertical">
 
     <ImageView
-      android:id="@+id/userAvatar"
+      android:id="@+id/user_avatar"
       style="@style/Welcome.SenderImage"
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content" />
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/welcome_user_avatar_top_margin" />
 
     <TextView
-      android:id="@+id/welcomeMessageView"
+      android:id="@+id/welcome_message_view"
       style="@style/Welcome.Message"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content" />
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/welcome_message_margin"
+      android:layout_marginBottom="86dp" />
   </LinearLayout>
 
   <TextView
     style="@style/Welcome.Message.Static"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="@string/enjoy_the_awesomness" />
+    android:layout_marginTop="@dimen/welcome_message_top_margin"
+    android:layout_marginBottom="@dimen/welcome_message_bottom_margin"
+    android:layout_marginLeft="@dimen/welcome_horizontal_margin"
+    android:layout_marginRight="@dimen/welcome_horizontal_margin"
+    android:text="@string/enjoy_the_awesomeness" />
 
   <TextView
-    android:id="@+id/proceedButton"
+    android:id="@+id/proceed_button"
     style="@style/Welcome.ProceedButton"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/welcome_proceed_button_margin"
     android:text="@string/start_chatting" />
 
 </merge>

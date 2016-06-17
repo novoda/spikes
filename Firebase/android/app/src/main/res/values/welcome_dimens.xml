@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <dimen name="welcome_user_avatar_top_margin">60dp</dimen>
+  <dimen name="welcome_horizontal_margin">16dp</dimen>
+  <dimen name="welcome_message_margin">@dimen/welcome_horizontal_margin</dimen>
+  <dimen name="welcome_proceed_button_margin">@dimen/welcome_horizontal_margin</dimen>
+  <dimen name="welcome_message_bottom_margin">24dp</dimen>
+  <dimen name="welcome_message_top_margin">48dp</dimen>
+
+</resources>

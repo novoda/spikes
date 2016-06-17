@@ -4,7 +4,7 @@
   <include layout="@layout/toolbar_layout" />
 
   <android.support.v7.widget.RecyclerView
-    android:id="@+id/usersRecyclerView"
+    android:id="@+id/users_recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
 

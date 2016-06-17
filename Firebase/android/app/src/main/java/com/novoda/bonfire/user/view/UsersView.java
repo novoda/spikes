@@ -37,7 +37,7 @@ public class UsersView extends LinearLayout implements UsersDisplayer {
     protected void onFinishInflate() {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_users_view, this);
-        recyclerView = Views.findById(this, R.id.usersRecyclerView);
+        recyclerView = Views.findById(this, R.id.users_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         toolbar = Views.findById(this, R.id.toolbar);
         toolbar.setTitle(R.string.members);

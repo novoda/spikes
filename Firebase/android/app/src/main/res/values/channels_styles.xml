@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <style name="Channels"/>
+
+  <style name="Channels" />
 
   <style name="Channels.Name">
     <item name="android:background">@drawable/circle_shape_white</item>
@@ -17,7 +18,6 @@
   </style>
 
   <style name="Channels.LockIcon">
-    <item name="android:layout_gravity">bottom|end</item>
     <item name="android:background">@drawable/circle_shape_accent</item>
     <item name="android:padding">3dp</item>
   </style>

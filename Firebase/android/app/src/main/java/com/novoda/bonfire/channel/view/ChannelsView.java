@@ -37,7 +37,7 @@ public class ChannelsView extends LinearLayout implements ChannelsDisplayer {
         RecyclerView channels = Views.findById(this, R.id.channels);
         channels.addItemDecoration(new ChannelItemDecoration());
         channels.setAdapter(channelsAdapter);
-        newChannelFab = Views.findById(this, R.id.newChannelFab);
+        newChannelFab = Views.findById(this, R.id.new_channel_fab);
         toolbar = Views.findById(this, R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
         toolbar.inflateMenu(R.menu.channels_menu);

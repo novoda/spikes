@@ -31,8 +31,8 @@ public class NewChannelView extends LinearLayout implements NewChannelDisplayer 
     protected void onFinishInflate() {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_new_channel_view, this);
-        newChannelName = Views.findById(this, R.id.newChannelName);
-        privateChannelSwitch = Views.findById(this, R.id.privateChannelSwitch);
+        newChannelName = Views.findById(this, R.id.new_channel_name);
+        privateChannelSwitch = Views.findById(this, R.id.private_channel_switch);
         setupToolbar();
     }
 

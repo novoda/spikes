@@ -30,7 +30,7 @@ public class ChatActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        ChatDisplayer chatDisplayer = (ChatDisplayer) findViewById(R.id.chatView);
+        ChatDisplayer chatDisplayer = (ChatDisplayer) findViewById(R.id.chat_view);
         Channel channel = new Channel(getIntent().getStringExtra(NAME_EXTRA),
                                       Channel.Access.valueOf(getIntent().getStringExtra(ACCESS_EXTRA)));
         presenter = new ChatPresenter(

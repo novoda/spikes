@@ -83,7 +83,7 @@ public class UsersActivityTest {
 
         clickOnUserAtPosition(1);
 
-        onView(withId(R.id.usersRecyclerView)).check(matches(atPosition(1, isSelected())));
+        onView(withId(R.id.users_recycler_view)).check(matches(atPosition(1, isSelected())));
     }
 
     @Test
@@ -93,7 +93,7 @@ public class UsersActivityTest {
 
         clickOnUserAtPosition(2);
 
-        onView(withId(R.id.usersRecyclerView)).check(matches(atPosition(2, not(isSelected()))));
+        onView(withId(R.id.users_recycler_view)).check(matches(atPosition(2, not(isSelected()))));
     }
 
     private void launchUsersActivity() {
@@ -102,7 +102,7 @@ public class UsersActivityTest {
     }
 
     private void clickOnUserAtPosition(int position) {
-        onView(withId(R.id.usersRecyclerView)).perform(RecyclerViewActions.actionOnItemAtPosition(position, click()));
+        onView(withId(R.id.users_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(position, click()));
     }
 
     private Matcher<View> atPosition(final int position, final Matcher<View> itemMatcher) {

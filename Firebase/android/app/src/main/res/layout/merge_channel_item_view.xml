@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
   <TextView
-    android:id="@+id/channelTitle"
+    android:id="@+id/channel_title"
     style="@style/Channels.Name"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center" />
 
   <ImageView
-    android:id="@+id/lockIcon"
-    android:layout_width="@dimen/channel_lock_icon_size"
-    android:layout_height="@dimen/channel_lock_icon_size"
-    android:src="@drawable/ic_lock_white"
-    style="@style/Channels.LockIcon" />
+    android:id="@+id/lock_icon"
+    style="@style/Channels.LockIcon"
+    android:layout_width="@dimen/channel_item_lock_icon_size"
+    android:layout_height="@dimen/channel_item_lock_icon_size"
+    android:layout_gravity="bottom|end"
+    android:src="@drawable/ic_lock_white" />
 
 </merge>

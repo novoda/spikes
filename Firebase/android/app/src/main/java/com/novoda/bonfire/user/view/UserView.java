@@ -25,8 +25,8 @@ public class UserView extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_user_item_view, this);
-        name = Views.findById(this, R.id.userName);
-        image = Views.findById(this, R.id.userImage);
+        name = Views.findById(this, R.id.user_name);
+        image = Views.findById(this, R.id.user_image);
     }
 
     public void display(UsersView.SelectableUser user) {

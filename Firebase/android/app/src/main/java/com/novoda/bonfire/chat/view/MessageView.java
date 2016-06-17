@@ -56,10 +56,10 @@ public class MessageView extends LinearLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         View.inflate(getContext(), layoutResId, this);
-        this.picture = Views.findById(this, R.id.messageAuthorImage);
-        this.body = Views.findById(this, R.id.messageBody);
-        this.time = Views.findById(this, R.id.messageTime);
-        this.name = Views.findById(this, R.id.messageAuthorName);
+        this.picture = Views.findById(this, R.id.message_author_image);
+        this.body = Views.findById(this, R.id.message_body);
+        this.time = Views.findById(this, R.id.message_time);
+        this.name = Views.findById(this, R.id.message_author_name);
     }
 
     public void display(Message message) {

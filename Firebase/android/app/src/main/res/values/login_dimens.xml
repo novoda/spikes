@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
   <dimen name="login_icon_layout_height">260dp</dimen>
   <dimen name="login_app_icon_size">86dp</dimen>
   <dimen name="login_disclaimer_horizontal_margin">16dp</dimen>
