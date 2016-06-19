@@ -1,14 +1,14 @@
 package com.novoda.simonsays.highscores;
 
+import com.novoda.notils.caster.Views;
+import com.novoda.simonsays.BuildConfig;
+import com.novoda.simonsays.R;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
-
-import com.novoda.notils.caster.Views;
-import com.novoda.simonsays.BuildConfig;
-import com.novoda.simonsays.R;
 
 public class HighscoresActivity extends AppCompatActivity {
 
@@ -36,4 +36,5 @@ public class HighscoresActivity extends AppCompatActivity {
         TextView highScoreWidget = Views.findById(this, R.id.highscores_high_score_label);
         highScoreWidget.setText(getString(R.string.highscore_is_x, highscore));
     }
+
 }

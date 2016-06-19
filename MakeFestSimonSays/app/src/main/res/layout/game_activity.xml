@@ -1,72 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical"
-  android:paddingBottom="@dimen/activity_vertical_margin"
-  android:paddingLeft="@dimen/activity_horizontal_margin"
-  android:paddingRight="@dimen/activity_horizontal_margin"
-  android:paddingTop="@dimen/activity_vertical_margin"
-  tools:context="com.novoda.simonsays.game.GameActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.novoda.simonsays.game.GameActivity">
 
-  <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/simon_says" />
+    <TextView
+        android:id="@+id/game_label_score"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:gravity="right"
+        android:text="@string/score_x"
+        android:textAppearance="?android:textAppearanceMedium" />
 
-  <TextView
-    android:id="@+id/game_label_instructions"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:text="Ready to start? 3 .. 2 .. 1" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="100">
 
-  <LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+        <Space
+            android:id="@+id/center"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerInParent="true" />
 
-    <android.support.v7.widget.AppCompatButton
-      android:id="@+id/game_button_a"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:background="#FF0000"
-      android:layerType="hardware"
-      android:text="@string/a"
-      android:visibility="invisible" />
+        <TextView
+            android:id="@+id/game_button_a"
+            style="@style/Simon.Green.Game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/center"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@id/center"
+            android:text="@string/a" />
 
-    <android.support.v7.widget.AppCompatButton
-      android:id="@+id/game_button_b"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:background="#00FF00"
-      android:layerType="hardware"
-      android:text="@string/b"
-      android:visibility="invisible" />
+        <TextView
+            android:id="@+id/game_button_b"
+            style="@style/Simon.Blue.Game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/center"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/center"
+            android:text="@string/b" />
 
-    <android.support.v7.widget.AppCompatButton
-      android:id="@+id/game_button_c"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:background="#0000FF"
-      android:layerType="hardware"
-      android:text="@string/c"
-      android:visibility="invisible" />
+        <TextView
+            android:id="@+id/game_button_c"
+            style="@style/Simon.Yellow.Game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/center"
+            android:layout_toLeftOf="@id/center"
+            android:text="@string/c" />
 
-    <android.support.v7.widget.AppCompatButton
-      android:id="@+id/game_button_d"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:background="#FFFF00"
-      android:layerType="hardware"
-      android:text="@string/d"
-      android:visibility="invisible" />
-  </LinearLayout>
+        <TextView
+            android:id="@+id/game_button_d"
+            style="@style/Simon.Red.Game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/center"
+            android:layout_toRightOf="@id/center"
+            android:text="@string/d" />
+    </RelativeLayout>
 
-  <TextView
-    android:id="@+id/game_label_score"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/score_x" />
+    <TextView
+        android:id="@+id/game_label_instructions"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/ready_to_start_3_2_1"
+        android:textAppearance="?android:textAppearanceMedium" />
 
 </LinearLayout>

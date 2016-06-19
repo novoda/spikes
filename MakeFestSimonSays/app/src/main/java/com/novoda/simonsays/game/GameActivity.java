@@ -1,14 +1,5 @@
 package com.novoda.simonsays.game;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-
 import com.novoda.notils.caster.Views;
 import com.novoda.notils.logger.toast.ToastDisplayer;
 import com.novoda.notils.logger.toast.ToastDisplayers;
@@ -16,6 +7,14 @@ import com.novoda.notils.meta.AndroidUtils;
 import com.novoda.simonsays.BuildConfig;
 import com.novoda.simonsays.R;
 import com.novoda.simonsays.highscores.HighscoresActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,16 +41,14 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.game_activity);
 
         toastDisplayer = ToastDisplayers.noPendingToastsToastDisplayer(this);
-
-        TextView instructionsWidget = Views.findById(this, R.id.game_label_instructions);
         TextView scoreWidget = Views.findById(this, R.id.game_label_score);
 
-        Button gameButtonA = Views.findById(this, R.id.game_button_a);
-        Button gameButtonB = Views.findById(this, R.id.game_button_b);
-        Button gameButtonC = Views.findById(this, R.id.game_button_c);
-        Button gameButtonD = Views.findById(this, R.id.game_button_d);
+        View gameButtonA = Views.findById(this, R.id.game_button_a);
+        View gameButtonB = Views.findById(this, R.id.game_button_b);
+        View gameButtonC = Views.findById(this, R.id.game_button_c);
+        View gameButtonD = Views.findById(this, R.id.game_button_d);
 
-        List<View> views = new ArrayList<>();
+        final List<View> views = new ArrayList<>();
         views.add(gameButtonA);
         views.add(gameButtonB);
         views.add(gameButtonC);
@@ -60,7 +57,11 @@ public class GameActivity extends AppCompatActivity {
         int roundNumber = getIntent().getIntExtra(EXTRA_ROUND_NUMBER, 1);
 
         RoundCreator roundCreator = new RoundCreator(views);
-        currentRound = roundCreator.createRound(roundNumber);
+        if (savedInstanceState == null) {
+            currentRound = roundCreator.createRound(roundNumber);
+        } else {
+            currentRound = roundCreator.resumeRound(roundNumber);
+        }
 
         state = State.PAUSED;
         gameHandler = new Handler(getMainLooper());
@@ -87,11 +88,8 @@ public class GameActivity extends AppCompatActivity {
 
         @Override
         public void run() {
+            Views.findById(GameActivity.this, R.id.game_label_instructions).setVisibility(View.INVISIBLE);
             state = State.PLAYING_SEQUENCE;
-            for (final View view : viewSequence) {
-                view.setVisibility(View.INVISIBLE);
-                view.setAlpha(0);
-            }
             if (viewSequence.isComplete()) {
                 state = State.AWAITING_PLAYER;
                 playerInput.clear();
@@ -99,10 +97,10 @@ public class GameActivity extends AppCompatActivity {
                 return;
             }
             final View view = viewSequence.next();
-            view.animate().alpha(1).withStartAction(new Runnable() {
+            view.animate().alpha(1).setDuration(130).setStartDelay(0).withEndAction(new Runnable() {
                 @Override
                 public void run() {
-                    view.setVisibility(View.VISIBLE);
+                    view.animate().alpha(0.33f).setDuration(50).setStartDelay(100).start();
                 }
             }).start();
             gameHandler.postDelayed(this, roundSpeed);
@@ -132,35 +130,41 @@ public class GameActivity extends AppCompatActivity {
             int inputtedKey = playerInput.get(i);
             if (expectedKey == inputtedKey) {
                 // input so far is correct
-                toastDisplayer
-                        .display(KeyEvent.keyCodeToString(inputtedKey) + ", yes!");
+                toastDisplayer.display(getString(R.string.aw_yes, KeyEvent.keyCodeToString(inputtedKey)));
 
                 if (playerInput.size() == currentRoundKeySequence.size()) {
                     // whole sequence is correct
                     state = State.PAUSED;
-                    toastDisplayer
-                            .display("NICE. Moving to the next level!");
-
-                    Intent intent = new Intent(this, GameActivity.class);
-                    intent.putExtra(EXTRA_ROUND_NUMBER, currentRound.getNextLevel());
-                    gameHandler.removeCallbacks(sequenceShower);
-                    startActivity(intent);
-                    finish();
+                    toastDisplayer.display(getString(R.string.moving_to_next_level));
+                    continueToNextLevel();
+                    return;
                 }
 
             } else {
                 state = State.PAUSED;
                 // Game over
-                toastDisplayer
-                        .displayLong(KeyEvent.keyCodeToString(inputtedKey) + ", is incorrect :-(");
-
-                Intent intent = new Intent(this, HighscoresActivity.class);
-                intent.putExtra(HighscoresActivity.EXTRA_SCORE, currentRound.getScore());
-                gameHandler.removeCallbacks(sequenceShower);
-                startActivity(intent);
-                finish();
+                toastDisplayer.displayLong(getString(R.string.incorrect_key, KeyEvent.keyCodeToString(inputtedKey)));
+                continueToHighscores();
+                return;
             }
         }
+    }
+
+    private void continueToNextLevel() {
+        Intent intent = new Intent(this, GameActivity.class);
+        intent.putExtra(EXTRA_ROUND_NUMBER, currentRound.getNextLevel());
+        gameHandler.removeCallbacks(sequenceShower);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(0, 0);
+    }
+
+    private void continueToHighscores() {
+        Intent intent = new Intent(this, HighscoresActivity.class);
+        intent.putExtra(HighscoresActivity.EXTRA_SCORE, currentRound.getScore());
+        gameHandler.removeCallbacks(sequenceShower);
+        startActivity(intent);
+        finish();
     }
 
     @Override
