@@ -10,7 +10,6 @@
   <style name="Welcome.Sender" />
 
   <style name="Welcome.Sender.Layout">
-    <item name="android:background">@drawable/bubble_shape_background</item>
     <item name="android:gravity">center</item>
   </style>
 

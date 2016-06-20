@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <declare-styleable name="BubblyBackgroundLayout">
+
+    <attr name="bubbleBigCurveDiameter" format="dimension"/>
+    <attr name="bubbleBumpDiameter" format="dimension"/>
+    <attr name="smallBubbleDiameter" format="dimension"/>
+    <attr name="smallBubbleDistance" format="dimension"/>
+    <attr name="bubbleColor" format="color"/>
+
+  </declare-styleable>
+
+</resources>

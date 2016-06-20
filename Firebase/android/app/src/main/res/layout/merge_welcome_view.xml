@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <LinearLayout
+  <com.novoda.bonfire.view.BubblyBackgroundLayout
     style="@style/Welcome.Sender.Layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
       android:layout_height="wrap_content"
       android:layout_marginBottom="@dimen/welcome_sender_message_bottom_margin"
       android:layout_marginTop="@dimen/welcome_sender_message_top_margin" />
-  </LinearLayout>
+  </com.novoda.bonfire.view.BubblyBackgroundLayout>
 
   <TextView
     style="@style/Welcome.Message"
