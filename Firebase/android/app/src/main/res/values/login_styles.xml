@@ -8,6 +8,15 @@
     <item name="android:gravity">top</item>
   </style>
 
+  <style name="Login.IconLayout">
+    <item name="android:gravity">center</item>
+    <item name="bubbleColor">@color/white</item>
+    <item name="bubbleBigCurveHeight">@dimen/login_big_bubble_curved_height</item>
+    <item name="smallBubbleDiameter">@dimen/login_small_bubble_diameter</item>
+    <item name="bubbleBumpDiameter">@dimen/login_bubble_bump_diameter</item>
+    <item name="smallBubbleDistance">@dimen/login_small_bubble_distance</item>
+  </style>
+
   <style name="Login.Disclaimer">
     <item name="android:gravity">center</item>
     <item name="android:textColor">@color/white</item>

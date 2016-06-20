@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
   <declare-styleable name="BubblyView">
     <attr name="bubbleColor"
       format="color" />
   </declare-styleable>
 
-  <declare-styleable name="BubblyBackgroundLayout"
+  <declare-styleable name="BubblyLinearLayout"
     parent="BubblyView">
-
     <attr name="bubbleColor" />
-    <attr name="bubbleBigCurveDiameter"
+    <attr name="bubbleBigCurveHeight"
       format="dimension" />
     <attr name="bubbleBumpDiameter"
       format="dimension" />
@@ -17,12 +17,10 @@
       format="dimension" />
     <attr name="smallBubbleDistance"
       format="dimension" />
-
   </declare-styleable>
 
   <declare-styleable name="BubblyTextView"
     parent="BubblyView">
-
     <attr name="bubbleColor" />
     <attr name="bubbleGravity"
       format="enum">
@@ -31,7 +29,6 @@
       <enum name="end"
         value="1" />
     </attr>
-
   </declare-styleable>
 
 </resources>

@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 
 import com.novoda.bonfire.R;
 
-public class BubblyBackgroundLayout extends LinearLayout {
+public class BubblyLinearLayout extends LinearLayout {
 
     private final Paint paint;
     private final RectF rect;
@@ -19,15 +19,15 @@ public class BubblyBackgroundLayout extends LinearLayout {
     private final int smallBubbleDistance;
     private final int bubbleCurveHeight;
 
-    public BubblyBackgroundLayout(Context context) {
+    public BubblyLinearLayout(Context context) {
         this(context, null);
     }
 
-    public BubblyBackgroundLayout(Context context, AttributeSet attrs) {
+    public BubblyLinearLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public BubblyBackgroundLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public BubblyLinearLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setWillNotDraw(false);
         rect = new RectF();
@@ -35,20 +35,16 @@ public class BubblyBackgroundLayout extends LinearLayout {
         paint.setStyle(Paint.Style.FILL);
         paint.setAntiAlias(true);
 
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.BubblyBackgroundLayout, 0, 0);
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.BubblyLinearLayout, 0, 0);
         try {
-            bubbleCurveHeight = getPixelSizeOrDefault(ta, R.styleable.BubblyBackgroundLayout_bubbleBigCurveDiameter, R.dimen.bubble_big_height);
-            bumpDiameter = getPixelSizeOrDefault(ta, R.styleable.BubblyBackgroundLayout_bubbleBumpDiameter, R.dimen.bubble_bump_diameter);
-            smallBubbleDiameter = getPixelSizeOrDefault(ta, R.styleable.BubblyBackgroundLayout_smallBubbleDiameter, R.dimen.bubble_small_diameter);
-            smallBubbleDistance = getPixelSizeOrDefault(ta, R.styleable.BubblyBackgroundLayout_smallBubbleDistance, R.dimen.bubble_distance);
-            paint.setColor(ta.getColor(R.styleable.BubblyBackgroundLayout_bubbleColor, getResources().getColor(R.color.white)));
+            bubbleCurveHeight = ta.getDimensionPixelSize(R.styleable.BubblyLinearLayout_bubbleBigCurveHeight, 0);
+            bumpDiameter = ta.getDimensionPixelSize(R.styleable.BubblyLinearLayout_bubbleBumpDiameter, 0);
+            smallBubbleDiameter = ta.getDimensionPixelSize(R.styleable.BubblyLinearLayout_smallBubbleDiameter, 0);
+            smallBubbleDistance = ta.getDimensionPixelSize(R.styleable.BubblyLinearLayout_smallBubbleDistance, 0);
+            paint.setColor(ta.getColor(R.styleable.BubblyLinearLayout_bubbleColor, 0));
         } finally {
             ta.recycle();
         }
-    }
-
-    private int getPixelSizeOrDefault(TypedArray ta, int index, int defaultResIndex) {
-        return ta.getDimensionPixelSize(index, getResources().getDimensionPixelSize(defaultResIndex));
     }
 
     @Override
