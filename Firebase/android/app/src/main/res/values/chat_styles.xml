@@ -33,17 +33,19 @@
   </style>
 
   <style name="Chat.Message.Body">
-    <item name="android:background">@drawable/bubble_shape_grey</item>
     <item name="android:paddingStart">26dp</item>
     <item name="android:paddingEnd">10dp</item>
     <item name="android:paddingBottom">8dp</item>
     <item name="android:paddingTop">8dp</item>
     <item name="android:textColor">@color/text_black</item>
     <item name="android:textSize">14sp</item>
+    <item name="bubbleColor">@color/bubble_grey</item>
+    <item name="bubbleGravity">start</item>
   </style>
 
   <style name="Chat.Message.Body.Self">
-    <item name="android:background">@drawable/bubble_shape_primary</item>
+    <item name="bubbleColor">@color/colorPrimaryLight</item>
+    <item name="bubbleGravity">end</item>
     <item name="android:paddingStart">10dp</item>
     <item name="android:paddingEnd">26dp</item>
   </style>

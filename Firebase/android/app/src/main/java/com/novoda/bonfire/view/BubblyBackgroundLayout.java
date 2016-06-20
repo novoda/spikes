@@ -3,7 +3,6 @@ package com.novoda.bonfire.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
@@ -42,7 +41,7 @@ public class BubblyBackgroundLayout extends LinearLayout {
             bumpDiameter = getPixelSizeOrDefault(ta, R.styleable.BubblyBackgroundLayout_bubbleBumpDiameter, R.dimen.bubble_bump_diameter);
             smallBubbleDiameter = getPixelSizeOrDefault(ta, R.styleable.BubblyBackgroundLayout_smallBubbleDiameter, R.dimen.bubble_small_diameter);
             smallBubbleDistance = getPixelSizeOrDefault(ta, R.styleable.BubblyBackgroundLayout_smallBubbleDistance, R.dimen.bubble_distance);
-            paint.setColor(ta.getColor(R.styleable.BubblyBackgroundLayout_bubbleColor, Color.WHITE));
+            paint.setColor(ta.getColor(R.styleable.BubblyBackgroundLayout_bubbleColor, getResources().getColor(R.color.white)));
         } finally {
             ta.recycle();
         }
