@@ -70,6 +70,6 @@ public class BubblyDrawable extends Drawable{
 
     @Override
     public int getOpacity() {
-        return PixelFormat.OPAQUE;
+        return PixelFormat.TRANSLUCENT;
     }
 }

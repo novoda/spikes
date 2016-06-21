@@ -35,7 +35,8 @@ public class WelcomeView extends LinearLayout implements WelcomeDisplayer {
         welcomeMessage = Views.findById(this, R.id.welcome_message_view);
         userAvatar = Views.findById(this, R.id.user_avatar);
         proceedButton = Views.findById(this, R.id.proceed_button);
-        Views.findById(this, R.id.welcome_sender_layout).setBackground(new BubblyDrawable(getResources()));
+        View senderFrame = Views.findById(this, R.id.welcome_sender_layout);
+        senderFrame.setBackground(new BubblyDrawable(getResources()));
     }
 
     @Override
