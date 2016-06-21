@@ -5,7 +5,7 @@
   <string name="start_chatting">Start chatting</string>
   <string name="selectLoginProvider">Please select your login provider</string>
   <string name="createChannel">Create channel</string>
-  <string name="insert_channel_name">\uD83D\uDE1C</string>
+  <string name="insert_channel_name">\u263a</string>
   <string name="private_channel">Private channel</string>
   <string name="add_channel_members">Add channel members</string>
   <string name="create">Create</string>
