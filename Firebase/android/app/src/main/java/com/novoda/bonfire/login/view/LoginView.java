@@ -25,7 +25,7 @@ public class LoginView extends LinearLayout implements LoginDisplayer {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_login_view, this);
         loginButton = Views.findById(this, R.id.sign_in_button);
-        Views.findById(this, R.id.login_icon_frame_layout).setBackground(new BubblyDrawable(getContext()));
+        Views.findById(this, R.id.login_icon_frame_layout).setBackground(new BubblyDrawable(getResources()));
     }
 
     @Override

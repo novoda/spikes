@@ -1,6 +1,6 @@
 package com.novoda.bonfire.view;
 
-import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
@@ -19,16 +19,16 @@ public class BubblyDrawable extends Drawable{
     private final int smallBubbleDistance;
     private final int bubbleCurveHeight;
 
-    public BubblyDrawable(Context context) {
-        this.bumpDiameter = context.getResources().getDimensionPixelSize(R.dimen.bubble_bump_diameter);
-        this.smallBubbleDiameter = context.getResources().getDimensionPixelSize(R.dimen.small_bubble_diameter);
-        this.smallBubbleDistance = context.getResources().getDimensionPixelSize(R.dimen.small_bubble_distance);
-        this.bubbleCurveHeight = context.getResources().getDimensionPixelSize(R.dimen.big_bubble_curved_height);
+    public BubblyDrawable(Resources resources) {
+        this.bumpDiameter = resources.getDimensionPixelSize(R.dimen.bubble_bump_diameter);
+        this.smallBubbleDiameter = resources.getDimensionPixelSize(R.dimen.small_bubble_diameter);
+        this.smallBubbleDistance = resources.getDimensionPixelSize(R.dimen.small_bubble_distance);
+        this.bubbleCurveHeight = resources.getDimensionPixelSize(R.dimen.big_bubble_curved_height);
+        this.rect = new RectF();
         this.paint = new Paint();
-        paint.setColor(context.getResources().getColor(R.color.white));
+        paint.setColor(resources.getColor(R.color.white));
         paint.setStyle(Paint.Style.FILL);
         paint.setAntiAlias(true);
-        this.rect = new RectF();
     }
 
     @Override
