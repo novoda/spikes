@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <dimen name="big_bubble_curved_height">48dp</dimen>
+  <dimen name="bubble_bump_diameter">24dp</dimen>
+  <dimen name="small_bubble_diameter">12dp</dimen>
+  <dimen name="small_bubble_distance">6dp</dimen>
+
+</resources>

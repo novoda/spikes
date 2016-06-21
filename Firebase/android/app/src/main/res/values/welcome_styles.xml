@@ -11,11 +11,6 @@
 
   <style name="Welcome.Sender.Layout">
     <item name="android:gravity">center</item>
-    <item name="bubbleColor">@color/white</item>
-    <item name="bubbleBigCurveHeight">@dimen/welcome_big_bubble_curved_height</item>
-    <item name="smallBubbleDiameter">@dimen/welcome_small_bubble_diameter</item>
-    <item name="bubbleBumpDiameter">@dimen/welcome_bubble_bump_diameter</item>
-    <item name="smallBubbleDistance">@dimen/welcome_small_bubble_distance</item>
   </style>
 
   <style name="Welcome.Sender.Image">

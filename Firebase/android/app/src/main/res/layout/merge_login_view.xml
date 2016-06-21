@@ -8,7 +8,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.novoda.bonfire.view.BubblyLinearLayout
+    <FrameLayout
+      android:id="@+id/login_icon_frame_layout"
       style="@style/Login.IconLayout"
       android:layout_width="match_parent"
       android:layout_height="@dimen/login_icon_layout_height"
@@ -20,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:src="@mipmap/ic_launcher" />
-    </com.novoda.bonfire.view.BubblyLinearLayout>
+    </FrameLayout>
 
     <TextView
       style="@style/Login.Disclaimer"

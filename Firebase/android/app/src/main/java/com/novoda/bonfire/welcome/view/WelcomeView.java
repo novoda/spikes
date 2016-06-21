@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.novoda.bonfire.R;
 import com.novoda.bonfire.user.data.model.User;
+import com.novoda.bonfire.view.BubblyDrawable;
 import com.novoda.bonfire.view.CircleCropImageTransformation;
 import com.novoda.bonfire.welcome.displayer.WelcomeDisplayer;
 import com.novoda.notils.caster.Views;
@@ -34,6 +35,7 @@ public class WelcomeView extends LinearLayout implements WelcomeDisplayer {
         welcomeMessage = Views.findById(this, R.id.welcome_message_view);
         userAvatar = Views.findById(this, R.id.user_avatar);
         proceedButton = Views.findById(this, R.id.proceed_button);
+        Views.findById(this, R.id.welcome_sender_layout).setBackground(new BubblyDrawable(getContext()));
     }
 
     @Override

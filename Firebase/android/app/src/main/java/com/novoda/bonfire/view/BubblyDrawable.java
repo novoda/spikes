@@ -1,16 +1,16 @@
 package com.novoda.bonfire.view;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.RectF;
-import android.util.AttributeSet;
-import android.widget.LinearLayout;
+import android.graphics.drawable.Drawable;
 
 import com.novoda.bonfire.R;
 
-public class BubblyLinearLayout extends LinearLayout {
+public class BubblyDrawable extends Drawable{
 
     private final Paint paint;
     private final RectF rect;
@@ -19,37 +19,20 @@ public class BubblyLinearLayout extends LinearLayout {
     private final int smallBubbleDistance;
     private final int bubbleCurveHeight;
 
-    public BubblyLinearLayout(Context context) {
-        this(context, null);
-    }
-
-    public BubblyLinearLayout(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public BubblyLinearLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        setWillNotDraw(false);
-        rect = new RectF();
-        paint = new Paint();
+    public BubblyDrawable(Context context) {
+        this.bumpDiameter = context.getResources().getDimensionPixelSize(R.dimen.bubble_bump_diameter);
+        this.smallBubbleDiameter = context.getResources().getDimensionPixelSize(R.dimen.small_bubble_diameter);
+        this.smallBubbleDistance = context.getResources().getDimensionPixelSize(R.dimen.small_bubble_distance);
+        this.bubbleCurveHeight = context.getResources().getDimensionPixelSize(R.dimen.big_bubble_curved_height);
+        this.paint = new Paint();
+        paint.setColor(context.getResources().getColor(R.color.white));
         paint.setStyle(Paint.Style.FILL);
         paint.setAntiAlias(true);
-
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.BubblyLinearLayout, 0, 0);
-        try {
-            bubbleCurveHeight = ta.getDimensionPixelSize(R.styleable.BubblyLinearLayout_bubbleBigCurveHeight, 0);
-            bumpDiameter = ta.getDimensionPixelSize(R.styleable.BubblyLinearLayout_bubbleBumpDiameter, 0);
-            smallBubbleDiameter = ta.getDimensionPixelSize(R.styleable.BubblyLinearLayout_smallBubbleDiameter, 0);
-            smallBubbleDistance = ta.getDimensionPixelSize(R.styleable.BubblyLinearLayout_smallBubbleDistance, 0);
-            paint.setColor(ta.getColor(R.styleable.BubblyLinearLayout_bubbleColor, 0));
-        } finally {
-            ta.recycle();
-        }
+        this.rect = new RectF();
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+    public void draw(Canvas canvas) {
         int canvasHeight = canvas.getHeight();
         int canvasWidth = canvas.getWidth();
 
@@ -75,4 +58,18 @@ public class BubblyLinearLayout extends LinearLayout {
         canvas.drawRoundRect(rect, radius, radius, paint);
     }
 
+    @Override
+    public void setAlpha(int alpha) {
+        paint.setAlpha(alpha);
+    }
+
+    @Override
+    public void setColorFilter(ColorFilter colorFilter) {
+        paint.setColorFilter(colorFilter);
+    }
+
+    @Override
+    public int getOpacity() {
+        return PixelFormat.OPAQUE;
+    }
 }

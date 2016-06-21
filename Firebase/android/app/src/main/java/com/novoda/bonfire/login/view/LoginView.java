@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.novoda.bonfire.R;
 import com.novoda.bonfire.login.displayer.LoginDisplayer;
+import com.novoda.bonfire.view.BubblyDrawable;
 import com.novoda.notils.caster.Views;
 
 public class LoginView extends LinearLayout implements LoginDisplayer {
@@ -24,6 +25,7 @@ public class LoginView extends LinearLayout implements LoginDisplayer {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_login_view, this);
         loginButton = Views.findById(this, R.id.sign_in_button);
+        Views.findById(this, R.id.login_icon_frame_layout).setBackground(new BubblyDrawable(getContext()));
     }
 
     @Override

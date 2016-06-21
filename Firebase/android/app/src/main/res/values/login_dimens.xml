@@ -7,9 +7,5 @@
   <dimen name="login_sign_in_button_margin">@dimen/login_disclaimer_horizontal_margin</dimen>
   <dimen name="login_disclaimer_top_margin">48dp</dimen>
   <dimen name="login_disclaimer_bottom_margin">24dp</dimen>
-  <dimen name="login_big_bubble_curved_height">48dp</dimen>
-  <dimen name="login_bubble_bump_diameter">24dp</dimen>
-  <dimen name="login_small_bubble_diameter">12dp</dimen>
-  <dimen name="login_small_bubble_distance">6dp</dimen>
 
 </resources>
