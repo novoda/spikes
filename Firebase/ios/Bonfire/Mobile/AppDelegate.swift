@@ -12,10 +12,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         FIRApp.configure()
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
 
-        // Uncomment these lines to sign out and start afresh!
-        // try! FIRAuth.auth()?.signOut()
-        // GIDSignIn.sharedInstance().signOut()
-
         UIApplication.sharedApplication().statusBarStyle = .LightContent
 
         if let navigationController = (SharedServices.navigator as? AppNavigator)?.navigationController {
