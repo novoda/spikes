@@ -61,6 +61,10 @@ public class Round {
         public Iterator<View> iterator() {
             return views.iterator();
         }
+
+        public View get(int position) {
+            return views.get(position);
+        }
     }
 
     public static class KeySequence implements Iterable<Integer> {
@@ -82,6 +86,14 @@ public class Round {
         @Override
         public Iterator<Integer> iterator() {
             return keys.iterator();
+        }
+
+        public boolean contains(int keyCode) {
+            return keys.contains(keyCode);
+        }
+
+        public int indexOf(int keyCode) {
+            return keys.indexOf(keyCode);
         }
     }
 }

@@ -126,11 +126,25 @@ public class GameActivity extends AppCompatActivity {
             return true;
         }
 
-        playerInput.add(keyCode);
+        highlightKeyPressed(keyCode);
 
+        playerInput.add(keyCode);
         checkForSequence();
 
         return true;
+    }
+
+    private void highlightKeyPressed(int keyCode) {
+        if (currentRound.getKeySequence().contains(keyCode)) {
+            int index = currentRound.getKeySequence().indexOf(keyCode);
+            final View sequenceCurrentView = currentRound.getViewSequence().get(index);
+            sequenceCurrentView.animate().alpha(1).setDuration(20).setStartDelay(0).withEndAction(new Runnable() {
+                @Override
+                public void run() {
+                    sequenceCurrentView.animate().alpha(0.33f).setDuration(50).setStartDelay(10).start();
+                }
+            }).start();
+        }
     }
 
     private void checkForSequence() {
@@ -139,6 +153,7 @@ public class GameActivity extends AppCompatActivity {
             if (playerInput.size() <= i) {
                 return;
             }
+
             int expectedKey = currentRoundKeySequence.get(i);
             int inputtedKey = playerInput.get(i);
             if (expectedKey == inputtedKey) {
