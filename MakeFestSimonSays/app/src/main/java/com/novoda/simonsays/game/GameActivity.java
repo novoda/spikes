@@ -1,5 +1,14 @@
 package com.novoda.simonsays.game;
 
+import android.content.Intent;
+import android.hardware.usb.UsbManager;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.TextView;
+
 import com.novoda.notils.caster.Views;
 import com.novoda.notils.logger.toast.ToastDisplayer;
 import com.novoda.notils.logger.toast.ToastDisplayers;
@@ -7,14 +16,6 @@ import com.novoda.notils.meta.AndroidUtils;
 import com.novoda.simonsays.BuildConfig;
 import com.novoda.simonsays.R;
 import com.novoda.simonsays.highscores.HighscoresActivity;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +94,7 @@ public class GameActivity extends AppCompatActivity {
             if (viewSequence.isComplete()) {
                 state = State.AWAITING_PLAYER;
                 playerInput.clear();
-                AndroidUtils.toggleKeyboard(GameActivity.this);
+                promptForInput();
                 return;
             }
             final View view = viewSequence.next();
@@ -107,17 +108,29 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    private void promptForInput() {
+        UsbManager systemService = (UsbManager) getSystemService(USB_SERVICE);
+        if (systemService.getDeviceList().isEmpty()) {
+            AndroidUtils.toggleKeyboard(GameActivity.this);
+        } else {
+            toastDisplayer.display("Simon Says!");
+        }
+    }
+
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (state != State.AWAITING_PLAYER) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             return super.onKeyUp(keyCode, event);
+        }
+        if (state != State.AWAITING_PLAYER) {
+            return true;
         }
 
         playerInput.add(keyCode);
 
         checkForSequence();
 
-        return super.onKeyUp(keyCode, event);
+        return true;
     }
 
     private void checkForSequence() {
