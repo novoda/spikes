@@ -1,13 +1,11 @@
 import UIKit
 import Firebase
 import GoogleSignIn
-import RxSwift
 
 @UIApplicationMain
 final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    let disposeBag = DisposeBag()
     var userService: UsersService!
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
