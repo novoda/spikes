@@ -1,6 +1,4 @@
 import UIKit
-import RxSwift
-import RxCocoa
 
 final class CreateChannelView: UIView {
 
@@ -22,8 +20,6 @@ final class CreateChannelView: UIView {
 
     weak var actionListener: CreateChannelActionListener?
     weak var viewController: UIViewController?
-
-    private let disposeBag = DisposeBag()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -82,7 +78,6 @@ final class CreateChannelView: UIView {
 
     }
 
-
     func setupLayout() {
         addSubview(scrollView)
         scrollView.pinToSuperviewEdges()
@@ -140,10 +135,7 @@ final class CreateChannelView: UIView {
     }
 
     func setupActions() {
-        submitButton.rx_tap.subscribe(
-            onNext: { [weak self] in
-                self?.createChannel()
-            }).addDisposableTo(disposeBag)
+        submitButton.addTarget(self, action: #selector(createChannel), forControlEvents: .TouchUpInside)
     }
 
     func createChannel() {
