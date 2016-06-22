@@ -35,7 +35,7 @@
       android:layout_height="@dimen/chat_message_author_image"
       android:layout_alignParentEnd="true" />
 
-    <com.novoda.bonfire.view.BubblyTextView
+    <TextView
       android:id="@+id/message_body"
       style="@style/Chat.Message.Body.Self"
       android:layout_width="wrap_content"

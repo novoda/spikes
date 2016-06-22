@@ -8,8 +8,11 @@ import com.novoda.bonfire.R;
 import com.novoda.bonfire.chat.data.model.Chat;
 import com.novoda.bonfire.chat.data.model.Message;
 import com.novoda.bonfire.user.data.model.User;
+import com.novoda.bonfire.view.MessageBubbleDrawable;
 
 import java.util.ArrayList;
+
+import static com.novoda.bonfire.view.MessageBubbleDrawable.*;
 
 class ChatAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
@@ -30,11 +33,17 @@ class ChatAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
     @Override
     public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        MessageBubbleDrawable bubbleDrawable;
+        MessageView messageView;
         if (viewType == 0) {
-            return new MessageViewHolder((MessageView) inflater.inflate(R.layout.self_message_item_layout, parent, false));
+            bubbleDrawable = new MessageBubbleDrawable(parent.getContext(), R.color.colorPrimaryLight, Gravity.END);
+            messageView = (MessageView) inflater.inflate(R.layout.self_message_item_layout, parent, false);
         } else {
-            return new MessageViewHolder((MessageView) inflater.inflate(R.layout.message_item_layout, parent, false));
+            bubbleDrawable = new MessageBubbleDrawable(parent.getContext(), R.color.bubble_grey, Gravity.START);
+            messageView = (MessageView) inflater.inflate(R.layout.message_item_layout, parent, false);
         }
+        messageView.setTextBackground(bubbleDrawable);
+        return new MessageViewHolder(messageView);
     }
 
     @Override

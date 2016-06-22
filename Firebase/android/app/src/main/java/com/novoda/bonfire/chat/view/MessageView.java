@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.novoda.bonfire.R;
 import com.novoda.bonfire.chat.data.model.Message;
 import com.novoda.bonfire.view.CircleCropImageTransformation;
+import com.novoda.bonfire.view.MessageBubbleDrawable;
 import com.novoda.notils.caster.Views;
 import com.novoda.notils.exception.DeveloperError;
 
@@ -45,6 +46,10 @@ public class MessageView extends LinearLayout {
             layoutResId = array.getResourceId(0, R.layout.merge_message_item_view);
             array.recycle();
         }
+    }
+
+    public void setTextBackground(MessageBubbleDrawable bubbleDrawable) {
+        body.setBackground(bubbleDrawable);
     }
 
     @Override

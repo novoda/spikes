@@ -2,18 +2,19 @@ package com.novoda.bonfire.view;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.RectF;
-import android.util.AttributeSet;
-import android.widget.TextView;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorRes;
 
 import com.novoda.bonfire.R;
 
-public class BubblyTextView extends TextView {
+public class MessageBubbleDrawable extends Drawable {
 
-    private enum Gravity {
+    public enum Gravity {
         START, END
     }
 
@@ -26,32 +27,15 @@ public class BubblyTextView extends TextView {
     private int bumpDiameter;
     private int smallBubbleDiameter;
 
-    public BubblyTextView(Context context) {
-        this(context, null);
-    }
-
-    public BubblyTextView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public BubblyTextView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public MessageBubbleDrawable(Context context, @ColorRes int color, Gravity gravity) {
+        this.gravity = gravity;
         rect = new RectF();
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setAntiAlias(true);
-        resolveAttributes(context, attrs);
-        resolveDimensions(getResources());
-    }
+        paint.setColor(context.getResources().getColor(color));
 
-    private void resolveAttributes(Context context, AttributeSet attrs) {
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.BubblyTextView, 0, 0);
-        try {
-            paint.setColor(typedArray.getColor(R.styleable.BubblyTextView_bubbleColor, getResources().getColor(R.color.bubble_grey)));
-            gravity = Gravity.values()[typedArray.getInt(R.styleable.BubblyTextView_bubbleGravity, 0)];
-        } finally {
-            typedArray.recycle();
-        }
+        resolveDimensions(context.getResources());
     }
 
     private void resolveDimensions(Resources resources) {
@@ -63,12 +47,7 @@ public class BubblyTextView extends TextView {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        drawBackground(canvas);
-        super.onDraw(canvas);
-    }
-
-    private void drawBackground(Canvas canvas) {
+    public void draw(Canvas canvas) {
         int messageBubbleLeft = gravity == Gravity.START ? messageBubblePadding : 0;
         int messageBubbleRight = gravity == Gravity.START ? canvas.getWidth() : canvas.getWidth() - messageBubblePadding;
         int bumpCenterHorizontal = gravity == Gravity.START ? messageBubbleLeft : messageBubbleRight;
@@ -84,5 +63,20 @@ public class BubblyTextView extends TextView {
         int radius = diameter / 2;
         rect.set(xPosition - radius, yPosition - radius, xPosition + radius, yPosition + radius);
         canvas.drawRoundRect(rect, radius, radius, paint);
+    }
+
+    @Override
+    public void setAlpha(int alpha) {
+        paint.setAlpha(alpha);
+    }
+
+    @Override
+    public void setColorFilter(ColorFilter colorFilter) {
+        paint.setColorFilter(colorFilter);
+    }
+
+    @Override
+    public int getOpacity() {
+        return PixelFormat.TRANSLUCENT;
     }
 }
