@@ -1,6 +1,4 @@
 import UIKit
-import RxSwift
-import RxCocoa
 
 protocol ChatViewNavigationItemDelegate: class {
     func updateNavigationItem(withChat chat: Chat)
@@ -56,6 +54,7 @@ final class ChatView: UIView {
         sendButton.titleLabel?.font = UIFont.boldSystemFontOfSize(17)
 
         sendButton.addTarget(self, action: #selector(submitMessage), forControlEvents: .TouchUpInside)
+        textField.addTarget(self, action: #selector(updateButtonState), forControlEvents: [.ValueChanged, .AllEditingEvents])
     }
 
     private func setupHierarchy() {
@@ -121,9 +120,21 @@ extension ChatView {
         actionListener?.addUsers()
     }
 
+    func updateButtonState() {
+        sendButton.enabled = !messageText.isEmpty
+    }
+
     func submitMessage() {
-        actionListener?.submitMessage(textField.text ?? "")
+        guard !messageText.isEmpty else {
+            return
+        }
+
+        actionListener?.submitMessage(messageText)
         textField.text = ""
+    }
+
+    var messageText: String {
+        return textField.text?.stringByTrimmingCharactersInSet(.whitespaceCharacterSet()) ?? ""
     }
 }
 
