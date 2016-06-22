@@ -4,10 +4,10 @@
     <string name="highscores">Highscores</string>
     <string name="simon_says">Play now to enter the competition!!!!</string>
     <string name="made_with_heart_by_novoda">Made with &lt;3 by Novoda</string>
-    <string name="a">1</string>
-    <string name="b">2</string>
-    <string name="c">3</string>
-    <string name="d">4</string>
+    <string name="a">Y</string>
+    <string name="b">X</string>
+    <string name="c">B</string>
+    <string name="d">A</string>
     <string name="score_x">Score: %1$d</string>
     <string name="your_score_was_x">Your score was %1$d</string>
     <string name="highscore_is_x">Highscore is %1$d</string>
