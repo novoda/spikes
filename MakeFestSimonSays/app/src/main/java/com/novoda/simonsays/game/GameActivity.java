@@ -71,7 +71,7 @@ public class GameActivity extends AppCompatActivity {
                 currentRound.getViewSequence(),
                 currentRound.getSpeed()
         );
-        gameHandler.postDelayed(sequenceShower, 1000);
+        gameHandler.postDelayed(sequenceShower, 500);
         scoreWidget.setText(getString(R.string.score_x, currentRound.getScore()));
     }
 
@@ -98,10 +98,11 @@ public class GameActivity extends AppCompatActivity {
                 return;
             }
             final View view = viewSequence.next();
-            view.animate().alpha(1).setDuration(130).setStartDelay(0).withEndAction(new Runnable() {
+            final long animationSpeed = roundSpeed / 2;
+            view.animate().alpha(1).setDuration(animationSpeed).setStartDelay(0).withEndAction(new Runnable() {
                 @Override
                 public void run() {
-                    view.animate().alpha(0.33f).setDuration(50).setStartDelay(100).start();
+                    view.animate().alpha(0.33f).setDuration(animationSpeed / 2).setStartDelay(animationSpeed / 2).start();
                 }
             }).start();
             gameHandler.postDelayed(this, roundSpeed);
