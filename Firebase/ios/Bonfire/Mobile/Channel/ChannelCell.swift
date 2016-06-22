@@ -28,8 +28,6 @@ final class ChannelCell: UICollectionViewCell {
 
         privateImage.contentMode = .ScaleAspectFill
 
-//        backgroundCircle.layer.borderWidth = 3
-//        backgroundCircle.layer.borderColor = UIColor(red: 248 / 255, green: 95 / 255, blue: 65 / 255, alpha: 1.0).CGColor
         backgroundCircle.layer.cornerRadius = layer.frame.height / 2
         backgroundCircle.backgroundColor = UIColor.whiteColor()
 
