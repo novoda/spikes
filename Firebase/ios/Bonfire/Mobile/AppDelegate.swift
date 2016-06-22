@@ -12,8 +12,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         FIRApp.configure()
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
 
-//                try! FIRAuth.auth()?.signOut()
-//                GIDSignIn.sharedInstance().signOut()
+        // Uncomment these lines to sign out and start afresh!
+        // try! FIRAuth.auth()?.signOut()
+        // GIDSignIn.sharedInstance().signOut()
+
         UIApplication.sharedApplication().statusBarStyle = .LightContent
 
         if let navigationController = (SharedServices.navigator as? AppNavigator)?.navigationController {
@@ -47,7 +49,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(
         application: UIApplication,
         continueUserActivity userActivity: NSUserActivity,
-        restorationHandler: ([AnyObject]?) -> Void
+                             restorationHandler: ([AnyObject]?) -> Void
         ) -> Bool {
 
         let handled = FIRDynamicLinks.dynamicLinks()?.handleUniversalLink(userActivity.webpageURL!) { (dynamiclink, error) in
