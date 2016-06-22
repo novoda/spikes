@@ -1,19 +1,16 @@
 package com.novoda.simonsays.game;
 
-import static android.view.KeyEvent.KEYCODE_1;
-import static android.view.KeyEvent.KEYCODE_2;
-import static android.view.KeyEvent.KEYCODE_3;
-import static android.view.KeyEvent.KEYCODE_4;
-
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static android.view.KeyEvent.*;
+
 class RoundCreator {
 
-    private static final int[] KEYS = {KEYCODE_1, KEYCODE_2, KEYCODE_3, KEYCODE_4};
+    private static final int[] KEYS = {KEYCODE_BUTTON_Y, KEYCODE_BUTTON_X, KEYCODE_BUTTON_B, KEYCODE_BUTTON_A};
     private static final List<Integer> SEQUENCE = new ArrayList<>();
 
     private final Random random = new Random();
