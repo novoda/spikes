@@ -14,5 +14,7 @@ if (isLocalDeploy) {
       }
     }
   }
+} else {
+  throw new UnsupportedOperationException('Plugin has not been deployed to Bintray yet, please use -Plocal to use the embedded repo')
 }
 
