@@ -1,7 +1,7 @@
 group pluginGroup
 version pluginVersion
 
-if (project.hasProperty('localDeploy')) {
+if (isLocalDeploy) {
   apply plugin: 'maven'
   File localRepo = rootProject.file('.gradle/repo')
   if (!localRepo.exists()) {
