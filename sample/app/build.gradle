@@ -1,0 +1,35 @@
+buildscript {
+  repositories {
+    maven { url rootProject.file('../.gradle/repo') }
+  }
+  dependencies {
+    classpath 'com.android.tools.build:gradle:2.1.2'
+    classpath "com.novoda.build-properties:plugin:${pluginVersion}"
+  }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'build-properties'
+
+android {
+  compileSdkVersion 23
+  buildToolsVersion "23.0.2"
+
+  defaultConfig {
+    applicationId "com.novoda.buildpropertiesplugin.sample"
+    minSdkVersion 16
+    targetSdkVersion 23
+    versionCode 1
+    versionName "1.0"
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt')
+    }
+  }
+}
+
+dependencies {
+  compile 'com.android.support:appcompat-v7:24.0.0'
+}
