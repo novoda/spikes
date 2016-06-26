@@ -3,7 +3,7 @@
 <br/>
 
 Sometimes you want to retrieve some information from a file that is not checked in as part of your repo for security reasons (keys, credentials, passwords, etc).
-Other times it's just you already are given a properties file and you need to make sure it ends up in your application `BuildìConfig` or in some resource file.<br/>
+Other times it's just you already are given a properties file and you need to make sure it ends up in your application `BuildConfig` or in some resource file.<br/>
 This plugin augments the `android` default facilities, aiming to provide a simple way to:
 - define handles to properties files in your build script (à la `signingConfig`)
 - define a string field in your `BuildConfig` filled with a value in a properties file
