@@ -10,7 +10,7 @@ This plugin augments the `android` default facilities, aiming to provide a simpl
 - load an entire properties file into your `BuildConfig`
 - use properties files for signing configurations avoiding to worry about passwords and keystores in your repo
 
-### How To Build
+## How To Build
 
 To build the latest version of the plugin, run from the root of the repo:
 ```
@@ -32,7 +32,7 @@ by the sample app to use the embedded local repo to retrieve the plugin:
 ./gradlew -Plocal assemble
 ```
 
-### How To Use
+## How To Use
 
 #### 1.Maven coordinates
 The plugin **is not deployed on any public maven repo at the moment**, therefore you have the only choice of using it in
@@ -74,9 +74,9 @@ In any product flavor configuration (or `defaultConfig`) you can use `buildConfi
 All the entries in that properties files are converted to string fields in your `BuildConfig`. Names of the fields are
 created formatting the key of each entry to follow the standard constant field naming in Java (uppercase with underscores), eg:
 
-`apiKey` -> `API_KEY`
-`api_key` -> `API_KEY`
-`api.key` -> `API_KEY`
+`apiKey` -> `API_KEY`<br/>
+`api_key` -> `API_KEY`<br/>
+`api.key` -> `API_KEY`<br/>
 
 Note that properties files treat values as strings, therefore only string fields are generated in this case.
 
@@ -117,7 +117,7 @@ In any product flavor configuration (or `defaultConfig`) you can use `resValuePr
 ```
 You can omit the name of the resource and let the plugin generate one for you from the property key (snake case).
 
-### Bonus
+## Bonus
 As a bonus the plugin enhances the `buildConfigField` and `resValue` facilities to enforce types.
 To generate a string field in your `BuildConfig` you used to write:
 ```
