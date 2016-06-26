@@ -1,3 +1,5 @@
+package com.novoda.buildproperties
+
 class BuildProperties {
 
     final String name
