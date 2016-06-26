@@ -41,20 +41,18 @@ by the sample app to use the embedded local repo to retrieve the plugin:
 
 ### How To Use
 
-1. Maven coordinates
-
+#### 1.Maven coordinates
 The plugin **is not deployed on any public maven repo at the moment**, therefore you have the only choice of using it in
 the sample app via the embedded local repo. The setup for this scenario is already in place, so you just need to specify
 the `-Plocal` flag at build time as explained above (Fear not, Bintray deploy is coming soon).
 
-
-2. Apply plugin
+#### 2. Apply plugin
 The plugin needs to be applied to your Android module after the Android gradle plugin. In your `build.gradle` you should put
 ```
 apply plugin: 'build-properties'
 ```
 
-3. List properties files
+#### 3. List properties files
 In your `android` configuration you can add a `buildProperties` configuration listing all the properties files you intend
 to reference in your build script, eg:
 ```
@@ -70,7 +68,7 @@ android {
 }
 ```
 
-4. Store whole properties file in `BuildConfig`
+#### 4. Store whole properties file in `BuildConfig`
 In any product flavor configuration (or `defaultConfig`) you can use `buildConfigProperties` as follows:
 
 ```
@@ -89,7 +87,7 @@ created formatting the key of each entry to follow the standard constant field n
 
 Note that properties files treat values as strings, therefore only string fields are generated in this case.
 
-5. Store a property value into your `BuildConfig`
+#### 5. Store a property value into your `BuildConfig`
 In any product flavor configuration (or `defaultConfig`) you can use `buildConfigProperty` as follows:
 
 ```
@@ -101,7 +99,7 @@ In any product flavor configuration (or `defaultConfig`) you can use `buildConfi
 ```
 You can omit the field name and let the plugin generate one for you (following the same rules at 4.)
 
-6. Store whole properties file as generated string resources
+#### 6. Store whole properties file as generated string resources
 In any product flavor configuration (or `defaultConfig`) you can use `resValueProperties` as follows:
 
 ```
@@ -114,7 +112,7 @@ In any product flavor configuration (or `defaultConfig`) you can use `resValuePr
 All the entries in that properties files are converted to string resources, named after their key.
 
 
-7. Store a property value as generated string resource
+#### 7. Store a property value as generated string resource
 In any product flavor configuration (or `defaultConfig`) you can use `resValueProperty` as follows:
 
 ```
