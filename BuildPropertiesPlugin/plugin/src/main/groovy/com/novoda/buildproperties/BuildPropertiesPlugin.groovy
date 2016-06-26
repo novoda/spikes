@@ -109,11 +109,15 @@ class BuildPropertiesPlugin implements Plugin<Project> {
     }
 
     private String formatBuildConfigField(String name) {
+        return splitTokens(name)
+                .toUpperCase()
+    }
+
+    private String splitTokens(String name) {
         return name
                 .replace('.', '_')
                 .split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")
                 .join('_')
-                .toUpperCase()
     }
 
     private void addResValueSupportTo(target, Project project) {
@@ -132,17 +136,22 @@ class BuildPropertiesPlugin implements Plugin<Project> {
         target.ext.resValueProperty = { String name = null, Closure<BuildProperties> getBuildProperties, String key ->
             project.afterEvaluate {
                 Properties properties = getBuildProperties().entries
-                target.resValue 'string', name ?: key, "\"${properties[key]}\""
+                target.resValue 'string', name ?: formatResValueName(key), "\"${properties[key]}\""
             }
         }
         target.ext.resValueProperties = { Closure<BuildProperties> getBuildProperties ->
             project.afterEvaluate {
                 Properties properties = getBuildProperties().entries
                 properties.stringPropertyNames().each { name ->
-                    target.resValue 'string', name, properties.getProperty(name)
+                    target.resValue 'string', formatResValueName(name), properties.getProperty(name)
                 }
             }
         }
+    }
+
+    private String formatResValueName(String name) {
+        return splitTokens(name)
+                .toLowerCase()
     }
 
     private void addSigningConfigSupportTo(target, Project project) {
