@@ -13,12 +13,8 @@ This plugin augments the `android` extension, aiming to provide a simple way to:
 As a bonus the plugin enhances the `buildConfigField` and `resValue` facilities to enforce types.
 
 | Before | After |
-|--|--|
-|```
-buildConfigField 'String', 'LOL', '\"sometimes the picture takes\"'
-``` | ```
-buildConfigString 'LOL', 'sometimes the picture takes'
-```|
+|----|----|
+|```buildConfigField 'String', 'LOL', '\"sometimes the picture takes\"'``` | ```buildConfigString 'LOL', 'sometimes the picture takes'```|
 
 
 ### How To
