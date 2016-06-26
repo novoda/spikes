@@ -1,4 +1,9 @@
-buildscript {
+subprojects {
+  buildscript {
+    repositories {
+      jcenter()
+    }
+  }
   repositories {
     jcenter()
   }
