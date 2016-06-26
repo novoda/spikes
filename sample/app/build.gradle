@@ -15,17 +15,56 @@ android {
   compileSdkVersion 23
   buildToolsVersion "23.0.2"
 
+  buildProperties {
+    secrets {
+      file rootProject.file('properties/secrets.properties')
+    }
+    resValues {
+      file rootProject.file('properties/resValues.properties')
+    }
+    releaseSigning {
+      file rootProject.file('properties/releaseSigning.properties')
+    }
+  }
+
   defaultConfig {
     applicationId "com.novoda.buildpropertiesplugin.sample"
     minSdkVersion 16
     targetSdkVersion 23
     versionCode 1
     versionName "1.0"
+    buildConfigBoolean 'TEST_BOOLEAN', false
+    buildConfigInt 'TEST_INT', 42
+    buildConfigLong 'TEST_LONG', System.currentTimeMillis()
+    buildConfigDouble 'TEST_DOUBLE', Math.PI
+    buildConfigString 'TEST_STRING', "whateva"
+    buildConfigProperty 'TEST_BUILD_PROPERTY', from(buildProperties.secrets), 'superSecret'
+    buildConfigProperty 'TEST_LOAD_PROPERTY', load(rootProject.file('properties/secrets.properties')), 'superSecret'
+    buildConfigProperties from(buildProperties.secrets)
   }
+
+  signingConfigs {
+    debug {
+      signingConfigProperties load(rootProject.file('properties/debugSigning.properties'))
+    }
+    release {
+      signingConfigProperties from(buildProperties.releaseSigning)
+    }
+  }
+
   buildTypes {
+    debug {
+      signingConfig signingConfigs.debug
+      resValueInt 'debug_test_int', 100
+      resValueBoolean 'debug_test_bool', true
+      resValueString 'debug_test_string', 'dunno bro...'
+      resValueProperty from(buildProperties.secrets), 'superSecret'
+      resValueProperties from(buildProperties.resValues)
+    }
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt')
+      signingConfig signingConfigs.release
     }
   }
 }
