@@ -5,8 +5,8 @@
 Sometimes you want to retrieve some information from a file that is not checked in as part of your repo for security reasons (keys, credentials, passwords, etc).
 Other times it's just you already are given a properties file and you need to make sure it ends up in your application `BuildConfig` or in some resource file.<br/>
 This plugin augments the `android` default facilities, aiming to provide a simple way to:
-- define handles to properties files in your build script (à la `signingConfig`)
-- generate string fields in your `BuildConfig` filled with values from a properties file
+- define handles to properties file in your build script (à la `signingConfig`)
+- generate string fields in your `BuildConfig` with values from a properties file
 - generate string resources with values from a properties file
 - load signing configurations from properties files avoiding to worry about passwords and keystores references in your build script
 
@@ -25,9 +25,7 @@ A default setup with an embedded repo (pointing to `.gradle/repo`) is provided, 
 ```
 
 The sample app is not part of the main project to work around the fact the plugin might be not deployed yet either locally or remotely.
-To give it a go you need to **change your working directory to `sample/`**, and build from there. The same `-Plocal` flag is supported
-by the sample app to use the embedded local repo to retrieve the plugin:
-
+To give it a go you need to **change your working directory to `sample/`**, and build from there. The same `-Plocal` flag is supported by the sample app to use the embedded local repo to retrieve the plugin:
 ```
 ./gradlew -Plocal assemble
 ```
@@ -83,7 +81,6 @@ Note that properties files treat values as strings, therefore only string fields
 
 #### 2. Store a property value into your `BuildConfig`
 In any product flavor configuration (or `defaultConfig`) you can use `buildConfigProperty` as follows:
-
 ```
     defaultConfig {
         ...
@@ -103,7 +100,7 @@ In any product flavor configuration (or `defaultConfig`) you can use `resValuePr
         ...
     }
 ```
-All the entries in that properties files are converted to string resources, named after their key.
+All the entries in that properties files are converted to string resources, named after their key, enforcing snake casing over camel casing if necessary.
 
 
 #### 4. Store a property value as generated string resource
@@ -116,10 +113,25 @@ In any product flavor configuration (or `defaultConfig`) you can use `resValuePr
         ...
     }
 ```
-You can omit the name of the resource and let the plugin generate one for you from the property key (snake case).
+You can omit the name of the resource and let the plugin generate one for you from the property key, enforcing snake casing over camel casing if necessary.
+
+
+#### 5. Load signing coinfiguration from properties
+Instead of inline your passwords and other details in your build script you can fill the signing configuration using a properties file.
+```
+signingConfigs {
+  release {
+    signingConfigProperties from(buildProperties.releaseSigning)
+  }
+}
+```
+The plugin will automatically retrieve all the needed fields from the properties file.
+Note: the path of the keystore file is considered relative to the path of the specified properties file.
 
 ## Bonus
-As a bonus the plugin enhances the `buildConfigField` and `resValue` facilities to enforce types.
+
+#### Typed `buildConfigField`/`resValue`
+The plugin enhances the `buildConfigField` and `resValue` facilities to enforce types.
 To generate a string field in your `BuildConfig` you used to write:
 ```
 buildConfigField 'String', 'LOL', '\"sometimes the picture takes\"'
@@ -140,3 +152,6 @@ The full list of new typed facilities is as follows:
 |`resValueInt`| `resValueInt 'debug_test_int', 100`|
 |`resValueBoolean` | `resValueBoolean 'debug_test_bool', true`|
 |`resValueString` | `resValueString 'debug_test_string', 'dunno bro...'`|
+
+#### More on load properties
+When you need to specify a properties file to retrieve a property from you can use the convenience method `from()` referencing one of the files listed in `buildProperties`. If instead you want to use a different file that is not listed there you can use `load()`, specifying the path of the file you want to use. This in turn will lazy-load the properties file and caching it if any further calls in the build script.
