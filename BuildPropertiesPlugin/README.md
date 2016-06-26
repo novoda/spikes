@@ -17,7 +17,7 @@ As a bonus the plugin enhances the `buildConfigField` and `resValue` facilities 
 |```buildConfigField 'String', 'LOL', '\"sometimes the picture takes\"'``` | ```buildConfigString 'LOL', 'sometimes the picture takes'```|
 
 
-### How To
+### How To Build
 
 To build the latest version of the plugin, run from the root of the repo:
 ```
@@ -39,4 +39,89 @@ by the sample app to use the embedded local repo to retrieve the plugin:
 ./gradlew -Plocal assemble
 ```
 
+### How To Use
 
+1. Maven coordinates
+
+The plugin **is not deployed on any public maven repo at the moment**, therefore you have the only choice of using it in
+the sample app via the embedded local repo. The setup for this scenario is already in place, so you just need to specify
+the `-Plocal` flag at build time as explained above (Fear not, Bintray deploy is coming soon).
+
+
+2. Apply plugin
+The plugin needs to be applied to your Android module after the Android gradle plugin. In your `build.gradle` you should put
+```
+apply plugin: 'build-properties'
+```
+
+3. List properties files
+In your `android` configuration you can add a `buildProperties` configuration listing all the properties files you intend
+to reference in your build script, eg:
+```
+android {
+
+    buildProperties {
+        secrets {
+            file project.file('secrets.properties')
+        }
+    }
+
+    ...
+}
+```
+
+4. Store whole properties file in `BuildConfig`
+In any product flavor configuration (or `defaultConfig`) you can use `buildConfigProperties` as follows:
+
+```
+    defaultConfig {
+        ...
+        buildConfigProperties from(buildProperties.secrets)
+        ...
+    }
+```
+All the entries in that properties files are converted to string fields in your `BuildConfig`. Names of the fields are
+created formatting the key of each entry to follow the standard constant field naming in Java (uppercase with underscores), eg:
+
+`apiKey` -> `API_KEY`
+`api_key` -> `API_KEY`
+`api.key` -> `API_KEY`
+
+Note that properties files treat values as strings, therefore only string fields are generated in this case.
+
+5. Store a property value into your `BuildConfig`
+In any product flavor configuration (or `defaultConfig`) you can use `buildConfigProperty` as follows:
+
+```
+    defaultConfig {
+        ...
+        buildConfigProperty 'API_KEY', from(buildProperties.secrets), 'apiKey'
+        ...
+    }
+```
+You can omit the field name and let the plugin generate one for you (following the same rules at 4.)
+
+6. Store whole properties file as generated string resources
+In any product flavor configuration (or `defaultConfig`) you can use `resValueProperties` as follows:
+
+```
+    defaultConfig {
+        ...
+        resValueProperties from(buildProperties.secrets)
+        ...
+    }
+```
+All the entries in that properties files are converted to string resources, named after their key.
+
+
+7. Store a property value as generated string resource
+In any product flavor configuration (or `defaultConfig`) you can use `resValueProperty` as follows:
+
+```
+    defaultConfig {
+        ...
+        resValueProperty 'api_key', from(buildProperties.secrets), 'apiKey'
+        ...
+    }
+```
+You can omit the name of the resource and let the plugin generate one for you from the property key (snake case).
