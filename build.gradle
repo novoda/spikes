@@ -3,3 +3,8 @@ buildscript {
     jcenter()
   }
 }
+
+ext {
+  pluginGroup = 'com.novoda.build-properties-plugin'
+  pluginVersion = '0.9.0'
+}
