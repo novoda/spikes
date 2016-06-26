@@ -128,13 +128,14 @@ but now you can instead write:
 buildConfigString 'LOL', 'sometimes the picture takes'
 ```
 The full list of new typed facilities is as follows:
+
 | | Example |
-----|----
-`buildConfigBoolean` | `buildConfigBoolean 'TEST_BOOLEAN', false`
-`buildConfigInt` | `buildConfigInt 'TEST_INT', 42`
-`buildConfigLong` | `buildConfigLong 'TEST_LONG', System.currentTimeMillis()`
-`buildConfigDouble` | `buildConfigDouble 'TEST_DOUBLE', Math.PI`
-`buildConfigString` | `buildConfigString 'TEST_STRING', "whateva"`
-`resValueInt`| `resValueInt 'debug_test_int', 100`
-`resValueBoolean` | `resValueBoolean 'debug_test_bool', true`
-`resValueString` | `resValueString 'debug_test_string', 'dunno bro...'`
+|----|----|
+|`buildConfigBoolean` | `buildConfigBoolean 'TEST_BOOLEAN', false`|
+|`buildConfigInt` | `buildConfigInt 'TEST_INT', 42`|
+|`buildConfigLong` | `buildConfigLong 'TEST_LONG', System.currentTimeMillis()`|
+|`buildConfigDouble` | `buildConfigDouble 'TEST_DOUBLE', Math.PI`|
+|`buildConfigString` | `buildConfigString 'TEST_STRING', "whateva"`|
+|`resValueInt`| `resValueInt 'debug_test_int', 100`|
+|`resValueBoolean` | `resValueBoolean 'debug_test_bool', true`|
+|`resValueString` | `resValueString 'debug_test_string', 'dunno bro...'`|
