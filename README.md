@@ -3,19 +3,12 @@
 <br/>
 
 Sometimes you want to retrieve some information from a file that is not checked in as part of your repo for security reasons (keys, credentials, passwords, etc).
-Other times it's just you already are given a properties file and you need to make sure it ends up in your application `BuildìConfig` or in some resource file.
-This plugin augments the `android` extension, aiming to provide a simple way to:
+Other times it's just you already are given a properties file and you need to make sure it ends up in your application `BuildìConfig` or in some resource file.<br/>
+This plugin augments the `android` default facilities, aiming to provide a simple way to:
 - define handles to properties files in your build script (à la `signingConfig`)
 - define a string field in your `BuildConfig` filled with a value in a properties file
 - load an entire properties file into your `BuildConfig`
 - use properties files for signing configurations avoiding to worry about passwords and keystores in your repo
-
-As a bonus the plugin enhances the `buildConfigField` and `resValue` facilities to enforce types.
-
-| Before | After |
-|----|----|
-|```buildConfigField 'String', 'LOL', '\"sometimes the picture takes\"'``` | ```buildConfigString 'LOL', 'sometimes the picture takes'```|
-
 
 ### How To Build
 
@@ -123,3 +116,25 @@ In any product flavor configuration (or `defaultConfig`) you can use `resValuePr
     }
 ```
 You can omit the name of the resource and let the plugin generate one for you from the property key (snake case).
+
+### Bonus
+As a bonus the plugin enhances the `buildConfigField` and `resValue` facilities to enforce types.
+To generate a string field in your `BuildConfig` you used to write:
+```
+buildConfigField 'String', 'LOL', '\"sometimes the picture takes\"'
+```
+but now you can instead write:
+```
+buildConfigString 'LOL', 'sometimes the picture takes'
+```
+The full list of new typed facilities is as follows:
+| | Example |
+----|----
+`buildConfigBoolean` | `buildConfigBoolean 'TEST_BOOLEAN', false`
+`buildConfigInt` | `buildConfigInt 'TEST_INT', 42`
+`buildConfigLong` | `buildConfigLong 'TEST_LONG', System.currentTimeMillis()`
+`buildConfigDouble` | `buildConfigDouble 'TEST_DOUBLE', Math.PI`
+`buildConfigString` | `buildConfigString 'TEST_STRING', "whateva"`
+`resValueInt`| `resValueInt 'debug_test_int', 100`
+`resValueBoolean` | `resValueBoolean 'debug_test_bool', true`
+`resValueString` | `resValueString 'debug_test_string', 'dunno bro...'`
