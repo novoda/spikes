@@ -44,8 +44,6 @@ The plugin needs to be applied to your Android module after the Android gradle p
 ```
 apply plugin: 'build-properties'
 ```
-
-## Features
 #### 1. List properties files
 In your `android` configuration you can add a `buildProperties` configuration listing all the properties files you intend
 to reference in your build script, eg:
@@ -62,7 +60,9 @@ android {
 }
 ```
 
-#### 2. Store whole properties file in `BuildConfig`
+## Features
+
+#### 1. Store whole properties file in `BuildConfig`
 In any product flavor configuration (or `defaultConfig`) you can use `buildConfigProperties` as follows:
 
 ```
@@ -81,7 +81,7 @@ created formatting the key of each entry to follow the standard constant field n
 
 Note that properties files treat values as strings, therefore only string fields are generated in this case.
 
-#### 3. Store a property value into your `BuildConfig`
+#### 2. Store a property value into your `BuildConfig`
 In any product flavor configuration (or `defaultConfig`) you can use `buildConfigProperty` as follows:
 
 ```
@@ -91,9 +91,9 @@ In any product flavor configuration (or `defaultConfig`) you can use `buildConfi
         ...
     }
 ```
-You can omit the field name and let the plugin generate one for you (following the same rules at 4.)
+You can omit the field name and let the plugin generate one for you (following the same rules at 1.)
 
-#### 4. Store whole properties file as generated string resources
+#### 3. Store whole properties file as generated string resources
 In any product flavor configuration (or `defaultConfig`) you can use `resValueProperties` as follows:
 
 ```
@@ -106,7 +106,7 @@ In any product flavor configuration (or `defaultConfig`) you can use `resValuePr
 All the entries in that properties files are converted to string resources, named after their key.
 
 
-#### 5. Store a property value as generated string resource
+#### 4. Store a property value as generated string resource
 In any product flavor configuration (or `defaultConfig`) you can use `resValueProperty` as follows:
 
 ```
