@@ -66,7 +66,7 @@ In any product flavor configuration (or `defaultConfig`) you can use `buildConfi
 ```
     defaultConfig {
         ...
-        buildConfigProperties from(buildProperties.secrets)
+        buildConfigProperties buildProperties.secrets
         ...
     }
 ```
@@ -84,7 +84,7 @@ In any product flavor configuration (or `defaultConfig`) you can use `buildConfi
 ```
     defaultConfig {
         ...
-        buildConfigProperty 'API_KEY', from(buildProperties.secrets), 'apiKey'
+        buildConfigProperty 'API_KEY', buildProperties.secrets['apiKey']
         ...
     }
 ```
@@ -96,7 +96,7 @@ In any product flavor configuration (or `defaultConfig`) you can use `resValuePr
 ```
     defaultConfig {
         ...
-        resValueProperties from(buildProperties.secrets)
+        resValueProperties buildProperties.secrets
         ...
     }
 ```
@@ -109,19 +109,19 @@ In any product flavor configuration (or `defaultConfig`) you can use `resValuePr
 ```
     defaultConfig {
         ...
-        resValueProperty 'api_key', from(buildProperties.secrets), 'apiKey'
+        resValueProperty 'api_key', buildProperties.secrets['apiKey']
         ...
     }
 ```
 You can omit the name of the resource and let the plugin generate one for you from the property key, enforcing snake casing over camel casing if necessary.
 
 
-#### 5. Load signing coinfiguration from properties
+#### 5. Load signing configuration from properties
 Instead of inline your passwords and other details in your build script you can fill the signing configuration using a properties file.
 ```
 signingConfigs {
   release {
-    signingConfigProperties from(buildProperties.releaseSigning)
+    signingConfigProperties buildProperties.releaseSigning
   }
 }
 ```
@@ -154,4 +154,14 @@ The full list of new typed facilities is as follows:
 |`resValueString` | `resValueString 'debug_test_string', 'dunno bro...'`|
 
 #### More on load properties
-When you need to specify a properties file to retrieve a property from you can use the convenience method `from()` referencing one of the files listed in `buildProperties`. If instead you want to use a different file that is not listed there you can use `load()`, specifying the path of the file you want to use. This in turn will lazy-load the properties file and caching it if any further calls in the build script.
+Properties files are lazy-loaded when accessing some of their properties for the first time in the build script. Given a `BuildProperties` instance one of its entries can be retrieved using the `getAt` operator:
+
+`BuildProperty.Entry entry = buildProperties.secrets['aProperty']`
+
+The value of an entry can be retrieved via one of the following typed accessors:
+
+- `entry.booleanValue()`
+- `entry.intValue()`
+- `entry.doubleValue()`
+- `entry.stringValue()`
+
