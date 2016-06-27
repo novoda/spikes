@@ -1223,6 +1223,27 @@ class PersistedTasksServiceTest {
         ))
     }
 
+    @Test
+    fun given_WeHaveTasksInTheService_on_ClearCompletedTasks_it_ShouldReturnLocallyClearedTaskFirstThenConfirm() {
+        val tasks = sampleRemoteSomeCompletedTasks()
+        val testObserver = TestObserver<Event<Tasks>>()
+        taskRemoteDataSubject.onNext(tasks)
+        taskRemoteDataSubject.onCompleted()
+        taskLocalDataSubject.onCompleted()
+        service.getTasksEvents().subscribe(TestObserver<Event<Tasks>>())
+        `when`(remoteDataSource.clearCompletedTasks()).thenReturn(Observable.just(sampleRemoteSomeCompletedTasksDeleted()));
+        service.getTasksEvents().subscribe(testObserver)
+
+        service.clearCompletedTasks().call();
+
+        testObserver.assertReceivedOnNext(listOf(
+                Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
+                Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(sampleLocalSomeCompletedTasksDeleted(), TEST_TIME)),
+                Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(sampleRemoteSomeCompletedTasksDeleted(), TEST_TIME)),
+                Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(sampleRemoteSomeCompletedTasksDeleted(), TEST_TIME))
+                ))
+    }
+
     private fun sampleRefreshedTasks() = listOf(
             Task.builder().id(Id.from("42")).title("Foo").build(),
             Task.builder().id(Id.from("24")).title("Bar").build(),
@@ -1232,6 +1253,22 @@ class PersistedTasksServiceTest {
     private fun sampleRemoteTasks() = listOf(
             Task.builder().id(Id.from("42")).title("Foo").build(),
             Task.builder().id(Id.from("24")).title("Bar").build()
+    )
+
+    private fun sampleRemoteSomeCompletedTasks() = listOf(
+            Task.builder().id(Id.from("24")).title("Bar").isCompleted(true).build(),
+            Task.builder().id(Id.from("42")).title("Foo").build(),
+            Task.builder().id(Id.from("12")).title("Whizz").build(),
+            Task.builder().id(Id.from("424")).title("New").isCompleted(true).build()
+    )
+
+    private fun sampleLocalSomeCompletedTasksDeleted() = listOf(
+            Task.builder().id(Id.from("42")).title("Foo").build(),
+            Task.builder().id(Id.from("12")).title("Whizz").build()
+    )
+
+    private fun sampleRemoteSomeCompletedTasksDeleted() = listOf(
+            Task.builder().id(Id.from("42")).title("Foo").build()
     )
 
     private fun sampleRemoteCompletedTasks() = listOf(

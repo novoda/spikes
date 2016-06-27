@@ -2,6 +2,8 @@ package com.novoda.todoapp.tasks.service;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.jakewharton.rxrelay.BehaviorRelay;
 import com.novoda.data.SyncState;
 import com.novoda.data.SyncedData;
@@ -203,11 +205,24 @@ public class PersistedTasksService implements TasksService {
         return new Action0() {
             @Override
             public void call() {
+                Event<Tasks> tasksEvent = taskRelay.getValue();
+                Tasks value = tasksEvent.data().or(Tasks.empty());
+                ImmutableList<SyncedData<Task>> uncompletedTasks = ImmutableList.copyOf(Iterables.filter(value.all(), notCompleted()));
+
                 remoteDataSource.clearCompletedTasks()
                         .map(asSyncedTasksNow())
                         .flatMap(persistTasks())
-                        .compose(asEvent(taskRelay.getValue()))
+                        .compose(asEvent(tasksEvent.updateData(Tasks.from(uncompletedTasks))))
                         .subscribe(taskRelay);
+            }
+        };
+    }
+
+    private static Predicate<SyncedData<Task>> notCompleted() {
+        return new Predicate<SyncedData<Task>>() {
+            @Override
+            public boolean apply(SyncedData<Task> input) {
+                return !input.data().isCompleted();
             }
         };
     }
