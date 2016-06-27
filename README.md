@@ -165,3 +165,7 @@ The value of an entry can be retrieved via one of the following typed accessors:
 - `entry.doubleValue()`
 - `entry.stringValue()`
 
+It's important to note that values are lazily accessed too (via the internal closure provided in `Entry`). The look up of the specified key could generate an exception if the property missing, eg:
+```
+No value defined for property 'notThere' in 'secrets' properties
+```
