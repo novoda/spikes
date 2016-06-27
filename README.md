@@ -43,18 +43,17 @@ The plugin needs to be applied to your Android module after the Android gradle p
 apply plugin: 'build-properties'
 ```
 #### 3. List properties files
-In your `android` configuration you can add a `buildProperties` configuration listing all the properties files you intend
-to reference in your build script, eg:
+In your android project you can add a `buildProperties` configuration listing all the properties files you intend
+to reference in your `android` configuration, eg:
 ```
-android {
-
-    buildProperties {
-        secrets {
-            file project.file('secrets.properties')
-        }
+buildProperties {
+    secrets {
+        file project.file('secrets.properties')
     }
+}
 
-    ...
+android {
+...
 }
 ```
 

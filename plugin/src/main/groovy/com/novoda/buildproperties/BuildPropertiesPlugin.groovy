@@ -13,7 +13,7 @@ class BuildPropertiesPlugin implements Plugin<Project> {
             throw new GradleException("This plugin can be applied only to an Android application project")
         }
 
-        project.android.extensions.add('buildProperties', project.container(BuildProperties))
+        project.extensions.add('buildProperties', project.container(BuildProperties))
 
         def android = project.extensions.findByName("android")
         android.defaultConfig.with {
