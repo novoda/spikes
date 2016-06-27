@@ -9,6 +9,7 @@ import com.novoda.data.SyncState;
 import com.novoda.data.SyncedData;
 import com.novoda.data.SyncedDataCreator;
 import com.novoda.event.Event;
+import com.novoda.event.EventFunctions;
 import com.novoda.todoapp.rx.IfThenFlatMap;
 import com.novoda.todoapp.task.data.model.Id;
 import com.novoda.todoapp.task.data.model.Task;
@@ -123,7 +124,7 @@ public class PersistedTasksService implements TasksService {
                 return localDataSource.getTasks()
                         .flatMap(fetchFromRemoteIfOutOfDate())
                         .switchIfEmpty(fetchFromRemote())
-                        .compose(asEvent(taskRelay.getValue()))
+                        .compose(asValidatedEvent(taskRelay.getValue()))
                         .doOnNext(taskRelay)
                         .publish().autoConnect();
             }
@@ -194,7 +195,7 @@ public class PersistedTasksService implements TasksService {
             @Override
             public void call() {
                 fetchFromRemote()
-                        .compose(asEvent(taskRelay.getValue()))
+                        .compose(asValidatedEvent(taskRelay.getValue()))
                         .subscribe(taskRelay);
             }
         };
@@ -207,13 +208,34 @@ public class PersistedTasksService implements TasksService {
             public void call() {
                 Event<Tasks> tasksEvent = taskRelay.getValue();
                 Tasks value = tasksEvent.data().or(Tasks.empty());
-                ImmutableList<SyncedData<Task>> uncompletedTasks = ImmutableList.copyOf(Iterables.transform(value.all(), markCompletedAsDeleted()));
+                Tasks uncompletedTasks = Tasks.from(ImmutableList.copyOf(Iterables.transform(value.all(), markCompletedAsDeleted())));
 
                 remoteDataSource.clearCompletedTasks()
                         .map(asSyncedTasksNow())
+                        .onErrorReturn(markAllAsSyncError(value))
+                        .startWith(uncompletedTasks)
                         .flatMap(persistTasks())
-                        .compose(asEvent(tasksEvent.updateData(Tasks.from(uncompletedTasks))))
+                        .compose(asValidatedEvent(tasksEvent.updateData(uncompletedTasks)))
                         .subscribe(taskRelay);
+            }
+        };
+    }
+
+    private static Func1<Throwable, Tasks> markAllAsSyncError(final Tasks value) {
+        return new Func1<Throwable, Tasks>() {
+            @Override
+            public Tasks call(Throwable throwable) {
+                ImmutableList<SyncedData<Task>> syncErrorTasks = ImmutableList.copyOf(Iterables.transform(value.all(), markAsSyncError()));
+                return Tasks.from(syncErrorTasks);
+            }
+        };
+    }
+
+    private static Function<SyncedData<Task>, SyncedData<Task>> markAsSyncError() {
+        return new Function<SyncedData<Task>, SyncedData<Task>>() {
+            @Override
+            public SyncedData<Task> apply(SyncedData<Task> input) {
+                return input.toBuilder().syncState(SyncState.SYNC_ERROR).build();
             }
         };
     }
@@ -247,7 +269,7 @@ public class PersistedTasksService implements TasksService {
             public void call() {
                 remoteDataSource.deleteAllTasks()
                         .flatMap(deleteAllLocalTasks())
-                        .compose(asEvent(taskRelay.getValue()))
+                        .compose(asValidatedEvent(taskRelay.getValue()))
                         .subscribe(taskRelay);
             }
         };
@@ -359,6 +381,24 @@ public class PersistedTasksService implements TasksService {
             @Override
             public Observable<SyncedData<Task>> call(Event<Tasks> event) {
                 return localDataSource.saveTask(value);
+            }
+        };
+    }
+
+    private static Observable.Transformer<Tasks, Event<Tasks>> asValidatedEvent(final Event<Tasks> value) {
+        return new Observable.Transformer<Tasks, Event<Tasks>>() {
+            @Override
+            public Observable<Event<Tasks>> call(Observable<Tasks> tasksObservable) {
+                return tasksObservable.compose(EventFunctions.<Tasks>asEvent(value)).map(new Func1<Event<Tasks>, Event<Tasks>>() {
+                    @Override
+                    public Event<Tasks> call(Event<Tasks> tasksEvent) {
+                        if (tasksEvent.data().or(Tasks.empty()).hasSyncError()) {
+                            return tasksEvent.asError(new SyncError());
+                        } else {
+                            return tasksEvent;
+                        }
+                    }
+                });
             }
         };
     }

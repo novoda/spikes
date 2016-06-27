@@ -1245,6 +1245,26 @@ class PersistedTasksServiceTest {
                 ))
     }
 
+    @Test
+    fun given_RemoteSourceFailsToClearCompletedTasks_on_ClearCompletedTasks_it_ShouldReturnLocallyClearedTaskFirstThenSyncError() {
+        val tasks = sampleRemoteSomeCompletedTasks()
+        val testObserver = TestObserver<Event<Tasks>>()
+        taskRemoteDataSubject.onNext(tasks)
+        taskRemoteDataSubject.onCompleted()
+        taskLocalDataSubject.onCompleted()
+        service.getTasksEvents().subscribe(TestObserver<Event<Tasks>>())
+        `when`(remoteDataSource.clearCompletedTasks()).thenReturn(Observable.error(Throwable("Terrible things")));
+        service.getTasksEvents().subscribe(testObserver)
+
+        service.clearCompletedTasks().call();
+
+        testObserver.assertReceivedOnNext(listOf(
+                Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
+                Event.loading<Tasks>(noEmptyTasks()).updateData(sampleLocalSomeCompletedTasksDeleted()),
+                Event.idle<Tasks>(noEmptyTasks()).updateData(sampleSomeCompletedTasksDeletedFailed()).asError(SyncError())
+        ))
+    }
+
     private fun sampleRefreshedTasks() = listOf(
             Task.builder().id(Id.from("42")).title("Foo").build(),
             Task.builder().id(Id.from("24")).title("Bar").build(),
@@ -1268,6 +1288,13 @@ class PersistedTasksServiceTest {
             SyncedData.from(Task.builder().id(Id.from("42")).title("Foo").build(), SyncState.AHEAD, TEST_TIME),
             SyncedData.from(Task.builder().id(Id.from("12")).title("Whizz").build(), SyncState.AHEAD, TEST_TIME),
             SyncedData.from(Task.builder().id(Id.from("424")).title("New").isCompleted(true).build(), SyncState.DELETED_LOCALLY, TEST_TIME)
+    )))
+
+    private fun sampleSomeCompletedTasksDeletedFailed() = Tasks.from(ImmutableList.copyOf(listOf(
+            SyncedData.from(Task.builder().id(Id.from("24")).title("Bar").isCompleted(true).build(), SyncState.SYNC_ERROR, TEST_TIME),
+            SyncedData.from(Task.builder().id(Id.from("42")).title("Foo").build(), SyncState.SYNC_ERROR, TEST_TIME),
+            SyncedData.from(Task.builder().id(Id.from("12")).title("Whizz").build(), SyncState.SYNC_ERROR, TEST_TIME),
+            SyncedData.from(Task.builder().id(Id.from("424")).title("New").isCompleted(true).build(), SyncState.SYNC_ERROR, TEST_TIME)
     )))
 
     private fun sampleRemoteSomeCompletedTasksDeleted() = listOf(

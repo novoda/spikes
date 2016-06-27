@@ -93,4 +93,17 @@ public abstract class Tasks {
             }
         };
     }
+
+    public boolean hasSyncError() {
+        return !internalMap().filter(syncError()).isEmpty();
+    }
+
+    private static Predicate<Map.Entry<Id, SyncedData<Task>>> syncError() {
+        return new Predicate<Map.Entry<Id, SyncedData<Task>>>() {
+            @Override
+            public boolean apply(Map.Entry<Id, SyncedData<Task>> input) {
+                return input.getValue().syncState() == SyncState.SYNC_ERROR;
+            }
+        };
+    }
 }
