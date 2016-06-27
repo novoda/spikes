@@ -6,8 +6,6 @@ import org.gradle.api.Project
 
 class BuildPropertiesPlugin implements Plugin<Project> {
 
-    private final Map<String, BuildProperties> propertiesMap = [:]
-
     @Override
     void apply(Project project) {
         boolean isAndroidApp = project.plugins.hasPlugin('com.android.application')
@@ -16,60 +14,26 @@ class BuildPropertiesPlugin implements Plugin<Project> {
         }
 
         project.android.extensions.add('buildProperties', project.container(BuildProperties))
-        def container = project.android.extensions.getByName('buildProperties')
-        project.afterEvaluate {
-            container.all { BuildProperties buildProperties ->
-                Properties properties = new Properties()
-                properties.load(new FileInputStream(buildProperties.file))
-                buildProperties.setEntries(properties)
-                propertiesMap[buildProperties.name] = buildProperties
-            }
-        }
 
         def android = project.extensions.findByName("android")
-
         android.defaultConfig.with {
-            addPropertiesLoadSupport(it)
             addBuildConfigSupportTo(it, project)
             addResValueSupportTo(it, project)
         }
 
         android.productFlavors.all {
-            addPropertiesLoadSupport(it)
             addBuildConfigSupportTo(it, project)
             addResValueSupportTo(it, project)
         }
 
         android.buildTypes.all {
-            addPropertiesLoadSupport(it)
             addBuildConfigSupportTo(it, project)
             addResValueSupportTo(it, project)
         }
 
         android.signingConfigs.all {
-            addPropertiesLoadSupport(it)
             addSigningConfigSupportTo(it, project)
         }
-    }
-
-    private void addPropertiesLoadSupport(target) {
-        target.ext.from = { BuildProperties buildProperties ->
-            return { propertiesMap[buildProperties.name] }
-        }
-        target.ext.load = { File file ->
-            return {
-                BuildProperties buildProperties = new BuildProperties(file.path)
-                buildProperties.entries = load(file)
-                buildProperties.file = file
-                buildProperties
-            }.memoize()
-        }
-    }
-
-    private Properties load(File file) {
-        Properties properties = new Properties()
-        properties.load(new FileInputStream(file))
-        properties
     }
 
     private void addBuildConfigSupportTo(target, Project project) {
@@ -92,18 +56,14 @@ class BuildPropertiesPlugin implements Plugin<Project> {
         target.ext.buildConfigString = { String name, String value ->
             buildConfigField('String', name, { "\"$value\"" })
         }
-        target.ext.buildConfigProperty = { String name = null, Closure<BuildProperties> getBuildProperties, String key ->
+        target.ext.buildConfigProperty = { String name = null, BuildProperties.Entry entry ->
             project.afterEvaluate {
-                Properties properties = getBuildProperties().entries
-                target.buildConfigField 'String', name ?: formatBuildConfigField(key), "\"${properties[key]}\""
+                target.buildConfigField 'String', name ?: formatBuildConfigField(entry.key), "\"${entry.stringValue()}\""
             }
         }
-        target.ext.buildConfigProperties = { Closure<BuildProperties> getBuildProperties ->
-            project.afterEvaluate {
-                Properties properties = getBuildProperties().entries
-                properties.stringPropertyNames().each { name ->
-                    target.buildConfigField 'String', formatBuildConfigField(name), "\"${properties[name]}\""
-                }
+        target.ext.buildConfigProperties = { BuildProperties buildProperties ->
+            buildProperties.allEntries().each { BuildProperties.Entry entry ->
+                target.ext.buildConfigProperty entry
             }
         }
     }
@@ -133,18 +93,14 @@ class BuildPropertiesPlugin implements Plugin<Project> {
         target.ext.resValueString = { String name, String value ->
             resValue('string', name, { "\"$value\"" })
         }
-        target.ext.resValueProperty = { String name = null, Closure<BuildProperties> getBuildProperties, String key ->
+        target.ext.resValueProperty = { String name = null, BuildProperties.Entry entry ->
             project.afterEvaluate {
-                Properties properties = getBuildProperties().entries
-                target.resValue 'string', name ?: formatResValueName(key), "\"${properties[key]}\""
+                target.resValue 'string', name ?: formatResValueName(entry.key), "\"${entry.stringValue()}\""
             }
         }
-        target.ext.resValueProperties = { Closure<BuildProperties> getBuildProperties ->
-            project.afterEvaluate {
-                Properties properties = getBuildProperties().entries
-                properties.stringPropertyNames().each { name ->
-                    target.resValue 'string', formatResValueName(name), properties.getProperty(name)
-                }
+        target.ext.resValueProperties = { BuildProperties buildProperties ->
+            buildProperties.allEntries().each { BuildProperties.Entry entry ->
+                target.ext.resValueProperty entry
             }
         }
     }
@@ -155,14 +111,12 @@ class BuildPropertiesPlugin implements Plugin<Project> {
     }
 
     private void addSigningConfigSupportTo(target, Project project) {
-        target.ext.signingConfigProperties = { Closure<BuildProperties> getBuildProperties ->
+        target.ext.signingConfigProperties = { BuildProperties buildProperties ->
             project.afterEvaluate {
-                BuildProperties buildProperties = getBuildProperties()
-                Properties properties = buildProperties.entries
-                target.storeFile new File(buildProperties.parentFile, properties.storeFile)
-                target.storePassword properties.storePassword
-                target.keyAlias properties.keyAlias
-                target.keyPassword properties.keyPassword
+                target.storeFile new File(buildProperties.parentFile, buildProperties['storeFile'].stringValue())
+                target.storePassword buildProperties['storePassword'].stringValue()
+                target.keyAlias buildProperties['keyAlias'].stringValue()
+                target.keyPassword buildProperties['keyPassword'].stringValue()
             }
         }
     }
