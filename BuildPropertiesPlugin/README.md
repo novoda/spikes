@@ -165,7 +165,12 @@ The value of an entry can be retrieved via one of the following typed accessors:
 - `entry.doubleValue()`
 - `entry.stringValue()`
 
-It's important to note that values are lazily accessed too (via the internal closure provided in `Entry`). The look up of the specified key could generate an exception if the property missing, eg:
+It's important to note that values are lazily accessed too (via the internal closure provided in `Entry`). Trying to access the value of a specific property could generate an exception if the key is missing in the provided properties file, eg:
 ```
-No value defined for property 'notThere' in 'secrets' properties
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+A problem occurred configuring project ':app'.
+> No value defined for property 'notThere' in 'secrets' properties (/Users/toto/novoda/spikes/BuildPropertiesPlugin/sample/properties/secrets.properties)
+
 ```
