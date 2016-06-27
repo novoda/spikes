@@ -22,6 +22,9 @@ android {
     resValues {
       file rootProject.file('properties/resValues.properties')
     }
+    debugSigning {
+      file rootProject.file('properties/debugSigning.properties')
+    }
     releaseSigning {
       file rootProject.file('properties/releaseSigning.properties')
     }
@@ -38,17 +41,16 @@ android {
     buildConfigLong 'TEST_LONG', System.currentTimeMillis()
     buildConfigDouble 'TEST_DOUBLE', Math.PI
     buildConfigString 'TEST_STRING', "whateva"
-    buildConfigProperty 'TEST_BUILD_PROPERTY', from(buildProperties.secrets), 'superSecret'
-    buildConfigProperty 'TEST_LOAD_PROPERTY', load(rootProject.file('properties/secrets.properties')), 'superSecret'
-    buildConfigProperties from(buildProperties.secrets)
+    buildConfigProperty 'TEST_BUILD_PROPERTY', buildProperties.secrets['superSecret']
+    buildConfigProperties buildProperties.secrets
   }
 
   signingConfigs {
     debug {
-      signingConfigProperties load(rootProject.file('properties/debugSigning.properties'))
+      signingConfigProperties buildProperties.debugSigning
     }
     release {
-      signingConfigProperties from(buildProperties.releaseSigning)
+      signingConfigProperties buildProperties.releaseSigning
     }
   }
 
@@ -58,8 +60,8 @@ android {
       resValueInt 'debug_test_int', 100
       resValueBoolean 'debug_test_bool', true
       resValueString 'debug_test_string', 'dunno bro...'
-      resValueProperty from(buildProperties.secrets), 'superSecret'
-      resValueProperties from(buildProperties.resValues)
+      resValueProperty buildProperties.secrets['superSecret']
+      resValueProperties buildProperties.resValues
     }
     release {
       minifyEnabled false
