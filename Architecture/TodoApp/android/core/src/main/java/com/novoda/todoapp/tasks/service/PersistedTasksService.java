@@ -207,13 +207,26 @@ public class PersistedTasksService implements TasksService {
             public void call() {
                 Event<Tasks> tasksEvent = taskRelay.getValue();
                 Tasks value = tasksEvent.data().or(Tasks.empty());
-                ImmutableList<SyncedData<Task>> uncompletedTasks = ImmutableList.copyOf(Iterables.filter(value.all(), notCompleted()));
+                ImmutableList<SyncedData<Task>> uncompletedTasks = ImmutableList.copyOf(Iterables.transform(value.all(), markCompletedAsDeleted()));
 
                 remoteDataSource.clearCompletedTasks()
                         .map(asSyncedTasksNow())
                         .flatMap(persistTasks())
                         .compose(asEvent(tasksEvent.updateData(Tasks.from(uncompletedTasks))))
                         .subscribe(taskRelay);
+            }
+        };
+    }
+
+    private static Function<SyncedData<Task>, SyncedData<Task>> markCompletedAsDeleted() {
+        return new Function<SyncedData<Task>, SyncedData<Task>>() {
+            @Override
+            public SyncedData<Task> apply(SyncedData<Task> input) {
+                if (input.data().isCompleted()) {
+                    return input.toBuilder().syncState(SyncState.DELETED_LOCALLY).build();
+                } else {
+                    return input.toBuilder().syncState(SyncState.AHEAD).build();
+                }
             }
         };
     }

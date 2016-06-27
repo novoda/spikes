@@ -1,5 +1,6 @@
 package com.novoda.todoapp.tasks.service
 
+import com.google.common.collect.ImmutableList
 import com.novoda.data.SyncState
 import com.novoda.data.SyncedData
 import com.novoda.event.Event
@@ -1238,7 +1239,7 @@ class PersistedTasksServiceTest {
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(sampleLocalSomeCompletedTasksDeleted(), TEST_TIME)),
+                Event.loading<Tasks>(noEmptyTasks()).updateData(sampleLocalSomeCompletedTasksDeleted()),
                 Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(sampleRemoteSomeCompletedTasksDeleted(), TEST_TIME)),
                 Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(sampleRemoteSomeCompletedTasksDeleted(), TEST_TIME))
                 ))
@@ -1262,10 +1263,12 @@ class PersistedTasksServiceTest {
             Task.builder().id(Id.from("424")).title("New").isCompleted(true).build()
     )
 
-    private fun sampleLocalSomeCompletedTasksDeleted() = listOf(
-            Task.builder().id(Id.from("42")).title("Foo").build(),
-            Task.builder().id(Id.from("12")).title("Whizz").build()
-    )
+    private fun sampleLocalSomeCompletedTasksDeleted() = Tasks.from(ImmutableList.copyOf(listOf(
+            SyncedData.from(Task.builder().id(Id.from("24")).title("Bar").isCompleted(true).build(), SyncState.DELETED_LOCALLY, TEST_TIME),
+            SyncedData.from(Task.builder().id(Id.from("42")).title("Foo").build(), SyncState.AHEAD, TEST_TIME),
+            SyncedData.from(Task.builder().id(Id.from("12")).title("Whizz").build(), SyncState.AHEAD, TEST_TIME),
+            SyncedData.from(Task.builder().id(Id.from("424")).title("New").isCompleted(true).build(), SyncState.DELETED_LOCALLY, TEST_TIME)
+    )))
 
     private fun sampleRemoteSomeCompletedTasksDeleted() = listOf(
             Task.builder().id(Id.from("42")).title("Foo").build()
