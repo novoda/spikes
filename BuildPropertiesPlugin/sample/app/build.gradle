@@ -1,0 +1,76 @@
+buildscript {
+  repositories {
+    maven { url rootProject.file('../.gradle/repo') }
+  }
+  dependencies {
+    classpath 'com.android.tools.build:gradle:2.1.2'
+    classpath "com.novoda.build-properties:plugin:${pluginVersion}"
+  }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'build-properties'
+
+buildProperties {
+  secrets {
+    file rootProject.file('properties/secrets.properties')
+  }
+  resValues {
+    file rootProject.file('properties/resValues.properties')
+  }
+  debugSigning {
+    file rootProject.file('properties/debugSigning.properties')
+  }
+  releaseSigning {
+    file rootProject.file('properties/releaseSigning.properties')
+  }
+}
+
+android {
+  compileSdkVersion 23
+  buildToolsVersion "23.0.2"
+
+  defaultConfig {
+    applicationId "com.novoda.buildpropertiesplugin.sample"
+    minSdkVersion 16
+    targetSdkVersion 23
+    versionCode 1
+    versionName "1.0"
+    buildConfigBoolean 'TEST_BOOLEAN', false
+    buildConfigInt 'TEST_INT', 42
+    buildConfigLong 'TEST_LONG', System.currentTimeMillis()
+    buildConfigDouble 'TEST_DOUBLE', Math.PI
+    buildConfigString 'TEST_STRING', "whateva"
+    buildConfigProperty 'TEST_BUILD_PROPERTY', buildProperties.secrets['superSecret']
+    buildConfigProperties buildProperties.secrets
+  }
+
+  signingConfigs {
+    debug {
+      signingConfigProperties buildProperties.debugSigning
+    }
+    release {
+      signingConfigProperties buildProperties.releaseSigning
+    }
+  }
+
+  buildTypes {
+    debug {
+      signingConfig signingConfigs.debug
+      resValueInt 'debug_test_int', 100
+      resValueBoolean 'debug_test_bool', true
+      resValueString 'debug_test_string', 'dunno bro...'
+      resValueProperty buildProperties.secrets['superSecret']
+      resValueProperties buildProperties.resValues
+    }
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt')
+      signingConfig signingConfigs.release
+    }
+  }
+}
+
+dependencies {
+  compile 'com.android.support:appcompat-v7:24.0.0'
+}
