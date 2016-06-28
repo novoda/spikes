@@ -17,7 +17,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Matchers
 import org.mockito.Mockito
-import org.mockito.Mockito.times
+import org.mockito.Mockito.*
 import rx.functions.Action0
 import rx.subjects.BehaviorSubject
 import kotlin.test.assertEquals
@@ -79,17 +79,14 @@ class TasksPresenterTest {
         Mockito.verify(displayer).display(nonDeletedTasksOnly())
     }
 
-    private fun someDeletedLocallyTasks() = Tasks.from(ImmutableList.copyOf(listOf(
-            SyncedData.from(Task.builder().id(Id.from("24")).title("Bar").isCompleted(true).build(), SyncState.DELETED_LOCALLY, TEST_TIME),
-            SyncedData.from(Task.builder().id(Id.from("42")).title("Foo").build(), SyncState.AHEAD, TEST_TIME),
-            SyncedData.from(Task.builder().id(Id.from("12")).title("Whizz").build(), SyncState.IN_SYNC, TEST_TIME),
-            SyncedData.from(Task.builder().id(Id.from("424")).title("New").isCompleted(false).build(), SyncState.DELETED_LOCALLY, TEST_TIME)
-    )))
+    @Test
+    fun given_ThePresenterIsPresenting_on_EmissionOfAllDeletedLocallyTasks_it_ShouldNotPresentToTheView() {
+        givenThePresenterIsPresenting()
 
-    private fun nonDeletedTasksOnly() = Tasks.from(ImmutableList.copyOf(listOf(
-            SyncedData.from(Task.builder().id(Id.from("42")).title("Foo").build(), SyncState.AHEAD, TEST_TIME),
-            SyncedData.from(Task.builder().id(Id.from("12")).title("Whizz").build(), SyncState.IN_SYNC, TEST_TIME)
-    )))
+        tasksSubject.onNext(allDeletedLocallyTasks())
+
+        Mockito.verify(displayer, never()).display(any(Tasks::class.java))
+    }
 
     @Test
     fun given_ThePresenterIsPresenting_on_EmissionOfALoadingEventWithNoData_it_ShouldPresentTheLoadingScreen() {
@@ -455,6 +452,25 @@ class TasksPresenterTest {
             .id(Id.from("42"))
             .title("Foo")
             .build()
+
+    private fun someDeletedLocallyTasks() = Tasks.from(ImmutableList.copyOf(listOf(
+            SyncedData.from(Task.builder().id(Id.from("24")).title("Bar").isCompleted(true).build(), SyncState.DELETED_LOCALLY, TEST_TIME),
+            SyncedData.from(Task.builder().id(Id.from("42")).title("Foo").build(), SyncState.AHEAD, TEST_TIME),
+            SyncedData.from(Task.builder().id(Id.from("12")).title("Whizz").build(), SyncState.IN_SYNC, TEST_TIME),
+            SyncedData.from(Task.builder().id(Id.from("424")).title("New").isCompleted(false).build(), SyncState.DELETED_LOCALLY, TEST_TIME)
+    )))
+
+    private fun nonDeletedTasksOnly() = Tasks.from(ImmutableList.copyOf(listOf(
+            SyncedData.from(Task.builder().id(Id.from("42")).title("Foo").build(), SyncState.AHEAD, TEST_TIME),
+            SyncedData.from(Task.builder().id(Id.from("12")).title("Whizz").build(), SyncState.IN_SYNC, TEST_TIME)
+    )))
+
+    private fun allDeletedLocallyTasks() = Tasks.from(ImmutableList.copyOf(listOf(
+            SyncedData.from(Task.builder().id(Id.from("24")).title("Bar").isCompleted(true).build(), SyncState.DELETED_LOCALLY, TEST_TIME),
+            SyncedData.from(Task.builder().id(Id.from("42")).title("Foo").build(), SyncState.DELETED_LOCALLY, TEST_TIME),
+            SyncedData.from(Task.builder().id(Id.from("12")).title("Whizz").build(), SyncState.DELETED_LOCALLY, TEST_TIME),
+            SyncedData.from(Task.builder().id(Id.from("424")).title("New").isCompleted(false).build(), SyncState.DELETED_LOCALLY, TEST_TIME)
+    )))
 
     private fun setUpService() {
         tasksSubject = BehaviorSubject.create()

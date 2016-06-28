@@ -56,6 +56,12 @@ public class TasksPresenter {
         subscriptions.add(
                 getTasksObservableFor(filter)
                         .map(removeDeletedTasks())
+                        .filter(new Func1<Tasks, Boolean>() {
+                            @Override
+                            public Boolean call(Tasks tasks) {
+                                return !tasks.isEmpty();
+                            }
+                        })
                         .subscribe(tasksObserver)
         );
         subscriptions.add(
