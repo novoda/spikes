@@ -3,7 +3,7 @@
 
   <EditTextPreference
     android:key="@string/preference_key_tweet_filter"
-    android:defaultValue="#droidconDE"
+    android:defaultValue="novoda"
     android:title="@string/preference_twitter_filter_title"
     android:summary="@string/preference_twitter_filter_summary" />
 

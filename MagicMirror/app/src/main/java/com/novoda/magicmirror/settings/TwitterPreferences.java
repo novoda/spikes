@@ -9,7 +9,7 @@ import com.novoda.magicmirror.R;
 
 public class TwitterPreferences extends PreferenceFragment {
 
-    private static final String DEFAULT_QUERY = "#droidconde";
+    private static final String DEFAULT_QUERY = "novoda";
 
     private EditTextPreference filterPreference;
 

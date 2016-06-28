@@ -19,7 +19,7 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class TwitterModule implements DashboardModule {
 
-    private static final String DEFAULT_QUERY = "#droidconde";
+    private static final String DEFAULT_QUERY = "novoda";
 
     private final TwitterStream twitterStream;
     private final String query;
