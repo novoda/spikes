@@ -19,10 +19,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.novoda.magicmirror.modules.DashboardModule;
 import com.novoda.magicmirror.modules.DashboardModuleComposite;
 import com.novoda.magicmirror.modules.time.TimeModule;
+import com.novoda.magicmirror.modules.twitter.TwitterModule;
 import com.novoda.magicmirror.modules.weather.WeatherIconMapper;
 import com.novoda.magicmirror.modules.weather.WeatherInfo;
+import com.novoda.magicmirror.modules.weather.WeatherModule;
 import com.novoda.magicmirror.todo.TodoItemsAdapter;
 import com.novoda.notils.caster.Views;
 
@@ -30,10 +33,6 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.novoda.magicmirror.modules.DashboardModule;
-import com.novoda.magicmirror.modules.twitter.TwitterModule;
-import com.novoda.magicmirror.modules.weather.WeatherModule;
 
 import twitter4j.Status;
 
@@ -67,7 +66,9 @@ public class MainActivity extends AppCompatActivity {
         keepScreenOn();
 
         createModules();
-        createTodoList();
+
+        // TODO: TODOlist not displayed. To enable it uncomment the following line and swap visibility with label_tweet
+        // createTodoList();
     }
 
     private void keepScreenOn() {
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         List<DashboardModule> modulesList = new ArrayList<>();
         modulesList.add(new TimeModule(timeLabel, dateLabel));
         modulesList.add(WeatherModule.newInstance(this, weatherListener));
+        modulesList.add(TwitterModule.newInstance(this, tweetListener));
 
         modules = new DashboardModuleComposite(modulesList);
     }

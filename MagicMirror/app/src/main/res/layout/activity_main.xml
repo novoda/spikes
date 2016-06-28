@@ -40,14 +40,14 @@
     android:layout_height="wrap_content"
     android:layout_above="@+id/weather_container"
     android:layout_below="@+id/time_container"
-    android:layout_gravity="center_vertical"
-    android:visibility="gone"
+    android:gravity="center_vertical"
     tools:text="Tweeeet" />
 
   <FrameLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_above="@+id/weather_container"
+    android:visibility="gone"
     android:layout_below="@+id/time_container">
 
     <ListView
