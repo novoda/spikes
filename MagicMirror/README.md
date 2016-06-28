@@ -24,3 +24,5 @@ This app is meant to be installed on phones, tablets or TV sticks used in smart 
 ##Development
 In order to use all the features of the app, when building it from source, please make a copy of the `gradle.properties.example` file, rename it to `gradle.properties` and add the required keys.
 
+When deployed on an emulator, it is possible to quickly test the different emotions using the keyboard keys 0-4.
+
