@@ -7,10 +7,12 @@ import com.novoda.event.Event
 import com.novoda.todoapp.navigation.Navigator
 import com.novoda.todoapp.task.data.model.Id
 import com.novoda.todoapp.task.data.model.Task
+import com.novoda.todoapp.tasks.NoEmptyTasksPredicate
 import com.novoda.todoapp.tasks.data.model.Tasks
 import com.novoda.todoapp.tasks.displayer.TasksActionListener
 import com.novoda.todoapp.tasks.displayer.TasksDisplayer
 import com.novoda.todoapp.tasks.loading.displayer.TasksLoadingDisplayer
+import com.novoda.todoapp.tasks.service.SyncError
 import com.novoda.todoapp.tasks.service.TasksService
 import org.junit.After
 import org.junit.Before
@@ -106,12 +108,49 @@ class TasksPresenterTest {
         Mockito.verify(loadingDisplayer).showLoadingIndicator()
     }
 
+
+    @Test
+    fun given_ThePresenterIsPresenting_on_EmissionOfLoadingEventWithSomeDeletedData_it_ShouldPresentLoadingIndicator() {
+        givenThePresenterIsPresenting()
+
+        tasksEventSubject.onNext(Event.loading<Tasks>().updateData(someDeletedLocallyTasks()))
+
+        Mockito.verify(loadingDisplayer).showLoadingIndicator()
+    }
+
+    @Test
+    fun given_ThePresenterIsPresenting_on_EmissionOfLoadingEventWithAllDeletedData_it_ShouldPresentLoadingScreen() {
+        givenThePresenterIsPresenting()
+
+        tasksEventSubject.onNext(Event.loading<Tasks>(noEmptyTasks()).updateData(allDeletedLocallyTasks()))
+
+        Mockito.verify(loadingDisplayer).showLoadingScreen()
+    }
+
     @Test
     fun given_TheCurrentFilterIsAll_on_EmissionOfAnIdleEventWithNoData_it_ShouldPresentTheEmptyScreen() {
         presenter.setInitialFilterTo(TasksActionListener.Filter.ALL)
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(Event.idle())
+
+        Mockito.verify(loadingDisplayer).showEmptyTasksScreen()
+    }
+
+    @Test
+    fun given_ThePresenterIsPresenting_on_EmissionOfIdleEventWithSomeDeletedData_it_ShouldPresentData() {
+        givenThePresenterIsPresenting()
+
+        tasksEventSubject.onNext(Event.idle<Tasks>().updateData(someDeletedLocallyTasks()))
+
+        Mockito.verify(loadingDisplayer).showData()
+    }
+
+    @Test
+    fun given_ThePresenterIsPresenting_on_EmissionOfIdleEventWithAllDeletedData_it_ShouldPresentEmptyTasksScreen() {
+        givenThePresenterIsPresenting()
+
+        tasksEventSubject.onNext(Event.idle<Tasks>(noEmptyTasks()).updateData(allDeletedLocallyTasks()))
 
         Mockito.verify(loadingDisplayer).showEmptyTasksScreen()
     }
@@ -150,6 +189,24 @@ class TasksPresenterTest {
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(Event.error(Throwable()))
+
+        Mockito.verify(loadingDisplayer).showErrorScreen()
+    }
+
+    @Test
+    fun given_ThePresenterIsPresenting_on_EmissionOfErrorEventWithSomeDeletedData_it_ShouldPresentErrorIndicator() {
+        givenThePresenterIsPresenting()
+
+        tasksEventSubject.onNext(Event.error<Tasks>(SyncError()).updateData(someDeletedLocallyTasks()))
+
+        Mockito.verify(loadingDisplayer).showErrorIndicator()
+    }
+
+    @Test
+    fun given_ThePresenterIsPresenting_on_EmissionOfErrorEventWithAllDeletedData_it_ShouldPresentErrorScreen() {
+        givenThePresenterIsPresenting()
+
+        tasksEventSubject.onNext(Event.idle(noEmptyTasks()).asError(SyncError()).updateData(allDeletedLocallyTasks()))
 
         Mockito.verify(loadingDisplayer).showErrorScreen()
     }
@@ -315,6 +372,7 @@ class TasksPresenterTest {
         Mockito.verify(clearCompletedAction).call()
     }
 
+    @Test
     fun given_ThePresenterIsPresenting_on_AddTaskSelected_it_ShouldNavigateToAddTask() {
         givenThePresenterIsPresenting()
 
@@ -326,7 +384,6 @@ class TasksPresenterTest {
     @Test
     fun given_ThePresenterIsPresenting_on_AllFilterSelected_it_ShouldReSubscribeToTasksStream() {
         givenThePresenterIsPresenting()
-        val simpleTask = simpleTask()
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.ALL)
 
@@ -337,7 +394,6 @@ class TasksPresenterTest {
     @Test
     fun given_ThePresenterIsPresenting_on_AllFilterSelected_it_ShouldReSubscribeToTasksEventStream() {
         givenThePresenterIsPresenting()
-        val simpleTask = simpleTask()
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.ALL)
 
@@ -348,7 +404,6 @@ class TasksPresenterTest {
     @Test
     fun given_ThePresenterIsPresenting_on_ActiveFilterSelected_it_ShouldSubscribeToActiveTasksStream() {
         givenThePresenterIsPresenting()
-        val simpleTask = simpleTask()
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.ACTIVE)
 
@@ -359,7 +414,6 @@ class TasksPresenterTest {
     @Test
     fun given_ThePresenterIsPresenting_on_ActiveFilterSelected_it_ShouldSubscribeToActiveTasksEventStream() {
         givenThePresenterIsPresenting()
-        val simpleTask = simpleTask()
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.ACTIVE)
 
@@ -370,7 +424,6 @@ class TasksPresenterTest {
     @Test
     fun given_ThePresenterIsPresenting_on_CompletedFilterSelected_it_ShouldSubscribeToCompletedTasksStream() {
         givenThePresenterIsPresenting()
-        val simpleTask = simpleTask()
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.COMPLETED)
 
@@ -381,7 +434,6 @@ class TasksPresenterTest {
     @Test
     fun given_ThePresenterIsPresenting_on_CompletedFilterSelected_it_ShouldSubscribeToCompletedTasksEventStream() {
         givenThePresenterIsPresenting()
-        val simpleTask = simpleTask()
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.COMPLETED)
 
@@ -392,7 +444,6 @@ class TasksPresenterTest {
     @Test
     fun given_ThePresenterIsPresenting_on_CompletedFilterSelected_it_ShouldUpdateCurrentFilter() {
         givenThePresenterIsPresenting()
-        val simpleTask = simpleTask()
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.COMPLETED)
 
@@ -402,7 +453,6 @@ class TasksPresenterTest {
     @Test
     fun given_ThePresenterIsPresenting_on_ActiveFilterSelected_it_ShouldUpdateCurrentFilter() {
         givenThePresenterIsPresenting()
-        val simpleTask = simpleTask()
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.ACTIVE)
 
@@ -471,6 +521,8 @@ class TasksPresenterTest {
             SyncedData.from(Task.builder().id(Id.from("12")).title("Whizz").build(), SyncState.DELETED_LOCALLY, TEST_TIME),
             SyncedData.from(Task.builder().id(Id.from("424")).title("New").isCompleted(false).build(), SyncState.DELETED_LOCALLY, TEST_TIME)
     )))
+
+    private fun noEmptyTasks() = NoEmptyTasksPredicate()
 
     private fun setUpService() {
         tasksSubject = BehaviorSubject.create()

@@ -6,6 +6,7 @@ import com.novoda.data.SyncedData
 import com.novoda.event.Event
 import com.novoda.todoapp.task.data.model.Id
 import com.novoda.todoapp.task.data.model.Task
+import com.novoda.todoapp.tasks.NoEmptyTasksPredicate
 import com.novoda.todoapp.tasks.data.TasksDataFreshnessChecker
 import com.novoda.todoapp.tasks.data.model.Tasks
 import com.novoda.todoapp.tasks.data.source.LocalTasksDataSource
