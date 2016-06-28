@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context="net.bonysoft.magicmirror.FaceRecognitionActivity">
+
+  <net.bonysoft.magicmirror.facerecognition.CameraSourcePreview
+    android:id="@+id/preview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+
+  <net.bonysoft.magicmirror.sfx.ParticlesLayout
+    android:id="@+id/particles"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <net.bonysoft.magicmirror.sfx.GlowView
+      android:id="@+id/glow_background"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@color/activity_background"
+      android:scaleType="fitXY" />
+
+  </net.bonysoft.magicmirror.sfx.ParticlesLayout>
+
+  <net.bonysoft.magicmirror.facerecognition.LookingEyes
+    android:background="@null"
+    android:id="@+id/looking_eyes"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:contentDescription="@null"
+    tools:src="@drawable/eyes_left" />
+
+
+  <net.bonysoft.magicmirror.facerecognition.FaceStatusView
+    android:id="@+id/status"
+    style="@style/Label.FaceStatus"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="top|center_horizontal" />
+
+
+</FrameLayout>

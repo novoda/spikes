@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@android:id/text1"
+  style="@style/Label.Tweet"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:gravity="center_vertical"
+  android:minHeight="?android:attr/listPreferredItemHeightSmall"
+  android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+  android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+  android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+  android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+  android:theme="@style/TodoCheckBox" />

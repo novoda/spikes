@@ -1,0 +1,16 @@
+<resources>
+
+  <string name="app_name">Magic Mirror</string>
+  <string name="settings">Mirror Settings</string>
+  <string name="face_recognition">Mirror Face Recognition</string>
+
+  <string name="header_title_twitter">Twitter module</string>
+  <string name="preference_twitter_filter_title">Query filter</string>
+  <string name="preference_twitter_filter_summary">The text used as a filter for the displayed tweets</string>
+
+  <string name="weather_condition">(%1$s° | %2$s°)</string>
+
+  <string name="no_camera_available_error">No front camera available error</string>
+  <string name="face_detection_not_available_error">Face Detection not available.</string>
+
+</resources>

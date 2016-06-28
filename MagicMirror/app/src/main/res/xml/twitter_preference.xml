@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <EditTextPreference
+    android:key="@string/preference_key_tweet_filter"
+    android:defaultValue="#droidconDE"
+    android:title="@string/preference_twitter_filter_title"
+    android:summary="@string/preference_twitter_filter_summary" />
+
+</PreferenceScreen>

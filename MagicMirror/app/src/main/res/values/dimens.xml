@@ -1,0 +1,18 @@
+<resources>
+
+  <!-- Default screen margins, per the Android Design guidelines. -->
+  <dimen name="activity_horizontal_margin">16dp</dimen>
+  <dimen name="activity_vertical_margin">16dp</dimen>
+
+  <dimen name="time_text">108sp</dimen>
+  <dimen name="date_text">40sp</dimen>
+  <dimen name="tweet_text">48sp</dimen>
+  <dimen name="todo_item">40sp</dimen>
+  <dimen name="weather_temperature_text">48sp</dimen>
+  <dimen name="weather_condition_text">26sp</dimen>
+  <dimen name="weather_icon_width">150dp</dimen>
+  <dimen name="weather_icon_height">150dp</dimen>
+
+  <dimen name="face_recognition_text">50sp</dimen>
+
+</resources>
