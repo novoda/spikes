@@ -133,11 +133,11 @@ Note: the path of the keystore file is considered relative to the path of the sp
 The plugin enhances the `buildConfigField` and `resValue` facilities to enforce types.
 To generate a string field in your `BuildConfig` you used to write:
 ```
-buildConfigField 'String', 'LOL', '\"sometimes the picture takes\"'
+buildConfigField 'String', 'LOL', '\"sometimes the picture take\"'
 ```
 but now you can instead write:
 ```
-buildConfigString 'LOL', 'sometimes the picture takes'
+buildConfigString 'LOL', 'sometimes the picture take'
 ```
 The full list of new typed facilities is as follows:
 
