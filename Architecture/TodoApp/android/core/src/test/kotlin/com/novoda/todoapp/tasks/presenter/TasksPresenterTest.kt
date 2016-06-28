@@ -30,13 +30,10 @@ class TasksPresenterTest {
 
     val TEST_TIME = 123L
 
-    var tasksSubject: BehaviorSubject<Tasks> = BehaviorSubject.create()
     var tasksEventSubject: BehaviorSubject<Event<Tasks>> = BehaviorSubject.create()
 
-    var tasksCompletedSubject: BehaviorSubject<Tasks> = BehaviorSubject.create()
     var tasksCompletedEventSubject: BehaviorSubject<Event<Tasks>> = BehaviorSubject.create()
 
-    var tasksActiveSubject: BehaviorSubject<Tasks> = BehaviorSubject.create()
     var tasksActiveEventSubject: BehaviorSubject<Event<Tasks>> = BehaviorSubject.create()
 
     var service: TasksService = Mockito.mock(TasksService::class.java)
@@ -67,7 +64,7 @@ class TasksPresenterTest {
     fun given_ThePresenterIsPresenting_on_EmissionOfNewTasks_it_ShouldPresentTheTasksToTheView() {
         givenThePresenterIsPresenting()
 
-        tasksSubject.onNext(simpleTasks())
+        tasksEventSubject.onNext(Event.idle(noEmptyTasks()).updateData(simpleTasks()))
 
         Mockito.verify(displayer).display(simpleTasks())
     }
@@ -76,7 +73,7 @@ class TasksPresenterTest {
     fun given_ThePresenterIsPresenting_on_EmissionOfSomeNewDeletedLocallyTasks_it_ShouldPresentNonDeletedTasksToTheView() {
         givenThePresenterIsPresenting()
 
-        tasksSubject.onNext(someDeletedLocallyTasks())
+        tasksEventSubject.onNext(Event.idle(noEmptyTasks()).updateData(someDeletedLocallyTasks()))
 
         Mockito.verify(displayer).display(nonDeletedTasksOnly())
     }
@@ -85,7 +82,7 @@ class TasksPresenterTest {
     fun given_ThePresenterIsPresenting_on_EmissionOfAllDeletedLocallyTasks_it_ShouldNotPresentToTheView() {
         givenThePresenterIsPresenting()
 
-        tasksSubject.onNext(allDeletedLocallyTasks())
+        tasksEventSubject.onNext(Event.idle(noEmptyTasks()).updateData(allDeletedLocallyTasks()))
 
         Mockito.verify(displayer, never()).display(any(Tasks::class.java))
     }
@@ -234,7 +231,7 @@ class TasksPresenterTest {
     fun given_ThePresenterStoppedPresenting_on_EmissionOfNewTasks_it_ShouldNotPresentTheTasksToTheView() {
         givenThePresenterStoppedPresenting()
 
-        tasksSubject.onNext(simpleTasks())
+        tasksEventSubject.onNext(Event.idle(noEmptyTasks()).updateData(simpleTasks()))
 
         Mockito.verifyZeroInteractions(displayer)
     }
@@ -290,7 +287,7 @@ class TasksPresenterTest {
 
         presenter.startPresenting()
 
-        assertTrue(tasksSubject.hasObservers())
+        assertTrue(tasksEventSubject.hasObservers())
     }
 
     @Test
@@ -308,7 +305,7 @@ class TasksPresenterTest {
 
         presenter.stopPresenting()
 
-        assertFalse(tasksSubject.hasObservers())
+        assertFalse(tasksEventSubject.hasObservers())
     }
 
     @Test
@@ -382,33 +379,13 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_AllFilterSelected_it_ShouldReSubscribeToTasksStream() {
-        givenThePresenterIsPresenting()
-
-        presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.ALL)
-
-        Mockito.verify(service, times(2)).getTasks()
-        assertTrue(tasksSubject.hasObservers())
-    }
-
-    @Test
     fun given_ThePresenterIsPresenting_on_AllFilterSelected_it_ShouldReSubscribeToTasksEventStream() {
         givenThePresenterIsPresenting()
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.ALL)
 
-        Mockito.verify(service, times(2)).getTasksEvents()
+        Mockito.verify(service, times(4)).getTasksEvents()
         assertTrue(tasksEventSubject.hasObservers())
-    }
-
-    @Test
-    fun given_ThePresenterIsPresenting_on_ActiveFilterSelected_it_ShouldSubscribeToActiveTasksStream() {
-        givenThePresenterIsPresenting()
-
-        presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.ACTIVE)
-
-        Mockito.verify(service).getActiveTasks()
-        assertTrue(tasksActiveSubject.hasObservers())
     }
 
     @Test
@@ -417,18 +394,8 @@ class TasksPresenterTest {
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.ACTIVE)
 
-        Mockito.verify(service).getActiveTasksEvents()
+        Mockito.verify(service, times(2)).getActiveTasksEvents()
         assertTrue(tasksActiveEventSubject.hasObservers())
-    }
-
-    @Test
-    fun given_ThePresenterIsPresenting_on_CompletedFilterSelected_it_ShouldSubscribeToCompletedTasksStream() {
-        givenThePresenterIsPresenting()
-
-        presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.COMPLETED)
-
-        Mockito.verify(service).getCompletedTasks()
-        assertTrue(tasksCompletedSubject.hasObservers())
     }
 
     @Test
@@ -437,7 +404,7 @@ class TasksPresenterTest {
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.COMPLETED)
 
-        Mockito.verify(service).getCompletedTasksEvents()
+        Mockito.verify(service, times(2)).getCompletedTasksEvents()
         assertTrue(tasksCompletedEventSubject.hasObservers())
     }
 
@@ -460,24 +427,13 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsSetWithInitalFilter_on_StartPresenting_it_ShouldSubscribeToTheCorrespondingTasksStream() {
+    fun given_ThePresenterIsSetWithInitialFilter_on_StartPresenting_it_ShouldSubscribeToTheCorrespondingEventStream() {
         givenThePresenterIsNotPresenting()
         presenter.setInitialFilterTo(TasksActionListener.Filter.ACTIVE)
 
         presenter.startPresenting()
 
-        Mockito.verify(service).getActiveTasks()
-        assertTrue(tasksActiveSubject.hasObservers())
-    }
-
-    @Test
-    fun given_ThePresenterIsSetWithInitalFilter_on_StartPresenting_it_ShouldSubscribeToTheCorrespondingEventStream() {
-        givenThePresenterIsNotPresenting()
-        presenter.setInitialFilterTo(TasksActionListener.Filter.ACTIVE)
-
-        presenter.startPresenting()
-
-        Mockito.verify(service).getActiveTasksEvents()
+        Mockito.verify(service, times(2)).getActiveTasksEvents()
         assertTrue(tasksActiveEventSubject.hasObservers())
     }
 
@@ -525,16 +481,12 @@ class TasksPresenterTest {
     private fun noEmptyTasks() = NoEmptyTasksPredicate()
 
     private fun setUpService() {
-        tasksSubject = BehaviorSubject.create()
         tasksEventSubject = BehaviorSubject.create()
 
-        Mockito.`when`(service.getTasks()).thenReturn(tasksSubject)
         Mockito.`when`(service.getTasksEvents()).thenReturn(tasksEventSubject)
 
-        Mockito.`when`(service.getActiveTasks()).thenReturn(tasksActiveSubject)
         Mockito.`when`(service.getActiveTasksEvents()).thenReturn(tasksActiveEventSubject)
 
-        Mockito.`when`(service.getCompletedTasks()).thenReturn(tasksCompletedSubject)
         Mockito.`when`(service.getCompletedTasksEvents()).thenReturn(tasksCompletedEventSubject)
 
         Mockito.`when`(service.refreshTasks()).thenReturn(refreshAction)

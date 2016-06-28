@@ -21,6 +21,8 @@ import rx.Observable;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 
+import static com.novoda.event.EventFunctions.asData;
+
 public class TasksPresenter {
 
     private final TasksService tasksService;
@@ -54,40 +56,25 @@ public class TasksPresenter {
 
     private void subscribeToSourcesFilteredWith(TasksActionListener.Filter filter) {
         subscriptions.add(
-                getTasksObservableFor(filter)
-                        .map(removeDeletedTasks())
-                        .filter(new Func1<Tasks, Boolean>() {
-                            @Override
-                            public Boolean call(Tasks tasks) {
-                                return !tasks.isEmpty();
-                            }
-                        })
+                getValidatedTasksEventObservable(filter)
+                        .compose(asData(Tasks.class))
                         .subscribe(tasksObserver)
         );
         subscriptions.add(
-                getTasksEventObservableFor(filter)
-                        .map(new Func1<Event<Tasks>, Event<Tasks>>() {
-                            @Override
-                            public Event<Tasks> call(Event<Tasks> tasksEvent) {
-                                Iterable<SyncedData<Task>> nonDeletedTasks = Iterables.filter(tasksEvent.data().or(Tasks.empty()).all(), shouldDisplayTask());
-                                return tasksEvent.updateData(Tasks.from(ImmutableList.copyOf(nonDeletedTasks)));
-                            }
-                        })
+                getValidatedTasksEventObservable(filter)
                         .subscribe(tasksEventObserver)
         );
     }
 
-    private Observable<Tasks> getTasksObservableFor(TasksActionListener.Filter filter) {
-        switch (filter) {
-            case ACTIVE:
-                return tasksService.getActiveTasks();
-            case COMPLETED:
-                return tasksService.getCompletedTasks();
-            case ALL:
-                return tasksService.getTasks();
-            default:
-                throw new IllegalArgumentException("Unknown filter type " + filter);
-        }
+    private Observable<Event<Tasks>> getValidatedTasksEventObservable(TasksActionListener.Filter filter) {
+        return getTasksEventObservableFor(filter)
+                .map(new Func1<Event<Tasks>, Event<Tasks>>() {
+                    @Override
+                    public Event<Tasks> call(Event<Tasks> tasksEvent) {
+                        Iterable<SyncedData<Task>> nonDeletedTasks = Iterables.filter(tasksEvent.data().or(Tasks.empty()).all(), shouldDisplayTask());
+                        return tasksEvent.updateData(Tasks.from(ImmutableList.copyOf(nonDeletedTasks)));
+                    }
+                });
     }
 
     private Observable<Event<Tasks>> getTasksEventObservableFor(TasksActionListener.Filter filter) {
@@ -101,16 +88,6 @@ public class TasksPresenter {
             default:
                 throw new IllegalArgumentException("Unknown filter type " + filter);
         }
-    }
-
-    private Func1<Tasks, Tasks> removeDeletedTasks() {
-        return new Func1<Tasks, Tasks>() {
-            @Override
-            public Tasks call(Tasks tasks) {
-                Iterable<SyncedData<Task>> nonDeletedTasks = Iterables.filter(tasks.all(), shouldDisplayTask());
-                return Tasks.from(ImmutableList.copyOf(nonDeletedTasks));
-            }
-        };
     }
 
     private static Predicate<SyncedData<Task>> shouldDisplayTask() {
