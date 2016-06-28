@@ -7,7 +7,7 @@
   android:paddingLeft="@dimen/activity_horizontal_margin"
   android:paddingRight="@dimen/activity_horizontal_margin"
   android:paddingTop="@dimen/activity_vertical_margin"
-  tools:context="net.bonysoft.magicmirror.MainActivity">
+  tools:context="com.novoda.magicmirror.MainActivity">
 
   <LinearLayout
     android:id="@+id/time_container"
@@ -70,6 +70,7 @@
     android:orientation="vertical">
 
     <ImageView
+      android:contentDescription="@null"
       android:id="@+id/weather_icon"
       android:layout_width="@dimen/weather_icon_width"
       android:layout_height="@dimen/weather_icon_height" />
