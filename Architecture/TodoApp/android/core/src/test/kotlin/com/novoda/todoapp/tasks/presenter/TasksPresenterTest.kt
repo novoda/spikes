@@ -1,5 +1,8 @@
 package com.novoda.todoapp.tasks.presenter;
 
+import com.google.common.collect.ImmutableList
+import com.novoda.data.SyncState
+import com.novoda.data.SyncedData
 import com.novoda.event.Event
 import com.novoda.todoapp.navigation.Navigator
 import com.novoda.todoapp.task.data.model.Id
@@ -66,6 +69,27 @@ class TasksPresenterTest {
 
         Mockito.verify(displayer).display(simpleTasks())
     }
+
+    @Test
+    fun given_ThePresenterIsPresenting_on_EmissionOfSomeNewDeletedLocallyTasks_it_ShouldPresentNonDeletedTasksToTheView() {
+        givenThePresenterIsPresenting()
+
+        tasksSubject.onNext(someDeletedLocallyTasks())
+
+        Mockito.verify(displayer).display(nonDeletedTasksOnly())
+    }
+
+    private fun someDeletedLocallyTasks() = Tasks.from(ImmutableList.copyOf(listOf(
+            SyncedData.from(Task.builder().id(Id.from("24")).title("Bar").isCompleted(true).build(), SyncState.DELETED_LOCALLY, TEST_TIME),
+            SyncedData.from(Task.builder().id(Id.from("42")).title("Foo").build(), SyncState.AHEAD, TEST_TIME),
+            SyncedData.from(Task.builder().id(Id.from("12")).title("Whizz").build(), SyncState.IN_SYNC, TEST_TIME),
+            SyncedData.from(Task.builder().id(Id.from("424")).title("New").isCompleted(false).build(), SyncState.DELETED_LOCALLY, TEST_TIME)
+    )))
+
+    private fun nonDeletedTasksOnly() = Tasks.from(ImmutableList.copyOf(listOf(
+            SyncedData.from(Task.builder().id(Id.from("42")).title("Foo").build(), SyncState.AHEAD, TEST_TIME),
+            SyncedData.from(Task.builder().id(Id.from("12")).title("Whizz").build(), SyncState.IN_SYNC, TEST_TIME)
+    )))
 
     @Test
     fun given_ThePresenterIsPresenting_on_EmissionOfALoadingEventWithNoData_it_ShouldPresentTheLoadingScreen() {
@@ -428,9 +452,9 @@ class TasksPresenterTest {
     ), TEST_TIME)
 
     private fun simpleTask() = Task.builder()
-        .id(Id.from("42"))
-        .title("Foo")
-        .build()
+            .id(Id.from("42"))
+            .title("Foo")
+            .build()
 
     private fun setUpService() {
         tasksSubject = BehaviorSubject.create()
