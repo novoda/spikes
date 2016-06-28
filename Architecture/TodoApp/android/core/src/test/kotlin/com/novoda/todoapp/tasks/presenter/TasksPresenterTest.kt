@@ -94,7 +94,7 @@ class TasksPresenterTest {
     fun given_ThePresenterIsPresenting_on_EmissionOfALoadingEventWithNoData_it_ShouldPresentTheLoadingScreen() {
         givenThePresenterIsPresenting()
 
-        tasksEventSubject.onNext(Event.loading())
+        tasksEventSubject.onNext(Event.loading(noEmptyTasks()))
 
         Mockito.verify(loadingDisplayer).showLoadingScreen()
     }
@@ -132,7 +132,7 @@ class TasksPresenterTest {
         presenter.setInitialFilterTo(TasksActionListener.Filter.ALL)
         givenThePresenterIsPresenting()
 
-        tasksEventSubject.onNext(Event.idle())
+        tasksEventSubject.onNext(Event.idle(noEmptyTasks()))
 
         Mockito.verify(loadingDisplayer).showEmptyTasksScreen()
     }
@@ -160,7 +160,7 @@ class TasksPresenterTest {
         presenter.setInitialFilterTo(TasksActionListener.Filter.ACTIVE)
         givenThePresenterIsPresenting()
 
-        tasksActiveEventSubject.onNext(Event.idle())
+        tasksActiveEventSubject.onNext(Event.idle(noEmptyTasks()))
 
         Mockito.verify(loadingDisplayer).showEmptyActiveTasksScreen()
     }
@@ -170,7 +170,7 @@ class TasksPresenterTest {
         presenter.setInitialFilterTo(TasksActionListener.Filter.COMPLETED)
         givenThePresenterIsPresenting()
 
-        tasksCompletedEventSubject.onNext(Event.idle())
+        tasksCompletedEventSubject.onNext(Event.idle(noEmptyTasks()))
 
         Mockito.verify(loadingDisplayer).showEmptyCompletedTasksScreen()
     }
@@ -188,7 +188,7 @@ class TasksPresenterTest {
     fun given_ThePresenterIsPresenting_on_EmissionOfAnErrorEventWithNoData_it_ShouldPresentTheErrorScreen() {
         givenThePresenterIsPresenting()
 
-        tasksEventSubject.onNext(Event.error(Throwable()))
+        tasksEventSubject.onNext(Event.idle(noEmptyTasks()).asError(SyncError()))
 
         Mockito.verify(loadingDisplayer).showErrorScreen()
     }

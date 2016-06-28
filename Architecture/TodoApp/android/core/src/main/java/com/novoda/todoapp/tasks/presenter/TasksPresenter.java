@@ -69,11 +69,8 @@ public class TasksPresenter {
                         .map(new Func1<Event<Tasks>, Event<Tasks>>() {
                             @Override
                             public Event<Tasks> call(Event<Tasks> tasksEvent) {
-                                if (tasksEvent.data().isPresent()) {
-                                    Iterable<SyncedData<Task>> nonDeletedTasks = Iterables.filter(tasksEvent.data().get().all(), shouldDisplayTask());
-                                    return tasksEvent.updateData(Tasks.from(ImmutableList.copyOf(nonDeletedTasks)));
-                                }
-                                return tasksEvent;
+                                Iterable<SyncedData<Task>> nonDeletedTasks = Iterables.filter(tasksEvent.data().or(Tasks.empty()).all(), shouldDisplayTask());
+                                return tasksEvent.updateData(Tasks.from(ImmutableList.copyOf(nonDeletedTasks)));
                             }
                         })
                         .subscribe(tasksEventObserver)
