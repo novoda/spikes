@@ -363,16 +363,19 @@ public class PersistedTasksService implements TasksService {
         return new Observable.Transformer<Tasks, Event<Tasks>>() {
             @Override
             public Observable<Event<Tasks>> call(Observable<Tasks> tasksObservable) {
-                return tasksObservable.compose(EventFunctions.asEvent(value)).map(new Func1<Event<Tasks>, Event<Tasks>>() {
-                    @Override
-                    public Event<Tasks> call(Event<Tasks> tasksEvent) {
-                        if (tasksEvent.data().or(Tasks.empty()).hasSyncError()) {
-                            return tasksEvent.asError(new SyncError());
-                        } else {
-                            return tasksEvent;
-                        }
-                    }
-                });
+                return tasksObservable
+                        .compose(EventFunctions.asEvent(value))
+                        .map(new Func1<Event<Tasks>, Event<Tasks>>() {
+                                 @Override
+                                 public Event<Tasks> call(Event<Tasks> tasksEvent) {
+                                     if (tasksEvent.data().or(Tasks.empty()).hasSyncError()) {
+                                         return tasksEvent.asError(new SyncError());
+                                     } else {
+                                         return tasksEvent;
+                                     }
+                                 }
+                             }
+                        );
             }
         };
     }
