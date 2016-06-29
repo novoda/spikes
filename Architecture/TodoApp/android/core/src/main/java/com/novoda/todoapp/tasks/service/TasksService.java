@@ -11,17 +11,11 @@ import rx.functions.Action0;
 
 public interface TasksService {
 
-    Observable<Tasks> getTasks();
+    Observable<Event<Tasks>> getTasksEvent();
 
-    Observable<Event<Tasks>> getTasksEvents();
+    Observable<Event<Tasks>> getCompletedTasksEvent();
 
-    Observable<Tasks> getCompletedTasks();
-
-    Observable<Event<Tasks>> getCompletedTasksEvents();
-
-    Observable<Tasks> getActiveTasks();
-
-    Observable<Event<Tasks>> getActiveTasksEvents();
+    Observable<Event<Tasks>> getActiveTasksEvent();
 
     Observable<SyncedData<Task>> getTask(Id taskId);
 

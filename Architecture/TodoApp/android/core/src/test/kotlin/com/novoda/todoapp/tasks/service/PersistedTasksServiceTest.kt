@@ -51,65 +51,6 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataIsEmpty_on_GetTasks_it_ShouldReturnTasksFromTheRemote() {
-        val tasks = sampleRemoteTasks()
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onNext(tasks)
-        taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onCompleted()
-
-        service.getTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf(Tasks.asSynced(tasks, TEST_TIME)))
-        assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
-    }
-
-    @Test
-    fun given_TheLocalDataIsEmpty_on_GetTasks_it_ShouldSaveTasksFromTheRemoteInTheLocalData() {
-        val tasks = sampleRemoteTasks()
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onNext(tasks)
-        taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onCompleted()
-
-        service.getTasks().subscribe(testObserver)
-
-        verify(localDataSource).saveTasks(Tasks.asSynced(tasks, TEST_TIME))
-    }
-
-    @Test
-    fun given_TheLocalDataHasTasksAndTasksAreFresh_on_GetTasks_it_ShouldReturnTasksFromTheLocalData() {
-        val remoteTasks = sampleRemoteTasks()
-        val localTasks = sampleLocalTasks()
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onNext(remoteTasks)
-        taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onNext(localTasks)
-        taskLocalDataSubject.onCompleted()
-        `when`(freshnessChecker.isFresh(localTasks)).thenReturn(true)
-
-        service.getTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf(localTasks))
-    }
-
-    @Test
-    fun given_TheLocalDataHasTasksAndTasksAreExpired_on_GetTasks_it_ShouldReturnTasksFromTheLocalDataThenTasksFromTheRemote() {
-        val remoteTasks = sampleRemoteTasks()
-        val localTasks = sampleLocalTasks()
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onNext(remoteTasks)
-        taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onNext(localTasks)
-        taskLocalDataSubject.onCompleted()
-        `when`(freshnessChecker.isFresh(localTasks)).thenReturn(false)
-
-        service.getTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf(localTasks, Tasks.asSynced(remoteTasks, TEST_TIME)))
-    }
-
-    @Test
     fun given_TheLocalDataHasTasksAndTasksAreExpired_on_GetTasks_it_ShouldSaveTasksFromTheRemoteInTheLocalData() {
         val remoteTasks = sampleRemoteTasks()
         val localTasks = sampleLocalTasks()
@@ -193,7 +134,7 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
 
-        service.getTasksEvents().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -213,7 +154,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(true)
 
-        service.getTasksEvents().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -233,7 +174,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(false)
 
-        service.getTasksEvents().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -250,7 +191,7 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onError(throwable)
         taskLocalDataSubject.onCompleted()
 
-        service.getTasksEvents().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -264,7 +205,7 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
 
-        service.getTasksEvents().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -279,7 +220,7 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onError(throwable)
 
-        service.getTasksEvents().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -296,7 +237,7 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onError(throwable)
 
-        service.getTasksEvents().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -313,7 +254,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onNext(localTasks)
         taskLocalDataSubject.onCompleted()
 
-        service.getTasksEvents().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -383,7 +324,7 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onNext(tasks)
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
-        service.getTasksEvents().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
         setUpService()
         taskRemoteDataSubject.onNext(tasksRefreshed)
         taskRemoteDataSubject.onCompleted()
@@ -756,7 +697,7 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
 
-        service.getActiveTasksEvents().subscribe(testObserver)
+        service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -776,7 +717,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(true)
 
-        service.getActiveTasksEvents().subscribe(testObserver)
+        service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -796,7 +737,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(false)
 
-        service.getActiveTasksEvents().subscribe(testObserver)
+        service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -813,7 +754,7 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onError(throwable)
         taskLocalDataSubject.onCompleted()
 
-        service.getActiveTasksEvents().subscribe(testObserver)
+        service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -827,7 +768,7 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
 
-        service.getActiveTasksEvents().subscribe(testObserver)
+        service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -842,7 +783,7 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onError(throwable)
 
-        service.getActiveTasksEvents().subscribe(testObserver)
+        service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -859,7 +800,7 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onError(throwable)
 
-        service.getActiveTasksEvents().subscribe(testObserver)
+        service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -876,7 +817,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onNext(localTasks)
         taskLocalDataSubject.onCompleted()
 
-        service.getActiveTasksEvents().subscribe(testObserver)
+        service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -893,7 +834,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onNext(tasks)
         taskLocalDataSubject.onCompleted()
 
-        service.getActiveTasksEvents().subscribe(testObserver)
+        service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -910,7 +851,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onNext(tasks)
         taskLocalDataSubject.onCompleted()
 
-        service.getActiveTasksEvents().subscribe(testObserver)
+        service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -1062,7 +1003,7 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
 
-        service.getCompletedTasksEvents().subscribe(testObserver)
+        service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -1082,7 +1023,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(true)
 
-        service.getCompletedTasksEvents().subscribe(testObserver)
+        service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -1102,7 +1043,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(false)
 
-        service.getCompletedTasksEvents().subscribe(testObserver)
+        service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -1119,7 +1060,7 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onError(throwable)
         taskLocalDataSubject.onCompleted()
 
-        service.getCompletedTasksEvents().subscribe(testObserver)
+        service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -1133,7 +1074,7 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
 
-        service.getCompletedTasksEvents().subscribe(testObserver)
+        service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -1148,7 +1089,7 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onError(throwable)
 
-        service.getCompletedTasksEvents().subscribe(testObserver)
+        service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -1165,7 +1106,7 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onError(throwable)
 
-        service.getCompletedTasksEvents().subscribe(testObserver)
+        service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -1182,7 +1123,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onNext(localTasks)
         taskLocalDataSubject.onCompleted()
 
-        service.getCompletedTasksEvents().subscribe(testObserver)
+        service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -1199,7 +1140,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onNext(tasks)
         taskLocalDataSubject.onCompleted()
 
-        service.getCompletedTasksEvents().subscribe(testObserver)
+        service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -1216,7 +1157,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onNext(tasks)
         taskLocalDataSubject.onCompleted()
 
-        service.getCompletedTasksEvents().subscribe(testObserver)
+        service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
                 Event.loading<Tasks>(noEmptyTasks()),
@@ -1232,9 +1173,9 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onNext(tasks)
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
-        service.getTasksEvents().subscribe(TestObserver<Event<Tasks>>())
+        service.getTasksEvent().subscribe(TestObserver<Event<Tasks>>())
         `when`(remoteDataSource.clearCompletedTasks()).thenReturn(Observable.just(sampleRemoteSomeCompletedTasksDeleted()));
-        service.getTasksEvents().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
         service.clearCompletedTasks().call();
 
@@ -1253,9 +1194,9 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onNext(tasks)
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
-        service.getTasksEvents().subscribe(TestObserver<Event<Tasks>>())
+        service.getTasksEvent().subscribe(TestObserver<Event<Tasks>>())
         `when`(remoteDataSource.clearCompletedTasks()).thenReturn(Observable.error(Throwable("Terrible things")));
-        service.getTasksEvents().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
         service.clearCompletedTasks().call();
 

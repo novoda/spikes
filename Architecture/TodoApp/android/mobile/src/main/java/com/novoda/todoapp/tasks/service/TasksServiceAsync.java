@@ -21,43 +21,22 @@ public class TasksServiceAsync implements TasksService {
     }
 
     @Override
-    public Observable<Tasks> getTasks() {
-        return tasksService.getTasks()
+    public Observable<Event<Tasks>> getTasksEvent() {
+        return tasksService.getTasksEvent()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
-    public Observable<Event<Tasks>> getTasksEvents() {
-        return tasksService.getTasksEvents()
+    public Observable<Event<Tasks>> getCompletedTasksEvent() {
+        return tasksService.getCompletedTasksEvent()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
-    public Observable<Tasks> getCompletedTasks() {
-        return tasksService.getCompletedTasks()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    @Override
-    public Observable<Event<Tasks>> getCompletedTasksEvents() {
-        return tasksService.getCompletedTasksEvents()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    @Override
-    public Observable<Tasks> getActiveTasks() {
-        return tasksService.getActiveTasks()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    @Override
-    public Observable<Event<Tasks>> getActiveTasksEvents() {
-        return tasksService.getActiveTasksEvents()
+    public Observable<Event<Tasks>> getActiveTasksEvent() {
+        return tasksService.getActiveTasksEvent()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

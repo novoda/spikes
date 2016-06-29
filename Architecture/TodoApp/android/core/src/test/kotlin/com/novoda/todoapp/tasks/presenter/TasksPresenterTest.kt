@@ -384,7 +384,7 @@ class TasksPresenterTest {
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.ALL)
 
-        Mockito.verify(service, times(4)).getTasksEvents()
+        Mockito.verify(service, times(4)).getTasksEvent()
         assertTrue(tasksEventSubject.hasObservers())
     }
 
@@ -394,7 +394,7 @@ class TasksPresenterTest {
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.ACTIVE)
 
-        Mockito.verify(service, times(2)).getActiveTasksEvents()
+        Mockito.verify(service, times(2)).getActiveTasksEvent()
         assertTrue(tasksActiveEventSubject.hasObservers())
     }
 
@@ -404,7 +404,7 @@ class TasksPresenterTest {
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.COMPLETED)
 
-        Mockito.verify(service, times(2)).getCompletedTasksEvents()
+        Mockito.verify(service, times(2)).getCompletedTasksEvent()
         assertTrue(tasksCompletedEventSubject.hasObservers())
     }
 
@@ -433,7 +433,7 @@ class TasksPresenterTest {
 
         presenter.startPresenting()
 
-        Mockito.verify(service, times(2)).getActiveTasksEvents()
+        Mockito.verify(service, times(2)).getActiveTasksEvent()
         assertTrue(tasksActiveEventSubject.hasObservers())
     }
 
@@ -483,11 +483,11 @@ class TasksPresenterTest {
     private fun setUpService() {
         tasksEventSubject = BehaviorSubject.create()
 
-        Mockito.`when`(service.getTasksEvents()).thenReturn(tasksEventSubject)
+        Mockito.`when`(service.getTasksEvent()).thenReturn(tasksEventSubject)
 
-        Mockito.`when`(service.getActiveTasksEvents()).thenReturn(tasksActiveEventSubject)
+        Mockito.`when`(service.getActiveTasksEvent()).thenReturn(tasksActiveEventSubject)
 
-        Mockito.`when`(service.getCompletedTasksEvents()).thenReturn(tasksCompletedEventSubject)
+        Mockito.`when`(service.getCompletedTasksEvent()).thenReturn(tasksCompletedEventSubject)
 
         Mockito.`when`(service.refreshTasks()).thenReturn(refreshAction)
         Mockito.`when`(service.clearCompletedTasks()).thenReturn(clearCompletedAction)

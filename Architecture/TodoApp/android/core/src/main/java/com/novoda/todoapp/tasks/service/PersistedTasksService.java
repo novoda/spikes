@@ -27,7 +27,8 @@ import rx.functions.Func0;
 import rx.functions.Func1;
 
 import static com.novoda.data.SyncFunctions.asSyncedAction;
-import static com.novoda.event.EventFunctions.*;
+import static com.novoda.event.EventFunctions.asData;
+import static com.novoda.event.EventFunctions.isInitialised;
 import static com.novoda.todoapp.rx.RxFunctions.ifThenMap;
 
 public class PersistedTasksService implements TasksService {
@@ -55,20 +56,15 @@ public class PersistedTasksService implements TasksService {
     }
 
     @Override
-    public Observable<Event<Tasks>> getTasksEvents() {
+    public Observable<Event<Tasks>> getTasksEvent() {
         return taskRelay.asObservable()
                 .startWith(initialiseSubject())
                 .distinctUntilChanged();
     }
 
     @Override
-    public Observable<Tasks> getTasks() {
-        return getTasksEvents().compose(asData(Tasks.class));
-    }
-
-    @Override
-    public Observable<Event<Tasks>> getCompletedTasksEvents() {
-        return getTasksEvents()
+    public Observable<Event<Tasks>> getCompletedTasksEvent() {
+        return getTasksEvent()
                 .map(filterTasks(onlyCompleted()));
     }
 
@@ -91,13 +87,8 @@ public class PersistedTasksService implements TasksService {
     }
 
     @Override
-    public Observable<Tasks> getCompletedTasks() {
-        return getCompletedTasksEvents().compose(asData(Tasks.class));
-    }
-
-    @Override
-    public Observable<Event<Tasks>> getActiveTasksEvents() {
-        return getTasksEvents()
+    public Observable<Event<Tasks>> getActiveTasksEvent() {
+        return getTasksEvent()
                 .map(filterTasks(onlyActives()));
     }
 
@@ -108,11 +99,6 @@ public class PersistedTasksService implements TasksService {
                 return input.onlyActives();
             }
         };
-    }
-
-    @Override
-    public Observable<Tasks> getActiveTasks() {
-        return getActiveTasksEvents().compose(asData(Tasks.class));
     }
 
     private Observable<Event<Tasks>> initialiseSubject() {
@@ -170,24 +156,17 @@ public class PersistedTasksService implements TasksService {
 
     @Override
     public Observable<SyncedData<Task>> getTask(final Id taskId) {
-        return getTasks().flatMap(new Func1<Tasks, Observable<SyncedData<Task>>>() {
-            @Override
-            public Observable<SyncedData<Task>> call(Tasks tasks) {
-                if (tasks.containsTask(taskId)) {
-                    return Observable.just(tasks.syncedDataFor(taskId));
-                }
-                return Observable.empty(); //TODO handle remote fetching as fallback.
-            }
-        });
-    }
-
-    private Func1<Task, SyncedData<Task>> asSyncedNow() {
-        return new Func1<Task, SyncedData<Task>>() {
-            @Override
-            public SyncedData<Task> call(Task task) {
-                return SyncedData.from(task, SyncState.IN_SYNC, clock.timeInMillis());
-            }
-        };
+        return getTasksEvent()
+                .compose(asData(Tasks.class))
+                .flatMap(new Func1<Tasks, Observable<SyncedData<Task>>>() {
+                    @Override
+                    public Observable<SyncedData<Task>> call(Tasks tasks) {
+                        if (tasks.containsTask(taskId)) {
+                            return Observable.just(tasks.syncedDataFor(taskId));
+                        }
+                        return Observable.empty(); //TODO handle remote fetching as fallback.
+                    }
+                });
     }
 
     @Override
@@ -250,15 +229,6 @@ public class PersistedTasksService implements TasksService {
                 } else {
                     return input.toBuilder().syncState(SyncState.AHEAD).build();
                 }
-            }
-        };
-    }
-
-    private static Predicate<SyncedData<Task>> notCompleted() {
-        return new Predicate<SyncedData<Task>>() {
-            @Override
-            public boolean apply(SyncedData<Task> input) {
-                return !input.data().isCompleted();
             }
         };
     }
@@ -390,7 +360,7 @@ public class PersistedTasksService implements TasksService {
         return new Observable.Transformer<Tasks, Event<Tasks>>() {
             @Override
             public Observable<Event<Tasks>> call(Observable<Tasks> tasksObservable) {
-                return tasksObservable.compose(EventFunctions.<Tasks>asEvent(value)).map(new Func1<Event<Tasks>, Event<Tasks>>() {
+                return tasksObservable.compose(EventFunctions.asEvent(value)).map(new Func1<Event<Tasks>, Event<Tasks>>() {
                     @Override
                     public Event<Tasks> call(Event<Tasks> tasksEvent) {
                         if (tasksEvent.data().or(Tasks.empty()).hasSyncError()) {

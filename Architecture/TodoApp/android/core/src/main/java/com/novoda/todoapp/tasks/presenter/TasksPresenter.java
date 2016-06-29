@@ -80,11 +80,11 @@ public class TasksPresenter {
     private Observable<Event<Tasks>> getTasksEventObservableFor(TasksActionListener.Filter filter) {
         switch (filter) {
             case ACTIVE:
-                return tasksService.getActiveTasksEvents();
+                return tasksService.getActiveTasksEvent();
             case COMPLETED:
-                return tasksService.getCompletedTasksEvents();
+                return tasksService.getCompletedTasksEvent();
             case ALL:
-                return tasksService.getTasksEvents();
+                return tasksService.getTasksEvent();
             default:
                 throw new IllegalArgumentException("Unknown filter type " + filter);
         }
