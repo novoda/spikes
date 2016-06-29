@@ -1,0 +1,53 @@
+<resources>
+
+  <style name="AppTheme"
+    parent="Theme.AppCompat.NoActionBar">
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+    <item name="android:background">@color/activity_background</item>
+  </style>
+
+  <style name="Label">
+    <item name="android:textColor">@color/label_text</item>
+    <item name="android:fontFamily">sans-serif-light</item>
+  </style>
+
+  <style name="Label.Time">
+    <item name="android:textSize">@dimen/time_text</item>
+  </style>
+
+  <style name="Label.Date">
+    <item name="android:textSize">@dimen/date_text</item>
+  </style>
+
+  <style name="Label.Tweet">
+    <item name="android:textSize">@dimen/tweet_text</item>
+  </style>
+
+  <style name="Label.TodoItem">
+    <item name="android:textSize">@dimen/todo_item</item>
+  </style>
+
+  <style name="TodoCheckBox"
+    parent="Theme.AppCompat.Light">
+    <item name="colorControlNormal">@android:color/white</item>
+    <item name="colorControlActivated">@android:color/white</item>
+  </style>
+
+  <style name="Label.Weather" />
+
+  <style name="Label.Weather.Temperature">
+    <item name="android:textSize">@dimen/weather_temperature_text</item>
+  </style>
+
+  <style name="Label.Weather.Condition">
+    <item name="android:textSize">@dimen/weather_condition_text</item>
+  </style>
+
+  <style name="Label.FaceStatus">
+    <item name="android:textSize">@dimen/face_recognition_text</item>
+    <item name="android:background">@android:color/transparent</item>
+  </style>
+
+</resources>
