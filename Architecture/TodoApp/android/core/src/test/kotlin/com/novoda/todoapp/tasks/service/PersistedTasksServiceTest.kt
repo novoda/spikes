@@ -64,7 +64,7 @@ class PersistedTasksServiceTest {
 
         service.getTasksEvent().subscribe(testObserver)
 
-        verify(localDataSource).saveTasks(Tasks.asSynced(remoteTasks, TEST_TIME))
+        verify(localDataSource).saveTasks(asSyncedTasks(remoteTasks))
     }
 
 
@@ -79,9 +79,9 @@ class PersistedTasksServiceTest {
         service.getTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
-                Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME))
+                loadingEvent(),
+                loadingEventWith(asSyncedTasks(tasks)),
+                idleEventWith(asSyncedTasks(tasks))
         ))
     }
 
@@ -99,9 +99,9 @@ class PersistedTasksServiceTest {
         service.getTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(localTasks),
-                Event.idle<Tasks>(noEmptyTasks()).updateData(localTasks)
+                loadingEvent(),
+                loadingEventWith(localTasks),
+                idleEventWith(localTasks)
         ))
     }
 
@@ -119,10 +119,10 @@ class PersistedTasksServiceTest {
         service.getTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(localTasks),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(remoteTasks, TEST_TIME)),
-                Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(remoteTasks, TEST_TIME))
+                loadingEvent(),
+                loadingEventWith(localTasks),
+                loadingEventWith(asSyncedTasks(remoteTasks)),
+                idleEventWith(asSyncedTasks(remoteTasks))
         ))
     }
 
@@ -136,8 +136,8 @@ class PersistedTasksServiceTest {
         service.getTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.error<Tasks>(throwable).toBuilder().dataValidator(noEmptyTasks()).build()
+                loadingEvent(),
+                errorEventWith(throwable)
         ))
     }
 
@@ -150,8 +150,8 @@ class PersistedTasksServiceTest {
         service.getTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.idle<Tasks>(noEmptyTasks())
+                loadingEvent(),
+                idleEvent()
         ))
     }
 
@@ -165,8 +165,8 @@ class PersistedTasksServiceTest {
         service.getTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.error<Tasks>(throwable).toBuilder().dataValidator(noEmptyTasks()).build()
+                loadingEvent(),
+                errorEventWith(throwable)
         ))
     }
 
@@ -182,8 +182,8 @@ class PersistedTasksServiceTest {
         service.getTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.error<Tasks>(throwable).toBuilder().dataValidator(noEmptyTasks()).build()
+                loadingEvent(),
+                errorEventWith(throwable)
         ))
     }
 
@@ -214,9 +214,9 @@ class PersistedTasksServiceTest {
         service.getTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(localTasks),
-                Event.error<Tasks>(throwable).updateData(localTasks).toBuilder().dataValidator(noEmptyTasks()).build()
+                loadingEvent(),
+                loadingEventWith(localTasks),
+                errorEventWith(localTasks, throwable)
         ))
     }
 
@@ -237,12 +237,12 @@ class PersistedTasksServiceTest {
 
         testObserver.assertReceivedOnNext(
                 listOf(
-                        Event.loading<Tasks>(noEmptyTasks()),
-                        Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
-                        Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
-                        Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
-                        Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasksRefreshed, TEST_TIME)),
-                        Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasksRefreshed, TEST_TIME))
+                        loadingEvent(),
+                        loadingEventWith(asSyncedTasks(tasks)),
+                        idleEventWith(asSyncedTasks(tasks)),
+                        loadingEventWith(asSyncedTasks(tasks)),
+                        loadingEventWith(asSyncedTasks(tasksRefreshed)),
+                        idleEventWith(asSyncedTasks(tasksRefreshed))
                 )
         )
     }
@@ -263,11 +263,11 @@ class PersistedTasksServiceTest {
 
         testObserver.assertReceivedOnNext(
                 listOf(
-                        Event.loading<Tasks>(noEmptyTasks()),
-                        Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
-                        Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
-                        Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
-                        Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME))
+                        loadingEvent(),
+                        loadingEventWith(asSyncedTasks(tasks)),
+                        idleEventWith(asSyncedTasks(tasks)),
+                        loadingEventWith(asSyncedTasks(tasks)),
+                        idleEventWith(asSyncedTasks(tasks))
                 )
         )
     }
@@ -287,7 +287,7 @@ class PersistedTasksServiceTest {
 
         service.refreshTasks().call()
 
-        verify(localDataSource).saveTasks(Tasks.asSynced(tasksRefreshed, TEST_TIME))
+        verify(localDataSource).saveTasks(asSyncedTasks(tasksRefreshed))
     }
 
     @Test
@@ -306,12 +306,12 @@ class PersistedTasksServiceTest {
         service.refreshTasks().call()
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
-                Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasksRefreshed, TEST_TIME)),
-                Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasksRefreshed, TEST_TIME))
+                loadingEvent(),
+                loadingEventWith(asSyncedTasks(tasks)),
+                idleEventWith(asSyncedTasks(tasks)),
+                loadingEventWith(asSyncedTasks(tasks)),
+                loadingEventWith(asSyncedTasks(tasksRefreshed)),
+                idleEventWith(asSyncedTasks(tasksRefreshed))
         ))
     }
 
@@ -330,11 +330,11 @@ class PersistedTasksServiceTest {
         service.complete(task).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading(noEmptyTasks()).updateData(localTasks),
-                Event.idle<Tasks>(noEmptyTasks()).updateData(localTasks),
-                Event.idle<Tasks>(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(task.complete(), SyncState.AHEAD, 321))),
-                Event.idle<Tasks>(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(task.complete(), SyncState.IN_SYNC, 321)))
+                loadingEvent(),
+                loadingEventWith(localTasks),
+                idleEventWith(localTasks),
+                idleEventWith(localTasks.save(SyncedData.from(task.complete(), SyncState.AHEAD, 321))),
+                idleEventWith(localTasks.save(SyncedData.from(task.complete(), SyncState.IN_SYNC, 321)))
         ))
         assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
     }
@@ -357,9 +357,9 @@ class PersistedTasksServiceTest {
         service.complete(updatedTask).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(updatedTasks),
-                Event.idle(noEmptyTasks()).updateData(updatedTasks)
+                loadingEvent(),
+                loadingEventWith(updatedTasks),
+                idleEventWith(updatedTasks)
         ))
         assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
     }
@@ -382,11 +382,11 @@ class PersistedTasksServiceTest {
         service.complete(task).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading(noEmptyTasks()).updateData(localTasks),
-                Event.idle(noEmptyTasks()).updateData(localTasks),
-                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(task.complete(), SyncState.AHEAD, 321))),
-                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(task.complete(), SyncState.SYNC_ERROR, 321)))
+                loadingEvent(),
+                loadingEventWith(localTasks),
+                idleEventWith(localTasks),
+                idleEventWith(localTasks.save(SyncedData.from(task.complete(), SyncState.AHEAD, 321))),
+                idleEventWith(localTasks.save(SyncedData.from(task.complete(), SyncState.SYNC_ERROR, 321)))
         ))
         assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
     }
@@ -406,11 +406,11 @@ class PersistedTasksServiceTest {
         service.activate(task).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(localTasks),
-                Event.idle(noEmptyTasks()).updateData(localTasks),
-                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(task.activate(), SyncState.AHEAD, 321))),
-                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(task.activate(), SyncState.IN_SYNC, 321)))
+                loadingEvent(),
+                loadingEventWith(localTasks),
+                idleEventWith(localTasks),
+                idleEventWith(localTasks.save(SyncedData.from(task.activate(), SyncState.AHEAD, 321))),
+                idleEventWith(localTasks.save(SyncedData.from(task.activate(), SyncState.IN_SYNC, 321)))
         ))
         assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
     }
@@ -433,9 +433,9 @@ class PersistedTasksServiceTest {
         service.activate(task).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading(noEmptyTasks()).updateData(tasks),
-                Event.idle(noEmptyTasks()).updateData(tasks)
+                loadingEvent(),
+                loadingEventWith(tasks),
+                idleEventWith(tasks)
         ))
         assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
     }
@@ -458,11 +458,11 @@ class PersistedTasksServiceTest {
         service.activate(task).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading(noEmptyTasks()).updateData(localTasks),
-                Event.idle(noEmptyTasks()).updateData(localTasks),
-                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(task.activate(), SyncState.AHEAD, 321))),
-                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(task.activate(), SyncState.SYNC_ERROR, 321)))
+                loadingEvent(),
+                loadingEventWith(localTasks),
+                idleEventWith(localTasks),
+                idleEventWith(localTasks.save(SyncedData.from(task.activate(), SyncState.AHEAD, 321))),
+                idleEventWith(localTasks.save(SyncedData.from(task.activate(), SyncState.SYNC_ERROR, 321)))
         ))
         assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
     }
@@ -483,11 +483,11 @@ class PersistedTasksServiceTest {
         service.save(newTask).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading(noEmptyTasks()).updateData(localTasks),
-                Event.idle(noEmptyTasks()).updateData(localTasks),
-                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(newTask, SyncState.AHEAD, 321))),
-                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(newTask, SyncState.IN_SYNC, 321)))
+                loadingEvent(),
+                loadingEventWith(localTasks),
+                idleEventWith(localTasks),
+                idleEventWith(localTasks.save(SyncedData.from(newTask, SyncState.AHEAD, 321))),
+                idleEventWith(localTasks.save(SyncedData.from(newTask, SyncState.IN_SYNC, 321)))
         ))
         assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
     }
@@ -511,9 +511,9 @@ class PersistedTasksServiceTest {
         service.save(newTask).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(tasks),
-                Event.idle(noEmptyTasks()).updateData(tasks)
+                loadingEvent(),
+                loadingEventWith(tasks),
+                idleEventWith(tasks)
         ))
         assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
     }
@@ -537,11 +537,11 @@ class PersistedTasksServiceTest {
         service.save(newTask).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading(noEmptyTasks()).updateData(localTasks),
-                Event.idle(noEmptyTasks()).updateData(localTasks),
-                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(newTask, SyncState.AHEAD, 321))),
-                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(newTask, SyncState.SYNC_ERROR, 321)))
+                loadingEvent(),
+                loadingEventWith(localTasks),
+                idleEventWith(localTasks),
+                idleEventWith(localTasks.save(SyncedData.from(newTask, SyncState.AHEAD, 321))),
+                idleEventWith(localTasks.save(SyncedData.from(newTask, SyncState.SYNC_ERROR, 321)))
         ))
         assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
     }
@@ -556,7 +556,7 @@ class PersistedTasksServiceTest {
 
         service.getActiveTasksEvent().subscribe(testObserver)
 
-        verify(localDataSource).saveTasks(Tasks.asSynced(tasks, TEST_TIME))
+        verify(localDataSource).saveTasks(asSyncedTasks(tasks))
     }
 
     @Test
@@ -572,7 +572,7 @@ class PersistedTasksServiceTest {
 
         service.getActiveTasksEvent().subscribe(testObserver)
 
-        verify(localDataSource).saveTasks(Tasks.asSynced(remoteTasks, TEST_TIME))
+        verify(localDataSource).saveTasks(asSyncedTasks(remoteTasks))
     }
 
     @Test
@@ -586,9 +586,9 @@ class PersistedTasksServiceTest {
         service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
-                Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME))
+                loadingEvent(),
+                loadingEventWith(asSyncedTasks(tasks)),
+                idleEventWith(asSyncedTasks(tasks))
         ))
     }
 
@@ -606,9 +606,9 @@ class PersistedTasksServiceTest {
         service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(localTasks),
-                Event.idle<Tasks>(noEmptyTasks()).updateData(localTasks)
+                loadingEvent(),
+                loadingEventWith(localTasks),
+                idleEventWith(localTasks)
         ))
     }
 
@@ -626,10 +626,10 @@ class PersistedTasksServiceTest {
         service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(localTasks),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(remoteTasks, TEST_TIME)),
-                Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(remoteTasks, TEST_TIME))
+                loadingEvent(),
+                loadingEventWith(localTasks),
+                loadingEventWith(asSyncedTasks(remoteTasks)),
+                idleEventWith(asSyncedTasks(remoteTasks))
         ))
     }
 
@@ -643,8 +643,8 @@ class PersistedTasksServiceTest {
         service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.error<Tasks>(throwable).toBuilder().dataValidator(noEmptyTasks()).build()
+                loadingEvent(),
+                errorEventWith(throwable)
         ))
     }
 
@@ -657,8 +657,8 @@ class PersistedTasksServiceTest {
         service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.idle<Tasks>(noEmptyTasks())
+                loadingEvent(),
+                idleEvent()
         ))
     }
 
@@ -672,8 +672,8 @@ class PersistedTasksServiceTest {
         service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.error<Tasks>(throwable).toBuilder().dataValidator(noEmptyTasks()).build()
+                loadingEvent(),
+                errorEventWith(throwable)
         ))
     }
 
@@ -689,8 +689,8 @@ class PersistedTasksServiceTest {
         service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.error<Tasks>(throwable).toBuilder().dataValidator(noEmptyTasks()).build()
+                loadingEvent(),
+                errorEventWith(throwable)
         ))
     }
 
@@ -706,9 +706,9 @@ class PersistedTasksServiceTest {
         service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(localTasks),
-                Event.error<Tasks>(throwable).updateData(localTasks).toBuilder().dataValidator(noEmptyTasks()).build()
+                loadingEvent(),
+                loadingEventWith(localTasks),
+                errorEventWith(localTasks, throwable)
         ))
     }
 
@@ -723,9 +723,9 @@ class PersistedTasksServiceTest {
         service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.idle<Tasks>(noEmptyTasks())
+                loadingEvent(),
+                loadingEvent(),
+                idleEvent()
         ))
     }
 
@@ -740,9 +740,9 @@ class PersistedTasksServiceTest {
         service.getActiveTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(sampleLocalActivatedTasks()),
-                Event.idle<Tasks>(noEmptyTasks()).updateData(sampleLocalActivatedTasks())
+                loadingEvent(),
+                loadingEventWith(sampleLocalActivatedTasks()),
+                idleEventWith(sampleLocalActivatedTasks())
         ))
     }
 
@@ -756,7 +756,7 @@ class PersistedTasksServiceTest {
 
         service.getCompletedTasksEvent().subscribe(testObserver)
 
-        verify(localDataSource).saveTasks(Tasks.asSynced(tasks, TEST_TIME))
+        verify(localDataSource).saveTasks(asSyncedTasks(tasks))
     }
 
     @Test
@@ -772,7 +772,7 @@ class PersistedTasksServiceTest {
 
         service.getCompletedTasksEvent().subscribe(testObserver)
 
-        verify(localDataSource).saveTasks(Tasks.asSynced(remoteTasks, TEST_TIME))
+        verify(localDataSource).saveTasks(asSyncedTasks(remoteTasks))
     }
 
     @Test
@@ -786,9 +786,9 @@ class PersistedTasksServiceTest {
         service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
-                Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME))
+                loadingEvent(),
+                loadingEventWith(asSyncedTasks(tasks)),
+                idleEventWith(asSyncedTasks(tasks))
         ))
     }
 
@@ -806,9 +806,9 @@ class PersistedTasksServiceTest {
         service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(localTasks),
-                Event.idle<Tasks>(noEmptyTasks()).updateData(localTasks)
+                loadingEvent(),
+                loadingEventWith(localTasks),
+                idleEventWith(localTasks)
         ))
     }
 
@@ -826,10 +826,10 @@ class PersistedTasksServiceTest {
         service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(localTasks),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(remoteTasks, TEST_TIME)),
-                Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(remoteTasks, TEST_TIME))
+                loadingEvent(),
+                loadingEventWith(localTasks),
+                loadingEventWith(asSyncedTasks(remoteTasks)),
+                idleEventWith(asSyncedTasks(remoteTasks))
         ))
     }
 
@@ -843,8 +843,8 @@ class PersistedTasksServiceTest {
         service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.error<Tasks>(throwable).toBuilder().dataValidator(noEmptyTasks()).build()
+                loadingEvent(),
+                errorEventWith(throwable)
         ))
     }
 
@@ -857,8 +857,8 @@ class PersistedTasksServiceTest {
         service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.idle<Tasks>(noEmptyTasks())
+                loadingEvent(),
+                idleEvent()
         ))
     }
 
@@ -872,8 +872,8 @@ class PersistedTasksServiceTest {
         service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.error<Tasks>(throwable).toBuilder().dataValidator(noEmptyTasks()).build()
+                loadingEvent(),
+                errorEventWith(throwable)
         ))
     }
 
@@ -889,8 +889,8 @@ class PersistedTasksServiceTest {
         service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.error<Tasks>(throwable).toBuilder().dataValidator(noEmptyTasks()).build()
+                loadingEvent(),
+                errorEventWith(throwable)
         ))
     }
 
@@ -906,9 +906,9 @@ class PersistedTasksServiceTest {
         service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(localTasks),
-                Event.error<Tasks>(throwable).updateData(localTasks).toBuilder().dataValidator(noEmptyTasks()).build()
+                loadingEvent(),
+                loadingEventWith(localTasks),
+                errorEventWith(localTasks, throwable)
         ))
     }
 
@@ -923,9 +923,9 @@ class PersistedTasksServiceTest {
         service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.idle<Tasks>(noEmptyTasks())
+                loadingEvent(),
+                loadingEvent(),
+                idleEvent()
         ))
     }
 
@@ -940,9 +940,9 @@ class PersistedTasksServiceTest {
         service.getCompletedTasksEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Tasks>(noEmptyTasks()),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(sampleLocalCompletedTasks()),
-                Event.idle<Tasks>(noEmptyTasks()).updateData(sampleLocalCompletedTasks())
+                loadingEvent(),
+                loadingEventWith(sampleLocalCompletedTasks()),
+                idleEventWith(sampleLocalCompletedTasks())
         ))
     }
 
@@ -960,10 +960,10 @@ class PersistedTasksServiceTest {
         service.clearCompletedTasks().call();
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(sampleLocalSomeCompletedTasksDeleted()),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(sampleRemoteSomeCompletedTasksDeleted(), TEST_TIME)),
-                Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(sampleRemoteSomeCompletedTasksDeleted(), TEST_TIME))
+                idleEventWith(asSyncedTasks(tasks)),
+                loadingEventWith(sampleLocalSomeCompletedTasksDeleted()),
+                loadingEventWith(asSyncedTasks(sampleRemoteSomeCompletedTasksDeleted())),
+                idleEventWith(asSyncedTasks(sampleRemoteSomeCompletedTasksDeleted()))
         ))
     }
 
@@ -981,11 +981,28 @@ class PersistedTasksServiceTest {
         service.clearCompletedTasks().call();
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
-                Event.loading<Tasks>(noEmptyTasks()).updateData(sampleLocalSomeCompletedTasksDeleted()),
-                Event.idle<Tasks>(noEmptyTasks()).updateData(sampleSomeCompletedTasksDeletedFailed()).asError(SyncError())
+                idleEventWith(asSyncedTasks(tasks)),
+                loadingEventWith(sampleLocalSomeCompletedTasksDeleted()),
+                idleEventWith(sampleSomeCompletedTasksDeletedFailed()).asError(SyncError())
         ))
     }
+
+    private fun idleEventWith(tasks: Tasks?) = idleEvent().updateData(tasks)
+
+    private fun loadingEventWith(tasks: Tasks?) = loadingEvent().updateData(tasks)
+
+    private fun idleEvent() = Event.idle<Tasks>(noEmptyTasks())
+
+    private fun loadingEvent() = Event.loading<Tasks>(noEmptyTasks())
+
+    private fun errorEventWith(localTasks: Tasks, throwable: Throwable) = defaultErrorEvent(localTasks, throwable).toBuilder().dataValidator(noEmptyTasks()).build()
+
+    private fun errorEventWith(throwable: Throwable) = defaultErrorEvent(throwable).toBuilder().dataValidator(noEmptyTasks()).build()
+
+    private fun defaultErrorEvent(localTasks: Tasks, throwable: Throwable) = defaultErrorEvent(throwable).updateData(localTasks)
+
+    private fun defaultErrorEvent(throwable: Throwable) = Event.error<Tasks>(throwable)
+
 
     private fun sampleRefreshedTasks() = listOf(
             Task.builder().id(Id.from("42")).title("Foo").build(),
@@ -1028,22 +1045,24 @@ class PersistedTasksServiceTest {
             Task.builder().id(Id.from("24")).title("Bar").isCompleted(true).build()
     )
 
-    private fun sampleLocalTasks() = Tasks.asSynced(listOf(
+    private fun sampleLocalTasks() = asSyncedTasks(listOf(
             Task.builder().id(Id.from("24")).title("Bar").build()
-    ), TEST_TIME)
+    ))
 
-    private fun sampleLocalCompletedTasks() = Tasks.asSynced(listOf(
+    private fun sampleLocalCompletedTasks() = asSyncedTasks(listOf(
             Task.builder().id(Id.from("42")).title("Foo").isCompleted(true).build()
-    ), TEST_TIME)
+    ))
 
-    private fun sampleLocalActivatedTasks() = Tasks.asSynced(listOf(
+    private fun sampleLocalActivatedTasks() = asSyncedTasks(listOf(
             Task.builder().id(Id.from("24")).title("Bar").build()
-    ), TEST_TIME)
+    ))
 
-    private fun sampleLocalSomeCompletedTasks() = Tasks.asSynced(listOf(
+    private fun sampleLocalSomeCompletedTasks() = asSyncedTasks(listOf(
             Task.builder().id(Id.from("42")).title("Foo").isCompleted(true).build(),
             Task.builder().id(Id.from("24")).title("Bar").build()
-    ), TEST_TIME)
+    ))
+
+    private fun asSyncedTasks(remoteTasks: List<Task>) = Tasks.asSynced(remoteTasks, TEST_TIME)
 
     private fun noEmptyTasks() = NoEmptyTasksPredicate()
 
