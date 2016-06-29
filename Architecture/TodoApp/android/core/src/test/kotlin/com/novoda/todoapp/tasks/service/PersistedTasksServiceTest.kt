@@ -943,9 +943,11 @@ class PersistedTasksServiceTest {
 
     private fun loadingEvent() = Event.loading<Tasks>(noEmptyTasks())
 
-    private fun errorEventWith(localTasks: Tasks, throwable: Throwable) = defaultErrorEvent(localTasks, throwable).toBuilder().dataValidator(noEmptyTasks()).build()
+    private fun errorEventWith(localTasks: Tasks, throwable: Throwable) = validatedErrorEvent(defaultErrorEvent(localTasks, throwable))
 
-    private fun errorEventWith(throwable: Throwable) = defaultErrorEvent(throwable).toBuilder().dataValidator(noEmptyTasks()).build()
+    private fun errorEventWith(throwable: Throwable) = validatedErrorEvent(defaultErrorEvent(throwable))
+
+    private fun validatedErrorEvent(errorEvent: Event<Tasks>) = errorEvent.toBuilder().dataValidator(noEmptyTasks()).build()
 
     private fun defaultErrorEvent(localTasks: Tasks, throwable: Throwable) = defaultErrorEvent(throwable).updateData(localTasks)
 
