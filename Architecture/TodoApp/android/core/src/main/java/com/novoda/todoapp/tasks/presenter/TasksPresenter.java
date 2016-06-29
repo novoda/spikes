@@ -32,7 +32,7 @@ public class TasksPresenter {
         this.navigator = navigator;
     }
 
-    public void setInitialFilterTo(TasksActionListener.Filter filter){
+    public void setInitialFilterTo(TasksActionListener.Filter filter) {
         currentFilter = filter;
     }
 
