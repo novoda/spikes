@@ -12,6 +12,7 @@ import com.novoda.todoapp.tasks.data.model.Tasks
 import com.novoda.todoapp.tasks.data.source.LocalTasksDataSource
 import com.novoda.todoapp.tasks.data.source.RemoteTasksDataSource
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.*
@@ -54,77 +55,18 @@ class PersistedTasksServiceTest {
     fun given_TheLocalDataHasTasksAndTasksAreExpired_on_GetTasks_it_ShouldSaveTasksFromTheRemoteInTheLocalData() {
         val remoteTasks = sampleRemoteTasks()
         val localTasks = sampleLocalTasks()
-        val testObserver = TestObserver<Tasks>()
+        val testObserver = TestObserver<Event<Tasks>>()
         taskRemoteDataSubject.onNext(remoteTasks)
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onNext(localTasks)
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(false)
 
-        service.getTasks().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
         verify(localDataSource).saveTasks(Tasks.asSynced(remoteTasks, TEST_TIME))
     }
 
-    @Test
-    fun given_TheLocalDataHasTasksAndRemoteFails_on_GetTasks_it_ShouldReturnTasksFromTheLocalData() {
-        val localTasks = sampleLocalTasks()
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onError(Throwable())
-        taskLocalDataSubject.onNext(localTasks)
-        taskLocalDataSubject.onCompleted()
-        `when`(freshnessChecker.isFresh(localTasks)).thenReturn(false)
-
-        service.getTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf(localTasks))
-    }
-
-    @Test
-    fun given_TheLocalDataIsEmptyAndRemoteFails_on_GetTasks_it_ShouldReturnNothing() {
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onError(Throwable())
-        taskLocalDataSubject.onCompleted()
-
-        service.getTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf())
-    }
-
-    @Test
-    fun given_TheLocalDataIsEmptyAndRemoteIsEmpty_on_GetTasks_it_ShouldReturnNothing() {
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onCompleted()
-
-        service.getTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf())
-    }
-
-    @Test
-    fun given_TheLocalDataFailsAndRemoteIsEmpty_on_GetTasks_it_ShouldReturnNothing() {
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onError(Throwable())
-
-        service.getTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf())
-    }
-
-    @Test
-    fun given_TheLocalDataFailsAndRemoteHasTasks_on_GetTasks_it_ShouldReturnNothing() {
-        val tasks = sampleRemoteTasks()
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onNext(tasks)
-        taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onError(Throwable())
-
-        service.getTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf())
-    }
 
     @Test
     fun given_TheLocalDataIsEmpty_on_GetTasksEvents_it_ShouldReturnTasksFromTheRemote() {
@@ -245,6 +187,21 @@ class PersistedTasksServiceTest {
         ))
     }
 
+    @Test //ask ben about this one, the Event equivalent returns error, not local data
+    @Ignore
+    fun given_TheLocalDataHasTasksAndRemoteFails_on_GetTasks_it_ShouldReturnTasksFromTheLocalData() {
+        val localTasks = sampleLocalTasks()
+        val testObserver = TestObserver<Tasks>()
+        taskRemoteDataSubject.onError(Throwable())
+        taskLocalDataSubject.onNext(localTasks)
+        taskLocalDataSubject.onCompleted()
+        `when`(freshnessChecker.isFresh(localTasks)).thenReturn(false)
+
+//        service.getTasks().subscribe(testObserver)
+
+        testObserver.assertReceivedOnNext(listOf(localTasks))
+    }
+
     @Test
     fun given_TheLocalDataHasDataAndRemoteFails_on_GetTasksEvents_it_ShouldReturnErrorWithData() {
         val localTasks = sampleLocalTasks()
@@ -267,46 +224,63 @@ class PersistedTasksServiceTest {
     fun given_remoteDataSourceDataHasChanged_on_RefreshTasks_it_ShouldReturnNewData() {
         val tasks = sampleRemoteTasks()
         val tasksRefreshed = sampleRefreshedTasks()
-        val testObserver = TestObserver<Tasks>()
+        val testObserver = TestObserver<Event<Tasks>>()
         taskRemoteDataSubject.onNext(tasks)
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
-        service.getTasks().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
         setUpService()
         taskRemoteDataSubject.onNext(tasksRefreshed)
         taskRemoteDataSubject.onCompleted()
 
         service.refreshTasks().call()
 
-        testObserver.assertReceivedOnNext(listOf(Tasks.asSynced(tasks, TEST_TIME), Tasks.asSynced(tasksRefreshed, TEST_TIME)))
+        testObserver.assertReceivedOnNext(
+                listOf(
+                        Event.loading<Tasks>(noEmptyTasks()),
+                        Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
+                        Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
+                        Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
+                        Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasksRefreshed, TEST_TIME)),
+                        Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasksRefreshed, TEST_TIME))
+                )
+        )
     }
 
     @Test
     fun given_remoteDataSourceDataHasNotChanged_on_RefreshTasks_it_ShouldReturnNoAdditionalData() {
         val tasks = sampleRemoteTasks()
-        val testObserver = TestObserver<Tasks>()
+        val testObserver = TestObserver<Event<Tasks>>()
         taskRemoteDataSubject.onNext(tasks)
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
-        service.getTasks().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
         setUpService()
         taskRemoteDataSubject.onNext(tasks)
         taskRemoteDataSubject.onCompleted()
 
         service.refreshTasks().call()
 
-        testObserver.assertReceivedOnNext(listOf(Tasks.asSynced(tasks, TEST_TIME)))
+        testObserver.assertReceivedOnNext(
+                listOf(
+                        Event.loading<Tasks>(noEmptyTasks()),
+                        Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
+                        Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
+                        Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME)),
+                        Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(tasks, TEST_TIME))
+                )
+        )
     }
 
     @Test
     fun given_remoteDataSourceDataHasChanged_on_RefreshTasks_it_ShouldPersistNewDataToLocalDatasitory() {
         val tasks = sampleRemoteTasks()
         val tasksRefreshed = sampleRefreshedTasks()
-        val testObserver = TestObserver<Tasks>()
+        val testObserver = TestObserver<Event<Tasks>>()
         taskRemoteDataSubject.onNext(tasks)
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
-        service.getTasks().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
         setUpService()
         taskRemoteDataSubject.onNext(tasksRefreshed)
         taskRemoteDataSubject.onCompleted()
@@ -345,20 +319,22 @@ class PersistedTasksServiceTest {
     fun given_RemoteIsAcceptingUpdates_on_CompleteTask_it_ShouldSendAheadThenInSyncInfo() {
         val localTasks = sampleLocalTasks()
         val task = localTasks.all().get(0).data()
-        val testObserver = TestObserver<Tasks>()
+        val testObserver = TestObserver<Event<Tasks>>()
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onNext(localTasks)
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(true)
         `when`(clock.timeInMillis()).thenReturn(321);
-        service.getTasks().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
         service.complete(task).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                localTasks,
-                localTasks.save(SyncedData.from(task.complete(), SyncState.AHEAD, 321)),
-                localTasks.save(SyncedData.from(task.complete(), SyncState.IN_SYNC, 321))
+                Event.loading<Tasks>(noEmptyTasks()),
+                Event.loading(noEmptyTasks()).updateData(localTasks),
+                Event.idle<Tasks>(noEmptyTasks()).updateData(localTasks),
+                Event.idle<Tasks>(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(task.complete(), SyncState.AHEAD, 321))),
+                Event.idle<Tasks>(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(task.complete(), SyncState.IN_SYNC, 321)))
         ))
         assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
     }
@@ -368,20 +344,22 @@ class PersistedTasksServiceTest {
         val tasksOld = sampleLocalTasks()
         val taskOld = tasksOld.all().get(0)
         val syncedTask = SyncedData.from(taskOld.data(), taskOld.syncState(), 456)
-        val tasks = tasksOld.save(syncedTask)
-        val task = syncedTask.data()
-        val testObserver = TestObserver<Tasks>()
+        val updatedTasks = tasksOld.save(syncedTask)
+        val updatedTask = syncedTask.data()
+        val testObserver = TestObserver<Event<Tasks>>()
         taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onNext(tasks)
+        taskLocalDataSubject.onNext(updatedTasks)
         taskLocalDataSubject.onCompleted()
-        `when`(freshnessChecker.isFresh(tasks)).thenReturn(true)
+        `when`(freshnessChecker.isFresh(updatedTasks)).thenReturn(true)
         `when`(clock.timeInMillis()).thenReturn(321);
-        service.getTasks().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
-        service.complete(task).call()
+        service.complete(updatedTask).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                tasks
+                Event.loading<Tasks>(noEmptyTasks()),
+                Event.loading<Tasks>(noEmptyTasks()).updateData(updatedTasks),
+                Event.idle(noEmptyTasks()).updateData(updatedTasks)
         ))
         assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
     }
@@ -390,7 +368,7 @@ class PersistedTasksServiceTest {
     fun given_RemoteIsFailingUpdates_on_CompleteTask_it_ShouldSendAheadThenThenMarkAsError() {
         val localTasks = sampleLocalTasks()
         val task = localTasks.all().get(0).data()
-        val testObserver = TestObserver<Tasks>()
+        val testObserver = TestObserver<Event<Tasks>>()
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onNext(localTasks)
         taskLocalDataSubject.onCompleted()
@@ -399,14 +377,16 @@ class PersistedTasksServiceTest {
         Mockito.doAnswer {
             Observable.error<Task>(Throwable())
         }.`when`(remoteDataSource).saveTask(any())
-        service.getTasks().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
         service.complete(task).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                localTasks,
-                localTasks.save(SyncedData.from(task.complete(), SyncState.AHEAD, 321)),
-                localTasks.save(SyncedData.from(task.complete(), SyncState.SYNC_ERROR, 321))
+                Event.loading<Tasks>(noEmptyTasks()),
+                Event.loading(noEmptyTasks()).updateData(localTasks),
+                Event.idle(noEmptyTasks()).updateData(localTasks),
+                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(task.complete(), SyncState.AHEAD, 321))),
+                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(task.complete(), SyncState.SYNC_ERROR, 321)))
         ))
         assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
     }
@@ -415,20 +395,22 @@ class PersistedTasksServiceTest {
     fun given_RemoteIsAcceptingUpdates_on_ActivateTask_it_ShouldSendAheadThenInSyncInfo() {
         val localTasks = sampleLocalCompletedTasks()
         val task = localTasks.all().get(0).data()
-        val testObserver = TestObserver<Tasks>()
+        val testObserver = TestObserver<Event<Tasks>>()
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onNext(localTasks)
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(true)
         `when`(clock.timeInMillis()).thenReturn(321);
-        service.getTasks().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
         service.activate(task).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                localTasks,
-                localTasks.save(SyncedData.from(task.activate(), SyncState.AHEAD, 321)),
-                localTasks.save(SyncedData.from(task.activate(), SyncState.IN_SYNC, 321))
+                Event.loading<Tasks>(noEmptyTasks()),
+                Event.loading<Tasks>(noEmptyTasks()).updateData(localTasks),
+                Event.idle(noEmptyTasks()).updateData(localTasks),
+                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(task.activate(), SyncState.AHEAD, 321))),
+                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(task.activate(), SyncState.IN_SYNC, 321)))
         ))
         assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
     }
@@ -440,18 +422,20 @@ class PersistedTasksServiceTest {
         val syncedTask = SyncedData.from(taskOld.data(), taskOld.syncState(), 456)
         val tasks = tasksOld.save(syncedTask)
         val task = syncedTask.data()
-        val testObserver = TestObserver<Tasks>()
+        val testObserver = TestObserver<Event<Tasks>>()
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onNext(tasks)
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(tasks)).thenReturn(true)
         `when`(clock.timeInMillis()).thenReturn(321);
-        service.getTasks().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
         service.activate(task).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                tasks
+                Event.loading<Tasks>(noEmptyTasks()),
+                Event.loading(noEmptyTasks()).updateData(tasks),
+                Event.idle(noEmptyTasks()).updateData(tasks)
         ))
         assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
     }
@@ -460,7 +444,7 @@ class PersistedTasksServiceTest {
     fun given_RemoteIsFailingUpdates_on_ActivateTask_it_ShouldSendAheadThenMarkAsError() {
         val localTasks = sampleLocalCompletedTasks()
         val task = localTasks.all().get(0).data()
-        val testObserver = TestObserver<Tasks>()
+        val testObserver = TestObserver<Event<Tasks>>()
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onNext(localTasks)
         taskLocalDataSubject.onCompleted()
@@ -469,14 +453,16 @@ class PersistedTasksServiceTest {
         Mockito.doAnswer {
             Observable.error<Task>(Throwable())
         }.`when`(remoteDataSource).saveTask(any())
-        service.getTasks().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
         service.activate(task).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                localTasks,
-                localTasks.save(SyncedData.from(task.activate(), SyncState.AHEAD, 321)),
-                localTasks.save(SyncedData.from(task.activate(), SyncState.SYNC_ERROR, 321))
+                Event.loading<Tasks>(noEmptyTasks()),
+                Event.loading(noEmptyTasks()).updateData(localTasks),
+                Event.idle(noEmptyTasks()).updateData(localTasks),
+                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(task.activate(), SyncState.AHEAD, 321))),
+                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(task.activate(), SyncState.SYNC_ERROR, 321)))
         ))
         assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
     }
@@ -485,21 +471,23 @@ class PersistedTasksServiceTest {
     fun given_RemoteIsAcceptingUpdates_on_SaveTask_it_ShouldSendAheadThenInSyncInfo() {
         val localTasks = sampleLocalCompletedTasks()
         val task = localTasks.all().get(0).data()
-        val testObserver = TestObserver<Tasks>()
+        val testObserver = TestObserver<Event<Tasks>>()
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onNext(localTasks)
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(true)
         `when`(clock.timeInMillis()).thenReturn(321);
-        service.getTasks().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
         val newTask = task.toBuilder().description("NewDesc").build()
         service.save(newTask).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                localTasks,
-                localTasks.save(SyncedData.from(newTask, SyncState.AHEAD, 321)),
-                localTasks.save(SyncedData.from(newTask, SyncState.IN_SYNC, 321))
+                Event.loading<Tasks>(noEmptyTasks()),
+                Event.loading(noEmptyTasks()).updateData(localTasks),
+                Event.idle(noEmptyTasks()).updateData(localTasks),
+                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(newTask, SyncState.AHEAD, 321))),
+                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(newTask, SyncState.IN_SYNC, 321)))
         ))
         assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
     }
@@ -511,19 +499,21 @@ class PersistedTasksServiceTest {
         val syncedTask = SyncedData.from(taskOld.data(), taskOld.syncState(), 456)
         val tasks = tasksOld.save(syncedTask)
         val task = syncedTask.data()
-        val testObserver = TestObserver<Tasks>()
+        val testObserver = TestObserver<Event<Tasks>>()
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onNext(tasks)
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(tasks)).thenReturn(true)
         `when`(clock.timeInMillis()).thenReturn(321);
-        service.getTasks().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
         val newTask = task.toBuilder().description("NewDesc").build()
         service.save(newTask).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                tasks
+                Event.loading<Tasks>(noEmptyTasks()),
+                Event.loading<Tasks>(noEmptyTasks()).updateData(tasks),
+                Event.idle(noEmptyTasks()).updateData(tasks)
         ))
         assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
     }
@@ -532,7 +522,7 @@ class PersistedTasksServiceTest {
     fun given_RemoteIsFailingUpdates_on_SaveTask_it_ShouldSendAheadThenMarkAsError() {
         val localTasks = sampleLocalCompletedTasks()
         val task = localTasks.all().get(0).data()
-        val testObserver = TestObserver<Tasks>()
+        val testObserver = TestObserver<Event<Tasks>>()
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onNext(localTasks)
         taskLocalDataSubject.onCompleted()
@@ -541,152 +531,48 @@ class PersistedTasksServiceTest {
         Mockito.doAnswer {
             Observable.error<Task>(Throwable())
         }.`when`(remoteDataSource).saveTask(any())
-        service.getTasks().subscribe(testObserver)
+        service.getTasksEvent().subscribe(testObserver)
 
         val newTask = task.toBuilder().description("NewDesc").build()
         service.save(newTask).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                localTasks,
-                localTasks.save(SyncedData.from(newTask, SyncState.AHEAD, 321)),
-                localTasks.save(SyncedData.from(newTask, SyncState.SYNC_ERROR, 321))
+                Event.loading<Tasks>(noEmptyTasks()),
+                Event.loading(noEmptyTasks()).updateData(localTasks),
+                Event.idle(noEmptyTasks()).updateData(localTasks),
+                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(newTask, SyncState.AHEAD, 321))),
+                Event.idle(noEmptyTasks()).updateData(localTasks.save(SyncedData.from(newTask, SyncState.SYNC_ERROR, 321)))
         ))
-        assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
-    }
-
-    @Test
-    fun given_TheLocalDataIsEmpty_on_GetActiveTasks_it_ShouldReturnTasksFromTheRemote() {
-        val tasks = sampleRemoteTasks()
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onNext(tasks)
-        taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onCompleted()
-
-        service.getActiveTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf(Tasks.asSynced(tasks, TEST_TIME)))
         assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
     }
 
     @Test
     fun given_TheLocalDataIsEmpty_on_GetActiveTasks_it_ShouldSaveTasksFromTheRemoteInTheLocalData() {
         val tasks = sampleRemoteTasks()
-        val testObserver = TestObserver<Tasks>()
+        val testObserver = TestObserver<Event<Tasks>>()
         taskRemoteDataSubject.onNext(tasks)
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
 
-        service.getActiveTasks().subscribe(testObserver)
+        service.getActiveTasksEvent().subscribe(testObserver)
 
         verify(localDataSource).saveTasks(Tasks.asSynced(tasks, TEST_TIME))
-    }
-
-    @Test
-    fun given_TheLocalDataHasTasksAndTasksAreFresh_on_GetActiveTasks_it_ShouldReturnTasksFromTheLocalData() {
-        val remoteTasks = sampleRemoteTasks()
-        val localTasks = sampleLocalTasks()
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onNext(remoteTasks)
-        taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onNext(localTasks)
-        taskLocalDataSubject.onCompleted()
-        `when`(freshnessChecker.isFresh(localTasks)).thenReturn(true)
-
-        service.getActiveTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf(localTasks))
-    }
-
-    @Test
-    fun given_TheLocalDataHasTasksAndTasksAreExpired_on_GetActiveTasks_it_ShouldReturnTasksFromTheLocalDataThenTasksFromTheRemote() {
-        val remoteTasks = sampleRemoteTasks()
-        val localTasks = sampleLocalTasks()
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onNext(remoteTasks)
-        taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onNext(localTasks)
-        taskLocalDataSubject.onCompleted()
-        `when`(freshnessChecker.isFresh(localTasks)).thenReturn(false)
-
-        service.getActiveTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf(localTasks, Tasks.asSynced(remoteTasks, TEST_TIME)))
     }
 
     @Test
     fun given_TheLocalDataHasTasksAndTasksAreExpired_on_GetActiveTasks_it_ShouldSaveTasksFromTheRemoteInTheLocalData() {
         val remoteTasks = sampleRemoteTasks()
         val localTasks = sampleLocalTasks()
-        val testObserver = TestObserver<Tasks>()
+        val testObserver = TestObserver<Event<Tasks>>()
         taskRemoteDataSubject.onNext(remoteTasks)
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onNext(localTasks)
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(false)
 
-        service.getActiveTasks().subscribe(testObserver)
+        service.getActiveTasksEvent().subscribe(testObserver)
 
         verify(localDataSource).saveTasks(Tasks.asSynced(remoteTasks, TEST_TIME))
-    }
-
-    @Test
-    fun given_TheLocalDataHasTasksAndRemoteFails_on_GetActiveTasks_it_ShouldReturnTasksFromTheLocalData() {
-        val localTasks = sampleLocalTasks()
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onError(Throwable())
-        taskLocalDataSubject.onNext(localTasks)
-        taskLocalDataSubject.onCompleted()
-        `when`(freshnessChecker.isFresh(localTasks)).thenReturn(false)
-
-        service.getActiveTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf(localTasks))
-    }
-
-    @Test
-    fun given_TheLocalDataIsEmptyAndRemoteFails_on_GetActiveTasks_it_ShouldReturnNothing() {
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onError(Throwable())
-        taskLocalDataSubject.onCompleted()
-
-        service.getActiveTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf())
-    }
-
-    @Test
-    fun given_TheLocalDataIsEmptyAndRemoteIsEmpty_on_GetActiveTasks_it_ShouldReturnNothing() {
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onCompleted()
-
-        service.getActiveTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf())
-    }
-
-    @Test
-    fun given_TheLocalDataFailsAndRemoteIsEmpty_on_GetActiveTasks_it_ShouldReturnNothing() {
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onError(Throwable())
-
-        service.getActiveTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf())
-    }
-
-    @Test
-    fun given_TheLocalDataFailsAndRemoteHasTasks_on_GetActiveTasks_it_ShouldReturnNothing() {
-        val tasks = sampleRemoteTasks()
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onNext(tasks)
-        taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onError(Throwable())
-
-        service.getActiveTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf())
     }
 
     @Test
@@ -861,138 +747,32 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataIsEmpty_on_GetCompletedTasks_it_ShouldReturnTasksFromTheRemote() {
-        val tasks = sampleRemoteCompletedTasks()
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onNext(tasks)
-        taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onCompleted()
-
-        service.getCompletedTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf(Tasks.asSynced(tasks, TEST_TIME)))
-        assertTrue(testObserver.onCompletedEvents.isEmpty(), "Service stream should never terminate")
-    }
-
-    @Test
     fun given_TheLocalDataIsEmpty_on_GetCompletedTasks_it_ShouldSaveTasksFromTheRemoteInTheLocalData() {
         val tasks = sampleRemoteCompletedTasks()
-        val testObserver = TestObserver<Tasks>()
+        val testObserver = TestObserver<Event<Tasks>>()
         taskRemoteDataSubject.onNext(tasks)
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
 
-        service.getCompletedTasks().subscribe(testObserver)
+        service.getCompletedTasksEvent().subscribe(testObserver)
 
         verify(localDataSource).saveTasks(Tasks.asSynced(tasks, TEST_TIME))
-    }
-
-    @Test
-    fun given_TheLocalDataHasTasksAndTasksAreFresh_on_GetCompletedTasks_it_ShouldReturnTasksFromTheLocalData() {
-        val remoteTasks = sampleRemoteCompletedTasks()
-        val localTasks = sampleLocalCompletedTasks()
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onNext(remoteTasks)
-        taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onNext(localTasks)
-        taskLocalDataSubject.onCompleted()
-        `when`(freshnessChecker.isFresh(localTasks)).thenReturn(true)
-
-        service.getCompletedTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf(localTasks))
-    }
-
-    @Test
-    fun given_TheLocalDataHasTasksAndTasksAreExpired_on_GetCompletedTasks_it_ShouldReturnTasksFromTheLocalDataThenTasksFromTheRemote() {
-        val remoteTasks = sampleRemoteCompletedTasks()
-        val localTasks = sampleLocalCompletedTasks()
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onNext(remoteTasks)
-        taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onNext(localTasks)
-        taskLocalDataSubject.onCompleted()
-        `when`(freshnessChecker.isFresh(localTasks)).thenReturn(false)
-
-        service.getCompletedTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf(localTasks, Tasks.asSynced(remoteTasks, TEST_TIME)))
     }
 
     @Test
     fun given_TheLocalDataHasTasksAndTasksAreExpired_on_GetCompletedTasks_it_ShouldSaveTasksFromTheRemoteInTheLocalData() {
         val remoteTasks = sampleRemoteCompletedTasks()
         val localTasks = sampleLocalCompletedTasks()
-        val testObserver = TestObserver<Tasks>()
+        val testObserver = TestObserver<Event<Tasks>>()
         taskRemoteDataSubject.onNext(remoteTasks)
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onNext(localTasks)
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(false)
 
-        service.getCompletedTasks().subscribe(testObserver)
+        service.getCompletedTasksEvent().subscribe(testObserver)
 
         verify(localDataSource).saveTasks(Tasks.asSynced(remoteTasks, TEST_TIME))
-    }
-
-    @Test
-    fun given_TheLocalDataHasTasksAndRemoteFails_on_GetCompletedTasks_it_ShouldReturnTasksFromTheLocalData() {
-        val localTasks = sampleLocalCompletedTasks()
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onError(Throwable())
-        taskLocalDataSubject.onNext(localTasks)
-        taskLocalDataSubject.onCompleted()
-        `when`(freshnessChecker.isFresh(localTasks)).thenReturn(false)
-
-        service.getCompletedTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf(localTasks))
-    }
-
-    @Test
-    fun given_TheLocalDataIsEmptyAndRemoteFails_on_GetCompletedTasks_it_ShouldReturnNothing() {
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onError(Throwable())
-        taskLocalDataSubject.onCompleted()
-
-        service.getCompletedTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf())
-    }
-
-    @Test
-    fun given_TheLocalDataIsEmptyAndRemoteIsEmpty_on_GetCompletedTasks_it_ShouldReturnNothing() {
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onCompleted()
-
-        service.getCompletedTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf())
-    }
-
-    @Test
-    fun given_TheLocalDataFailsAndRemoteIsEmpty_on_GetCompletedTasks_it_ShouldReturnNothing() {
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onError(Throwable())
-
-        service.getCompletedTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf())
-    }
-
-    @Test
-    fun given_TheLocalDataFailsAndRemoteHasTasks_on_GetCompletedTasks_it_ShouldReturnNothing() {
-        val tasks = sampleRemoteCompletedTasks()
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onNext(tasks)
-        taskRemoteDataSubject.onCompleted()
-        taskLocalDataSubject.onError(Throwable())
-
-        service.getCompletedTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf())
     }
 
     @Test
@@ -1184,7 +964,7 @@ class PersistedTasksServiceTest {
                 Event.loading<Tasks>(noEmptyTasks()).updateData(sampleLocalSomeCompletedTasksDeleted()),
                 Event.loading<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(sampleRemoteSomeCompletedTasksDeleted(), TEST_TIME)),
                 Event.idle<Tasks>(noEmptyTasks()).updateData(Tasks.asSynced(sampleRemoteSomeCompletedTasksDeleted(), TEST_TIME))
-                ))
+        ))
     }
 
     @Test
