@@ -187,12 +187,12 @@ public class PersistedTasksService implements TasksService {
             @Override
             public void call() {
                 Event<Tasks> tasksEvent = taskRelay.getValue();
-                Tasks value = tasksEvent.data().or(Tasks.empty());
-                Tasks uncompletedTasks = Tasks.from(ImmutableList.copyOf(Iterables.transform(value.all(), markCompletedAsDeleted())));
+                Tasks tasksFromEvent = tasksEvent.data().or(Tasks.empty());
+                Tasks uncompletedTasks = mapFunctionToTasks(tasksFromEvent, markCompletedAsDeleted());
 
                 remoteDataSource.clearCompletedTasks()
                         .map(asSyncedTasksNow())
-                        .onErrorReturn(markAllAsSyncError(value))
+                        .onErrorReturn(markAllAsSyncError(tasksFromEvent))
                         .startWith(uncompletedTasks)
                         .flatMap(persistTasks())
                         .compose(asValidatedEvent(tasksEvent.updateData(uncompletedTasks)))
@@ -205,10 +205,13 @@ public class PersistedTasksService implements TasksService {
         return new Func1<Throwable, Tasks>() {
             @Override
             public Tasks call(Throwable throwable) {
-                ImmutableList<SyncedData<Task>> syncErrorTasks = ImmutableList.copyOf(Iterables.transform(value.all(), markAsSyncError()));
-                return Tasks.from(syncErrorTasks);
+                return mapFunctionToTasks(value, markAsSyncError());
             }
         };
+    }
+
+    private static Tasks mapFunctionToTasks(Tasks tasksFromEvent, Function<SyncedData<Task>, SyncedData<Task>> function) {
+        return Tasks.from(ImmutableList.copyOf(Iterables.transform(tasksFromEvent.all(), function)));
     }
 
     private static Function<SyncedData<Task>, SyncedData<Task>> markAsSyncError() {
