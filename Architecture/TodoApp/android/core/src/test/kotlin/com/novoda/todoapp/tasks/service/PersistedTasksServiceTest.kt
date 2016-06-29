@@ -12,7 +12,6 @@ import com.novoda.todoapp.tasks.data.model.Tasks
 import com.novoda.todoapp.tasks.data.source.LocalTasksDataSource
 import com.novoda.todoapp.tasks.data.source.RemoteTasksDataSource
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.*
@@ -185,21 +184,6 @@ class PersistedTasksServiceTest {
                 loadingEvent(),
                 errorEventWith(throwable)
         ))
-    }
-
-    @Test //ask ben about this one, the Event equivalent returns error, not local data
-    @Ignore
-    fun given_TheLocalDataHasTasksAndRemoteFails_on_GetTasks_it_ShouldReturnTasksFromTheLocalData() {
-        val localTasks = sampleLocalTasks()
-        val testObserver = TestObserver<Tasks>()
-        taskRemoteDataSubject.onError(Throwable())
-        taskLocalDataSubject.onNext(localTasks)
-        taskLocalDataSubject.onCompleted()
-        `when`(freshnessChecker.isFresh(localTasks)).thenReturn(false)
-
-//        service.getTasks().subscribe(testObserver)
-
-        testObserver.assertReceivedOnNext(listOf(localTasks))
     }
 
     @Test
