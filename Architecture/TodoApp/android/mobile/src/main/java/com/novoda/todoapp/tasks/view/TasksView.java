@@ -41,8 +41,23 @@ public class TasksView extends CoordinatorLayout implements TasksDisplayer {
         TodoAppBar todoAppBar = Views.findById(this, R.id.app_bar);
         Toolbar toolbar = todoAppBar.getToolbar();
         toolbar.inflateMenu(R.menu.tasks_menu);
-        toolbar.setOnMenuItemClickListener(new TasksMenuItemClickListener());
-        toolbar.setTitle(R.string.to_do_novoda);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_refresh:
+                        tasksActionListener.onRefreshSelected();
+                        return true;
+                    case R.id.menu_filter:
+                        showFilteringPopUpMenu();
+                        return true;
+                    case R.id.menu_clear:
+                        tasksActionListener.onClearCompletedSelected();
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -75,24 +90,6 @@ public class TasksView extends CoordinatorLayout implements TasksDisplayer {
 
     public View getContentView() {
         return recyclerView;
-    }
-
-    private class TasksMenuItemClickListener implements Toolbar.OnMenuItemClickListener {
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.menu_refresh:
-                    tasksActionListener.onRefreshSelected();
-                    return true;
-                case R.id.menu_filter:
-                    showFilteringPopUpMenu();
-                    return true;
-                case R.id.menu_clear:
-                    tasksActionListener.onClearCompletedSelected();
-                    return true;
-            }
-            return false;
-        }
     }
 
     private void showFilteringPopUpMenu() {
