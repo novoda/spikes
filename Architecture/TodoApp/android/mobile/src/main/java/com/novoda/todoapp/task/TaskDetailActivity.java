@@ -1,8 +1,8 @@
 package com.novoda.todoapp.task;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import com.novoda.todoapp.BaseActivity;
 import com.novoda.todoapp.R;
 import com.novoda.todoapp.TodoApplication;
 import com.novoda.todoapp.navigation.AndroidNavigator;
@@ -10,7 +10,7 @@ import com.novoda.todoapp.task.data.model.Id;
 import com.novoda.todoapp.task.displayer.TaskDisplayer;
 import com.novoda.todoapp.task.presenter.TaskPresenter;
 
-public class TaskDetailActivity extends BaseActivity {
+public class TaskDetailActivity extends AppCompatActivity {
 
     private TaskPresenter taskPresenter;
 
