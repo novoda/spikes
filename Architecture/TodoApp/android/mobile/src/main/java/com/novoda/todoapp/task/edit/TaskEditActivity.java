@@ -1,8 +1,8 @@
 package com.novoda.todoapp.task.edit;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import com.novoda.todoapp.BaseActivity;
 import com.novoda.todoapp.R;
 import com.novoda.todoapp.TodoApplication;
 import com.novoda.todoapp.navigation.AndroidNavigator;
@@ -12,7 +12,7 @@ import com.novoda.todoapp.task.edit.presenter.TaskEditPresenter;
 
 import java.util.UUID;
 
-public class TaskEditActivity extends BaseActivity {
+public class TaskEditActivity extends AppCompatActivity {
 
     private TaskEditPresenter taskPresenter;
 
