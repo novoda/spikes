@@ -19,12 +19,14 @@
       </intent-filter>
     </activity>
 
-    <activity
-      android:name=".task.TaskDetailActivity"
-      android:label="CHANGE ME" />
+    <activity android:name=".task.TaskDetailActivity" />
     <activity
       android:name=".task.edit.EditTaskActivity"
-      android:label="CHANGE ME2" />
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".task.newtask.NewTaskActivity"
+      android:windowSoftInputMode="adjustResize" />
+
 
   </application>
 

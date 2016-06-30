@@ -12,9 +12,4 @@ public interface EditTaskDisplayer {
     void display(SyncedData<Task> syncedData);
 
     void showEmptyTaskError();
-
-    void showAsNewTask();
-
-    void showAsEditTask();
-
 }

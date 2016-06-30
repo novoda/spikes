@@ -10,8 +10,6 @@ import com.novoda.todoapp.task.data.model.Id;
 import com.novoda.todoapp.task.edit.displayer.EditTaskDisplayer;
 import com.novoda.todoapp.task.edit.presenter.EditTaskPresenter;
 
-import java.util.UUID;
-
 public class EditTaskActivity extends AppCompatActivity {
 
     private EditTaskPresenter taskPresenter;
@@ -19,7 +17,7 @@ public class EditTaskActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.task_edit_activity);
+        setContentView(R.layout.edit_task_activity);
         Id taskId = getTaskIdFromExtras();
         taskPresenter = new EditTaskPresenter(
                 taskId,
@@ -33,7 +31,7 @@ public class EditTaskActivity extends AppCompatActivity {
         if (getIntent().hasExtra(AndroidNavigator.EXTRA_TASK_ID)) {
             return Id.from(getIntent().getStringExtra(AndroidNavigator.EXTRA_TASK_ID));
         } else {
-            return Id.from(UUID.randomUUID().toString()); //TODO move this logic presenter side
+            throw new IllegalStateException("Must supply task ID in Intent");
         }
     }
 

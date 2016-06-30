@@ -58,7 +58,7 @@ public class TaskPresenter {
 
         @Override
         public void onEditSelected(Task task) {
-            navigator.toTaskEdit(task);
+            navigator.toEditTask(task);
         }
     };
 

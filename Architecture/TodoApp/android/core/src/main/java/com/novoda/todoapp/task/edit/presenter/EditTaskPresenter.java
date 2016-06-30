@@ -35,7 +35,6 @@ public class EditTaskPresenter {
 
     public void startPresenting() {
         taskDisplayer.attach(editTaskActionListener);
-        taskDisplayer.showAsNewTask();
         subscriptions.add(
                 tasksService.getTask(taskId)
                         .subscribe(taskObserver)
@@ -68,7 +67,6 @@ public class EditTaskPresenter {
     private final DataObserver<SyncedData<Task>> taskObserver = new DataObserver<SyncedData<Task>>() {
         @Override
         public void onNext(SyncedData<Task> syncedData) {
-            taskDisplayer.showAsEditTask();
             taskDisplayer.display(syncedData);
         }
     };
