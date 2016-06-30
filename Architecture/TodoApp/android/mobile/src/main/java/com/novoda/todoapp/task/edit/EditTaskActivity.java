@@ -8,20 +8,20 @@ import com.novoda.todoapp.TodoApplication;
 import com.novoda.todoapp.navigation.AndroidNavigator;
 import com.novoda.todoapp.task.data.model.Id;
 import com.novoda.todoapp.task.edit.displayer.TaskEditDisplayer;
-import com.novoda.todoapp.task.edit.presenter.TaskEditPresenter;
+import com.novoda.todoapp.task.edit.presenter.EditTaskPresenter;
 
 import java.util.UUID;
 
-public class TaskEditActivity extends AppCompatActivity {
+public class EditTaskActivity extends AppCompatActivity {
 
-    private TaskEditPresenter taskPresenter;
+    private EditTaskPresenter taskPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.task_edit_activity);
         Id taskId = getTaskIdFromExtras();
-        taskPresenter = new TaskEditPresenter(
+        taskPresenter = new EditTaskPresenter(
                 taskId,
                 TodoApplication.TASKS_SERVICE,
                 ((TaskEditDisplayer) findViewById(R.id.content)),

@@ -19,7 +19,7 @@ import rx.subjects.BehaviorSubject
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class TaskEditPresenterTest {
+class EditTaskPresenterTest {
 
     val TASK_ID = Id.from("TEST_ID")
 
@@ -31,12 +31,12 @@ class TaskEditPresenterTest {
 
     var saveAction: Action0 = Mockito.mock(Action0::class.java)
 
-    var presenter = TaskEditPresenter(TASK_ID, service, displayer, navigator)
+    var presenter = EditTaskPresenter(TASK_ID, service, displayer, navigator)
 
     @Before
     fun setUp() {
         setUpService()
-        presenter = TaskEditPresenter(TASK_ID, service, displayer, navigator)
+        presenter = EditTaskPresenter(TASK_ID, service, displayer, navigator)
     }
 
     @After

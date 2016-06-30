@@ -12,7 +12,7 @@ import com.novoda.todoapp.tasks.service.TasksService;
 
 import rx.subscriptions.CompositeSubscription;
 
-public class TaskEditPresenter {
+public class EditTaskPresenter {
 
     private final Id taskId;
     private final TasksService tasksService;
@@ -21,7 +21,7 @@ public class TaskEditPresenter {
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
-    public TaskEditPresenter(
+    public EditTaskPresenter(
             Id taskId,
             TasksService tasksService,
             TaskEditDisplayer taskDisplayer,
