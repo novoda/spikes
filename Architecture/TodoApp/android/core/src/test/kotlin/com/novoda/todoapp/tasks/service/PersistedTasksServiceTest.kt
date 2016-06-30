@@ -76,7 +76,7 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(asSyncedTasks(tasks)),
                 idleEventWith(asSyncedTasks(tasks))
         ))
@@ -95,7 +95,7 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(localTasks),
                 idleEventWith(localTasks)
         ))
@@ -114,7 +114,7 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(localTasks),
                 loadingEventWith(asSyncedTasks(remoteTasks)),
                 idleEventWith(asSyncedTasks(remoteTasks))
@@ -130,8 +130,8 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
-                errorEventWith(throwable)
+                emptyLoadingEvent(),
+                emptyErrorEvent(throwable)
         ))
     }
 
@@ -143,8 +143,8 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
-                idleEvent()
+                emptyLoadingEvent(),
+                emptyIdleEvent()
         ))
     }
 
@@ -157,8 +157,8 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
-                errorEventWith(throwable)
+                emptyLoadingEvent(),
+                emptyErrorEvent(throwable)
         ))
     }
 
@@ -173,8 +173,8 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
-                errorEventWith(throwable)
+                emptyLoadingEvent(),
+                emptyErrorEvent(throwable)
         ))
     }
 
@@ -189,7 +189,7 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(localTasks),
                 errorEventWith(localTasks, throwable)
         ))
@@ -211,7 +211,7 @@ class PersistedTasksServiceTest {
 
         testObserver.assertReceivedOnNext(
                 listOf(
-                        loadingEvent(),
+                        emptyLoadingEvent(),
                         loadingEventWith(asSyncedTasks(tasks)),
                         idleEventWith(asSyncedTasks(tasks)),
                         loadingEventWith(asSyncedTasks(tasks)),
@@ -236,7 +236,7 @@ class PersistedTasksServiceTest {
 
         testObserver.assertReceivedOnNext(
                 listOf(
-                        loadingEvent(),
+                        emptyLoadingEvent(),
                         loadingEventWith(asSyncedTasks(tasks)),
                         idleEventWith(asSyncedTasks(tasks)),
                         loadingEventWith(asSyncedTasks(tasks)),
@@ -277,7 +277,7 @@ class PersistedTasksServiceTest {
         service.refreshTasks().call()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(asSyncedTasks(tasks)),
                 idleEventWith(asSyncedTasks(tasks)),
                 loadingEventWith(asSyncedTasks(tasks)),
@@ -300,7 +300,7 @@ class PersistedTasksServiceTest {
         service.complete(task).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(localTasks),
                 idleEventWith(localTasks),
                 idleEventWith(localTasks.save(SyncedData.from(task.complete(), SyncState.AHEAD, 321))),
@@ -327,7 +327,7 @@ class PersistedTasksServiceTest {
         service.complete(updatedTask).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(updatedTasks),
                 idleEventWith(updatedTasks)
         ))
@@ -352,7 +352,7 @@ class PersistedTasksServiceTest {
         service.complete(task).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(localTasks),
                 idleEventWith(localTasks),
                 idleEventWith(localTasks.save(SyncedData.from(task.complete(), SyncState.AHEAD, 321))),
@@ -376,7 +376,7 @@ class PersistedTasksServiceTest {
         service.activate(task).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(localTasks),
                 idleEventWith(localTasks),
                 idleEventWith(localTasks.save(SyncedData.from(task.activate(), SyncState.AHEAD, 321))),
@@ -403,7 +403,7 @@ class PersistedTasksServiceTest {
         service.activate(task).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(tasks),
                 idleEventWith(tasks)
         ))
@@ -428,7 +428,7 @@ class PersistedTasksServiceTest {
         service.activate(task).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(localTasks),
                 idleEventWith(localTasks),
                 idleEventWith(localTasks.save(SyncedData.from(task.activate(), SyncState.AHEAD, 321))),
@@ -453,7 +453,7 @@ class PersistedTasksServiceTest {
         service.save(newTask).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(localTasks),
                 idleEventWith(localTasks),
                 idleEventWith(localTasks.save(SyncedData.from(newTask, SyncState.AHEAD, 321))),
@@ -481,7 +481,7 @@ class PersistedTasksServiceTest {
         service.save(newTask).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(tasks),
                 idleEventWith(tasks)
         ))
@@ -507,7 +507,7 @@ class PersistedTasksServiceTest {
         service.save(newTask).call()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(localTasks),
                 idleEventWith(localTasks),
                 idleEventWith(localTasks.save(SyncedData.from(newTask, SyncState.AHEAD, 321))),
@@ -553,7 +553,7 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToActiveTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(asSyncedTasks(tasks)),
                 idleEventWith(asSyncedTasks(tasks))
         ))
@@ -572,7 +572,7 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToActiveTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(localTasks),
                 idleEventWith(localTasks)
         ))
@@ -591,7 +591,7 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToActiveTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(localTasks),
                 loadingEventWith(asSyncedTasks(remoteTasks)),
                 idleEventWith(asSyncedTasks(remoteTasks))
@@ -607,8 +607,8 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToActiveTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
-                errorEventWith(throwable)
+                emptyLoadingEvent(),
+                emptyErrorEvent(throwable)
         ))
     }
 
@@ -620,8 +620,8 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToActiveTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
-                idleEvent()
+                emptyLoadingEvent(),
+                emptyIdleEvent()
         ))
     }
 
@@ -634,8 +634,8 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToActiveTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
-                errorEventWith(throwable)
+                emptyLoadingEvent(),
+                emptyErrorEvent(throwable)
         ))
     }
 
@@ -650,8 +650,8 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToActiveTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
-                errorEventWith(throwable)
+                emptyLoadingEvent(),
+                emptyErrorEvent(throwable)
         ))
     }
 
@@ -666,7 +666,7 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToActiveTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(localTasks),
                 errorEventWith(localTasks, throwable)
         ))
@@ -682,9 +682,9 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToActiveTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
-                loadingEvent(),
-                idleEvent()
+                emptyLoadingEvent(),
+                emptyLoadingEvent(),
+                emptyIdleEvent()
         ))
     }
 
@@ -698,7 +698,7 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToActiveTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(sampleLocalActivatedTasks()),
                 idleEventWith(sampleLocalActivatedTasks())
         ))
@@ -741,7 +741,7 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToCompletedTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(asSyncedTasks(tasks)),
                 idleEventWith(asSyncedTasks(tasks))
         ))
@@ -760,7 +760,7 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToCompletedTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(localTasks),
                 idleEventWith(localTasks)
         ))
@@ -779,7 +779,7 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToCompletedTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(localTasks),
                 loadingEventWith(asSyncedTasks(remoteTasks)),
                 idleEventWith(asSyncedTasks(remoteTasks))
@@ -795,8 +795,8 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToCompletedTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
-                errorEventWith(throwable)
+                emptyLoadingEvent(),
+                emptyErrorEvent(throwable)
         ))
     }
 
@@ -808,8 +808,8 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToCompletedTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
-                idleEvent()
+                emptyLoadingEvent(),
+                emptyIdleEvent()
         ))
     }
 
@@ -822,8 +822,8 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToCompletedTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
-                errorEventWith(throwable)
+                emptyLoadingEvent(),
+                emptyErrorEvent(throwable)
         ))
     }
 
@@ -838,8 +838,8 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToCompletedTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
-                errorEventWith(throwable)
+                emptyLoadingEvent(),
+                emptyErrorEvent(throwable)
         ))
     }
 
@@ -854,7 +854,7 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToCompletedTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(localTasks),
                 errorEventWith(localTasks, throwable)
         ))
@@ -870,9 +870,9 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToCompletedTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
-                loadingEvent(),
-                idleEvent()
+                emptyLoadingEvent(),
+                emptyLoadingEvent(),
+                emptyIdleEvent()
         ))
     }
 
@@ -886,7 +886,7 @@ class PersistedTasksServiceTest {
         val testObserver = subscribeToCompletedTasksEvent()
 
         testObserver.assertReceivedOnNext(listOf(
-                loadingEvent(),
+                emptyLoadingEvent(),
                 loadingEventWith(sampleLocalCompletedTasks()),
                 idleEventWith(sampleLocalCompletedTasks())
         ))
@@ -935,18 +935,19 @@ class PersistedTasksServiceTest {
         ))
     }
 
-    private fun idleEventWith(tasks: Tasks?) = idleEvent().updateData(tasks)
+    private fun idleEventWith(tasks: Tasks) = emptyIdleEvent().updateData(tasks)
 
-    private fun loadingEventWith(tasks: Tasks?) = loadingEvent().updateData(tasks)
+    private fun emptyIdleEvent() = Event.idle<Tasks>(noEmptyTasks())
 
-    private fun idleEvent() = Event.idle<Tasks>(noEmptyTasks())
+    private fun loadingEventWith(tasks: Tasks) = emptyLoadingEvent().updateData(tasks)
 
-    private fun loadingEvent() = Event.loading<Tasks>(noEmptyTasks())
+    private fun emptyLoadingEvent() = Event.loading<Tasks>(noEmptyTasks())
 
-    private fun errorEventWith(localTasks: Tasks, throwable: Throwable) = validatedErrorEvent(defaultErrorEvent(localTasks, throwable))
+    private fun errorEventWith(tasks: Tasks, throwable: Throwable) = validatedErrorEvent(defaultErrorEvent(tasks, throwable))
 
-    private fun errorEventWith(throwable: Throwable) = validatedErrorEvent(defaultErrorEvent(throwable))
+    private fun emptyErrorEvent(throwable: Throwable) = validatedErrorEvent(defaultErrorEvent(throwable))
 
+    // don't use these in the tests, use errorEventWith or emptyErrorEvent
     private fun validatedErrorEvent(errorEvent: Event<Tasks>) = errorEvent.toBuilder().dataValidator(noEmptyTasks()).build()
 
     private fun defaultErrorEvent(localTasks: Tasks, throwable: Throwable) = defaultErrorEvent(throwable).updateData(localTasks)

@@ -91,7 +91,7 @@ class TasksPresenterTest {
     fun given_ThePresenterIsPresenting_on_EmissionOfALoadingEventWithNoData_it_ShouldPresentTheLoadingScreen() {
         givenThePresenterIsPresenting()
 
-        tasksEventSubject.onNext(nonEmptyLoadingEvent())
+        tasksEventSubject.onNext(emptyLoadingEvent())
 
         Mockito.verify(loadingDisplayer).showLoadingScreen()
     }
@@ -129,7 +129,7 @@ class TasksPresenterTest {
         presenter.setInitialFilterTo(TasksActionListener.Filter.ALL)
         givenThePresenterIsPresenting()
 
-        tasksEventSubject.onNext(nonEmptyIdleEvent())
+        tasksEventSubject.onNext(emptyIdleEvent())
 
         Mockito.verify(loadingDisplayer).showEmptyTasksScreen()
     }
@@ -157,7 +157,7 @@ class TasksPresenterTest {
         presenter.setInitialFilterTo(TasksActionListener.Filter.ACTIVE)
         givenThePresenterIsPresenting()
 
-        tasksActiveEventSubject.onNext(nonEmptyIdleEvent())
+        tasksActiveEventSubject.onNext(emptyIdleEvent())
 
         Mockito.verify(loadingDisplayer).showEmptyActiveTasksScreen()
     }
@@ -167,7 +167,7 @@ class TasksPresenterTest {
         presenter.setInitialFilterTo(TasksActionListener.Filter.COMPLETED)
         givenThePresenterIsPresenting()
 
-        tasksCompletedEventSubject.onNext(nonEmptyIdleEvent())
+        tasksCompletedEventSubject.onNext(emptyIdleEvent())
 
         Mockito.verify(loadingDisplayer).showEmptyCompletedTasksScreen()
     }
@@ -439,23 +439,23 @@ class TasksPresenterTest {
 
     private fun defaultIdleEvent() = Event.idle<Tasks>()
 
-    private fun defaultIdleEventWith(tasks: Tasks?) = defaultIdleEvent().updateData(tasks)
+    private fun defaultIdleEventWith(tasks: Tasks) = defaultIdleEvent().updateData(tasks)
 
-    private fun nonEmptyIdleEvent() = Event.idle(noEmptyTasks())
+    private fun emptyIdleEvent() = Event.idle(noEmptyTasks())
 
-    private fun nonEmptyIdleEventWith(tasks: Tasks?) = nonEmptyIdleEvent().updateData(tasks)
+    private fun nonEmptyIdleEventWith(tasks: Tasks) = emptyIdleEvent().updateData(tasks)
 
     private fun defaultLoadingEvent() = Event.loading<Tasks>()
 
-    private fun defaultLoadingEventWith(tasks: Tasks?) = defaultLoadingEvent().updateData(tasks)
+    private fun defaultLoadingEventWith(tasks: Tasks) = defaultLoadingEvent().updateData(tasks)
 
-    private fun nonEmptyLoadingEvent() = Event.loading(noEmptyTasks())
+    private fun emptyLoadingEvent() = Event.loading(noEmptyTasks())
 
-    private fun nonEmptyLoadingEventWith(tasks: Tasks?) = nonEmptyLoadingEvent().updateData(tasks)
+    private fun nonEmptyLoadingEventWith(tasks: Tasks) = emptyLoadingEvent().updateData(tasks)
 
     private fun errorEventWith(tasks: Tasks) = errorEvent().updateData(tasks)
 
-    private fun errorEvent() = nonEmptyIdleEvent().asError(SyncError())
+    private fun errorEvent() = emptyIdleEvent().asError(SyncError())
 
     private fun givenThePresenterIsPresenting() {
         presenter.startPresenting()
