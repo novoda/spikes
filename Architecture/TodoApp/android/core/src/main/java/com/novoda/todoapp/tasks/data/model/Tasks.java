@@ -96,10 +96,10 @@ public abstract class Tasks {
     }
 
     public boolean hasSyncError() {
-        return !internalMap().filter(syncError()).isEmpty();
+        return !internalMap().filter(keepSyncErrorsOnly()).isEmpty();
     }
 
-    private static Predicate<Map.Entry<Id, SyncedData<Task>>> syncError() {
+    private static Predicate<Map.Entry<Id, SyncedData<Task>>> keepSyncErrorsOnly() {
         return new Predicate<Map.Entry<Id, SyncedData<Task>>>() {
             @Override
             public boolean apply(Map.Entry<Id, SyncedData<Task>> input) {
