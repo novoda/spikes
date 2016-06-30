@@ -7,6 +7,7 @@ import com.novoda.todoapp.R;
 import com.novoda.todoapp.TodoApplication;
 import com.novoda.todoapp.navigation.AndroidNavigator;
 import com.novoda.todoapp.task.newtask.displayer.NewTaskDisplayer;
+import com.novoda.todoapp.task.newtask.presenter.IdGenerator;
 import com.novoda.todoapp.task.newtask.presenter.NewTaskPresenter;
 
 public class NewTaskActivity extends AppCompatActivity {
@@ -20,7 +21,8 @@ public class NewTaskActivity extends AppCompatActivity {
         taskPresenter = new NewTaskPresenter(
                 TodoApplication.TASKS_SERVICE,
                 ((NewTaskDisplayer) findViewById(R.id.content)),
-                new AndroidNavigator(this)
+                new AndroidNavigator(this),
+                new IdGenerator()
         );
     }
 

@@ -2,24 +2,23 @@ package com.novoda.todoapp.task.newtask.presenter;
 
 import com.google.common.base.Optional;
 import com.novoda.todoapp.navigation.Navigator;
-import com.novoda.todoapp.task.data.model.Id;
 import com.novoda.todoapp.task.data.model.Task;
 import com.novoda.todoapp.task.newtask.displayer.NewTaskActionListener;
 import com.novoda.todoapp.task.newtask.displayer.NewTaskDisplayer;
 import com.novoda.todoapp.tasks.service.TasksService;
-
-import java.util.UUID;
 
 public class NewTaskPresenter {
 
     private final TasksService tasksService;
     private final NewTaskDisplayer taskDisplayer;
     private final Navigator navigator;
+    private final IdGenerator idGenerator;
 
-    public NewTaskPresenter(TasksService tasksService, NewTaskDisplayer taskDisplayer, Navigator navigator) {
+    public NewTaskPresenter(TasksService tasksService, NewTaskDisplayer taskDisplayer, Navigator navigator, IdGenerator idGenerator) {
         this.tasksService = tasksService;
         this.taskDisplayer = taskDisplayer;
         this.navigator = navigator;
+        this.idGenerator = idGenerator;
     }
 
     public void startPresenting() {
@@ -35,7 +34,7 @@ public class NewTaskPresenter {
         public void save(Optional<String> title, Optional<String> description) {
             if (title.or(description).isPresent()) {
                 Task task = Task.builder()
-                        .id(Id.from(UUID.randomUUID().toString()))
+                        .id(idGenerator.generate())
                         .title(title)
                         .description(description)
                         .build();
@@ -46,4 +45,5 @@ public class NewTaskPresenter {
             }
         }
     };
+
 }
