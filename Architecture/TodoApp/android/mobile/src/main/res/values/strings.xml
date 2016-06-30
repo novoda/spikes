@@ -14,6 +14,7 @@
   <string name="no_tasks_all">You have no TO-DOs!</string>
   <string name="no_tasks_active">You have no active TO-DOs!</string>
   <string name="no_tasks_completed">You have no completed TO-DOs!</string>
-  <string name="loading_tasks">Loading TO-DOs...</string>
+  <string name="loading_tasks">Loading TO-DOs…</string>
   <string name="error_tasks">Error fetching your TO-DOs</string>
+  <string name="to_do_novoda">TO-DO-NOVODA</string>
 </resources>
