@@ -6,8 +6,8 @@ import com.novoda.event.DataObserver;
 import com.novoda.todoapp.navigation.Navigator;
 import com.novoda.todoapp.task.data.model.Id;
 import com.novoda.todoapp.task.data.model.Task;
-import com.novoda.todoapp.task.edit.displayer.TaskEditActionListener;
-import com.novoda.todoapp.task.edit.displayer.TaskEditDisplayer;
+import com.novoda.todoapp.task.edit.displayer.EditTaskActionListener;
+import com.novoda.todoapp.task.edit.displayer.EditTaskDisplayer;
 import com.novoda.todoapp.tasks.service.TasksService;
 
 import rx.subscriptions.CompositeSubscription;
@@ -16,7 +16,7 @@ public class EditTaskPresenter {
 
     private final Id taskId;
     private final TasksService tasksService;
-    private final TaskEditDisplayer taskDisplayer;
+    private final EditTaskDisplayer taskDisplayer;
     private final Navigator navigator;
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
@@ -24,7 +24,7 @@ public class EditTaskPresenter {
     public EditTaskPresenter(
             Id taskId,
             TasksService tasksService,
-            TaskEditDisplayer taskDisplayer,
+            EditTaskDisplayer taskDisplayer,
             Navigator navigator
     ) {
         this.taskId = taskId;
@@ -34,7 +34,7 @@ public class EditTaskPresenter {
     }
 
     public void startPresenting() {
-        taskDisplayer.attach(taskEditActionListener);
+        taskDisplayer.attach(editTaskActionListener);
         taskDisplayer.showAsNewTask();
         subscriptions.add(
                 tasksService.getTask(taskId)
@@ -43,12 +43,12 @@ public class EditTaskPresenter {
     }
 
     public void stopPresenting() {
-        taskDisplayer.detach(taskEditActionListener);
+        taskDisplayer.detach(editTaskActionListener);
         subscriptions.clear();
         subscriptions = new CompositeSubscription();
     }
 
-    final TaskEditActionListener taskEditActionListener = new TaskEditActionListener() {
+    final EditTaskActionListener editTaskActionListener = new EditTaskActionListener() {
         @Override
         public void save(Optional<String> title, Optional<String> description) {
             if (title.or(description).isPresent()) {

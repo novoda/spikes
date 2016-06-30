@@ -13,18 +13,18 @@ import com.novoda.data.SyncedData;
 import com.novoda.notils.caster.Views;
 import com.novoda.todoapp.R;
 import com.novoda.todoapp.task.data.model.Task;
-import com.novoda.todoapp.task.edit.displayer.TaskEditActionListener;
-import com.novoda.todoapp.task.edit.displayer.TaskEditDisplayer;
+import com.novoda.todoapp.task.edit.displayer.EditTaskActionListener;
+import com.novoda.todoapp.task.edit.displayer.EditTaskDisplayer;
 import com.novoda.todoapp.views.TodoAppBar;
 
-public class TaskEditView extends CoordinatorLayout implements TaskEditDisplayer {
+public class EditViewTask extends CoordinatorLayout implements EditTaskDisplayer {
 
     private TextView titleView;
     private TextView descriptionView;
     private FloatingActionButton editActionButton;
     private TodoAppBar todoAppBar;
 
-    public TaskEditView(Context context, AttributeSet attrs) {
+    public EditViewTask(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -39,7 +39,7 @@ public class TaskEditView extends CoordinatorLayout implements TaskEditDisplayer
     }
 
     @Override
-    public void attach(final TaskEditActionListener taskActionListener) {
+    public void attach(final EditTaskActionListener taskActionListener) {
         editActionButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,7 +49,7 @@ public class TaskEditView extends CoordinatorLayout implements TaskEditDisplayer
     }
 
     @Override
-    public void detach(TaskEditActionListener taskActionListener) {
+    public void detach(EditTaskActionListener taskActionListener) {
         editActionButton.setOnClickListener(null);
     }
 

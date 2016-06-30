@@ -1,4 +1,4 @@
-package com.novoda.todoapp.task.edit;
+package com.novoda.todoapp.task.edit.newtask;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,13 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import com.novoda.todoapp.R;
 import com.novoda.todoapp.TodoApplication;
 import com.novoda.todoapp.navigation.AndroidNavigator;
-import com.novoda.todoapp.task.data.model.Id;
 import com.novoda.todoapp.task.edit.displayer.EditTaskDisplayer;
 import com.novoda.todoapp.task.edit.presenter.EditTaskPresenter;
+import com.novoda.todoapp.task.newtask.presenter.NewTaskPresenter;
 
-import java.util.UUID;
-
-public class EditTaskActivity extends AppCompatActivity {
+public class NewTaskActivity extends AppCompatActivity {
 
     private EditTaskPresenter taskPresenter;
 
@@ -20,21 +18,11 @@ public class EditTaskActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.task_edit_activity);
-        Id taskId = getTaskIdFromExtras();
-        taskPresenter = new EditTaskPresenter(
-                taskId,
+        taskPresenter = new NewTaskPresenter(
                 TodoApplication.TASKS_SERVICE,
                 ((EditTaskDisplayer) findViewById(R.id.content)),
                 new AndroidNavigator(this)
         );
-    }
-
-    private Id getTaskIdFromExtras() {
-        if (getIntent().hasExtra(AndroidNavigator.EXTRA_TASK_ID)) {
-            return Id.from(getIntent().getStringExtra(AndroidNavigator.EXTRA_TASK_ID));
-        } else {
-            return Id.from(UUID.randomUUID().toString()); //TODO move this logic presenter side
-        }
     }
 
     @Override
