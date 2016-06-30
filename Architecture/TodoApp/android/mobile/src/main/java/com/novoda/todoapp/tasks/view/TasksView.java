@@ -1,12 +1,12 @@
 package com.novoda.todoapp.tasks.view;
 
 import android.content.Context;
+import android.support.annotation.MenuRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -18,7 +18,6 @@ import com.novoda.todoapp.tasks.data.model.Tasks;
 import com.novoda.todoapp.tasks.displayer.TasksActionListener;
 import com.novoda.todoapp.tasks.displayer.TasksDisplayer;
 import com.novoda.todoapp.tasks.view.loading.TasksLoadingView;
-import com.novoda.todoapp.views.TodoAppBar;
 
 public class TasksView extends CoordinatorLayout implements TasksDisplayer {
 
@@ -30,6 +29,11 @@ public class TasksView extends CoordinatorLayout implements TasksDisplayer {
         super(context, attrs);
     }
 
+    @MenuRes
+    public int getMenuResId() {
+        return R.menu.tasks_menu;
+    }
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -38,26 +42,6 @@ public class TasksView extends CoordinatorLayout implements TasksDisplayer {
         adapter = new TasksAdapter(LayoutInflater.from(getContext()));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
-        TodoAppBar todoAppBar = Views.findById(this, R.id.app_bar);
-        Toolbar toolbar = todoAppBar.getToolbar();
-        toolbar.inflateMenu(R.menu.tasks_menu);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.menu_refresh:
-                        tasksActionListener.onRefreshSelected();
-                        return true;
-                    case R.id.menu_filter:
-                        showFilteringPopUpMenu();
-                        return true;
-                    case R.id.menu_clear:
-                        tasksActionListener.onClearCompletedSelected();
-                        return true;
-                }
-                return false;
-            }
-        });
     }
 
     @Override
@@ -90,6 +74,21 @@ public class TasksView extends CoordinatorLayout implements TasksDisplayer {
 
     public View getContentView() {
         return recyclerView;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_refresh:
+                tasksActionListener.onRefreshSelected();
+                return true;
+            case R.id.menu_filter:
+                showFilteringPopUpMenu();
+                return true;
+            case R.id.menu_clear:
+                tasksActionListener.onClearCompletedSelected();
+                return true;
+        }
+        return false;
     }
 
     private void showFilteringPopUpMenu() {
