@@ -15,12 +15,14 @@ import com.novoda.todoapp.R;
 import com.novoda.todoapp.task.data.model.Task;
 import com.novoda.todoapp.task.edit.displayer.TaskEditActionListener;
 import com.novoda.todoapp.task.edit.displayer.TaskEditDisplayer;
+import com.novoda.todoapp.views.TodoAppBar;
 
 public class TaskEditView extends CoordinatorLayout implements TaskEditDisplayer {
 
     private TextView titleView;
     private TextView descriptionView;
     private FloatingActionButton editActionButton;
+    private TodoAppBar todoAppBar;
 
     public TaskEditView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -33,6 +35,7 @@ public class TaskEditView extends CoordinatorLayout implements TaskEditDisplayer
         titleView = Views.findById(this, R.id.edit_task_title);
         descriptionView = Views.findById(this, R.id.edit_task_description);
         editActionButton = Views.findById(this, R.id.fab_edit_task_done);
+        todoAppBar = Views.findById(this, R.id.app_bar);
     }
 
     @Override
@@ -77,6 +80,16 @@ public class TaskEditView extends CoordinatorLayout implements TaskEditDisplayer
     @Override
     public void showEmptyTaskError() {
         Snackbar.make(this, R.string.empty_task_message, Snackbar.LENGTH_LONG).show(); //TODO maybe this should be extracted
+    }
+
+    @Override
+    public void showAsNewTask() {
+        todoAppBar.getToolbar().setTitle(R.string.new_to_do);
+    }
+
+    @Override
+    public void showAsEditTask() {
+        todoAppBar.getToolbar().setTitle(R.string.edit_to_do);
     }
 
 }

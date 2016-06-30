@@ -13,4 +13,8 @@ public interface TaskEditDisplayer {
 
     void showEmptyTaskError();
 
+    void showAsNewTask();
+
+    void showAsEditTask();
+
 }

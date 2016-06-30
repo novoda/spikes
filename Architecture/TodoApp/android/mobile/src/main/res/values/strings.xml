@@ -17,4 +17,6 @@
   <string name="loading_tasks">Loading TO-DOs…</string>
   <string name="error_tasks">Error fetching your TO-DOs</string>
   <string name="to_do_novoda">TO-DO-NOVODA</string>
+  <string name="edit_to_do">Edit TO-DO</string>
+  <string name="new_to_do">New TO-DO</string>
 </resources>
