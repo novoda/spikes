@@ -45,7 +45,7 @@ function NewsFetcher(token) {
   }
 
   function isEnews(messageText) {
-    return contains(messageText, '#enews') || contains(messageText, '#eNews');
+    return contains(messageText, '#enews') || contains(messageText, '#eNews') || contains(messageText, '#C0YNBKANM');
   }
 
   function isValidMessage(message) {
