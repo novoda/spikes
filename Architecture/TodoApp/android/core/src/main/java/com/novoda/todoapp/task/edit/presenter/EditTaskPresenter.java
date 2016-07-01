@@ -6,7 +6,7 @@ import com.novoda.todoapp.navigation.Navigator;
 import com.novoda.todoapp.task.TaskActionListener;
 import com.novoda.todoapp.task.data.model.Task;
 import com.novoda.todoapp.task.edit.displayer.EditTaskDisplayer;
-import com.novoda.todoapp.task.presenter.IdGenerator;
+import com.novoda.todoapp.task.presenter.IdProducer;
 import com.novoda.todoapp.tasks.service.TasksService;
 
 import rx.subscriptions.CompositeSubscription;
@@ -15,7 +15,7 @@ public class EditTaskPresenter {
 
     private final TasksService tasksService;
     private final EditTaskDisplayer taskDisplayer;
-    private final IdGenerator idGenerator;
+    private final IdProducer idProducer;
 
     final TaskActionListener taskActionListener;
 
@@ -25,18 +25,18 @@ public class EditTaskPresenter {
             TasksService tasksService,
             EditTaskDisplayer taskDisplayer,
             Navigator navigator,
-            IdGenerator idGenerator
+            IdProducer idProducer
     ) {
         this.tasksService = tasksService;
         this.taskDisplayer = taskDisplayer;
-        this.idGenerator = idGenerator;
-        taskActionListener = new TaskActionListener(this.tasksService, this.taskDisplayer, navigator, this.idGenerator);
+        this.idProducer = idProducer;
+        taskActionListener = new TaskActionListener(this.tasksService, this.taskDisplayer, navigator, this.idProducer);
     }
 
     public void startPresenting() {
         taskDisplayer.attach(taskActionListener);
         subscriptions.add(
-                tasksService.getTask(idGenerator.generate())
+                tasksService.getTask(idProducer.produce())
                         .subscribe(taskObserver)
         );
     }

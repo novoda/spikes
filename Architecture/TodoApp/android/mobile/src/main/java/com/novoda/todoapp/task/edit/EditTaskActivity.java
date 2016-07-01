@@ -9,7 +9,7 @@ import com.novoda.todoapp.navigation.AndroidNavigator;
 import com.novoda.todoapp.task.data.model.Id;
 import com.novoda.todoapp.task.edit.displayer.EditTaskDisplayer;
 import com.novoda.todoapp.task.edit.presenter.EditTaskPresenter;
-import com.novoda.todoapp.task.presenter.IdGenerator;
+import com.novoda.todoapp.task.presenter.IdProducer;
 
 public class EditTaskActivity extends AppCompatActivity {
 
@@ -24,9 +24,9 @@ public class EditTaskActivity extends AppCompatActivity {
                 TodoApplication.TASKS_SERVICE,
                 ((EditTaskDisplayer) findViewById(R.id.content)),
                 new AndroidNavigator(this),
-                new IdGenerator() {
+                new IdProducer() {
                     @Override
-                    public Id generate() {
+                    public Id produce() {
                         return taskId;
                     }
                 }

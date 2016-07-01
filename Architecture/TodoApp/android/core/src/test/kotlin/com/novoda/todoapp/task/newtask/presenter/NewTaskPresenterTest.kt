@@ -5,7 +5,7 @@ import com.novoda.todoapp.navigation.Navigator
 import com.novoda.todoapp.task.TaskActionDisplayer
 import com.novoda.todoapp.task.data.model.Id
 import com.novoda.todoapp.task.data.model.Task
-import com.novoda.todoapp.task.presenter.IdGenerator
+import com.novoda.todoapp.task.presenter.IdProducer
 import com.novoda.todoapp.tasks.service.TasksService
 import org.junit.After
 import org.junit.Before
@@ -25,7 +25,7 @@ class NewTaskPresenterTest {
     var navigator: Navigator = Mockito.mock(Navigator::class.java)
 
     var saveAction: Action0 = Mockito.mock(Action0::class.java)
-    var idGenerator = Mockito.mock(IdGenerator::class.java)
+    var idGenerator = Mockito.mock(IdProducer::class.java)
 
     var presenter = NewTaskPresenter(service, taskDisplayer, navigator, idGenerator)
 
@@ -156,7 +156,7 @@ class NewTaskPresenterTest {
 
         presenter.taskActionListener.save(task.title(), task.description())
 
-        Mockito.verify(idGenerator).generate()
+        Mockito.verify(idGenerator).produce()
     }
 
     @Test
@@ -169,7 +169,7 @@ class NewTaskPresenterTest {
 
         presenter.taskActionListener.save(task.title(), task.description())
 
-        Mockito.verify(idGenerator).generate()
+        Mockito.verify(idGenerator).produce()
     }
 
     @Test
@@ -178,7 +178,7 @@ class NewTaskPresenterTest {
 
         presenter.taskActionListener.save(Optional.absent(), Optional.absent())
 
-        Mockito.verify(idGenerator, never()).generate()
+        Mockito.verify(idGenerator, never()).produce()
     }
 
     @Test
@@ -199,7 +199,7 @@ class NewTaskPresenterTest {
 
     private fun setUpService() {
         Mockito.`when`(service.save(Matchers.any())).thenReturn(saveAction)
-        Mockito.`when`(idGenerator.generate()).thenReturn(TASK_ID)
+        Mockito.`when`(idGenerator.produce()).thenReturn(TASK_ID)
     }
 }
 
