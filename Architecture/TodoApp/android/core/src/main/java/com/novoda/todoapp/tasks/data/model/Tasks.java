@@ -22,6 +22,15 @@ public abstract class Tasks {
         return from(ImmutableMapWithCopy.<Id, SyncedData<Task>>empty());
     }
 
+    public static Tasks from(ImmutableList<SyncedData<Task>> syncedTasks) {
+        ImmutableMap.Builder<Id, SyncedData<Task>> builder = ImmutableMap.builder();
+        for (SyncedData<Task> syncedTask : syncedTasks) {
+            Task task = syncedTask.data();
+            builder.put(task.id(), SyncedData.from(task, syncedTask.syncState(), syncedTask.lastSyncAction()));
+        }
+        return from(ImmutableMapWithCopy.from(builder.build()));
+    }
+
     public static Tasks asSynced(Collection<Task> tasks, long syncActionTimestamp) {
         ImmutableMap.Builder<Id, SyncedData<Task>> builder = ImmutableMap.builder();
         for (Task task : tasks) {
@@ -82,6 +91,19 @@ public abstract class Tasks {
             @Override
             public boolean apply(Map.Entry<Id, SyncedData<Task>> input) {
                 return input.getValue().data().isCompleted();
+            }
+        };
+    }
+
+    public boolean hasSyncError() {
+        return !internalMap().filter(keepSyncErrorsOnly()).isEmpty();
+    }
+
+    private static Predicate<Map.Entry<Id, SyncedData<Task>>> keepSyncErrorsOnly() {
+        return new Predicate<Map.Entry<Id, SyncedData<Task>>>() {
+            @Override
+            public boolean apply(Map.Entry<Id, SyncedData<Task>> input) {
+                return input.getValue().syncState() == SyncState.SYNC_ERROR;
             }
         };
     }

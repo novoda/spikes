@@ -2,14 +2,18 @@ package com.novoda.todoapp.tasks.service;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.jakewharton.rxrelay.BehaviorRelay;
 import com.novoda.data.SyncState;
 import com.novoda.data.SyncedData;
-import com.novoda.data.SyncedDataCreator;
+import com.novoda.data.DataOrchestrator;
 import com.novoda.event.Event;
+import com.novoda.event.EventFunctions;
 import com.novoda.todoapp.rx.IfThenFlatMap;
 import com.novoda.todoapp.task.data.model.Id;
 import com.novoda.todoapp.task.data.model.Task;
+import com.novoda.todoapp.tasks.NoEmptyTasksPredicate;
 import com.novoda.todoapp.tasks.data.TasksDataFreshnessChecker;
 import com.novoda.todoapp.tasks.data.model.Tasks;
 import com.novoda.todoapp.tasks.data.source.LocalTasksDataSource;
@@ -22,8 +26,9 @@ import rx.functions.Action0;
 import rx.functions.Func0;
 import rx.functions.Func1;
 
-import static com.novoda.data.SyncFunctions.asSyncedAction;
-import static com.novoda.event.EventFunctions.*;
+import static com.novoda.data.SyncFunctions.asOrchestratedAction;
+import static com.novoda.event.EventFunctions.asData;
+import static com.novoda.event.EventFunctions.isInitialised;
 import static com.novoda.todoapp.rx.RxFunctions.ifThenMap;
 
 public class PersistedTasksService implements TasksService {
@@ -51,20 +56,15 @@ public class PersistedTasksService implements TasksService {
     }
 
     @Override
-    public Observable<Event<Tasks>> getTasksEvents() {
+    public Observable<Event<Tasks>> getTasksEvent() {
         return taskRelay.asObservable()
                 .startWith(initialiseSubject())
                 .distinctUntilChanged();
     }
 
     @Override
-    public Observable<Tasks> getTasks() {
-        return getTasksEvents().compose(asData(Tasks.class));
-    }
-
-    @Override
-    public Observable<Event<Tasks>> getCompletedTasksEvents() {
-        return getTasksEvents()
+    public Observable<Event<Tasks>> getCompletedTasksEvent() {
+        return getTasksEvent()
                 .map(filterTasks(onlyCompleted()));
     }
 
@@ -87,13 +87,8 @@ public class PersistedTasksService implements TasksService {
     }
 
     @Override
-    public Observable<Tasks> getCompletedTasks() {
-        return getCompletedTasksEvents().compose(asData(Tasks.class));
-    }
-
-    @Override
-    public Observable<Event<Tasks>> getActiveTasksEvents() {
-        return getTasksEvents()
+    public Observable<Event<Tasks>> getActiveTasksEvent() {
+        return getTasksEvent()
                 .map(filterTasks(onlyActives()));
     }
 
@@ -106,11 +101,6 @@ public class PersistedTasksService implements TasksService {
         };
     }
 
-    @Override
-    public Observable<Tasks> getActiveTasks() {
-        return getActiveTasksEvents().compose(asData(Tasks.class));
-    }
-
     private Observable<Event<Tasks>> initialiseSubject() {
         return Observable.defer(new Func0<Observable<Event<Tasks>>>() {
             @Override
@@ -121,7 +111,7 @@ public class PersistedTasksService implements TasksService {
                 return localDataSource.getTasks()
                         .flatMap(fetchFromRemoteIfOutOfDate())
                         .switchIfEmpty(fetchFromRemote())
-                        .compose(asEvent(taskRelay.getValue()))
+                        .compose(asValidatedEvent(taskRelay.getValue()))
                         .doOnNext(taskRelay)
                         .publish().autoConnect();
             }
@@ -166,24 +156,17 @@ public class PersistedTasksService implements TasksService {
 
     @Override
     public Observable<SyncedData<Task>> getTask(final Id taskId) {
-        return getTasks().flatMap(new Func1<Tasks, Observable<SyncedData<Task>>>() {
-            @Override
-            public Observable<SyncedData<Task>> call(Tasks tasks) {
-                if (tasks.containsTask(taskId)) {
-                    return Observable.just(tasks.syncedDataFor(taskId));
-                }
-                return Observable.empty(); //TODO handle remote fetching as fallback.
-            }
-        });
-    }
-
-    private Func1<Task, SyncedData<Task>> asSyncedNow() {
-        return new Func1<Task, SyncedData<Task>>() {
-            @Override
-            public SyncedData<Task> call(Task task) {
-                return SyncedData.from(task, SyncState.IN_SYNC, clock.timeInMillis());
-            }
-        };
+        return getTasksEvent()
+                .compose(asData(Tasks.class))
+                .flatMap(new Func1<Tasks, Observable<SyncedData<Task>>>() {
+                    @Override
+                    public Observable<SyncedData<Task>> call(Tasks tasks) {
+                        if (tasks.containsTask(taskId)) {
+                            return Observable.just(tasks.syncedDataFor(taskId));
+                        }
+                        return Observable.empty(); //TODO handle remote fetching as fallback.
+                    }
+                });
     }
 
     @Override
@@ -192,7 +175,7 @@ public class PersistedTasksService implements TasksService {
             @Override
             public void call() {
                 fetchFromRemote()
-                        .compose(asEvent(taskRelay.getValue()))
+                        .compose(asValidatedEvent(taskRelay.getValue()))
                         .subscribe(taskRelay);
             }
         };
@@ -203,11 +186,65 @@ public class PersistedTasksService implements TasksService {
         return new Action0() {
             @Override
             public void call() {
+                long actionTimestamp = clock.timeInMillis();
+                Event<Tasks> tasksEvent = taskRelay.getValue();
+                Tasks tasksFromEvent = tasksEvent.data().or(Tasks.empty());
+                Tasks uncompletedTasks = mapFunctionToTasks(tasksFromEvent, markCompletedAsDeleted());
+
                 remoteDataSource.clearCompletedTasks()
-                        .map(asSyncedTasksNow())
+                        .compose(clearLocallyThenConfirmOrRevert(tasksFromEvent, uncompletedTasks, actionTimestamp))
                         .flatMap(persistTasks())
-                        .compose(asEvent(taskRelay.getValue()))
+                        .compose(asValidatedEvent(tasksEvent.updateData(uncompletedTasks)))
                         .subscribe(taskRelay);
+            }
+        };
+    }
+
+    private static Observable.Transformer<List<Task>, Tasks> clearLocallyThenConfirmOrRevert(
+            final Tasks tasksFromEvent,
+            final Tasks uncompletedTasks,
+            final long actionTimestamp
+    ) {
+        return asOrchestratedAction(new DataOrchestrator<List<Task>, Tasks>() {
+            @Override
+            public Tasks startWith() {
+                return uncompletedTasks;
+            }
+
+            @Override
+            public Tasks onConfirmed(List<Task> tasks) {
+                return Tasks.asSynced(tasks, actionTimestamp);
+            }
+
+            @Override
+            public Tasks onError() {
+                return mapFunctionToTasks(tasksFromEvent, markAsSyncError());
+            }
+        });
+    }
+
+    private static Tasks mapFunctionToTasks(Tasks tasksFromEvent, Function<SyncedData<Task>, SyncedData<Task>> function) {
+        return Tasks.from(ImmutableList.copyOf(Iterables.transform(tasksFromEvent.all(), function)));
+    }
+
+    private static Function<SyncedData<Task>, SyncedData<Task>> markCompletedAsDeleted() {
+        return new Function<SyncedData<Task>, SyncedData<Task>>() {
+            @Override
+            public SyncedData<Task> apply(SyncedData<Task> input) {
+                if (input.data().isCompleted()) {
+                    return input.toBuilder().syncState(SyncState.DELETED_LOCALLY).build();
+                } else {
+                    return input.toBuilder().syncState(SyncState.AHEAD).build();
+                }
+            }
+        };
+    }
+
+    private static Function<SyncedData<Task>, SyncedData<Task>> markAsSyncError() {
+        return new Function<SyncedData<Task>, SyncedData<Task>>() {
+            @Override
+            public SyncedData<Task> apply(SyncedData<Task> input) {
+                return input.toBuilder().syncState(SyncState.SYNC_ERROR).build();
             }
         };
     }
@@ -219,7 +256,7 @@ public class PersistedTasksService implements TasksService {
             public void call() {
                 remoteDataSource.deleteAllTasks()
                         .flatMap(deleteAllLocalTasks())
-                        .compose(asEvent(taskRelay.getValue()))
+                        .compose(asValidatedEvent(taskRelay.getValue()))
                         .subscribe(taskRelay);
             }
         };
@@ -268,7 +305,7 @@ public class PersistedTasksService implements TasksService {
             final Task updatedTask,
             final long actionTimestamp
     ) {
-        return asSyncedAction(new SyncedDataCreator<Task>() {
+        return asOrchestratedAction(new DataOrchestrator<Task, SyncedData<Task>>() {
             @Override
             public SyncedData<Task> startWith() {
                 return SyncedData.from(updatedTask, SyncState.AHEAD, actionTimestamp);
@@ -331,6 +368,27 @@ public class PersistedTasksService implements TasksService {
             @Override
             public Observable<SyncedData<Task>> call(Event<Tasks> event) {
                 return localDataSource.saveTask(value);
+            }
+        };
+    }
+
+    private static Observable.Transformer<Tasks, Event<Tasks>> asValidatedEvent(final Event<Tasks> value) {
+        return new Observable.Transformer<Tasks, Event<Tasks>>() {
+            @Override
+            public Observable<Event<Tasks>> call(Observable<Tasks> tasksObservable) {
+                return tasksObservable
+                        .compose(EventFunctions.asEvent(value))
+                        .map(new Func1<Event<Tasks>, Event<Tasks>>() {
+                                 @Override
+                                 public Event<Tasks> call(Event<Tasks> tasksEvent) {
+                                     if (tasksEvent.data().or(Tasks.empty()).hasSyncError()) {
+                                         return tasksEvent.asError(new SyncError());
+                                     } else {
+                                         return tasksEvent;
+                                     }
+                                 }
+                             }
+                        );
             }
         };
     }
