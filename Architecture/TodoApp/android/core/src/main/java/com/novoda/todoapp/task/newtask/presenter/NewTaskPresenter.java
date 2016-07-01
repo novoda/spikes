@@ -22,14 +22,14 @@ public class NewTaskPresenter {
     }
 
     public void startPresenting() {
-        taskDisplayer.attach(editTaskActionListener);
+        taskDisplayer.attach(newTaskActionListener);
     }
 
     public void stopPresenting() {
-        taskDisplayer.detach(editTaskActionListener);
+        taskDisplayer.detach(newTaskActionListener);
     }
 
-    final NewTaskActionListener editTaskActionListener = new NewTaskActionListener() {
+    final NewTaskActionListener newTaskActionListener = new NewTaskActionListener() {
         @Override
         public void save(Optional<String> title, Optional<String> description) {
             if (title.or(description).isPresent()) {
