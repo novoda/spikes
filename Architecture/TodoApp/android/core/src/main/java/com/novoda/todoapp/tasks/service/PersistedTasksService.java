@@ -7,7 +7,7 @@ import com.google.common.collect.Iterables;
 import com.jakewharton.rxrelay.BehaviorRelay;
 import com.novoda.data.SyncState;
 import com.novoda.data.SyncedData;
-import com.novoda.data.SyncedDataCreator;
+import com.novoda.data.DataOrchestrator;
 import com.novoda.event.Event;
 import com.novoda.event.EventFunctions;
 import com.novoda.todoapp.rx.IfThenFlatMap;
@@ -26,7 +26,7 @@ import rx.functions.Action0;
 import rx.functions.Func0;
 import rx.functions.Func1;
 
-import static com.novoda.data.SyncFunctions.asSyncedAction;
+import static com.novoda.data.SyncFunctions.asOrchestratedAction;
 import static com.novoda.event.EventFunctions.asData;
 import static com.novoda.event.EventFunctions.isInitialised;
 import static com.novoda.todoapp.rx.RxFunctions.ifThenMap;
@@ -186,14 +186,13 @@ public class PersistedTasksService implements TasksService {
         return new Action0() {
             @Override
             public void call() {
+                long actionTimestamp = clock.timeInMillis();
                 Event<Tasks> tasksEvent = taskRelay.getValue();
                 Tasks tasksFromEvent = tasksEvent.data().or(Tasks.empty());
                 Tasks uncompletedTasks = mapFunctionToTasks(tasksFromEvent, markCompletedAsDeleted());
 
                 remoteDataSource.clearCompletedTasks()
-                        .map(asSyncedTasksNow())
-                        .onErrorReturn(markAllAsSyncError(tasksFromEvent))
-                        .startWith(uncompletedTasks)
+                        .compose(clearLocallyThenConfirmOrRevert(tasksFromEvent, uncompletedTasks, actionTimestamp))
                         .flatMap(persistTasks())
                         .compose(asValidatedEvent(tasksEvent.updateData(uncompletedTasks)))
                         .subscribe(taskRelay);
@@ -201,26 +200,31 @@ public class PersistedTasksService implements TasksService {
         };
     }
 
-    private static Func1<Throwable, Tasks> markAllAsSyncError(final Tasks value) {
-        return new Func1<Throwable, Tasks>() {
+    private static Observable.Transformer<List<Task>, Tasks> clearLocallyThenConfirmOrRevert(
+            final Tasks tasksFromEvent,
+            final Tasks uncompletedTasks,
+            final long actionTimestamp
+    ) {
+        return asOrchestratedAction(new DataOrchestrator<List<Task>, Tasks>() {
             @Override
-            public Tasks call(Throwable throwable) {
-                return mapFunctionToTasks(value, markAsSyncError());
+            public Tasks startWith() {
+                return uncompletedTasks;
             }
-        };
+
+            @Override
+            public Tasks onConfirmed(List<Task> tasks) {
+                return Tasks.asSynced(tasks, actionTimestamp);
+            }
+
+            @Override
+            public Tasks onError() {
+                return mapFunctionToTasks(tasksFromEvent, markAsSyncError());
+            }
+        });
     }
 
     private static Tasks mapFunctionToTasks(Tasks tasksFromEvent, Function<SyncedData<Task>, SyncedData<Task>> function) {
         return Tasks.from(ImmutableList.copyOf(Iterables.transform(tasksFromEvent.all(), function)));
-    }
-
-    private static Function<SyncedData<Task>, SyncedData<Task>> markAsSyncError() {
-        return new Function<SyncedData<Task>, SyncedData<Task>>() {
-            @Override
-            public SyncedData<Task> apply(SyncedData<Task> input) {
-                return input.toBuilder().syncState(SyncState.SYNC_ERROR).build();
-            }
-        };
     }
 
     private static Function<SyncedData<Task>, SyncedData<Task>> markCompletedAsDeleted() {
@@ -232,6 +236,15 @@ public class PersistedTasksService implements TasksService {
                 } else {
                     return input.toBuilder().syncState(SyncState.AHEAD).build();
                 }
+            }
+        };
+    }
+
+    private static Function<SyncedData<Task>, SyncedData<Task>> markAsSyncError() {
+        return new Function<SyncedData<Task>, SyncedData<Task>>() {
+            @Override
+            public SyncedData<Task> apply(SyncedData<Task> input) {
+                return input.toBuilder().syncState(SyncState.SYNC_ERROR).build();
             }
         };
     }
@@ -292,7 +305,7 @@ public class PersistedTasksService implements TasksService {
             final Task updatedTask,
             final long actionTimestamp
     ) {
-        return asSyncedAction(new SyncedDataCreator<Task>() {
+        return asOrchestratedAction(new DataOrchestrator<Task, SyncedData<Task>>() {
             @Override
             public SyncedData<Task> startWith() {
                 return SyncedData.from(updatedTask, SyncState.AHEAD, actionTimestamp);
