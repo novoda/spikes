@@ -12,8 +12,14 @@ oldestDate.setDate(latestDate.getDate() - 31);
 var latest = latestDate / 1000;
 var oldest = oldestDate / 1000;
 
-newsFetcher.getEnews(oldest, latest, function(eNews) {
-  eNews.forEach(function(each) {
+// newsFetcher.getEnews(oldest, latest, function(eNews) {
+//   eNews.forEach(function(each) {
+//     console.log(each);
+//   });
+// });
+
+newsFetcher.getEnews(oldest, latest, function(messages) {
+  messages.forEach(function(each) {
     console.log(each);
   });
 });
