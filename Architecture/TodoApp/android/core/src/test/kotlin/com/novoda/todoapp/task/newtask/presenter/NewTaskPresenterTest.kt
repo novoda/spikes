@@ -2,9 +2,10 @@ package com.novoda.todoapp.task.newtask.presenter
 
 import com.google.common.base.Optional
 import com.novoda.todoapp.navigation.Navigator
+import com.novoda.todoapp.task.TaskActionDisplayer
 import com.novoda.todoapp.task.data.model.Id
 import com.novoda.todoapp.task.data.model.Task
-import com.novoda.todoapp.task.newtask.displayer.NewTaskDisplayer
+import com.novoda.todoapp.task.presenter.IdGenerator
 import com.novoda.todoapp.tasks.service.TasksService
 import org.junit.After
 import org.junit.Before
@@ -20,7 +21,7 @@ class NewTaskPresenterTest {
 
     var service: TasksService = Mockito.mock(TasksService::class.java)
 
-    var taskDisplayer: NewTaskDisplayer = Mockito.mock(NewTaskDisplayer::class.java)
+    var taskDisplayer: TaskActionDisplayer = Mockito.mock(TaskActionDisplayer::class.java)
     var navigator: Navigator = Mockito.mock(Navigator::class.java)
 
     var saveAction: Action0 = Mockito.mock(Action0::class.java)
@@ -45,7 +46,7 @@ class NewTaskPresenterTest {
 
         presenter.startPresenting()
 
-        Mockito.verify(taskDisplayer).attach(presenter.newTaskActionListener)
+        Mockito.verify(taskDisplayer).attach(presenter.taskActionListener)
     }
 
     @Test
@@ -54,7 +55,7 @@ class NewTaskPresenterTest {
 
         presenter.stopPresenting()
 
-        Mockito.verify(taskDisplayer).detach(presenter.newTaskActionListener)
+        Mockito.verify(taskDisplayer).detach(presenter.taskActionListener)
     }
 
     @Test
@@ -66,7 +67,7 @@ class NewTaskPresenterTest {
                 .description("Description")
                 .build()
 
-        presenter.newTaskActionListener.save(task.title(), task.description())
+        presenter.taskActionListener.save(task.title(), task.description())
 
         Mockito.verify(service).save(task)
         Mockito.verify(saveAction).call()
@@ -80,7 +81,7 @@ class NewTaskPresenterTest {
                 .title("Title")
                 .build()
 
-        presenter.newTaskActionListener.save(task.title(), task.description())
+        presenter.taskActionListener.save(task.title(), task.description())
 
         Mockito.verify(service).save(task)
         Mockito.verify(saveAction).call()
@@ -94,7 +95,7 @@ class NewTaskPresenterTest {
                 .description("Description")
                 .build()
 
-        presenter.newTaskActionListener.save(task.title(), task.description())
+        presenter.taskActionListener.save(task.title(), task.description())
 
         Mockito.verify(service).save(task)
         Mockito.verify(saveAction).call()
@@ -104,7 +105,7 @@ class NewTaskPresenterTest {
     fun given_TaskTitleAndDescriptionAreInvalid_on_SaveTask_it_ShouldNotSaveTaskToService() {
         givenThePresenterIsPresenting()
 
-        presenter.newTaskActionListener.save(Optional.absent(), Optional.absent())
+        presenter.taskActionListener.save(Optional.absent(), Optional.absent())
 
         Mockito.verify(service, never()).save(Matchers.any())
         Mockito.verify(saveAction, never()).call()
@@ -118,7 +119,7 @@ class NewTaskPresenterTest {
                 .description("Description")
                 .build()
 
-        presenter.newTaskActionListener.save(task.title(), task.description())
+        presenter.taskActionListener.save(task.title(), task.description())
 
         Mockito.verify(navigator).back()
     }
@@ -127,7 +128,7 @@ class NewTaskPresenterTest {
     fun given_TaskTitleAndDescriptionAreInvalid_on_SaveTask_it_ShouldNotNavigateBack() {
         givenThePresenterIsPresenting()
 
-        presenter.newTaskActionListener.save(Optional.absent(), Optional.absent())
+        presenter.taskActionListener.save(Optional.absent(), Optional.absent())
 
         Mockito.verify(navigator, never()).back()
     }
@@ -140,7 +141,7 @@ class NewTaskPresenterTest {
                 .title("Title")
                 .build()
 
-        presenter.newTaskActionListener.save(task.title(), task.description())
+        presenter.taskActionListener.save(task.title(), task.description())
 
         Mockito.verify(navigator).back()
     }
@@ -153,7 +154,7 @@ class NewTaskPresenterTest {
                 .title("Title")
                 .build()
 
-        presenter.newTaskActionListener.save(task.title(), task.description())
+        presenter.taskActionListener.save(task.title(), task.description())
 
         Mockito.verify(idGenerator).generate()
     }
@@ -166,7 +167,7 @@ class NewTaskPresenterTest {
                 .description("Description")
                 .build()
 
-        presenter.newTaskActionListener.save(task.title(), task.description())
+        presenter.taskActionListener.save(task.title(), task.description())
 
         Mockito.verify(idGenerator).generate()
     }
@@ -175,7 +176,7 @@ class NewTaskPresenterTest {
     fun given_TaskTitleAndDescriptionAreInvalid_on_SaveTask_it_ShouldNotGenerateId() {
         givenThePresenterIsPresenting()
 
-        presenter.newTaskActionListener.save(Optional.absent(), Optional.absent())
+        presenter.taskActionListener.save(Optional.absent(), Optional.absent())
 
         Mockito.verify(idGenerator, never()).generate()
     }
@@ -184,7 +185,7 @@ class NewTaskPresenterTest {
     fun given_TaskTitleAndDescriptionAreInvalid_on_SaveTask_it_ShouldPresentEmptyTaskError() {
         givenThePresenterIsPresenting()
 
-        presenter.newTaskActionListener.save(Optional.absent(), Optional.absent())
+        presenter.taskActionListener.save(Optional.absent(), Optional.absent())
 
         Mockito.verify(taskDisplayer).showEmptyTaskError()
     }

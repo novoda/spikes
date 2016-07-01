@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.google.common.base.Optional;
 import com.novoda.notils.caster.Views;
 import com.novoda.todoapp.R;
-import com.novoda.todoapp.task.newtask.displayer.NewTaskActionListener;
+import com.novoda.todoapp.task.newtask.displayer.TaskActionListener;
 import com.novoda.todoapp.task.newtask.displayer.NewTaskDisplayer;
 import com.novoda.todoapp.views.TodoAppBar;
 
@@ -52,17 +52,17 @@ public class NewTaskView extends CoordinatorLayout implements NewTaskDisplayer {
     }
 
     @Override
-    public void attach(final NewTaskActionListener newTaskActionListener) {
+    public void attach(final TaskActionListener taskActionListener) {
         saveActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newTaskActionListener.save(getTitle(), getDescription());
+                taskActionListener.save(getTitle(), getDescription());
             }
         });
     }
 
     @Override
-    public void detach(NewTaskActionListener newTaskActionListener) {
+    public void detach(TaskActionListener taskActionListener) {
         saveActionButton.setOnClickListener(null);
     }
 

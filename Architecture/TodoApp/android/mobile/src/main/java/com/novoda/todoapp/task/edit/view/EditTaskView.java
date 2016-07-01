@@ -13,8 +13,8 @@ import com.novoda.data.SyncedData;
 import com.novoda.notils.caster.Views;
 import com.novoda.todoapp.R;
 import com.novoda.todoapp.task.data.model.Task;
-import com.novoda.todoapp.task.edit.displayer.EditTaskActionListener;
 import com.novoda.todoapp.task.edit.displayer.EditTaskDisplayer;
+import com.novoda.todoapp.task.newtask.displayer.TaskActionListener;
 import com.novoda.todoapp.views.TodoAppBar;
 
 public class EditTaskView extends CoordinatorLayout implements EditTaskDisplayer {
@@ -39,7 +39,7 @@ public class EditTaskView extends CoordinatorLayout implements EditTaskDisplayer
     }
 
     @Override
-    public void attach(final EditTaskActionListener taskActionListener) {
+    public void attach(final TaskActionListener taskActionListener) {
         editActionButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,7 +49,7 @@ public class EditTaskView extends CoordinatorLayout implements EditTaskDisplayer
     }
 
     @Override
-    public void detach(EditTaskActionListener taskActionListener) {
+    public void detach(TaskActionListener taskActionListener) {
         editActionButton.setOnClickListener(null);
     }
 

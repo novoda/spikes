@@ -9,6 +9,7 @@ import com.novoda.todoapp.navigation.AndroidNavigator;
 import com.novoda.todoapp.task.data.model.Id;
 import com.novoda.todoapp.task.edit.displayer.EditTaskDisplayer;
 import com.novoda.todoapp.task.edit.presenter.EditTaskPresenter;
+import com.novoda.todoapp.task.presenter.IdGenerator;
 
 public class EditTaskActivity extends AppCompatActivity {
 
@@ -18,12 +19,17 @@ public class EditTaskActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_task_activity);
-        Id taskId = getTaskIdFromExtras();
+        final Id taskId = getTaskIdFromExtras();
         taskPresenter = new EditTaskPresenter(
-                taskId,
                 TodoApplication.TASKS_SERVICE,
                 ((EditTaskDisplayer) findViewById(R.id.content)),
-                new AndroidNavigator(this)
+                new AndroidNavigator(this),
+                new IdGenerator() {
+                    @Override
+                    public Id generate() {
+                        return taskId;
+                    }
+                }
         );
     }
 
