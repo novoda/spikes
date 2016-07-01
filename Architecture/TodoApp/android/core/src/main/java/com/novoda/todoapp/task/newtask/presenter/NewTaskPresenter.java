@@ -24,5 +24,4 @@ public class NewTaskPresenter {
     public void stopPresenting() {
         taskDisplayer.detach(taskActionListener);
     }
-
 }
