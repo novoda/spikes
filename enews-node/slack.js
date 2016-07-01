@@ -2,6 +2,7 @@ module.exports = Slack;
 
 function Slack(token) {
   const HISTORY_ENDPOINT = 'https://slack.com/api/channels.history'
+  const USER_ENDPOINT = 'https://slack.com/api/users.info'
   const MESSAGE_COUNT = 1000;
 
   var httpClient = require('request');
@@ -46,5 +47,24 @@ function Slack(token) {
       }
     }
   };
-  
+
+  this.getUser = function(userId, callback) {
+    var request = createUserRequest(userId);
+    httpClient.get(request, function(error, response, body) {
+      var jsonBody = JSON.parse(body);
+      var user = jsonBody.user;
+      callback(user);
+    });
+  }
+
+  function createUserRequest(userId) {
+    return {
+      url: USER_ENDPOINT,
+      qs: {
+        token: token,
+        user: userId
+      }
+    }
+  };
+
 }
