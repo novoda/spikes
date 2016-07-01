@@ -56,11 +56,13 @@ function NewsFetcher(token) {
   function toEnews(messages, users) {
     return messages.map(message => {
         var posterName = users.filter(user => user.id === message.user).map(user => user.real_name)[0];
+        var attachment = message.attachments[0];
         return {
             originalMessage: message.text,
-            title: message.attachments[0].title,
-            link: message.attachments[0].title_link,
-            poster: posterName
+            title: attachment.title,
+            link: attachment.title_link,
+            poster: posterName,
+            imageUrl: attachment.imageUrl ? attachment.image_url : attachment.thumb_url
         }
     });
   }
