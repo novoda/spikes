@@ -9,24 +9,24 @@ public final class SyncFunctions {
         throw new IllegalStateException("NonInstantiableClassException");
     }
 
-    public static <T> Observable.Transformer<T, SyncedData<T>> asSyncedAction(final SyncedDataCreator<T> syncedDataCreator) {
-        return new Observable.Transformer<T, SyncedData<T>>() {
+    public static <T,V> Observable.Transformer<T, V> asOrchestratedAction(final DataOrchestrator<T, V> dataOrchestrator) {
+        return new Observable.Transformer<T, V>() {
             @Override
-            public Observable<SyncedData<T>> call(Observable<T> observable) {
+            public Observable<V> call(Observable<T> observable) {
                 return observable
-                        .map(new Func1<T, SyncedData<T>>() {
+                        .map(new Func1<T, V>() {
                             @Override
-                            public SyncedData<T> call(T value) {
-                                return syncedDataCreator.onConfirmed(value);
+                            public V call(T value) {
+                                return dataOrchestrator.onConfirmed(value);
                             }
                         })
-                        .onErrorReturn(new Func1<Throwable, SyncedData<T>>() {
+                        .onErrorReturn(new Func1<Throwable, V>() {
                             @Override
-                            public SyncedData<T> call(Throwable throwable) {
-                                return syncedDataCreator.onError();
+                            public V call(Throwable throwable) {
+                                return dataOrchestrator.onError();
                             }
                         })
-                        .startWith(syncedDataCreator.startWith());
+                        .startWith(dataOrchestrator.startWith());
             }
         };
     }

@@ -3,8 +3,8 @@ package com.novoda.todoapp.tasks.view.loading;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
-import com.novoda.todoapp.tasks.loading.displayer.TasksLoadingDisplayer;
 import com.novoda.todoapp.tasks.loading.displayer.RetryActionListener;
+import com.novoda.todoapp.tasks.loading.displayer.TasksLoadingDisplayer;
 
 public class AndroidTasksLoadingDisplayer implements TasksLoadingDisplayer {
 
