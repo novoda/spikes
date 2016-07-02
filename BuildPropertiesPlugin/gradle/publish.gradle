@@ -14,5 +14,14 @@ if (isLocalDeploy) {
       }
     }
   }
+} else {
+  apply plugin: 'com.novoda.bintray-release'
+  publish {
+    userOrg = 'novoda'
+    groupId = pluginGroup
+    artifactId = 'build-properties'
+    publishVersion = pluginVersion
+    website = 'https://github.com/novoda/spikes/tree/master/BuildPropertiesPlugin'
+  }
 }
 
