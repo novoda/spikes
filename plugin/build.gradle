@@ -12,7 +12,16 @@ targetCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
   compile gradleApi()
+  testCompile 'com.google.guava:guava:19.0'
+  testCompile 'com.google.truth:truth:0.28'
 }
+
+// https://code.google.com/p/android/issues/detail?id=64887
+task copyTestResources(type: Copy) {
+  from "${projectDir}/src/test/resources"
+  into "${buildDir}/classes/test"
+}
+test.dependsOn copyTestResources
 
 task deployLocal << {
   // we need to deploy twice because the first time uploadArchives task
