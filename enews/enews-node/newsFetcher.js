@@ -62,7 +62,7 @@ function NewsFetcher(token) {
             title: attachment.title,
             link: attachment.title_link,
             poster: posterName,
-            imageUrl: attachment.imageUrl ? attachment.image_url : attachment.thumb_url
+            imageUrl: attachment.image_url ? attachment.image_url : attachment.thumb_url
         }
     });
   }
