@@ -58,7 +58,7 @@ class BuildPropertiesPlugin implements Plugin<Project> {
         }
         target.ext.buildConfigProperty = { String name = null, BuildProperties.Entry entry ->
             project.afterEvaluate {
-                target.buildConfigField 'String', name ?: formatBuildConfigField(entry.key), "\"${entry.stringValue()}\""
+                target.buildConfigField 'String', name ?: formatBuildConfigField(entry.key), "\"${entry.string}\""
             }
         }
         target.ext.buildConfigProperties = { BuildProperties buildProperties ->
@@ -95,7 +95,7 @@ class BuildPropertiesPlugin implements Plugin<Project> {
         }
         target.ext.resValueProperty = { String name = null, BuildProperties.Entry entry ->
             project.afterEvaluate {
-                target.resValue 'string', name ?: formatResValueName(entry.key), "\"${entry.stringValue()}\""
+                target.resValue 'string', name ?: formatResValueName(entry.key), "\"${entry.string}\""
             }
         }
         target.ext.resValueProperties = { BuildProperties buildProperties ->
@@ -113,10 +113,10 @@ class BuildPropertiesPlugin implements Plugin<Project> {
     private void addSigningConfigSupportTo(target, Project project) {
         target.ext.signingConfigProperties = { BuildProperties buildProperties ->
             project.afterEvaluate {
-                target.storeFile new File(buildProperties.parentFile, buildProperties['storeFile'].stringValue())
-                target.storePassword buildProperties['storePassword'].stringValue()
-                target.keyAlias buildProperties['keyAlias'].stringValue()
-                target.keyPassword buildProperties['keyPassword'].stringValue()
+                target.storeFile new File(buildProperties.parentFile, buildProperties['storeFile'].string)
+                target.storePassword buildProperties['storePassword'].string
+                target.keyAlias buildProperties['keyAlias'].string
+                target.keyPassword buildProperties['keyPassword'].string
             }
         }
     }
