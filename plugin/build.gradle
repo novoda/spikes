@@ -1,3 +1,9 @@
+buildscript {
+  dependencies {
+    classpath 'com.novoda:bintray-release:0.3.4'
+  }
+}
+
 apply plugin: 'groovy'
 apply from: rootProject.file('gradle/publish.gradle')
 
