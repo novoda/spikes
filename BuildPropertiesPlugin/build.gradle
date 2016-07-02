@@ -1,5 +1,5 @@
 ext {
-  isLocalDeploy = project.hasProperty('local')
+  isLocalDeploy = !project.hasProperty('maven')
   pluginGroup = 'com.novoda.build-properties'
   pluginVersion = isLocalDeploy ? 'LOCAL' : '0.9.0'
 }

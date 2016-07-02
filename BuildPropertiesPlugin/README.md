@@ -21,21 +21,20 @@ The plugin at the moment is not deployed in any public maven repo, therefore you
 A default setup with an embedded repo (pointing to `.gradle/repo`) is provided, just run the following command from the root
  of the project:
 ```
-./gradlew -Plocal uploadArchives
+./gradlew deployLocal
 ```
 
 The sample app is not part of the main project to work around the fact the plugin might be not deployed yet either locally or remotely.
-To give it a go you need to **change your working directory to `sample/`**, and build from there. The same `-Plocal` flag is supported by the sample app to use the embedded local repo to retrieve the plugin:
+To give it a go you need to **change your working directory to `sample/`**, and build from there. The sample app by default will use the embedded local repo to retrieve the plugin:
 ```
-./gradlew -Plocal assemble
+./gradlew assemble
 ```
 
 ## How To Use
 
 #### 1.Maven coordinates
 The plugin **is not deployed on any public maven repo at the moment**, therefore you have the only choice of using it in
-the sample app via the embedded local repo. The setup for this scenario is already in place, so you just need to specify
-the `-Plocal` flag at build time as explained above (Fear not, Bintray deploy is coming soon).
+the sample app via the embedded local repo. The setup for this scenario is already in place (Fear not, Bintray deploy is coming soon).
 
 #### 2. Apply plugin
 The plugin needs to be applied to your Android module after the Android gradle plugin. In your `build.gradle` you should put
