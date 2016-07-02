@@ -13,3 +13,10 @@ targetCompatibility = JavaVersion.VERSION_1_7
 dependencies {
   compile gradleApi()
 }
+
+task deployLocal << {
+  // we need to deploy twice because the first time uploadArchives task
+  // might fail to find the metadata in the embedded repo
+  tasks.uploadArchives.execute()
+  tasks.uploadArchives.execute()
+}
