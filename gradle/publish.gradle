@@ -11,6 +11,9 @@ if (isLocalDeploy) {
     repositories {
       mavenDeployer {
         repository(url: localRepo.toURI())
+        pom.groupId = pluginGroup
+        pom.artifactId = pluginId
+        pom.version = pluginVersion
       }
     }
   }
@@ -19,7 +22,7 @@ if (isLocalDeploy) {
   publish {
     userOrg = 'novoda'
     groupId = pluginGroup
-    artifactId = 'build-properties'
+    artifactId = pluginId
     publishVersion = pluginVersion
     website = 'https://github.com/novoda/spikes/tree/master/BuildPropertiesPlugin'
   }
