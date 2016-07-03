@@ -9,18 +9,18 @@ const SMTP_PASSWORD = process.env.SMTP_PASSWORD;
 const SMTP_HOST = process.env.SMTP_HOST;
 const RECIPIENTS = process.env.RECIPIENTS;
 
-createEnewsHtml(function(html) {
-  sendMail(html);
+createEnewsHtml(function(html, plaintText) {
+  sendMail(html, plaintText);
 });
 
 function createEnewsHtml(callback) {
   enewsFetcher.getLastSevenDays(function(eNews) {
     var html = generateHtml(eNews);
-    callback(html);
+    callback(html, 'todo');
   });
 }
 
-function sendMail(contentHtml) {
+function sendMail(contentHtml, plainText) {
   var smtpConfig = {
     host: SMTP_HOST,
     port: 465,
@@ -36,7 +36,8 @@ function sendMail(contentHtml) {
     from: '"Hal Berto 👥" <' + SMTP_USER + '>',
     to: RECIPIENTS,
     subject: '#enews ' + moment().format('YYYY-MM-DD') + ' ✔',
-    html: contentHtml
+    html: contentHtml,
+    text: plainText
   };
 
   transporter.sendMail(mailOptions, function(error, info){
