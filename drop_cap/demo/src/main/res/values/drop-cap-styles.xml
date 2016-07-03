@@ -1,0 +1,17 @@
+<resources>
+
+  <style name="AppTheme"
+    parent="Theme.AppCompat.Light.DarkActionBar" />
+
+  <style name="DropCap">
+    <item name="android:paddingLeft">@dimen/drop_cap_padding_left</item>
+    <item name="android:paddingTop">@dimen/drop_cap_padding_top</item>
+    <item name="android:paddingRight">@dimen/drop_cap_padding_right</item>
+    <item name="android:paddingBottom">@dimen/drop_cap_padding_bottom</item>
+    <item name="dropCapTextSize">@dimen/drop_cap_text</item>
+    <item name="copyTextSize">@dimen/copy_text</item>
+    <item name="fontPath">fonts/funkrocker.otf</item>
+    <item name="lineSpacingExtra">@dimen/drop_cap_linespacing_extra</item>
+  </style>
+
+</resources>
