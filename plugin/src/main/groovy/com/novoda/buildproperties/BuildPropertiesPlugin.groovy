@@ -12,7 +12,7 @@ class BuildPropertiesPlugin implements Plugin<Project> {
         boolean isAndroidLib = project.plugins.hasPlugin('com.android.library')
 
         if (!isAndroidApp && !isAndroidLib) {
-            throw new GradleException("The build-properties plugin can be applied only to an Android project")
+            throw new GradleException('The build-properties plugin can be applied only after the Android plugin')
         }
 
         project.extensions.add('buildProperties', project.container(BuildProperties))

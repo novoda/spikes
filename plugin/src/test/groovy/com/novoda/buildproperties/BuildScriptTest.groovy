@@ -32,7 +32,7 @@ public class BuildScriptTest {
       plugin.apply(project)
       fail('Gradle exception not thrown')
     } catch (GradleException e) {
-      assertThat(e.getMessage()).isEqualTo('The build-properties plugin can be applied only to an Android project')
+      assertThat(e.getMessage()).isEqualTo('The build-properties plugin can be applied only after the Android plugin')
     }
   }
 
