@@ -1,4 +1,4 @@
-var NewsFetcher = require('../enews-node/newsFetcher');
+var NewsFetcher = require('enews');
 var htmlGenerator = require('./htmlGenerator').generateHtml;
 var fs = require('fs');
 

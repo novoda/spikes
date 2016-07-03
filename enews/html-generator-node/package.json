@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "enews": "file:../enews-node",
     "moment": "^2.13.0"
   }
 }
