@@ -158,12 +158,13 @@ Properties files are lazy-loaded when accessing some of their properties for the
 
 The value of an entry can be retrieved via one of the following typed accessors:
 
-- `entry.booleanValue()`
-- `entry.intValue()`
-- `entry.doubleValue()`
-- `entry.stringValue()`
+- `entry.getBoolean()`, or `entry.boolean`
+- `entry.getInt()`, or `entry.int`
+- `entry.getDouble()`, or `entry.double`
+- `entry.getString()`, or `entry.string`
 
-It's important to note that values are lazily accessed too (via the internal closure provided in `Entry`). Trying to access the value of a specific property could generate an exception if the key is missing in the provided properties file, eg:
+If you want to access the raw value (`Object`) you can also use `entry.getValue()`/`entry.value`. Is important to note that values are lazily accessed too (via the internal closure provided in `Entry`).
+Trying to access the value of a specific property could generate an exception if the key is missing in the provided properties file, eg:
 ```
 FAILURE: Build failed with an exception.
 
