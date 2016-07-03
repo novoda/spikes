@@ -1,18 +1,29 @@
-module.exports = NewsFetcher;
+module.exports = EnewsFetcher;
 
 var Slack = require('./slack.js');
 var Q = require('q');
 
-function NewsFetcher(token) {
+function EnewsFetcher(token) {
   const GENERAL_CHANNEL_ID = 'C029J9QTH'
 
   var slack = new Slack(token);
 
+  this.getLastSevenDays = function(callback) {
+    var latest = new Date();
+    var oldest = new Date();
+    oldest.setDate(latest.getDate() - 7);
+
+    this.getEnews(oldest, latest, callback);
+  }
+
   this.getEnews = function(oldest, latest, callback) {
+    // node timestamps are in milliseconds, need to convert to epoch
+    var latestEpoch = latest / 1000;
+    var oldestEpoch = oldest / 1000;
     var wrap = function(messages) {
       convertToEnews(messages, callback);
     };
-    slack.getMessages(GENERAL_CHANNEL_ID, oldest, latest, wrap);
+    slack.getMessages(GENERAL_CHANNEL_ID, oldestEpoch, latestEpoch, wrap);
   }
 
   function convertToEnews(messages, callback) {
