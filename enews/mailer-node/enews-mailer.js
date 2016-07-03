@@ -10,14 +10,25 @@ const SMTP_HOST = process.env.SMTP_HOST;
 const RECIPIENTS = process.env.RECIPIENTS;
 
 createEnewsHtml(function(html, plaintText) {
-  sendMail(html, plaintText);
+  sendMail(html, plainText);
 });
 
 function createEnewsHtml(callback) {
   enewsFetcher.getLastSevenDays(function(eNews) {
     var html = generateHtml(eNews);
-    callback(html, 'todo');
+    var plainText = generatePlainText(eNews);
+    callback(html, plainText);
   });
+}
+
+function generatePlainText(eNews) {
+  var plainText = '';
+  eNews.forEach(each => {
+    plainText += '** ' + each.title + '\n';
+    plainText += each.link + '\n'
+    plainText += '------------------------------\n'
+  });
+  return plainText;
 }
 
 function sendMail(contentHtml, plainText) {
