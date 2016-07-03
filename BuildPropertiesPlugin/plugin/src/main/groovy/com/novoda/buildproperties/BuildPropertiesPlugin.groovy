@@ -9,8 +9,10 @@ class BuildPropertiesPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
         boolean isAndroidApp = project.plugins.hasPlugin('com.android.application')
-        if (!isAndroidApp) {
-            throw new GradleException("This plugin can be applied only to an Android application project")
+        boolean isAndroidLib = project.plugins.hasPlugin('com.android.library')
+
+        if (!isAndroidApp && !isAndroidLib) {
+            throw new GradleException("The build-properties plugin can be applied only to an Android application project")
         }
 
         project.extensions.add('buildProperties', project.container(BuildProperties))
