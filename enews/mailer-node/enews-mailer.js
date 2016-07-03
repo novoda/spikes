@@ -9,7 +9,7 @@ const SMTP_PASSWORD = process.env.SMTP_PASSWORD;
 const SMTP_HOST = process.env.SMTP_HOST;
 const RECIPIENTS = process.env.RECIPIENTS;
 
-createEnewsHtml(function(html, plaintText) {
+createEnewsHtml(function(html, plainText) {
   sendMail(html, plainText);
 });
 
