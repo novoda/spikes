@@ -32,3 +32,4 @@ task deployLocal << {
   tasks.uploadArchives.execute()
   tasks.uploadArchives.execute()
 }
+test.dependsOn deployLocal
