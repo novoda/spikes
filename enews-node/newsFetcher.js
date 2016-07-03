@@ -1,72 +1,70 @@
 module.exports = NewsFetcher;
 
+var Slack = require('./slack.js');
+var Q = require('q');
+
 function NewsFetcher(token) {
   const GENERAL_CHANNEL_ID = 'C029J9QTH'
-  const HISTORY_ENDPOINT = 'https://slack.com/api/channels.history'
-  const MESSAGE_COUNT = 1000;
 
-  var httpClient = require('request');
+  var slack = new Slack(token);
 
-  this.getEnews = function getEnews(oldest, latest, callback) {
-    var allEnews = [];
-    var handler = function(enews, hasMore, reducedLatest) {
-      allEnews = allEnews.concat(enews);
-      if (hasMore) {
-        getSlackHistory(createHistoryRequest(oldest, reducedLatest), handler);
-      } else {
-        callback(allEnews);
-      }
-    }
-    getSlackHistory(createHistoryRequest(oldest, latest), handler);
+  this.getEnews = function(oldest, latest, callback) {
+    var wrap = function(messages) {
+      convertToEnews(messages, callback);
+    };
+    slack.getMessages(GENERAL_CHANNEL_ID, oldest, latest, wrap);
   }
 
-  function getSlackHistory(request, callback) {
-    httpClient.get(request, function(error, response, body) {
-      var jsonBody = JSON.parse(body);
-      var messages = jsonBody.messages;
-      var enews = parseMessages(messages);
-      var reducedLatest = messages[messages.length - 1].ts;
-      callback(enews, jsonBody.has_more, reducedLatest);
+  function convertToEnews(messages, callback) {
+    var eNewsMessages = messages.filter(isEnewsMessage);
+    var usersPromise = getUsersFrom(eNewsMessages);
+    Q.all(usersPromise).then(users => {
+      var eNews = toEnews(eNewsMessages, users);
+      callback(eNews);
     });
-  }
-
-  function parseMessages(messages) {
-    var enews = [];
-    messages.forEach(function(message) {
-      if (isEnewsMessage(message)) {
-        enews.push(message.text);
-      }
-    });
-    return enews;
   }
 
   function isEnewsMessage(message) {
-    return isValidMessage(message) && isEnews(message.text)
-  }
-
-  function isEnews(messageText) {
-    return contains(messageText, '#enews') || contains(messageText, '#eNews');
-  }
-
-  function isValidMessage(message) {
-    return !message.bot_id && message.type == 'message'
+    var messageText = message.text;
+    return contains(messageText, '#enews') || contains(messageText, '#eNews') || contains(messageText, '#C0YNBKANM');
   }
 
   function contains(input, check) {
     return input.indexOf(check) > -1;
   }
 
-  function createHistoryRequest(oldest, latest) {
-    return {
-      url: HISTORY_ENDPOINT,
-      qs: {
-        token: token,
-        channel: GENERAL_CHANNEL_ID,
-        count: MESSAGE_COUNT,
-        oldest: oldest,
-        latest: latest
-      }
-    }
-  };
+  function getUsersFrom(messages) {
+    var userIds = messages.map(each => {
+      return each.user;
+    });
+    var promises = [];
+    userIds.forEach(function(userId) {
+      promises.push(getUser(userId));
+    });
+    return promises;
+  }
+
+  function getUser(userId) {
+    return Q.promise(function(resolve, reject, notify) {
+      var wrap = function(user) {
+          resolve(user);
+      };
+      slack.getUser(userId, wrap);
+    });
+  }
+
+  function toEnews(messages, users) {
+    return messages.map(message => {
+        var posterName = users.filter(user => user.id === message.user).map(user => user.real_name)[0];
+        var attachment = message.attachments[0];
+        return {
+            originalMessage: message.text,
+            title: attachment.title,
+            link: attachment.title_link,
+            poster: posterName,
+            imageUrl: attachment.imageUrl ? attachment.image_url : attachment.thumb_url
+        }
+    });
+  }
 
 }
