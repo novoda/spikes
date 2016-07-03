@@ -70,8 +70,8 @@ function EnewsFetcher(token) {
         var attachment = message.attachments[0];
         return {
             originalMessage: message.text,
-            title: attachment.title,
-            link: attachment.title_link,
+            title: attachment.title ? attachment.title : (attachment.text ? attachment.text : ''),
+            link: attachment.title_link ? attachment.title_link : attachment.from_url,
             poster: posterName,
             imageUrl: attachment.image_url ? attachment.image_url : attachment.thumb_url
         }
