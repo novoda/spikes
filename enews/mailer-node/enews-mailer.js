@@ -33,7 +33,7 @@ function sendMail(contentHtml) {
 
   var transporter = nodemailer.createTransport(smtpConfig);
   var mailOptions = {
-    from: '"Hal Berto 👥" <enews@novoda.com>',
+    from: '"Hal Berto 👥" <' + SMTP_USER + '>',
     to: RECIPIENTS,
     subject: '#enews ' + moment().format('YYYY-MM-DD') + ' ✔',
     html: contentHtml
