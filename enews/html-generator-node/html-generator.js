@@ -19,7 +19,7 @@ function generateHtml(eNews) {
 
 function createImageItem(each) {
   return '<tr>' +
-  '<td><a href="' + each.link + '"><img src=' + each.imageUrl + ' height="150" width="150"/></td><a/>' +
+  '<td><a href="' + each.link + '"><img src=' + each.imageUrl + ' height="150" width="150" alt="' + each.title + '"/></td><a/>' +
   '<td><p style="font-family:Comic Sans MS">' + '<i>' + each.originalMessage + '</i>' + '<br>' + each.title + '</p>' +
   '<br><p style="font-family:Comic Sans MS">' + each.poster + '</p></td>' +
   '</tr>';
