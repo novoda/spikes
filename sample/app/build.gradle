@@ -38,7 +38,7 @@ android {
     versionName "1.0"
     buildConfigBoolean 'TEST_BOOLEAN', false
     buildConfigInt 'TEST_INT', 42
-    buildConfigLong 'TEST_LONG', System.currentTimeMillis()
+    buildConfigLong 'TEST_LONG', Long.MAX_VALUE
     buildConfigDouble 'TEST_DOUBLE', Math.PI
     buildConfigString 'TEST_STRING', "whateva"
     buildConfigProperty 'TEST_BUILD_PROPERTY', buildProperties.secrets['superSecret']
@@ -57,6 +57,7 @@ android {
   buildTypes {
     debug {
       signingConfig signingConfigs.debug
+      buildConfigProperty 'ONLY_DEBUG', buildProperties.secrets['superSecret']
       resValueInt 'debug_test_int', 100
       resValueBoolean 'debug_test_bool', true
       resValueString 'debug_test_string', 'dunno bro...'
