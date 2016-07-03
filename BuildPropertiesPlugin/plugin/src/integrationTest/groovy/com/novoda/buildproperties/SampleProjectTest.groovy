@@ -86,7 +86,7 @@ public class SampleProjectTest {
       File localRepoDir = new File(rootDir, '.gradle/repo')
       assertThat(localRepoDir.absolutePath).endsWith('.gradle/repo')
 
-      File artifactDir = new File(localRepoDir, 'com/novoda/build-properties/plugin/LOCAL')
+      File artifactDir = new File(localRepoDir, 'com/novoda/build-properties-plugin/LOCAL')
       assertWithMessage('Run ./gradlew uploadArchives to deploy the plugin to the embedded local repo.\n')
               .that(artifactDir.exists()).isTrue()
 
