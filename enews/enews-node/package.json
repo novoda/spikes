@@ -2,13 +2,14 @@
   "name": "enews",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "newsFetcher.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "q": "^1.4.1",
     "request": "^2.69.0"
   }
 }
