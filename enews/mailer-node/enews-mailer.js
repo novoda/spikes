@@ -44,7 +44,7 @@ function sendMail(contentHtml, plainText) {
 
   var transporter = nodemailer.createTransport(smtpConfig);
   var mailOptions = {
-    from: '"Hal Berto 👥" <' + SMTP_USER + '>',
+    from: '"enewsletter " <' + SMTP_USER + '>',
     to: RECIPIENTS,
     subject: '#enews ' + moment().format('YYYY-MM-DD') + ' ✔',
     html: contentHtml,
