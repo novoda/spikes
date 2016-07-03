@@ -1,9 +1,6 @@
-cd html-generator-node && npm install
-node app.js
-
 mkdir output
 mv enews.html output/index.html
-git add output && git commit -m "deploy html"
+git add output && git commit -m "deploy enews html"
 
 cd `git rev-parse --show-toplevel`
 
