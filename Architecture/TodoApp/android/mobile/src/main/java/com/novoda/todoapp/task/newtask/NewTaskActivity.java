@@ -1,4 +1,4 @@
-package com.novoda.todoapp.task;
+package com.novoda.todoapp.task.newtask;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,24 +6,23 @@ import android.support.v7.app.AppCompatActivity;
 import com.novoda.todoapp.R;
 import com.novoda.todoapp.TodoApplication;
 import com.novoda.todoapp.navigation.AndroidNavigator;
-import com.novoda.todoapp.task.data.model.Id;
-import com.novoda.todoapp.task.displayer.TaskDisplayer;
-import com.novoda.todoapp.task.presenter.TaskPresenter;
+import com.novoda.todoapp.task.TaskActionDisplayer;
+import com.novoda.todoapp.task.newtask.presenter.UUIDGenerator;
+import com.novoda.todoapp.task.newtask.presenter.NewTaskPresenter;
 
-public class TaskDetailActivity extends AppCompatActivity {
+public class NewTaskActivity extends AppCompatActivity {
 
-    private TaskPresenter taskPresenter;
+    private NewTaskPresenter taskPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.task_detail_activity);
-        Id taskId = Id.from(getIntent().getStringExtra(AndroidNavigator.EXTRA_TASK_ID));
-        taskPresenter = new TaskPresenter(
-                taskId,
+        setContentView(R.layout.new_task_activity);
+        taskPresenter = new NewTaskPresenter(
                 TodoApplication.TASKS_SERVICE,
-                ((TaskDisplayer) findViewById(R.id.content)),
-                new AndroidNavigator(this)
+                ((TaskActionDisplayer) findViewById(R.id.content)),
+                new AndroidNavigator(this),
+                new UUIDGenerator()
         );
     }
 

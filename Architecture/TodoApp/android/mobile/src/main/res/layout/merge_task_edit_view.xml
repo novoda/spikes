@@ -23,7 +23,7 @@
       android:paddingTop="@dimen/activity_vertical_margin">
 
       <EditText
-        android:id="@+id/edit_task_title"
+        android:id="@+id/task_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/title_hint"
@@ -31,7 +31,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
       <EditText
-        android:id="@+id/edit_task_description"
+        android:id="@+id/task_description"
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:gravity="top"
@@ -42,13 +42,13 @@
   </LinearLayout>
 
   <android.support.design.widget.FloatingActionButton
-    android:id="@+id/fab_edit_task_done"
-    app:fabSize="normal"
-    app:layout_anchor="@id/contentContainer"
-    app:layout_anchorGravity="bottom|right|end"
+    android:id="@+id/fab_task_done"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/fab_margin"
-    android:src="@drawable/ic_add" />
+    android:src="@drawable/ic_done"
+    app:fabSize="normal"
+    app:layout_anchor="@id/contentContainer"
+    app:layout_anchorGravity="bottom|right|end" />
 
 </merge>
