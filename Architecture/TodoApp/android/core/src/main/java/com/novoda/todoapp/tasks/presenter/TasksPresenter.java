@@ -159,6 +159,11 @@ public class TasksPresenter {
         public void onAddTaskSelected() {
             navigator.toAddTask();
         }
+
+        @Override
+        public void onStatisticsSelected() {
+            navigator.toStatistics();
+        }
     };
 
     private final DataObserver<Tasks> tasksObserver = new DataObserver<Tasks>() {

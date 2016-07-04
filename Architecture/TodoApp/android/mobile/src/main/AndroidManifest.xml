@@ -26,6 +26,8 @@
     <activity
       android:name=".task.newtask.NewTaskActivity"
       android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:name=".statistics.StatisticsActivity" />
 
 
   </application>

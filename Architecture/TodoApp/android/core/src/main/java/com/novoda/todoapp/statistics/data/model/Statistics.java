@@ -15,6 +15,10 @@ public abstract class Statistics {
 
     public abstract int completedTasks();
 
+    public boolean noTasks() {
+        return activeTasks() == 0 && completedTasks() == 0;
+    }
+
     @AutoValue.Builder
     public abstract static class Builder {
 
