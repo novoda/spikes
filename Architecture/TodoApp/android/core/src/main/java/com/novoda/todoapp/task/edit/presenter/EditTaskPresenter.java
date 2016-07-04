@@ -43,6 +43,10 @@ public class EditTaskPresenter {
 
     public void stopPresenting() {
         taskDisplayer.detach(taskActionListener);
+        clearSubscriptions();
+    }
+
+    private void clearSubscriptions() {
         subscriptions.clear();
         subscriptions = new CompositeSubscription();
     }
