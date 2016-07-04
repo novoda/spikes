@@ -11,11 +11,11 @@ import android.widget.TextView;
 import com.google.common.base.Optional;
 import com.novoda.notils.caster.Views;
 import com.novoda.todoapp.R;
-import com.novoda.todoapp.task.newtask.displayer.TaskActionListener;
-import com.novoda.todoapp.task.newtask.displayer.NewTaskDisplayer;
+import com.novoda.todoapp.task.TaskActionDisplayer;
+import com.novoda.todoapp.task.TaskActionListener;
 import com.novoda.todoapp.views.TodoAppBar;
 
-public class NewTaskView extends CoordinatorLayout implements NewTaskDisplayer {
+public class NewTaskView extends CoordinatorLayout implements TaskActionDisplayer {
     private TextView titleView;
     private TextView descriptionView;
     private FloatingActionButton saveActionButton;

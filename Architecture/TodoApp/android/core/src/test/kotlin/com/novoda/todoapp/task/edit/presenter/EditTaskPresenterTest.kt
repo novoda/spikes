@@ -7,7 +7,6 @@ import com.novoda.todoapp.navigation.Navigator
 import com.novoda.todoapp.task.data.model.Id
 import com.novoda.todoapp.task.data.model.Task
 import com.novoda.todoapp.task.edit.displayer.EditTaskDisplayer
-import com.novoda.todoapp.task.presenter.IdProducer
 import com.novoda.todoapp.tasks.service.TasksService
 import org.junit.After
 import org.junit.Before
@@ -31,14 +30,13 @@ class EditTaskPresenterTest {
     var navigator: Navigator = Mockito.mock(Navigator::class.java)
 
     var saveAction: Action0 = Mockito.mock(Action0::class.java)
-    var idGenerator = Mockito.mock(IdProducer::class.java)
 
-    var presenter = EditTaskPresenter(service, taskDisplayer, navigator, idGenerator)
+    var presenter = EditTaskPresenter(service, taskDisplayer, navigator, TASK_ID)
 
     @Before
     fun setUp() {
         setUpService()
-        presenter = EditTaskPresenter(service, taskDisplayer, navigator, idGenerator)
+        presenter = EditTaskPresenter(service, taskDisplayer, navigator, TASK_ID)
     }
 
     @After
@@ -222,7 +220,6 @@ class EditTaskPresenterTest {
         taskSubject = BehaviorSubject.create()
         Mockito.`when`(service.getTask(TASK_ID)).thenReturn(taskSubject)
         Mockito.`when`(service.save(Matchers.any())).thenReturn(saveAction)
-        Mockito.`when`(idGenerator.produce()).thenReturn(TASK_ID)
     }
 }
 

@@ -4,6 +4,7 @@ import com.novoda.data.SyncedData;
 import com.novoda.event.DataObserver;
 import com.novoda.todoapp.navigation.Navigator;
 import com.novoda.todoapp.task.TaskActionListener;
+import com.novoda.todoapp.task.data.model.Id;
 import com.novoda.todoapp.task.data.model.Task;
 import com.novoda.todoapp.task.edit.displayer.EditTaskDisplayer;
 import com.novoda.todoapp.task.presenter.IdProducer;
@@ -13,11 +14,11 @@ import rx.subscriptions.CompositeSubscription;
 
 public class EditTaskPresenter {
 
+    private final Id id;
     private final TasksService tasksService;
     private final EditTaskDisplayer taskDisplayer;
-    private final IdProducer idProducer;
 
-    final TaskActionListener taskActionListener;
+    TaskActionListener taskActionListener;
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
@@ -25,18 +26,18 @@ public class EditTaskPresenter {
             TasksService tasksService,
             EditTaskDisplayer taskDisplayer,
             Navigator navigator,
-            IdProducer idProducer
+            Id id
     ) {
         this.tasksService = tasksService;
         this.taskDisplayer = taskDisplayer;
-        this.idProducer = idProducer;
-        taskActionListener = new TaskActionListener(this.tasksService, this.taskDisplayer, navigator, this.idProducer);
+        this.id = id;
+        taskActionListener = new TaskActionListener(tasksService, taskDisplayer, navigator, new ConstantIdProducer(id));
     }
 
     public void startPresenting() {
         taskDisplayer.attach(taskActionListener);
         subscriptions.add(
-                tasksService.getTask(idProducer.produce())
+                tasksService.getTask(id)
                         .subscribe(taskObserver)
         );
     }
@@ -58,4 +59,16 @@ public class EditTaskPresenter {
         }
     };
 
+    private static class ConstantIdProducer implements IdProducer {
+        private final Id id;
+
+        public ConstantIdProducer(Id id) {
+            this.id = id;
+        }
+
+        @Override
+        public Id produce() {
+            return id;
+        }
+    }
 }

@@ -12,9 +12,9 @@ import com.google.common.base.Optional;
 import com.novoda.data.SyncedData;
 import com.novoda.notils.caster.Views;
 import com.novoda.todoapp.R;
+import com.novoda.todoapp.task.TaskActionListener;
 import com.novoda.todoapp.task.data.model.Task;
 import com.novoda.todoapp.task.edit.displayer.EditTaskDisplayer;
-import com.novoda.todoapp.task.newtask.displayer.TaskActionListener;
 import com.novoda.todoapp.views.TodoAppBar;
 
 public class EditTaskView extends CoordinatorLayout implements EditTaskDisplayer {
