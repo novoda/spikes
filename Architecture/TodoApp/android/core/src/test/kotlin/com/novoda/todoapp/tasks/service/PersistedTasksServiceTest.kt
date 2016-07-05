@@ -294,7 +294,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onNext(localTasks)
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(true)
-        `when`(clock.timeInMillis()).thenReturn(321);
+        `when`(clock.timeInMillis()).thenReturn(321)
         val testObserver = subscribeToTasksEvent()
 
         service.complete(task).call()
@@ -320,7 +320,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onNext(updatedTasks)
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(updatedTasks)).thenReturn(true)
-        `when`(clock.timeInMillis()).thenReturn(321);
+        `when`(clock.timeInMillis()).thenReturn(321)
 
         val testObserver = subscribeToTasksEvent()
 
@@ -342,7 +342,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onNext(localTasks)
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(true)
-        `when`(clock.timeInMillis()).thenReturn(321);
+        `when`(clock.timeInMillis()).thenReturn(321)
         Mockito.doAnswer {
             Observable.error<Task>(Throwable())
         }.`when`(remoteDataSource).saveTask(any())
@@ -369,7 +369,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onNext(localTasks)
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(true)
-        `when`(clock.timeInMillis()).thenReturn(321);
+        `when`(clock.timeInMillis()).thenReturn(321)
 
         val testObserver = subscribeToTasksEvent()
 
@@ -396,7 +396,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onNext(tasks)
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(tasks)).thenReturn(true)
-        `when`(clock.timeInMillis()).thenReturn(321);
+        `when`(clock.timeInMillis()).thenReturn(321)
 
         val testObserver = subscribeToTasksEvent()
 
@@ -418,7 +418,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onNext(localTasks)
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(true)
-        `when`(clock.timeInMillis()).thenReturn(321);
+        `when`(clock.timeInMillis()).thenReturn(321)
         Mockito.doAnswer {
             Observable.error<Task>(Throwable())
         }.`when`(remoteDataSource).saveTask(any())
@@ -445,7 +445,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onNext(localTasks)
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(true)
-        `when`(clock.timeInMillis()).thenReturn(321);
+        `when`(clock.timeInMillis()).thenReturn(321)
 
         val testObserver = subscribeToTasksEvent()
 
@@ -473,7 +473,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onNext(tasks)
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(tasks)).thenReturn(true)
-        `when`(clock.timeInMillis()).thenReturn(321);
+        `when`(clock.timeInMillis()).thenReturn(321)
 
         val testObserver = subscribeToTasksEvent()
 
@@ -496,7 +496,7 @@ class PersistedTasksServiceTest {
         taskLocalDataSubject.onNext(localTasks)
         taskLocalDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(true)
-        `when`(clock.timeInMillis()).thenReturn(321);
+        `when`(clock.timeInMillis()).thenReturn(321)
         Mockito.doAnswer {
             Observable.error<Task>(Throwable())
         }.`when`(remoteDataSource).saveTask(any())
@@ -899,12 +899,12 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onNext(tasks)
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
-        service.getTasksEvent().subscribe(TestObserver<Event<Tasks>>())
-        `when`(remoteDataSource.clearCompletedTasks()).thenReturn(Observable.just(sampleRemoteSomeCompletedTasksDeleted()));
+        service.tasksEvent.subscribe(TestObserver<Event<Tasks>>())
+        `when`(remoteDataSource.clearCompletedTasks()).thenReturn(Observable.just(sampleRemoteSomeCompletedTasksDeleted()))
 
         val testObserver = subscribeToTasksEvent()
 
-        service.clearCompletedTasks().call();
+        service.clearCompletedTasks().call()
 
         testObserver.assertReceivedOnNext(listOf(
                 idleEventWith(asSyncedTasks(tasks)),
@@ -921,12 +921,12 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
 
-        service.getTasksEvent().subscribe(TestObserver<Event<Tasks>>())
-        `when`(remoteDataSource.clearCompletedTasks()).thenReturn(Observable.error(Throwable("Terrible things")));
+        service.tasksEvent.subscribe(TestObserver<Event<Tasks>>())
+        `when`(remoteDataSource.clearCompletedTasks()).thenReturn(Observable.error(Throwable("Terrible things")))
 
         val testObserver = subscribeToTasksEvent()
 
-        service.clearCompletedTasks().call();
+        service.clearCompletedTasks().call()
 
         testObserver.assertReceivedOnNext(listOf(
                 idleEventWith(asSyncedTasks(tasks)),
@@ -956,19 +956,19 @@ class PersistedTasksServiceTest {
 
     private fun subscribeToTasksEvent(): TestObserver<Event<Tasks>> {
         val testObserver = TestObserver<Event<Tasks>>()
-        service.getTasksEvent().subscribe(testObserver)
+        service.tasksEvent.subscribe(testObserver)
         return testObserver
     }
 
     private fun subscribeToActiveTasksEvent(): TestObserver<Event<Tasks>> {
         val testObserver = TestObserver<Event<Tasks>>()
-        service.getActiveTasksEvent().subscribe(testObserver)
+        service.activeTasksEvent.subscribe(testObserver)
         return testObserver
     }
 
     private fun subscribeToCompletedTasksEvent(): TestObserver<Event<Tasks>> {
         val testObserver = TestObserver<Event<Tasks>>()
-        service.getCompletedTasksEvent().subscribe(testObserver)
+        service.completedTasksEvent.subscribe(testObserver)
         return testObserver
     }
 
@@ -1041,7 +1041,7 @@ class PersistedTasksServiceTest {
         val tasksLocalDataReplay = taskLocalDataSubject.replay()
         tasksApiReplay.connect()
         tasksLocalDataReplay.connect()
-        `when`(remoteDataSource.getTasks()).thenReturn(tasksApiReplay)
-        `when`(localDataSource.getTasks()).thenReturn(tasksLocalDataReplay)
+        `when`(remoteDataSource.tasks).thenReturn(tasksApiReplay)
+        `when`(localDataSource.tasks).thenReturn(tasksLocalDataReplay)
     }
 }
