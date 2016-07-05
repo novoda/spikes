@@ -78,6 +78,11 @@ public class TasksServiceAsync implements TasksService {
         return asAsyncAction(tasksService.save(task));
     }
 
+    @Override
+    public void delete(Task task) {
+        tasksService.delete(task);
+    }
+
     private static Action0 asAsyncAction(final Action0 action0) {
         return new Action0() {
             @Override
