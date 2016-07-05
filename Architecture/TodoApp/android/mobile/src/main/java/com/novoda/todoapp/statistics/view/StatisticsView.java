@@ -29,15 +29,21 @@ public class StatisticsView extends LinearLayout implements StatisticsDisplayer 
         statisticsLabel = Views.findById(this, R.id.statistics_label);
         TodoAppBar todoAppBar = Views.findById(this, R.id.app_bar);
         Toolbar toolbar = todoAppBar.getToolbar();
-        toolbar.setTitle("Statistics");
+        toolbar.setTitle(R.string.statistics);
     }
 
     @Override
     public void display(Statistics statistics) {
         if (statistics.noTasks()) {
-            statisticsLabel.setText("No Tasks");
+            statisticsLabel.setText(R.string.you_have_no_tasks);
         } else {
-            statisticsLabel.setText("Active tasks: " + statistics.activeTasks() + "\nCompleted tasks: " + statistics.completedTasks());
+            statisticsLabel.setText(
+                    getContext().getString(
+                            R.string.active_completed_tasks_statistics,
+                            statistics.activeTasks(),
+                            statistics.completedTasks()
+                    )
+            );
         }
     }
 
