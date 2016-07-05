@@ -2,6 +2,8 @@ React Twitter
 ======
 
 This spike is about the use of *React Native* to create a small Twitter client.
+
+Read more about React with the accompanying [blog post, here](https://www.novoda.com/blog/is-it-the-end-of-native-development/).
 _____
 
 ##Project setup##
