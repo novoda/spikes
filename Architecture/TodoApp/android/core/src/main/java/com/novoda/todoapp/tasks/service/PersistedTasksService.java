@@ -301,6 +301,11 @@ public class PersistedTasksService implements TasksService {
         };
     }
 
+    @Override
+    public void delete(Task task) {
+
+    }
+
     private static Observable.Transformer<Task, SyncedData<Task>> startAheadThenConfirmOrMarkAsError(
             final Task updatedTask,
             final long actionTimestamp

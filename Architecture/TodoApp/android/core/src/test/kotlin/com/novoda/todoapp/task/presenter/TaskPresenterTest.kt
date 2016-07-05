@@ -19,7 +19,7 @@ import kotlin.test.assertTrue
 
 class TaskPresenterTest {
 
-    val TASK_ID = Id.from("TEST_ID")
+    val TASK_ID = Id.from("TEST_ID")!!
 
     var taskSubject: BehaviorSubject<SyncedData<Task>> = BehaviorSubject.create()
     var service: TasksService = Mockito.mock(TasksService::class.java)
@@ -127,6 +127,16 @@ class TaskPresenterTest {
         presenter.taskActionListener.onEditSelected(simpleTask)
 
         Mockito.verify(navigator).toEditTask(simpleTask)
+    }
+
+    @Test
+    fun given_ThePresenterIsPresenting_on_DeleteTaskSelected_it_ShouldDeleteTheTask() {
+        givenThePresenterIsPresenting()
+        val simpleTask = simpleTask()
+
+        presenter.taskActionListener.onDeleteSelected(simpleTask)
+
+        Mockito.verify(service).delete(simpleTask)
     }
 
     private fun givenThePresenterIsPresenting() {
