@@ -1,6 +1,10 @@
 Spikes
 ======
 
+This is where we explore new ideas, hack around bug fixes and spark new code babies.
+
+_____
+
 
 When something matures and you want to move it out of here:
 
@@ -10,7 +14,9 @@ _____
 
 If something isn't big enough to deserve it's own repo we should move it to:
 
-https://github.com/novoda/android
+https://github.com/novoda/android-demos
+or
+https://github.com/novoda/ios-demos
 
 License
 -------
