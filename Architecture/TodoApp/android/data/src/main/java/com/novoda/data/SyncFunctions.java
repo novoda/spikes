@@ -9,7 +9,7 @@ public final class SyncFunctions {
         throw new IllegalStateException("NonInstantiableClassException");
     }
 
-    public static <T,V> Observable.Transformer<T, V> asOrchestratedAction(final DataOrchestrator<T, V> dataOrchestrator) {
+    public static <T, V> Observable.Transformer<T, V> asOrchestratedAction(final DataOrchestrator<T, V> dataOrchestrator) {
         return new Observable.Transformer<T, V>() {
             @Override
             public Observable<V> call(Observable<T> observable) {
@@ -20,6 +20,7 @@ public final class SyncFunctions {
                                 return dataOrchestrator.onConfirmed(value);
                             }
                         })
+                        .defaultIfEmpty(dataOrchestrator.onConfirmedWithoutData())
                         .onErrorReturn(new Func1<Throwable, V>() {
                             @Override
                             public V call(Throwable throwable) {
@@ -30,5 +31,4 @@ public final class SyncFunctions {
             }
         };
     }
-
 }

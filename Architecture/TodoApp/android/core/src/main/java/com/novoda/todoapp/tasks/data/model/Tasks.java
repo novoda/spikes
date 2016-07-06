@@ -121,8 +121,8 @@ public abstract class Tasks {
     public String toString() {
         String result = "";
         for (Id id : internalMap().keySet()) {
-            result = result + id + ", ";
+            result = result + ", " + "{" + id + "; " + internalMap().get(id).syncState() + "}";
         }
-        return result;
+        return result.substring(2);
     }
 }
