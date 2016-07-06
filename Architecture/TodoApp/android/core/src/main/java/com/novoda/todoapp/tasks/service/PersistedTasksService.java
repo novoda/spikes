@@ -309,17 +309,14 @@ public class PersistedTasksService implements TasksService {
     @Override
     public void delete(final Task task) {
 
-        final Event<Tasks> currentState = taskRelay.getValue();
-        final Tasks currentStateWithTaskMarkedDeleted = markTaskAsDeletedLocally(currentState, task);
-        final Tasks currentStateWithoutDeletedTask = currentState.data().or(Tasks.empty()).withoutTask(task);
-
         final long deleteActionTimestamp = clock.timeInMillis();
 
         remoteDataSource.deleteTask(task.id())
                 .compose(asOrchestratedAction(new DataOrchestrator<Void, Event<Tasks>>() {
                     @Override
                     public Event<Tasks> startWith() {
-                        return currentState.asLoadingWithData(currentStateWithTaskMarkedDeleted);
+                        Event<Tasks> currentState = taskRelay.getValue();
+                        return currentState.asLoadingWithData(markTaskAsDeletedLocally(currentState, task));
                     }
 
                     @Override
@@ -329,11 +326,13 @@ public class PersistedTasksService implements TasksService {
 
                     @Override
                     public Event<Tasks> onConfirmedWithoutData() {
-                        return currentState.updateData(currentStateWithoutDeletedTask).asIdle();
+                        Event<Tasks> currentState = taskRelay.getValue();
+                        return currentState.updateData(currentState.data().or(Tasks.empty()).withoutTask(task)).asIdle();
                     }
 
                     @Override
                     public Event<Tasks> onError() {
+                        Event<Tasks> currentState = taskRelay.getValue();
                         Tasks markErroredTask = mapFunctionToTasks(currentState.data().or(Tasks.empty()), new Function<SyncedData<Task>, SyncedData<Task>>() {
                             @Override
                             public SyncedData<Task> apply(SyncedData<Task> input) {
