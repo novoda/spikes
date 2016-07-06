@@ -7,7 +7,8 @@ The code is based on https://github.com/Orange-OpenSource/simiasque and http://w
 
 ### Installing
 
-Either download the APK from Github // TODO: Add link
+Either download the APK from Github: https://github.com/novoda/spikes/raw/master/MonkeyTrap/apk/app-debug.apk
+and install it `adb install app-debug.apk`
 
 Or from the terminal:
 
