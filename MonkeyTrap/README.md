@@ -1,6 +1,6 @@
 # Monkey Trap
 
-A way to prevent the Android UI/Application Exerciser Monkey from accessing the System Notifications tray. This makes sure the Monkey doesn't leave a device without Internet after it finishes.
+A way to prevent the Android UI/Application Exerciser Monkey from accessing the System Notifications tray. This makes sure the Monkey doesn't leave a device without network connectivity after it finishes.
 
 The code is based on https://github.com/Orange-OpenSource/simiasque and http://www.piwai.info/chatheads-basics/
 
