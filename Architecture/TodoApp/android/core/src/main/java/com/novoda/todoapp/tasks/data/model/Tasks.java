@@ -54,8 +54,12 @@ public abstract class Tasks {
     }
 
     public boolean isMostRecentAction(SyncedData<Task> syncedData) {
-        SyncedData<Task> currentSyncData = internalMap().get(syncedData.data().id());
-        return currentSyncData == null || syncedData.lastSyncAction() >= currentSyncData.lastSyncAction();
+        return isMostRecentAction(syncedData.data().id(), syncedData.lastSyncAction());
+    }
+
+    public boolean isMostRecentAction(Id id, long lastSyncAction) {
+        SyncedData<Task> currentSyncData = internalMap().get(id);
+        return currentSyncData == null || lastSyncAction >= currentSyncData.lastSyncAction();
     }
 
     public Tasks save(SyncedData<Task> taskSyncedData) {

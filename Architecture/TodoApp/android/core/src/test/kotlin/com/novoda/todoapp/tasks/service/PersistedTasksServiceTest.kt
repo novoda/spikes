@@ -962,7 +962,6 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
         service.tasksEvent.subscribe(TestObserver<Event<Tasks>>())
-        `when`(remoteDataSource.clearCompletedTasks()).thenReturn(Observable.just(remoteTasksWithCompletedTasksRemoved()))
 
         val testObserver = subscribeToTasksEvent()
 
@@ -1004,7 +1003,6 @@ class PersistedTasksServiceTest {
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
         service.tasksEvent.subscribe(TestObserver<Event<Tasks>>())
-        `when`(remoteDataSource.clearCompletedTasks()).thenReturn(Observable.just(remoteTasksWithCompletedTasksRemoved()))
 
         val testObserver = subscribeToTasksEvent()
 
@@ -1014,6 +1012,32 @@ class PersistedTasksServiceTest {
                 idleEventWith(asSyncedTasks(taskList)), // default ignore this
                 loadingEventWith(loadingTasks),
                 errorEventWith(expectedTasksWithError, SyncError())
+        ))
+    }
+
+    @Test
+    fun given_WeHaveAnOutdatedResponseFromRemote_on_DeleteTask_it_ShouldNotDeleteTheTask() {
+        `when`(remoteDataSource.deleteTask(any())).thenReturn(Observable.empty())
+
+        val localTasks = Tasks.from(ImmutableList.copyOf(listOf<SyncedData<Task>>(
+                SyncedData.from(Task.builder().id(Id.from("24")).title("Bar").isCompleted(true).build(), SyncState.AHEAD, TEST_TIME + 1),
+                SyncedData.from(Task.builder().id(Id.from("42")).title("Foo").build(), SyncState.IN_SYNC, TEST_TIME),
+                SyncedData.from(Task.builder().id(Id.from("12")).title("Whizz").build(), SyncState.IN_SYNC, TEST_TIME),
+                SyncedData.from(Task.builder().id(Id.from("424")).title("New").isCompleted(true).build(), SyncState.IN_SYNC, TEST_TIME)
+        )))
+
+        taskLocalDataSubject.onNext(localTasks)
+        taskLocalDataSubject.onCompleted()
+        taskRemoteDataSubject.onCompleted()
+
+        service.tasksEvent.subscribe(TestObserver<Event<Tasks>>())
+
+        val testObserver = subscribeToTasksEvent()
+
+        service.delete(localTasks.all().get(0).data())
+
+        testObserver.assertReceivedOnNext(listOf(
+                idleEventWith(localTasks)
         ))
     }
 

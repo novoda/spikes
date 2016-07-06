@@ -313,6 +313,8 @@ public class PersistedTasksService implements TasksService {
         final Tasks currentStateWithTaskMarkedDeleted = markTaskAsDeletedLocally(currentState, task);
         final Tasks currentStateWithoutDeletedTask = currentState.data().or(Tasks.empty()).withoutTask(task);
 
+        final long deleteActionTimestamp = clock.timeInMillis();
+
         remoteDataSource.deleteTask(task.id())
                 .compose(asOrchestratedAction(new DataOrchestrator<Void, Event<Tasks>>() {
                     @Override
@@ -345,7 +347,22 @@ public class PersistedTasksService implements TasksService {
                         return currentState.updateData(markErroredTask).asError(new SyncError());
                     }
                 }))
-                .flatMap(persistTasksEventLocally())
+                .flatMap(ifThenMap(new IfThenFlatMap<Event<Tasks>, Event<Tasks>>() {
+                    @Override
+                    public boolean ifMatches(Event<Tasks> value) {
+                        return taskRelay.getValue().data().or(Tasks.empty()).isMostRecentAction(task.id(), deleteActionTimestamp);
+                    }
+
+                    @Override
+                    public Observable<Event<Tasks>> thenMap(Event<Tasks> value) {
+                        return persistTasksEventLocally().call(value);
+                    }
+
+                    @Override
+                    public Observable<Event<Tasks>> elseMap(Event<Tasks> value) {
+                        return Observable.empty();
+                    }
+                }))
                 .subscribe(taskRelay);
     }
 
