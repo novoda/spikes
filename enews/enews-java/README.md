@@ -9,6 +9,5 @@ So far we have a `slack-scraper` module
 
 TODO
 
-Module to take this json and generate a html newsletter
 Module to post this newsletter to slack?
 Module to post this newsletter to email?
