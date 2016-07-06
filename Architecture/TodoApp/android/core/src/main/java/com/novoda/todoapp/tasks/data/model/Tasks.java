@@ -86,6 +86,15 @@ public abstract class Tasks {
         return Tasks.from(internalMap().filter(isCompleted()));
     }
 
+    public Tasks withoutTask(final Task task) {
+        return Tasks.from(internalMap().filter(new Predicate<Map.Entry<Id, SyncedData<Task>>>() {
+            @Override
+            public boolean apply(Map.Entry<Id, SyncedData<Task>> input) {
+                return !input.getKey().equals(task.id());
+            }
+        }));
+    }
+
     private static Predicate<Map.Entry<Id, SyncedData<Task>>> isCompleted() {
         return new Predicate<Map.Entry<Id, SyncedData<Task>>>() {
             @Override
@@ -106,5 +115,14 @@ public abstract class Tasks {
                 return input.getValue().syncState() == SyncState.SYNC_ERROR;
             }
         };
+    }
+
+    @Override
+    public String toString() {
+        String result = "";
+        for (Id id : internalMap().keySet()) {
+            result = result + id + ", ";
+        }
+        return result;
     }
 }

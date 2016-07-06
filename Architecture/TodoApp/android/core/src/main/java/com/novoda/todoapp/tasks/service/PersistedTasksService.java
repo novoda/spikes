@@ -5,9 +5,9 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.jakewharton.rxrelay.BehaviorRelay;
+import com.novoda.data.DataOrchestrator;
 import com.novoda.data.SyncState;
 import com.novoda.data.SyncedData;
-import com.novoda.data.DataOrchestrator;
 import com.novoda.event.Event;
 import com.novoda.event.EventFunctions;
 import com.novoda.todoapp.rx.IfThenFlatMap;
@@ -22,6 +22,7 @@ import com.novoda.todoapp.tasks.data.source.RemoteTasksDataSource;
 import java.util.List;
 
 import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Action0;
 import rx.functions.Func0;
 import rx.functions.Func1;
@@ -133,7 +134,7 @@ public class PersistedTasksService implements TasksService {
     private Observable<Tasks> fetchFromRemote() {
         return remoteDataSource.getTasks()
                 .map(asSyncedTasksNow())
-                .flatMap(persistTasks());
+                .flatMap(persistTasksLocally());
     }
 
     private Func1<List<Task>, Tasks> asSyncedTasksNow() {
@@ -145,7 +146,7 @@ public class PersistedTasksService implements TasksService {
         };
     }
 
-    private Func1<Tasks, Observable<Tasks>> persistTasks() {
+    private Func1<Tasks, Observable<Tasks>> persistTasksLocally() {
         return new Func1<Tasks, Observable<Tasks>>() {
             @Override
             public Observable<Tasks> call(Tasks tasks) {
@@ -188,27 +189,27 @@ public class PersistedTasksService implements TasksService {
             public void call() {
                 long actionTimestamp = clock.timeInMillis();
                 Event<Tasks> tasksEvent = taskRelay.getValue();
-                Tasks tasksFromEvent = tasksEvent.data().or(Tasks.empty());
-                Tasks uncompletedTasks = mapFunctionToTasks(tasksFromEvent, markCompletedAsDeleted());
+                Tasks allLocalTasks = tasksEvent.data().or(Tasks.empty());
+                Tasks uncompletedLocalTasks = mapFunctionToTasks(allLocalTasks, markCompletedAsDeleted());
 
                 remoteDataSource.clearCompletedTasks()
-                        .compose(clearLocallyThenConfirmOrRevert(tasksFromEvent, uncompletedTasks, actionTimestamp))
-                        .flatMap(persistTasks())
-                        .compose(asValidatedEvent(tasksEvent.updateData(uncompletedTasks)))
+                        .compose(confirmLocalDeletionsOrRevert(allLocalTasks, uncompletedLocalTasks, actionTimestamp))
+                        .flatMap(persistTasksLocally())
+                        .compose(asValidatedEvent(tasksEvent.updateData(uncompletedLocalTasks)))
                         .subscribe(taskRelay);
             }
         };
     }
 
-    private static Observable.Transformer<List<Task>, Tasks> clearLocallyThenConfirmOrRevert(
-            final Tasks tasksFromEvent,
-            final Tasks uncompletedTasks,
+    private static Observable.Transformer<List<Task>, Tasks> confirmLocalDeletionsOrRevert(
+            final Tasks allLocalTasks,
+            final Tasks uncompletedLocalTasks,
             final long actionTimestamp
     ) {
         return asOrchestratedAction(new DataOrchestrator<List<Task>, Tasks>() {
             @Override
             public Tasks startWith() {
-                return uncompletedTasks;
+                return uncompletedLocalTasks;
             }
 
             @Override
@@ -218,7 +219,7 @@ public class PersistedTasksService implements TasksService {
 
             @Override
             public Tasks onError() {
-                return mapFunctionToTasks(tasksFromEvent, markAsSyncError());
+                return mapFunctionToTasks(allLocalTasks, markAsSyncError());
             }
         });
     }
@@ -302,8 +303,56 @@ public class PersistedTasksService implements TasksService {
     }
 
     @Override
-    public void delete(Task task) {
+    public void delete(final Task task) {
 
+        markTaskAsDeletedLocally(taskRelay.getValue(), task);
+
+        remoteDataSource.deleteTask(task.id())
+                .subscribe(new Subscriber<Void>() {
+                    @Override
+                    public void onCompleted() {
+                        Event<Tasks> currentState = taskRelay.getValue();
+                        Tasks tasks = tasksWithout(currentState.data().or(Tasks.empty()), task);
+                        localDataSource.saveTasks(tasks);
+                        taskRelay.call(currentState.updateData(tasks).asIdle());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Event<Tasks> currentState = taskRelay.getValue();
+                        Tasks tasks = mapFunctionToTasks(currentState.data().or(Tasks.empty()), new Function<SyncedData<Task>, SyncedData<Task>>() {
+                            @Override
+                            public SyncedData<Task> apply(SyncedData<Task> input) {
+                                if (input.data().id().equals(task.id())) {
+                                    return SyncedData.from(task, SyncState.SYNC_ERROR, clock.timeInMillis());
+                                } else {
+                                    return input;
+                                }
+                            }
+                        });
+                        localDataSource.saveTasks(tasks);
+                        taskRelay.call(currentState.updateData(tasks).asError(new SyncError()));
+                    }
+
+                    @Override
+                    public void onNext(Void aVoid) {
+                        // void type, should never be called
+                    }
+                });
+    }
+
+    private Tasks tasksWithout(Tasks tasks, Task task) {
+        return tasks.withoutTask(task);
+    }
+
+    private void markTaskAsDeletedLocally(Event<Tasks> currentState, Task task) {
+        if (currentState.data().isPresent()) {
+            Tasks updatedTasks = currentState.data().get().save(SyncedData.from(task, SyncState.DELETED_LOCALLY, clock.timeInMillis()));
+            localDataSource.saveTasks(updatedTasks).subscribe();
+            taskRelay.call(currentState.asLoadingWithData(updatedTasks));
+        } else {
+            throw new RuntimeException("Trying to delete a task from empty data");
+        }
     }
 
     private static Observable.Transformer<Task, SyncedData<Task>> startAheadThenConfirmOrMarkAsError(
