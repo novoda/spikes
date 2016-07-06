@@ -1,5 +1,8 @@
 package com.novoda.enews;
 
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
@@ -7,7 +10,7 @@ public class Scraper {
 
     private final SlackHistoryFetcher slackHistoryFetcher;
 
-    public Scraper(SlackHistoryFetcher slackHistoryFetcher) {
+    Scraper(SlackHistoryFetcher slackHistoryFetcher) {
         this.slackHistoryFetcher = slackHistoryFetcher;
     }
 
@@ -26,5 +29,19 @@ public class Scraper {
                             messageText.contains("http");
 
                 });
+    }
+
+    public static class Factory {
+
+        public Scraper newInstance(String slackToken) {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("https://slack.com/api/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            SlackWebService slackWebService = retrofit.create(SlackWebService.class);
+            SlackHistoryFetcher slackHistoryFetcher = SlackHistoryFetcher.from(slackWebService, slackToken);
+            return new Scraper(slackHistoryFetcher);
+        }
+
     }
 }
