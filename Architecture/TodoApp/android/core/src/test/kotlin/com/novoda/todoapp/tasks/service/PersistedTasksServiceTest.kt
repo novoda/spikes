@@ -973,8 +973,48 @@ class PersistedTasksServiceTest {
                 loadingEventWith(loadingTasks),
                 idleEventWith(asSyncedTasks(expectedTaskList))
         ))
+    }
 
+    @Test
+    fun given_WeHaveAnErrorFromRemote_on_DeleteTask_it_ShouldMarkDeletedTaskAsSyncError() {
+        `when`(remoteDataSource.deleteTask(any())).thenReturn(Observable.error(Throwable("oh no")))
 
+        val taskList = listOf(
+                Task.builder().id(Id.from("24")).title("Bar").isCompleted(true).build(),
+                Task.builder().id(Id.from("42")).title("Foo").build(),
+                Task.builder().id(Id.from("12")).title("Whizz").build(),
+                Task.builder().id(Id.from("424")).title("New").isCompleted(true).build()
+        )
+
+        val loadingTasks = Tasks.from(ImmutableList.copyOf(listOf<SyncedData<Task>>(
+                SyncedData.from(Task.builder().id(Id.from("24")).title("Bar").isCompleted(true).build(), SyncState.DELETED_LOCALLY, TEST_TIME),
+                SyncedData.from(Task.builder().id(Id.from("42")).title("Foo").build(), SyncState.IN_SYNC, TEST_TIME),
+                SyncedData.from(Task.builder().id(Id.from("12")).title("Whizz").build(), SyncState.IN_SYNC, TEST_TIME),
+                SyncedData.from(Task.builder().id(Id.from("424")).title("New").isCompleted(true).build(), SyncState.IN_SYNC, TEST_TIME)
+        )))
+
+        val expectedTasksWithError = Tasks.from(ImmutableList.copyOf(listOf<SyncedData<Task>>(
+                SyncedData.from(Task.builder().id(Id.from("24")).title("Bar").isCompleted(true).build(), SyncState.SYNC_ERROR, TEST_TIME),
+                SyncedData.from(Task.builder().id(Id.from("42")).title("Foo").build(), SyncState.IN_SYNC, TEST_TIME),
+                SyncedData.from(Task.builder().id(Id.from("12")).title("Whizz").build(), SyncState.IN_SYNC, TEST_TIME),
+                SyncedData.from(Task.builder().id(Id.from("424")).title("New").isCompleted(true).build(), SyncState.IN_SYNC, TEST_TIME)
+        )))
+
+        taskRemoteDataSubject.onNext(taskList)
+        taskRemoteDataSubject.onCompleted()
+        taskLocalDataSubject.onCompleted()
+        service.tasksEvent.subscribe(TestObserver<Event<Tasks>>())
+        `when`(remoteDataSource.clearCompletedTasks()).thenReturn(Observable.just(remoteTasksWithCompletedTasksRemoved()))
+
+        val testObserver = subscribeToTasksEvent()
+
+        service.delete(taskList.get(0))
+
+        testObserver.assertReceivedOnNext(listOf(
+                idleEventWith(asSyncedTasks(taskList)), // default ignore this
+                loadingEventWith(loadingTasks),
+                errorEventWith(expectedTasksWithError, SyncError())
+        ))
     }
 
     private fun idleEventWith(tasks: Tasks) = emptyIdleEvent().updateData(tasks)

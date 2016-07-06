@@ -312,7 +312,7 @@ public class PersistedTasksService implements TasksService {
                     @Override
                     public void onCompleted() {
                         Event<Tasks> currentState = taskRelay.getValue();
-                        Tasks tasks = tasksWithout(currentState.data().or(Tasks.empty()), task);
+                        Tasks tasks = currentState.data().or(Tasks.empty()).withoutTask(task);
                         localDataSource.saveTasks(tasks);
                         taskRelay.call(currentState.updateData(tasks).asIdle());
                     }
@@ -339,10 +339,6 @@ public class PersistedTasksService implements TasksService {
                         // void type, should never be called
                     }
                 });
-    }
-
-    private Tasks tasksWithout(Tasks tasks, Task task) {
-        return tasks.withoutTask(task);
     }
 
     private void markTaskAsDeletedLocally(Event<Tasks> currentState, Task task) {
