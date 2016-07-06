@@ -7,7 +7,7 @@ import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
-public class Main {
+public class MainHtml {
 
     /**
      * @param args https://api.slack.com/docs/oauth-test-tokens

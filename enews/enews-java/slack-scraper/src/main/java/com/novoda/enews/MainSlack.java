@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
-public class Runner {
+public class MainSlack {
 
     /**
      * @param args https://api.slack.com/docs/oauth-test-tokens
