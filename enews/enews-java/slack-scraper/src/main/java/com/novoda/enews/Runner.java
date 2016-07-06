@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public class Runner {
 
@@ -25,23 +25,11 @@ public class Runner {
                 .build();
         SlackWebService slackWebService = retrofit.create(SlackWebService.class);
         SlackHistoryFetcher slackHistoryFetcher = SlackHistoryFetcher.from(slackWebService, slackToken);
-
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = LocalDateTime.now().minusDays(7);
-        ChannelHistory channelHistory = slackHistoryFetcher.getChannelHistory(start, end);
+        Scraper scraper = new Scraper(slackHistoryFetcher);
 
-        System.out.println(channelHistory.getHistoryFrom() + " / " + channelHistory.getHistoryTo());
-        channelHistory
-                .getMessages()
-                .parallelStream()
-                .map(message -> new ChannelHistory.Message(message.toString().replace("#C0YNBKANM", "#eNews")))
-                .filter(message -> {
-                    String messageText = message.toString().toLowerCase();
-                    return messageText.contains("#enews")
-                            &&
-                            messageText.contains("http");
-
-                })
+        scraper.scrape(start, end)
                 .forEach(System.out::println);
     }
 
