@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">MonkeyTrap</string>
+    <string name="turn_on_off_the_overlay">Turn on/off the overlay</string>
+</resources>
