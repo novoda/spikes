@@ -10,7 +10,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true">
 
-
         <activity android:name="com.novoda.monkeytrap.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
