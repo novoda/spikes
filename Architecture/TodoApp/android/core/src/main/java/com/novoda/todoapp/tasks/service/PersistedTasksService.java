@@ -202,13 +202,13 @@ public class PersistedTasksService implements TasksService {
 
     private static Observable.Transformer<List<Task>, Tasks> confirmLocalDeletionsOrRevert(
             final Tasks allLocalTasks,
-            final Tasks uncompletedLocalTasks,
+            final Tasks activeLocalTasks,
             final long actionTimestamp
     ) {
         return asOrchestratedAction(new DataOrchestrator<List<Task>, Tasks>() {
             @Override
             public Tasks startWith() {
-                return uncompletedLocalTasks;
+                return activeLocalTasks;
             }
 
             @Override
@@ -334,7 +334,7 @@ public class PersistedTasksService implements TasksService {
             public Event<Tasks> onConfirmedWithoutData() {
                 Event<Tasks> currentState = taskRelay.getValue();
                 Tasks currentTasks = currentState.data().or(Tasks.empty());
-                return currentState.updateData(currentTasks.withoutTask(task)).asIdle();
+                return currentState.updateData(currentTasks.remove(task)).asIdle();
             }
 
             @Override
@@ -353,7 +353,7 @@ public class PersistedTasksService implements TasksService {
             @Override
             public boolean ifMatches(Event<Tasks> value) {
                 Tasks currentTasks = taskRelay.getValue().data().or(Tasks.empty());
-                return currentTasks.hasNoTaskMoreRecentThan(task.id(), deleteActionTimestamp);
+                return currentTasks.hasNoActionMoreRecentThan(task.id(), deleteActionTimestamp);
             }
 
             @Override
@@ -439,7 +439,7 @@ public class PersistedTasksService implements TasksService {
                     @Override
                     public boolean ifMatches(SyncedData<Task> value) {
                         Tasks tasks = taskRelay.getValue().data().or(Tasks.empty());
-                        return tasks.hasNoTaskMoreRecentThan(value);
+                        return tasks.hasNoActionMoreRecentThan(value);
                     }
 
                     @Override
