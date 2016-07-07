@@ -1,4 +1,4 @@
-package com.novoda.todoapp.task.presenter;
+package com.novoda.todoapp.task.presenter
 
 import com.novoda.data.SyncState
 import com.novoda.data.SyncedData
