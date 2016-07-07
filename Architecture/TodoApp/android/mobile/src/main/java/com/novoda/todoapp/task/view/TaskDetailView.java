@@ -15,7 +15,7 @@ import com.novoda.todoapp.R;
 import com.novoda.todoapp.task.data.model.Task;
 import com.novoda.todoapp.task.displayer.TaskActionListener;
 import com.novoda.todoapp.task.displayer.TaskDisplayer;
-import com.novoda.todoapp.views.TodoAppBarWithDeleteButton;
+import com.novoda.todoapp.views.TodoAppBar;
 
 public class TaskDetailView extends CoordinatorLayout implements TaskDisplayer {
 
@@ -42,7 +42,7 @@ public class TaskDetailView extends CoordinatorLayout implements TaskDisplayer {
 
         deleteTaskButton = Views.findById(this, R.id.delete_task_button);
 
-        TodoAppBarWithDeleteButton todoAppBar = Views.findById(this, R.id.app_bar_with_delete_button);
+        TodoAppBar todoAppBar = Views.findById(this, R.id.app_bar_with_delete_button);
         Toolbar toolbar = todoAppBar.getToolbar();
         toolbar.setTitle(R.string.to_do_novoda);
     }
