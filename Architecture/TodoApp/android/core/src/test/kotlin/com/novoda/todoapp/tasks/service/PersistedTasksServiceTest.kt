@@ -192,6 +192,7 @@ class PersistedTasksServiceTest {
         val tasksRefreshed = sampleRefreshedTasks()
         putTaskListIntoRemoteDataSource(tasks)
         taskLocalDataSubject.onCompleted()
+
         val testObserver = subscribeToTasksEvent()
         setUpService()
         putTaskListIntoRemoteDataSource(tasksRefreshed)
@@ -215,6 +216,7 @@ class PersistedTasksServiceTest {
         val tasks = sampleRemoteTasks()
         putTaskListIntoRemoteDataSource(tasks)
         taskLocalDataSubject.onCompleted()
+
         val testObserver = subscribeToTasksEvent()
         setUpService()
         putTaskListIntoRemoteDataSource(tasks)
@@ -238,6 +240,7 @@ class PersistedTasksServiceTest {
         val tasksRefreshed = sampleRefreshedTasks()
         putTaskListIntoRemoteDataSource(tasks)
         taskLocalDataSubject.onCompleted()
+
         subscribeToTasksEvent()
         setUpService()
         putTaskListIntoRemoteDataSource(tasksRefreshed)
@@ -253,6 +256,7 @@ class PersistedTasksServiceTest {
         val tasksRefreshed = sampleRefreshedTasks()
         putTaskListIntoRemoteDataSource(tasks)
         taskLocalDataSubject.onCompleted()
+
         val testObserver = subscribeToTasksEvent()
         setUpService()
         putTaskListIntoRemoteDataSource(tasksRefreshed)
@@ -273,8 +277,8 @@ class PersistedTasksServiceTest {
     fun given_RemoteIsAcceptingUpdates_on_CompleteTask_it_ShouldSendAheadThenInSyncInfo() {
         val localTasks = sampleLocalTasks()
         val task = localTasks.all().get(0).data()
-        taskRemoteDataSubject.onCompleted()
         putTasksIntoLocalDataSource(localTasks)
+        taskRemoteDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(true)
         `when`(clock.timeInMillis()).thenReturn(321)
         val testObserver = subscribeToTasksEvent()
@@ -298,8 +302,8 @@ class PersistedTasksServiceTest {
         val syncedTask = SyncedData.from(taskOld.data(), taskOld.syncState(), 456)
         val updatedTasks = tasksOld.save(syncedTask)
         val updatedTask = syncedTask.data()
-        taskRemoteDataSubject.onCompleted()
         putTasksIntoLocalDataSource(updatedTasks)
+        taskRemoteDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(updatedTasks)).thenReturn(true)
         `when`(clock.timeInMillis()).thenReturn(321)
 
@@ -319,8 +323,8 @@ class PersistedTasksServiceTest {
     fun given_RemoteIsFailingUpdates_on_CompleteTask_it_ShouldSendAheadThenThenMarkAsError() {
         val localTasks = sampleLocalTasks()
         val task = localTasks.all().get(0).data()
-        taskRemoteDataSubject.onCompleted()
         putTasksIntoLocalDataSource(localTasks)
+        taskRemoteDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(true)
         `when`(clock.timeInMillis()).thenReturn(321)
         Mockito.doAnswer {
