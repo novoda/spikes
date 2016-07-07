@@ -52,7 +52,8 @@ public class OverlayService extends Service {
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
         overlayView = new OverlayView(this);
-        overlayView.setBackgroundColor(Color.parseColor("#2FA1D6"));
+        overlayView.setBackgroundColor(Color.parseColor("#30A4D9"));
+        overlayView.setImageResource(R.drawable.novoda);
         windowManager.addView(overlayView, OverlayView.createLayoutParams(getResources()));
     }
 
