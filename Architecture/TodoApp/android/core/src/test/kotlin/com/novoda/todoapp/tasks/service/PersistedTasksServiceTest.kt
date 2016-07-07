@@ -845,7 +845,7 @@ class PersistedTasksServiceTest {
 
     @Test
     fun given_WeHaveTasksInTheService_on_ClearCompletedTasks_it_ShouldReturnLocallyClearedTaskFirstThenConfirm() {
-        val tasks = sampleRemoteSomeCompletedTasks()
+        val tasks = taskListWithSomeCompleted()
         putTaskListIntoRemoteDataSource(tasks)
         taskLocalDataSubject.onCompleted()
         service.tasksEvent.subscribe(TestObserver<Event<Tasks>>())
@@ -857,7 +857,7 @@ class PersistedTasksServiceTest {
 
         testObserver.assertReceivedOnNext(listOf(
                 idleEventWith(asSyncedTasks(tasks)), // ideally, we would ignore this
-                loadingEventWith(localTasksWithCompletedTasksMarkedDeleted()),
+                loadingEventWith(tasksWithCompletedMarkedDeleted()),
                 loadingEventWith(asSyncedTasks(remoteTasksWithCompletedTasksRemoved())),
                 idleEventWith(asSyncedTasks(remoteTasksWithCompletedTasksRemoved()))
         ))
@@ -865,7 +865,7 @@ class PersistedTasksServiceTest {
 
     @Test
     fun given_RemoteSourceFailsToClearCompletedTasks_on_ClearCompletedTasks_it_ShouldReturnLocallyClearedTaskFirstThenSyncError() {
-        val tasks = sampleRemoteSomeCompletedTasks()
+        val tasks = taskListWithSomeCompleted()
         putTaskListIntoRemoteDataSource(tasks)
         taskLocalDataSubject.onCompleted()
         service.tasksEvent.subscribe(TestObserver<Event<Tasks>>())
@@ -877,8 +877,8 @@ class PersistedTasksServiceTest {
 
         testObserver.assertReceivedOnNext(listOf(
                 idleEventWith(asSyncedTasks(tasks)),
-                loadingEventWith(localTasksWithCompletedTasksMarkedDeleted()),
-                idleEventWith(sampleSomeCompletedTasksDeletedFailed()).asError(SyncError())
+                loadingEventWith(tasksWithCompletedMarkedDeleted()),
+                idleEventWith(tasksWithFirstAndLastAsError()).asError(SyncError())
         ))
     }
 
@@ -886,7 +886,7 @@ class PersistedTasksServiceTest {
     fun given_WeHaveTasksInTheService_on_DeleteTask_it_ShouldReturnIdleEventWithAllTasksExceptThatOne() {
         `when`(remoteDataSource.deleteTask(any())).thenReturn(Observable.empty())
 
-        val initialRemoteTaskList = sampleRemoteSomeCompletedTasks()
+        val initialRemoteTaskList = taskListWithSomeCompleted()
 
         putTaskListIntoRemoteDataSource(initialRemoteTaskList)
         taskLocalDataSubject.onCompleted()
@@ -916,7 +916,7 @@ class PersistedTasksServiceTest {
     fun given_WeHaveAnErrorFromRemote_on_DeleteTask_it_ShouldMarkDeletedTaskAsSyncError() {
         `when`(remoteDataSource.deleteTask(any())).thenReturn(Observable.error(Throwable("oh no")))
 
-        val initialRemoteTaskList = sampleRemoteSomeCompletedTasks()
+        val initialRemoteTaskList = taskListWithSomeCompleted()
 
         putTaskListIntoRemoteDataSource(initialRemoteTaskList)
         taskLocalDataSubject.onCompleted()
@@ -1014,21 +1014,21 @@ class PersistedTasksServiceTest {
             Task.builder().id(Id.from("24")).title("Bar").build()
     )
 
-    private fun sampleRemoteSomeCompletedTasks() = listOf(
+    private fun taskListWithSomeCompleted() = listOf(
             Task.builder().id(Id.from("24")).title("Bar").isCompleted(true).build(),
             Task.builder().id(Id.from("42")).title("Foo").build(),
             Task.builder().id(Id.from("12")).title("Whizz").build(),
             Task.builder().id(Id.from("424")).title("New").isCompleted(true).build()
     )
 
-    private fun localTasksWithCompletedTasksMarkedDeleted() = Tasks.from(ImmutableList.copyOf(listOf(
+    private fun tasksWithCompletedMarkedDeleted() = Tasks.from(ImmutableList.copyOf(listOf(
             SyncedData.from(Task.builder().id(Id.from("24")).title("Bar").isCompleted(true).build(), SyncState.DELETED_LOCALLY, TEST_TIME),
             SyncedData.from(Task.builder().id(Id.from("42")).title("Foo").build(), SyncState.AHEAD, TEST_TIME),
             SyncedData.from(Task.builder().id(Id.from("12")).title("Whizz").build(), SyncState.AHEAD, TEST_TIME),
             SyncedData.from(Task.builder().id(Id.from("424")).title("New").isCompleted(true).build(), SyncState.DELETED_LOCALLY, TEST_TIME)
     )))
 
-    private fun sampleSomeCompletedTasksDeletedFailed() = Tasks.from(ImmutableList.copyOf(listOf(
+    private fun tasksWithFirstAndLastAsError() = Tasks.from(ImmutableList.copyOf(listOf(
             SyncedData.from(Task.builder().id(Id.from("24")).title("Bar").isCompleted(true).build(), SyncState.SYNC_ERROR, TEST_TIME),
             SyncedData.from(Task.builder().id(Id.from("42")).title("Foo").build(), SyncState.SYNC_ERROR, TEST_TIME),
             SyncedData.from(Task.builder().id(Id.from("12")).title("Whizz").build(), SyncState.SYNC_ERROR, TEST_TIME),
