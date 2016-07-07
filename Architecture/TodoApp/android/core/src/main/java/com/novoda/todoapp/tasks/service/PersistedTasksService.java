@@ -333,23 +333,16 @@ public class PersistedTasksService implements TasksService {
                     @Override
                     public Event<Tasks> onError() {
                         Event<Tasks> currentState = taskRelay.getValue();
-                        Tasks markErroredTask = mapFunctionToTasks(currentState.data().or(Tasks.empty()), new Function<SyncedData<Task>, SyncedData<Task>>() {
-                            @Override
-                            public SyncedData<Task> apply(SyncedData<Task> input) {
-                                if (input.data().id().equals(task.id())) {
-                                    return SyncedData.from(task, SyncState.SYNC_ERROR, clock.timeInMillis());
-                                } else {
-                                    return input;
-                                }
-                            }
-                        });
-                        return currentState.updateData(markErroredTask).asError(new SyncError());
+                        Tasks currentTasks = currentState.data().or(Tasks.empty());
+                        Tasks markDeletedTaskAsError = mapFunctionToTasks(currentTasks, markTaskAsSyncErrorAt(task, clock.timeInMillis()));
+                        return currentState.updateData(markDeletedTaskAsError).asError(new SyncError());
                     }
                 }))
                 .flatMap(ifThenMap(new IfThenFlatMap<Event<Tasks>, Event<Tasks>>() {
                     @Override
                     public boolean ifMatches(Event<Tasks> value) {
-                        return taskRelay.getValue().data().or(Tasks.empty()).isMostRecentAction(task.id(), deleteActionTimestamp);
+                        Tasks currentTasks = taskRelay.getValue().data().or(Tasks.empty());
+                        return currentTasks.hasNoTaskMoreRecentThan(task.id(), deleteActionTimestamp);
                     }
 
                     @Override
@@ -363,6 +356,19 @@ public class PersistedTasksService implements TasksService {
                     }
                 }))
                 .subscribe(taskRelay);
+    }
+
+    private Function<SyncedData<Task>, SyncedData<Task>> markTaskAsSyncErrorAt(final Task task, final long timeInMillis) {
+        return new Function<SyncedData<Task>, SyncedData<Task>>() {
+            @Override
+            public SyncedData<Task> apply(SyncedData<Task> input) {
+                if (input.data().id().equals(task.id())) {
+                    return SyncedData.from(task, SyncState.SYNC_ERROR, timeInMillis);
+                } else {
+                    return input;
+                }
+            }
+        };
     }
 
     private Func1<Event<Tasks>, Observable<Event<Tasks>>> persistTasksEventLocally() {
@@ -422,7 +428,7 @@ public class PersistedTasksService implements TasksService {
                     @Override
                     public boolean ifMatches(SyncedData<Task> value) {
                         Tasks tasks = taskRelay.getValue().data().or(Tasks.empty());
-                        return tasks.isMostRecentAction(value);
+                        return tasks.hasNoTaskMoreRecentThan(value);
                     }
 
                     @Override
