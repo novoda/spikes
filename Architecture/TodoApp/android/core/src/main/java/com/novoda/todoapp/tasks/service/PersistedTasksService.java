@@ -312,53 +312,63 @@ public class PersistedTasksService implements TasksService {
         final long deleteActionTimestamp = clock.timeInMillis();
 
         remoteDataSource.deleteTask(task.id())
-                .compose(asOrchestratedAction(new DataOrchestrator<Void, Event<Tasks>>() {
-                    @Override
-                    public Event<Tasks> startWith() {
-                        Event<Tasks> currentState = taskRelay.getValue();
-                        return currentState.asLoadingWithData(markTaskAsDeletedLocally(currentState, task));
-                    }
-
-                    @Override
-                    public Event<Tasks> onConfirmed(Void value) {
-                        return onError();
-                    }
-
-                    @Override
-                    public Event<Tasks> onConfirmedWithoutData() {
-                        Event<Tasks> currentState = taskRelay.getValue();
-                        return currentState.updateData(currentState.data().or(Tasks.empty()).withoutTask(task)).asIdle();
-                    }
-
-                    @Override
-                    public Event<Tasks> onError() {
-                        Event<Tasks> currentState = taskRelay.getValue();
-                        Tasks currentTasks = currentState.data().or(Tasks.empty());
-                        Tasks markDeletedTaskAsError = mapFunctionToTasks(currentTasks, markTaskAsSyncErrorAt(task, clock.timeInMillis()));
-                        return currentState.updateData(markDeletedTaskAsError).asError(new SyncError());
-                    }
-                }))
-                .flatMap(ifThenMap(new IfThenFlatMap<Event<Tasks>, Event<Tasks>>() {
-                    @Override
-                    public boolean ifMatches(Event<Tasks> value) {
-                        Tasks currentTasks = taskRelay.getValue().data().or(Tasks.empty());
-                        return currentTasks.hasNoTaskMoreRecentThan(task.id(), deleteActionTimestamp);
-                    }
-
-                    @Override
-                    public Observable<Event<Tasks>> thenMap(Event<Tasks> value) {
-                        return persistTasksEventLocally().call(value);
-                    }
-
-                    @Override
-                    public Observable<Event<Tasks>> elseMap(Event<Tasks> value) {
-                        return Observable.empty();
-                    }
-                }))
+                .compose(deleteLocallyThenConfirmOrMarkAsError(task))
+                .flatMap(persistIfDeleteActionIsMostRecent(task, deleteActionTimestamp))
                 .subscribe(taskRelay);
     }
 
-    private Function<SyncedData<Task>, SyncedData<Task>> markTaskAsSyncErrorAt(final Task task, final long timeInMillis) {
+    private Observable.Transformer<Void, Event<Tasks>> deleteLocallyThenConfirmOrMarkAsError(final Task task) {
+        return asOrchestratedAction(new DataOrchestrator<Void, Event<Tasks>>() {
+            @Override
+            public Event<Tasks> startWith() {
+                Event<Tasks> currentState = taskRelay.getValue();
+                return currentState.asLoadingWithData(markTaskAsDeletedLocallyAt(currentState, task, clock.timeInMillis()));
+            }
+
+            @Override
+            public Event<Tasks> onConfirmed(Void value) {
+                return onError();
+            }
+
+            @Override
+            public Event<Tasks> onConfirmedWithoutData() {
+                Event<Tasks> currentState = taskRelay.getValue();
+                Tasks currentTasks = currentState.data().or(Tasks.empty());
+                return currentState.updateData(currentTasks.withoutTask(task)).asIdle();
+            }
+
+            @Override
+            public Event<Tasks> onError() {
+                Event<Tasks> currentState = taskRelay.getValue();
+                Tasks currentTasks = currentState.data().or(Tasks.empty());
+                Tasks markDeletedTaskAsError = mapFunctionToTasks(currentTasks, markTaskAsSyncErrorAt(task, clock.timeInMillis()));
+                return currentState.updateData(markDeletedTaskAsError).asError(new SyncError());
+            }
+        });
+    }
+
+    private Func1<Event<Tasks>, Observable<Event<Tasks>>> persistIfDeleteActionIsMostRecent(final Task task,
+                                                                                            final long deleteActionTimestamp) {
+        return ifThenMap(new IfThenFlatMap<Event<Tasks>, Event<Tasks>>() {
+            @Override
+            public boolean ifMatches(Event<Tasks> value) {
+                Tasks currentTasks = taskRelay.getValue().data().or(Tasks.empty());
+                return currentTasks.hasNoTaskMoreRecentThan(task.id(), deleteActionTimestamp);
+            }
+
+            @Override
+            public Observable<Event<Tasks>> thenMap(Event<Tasks> value) {
+                return persistTasksEventLocally().call(value);
+            }
+
+            @Override
+            public Observable<Event<Tasks>> elseMap(Event<Tasks> value) {
+                return Observable.empty();
+            }
+        });
+    }
+
+    private static Function<SyncedData<Task>, SyncedData<Task>> markTaskAsSyncErrorAt(final Task task, final long timeInMillis) {
         return new Function<SyncedData<Task>, SyncedData<Task>>() {
             @Override
             public SyncedData<Task> apply(SyncedData<Task> input) {
@@ -375,19 +385,20 @@ public class PersistedTasksService implements TasksService {
         return new Func1<Event<Tasks>, Observable<Event<Tasks>>>() {
             @Override
             public Observable<Event<Tasks>> call(final Event<Tasks> tasksEvent) {
-                return localDataSource.saveTasks(tasksEvent.data().or(Tasks.empty())).map(new Func1<Tasks, Event<Tasks>>() {
-                    @Override
-                    public Event<Tasks> call(Tasks tasks) {
-                        return tasksEvent.updateData(tasks);
-                    }
-                });
+                return localDataSource.saveTasks(tasksEvent.data().or(Tasks.empty()))
+                        .map(new Func1<Tasks, Event<Tasks>>() {
+                            @Override
+                            public Event<Tasks> call(Tasks tasks) {
+                                return tasksEvent.updateData(tasks);
+                            }
+                        });
             }
         };
     }
 
-    private Tasks markTaskAsDeletedLocally(Event<Tasks> currentState, Task task) {
+    private static Tasks markTaskAsDeletedLocallyAt(Event<Tasks> currentState, Task task, long timeInMillis) {
         if (currentState.data().isPresent()) {
-            return currentState.data().get().save(SyncedData.from(task, SyncState.DELETED_LOCALLY, clock.timeInMillis()));
+            return currentState.data().get().save(SyncedData.from(task, SyncState.DELETED_LOCALLY, timeInMillis));
         } else {
             throw new RuntimeException("Trying to delete a task from empty data");
         }
