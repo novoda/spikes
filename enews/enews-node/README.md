@@ -4,8 +4,10 @@ The directory contains a dependable module and a simple `demo.js` to show how th
 
 #### Demo usage -
 
+```
 export token=your-slack-api-token
-npm install && npm start
+npm install && node demo.js
+```
 
 #### External module usage -
 
