@@ -19,4 +19,5 @@
   <string name="to_do_novoda">TO-DO-NOVODA</string>
   <string name="edit_to_do">Edit TO-DO</string>
   <string name="new_to_do">New TO-DO</string>
+  <string name="delete_task">Delete Task</string>
 </resources>

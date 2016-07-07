@@ -14,7 +14,7 @@ import com.novoda.todoapp.R;
 import com.novoda.todoapp.task.data.model.Task;
 import com.novoda.todoapp.task.displayer.TaskActionListener;
 import com.novoda.todoapp.task.displayer.TaskDisplayer;
-import com.novoda.todoapp.views.TodoAppBar;
+import com.novoda.todoapp.views.TodoAppBarWithDeleteButton;
 
 public class TaskDetailView extends CoordinatorLayout implements TaskDisplayer {
 
@@ -37,7 +37,7 @@ public class TaskDetailView extends CoordinatorLayout implements TaskDisplayer {
         descriptionView = Views.findById(this, R.id.task_detail_description);
         completeCheckBox = Views.findById(this, R.id.task_detail_complete);
         editActionButton = Views.findById(this, R.id.fab_edit_task);
-        TodoAppBar todoAppBar = Views.findById(this, R.id.app_bar);
+        TodoAppBarWithDeleteButton todoAppBar = Views.findById(this, R.id.app_bar_with_delete_button);
         Toolbar toolbar = todoAppBar.getToolbar();
         toolbar.setTitle(R.string.to_do_novoda);
     }

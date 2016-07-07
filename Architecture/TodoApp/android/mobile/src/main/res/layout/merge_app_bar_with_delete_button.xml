@@ -1,0 +1,23 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <android.support.v7.widget.Toolbar
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:theme="@style/Toolbar"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+    <Button
+      android:id="@+id/delete_task_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="end"
+      android:layout_marginEnd="16dp"
+      android:layout_marginRight="16dp"
+      android:background="@android:color/transparent"
+      android:text="@string/delete_task" />
+
+  </android.support.v7.widget.Toolbar>
+
+</merge>
