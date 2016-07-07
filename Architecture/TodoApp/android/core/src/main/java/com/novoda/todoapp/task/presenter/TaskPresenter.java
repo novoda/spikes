@@ -64,6 +64,7 @@ public class TaskPresenter {
         @Override
         public void onDeleteSelected(Task task) {
             tasksService.delete(task);
+            navigator.back();
         }
     };
 

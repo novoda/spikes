@@ -5,6 +5,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ public class TaskDetailView extends CoordinatorLayout implements TaskDisplayer {
     private View editActionButton;
 
     private TaskActionListener taskActionListener;
+    private Button deleteTaskButton;
 
     public TaskDetailView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -37,6 +39,9 @@ public class TaskDetailView extends CoordinatorLayout implements TaskDisplayer {
         descriptionView = Views.findById(this, R.id.task_detail_description);
         completeCheckBox = Views.findById(this, R.id.task_detail_complete);
         editActionButton = Views.findById(this, R.id.fab_edit_task);
+
+        deleteTaskButton = Views.findById(this, R.id.delete_task_button);
+
         TodoAppBarWithDeleteButton todoAppBar = Views.findById(this, R.id.app_bar_with_delete_button);
         Toolbar toolbar = todoAppBar.getToolbar();
         toolbar.setTitle(R.string.to_do_novoda);
@@ -70,6 +75,13 @@ public class TaskDetailView extends CoordinatorLayout implements TaskDisplayer {
             @Override
             public void onClick(View v) {
                 taskActionListener.onEditSelected(task);
+            }
+        });
+
+        deleteTaskButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                taskActionListener.onDeleteSelected(task);
             }
         });
     }

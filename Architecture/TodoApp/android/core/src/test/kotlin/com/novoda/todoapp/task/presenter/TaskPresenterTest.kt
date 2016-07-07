@@ -139,6 +139,16 @@ class TaskPresenterTest {
         Mockito.verify(service).delete(simpleTask)
     }
 
+    @Test
+    fun given_ThePresenterIsPresenting_on_DeleteTaskSelected_it_ShouldGoBack() {
+        givenThePresenterIsPresenting()
+        val simpleTask = simpleTask()
+
+        presenter.taskActionListener.onDeleteSelected(simpleTask)
+
+        Mockito.verify(navigator).back()
+    }
+
     private fun givenThePresenterIsPresenting() {
         presenter.startPresenting()
     }
