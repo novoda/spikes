@@ -65,37 +65,37 @@ class TasksStatisticsServiceTest {
 
     @Test
     fun given_TasksEventIsIdleAndHasTasks_on_getStatisticsEvent_it_ShouldSendAnIdleEventWithStatisticsMatchingTasks() {
-        tasksEventSubject.onNext(Event.idle<Tasks>().updateData(sampleSomeCompletedSomeActiveTasks()))
+        tasksEventSubject.onNext(Event.idle<Tasks>().updateData(tasksWithSomeActiveAndSomeCompleted()))
         val testObserver = TestObserver<Event<Statistics>>()
 
         service.getStatisticsEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.idle<Statistics>().updateData(sampleStatisticsSomeCompletedSomeActiveTasks())
+                Event.idle<Statistics>().updateData(statisticsWithSomeActiveAndSomeCompletedTasks())
         ))
     }
 
     @Test
     fun given_TasksEventIsLoadingAndHasTasks_on_getStatisticsEvent_it_ShouldSendALoadingEventWithStatisticsMatchingTasks() {
-        tasksEventSubject.onNext(Event.loading<Tasks>().updateData(sampleSomeCompletedSomeActiveTasks()))
+        tasksEventSubject.onNext(Event.loading<Tasks>().updateData(tasksWithSomeActiveAndSomeCompleted()))
         val testObserver = TestObserver<Event<Statistics>>()
 
         service.getStatisticsEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.loading<Statistics>().updateData(sampleStatisticsSomeCompletedSomeActiveTasks())
+                Event.loading<Statistics>().updateData(statisticsWithSomeActiveAndSomeCompletedTasks())
         ))
     }
 
     @Test
     fun given_TasksEventIsErrorAndHasTasks_on_getStatisticsEvent_it_ShouldSendAnErrorEventWithStatisticsMatchingTasks() {
-        tasksEventSubject.onNext(Event.error<Tasks>(SyncError()).updateData(sampleSomeCompletedSomeActiveTasks()))
+        tasksEventSubject.onNext(Event.error<Tasks>(SyncError()).updateData(tasksWithSomeActiveAndSomeCompleted()))
         val testObserver = TestObserver<Event<Statistics>>()
 
         service.getStatisticsEvent().subscribe(testObserver)
 
         testObserver.assertReceivedOnNext(listOf(
-                Event.error<Statistics>(SyncError()).updateData(sampleStatisticsSomeCompletedSomeActiveTasks())
+                Event.error<Statistics>(SyncError()).updateData(statisticsWithSomeActiveAndSomeCompletedTasks())
         ))
     }
 
@@ -108,12 +108,12 @@ class TasksStatisticsServiceTest {
 
     private fun emptyStatistics() = Statistics.builder().build()
 
-    private fun sampleStatisticsSomeCompletedSomeActiveTasks() = Statistics.builder()
+    private fun statisticsWithSomeActiveAndSomeCompletedTasks() = Statistics.builder()
             .activeTasks(1)
             .completedTasks(3)
             .build()
 
-    private fun sampleSomeCompletedSomeActiveTasks() = Tasks.asSynced(listOf(
+    private fun tasksWithSomeActiveAndSomeCompleted() = Tasks.asSynced(listOf(
             Task.builder().id(Id.from("24")).title("Bar").isCompleted(true).build(),
             Task.builder().id(Id.from("42")).title("Foo").isCompleted(true).build(),
             Task.builder().id(Id.from("12")).title("Whizz").build(),
