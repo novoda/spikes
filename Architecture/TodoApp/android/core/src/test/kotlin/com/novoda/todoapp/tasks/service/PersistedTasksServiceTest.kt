@@ -345,8 +345,8 @@ class PersistedTasksServiceTest {
     fun given_RemoteIsAcceptingUpdates_on_ActivateTask_it_ShouldSendAheadThenInSyncInfo() {
         val localTasks = sampleLocalCompletedTasks()
         val task = localTasks.all().get(0).data()
-        taskRemoteDataSubject.onCompleted()
         putTasksIntoLocalDataSource(localTasks)
+        taskRemoteDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(true)
         `when`(clock.timeInMillis()).thenReturn(321)
 
@@ -418,8 +418,8 @@ class PersistedTasksServiceTest {
     fun given_RemoteIsAcceptingUpdates_on_SaveTask_it_ShouldSendAheadThenInSyncInfo() {
         val localTasks = sampleLocalCompletedTasks()
         val task = localTasks.all().get(0).data()
-        taskRemoteDataSubject.onCompleted()
         putTasksIntoLocalDataSource(localTasks)
+        taskRemoteDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(localTasks)).thenReturn(true)
         `when`(clock.timeInMillis()).thenReturn(321)
 
