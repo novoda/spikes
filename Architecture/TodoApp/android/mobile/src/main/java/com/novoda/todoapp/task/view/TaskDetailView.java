@@ -64,7 +64,7 @@ public class TaskDetailView extends CoordinatorLayout implements TaskDisplayer {
         descriptionView.setText(task.description().orNull());
 
         completeCheckBox.setChecked(task.isCompleted());
-        completeCheckBox.setOnClickListener(new View.OnClickListener() {
+        completeCheckBox.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 taskActionListener.toggleCompletion(task);
