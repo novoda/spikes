@@ -22,12 +22,12 @@ public final class InMemoryLocalTaskDataSource implements LocalTasksDataSource {
     private Tasks localTasks = Tasks.asSynced(
             ImmutableList.<Task>of(
                     Task.builder()
-                        .id(Id.from("42"))
+                        .id(Id.from("24"))
                         .title("First Task")
                         .description("Hardcoded stuff")
                         .build(),
                     Task.builder()
-                            .id(Id.from("24"))
+                            .id(Id.from("42"))
                             .title("Second Task")
                             .description("Hardcoded stuff again")
                             .build()

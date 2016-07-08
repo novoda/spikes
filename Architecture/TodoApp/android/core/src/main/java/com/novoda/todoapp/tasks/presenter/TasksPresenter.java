@@ -3,6 +3,7 @@ package com.novoda.todoapp.tasks.presenter;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.novoda.data.SyncState;
 import com.novoda.data.SyncedData;
 import com.novoda.event.DataObserver;
@@ -16,6 +17,10 @@ import com.novoda.todoapp.tasks.displayer.TasksDisplayer;
 import com.novoda.todoapp.tasks.loading.displayer.RetryActionListener;
 import com.novoda.todoapp.tasks.loading.displayer.TasksLoadingDisplayer;
 import com.novoda.todoapp.tasks.service.TasksService;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import rx.Observable;
 import rx.functions.Func1;
@@ -78,7 +83,9 @@ public class TasksPresenter {
                                         .all(),
                                 shouldDisplayTask()
                         );
-                        return tasksEvent.updateData(Tasks.from(ImmutableList.copyOf(nonDeletedTasks)));
+                        List<SyncedData<Task>> sortedNonDeletedTasks = Lists.newArrayList(nonDeletedTasks);
+                        Collections.sort(sortedNonDeletedTasks);
+                        return tasksEvent.updateData(Tasks.from(ImmutableList.copyOf(sortedNonDeletedTasks)));
                     }
                 });
     }

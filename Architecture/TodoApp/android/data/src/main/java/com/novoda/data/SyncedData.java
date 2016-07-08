@@ -3,9 +3,9 @@ package com.novoda.data;
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-public abstract class SyncedData<T> {
+public abstract class SyncedData<T extends Comparable<T>> implements Comparable<SyncedData<T>> {
 
-    public static <T> SyncedData<T> from(T data, SyncState syncState, long lastSyncAction) {
+    public static <T extends Comparable<T>> SyncedData<T> from(T data, SyncState syncState, long lastSyncAction) {
         return SyncedData.<T>builder()
                 .data(data)
                 .syncState(syncState)
@@ -13,7 +13,7 @@ public abstract class SyncedData<T> {
                 .build();
     }
 
-    public static <T> Builder<T> builder() {
+    public static <T extends Comparable<T>> Builder<T> builder() {
         return new AutoValue_SyncedData.Builder<T>();
     }
 
@@ -29,8 +29,13 @@ public abstract class SyncedData<T> {
 
     public abstract Builder<T> toBuilder();
 
+    @Override
+    public int compareTo(SyncedData<T> o) {
+        return data().compareTo(o.data());
+    }
+
     @AutoValue.Builder
-    public abstract static class Builder<T> {
+    public abstract static class Builder<T extends Comparable<T>> {
 
         public abstract Builder<T> data(T data);
 
