@@ -30,20 +30,18 @@ public class TasksPresenter {
     private final TasksService tasksService;
     private final TasksLoadingDisplayer loadingDisplayer;
     private final TasksDisplayer tasksDisplayer;
+    private final NavDrawerDisplayer navDrawerDisplayer;
     private final Navigator navigator;
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
     private TasksActionListener.Filter currentFilter = TasksActionListener.Filter.ALL;
 
-    public TasksPresenter(TasksService tasksService, TasksDisplayer tasksDisplayer, TasksLoadingDisplayer loadingDisplayer, Navigator navigator) {
+    public TasksPresenter(TasksService tasksService, TasksDisplayer tasksDisplayer, TasksLoadingDisplayer loadingDisplayer, NavDrawerDisplayer navDrawerDisplayer, Navigator navigator) {
         this.tasksService = tasksService;
         this.loadingDisplayer = loadingDisplayer;
         this.tasksDisplayer = tasksDisplayer;
+        this.navDrawerDisplayer = navDrawerDisplayer;
         this.navigator = navigator;
-    }
-
-    public TasksPresenter(TasksService service, TasksDisplayer displayer, TasksLoadingDisplayer loadingDisplayer, NavDrawerDisplayer navDrawerDisplayer, Navigator navigator) {
-        this(service, displayer, loadingDisplayer, navigator);
     }
 
     public void setInitialFilterTo(TasksActionListener.Filter filter) {
@@ -57,6 +55,7 @@ public class TasksPresenter {
     public void startPresenting() {
         loadingDisplayer.attach(retryActionListener);
         tasksDisplayer.attach(tasksActionListener);
+        navDrawerDisplayer.attach(navDrawerActionListener);
         subscribeToSourcesFilteredWith(currentFilter);
     }
 
@@ -176,7 +175,7 @@ public class TasksPresenter {
 
         @Override
         public void onToDoListNavDrawerItemSelected() {
-
+            navDrawerDisplayer.closeNavDrawer();
         }
 
         @Override

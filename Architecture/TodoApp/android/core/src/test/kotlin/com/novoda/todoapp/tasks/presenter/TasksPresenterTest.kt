@@ -440,12 +440,30 @@ class TasksPresenterTest {
     }
 
     @Test
+    fun given_ThePresenterIsNotPresenting_on_StartPresenting_it_ShouldAttachTheNavDrawerActionListener_ToTheDisplayer() {
+        givenThePresenterIsNotPresenting()
+
+        presenter.startPresenting()
+
+        Mockito.verify(navDrawerDisplayer).attach(presenter.navDrawerActionListener)
+    }
+
+    @Test
     fun given_ThePresenterIsPresenting_on_StatisticsNavDrawerItemSelected_it_ShouldNavigateToStatistics() {
         givenThePresenterIsPresenting()
 
         presenter.navDrawerActionListener.onStatisticsNavDrawerItemSelected()
 
         Mockito.verify(navigator).toStatistics()
+    }
+
+    @Test
+    fun given_ThePresenterIsPresenting_on_ToDoListNavDrawerItemSelected_it_ShouldCloseTheNavDrawer() {
+        givenThePresenterIsPresenting()
+
+        presenter.navDrawerActionListener.onToDoListNavDrawerItemSelected()
+
+        Mockito.verify(navDrawerDisplayer).closeNavDrawer()
     }
 
     private fun defaultIdleEvent() = Event.idle<Tasks>()

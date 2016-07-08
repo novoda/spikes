@@ -85,6 +85,10 @@ public class TasksView extends DrawerLayout implements TasksDisplayer {
         return recyclerView;
     }
 
+    public NavigationView getNavDrawer() {
+        return Views.findById(this, R.id.nav_drawer);
+    }
+
     private void showFilteringPopUpMenu() {
         PopupMenu popup = new PopupMenu(getContext(), Views.findById(this, R.id.menu_filter));
         popup.getMenuInflater().inflate(R.menu.filter_tasks_menu, popup.getMenu());
@@ -128,17 +132,4 @@ public class TasksView extends DrawerLayout implements TasksDisplayer {
         }
     }
 
-    private class TasksNavigationDrawerClickListener implements NavigationView.OnNavigationItemSelectedListener {
-        @Override
-        public boolean onNavigationItemSelected(MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.to_do_list_nav_drawer_item:
-                    return true;
-                case R.id.statistics_nav_drawer_item:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-    }
 }
