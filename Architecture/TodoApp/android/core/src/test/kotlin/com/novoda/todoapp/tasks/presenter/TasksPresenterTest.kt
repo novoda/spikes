@@ -1,9 +1,10 @@
-package com.novoda.todoapp.tasks.presenter;
+package com.novoda.todoapp.tasks.presenter
 
 import com.google.common.collect.ImmutableList
 import com.novoda.data.SyncState
 import com.novoda.data.SyncedData
 import com.novoda.event.Event
+import com.novoda.todoapp.navigation.NavDrawerDisplayer
 import com.novoda.todoapp.navigation.Navigator
 import com.novoda.todoapp.task.data.model.Id
 import com.novoda.todoapp.task.data.model.Task
@@ -40,6 +41,7 @@ class TasksPresenterTest {
 
     var displayer: TasksDisplayer = Mockito.mock(TasksDisplayer::class.java)
     var loadingDisplayer: TasksLoadingDisplayer = Mockito.mock(TasksLoadingDisplayer::class.java)
+    var navDrawerDisplayer: NavDrawerDisplayer = Mockito.mock(NavDrawerDisplayer::class.java)
     var navigator: Navigator = Mockito.mock(Navigator::class.java)
 
     var refreshAction: Action0 = Mockito.mock(Action0::class.java)
@@ -47,12 +49,12 @@ class TasksPresenterTest {
     var activateAction: Action0 = Mockito.mock(Action0::class.java)
     var clearCompletedAction: Action0 = Mockito.mock(Action0::class.java)
 
-    var presenter = TasksPresenter(service, displayer, loadingDisplayer, navigator)
+    var presenter = TasksPresenter(service, displayer, loadingDisplayer, navDrawerDisplayer, navigator)
 
     @Before
     fun setUp() {
         setUpService()
-        presenter = TasksPresenter(service, displayer, loadingDisplayer, navigator)
+        presenter = TasksPresenter(service, displayer, loadingDisplayer, navDrawerDisplayer, navigator)
     }
 
     @After
@@ -344,7 +346,7 @@ class TasksPresenterTest {
         givenThePresenterIsPresenting()
         val simpleTask = simpleTask()
 
-        presenter.tasksActionListener.onTaskSelected(simpleTask);
+        presenter.tasksActionListener.onTaskSelected(simpleTask)
 
         Mockito.verify(navigator).toTaskDetail(simpleTask)
     }
@@ -353,7 +355,7 @@ class TasksPresenterTest {
     fun given_ThePresenterIsPresenting_on_RefreshSelected_it_ShouldRefreshTheService() {
         givenThePresenterIsPresenting()
 
-        presenter.tasksActionListener.onRefreshSelected();
+        presenter.tasksActionListener.onRefreshSelected()
 
         Mockito.verify(service).refreshTasks()
         Mockito.verify(refreshAction).call()
@@ -384,7 +386,7 @@ class TasksPresenterTest {
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.ALL)
 
-        Mockito.verify(service, times(4)).getTasksEvent()
+        Mockito.verify(service, times(4)).tasksEvent
         assertTrue(tasksEventSubject.hasObservers())
     }
 
@@ -394,7 +396,7 @@ class TasksPresenterTest {
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.ACTIVE)
 
-        Mockito.verify(service, times(2)).getActiveTasksEvent()
+        Mockito.verify(service, times(2)).activeTasksEvent
         assertTrue(tasksActiveEventSubject.hasObservers())
     }
 
@@ -404,7 +406,7 @@ class TasksPresenterTest {
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.COMPLETED)
 
-        Mockito.verify(service, times(2)).getCompletedTasksEvent()
+        Mockito.verify(service, times(2)).completedTasksEvent
         assertTrue(tasksCompletedEventSubject.hasObservers())
     }
 
@@ -433,7 +435,7 @@ class TasksPresenterTest {
 
         presenter.startPresenting()
 
-        Mockito.verify(service, times(2)).getActiveTasksEvent()
+        Mockito.verify(service, times(2)).activeTasksEvent
         assertTrue(tasksActiveEventSubject.hasObservers())
     }
 
@@ -503,11 +505,11 @@ class TasksPresenterTest {
     private fun setUpService() {
         tasksEventSubject = BehaviorSubject.create()
 
-        Mockito.`when`(service.getTasksEvent()).thenReturn(tasksEventSubject)
+        Mockito.`when`(service.tasksEvent).thenReturn(tasksEventSubject)
 
-        Mockito.`when`(service.getActiveTasksEvent()).thenReturn(tasksActiveEventSubject)
+        Mockito.`when`(service.activeTasksEvent).thenReturn(tasksActiveEventSubject)
 
-        Mockito.`when`(service.getCompletedTasksEvent()).thenReturn(tasksCompletedEventSubject)
+        Mockito.`when`(service.completedTasksEvent).thenReturn(tasksCompletedEventSubject)
 
         Mockito.`when`(service.refreshTasks()).thenReturn(refreshAction)
         Mockito.`when`(service.clearCompletedTasks()).thenReturn(clearCompletedAction)

@@ -3,6 +3,7 @@ package com.novoda.todoapp.tasks.view;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -84,6 +85,27 @@ public class TasksView extends DrawerLayout implements TasksDisplayer {
         return recyclerView;
     }
 
+    private void showFilteringPopUpMenu() {
+        PopupMenu popup = new PopupMenu(getContext(), Views.findById(this, R.id.menu_filter));
+        popup.getMenuInflater().inflate(R.menu.filter_tasks_menu, popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.active:
+                        tasksActionListener.onFilterSelected(TasksActionListener.Filter.ACTIVE);
+                        return true;
+                    case R.id.completed:
+                        tasksActionListener.onFilterSelected(TasksActionListener.Filter.COMPLETED);
+                        return true;
+                    default:
+                        tasksActionListener.onFilterSelected(TasksActionListener.Filter.ALL);
+                        return true;
+                }
+            }
+        });
+        popup.show();
+    }
+
     private class TasksMenuItemClickListener implements Toolbar.OnMenuItemClickListener {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
@@ -106,24 +128,17 @@ public class TasksView extends DrawerLayout implements TasksDisplayer {
         }
     }
 
-    private void showFilteringPopUpMenu() {
-        PopupMenu popup = new PopupMenu(getContext(), Views.findById(this, R.id.menu_filter));
-        popup.getMenuInflater().inflate(R.menu.filter_tasks_menu, popup.getMenu());
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.active:
-                        tasksActionListener.onFilterSelected(TasksActionListener.Filter.ACTIVE);
-                        return true;
-                    case R.id.completed:
-                        tasksActionListener.onFilterSelected(TasksActionListener.Filter.COMPLETED);
-                        return true;
-                    default:
-                        tasksActionListener.onFilterSelected(TasksActionListener.Filter.ALL);
-                        return true;
-                }
+    private class TasksNavigationDrawerClickListener implements NavigationView.OnNavigationItemSelectedListener {
+        @Override
+        public boolean onNavigationItemSelected(MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.to_do_list_nav_drawer_item:
+                    return true;
+                case R.id.statistics_nav_drawer_item:
+                    return true;
+                default:
+                    return false;
             }
-        });
-        popup.show();
+        }
     }
 }

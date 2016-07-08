@@ -8,6 +8,7 @@ import com.novoda.data.SyncedData;
 import com.novoda.event.DataObserver;
 import com.novoda.event.Event;
 import com.novoda.event.EventObserver;
+import com.novoda.todoapp.navigation.NavDrawerDisplayer;
 import com.novoda.todoapp.navigation.Navigator;
 import com.novoda.todoapp.task.data.model.Task;
 import com.novoda.todoapp.tasks.data.model.Tasks;
@@ -38,6 +39,10 @@ public class TasksPresenter {
         this.loadingDisplayer = loadingDisplayer;
         this.tasksDisplayer = tasksDisplayer;
         this.navigator = navigator;
+    }
+
+    public TasksPresenter(TasksService service, TasksDisplayer displayer, TasksLoadingDisplayer loadingDisplayer, NavDrawerDisplayer navDrawerDisplayer, Navigator navigator) {
+        this(service, displayer, loadingDisplayer, navigator);
     }
 
     public void setInitialFilterTo(TasksActionListener.Filter filter) {
