@@ -12,4 +12,6 @@ public interface Navigator {
 
     void toAddTask();
 
+    void toStatistics();
+
 }

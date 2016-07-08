@@ -16,6 +16,8 @@ public interface TasksActionListener {
 
     void onAddTaskSelected();
 
+    void onStatisticsSelected();
+
     enum Filter {
         ALL,
         ACTIVE,

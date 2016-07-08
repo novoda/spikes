@@ -90,8 +90,12 @@ public class TasksView extends CoordinatorLayout implements TasksDisplayer {
                 case R.id.menu_clear:
                     tasksActionListener.onClearCompletedSelected();
                     return true;
+                case R.id.menu_stats:
+                    tasksActionListener.onStatisticsSelected();
+                    return true;
+                default:
+                    return false;
             }
-            return false;
         }
     }
 

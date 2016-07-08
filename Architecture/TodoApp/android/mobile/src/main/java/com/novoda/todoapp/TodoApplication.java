@@ -2,6 +2,8 @@ package com.novoda.todoapp;
 
 import android.app.Application;
 
+import com.novoda.todoapp.statistics.service.StatisticsService;
+import com.novoda.todoapp.statistics.service.TasksStatisticsService;
 import com.novoda.todoapp.tasks.data.AlwaysOutOfDateTasksFreshnessChecker;
 import com.novoda.todoapp.tasks.data.source.InMemoryLocalTaskDataSource;
 import com.novoda.todoapp.tasks.data.source.InMemoryRemoteTaskDataSource;
@@ -21,5 +23,8 @@ public class TodoApplication extends Application {
                     new Clock()
             )
     );
+
+    //TODO use proper dependency injection
+    public static final StatisticsService STATISTICS_SERVICE = new TasksStatisticsService(TASKS_SERVICE);
 
 }

@@ -3,6 +3,7 @@ package com.novoda.todoapp.navigation;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.novoda.todoapp.statistics.StatisticsActivity;
 import com.novoda.todoapp.task.TaskDetailActivity;
 import com.novoda.todoapp.task.data.model.Task;
 import com.novoda.todoapp.task.edit.EditTaskActivity;
@@ -40,6 +41,12 @@ public class AndroidNavigator implements Navigator {
     @Override
     public void toAddTask() {
         Intent intent = new Intent(activity, NewTaskActivity.class);
+        activity.startActivity(intent);
+    }
+
+    @Override
+    public void toStatistics() {
+        Intent intent = new Intent(activity, StatisticsActivity.class);
         activity.startActivity(intent);
     }
 
