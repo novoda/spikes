@@ -8,6 +8,7 @@ import com.novoda.data.SyncedData;
 import com.novoda.event.DataObserver;
 import com.novoda.event.Event;
 import com.novoda.event.EventObserver;
+import com.novoda.todoapp.navigation.NavDrawerActionListener;
 import com.novoda.todoapp.navigation.NavDrawerDisplayer;
 import com.novoda.todoapp.navigation.Navigator;
 import com.novoda.todoapp.task.data.model.Task;
@@ -167,6 +168,19 @@ public class TasksPresenter {
 
         @Override
         public void onStatisticsSelected() {
+            navigator.toStatistics();
+        }
+    };
+
+    final NavDrawerActionListener navDrawerActionListener = new NavDrawerActionListener() {
+
+        @Override
+        public void onToDoListNavDrawerItemSelected() {
+
+        }
+
+        @Override
+        public void onStatisticsNavDrawerItemSelected() {
             navigator.toStatistics();
         }
     };

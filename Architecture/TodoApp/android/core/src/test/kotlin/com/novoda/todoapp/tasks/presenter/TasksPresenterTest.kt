@@ -439,6 +439,15 @@ class TasksPresenterTest {
         assertTrue(tasksActiveEventSubject.hasObservers())
     }
 
+    @Test
+    fun given_ThePresenterIsPresenting_on_StatisticsNavDrawerItemSelected_it_ShouldNavigateToStatistics() {
+        givenThePresenterIsPresenting()
+
+        presenter.navDrawerActionListener.onStatisticsNavDrawerItemSelected()
+
+        Mockito.verify(navigator).toStatistics()
+    }
+
     private fun defaultIdleEvent() = Event.idle<Tasks>()
 
     private fun defaultIdleEventWith(tasks: Tasks) = defaultIdleEvent().updateData(tasks)
