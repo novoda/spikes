@@ -1,0 +1,4 @@
+rootProject.name = 'enews-letter'
+include 'slack-scraper'
+include 'html-generator'
+

@@ -1,0 +1,63 @@
+buildscript {
+  dependencies {
+    classpath 'com.novoda:bintray-release:0.3.4'
+  }
+}
+
+apply plugin: 'groovy'
+apply from: rootProject.file('gradle/publish.gradle')
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
+sourceSets {
+  integrationTest {
+    java { srcDir 'src/integrationTest/java' }
+    resources { srcDir 'src/integrationTest/resources' }
+    compileClasspath += sourceSets.main.runtimeClasspath
+    compileClasspath += sourceSets.test.runtimeClasspath
+  }
+}
+
+dependencies {
+  compile gradleApi()
+
+  testCompile gradleTestKit()
+  testCompile 'com.google.guava:guava:19.0'
+  testCompile 'com.google.truth:truth:0.28'
+  testCompile 'com.android.tools.build:gradle:2.1.2'
+
+  integrationTestCompile gradleTestKit()
+  integrationTestCompile 'com.google.guava:guava:19.0'
+  integrationTestCompile 'com.google.truth:truth:0.28'
+  integrationTestCompile 'com.android.tools.build:gradle:2.1.2'
+}
+
+// https://code.google.com/p/android/issues/detail?id=64887
+task copyTestResources(type: Copy) {
+  from "${projectDir}/src/test/resources"
+  into "${buildDir}/classes/test"
+}
+test.dependsOn copyTestResources
+
+task integrationTest(type: Test) {
+  reports.html.destination = file("$buildDir/reports/integrationTests")
+  testClassesDir = sourceSets.integrationTest.output.classesDir
+  classpath += sourceSets.integrationTest.runtimeClasspath
+  classpath += sourceSets.test.runtimeClasspath
+}
+
+// https://code.google.com/p/android/issues/detail?id=64887
+task copyIntegrationTestResources(type: Copy) {
+  from "${projectDir}/src/test/resources"
+  into "${buildDir}/classes/integrationTest"
+}
+integrationTest.dependsOn copyIntegrationTestResources
+
+task deployLocal << {
+  // we need to deploy twice because the first time uploadArchives task
+  // might fail to find the metadata in the embedded repo
+  tasks.uploadArchives.execute()
+  tasks.uploadArchives.execute()
+}
+integrationTest.dependsOn deployLocal

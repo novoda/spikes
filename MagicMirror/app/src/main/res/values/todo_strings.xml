@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string-array name="todo_items">
+    <item>Buy milk</item>
+    <item>Call Carl</item>
+    <item>Check this amazing MakeFest thing</item>
+  </string-array>
+
+</resources>

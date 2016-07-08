@@ -1,0 +1,17 @@
+{
+  "name": "mailer-node",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "node enews-mailer.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "enews-fetcher": "file:../enews-node",
+    "html-generator": "file:../html-generator-node",
+    "moment": "^2.13.0",
+    "nodemailer": "^2.4.2"
+  }
+}

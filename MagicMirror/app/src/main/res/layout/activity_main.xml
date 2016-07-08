@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:paddingBottom="@dimen/activity_vertical_margin"
+  android:paddingLeft="@dimen/activity_horizontal_margin"
+  android:paddingRight="@dimen/activity_horizontal_margin"
+  android:paddingTop="@dimen/activity_vertical_margin"
+  tools:context="com.novoda.magicmirror.MainActivity">
+
+  <LinearLayout
+    android:id="@+id/time_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/label_time"
+      style="@style/Label.Time"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      tools:text="20:45" />
+
+    <TextView
+      android:id="@+id/label_date"
+      style="@style/Label.Date"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      tools:text="Wed 20 Jan" />
+
+  </LinearLayout>
+
+  <TextView
+    android:id="@+id/label_tweet"
+    style="@style/Label.Tweet"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_above="@+id/weather_container"
+    android:layout_below="@+id/time_container"
+    android:gravity="center_vertical"
+    tools:text="Tweeeet" />
+
+  <FrameLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_above="@+id/weather_container"
+    android:visibility="gone"
+    android:layout_below="@+id/time_container">
+
+    <ListView
+      android:id="@+id/todo_list"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:divider="@color/activity_background" />
+
+  </FrameLayout>
+
+  <LinearLayout
+    android:id="@+id/weather_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_gravity="bottom"
+    android:orientation="vertical">
+
+    <ImageView
+      android:contentDescription="@null"
+      android:id="@+id/weather_icon"
+      android:layout_width="@dimen/weather_icon_width"
+      android:layout_height="@dimen/weather_icon_height" />
+
+    <TextView
+      android:id="@+id/label_weather_temperature"
+      style="@style/Label.Weather.Temperature"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      tools:text="21°" />
+
+    <TextView
+      android:id="@+id/label_today_forecast"
+      style="@style/Label.Weather.Condition"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      tools:text="(15° - 23°) Sunny" />
+
+  </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,19 @@
+ext {
+  isLocalDeploy = !project.hasProperty('maven')
+  pluginGroup = 'com.novoda'
+  pluginVersion = isLocalDeploy ? 'LOCAL' : '0.9.6'
+  pluginId = 'build-properties-plugin'
+}
+
+subprojects {
+  buildscript {
+    repositories {
+      jcenter()
+    }
+  }
+  repositories {
+    jcenter()
+  }
+}
+
+

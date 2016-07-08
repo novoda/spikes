@@ -1,0 +1,18 @@
+group 'com.novoda'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':slack-scraper')
+    compile group: 'com.googlecode.jatl', name:'jatl', version: '0.2.2'
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile 'org.assertj:assertj-core:3.3.0'
+}

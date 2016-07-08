@@ -1,0 +1,17 @@
+{
+  "name": "html-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "html-generator.js",
+  "scripts": {
+    "start": "node demo.js",
+    "deploy": "./deploy-to-ghpage.sh",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "enews-fetcher": "file:../enews-node",
+    "moment": "^2.13.0"
+  }
+}
