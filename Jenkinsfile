@@ -19,7 +19,7 @@ node ('android') {
               canComputeNew      : false,
               pattern            : '**/outputs/lint-results-*.xml',
               unstableTotalHigh  : '0',
-              unstableTotalNormal: '10']
+              unstableTotalNormal: '29']
         )
     }
 }
