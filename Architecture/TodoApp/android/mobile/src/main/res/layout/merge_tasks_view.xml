@@ -1,6 +1,10 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
+  <android.support.design.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
     <LinearLayout
       android:id="@+id/contentContainer"
       android:layout_width="match_parent"
@@ -26,12 +30,21 @@
 
     <android.support.design.widget.FloatingActionButton
       android:id="@+id/fab_add_task"
-      app:fabSize="normal"
-      app:layout_anchor="@id/contentContainer"
-      app:layout_anchorGravity="bottom|right|end"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/fab_margin"
-      android:src="@drawable/ic_add" />
+      android:src="@drawable/ic_add"
+      app:fabSize="normal"
+      app:layout_anchor="@id/contentContainer"
+      app:layout_anchorGravity="bottom|right|end" />
+
+  </android.support.design.widget.CoordinatorLayout>
+
+  <android.support.design.widget.NavigationView
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:fitsSystemWindows="true"
+    app:menu="@menu/nav_drawer" />
 
 </merge>

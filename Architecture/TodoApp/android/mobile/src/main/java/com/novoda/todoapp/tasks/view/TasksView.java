@@ -1,8 +1,10 @@
 package com.novoda.todoapp.tasks.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +22,7 @@ import com.novoda.todoapp.tasks.displayer.TasksDisplayer;
 import com.novoda.todoapp.tasks.view.loading.TasksLoadingView;
 import com.novoda.todoapp.views.TodoAppBar;
 
-public class TasksView extends CoordinatorLayout implements TasksDisplayer {
+public class TasksView extends DrawerLayout implements TasksDisplayer {
 
     private RecyclerView recyclerView;
     private TasksAdapter adapter;
@@ -38,11 +40,16 @@ public class TasksView extends CoordinatorLayout implements TasksDisplayer {
         adapter = new TasksAdapter(LayoutInflater.from(getContext()));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
+
         TodoAppBar todoAppBar = Views.findById(this, R.id.app_bar);
         Toolbar toolbar = todoAppBar.getToolbar();
         toolbar.inflateMenu(R.menu.tasks_menu);
         toolbar.setOnMenuItemClickListener(new TasksMenuItemClickListener());
         toolbar.setTitle(R.string.to_do_novoda);
+
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle((Activity) getContext(), this, toolbar, R.string.app_name, R.string.app_name);
+        addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
     }
 
     @Override
