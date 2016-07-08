@@ -4,18 +4,19 @@ import android.support.design.widget.NavigationView;
 import android.view.MenuItem;
 
 import com.novoda.todoapp.R;
+import com.novoda.todoapp.tasks.view.TasksView;
 
 public class AndroidNavDrawerDisplayer implements NavDrawerDisplayer {
 
-    private final NavigationView navDrawer;
+    private final TasksView tasksView;
 
-    public AndroidNavDrawerDisplayer(NavigationView navDrawer) {
-        this.navDrawer = navDrawer;
+    public AndroidNavDrawerDisplayer(TasksView tasksView) {
+        this.tasksView = tasksView;
     }
 
     @Override
     public void attach(final NavDrawerActionListener navDrawerActionListener) {
-        navDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        tasksView.getNavDrawer().setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()) {
@@ -34,6 +35,6 @@ public class AndroidNavDrawerDisplayer implements NavDrawerDisplayer {
 
     @Override
     public void closeNavDrawer() {
-
+        tasksView.closeDrawers();
     }
 }
