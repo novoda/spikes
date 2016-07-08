@@ -23,6 +23,9 @@ android {
         buildConfigField "String", "TWITTER_ACCESS_TOKEN", "\"$twitterAccessToken\""
         buildConfigField "String", "TWITTER_ACCESS_TOKEN_SECRET", "\"$twitterAccessTokenSecret\""
     }
+    lintOptions {
+        abortOnError false
+    }
     buildTypes {
         release {
             minifyEnabled false
