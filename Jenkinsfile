@@ -4,4 +4,5 @@ node {
     checkout scm
     sh "ls ./"
     sleep time: 15, unit:'SECONDS'
+    this will fail #rekt
 }
