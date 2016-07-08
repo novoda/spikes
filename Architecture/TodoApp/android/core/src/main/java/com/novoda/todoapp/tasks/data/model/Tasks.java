@@ -124,9 +124,10 @@ public abstract class Tasks {
     @Override
     public String toString() {
         String result = "";
+        String delimiter = ", ";
         for (Id id : internalMap().keySet()) {
-            result = result + ", " + "{" + id + "; " + internalMap().get(id).syncState() + "}";
+            result = result + delimiter + "{" + id + "; " + internalMap().get(id).syncState() + "}";
         }
-        return result.substring(2);
+        return result.substring(delimiter.length());
     }
 }
