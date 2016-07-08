@@ -18,4 +18,9 @@
     android:title="@string/refresh"
     app:showAsAction="never" />
 
+  <item
+    android:id="@+id/menu_stats"
+    android:title="Statistics"
+    app:showAsAction="never" />
+
 </menu>
