@@ -9,9 +9,10 @@
     android:orientation="vertical">
 
     <com.novoda.todoapp.views.TodoAppBar
-      android:id="@+id/app_bar"
+      android:id="@+id/app_bar_with_delete_button"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content" />
+      android:layout_height="wrap_content"
+      app:mergeLayoutId="@layout/merge_app_bar_with_delete_button" />
 
     <ScrollView
       android:layout_width="match_parent"
@@ -56,12 +57,12 @@
 
   <android.support.design.widget.FloatingActionButton
     android:id="@+id/fab_edit_task"
-    app:fabSize="normal"
-    app:layout_anchor="@id/contentContainer"
-    app:layout_anchorGravity="bottom|right|end"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/fab_margin"
-    android:src="@drawable/ic_edit" />
+    android:src="@drawable/ic_edit"
+    app:fabSize="normal"
+    app:layout_anchor="@id/contentContainer"
+    app:layout_anchorGravity="bottom|right|end" />
 
 </merge>

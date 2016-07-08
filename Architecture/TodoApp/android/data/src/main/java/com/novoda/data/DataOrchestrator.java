@@ -6,6 +6,8 @@ public interface DataOrchestrator<T,V> {
 
     V onConfirmed(T value);
 
+    V onConfirmedWithoutData();
+
     V onError();
 
 }

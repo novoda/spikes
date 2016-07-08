@@ -53,9 +53,13 @@ public abstract class Tasks {
         return internalMap().isEmpty();
     }
 
-    public boolean isMostRecentAction(SyncedData<Task> syncedData) {
-        SyncedData<Task> currentSyncData = internalMap().get(syncedData.data().id());
-        return currentSyncData == null || syncedData.lastSyncAction() >= currentSyncData.lastSyncAction();
+    public boolean hasNoActionMoreRecentThan(SyncedData<Task> syncedData) {
+        return hasNoActionMoreRecentThan(syncedData.data().id(), syncedData.lastSyncAction());
+    }
+
+    public boolean hasNoActionMoreRecentThan(Id id, long lastSyncAction) {
+        SyncedData<Task> internalData = internalMap().get(id);
+        return internalData == null || lastSyncAction >= internalData.lastSyncAction();
     }
 
     public Tasks save(SyncedData<Task> taskSyncedData) {
@@ -86,6 +90,15 @@ public abstract class Tasks {
         return Tasks.from(internalMap().filter(isCompleted()));
     }
 
+    public Tasks remove(final Task task) {
+        return Tasks.from(internalMap().filter(new Predicate<Map.Entry<Id, SyncedData<Task>>>() {
+            @Override
+            public boolean apply(Map.Entry<Id, SyncedData<Task>> input) {
+                return !input.getKey().equals(task.id());
+            }
+        }));
+    }
+
     private static Predicate<Map.Entry<Id, SyncedData<Task>>> isCompleted() {
         return new Predicate<Map.Entry<Id, SyncedData<Task>>>() {
             @Override
@@ -106,5 +119,15 @@ public abstract class Tasks {
                 return input.getValue().syncState() == SyncState.SYNC_ERROR;
             }
         };
+    }
+
+    @Override
+    public String toString() {
+        String result = "";
+        String delimiter = ", ";
+        for (Id id : internalMap().keySet()) {
+            result = result + delimiter + "{" + id + "; " + internalMap().get(id).syncState() + "}";
+        }
+        return result.substring(delimiter.length());
     }
 }

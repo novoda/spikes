@@ -37,7 +37,7 @@ public final class EventFunctions {
         return new Observable.Transformer<T, Event<T>>() {
             @Override
             public Observable<Event<T>> call(Observable<T> observable) {
-                return observable.materialize().compose(EventFunctions.<T>notificationToEvent(currentEvent.asLoading()));
+                return observable.materialize().compose(EventFunctions.notificationToEvent(currentEvent.asLoading()));
             }
         };
     }

@@ -31,4 +31,5 @@ public interface TasksService {
 
     Action0 save(Task task);
 
+    void delete(Task task);
 }

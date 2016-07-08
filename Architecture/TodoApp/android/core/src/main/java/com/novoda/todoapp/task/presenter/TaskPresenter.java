@@ -36,7 +36,7 @@ public class TaskPresenter {
         taskDisplayer.attach(taskActionListener);
         subscriptions.add(
                 tasksService.getTask(taskId)
-                    .subscribe(taskObserver)
+                        .subscribe(taskObserver)
         );
     }
 
@@ -59,6 +59,12 @@ public class TaskPresenter {
         @Override
         public void onEditSelected(Task task) {
             navigator.toEditTask(task);
+        }
+
+        @Override
+        public void onDeleteSelected(Task task) {
+            tasksService.delete(task);
+            navigator.back();
         }
     };
 

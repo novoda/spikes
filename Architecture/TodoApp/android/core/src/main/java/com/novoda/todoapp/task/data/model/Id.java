@@ -15,4 +15,8 @@ public abstract class Id {
 
     public abstract String value();
 
+    @Override
+    public String toString() {
+        return "Id=" + value();
+    }
 }
