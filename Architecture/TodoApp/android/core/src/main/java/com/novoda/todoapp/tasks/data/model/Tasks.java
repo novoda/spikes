@@ -121,11 +121,11 @@ public abstract class Tasks {
         };
     }
 
-    public Tasks updateOnlyIfMostRecentWith(Tasks tasks) {
+    public Tasks overrideWithMostRecentActionsFrom(Tasks tasks) {
         ImmutableMapWithCopy<Id, SyncedData<Task>> filter = tasks.internalMap().filter(new Predicate<Map.Entry<Id, SyncedData<Task>>>() {
             @Override
             public boolean apply(Map.Entry<Id, SyncedData<Task>> input) {
-                return hasNoActionMoreRecentThan(input.getValue());
+                return hasNoActionMoreRecentThan(input.getValue()) && internalMap().containsKey(input.getKey());
             }
         });
         return Tasks.from(internalMap().putAll(filter));

@@ -216,7 +216,7 @@ public class PersistedTasksService implements TasksService {
             @Override
             public Tasks call(Tasks tasks) {
                 Tasks currentTasks = taskRelay.getValue().data().or(Tasks.empty());
-                return currentTasks.updateOnlyIfMostRecentWith(tasks);
+                return tasks.overrideWithMostRecentActionsFrom(currentTasks);
             }
         };
     }
