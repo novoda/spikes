@@ -18,8 +18,8 @@ node ('android') {
         step([$class             : 'LintPublisher',
               canComputeNew      : false,
               pattern            : '**/outputs/lint-results-*.xml',
-              unstableTotalHigh  : 0,
-              unstableTotalNormal: 10]
+              unstableTotalHigh  : '0',
+              unstableTotalNormal: '10']
         )
     }
 }
