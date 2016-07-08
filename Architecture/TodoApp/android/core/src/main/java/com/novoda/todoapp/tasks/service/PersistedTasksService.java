@@ -131,16 +131,26 @@ public class PersistedTasksService implements TasksService {
     }
 
     private Observable<Tasks> fetchFromRemote() {
+        return Observable.defer(new Func0<Observable<Tasks>>() {
+            @Override
+            public Observable<Tasks> call() {
+                return fetchFromRemote(clock.timeInMillis());
+            }
+        });
+    }
+
+    private Observable<Tasks> fetchFromRemote(long actionTimestamp) {
         return remoteDataSource.getTasks()
-                .map(asSyncedTasksNow())
+                .map(asSyncedTasks(actionTimestamp))
+                .map(updateOnlyMostRecent())
                 .flatMap(persistTasksLocally());
     }
 
-    private Func1<List<Task>, Tasks> asSyncedTasksNow() {
+    private static Func1<List<Task>, Tasks> asSyncedTasks(final long actionTimestamp) {
         return new Func1<List<Task>, Tasks>() {
             @Override
             public Tasks call(List<Task> tasks) {
-                return Tasks.asSynced(tasks, clock.timeInMillis());
+                return Tasks.asSynced(tasks, actionTimestamp);
             }
         };
     }
@@ -189,13 +199,24 @@ public class PersistedTasksService implements TasksService {
                 long actionTimestamp = clock.timeInMillis();
                 Event<Tasks> currentState = taskRelay.getValue();
                 Tasks allLocalTasks = currentState.data().or(Tasks.empty());
-                Tasks uncompletedLocalTasks = mapFunctionToTasks(allLocalTasks, markCompletedAsDeleted());
+                Tasks uncompletedLocalTasks = mapFunctionToTasks(allLocalTasks, markCompletedAsDeleted(actionTimestamp));
 
                 remoteDataSource.clearCompletedTasks()
                         .compose(confirmLocalDeletionsOrRevert(allLocalTasks, uncompletedLocalTasks, actionTimestamp))
+                        .map(updateOnlyMostRecent())
                         .flatMap(persistTasksLocally())
                         .compose(asValidatedEvent(currentState.updateData(uncompletedLocalTasks)))
                         .subscribe(taskRelay);
+            }
+        };
+    }
+
+    private Func1<Tasks, Tasks> updateOnlyMostRecent() {
+        return new Func1<Tasks, Tasks>() {
+            @Override
+            public Tasks call(Tasks tasks) {
+                Tasks currentTasks = taskRelay.getValue().data().or(Tasks.empty());
+                return currentTasks.updateOnlyIfMostRecentWith(tasks);
             }
         };
     }
@@ -232,14 +253,14 @@ public class PersistedTasksService implements TasksService {
         return Tasks.from(ImmutableList.copyOf(Iterables.transform(tasks.all(), function)));
     }
 
-    private static Function<SyncedData<Task>, SyncedData<Task>> markCompletedAsDeleted() {
+    private static Function<SyncedData<Task>, SyncedData<Task>> markCompletedAsDeleted(final long actionTimestamp) {
         return new Function<SyncedData<Task>, SyncedData<Task>>() {
             @Override
             public SyncedData<Task> apply(SyncedData<Task> input) {
                 if (input.data().isCompleted()) {
-                    return input.toBuilder().syncState(SyncState.DELETED_LOCALLY).build();
+                    return input.toBuilder().syncState(SyncState.DELETED_LOCALLY).lastSyncAction(actionTimestamp).build();
                 } else {
-                    return input.toBuilder().syncState(SyncState.AHEAD).build();
+                    return input.toBuilder().syncState(SyncState.AHEAD).lastSyncAction(actionTimestamp).build();
                 }
             }
         };
@@ -250,34 +271,6 @@ public class PersistedTasksService implements TasksService {
             @Override
             public SyncedData<Task> apply(SyncedData<Task> input) {
                 return input.toBuilder().syncState(SyncState.SYNC_ERROR).build();
-            }
-        };
-    }
-
-    @Override
-    public Action0 deleteAllTasks() {
-        return new Action0() {
-            @Override
-            public void call() {
-                remoteDataSource.deleteAllTasks()
-                        .flatMap(deleteAllLocalTasks())
-                        .compose(asValidatedEvent(taskRelay.getValue()))
-                        .subscribe(taskRelay);
-            }
-        };
-    }
-
-    private Func1<Void, Observable<Tasks>> deleteAllLocalTasks() {
-        return new Func1<Void, Observable<Tasks>>() {
-            @Override
-            public Observable<Tasks> call(Void aVoid) {
-                return localDataSource.deleteAllTasks()
-                        .map(new Func1<Void, Tasks>() {
-                            @Override
-                            public Tasks call(Void aVoid) {
-                                return Tasks.empty();
-                            }
-                        });
             }
         };
     }
@@ -357,8 +350,14 @@ public class PersistedTasksService implements TasksService {
             }
 
             @Override
-            public Observable<Event<Tasks>> thenMap(Event<Tasks> value) {
-                return persistTasksEventLocally().call(value);
+            public Observable<Event<Tasks>> thenMap(final Event<Tasks> tasksEvent) {
+                return localDataSource.saveTasks(tasksEvent.data().or(Tasks.empty()))
+                        .map(new Func1<Tasks, Event<Tasks>>() {
+                            @Override
+                            public Event<Tasks> call(Tasks tasks) {
+                                return tasksEvent.updateData(tasks);
+                            }
+                        });
             }
 
             @Override
@@ -377,21 +376,6 @@ public class PersistedTasksService implements TasksService {
                 } else {
                     return input;
                 }
-            }
-        };
-    }
-
-    private Func1<Event<Tasks>, Observable<Event<Tasks>>> persistTasksEventLocally() {
-        return new Func1<Event<Tasks>, Observable<Event<Tasks>>>() {
-            @Override
-            public Observable<Event<Tasks>> call(final Event<Tasks> tasksEvent) {
-                return localDataSource.saveTasks(tasksEvent.data().or(Tasks.empty()))
-                        .map(new Func1<Tasks, Event<Tasks>>() {
-                            @Override
-                            public Event<Tasks> call(Tasks tasks) {
-                                return tasksEvent.updateData(tasks);
-                            }
-                        });
             }
         };
     }

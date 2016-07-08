@@ -14,6 +14,4 @@ public interface LocalTasksDataSource {
 
     Observable<SyncedData<Task>> saveTask(SyncedData<Task> taskSyncedData);
 
-    Observable<Void> deleteAllTasks();
-
 }

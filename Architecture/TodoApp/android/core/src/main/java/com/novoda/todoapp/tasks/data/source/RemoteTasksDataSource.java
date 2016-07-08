@@ -19,8 +19,6 @@ public interface RemoteTasksDataSource {
 
     Observable<List<Task>> clearCompletedTasks();
 
-    Observable<Void> deleteAllTasks();
-
     Observable<Void> deleteTask(Id taskId);
 
 }

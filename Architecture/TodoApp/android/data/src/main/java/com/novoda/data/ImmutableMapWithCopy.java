@@ -66,6 +66,12 @@ public abstract class ImmutableMapWithCopy<K, V> {
         return from(mutableMap);
     }
 
+    public ImmutableMapWithCopy<K, V> putAll(ImmutableMapWithCopy<? extends K, ? extends V> m) {
+        Map<K, V> mutableMap = extractMutableMap();
+        mutableMap.putAll(m.internalMap());
+        return from(mutableMap);
+    }
+
     public Set<K> keySet() {
         return internalMap().keySet();
     }

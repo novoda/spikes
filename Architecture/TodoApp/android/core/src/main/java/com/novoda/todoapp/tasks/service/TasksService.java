@@ -23,8 +23,6 @@ public interface TasksService {
 
     Action0 clearCompletedTasks();
 
-    Action0 deleteAllTasks();
-
     Action0 complete(Task task);
 
     Action0 activate(Task task);

@@ -82,17 +82,6 @@ public final class InMemoryLocalTaskDataSource implements LocalTasksDataSource {
         }).compose(this.<SyncedData<Task>>delay());
     }
 
-    @Override
-    public Observable<Void> deleteAllTasks() {
-        return Observable.create(new Observable.OnSubscribe<Void>() {
-            @Override
-            public void call(Subscriber<? super Void> subscriber) {
-                localTasks = Tasks.empty();
-                subscriber.onCompleted();
-            }
-        }).compose(this.<Void>delay());
-    }
-
     private <T> Observable.Transformer<T, T> delay() {
         return new Observable.Transformer<T, T>() {
             @Override

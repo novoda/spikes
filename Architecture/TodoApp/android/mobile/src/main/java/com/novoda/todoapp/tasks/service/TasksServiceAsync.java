@@ -59,11 +59,6 @@ public class TasksServiceAsync implements TasksService {
     }
 
     @Override
-    public Action0 deleteAllTasks() {
-        return asAsyncAction(tasksService.deleteAllTasks());
-    }
-
-    @Override
     public Action0 complete(Task task) {
         return asAsyncAction(tasksService.complete(task));
     }
