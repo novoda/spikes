@@ -1,11 +1,18 @@
 buildscript {
+  repositories {
+    jcenter()
+  }
   dependencies {
     classpath 'com.novoda:bintray-release:0.3.4'
   }
 }
 
+repositories {
+  jcenter()
+}
+
 apply plugin: 'groovy'
-apply from: rootProject.file('gradle/publish.gradle')
+apply from: file('../gradle/publish.gradle')
 
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
