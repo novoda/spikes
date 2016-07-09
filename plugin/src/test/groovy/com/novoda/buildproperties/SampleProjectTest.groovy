@@ -15,6 +15,7 @@ public class SampleProjectTest {
 
   @ClassRule
   public static final ProjectRule PROJECT = new ProjectRule()
+  public static final String COMMAND_LINE_PROPERTY = 'modified from command line'
 
   @Test
   public void shouldGenerateTypedFieldsFromTypedValuesProvidedInDefaultBuildConfig() {
@@ -66,6 +67,14 @@ public class SampleProjectTest {
     assertThat(PROJECT.releaseResValues.exists()).isFalse()
   }
 
+  @Test
+  public void shouldOverridePropertyValueInFileWithValueProvidedViaCommandLine() {
+    assertThat(PROJECT.secrets['overridable']).isNotEqualTo(COMMAND_LINE_PROPERTY)
+    [PROJECT.debugBuildConfig.text, PROJECT.releaseBuildConfig.text].each { String generatedBuildConfig ->
+      assertThat(generatedBuildConfig).contains("public static final String OVERRIDABLE = \"$COMMAND_LINE_PROPERTY;")
+    }
+  }
+
   static class ProjectRule implements TestRule {
     File projectDir
     BuildResult buildResult
@@ -85,7 +94,7 @@ public class SampleProjectTest {
               .withProjectDir(PROJECT.projectDir)
               .withDebug(true)
               .forwardStdOutput(new OutputStreamWriter(System.out))
-              .withArguments('clean', 'compileDebugSources', 'compileReleaseSources')
+              .withArguments('clean', "-Poverridable=$COMMAND_LINE_PROPERTY", 'compileDebugSources', 'compileReleaseSources')
               .build()
       debugBuildConfig = new File(PROJECT.projectDir, 'app/build/generated/source/buildConfig/debug/com/novoda/buildpropertiesplugin/sample/BuildConfig.java')
       releaseBuildConfig = new File(PROJECT.projectDir, 'app/build/generated/source/buildConfig/release/com/novoda/buildpropertiesplugin/sample/BuildConfig.java')
