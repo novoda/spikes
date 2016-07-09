@@ -94,9 +94,7 @@ public class FilePropertiesEntriesTest {
 
   @Test
   public void shouldEnumerateAllKeysInPropertiesFile() {
-    Set<String> keys = entries.keys()
-
-    assertThat(keys).containsExactly('aProperty', 'another_PROPERTY', 'api.key', 'negative', 'positive', 'int', 'double', 'string')
+    assertThat(entries.keys).containsExactly('aProperty', 'another_PROPERTY', 'api.key', 'negative', 'positive', 'int', 'double', 'string')
   }
 
 }

@@ -64,8 +64,8 @@ class BuildPropertiesPlugin implements Plugin<Project> {
             }
         }
         target.ext.buildConfigProperties = { BuildProperties buildProperties ->
-            buildProperties.allEntries().each { BuildProperties.Entry entry ->
-                target.ext.buildConfigProperty entry
+            buildProperties.keys.each { String key ->
+                target.ext.buildConfigProperty buildProperties[key]
             }
         }
     }
@@ -101,8 +101,8 @@ class BuildPropertiesPlugin implements Plugin<Project> {
             }
         }
         target.ext.resValueProperties = { BuildProperties buildProperties ->
-            buildProperties.allEntries().each { BuildProperties.Entry entry ->
-                target.ext.resValueProperty entry
+            buildProperties.keys.each { String key ->
+                target.ext.resValueProperty buildProperties[key]
             }
         }
     }
