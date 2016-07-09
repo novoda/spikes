@@ -1,0 +1,27 @@
+buildscript {
+  repositories {
+    jcenter()
+  }
+}
+
+repositories {
+  jcenter()
+}
+
+apply plugin: 'groovy'
+
+dependencies {
+  compile project(':plugin')
+
+  testCompile gradleTestKit()
+  testCompile 'com.google.guava:guava:19.0'
+  testCompile 'com.google.truth:truth:0.28'
+  testCompile 'com.android.tools.build:gradle:2.1.2'
+}
+
+// https://code.google.com/p/android/issues/detail?id=64887
+task copyTestResources(type: Copy) {
+  from "${projectDir}/src/test/resources"
+  into "${buildDir}/classes/test"
+}
+test.dependsOn copyTestResources
