@@ -5,5 +5,11 @@ repositories {
 apply plugin: 'groovy'
 
 dependencies {
-  compile project(':plugin')
+  compile gradleApi()
+}
+
+sourceSets {
+  main {
+    groovy { srcDir '../../plugin/src/main/groovy' }
+  }
 }

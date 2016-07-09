@@ -5,7 +5,7 @@ buildscript {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'build-properties'
+apply plugin: com.novoda.buildproperties.BuildPropertiesPlugin
 
 buildProperties {
   secrets {
