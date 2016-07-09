@@ -67,7 +67,7 @@ class BuildProperties {
       })
     }
 
-    abstract File file(String path)
+    abstract File parentFile()
 
     abstract Set<String> keys()
 
