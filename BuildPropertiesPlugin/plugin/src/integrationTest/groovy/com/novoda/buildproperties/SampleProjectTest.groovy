@@ -10,7 +10,6 @@ import org.junit.runner.Description
 import org.junit.runners.model.Statement
 
 import static com.google.common.truth.Truth.assertThat
-import static com.google.common.truth.Truth.assertWithMessage
 
 public class SampleProjectTest {
 
@@ -79,16 +78,11 @@ public class SampleProjectTest {
     @Override
     Statement apply(Statement base, Description description) {
       File propertiesFile = new File(Resources.getResource('any.properties').toURI())
-      assertThat(propertiesFile.absolutePath).endsWith('plugin/build/classes/test/any.properties')
 
       File rootDir = propertiesFile.parentFile.parentFile.parentFile.parentFile.parentFile
 
       File localRepoDir = new File(rootDir, '.gradle/repo')
       assertThat(localRepoDir.absolutePath).endsWith('.gradle/repo')
-
-      File artifactDir = new File(localRepoDir, 'com/novoda/build-properties-plugin/LOCAL')
-      assertWithMessage('Run ./gradlew uploadArchives to deploy the plugin to the embedded local repo.\n')
-              .that(artifactDir.exists()).isTrue()
 
       projectDir = new File(rootDir, 'sample')
       buildResult = DefaultGradleRunner.create()
