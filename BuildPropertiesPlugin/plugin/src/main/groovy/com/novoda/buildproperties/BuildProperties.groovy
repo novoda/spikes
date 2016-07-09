@@ -1,12 +1,16 @@
 package com.novoda.buildproperties
 
+import org.gradle.api.Project
+
 class BuildProperties {
 
   private final String name
+  private final Project project
   private Closure<Entries> entries
 
-  BuildProperties(String name) {
+  BuildProperties(String name, Project project) {
     this.name = name
+    this.project = project
   }
 
   String getName() {
@@ -28,7 +32,11 @@ class BuildProperties {
   }
 
   Entry getAt(String key) {
-    entries.call().getAt(key)
+    if (project.hasProperty(key)) {
+      new Entry(key, { project[key] })
+    } else {
+      entries.call().getAt(key)
+    }
   }
 
   static abstract class Entries {
