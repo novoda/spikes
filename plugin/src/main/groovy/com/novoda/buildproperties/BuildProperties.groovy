@@ -23,7 +23,7 @@ class BuildProperties {
     entries.call().parentFile
   }
 
-  Set<String> getKeys() {
+  Enumeration<String> getKeys() {
     entries.call().keys
   }
 
@@ -45,7 +45,7 @@ class BuildProperties {
 
     abstract File getParentFile()
 
-    abstract Set<String> getKeys()
+    abstract Enumeration<String> getKeys()
 
   }
 
