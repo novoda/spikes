@@ -18,8 +18,12 @@ class BuildProperties {
   }
 
   void file(File file) {
+    entries(FilePropertiesEntries.create(name, file))
+  }
+
+  void entries(Entries entries) {
     this.entries = {
-      FilePropertiesEntries.create(name, file)
+      entries
     }.memoize()
   }
 

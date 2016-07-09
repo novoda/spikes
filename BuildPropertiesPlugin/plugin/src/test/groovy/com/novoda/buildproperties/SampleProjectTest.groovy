@@ -71,7 +71,7 @@ public class SampleProjectTest {
   public void shouldOverridePropertyValueInFileWithValueProvidedViaCommandLine() {
     assertThat(PROJECT.secrets['overridable']).isNotEqualTo(COMMAND_LINE_PROPERTY)
     [PROJECT.debugBuildConfig.text, PROJECT.releaseBuildConfig.text].each { String generatedBuildConfig ->
-      assertThat(generatedBuildConfig).contains("public static final String OVERRIDABLE = \"$COMMAND_LINE_PROPERTY;")
+      assertThat(generatedBuildConfig).contains("public static final String OVERRIDABLE = \"$COMMAND_LINE_PROPERTY\";")
     }
   }
 
