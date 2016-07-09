@@ -73,7 +73,7 @@ public class SampleProjectTest {
     File releaseBuildConfig
     File debugResValues
     File releaseResValues
-    BuildProperties secrets
+    BuildProperties.Entries secrets
 
     @Override
     Statement apply(Statement base, Description description) {
@@ -91,7 +91,7 @@ public class SampleProjectTest {
       releaseBuildConfig = new File(PROJECT.projectDir, 'app/build/generated/source/buildConfig/release/com/novoda/buildpropertiesplugin/sample/BuildConfig.java')
       debugResValues = new File(PROJECT.projectDir, 'app/build/generated/res/resValues/debug/values/generated.xml')
       releaseResValues = new File(PROJECT.projectDir, 'app/build/generated/res/resValues/release/values/generated.xml')
-      secrets = BuildProperties.create(new File(PROJECT.projectDir, 'properties/secrets.properties'))
+      secrets = FilePropertiesEntries.create(new File(PROJECT.projectDir, 'properties/secrets.properties'))
       return base;
     }
   }
