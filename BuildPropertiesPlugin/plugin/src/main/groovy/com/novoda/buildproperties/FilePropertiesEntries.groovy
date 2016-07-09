@@ -38,8 +38,8 @@ class FilePropertiesEntries extends BuildProperties.Entries {
   }
 
   @Override
-  Set<String> getKeys() {
-    props.stringPropertyNames()
+  Enumeration<String> getKeys() {
+    Collections.enumeration(props.stringPropertyNames())
   }
 
 }
