@@ -78,11 +78,7 @@ public class SampleProjectTest {
     @Override
     Statement apply(Statement base, Description description) {
       File propertiesFile = new File(Resources.getResource('any.properties').toURI())
-
       File rootDir = propertiesFile.parentFile.parentFile.parentFile.parentFile.parentFile
-
-      File localRepoDir = new File(rootDir, '.gradle/repo')
-      assertThat(localRepoDir.absolutePath).endsWith('.gradle/repo')
 
       projectDir = new File(rootDir, 'sample')
       buildResult = DefaultGradleRunner.create()
