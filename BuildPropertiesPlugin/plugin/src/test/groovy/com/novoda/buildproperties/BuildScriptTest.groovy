@@ -16,44 +16,41 @@ public class BuildScriptTest {
   @Rule
   public final TemporaryFolder temp = new TemporaryFolder()
 
-  private BuildPropertiesPlugin plugin
+  private Project project
 
   @Before
   public void setUp() {
-    plugin = new BuildPropertiesPlugin()
+    project = ProjectBuilder.builder()
+            .withProjectDir(temp.newFolder())
+            .build()
   }
 
   @Test
   public void shouldNotApplyPluginWhenAndroidPluginNotApplied() {
-    Project project = ProjectBuilder.builder()
-            .withProjectDir(temp.newFolder())
-            .build()
     try {
-      plugin.apply(project)
+      project.apply plugin: BuildPropertiesPlugin
       fail('Gradle exception not thrown')
     } catch (GradleException e) {
-      assertThat(e.getMessage()).isEqualTo('The build-properties plugin can be applied only after the Android plugin')
+      assertThat(e.getCause().getMessage()).isEqualTo('The build-properties plugin can be applied only after the Android plugin')
     }
   }
 
   @Test
   public void shouldApplyPluginWhenAndroidApplicationPluginApplied() {
-    Project project = ProjectBuilder.builder()
-            .withProjectDir(temp.newFolder())
-            .build()
-
     project.apply plugin: 'com.android.application'
-    plugin.apply(project)
+
+    project.apply plugin: BuildPropertiesPlugin
+
+    assertThat(project.plugins.hasPlugin(BuildPropertiesPlugin)).isTrue()
   }
 
   @Test
   public void shouldApplyPluginWhenAndroidLibraryPluginApplied() {
-    Project project = ProjectBuilder.builder()
-            .withProjectDir(temp.newFolder())
-            .build()
-
     project.apply plugin: 'com.android.library'
-    plugin.apply(project)
+
+    project.apply plugin: BuildPropertiesPlugin
+
+    assertThat(project.plugins.hasPlugin(BuildPropertiesPlugin)).isTrue()
   }
 
 }
