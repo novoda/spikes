@@ -7,7 +7,7 @@ class BuildProperties {
   private Closure<Properties> entries
 
   static BuildProperties create(String name = null, File file) {
-    BuildProperties buildProperties = new BuildProperties(name?:file.name)
+    BuildProperties buildProperties = new BuildProperties(name ?: file.name)
     buildProperties.file file
     return buildProperties
   }
@@ -53,6 +53,31 @@ class BuildProperties {
       return value
     }
     return new Entry(key, getValue)
+  }
+
+  static abstract class Entries implements Iterable<Entry> {
+
+    abstract boolean contains(String key)
+
+    protected abstract Object getValueAt(String key)
+
+    Entry getAt(String key) {
+      new Entry(key, {
+        getValueAt(key)
+      })
+    }
+
+    abstract File file(String path)
+
+    abstract Set<String> keys()
+
+    @Override
+    Iterator<Entry> iterator() {
+      keys().collect { String key ->
+        getAt(key)
+      }.iterator()
+    }
+
   }
 
   static class Entry {
