@@ -5,12 +5,6 @@ class BuildProperties {
   private final String name
   private Closure<Entries> entries
 
-  static BuildProperties create(String name = null, File file) {
-    BuildProperties buildProperties = new BuildProperties(name ?: file.name)
-    buildProperties.file file
-    buildProperties
-  }
-
   BuildProperties(String name) {
     this.name = name
   }
