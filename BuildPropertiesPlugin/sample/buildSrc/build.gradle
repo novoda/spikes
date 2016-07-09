@@ -1,0 +1,9 @@
+repositories {
+  jcenter()
+}
+
+apply plugin: 'groovy'
+
+dependencies {
+  compile project(':plugin')
+}
