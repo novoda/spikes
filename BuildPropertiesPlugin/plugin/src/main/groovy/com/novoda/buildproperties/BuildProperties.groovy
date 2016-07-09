@@ -3,13 +3,12 @@ package com.novoda.buildproperties
 class BuildProperties {
 
   private final String name
-  private File file
-  private Closure<Properties> entries
+  private Closure<Entries> entries
 
   static BuildProperties create(String name = null, File file) {
     BuildProperties buildProperties = new BuildProperties(name ?: file.name)
     buildProperties.file file
-    return buildProperties
+    buildProperties
   }
 
   BuildProperties(String name) {
@@ -17,45 +16,28 @@ class BuildProperties {
   }
 
   String getName() {
-    return name
-  }
-
-  File getFile() {
-    return file
+    name
   }
 
   void file(File file) {
-    this.file = file
     this.entries = {
-      Properties properties = new Properties()
-      properties.load(new FileInputStream(file))
-      properties
+      FilePropertiesEntries.create(name, file)
     }.memoize()
   }
 
   File getParentFile() {
-    return file.getParentFile()
+    entries.call().parentFile
   }
 
-  Collection<Entry> allEntries() {
-    Properties properties = entries.call()
-    properties.stringPropertyNames().collect { String name ->
-      return new Entry(name, { properties[name] })
-    }
+  Set<String> getKeys() {
+    entries.call().keys
   }
 
   Entry getAt(String key) {
-    def getValue = {
-      Object value = entries.call()[key]
-      if (value == null) {
-        throw new IllegalArgumentException("No value defined for property '$key' in '$name' properties ($file.absolutePath)")
-      }
-      return value
-    }
-    return new Entry(key, getValue)
+    entries.call().getAt(key)
   }
 
-  static abstract class Entries implements Iterable<Entry> {
+  static abstract class Entries {
 
     abstract boolean contains(String key)
 
@@ -67,16 +49,9 @@ class BuildProperties {
       })
     }
 
-    abstract File parentFile()
+    abstract File getParentFile()
 
-    abstract Set<String> keys()
-
-    @Override
-    Iterator<Entry> iterator() {
-      keys().collect { String key ->
-        getAt(key)
-      }.iterator()
-    }
+    abstract Set<String> getKeys()
 
   }
 

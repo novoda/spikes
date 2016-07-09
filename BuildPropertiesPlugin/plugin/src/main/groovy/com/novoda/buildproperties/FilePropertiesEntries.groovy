@@ -33,12 +33,12 @@ class FilePropertiesEntries extends BuildProperties.Entries {
   }
 
   @Override
-  File parentFile() {
+  File getParentFile() {
     file.parentFile
   }
 
   @Override
-  Set<String> keys() {
+  Set<String> getKeys() {
     props.stringPropertyNames()
   }
 
