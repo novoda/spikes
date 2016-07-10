@@ -32,7 +32,7 @@ function EnewsFetcher(token) {
     Q.all(usersPromise).then(users => {
       var eNews = toEnews(eNewsMessages, users);
       callback(eNews);
-    });
+    }).done();
   }
 
   function isEnewsMessage(message) {
@@ -67,13 +67,13 @@ function EnewsFetcher(token) {
   function toEnews(messages, users) {
     return messages.map(message => {
         var posterName = users.filter(user => user.id === message.user).map(user => user.real_name)[0];
-        var attachment = message.attachments[0];
+        var attachment = message.attachments ? message.attachments[0] : '';
         return {
             originalMessage: message.text,
-            title: attachment.title ? attachment.title : (attachment.text ? attachment.text : ''),
-            link: attachment.title_link ? attachment.title_link : attachment.from_url,
+            title: attachment.title || attachment.text || '',
+            link: attachment.title_link || attachment.from_url || '',
             poster: posterName,
-            imageUrl: attachment.image_url ? attachment.image_url : attachment.thumb_url
+            imageUrl: attachment.image_url || attachment.thumb_url || ''
         }
     });
   }
