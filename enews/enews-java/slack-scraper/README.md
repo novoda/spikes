@@ -1,0 +1,1 @@
+Will scan the general channel for a date range and return all slack messages using the #eNews tag

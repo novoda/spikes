@@ -6,7 +6,7 @@ var moment = require('moment');
 
 function generateHtml(eNews) {
   var formattedTodaysDate = moment().format('YYYY-MM-DD');
-  var html = '<h1 style="font-family:Comic Sans MS">#enews ' + formattedTodaysDate + '</h1>'
+  var html = '<h1 style="font-family:serif">#enews ' + formattedTodaysDate + '</h1>'
   html += '<p style="font-family:Comic Sans MS"><i>External news from the past 7 days!</i></p>';
   html += '<br><table style="width:100%" cellspacing="20">';
   eNews.forEach(function(each) {
