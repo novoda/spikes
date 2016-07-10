@@ -30,6 +30,7 @@ function createImageItem(each) {
 function createTextItem(each) {
   return '<tr><td colspan="2">' +
   `<p style="font-family:Comic Sans MS"><i>${each.originalMessage}</i><br>${each.title}</p>` +
+  `<br><a style="font-family:Comic Sans MS" href="${each.link}">${each.link}</a>` +
   `<br><p style="font-family:Comic Sans MS">${each.poster}</p>` +
   '</td></tr>';
 }
