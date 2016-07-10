@@ -28,8 +28,8 @@ function createImageItem(each) {
 }
 
 function createTextItem(each) {
-  return '<tr>' +
+  return '<tr><td colspan="2">' +
   `<p style="font-family:Comic Sans MS"><i>${each.originalMessage}</i><br>${each.title}</p>` +
   `<br><p style="font-family:Comic Sans MS">${each.poster}</p>` +
-  '</tr>';
+  '</td></tr>';
 }
