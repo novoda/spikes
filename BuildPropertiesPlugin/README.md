@@ -17,15 +17,8 @@ To build the latest version of the plugin, run from the root of the repo:
 ./gradlew build
 ```
 
-The plugin at the moment is not deployed in any public maven repo, therefore your only option is to deploy it to a local one.
-A default setup with an embedded repo (pointing to `.gradle/repo`) is provided, just run the following command from the root
- of the project:
-```
-./gradlew deployLocal
-```
-
-The sample app is not part of the main project to work around the fact the plugin might be not deployed yet either locally or remotely.
-To give it a go you need to **change your working directory to `sample/`**, and build from there. The sample app by default will use the embedded local repo to retrieve the plugin:
+The sample app is not part of the main project and will compile the latest plugin on the fly.
+To give it a go you need to **change your working directory to `sample/`**, and build from there:
 ```
 ./gradlew assemble
 ```
@@ -34,7 +27,7 @@ To give it a go you need to **change your working directory to `sample/`**, and 
 
 #### 1.Maven coordinates
 The plugin **is not deployed on any public maven repo at the moment**, therefore you have the only choice of using it in
-the sample app via the embedded local repo. The setup for this scenario is already in place (Fear not, Bintray deploy is coming soon).
+the sample app (Fear not, Bintray deploy is coming soon).
 
 #### 2. Apply plugin
 The plugin needs to be applied to your Android module after the Android gradle plugin. In your `build.gradle` you should put
@@ -146,7 +139,7 @@ The full list of new typed facilities is as follows:
 |`buildConfigInt` | `buildConfigInt 'TEST_INT', 42`|
 |`buildConfigLong` | `buildConfigLong 'TEST_LONG', System.currentTimeMillis()`|
 |`buildConfigDouble` | `buildConfigDouble 'TEST_DOUBLE', Math.PI`|
-|`buildConfigString` | `buildConfigString 'TEST_STRING', "whateva"`|
+|`buildConfigString` | `buildConfigString 'TEST_STRING', 'whateva'`|
 |`resValueInt`| `resValueInt 'debug_test_int', 100`|
 |`resValueBoolean` | `resValueBoolean 'debug_test_bool', true`|
 |`resValueString` | `resValueString 'debug_test_string', 'dunno bro...'`|

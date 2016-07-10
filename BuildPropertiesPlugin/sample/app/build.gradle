@@ -1,15 +1,11 @@
 buildscript {
-  repositories {
-    maven { url rootProject.file('../.gradle/repo') }
-  }
   dependencies {
     classpath 'com.android.tools.build:gradle:2.1.2'
-    classpath "${pluginGroup}:${pluginId}:${pluginVersion}"
   }
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'build-properties'
+apply plugin: com.novoda.buildproperties.BuildPropertiesPlugin
 
 buildProperties {
   secrets {
