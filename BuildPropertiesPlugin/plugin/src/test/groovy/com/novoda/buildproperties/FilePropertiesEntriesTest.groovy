@@ -97,4 +97,17 @@ public class FilePropertiesEntriesTest {
     assertThat(Collections.list(entries.keys)).containsExactly('aProperty', 'another_PROPERTY', 'api.key', 'negative', 'positive', 'int', 'double', 'string')
   }
 
+  @Test
+  public void shouldRecursivelyIncludePropertiesFromSpecifiedFilesWhenIncludeProvided() {
+    def moreEntries = FilePropertiesEntries.create(new File(Resources.getResource('more.properties').toURI()))
+    def includingEntries = FilePropertiesEntries.create(new File(Resources.getResource('including.properties').toURI()))
+
+    entries.keys.each { String key ->
+      assertThat(moreEntries[key].value).isEqualTo(entries[key].value)
+    }
+    assertThat(moreEntries['foo'].value).isEqualTo(includingEntries['foo'].value)
+    assertThat(moreEntries['a'].value).isEqualTo('android')
+    assertThat(includingEntries['a'].value).isEqualTo('apple')
+  }
+
 }
