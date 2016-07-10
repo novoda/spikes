@@ -7,26 +7,35 @@ import org.junit.Test
 import static com.google.common.truth.Truth.assertThat
 import static org.junit.Assert.fail
 
-public class BuildPropertiesTest {
+public class FilePropertiesEntriesTest {
 
   private static final File PROPERTIES_FILE = new File(Resources.getResource('any.properties').toURI())
 
-  private BuildProperties buildProperties
+  private FilePropertiesEntries entries
 
   @Before
   public void setUp() {
-    buildProperties = BuildProperties.create('any', PROPERTIES_FILE)
+    entries = FilePropertiesEntries.create(PROPERTIES_FILE)
   }
 
   @Test
-  public void shouldAccessPropertiesLazily() {
-    BuildProperties.Entry entry1 = buildProperties['notThere']
-    BuildProperties.Entry entry2 = buildProperties['aProperty']
+  public void shouldNotAccessPropertyValueWhenGettingEntry() {
+    try {
+      BuildProperties.Entry entry = entries['notThere']
+    } catch (IllegalArgumentException ignored) {
+      fail('Entry value should be evaluated lazily')
+    }
+  }
+
+  @Test
+  public void shouldCheckPropertyExistenceInstantly() {
+    assertThat(entries.contains('notThere')).isFalse()
+    assertThat(entries.contains('aProperty')).isTrue()
   }
 
   @Test
   public void shouldRetrieveValueWhenPropertyDefined() {
-    def value = buildProperties['aProperty'].value
+    def value = entries['aProperty'].value
 
     assertThat(value).isEqualTo('qwerty')
   }
@@ -34,7 +43,7 @@ public class BuildPropertiesTest {
   @Test
   public void shouldThrowIllegalArgumentExceptionWhenTryingToAccessValueOfUndefinedProperty() {
     try {
-      buildProperties['notThere'].value
+      entries['notThere'].value
       fail('IllegalArgumentException expected')
     } catch (IllegalArgumentException e) {
       assertThat(e.getMessage()).startsWith("No value defined for property 'notThere'")
@@ -43,20 +52,20 @@ public class BuildPropertiesTest {
 
   @Test
   public void shouldConvertToTrueBooleanWhenPropertyDefinedAsTrue() {
-    Boolean value = buildProperties['positive'].boolean
+    Boolean value = entries['positive'].boolean
     assertThat(value).isTrue()
   }
 
   @Test
   public void shouldConvertToFalseWhenPropertyNotDefinedAsBoolean() {
-    Boolean value = buildProperties['string'].boolean
+    Boolean value = entries['string'].boolean
     assertThat(value).isFalse()
   }
 
   @Test
   public void shouldThrowNumberFormatExceptionWhenPropertyNotDefinedAsInteger() {
     try {
-      buildProperties['string'].int
+      entries['string'].int
     } catch (NumberFormatException e) {
       assertThat(e.getMessage()).contains('"hello world"')
     }
@@ -64,14 +73,14 @@ public class BuildPropertiesTest {
 
   @Test
   public void shouldConvertToIntegerWhenPropertyDefinedAsInteger() {
-    Integer value = buildProperties['int'].int
+    Integer value = entries['int'].int
     assertThat(value).isEqualTo(123456)
   }
 
   @Test
   public void shouldThrowNumberFormatExceptionWhenPropertyNotDefinedAsDouble() {
     try {
-      buildProperties['string'].double
+      entries['string'].double
     } catch (NumberFormatException e) {
       assertThat(e.getMessage()).contains('"hello world"')
     }
@@ -79,8 +88,13 @@ public class BuildPropertiesTest {
 
   @Test
   public void shouldConvertToDoubleWhenPropertyDefinedAsDouble() {
-    Double value = buildProperties['double'].double
+    Double value = entries['double'].double
     assertThat(value).isEqualTo(0.001 as Double)
+  }
+
+  @Test
+  public void shouldEnumerateAllKeysInPropertiesFile() {
+    assertThat(Collections.list(entries.keys)).containsExactly('aProperty', 'another_PROPERTY', 'api.key', 'negative', 'positive', 'int', 'double', 'string')
   }
 
 }

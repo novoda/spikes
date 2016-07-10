@@ -3,56 +3,50 @@ package com.novoda.buildproperties
 class BuildProperties {
 
   private final String name
-  private File file
-  private Closure<Properties> entries
-
-  static BuildProperties create(String name = null, File file) {
-    BuildProperties buildProperties = new BuildProperties(name?:file.name)
-    buildProperties.file file
-    return buildProperties
-  }
+  private Closure<Entries> entries
 
   BuildProperties(String name) {
     this.name = name
   }
 
   String getName() {
-    return name
-  }
-
-  File getFile() {
-    return file
+    name
   }
 
   void file(File file) {
-    this.file = file
     this.entries = {
-      Properties properties = new Properties()
-      properties.load(new FileInputStream(file))
-      properties
+      FilePropertiesEntries.create(name, file)
     }.memoize()
   }
 
   File getParentFile() {
-    return file.getParentFile()
+    entries.call().parentFile
   }
 
-  Collection<Entry> allEntries() {
-    Properties properties = entries.call()
-    properties.stringPropertyNames().collect { String name ->
-      return new Entry(name, { properties[name] })
-    }
+  Enumeration<String> getKeys() {
+    entries.call().keys
   }
 
   Entry getAt(String key) {
-    def getValue = {
-      Object value = entries.call()[key]
-      if (value == null) {
-        throw new IllegalArgumentException("No value defined for property '$key' in '$name' properties ($file.absolutePath)")
-      }
-      return value
+    entries.call().getAt(key)
+  }
+
+  static abstract class Entries {
+
+    abstract boolean contains(String key)
+
+    protected abstract Object getValueAt(String key)
+
+    Entry getAt(String key) {
+      new Entry(key, {
+        getValueAt(key)
+      })
     }
-    return new Entry(key, getValue)
+
+    abstract File getParentFile()
+
+    abstract Enumeration<String> getKeys()
+
   }
 
   static class Entry {
