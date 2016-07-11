@@ -21,19 +21,6 @@ public class StatisticsPresenter {
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
-    final NavDrawerActionListener navDrawerActionListener = new NavDrawerActionListener() {
-        @Override
-        public void onToDoListNavDrawerItemSelected() {
-            navDrawerDisplayer.closeNavDrawer();
-            navigator.toTasksList();
-        }
-
-        @Override
-        public void onStatisticsNavDrawerItemSelected() {
-            navDrawerDisplayer.closeNavDrawer();
-        }
-    };
-
     public StatisticsPresenter(StatisticsService statisticsService,
                                StatisticsDisplayer statisticsDisplayer,
                                NavDrawerDisplayer navDrawerDisplayer,
@@ -66,4 +53,16 @@ public class StatisticsPresenter {
         }
     }
 
+    final NavDrawerActionListener navDrawerActionListener = new NavDrawerActionListener() {
+        @Override
+        public void onToDoListNavDrawerItemSelected() {
+            navDrawerDisplayer.closeNavDrawer();
+            navigator.toTasksList();
+        }
+
+        @Override
+        public void onStatisticsNavDrawerItemSelected() {
+            navDrawerDisplayer.closeNavDrawer();
+        }
+    };
 }
