@@ -189,7 +189,7 @@ public class DropCapView extends View {
             shouldDisplayDropCap = true;
         } else {
             dropCapText = String.valueOf('\0');
-            copyText = text == null ? "" : text;
+            copyText = (text == null) ? "" : text;
             shouldDisplayDropCap = false;
         }
     }
