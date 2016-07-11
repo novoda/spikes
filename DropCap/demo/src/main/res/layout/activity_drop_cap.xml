@@ -4,11 +4,6 @@
   android:layout_height="match_parent"
   android:orientation="vertical">
 
-  <FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/divider_height"
-    android:background="@color/divider" />
-
   <ScrollView
     android:layout_width="match_parent"
     android:layout_height="@dimen/scroll_view_height">
@@ -21,7 +16,7 @@
 
   </ScrollView>
 
-  <FrameLayout
+  <View
     android:layout_width="match_parent"
     android:layout_height="@dimen/divider_height"
     android:background="@color/divider" />
