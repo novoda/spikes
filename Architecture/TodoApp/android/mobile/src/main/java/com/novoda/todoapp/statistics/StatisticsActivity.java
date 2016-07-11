@@ -3,10 +3,13 @@ package com.novoda.todoapp.statistics;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.novoda.notils.caster.Views;
 import com.novoda.todoapp.R;
 import com.novoda.todoapp.TodoApplication;
-import com.novoda.todoapp.statistics.displayer.StatisticsDisplayer;
+import com.novoda.todoapp.navigation.AndroidNavDrawerDisplayer;
+import com.novoda.todoapp.navigation.AndroidNavigator;
 import com.novoda.todoapp.statistics.presenter.StatisticsPresenter;
+import com.novoda.todoapp.statistics.view.StatisticsView;
 
 public class StatisticsActivity extends AppCompatActivity {
 
@@ -16,9 +19,12 @@ public class StatisticsActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.statistics_activity);
+        StatisticsView statisticsView = Views.findById(this, R.id.content);
         presenter = new StatisticsPresenter(
                 TodoApplication.STATISTICS_SERVICE,
-                ((StatisticsDisplayer) findViewById(R.id.content))
+                statisticsView,
+                new AndroidNavDrawerDisplayer(statisticsView, statisticsView.getNavDrawer()),
+                new AndroidNavigator(this)
         );
     }
 

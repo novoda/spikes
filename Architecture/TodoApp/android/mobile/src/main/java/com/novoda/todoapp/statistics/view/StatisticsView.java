@@ -2,6 +2,7 @@ package com.novoda.todoapp.statistics.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +19,7 @@ import com.novoda.todoapp.views.TodoAppBar;
 public class StatisticsView extends DrawerLayout implements StatisticsDisplayer {
 
     private TextView statisticsLabel;
+    private NavigationView navDrawer;
 
     public StatisticsView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -36,6 +38,8 @@ public class StatisticsView extends DrawerLayout implements StatisticsDisplayer 
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle((Activity) getContext(), this, toolbar, R.string.app_name, R.string.app_name);
         addDrawerListener(drawerToggle);
         drawerToggle.syncState();
+
+        navDrawer = Views.findById(this, R.id.nav_drawer);
     }
 
     @Override
@@ -53,4 +57,7 @@ public class StatisticsView extends DrawerLayout implements StatisticsDisplayer 
         }
     }
 
+    public NavigationView getNavDrawer() {
+        return navDrawer;
+    }
 }

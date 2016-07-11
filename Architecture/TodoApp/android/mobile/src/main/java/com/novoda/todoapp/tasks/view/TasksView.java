@@ -25,6 +25,7 @@ import com.novoda.todoapp.views.TodoAppBar;
 
 public class TasksView extends DrawerLayout implements TasksDisplayer {
 
+    private NavigationView navDrawer;
     private RecyclerView recyclerView;
     private TasksAdapter adapter;
     private TasksActionListener tasksActionListener;
@@ -51,6 +52,8 @@ public class TasksView extends DrawerLayout implements TasksDisplayer {
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle((Activity) getContext(), this, toolbar, R.string.app_name, R.string.app_name);
         addDrawerListener(drawerToggle);
         drawerToggle.syncState();
+
+        navDrawer = Views.findById(this, R.id.nav_drawer);
     }
 
     @Override
@@ -86,7 +89,7 @@ public class TasksView extends DrawerLayout implements TasksDisplayer {
     }
 
     public NavigationView getNavDrawer() {
-        return Views.findById(this, R.id.nav_drawer);
+        return navDrawer;
     }
 
     private void showFilteringPopUpMenu() {
