@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/scroll_view_height">
+
+    <com.mecharyry.dropcap.DropCapView
+      android:id="@+id/view_drop_cap"
+      style="@style/DropCap"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
+
+  </ScrollView>
+
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/divider_height"
+    android:background="@color/divider" />
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <Button
+      android:id="@+id/drop_cap_size"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="100"
+      android:text="@string/drop_cap_edit_drop_cap_size" />
+
+    <Button
+      android:id="@+id/copy_size"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="100"
+      android:text="@string/drop_cap_edit_copy_size" />
+
+  </LinearLayout>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <Button
+      android:id="@+id/drop_cap_color"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="100"
+      android:text="@string/drop_cap_edit_drop_cap_color" />
+
+    <Button
+      android:id="@+id/copy_color"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="100"
+      android:text="@string/drop_cap_edit_copy_color" />
+
+  </LinearLayout>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <Spinner
+      android:id="@+id/drop_cap_font_spinner"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="100" />
+
+    <Spinner
+      android:id="@+id/copy_font_spinner"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="100" />
+
+  </LinearLayout>
+
+</LinearLayout>

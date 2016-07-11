@@ -1,0 +1,70 @@
+<resources>
+
+  <string name="app_name">DropCap</string>
+
+  <string name="drop_cap_dummy_text">Qorem ipsum dolor sit amet, consectetur adipiscing elit. Integer feugiat, tortor dictum hendrerit mollis, mauris
+    odio congue nibh, non consequat lectus nisl ut sapien. Vivamus a quam vel enim ultrices bibendum eget ac tortor. In volutpat id enim eleifend
+    ultrices. Sed eleifend augue sit amet lobortis dignissim. Donec id nibh porta, molestie sem et, vehicula ipsum. Pellentesque sit amet enim ut
+    metus ornare sollicitudin. Praesent ut lorem ultrices elit condimentum sollicitudin id eget lorem. Nulla sit amet neque a mi mattis pellentesque
+    non id metus. Sed laoreet volutpat condimentum. Nullam in molestie dui. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
+    inceptos himenaeos.
+
+    Nullam sed neque quis ligula varius consequat id sed est. Duis hendrerit ex at vulputate consectetur. Ut mollis velit non est luctus, non mattis
+    metus pellentesque. Maecenas quis magna tellus. Nam nulla odio, vehicula eu ultricies iaculis, sagittis eget sem. Ut mattis venenatis dui vel
+    pretium. Nam blandit pulvinar dictum.
+
+    Sed vel augue sodales, congue leo et, suscipit ex. Suspendisse potenti. Mauris rutrum, mauris blandit sollicitudin congue, urna lorem sollicitudin
+    urna, at posuere mauris ipsum dapibus sapien. Donec imperdiet ipsum lectus, a ornare diam commodo suscipit. Vivamus eu volutpat elit, sagittis
+    rutrum eros. Vestibulum elementum ante ligula, vel accumsan tortor cursus a. Morbi vulputate placerat arcu at euismod. Pellentesque erat ex,
+    varius in metus eget, feugiat cursus metus. Donec ullamcorper sed arcu sed hendrerit. Nulla purus odio, pellentesque non dolor nec, dictum
+    tincidunt est. Sed a congue augue, ut pulvinar diam. Nullam eu fermentum dolor, vel faucibus justo. Suspendisse sollicitudin dapibus turpis.
+
+    Vivamus eleifend nulla augue, quis pulvinar nunc egestas a. Integer non purus mi. Aliquam eleifend mattis eros, et aliquam massa fermentum non.
+    Morbi dolor neque, aliquam vel diam vitae, congue dignissim nunc. In hac habitasse platea dictumst. Donec dapibus sem auctor ante feugiat
+    sollicitudin. Nam dapibus dapibus rhoncus. Aliquam posuere sem interdum, semper lectus ut, molestie nibh. Aenean pharetra dignissim lorem, ac
+    dapibus risus. Vestibulum suscipit turpis tristique feugiat pulvinar.
+
+    Aliquam a ullamcorper turpis. Aliquam commodo enim id lorem molestie sodales. Proin nulla tortor, vestibulum vel lorem vel, lobortis blandit urna.
+    Nam vulputate neque non arcu imperdiet, quis tempor ante ullamcorper. Nullam ullamcorper, massa eget bibendum lacinia, arcu eros ullamcorper
+    sapien, vitae porta elit ligula placerat elit. Praesent ut ligula sit amet velit lacinia aliquet. Aliquam volutpat ligula at massa interdum
+    tempor. Integer ornare vitae libero id mollis. Pellentesque viverra mattis mauris, quis mattis metus sagittis sed. Donec ut blandit magna. Donec
+    vulputate lacus ac cursus maximus. Aenean efficitur mauris eu placerat tincidunt.
+
+    Quisque aliquet mauris quam, sed accumsan odio porttitor in. Fusce facilisis tempor ligula, eu bibendum enim auctor sed. Nunc sodales venenatis
+    mi. Vestibulum est quam, consequat eget aliquet ac, rhoncus non ex. Praesent at vestibulum metus. Cras venenatis, massa nec efficitur malesuada,
+    purus neque tempor lectus, in convallis felis erat at eros. Morbi ipsum nisl, congue sit amet viverra sit amet, consequat vestibulum leo. Etiam
+    ornare tortor et risus congue dignissim. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+
+    Proin et massa eget dolor tincidunt efficitur. Duis quis aliquam mauris, ac laoreet leo. Cras pellentesque non nibh et viverra. Donec in vehicula
+    nulla. Sed feugiat urna ligula, non ultricies lorem rutrum aliquet. Fusce mollis sagittis velit nec congue. Curabitur scelerisque, enim at
+    convallis maximus, purus orci sollicitudin nulla, sed rutrum nunc massa eget sem. Aenean ut est pharetra, commodo tortor vel, fermentum purus.
+    Phasellus commodo bibendum elit. Curabitur non massa suscipit, lacinia velit et, vestibulum ante. Aenean volutpat placerat odio sit amet sodales.
+    Sed fringilla eros vel vehicula gravida. Proin consectetur ante dolor, eu consectetur neque iaculis sit amet.
+
+    In non eros efficitur nisl hendrerit lobortis in et nisi. Nullam fringilla nisi eu leo maximus efficitur. Sed non sollicitudin dolor. Donec id
+    ante blandit, lobortis leo nec, facilisis nunc. Praesent ac consectetur sapien, eget hendrerit velit. Ut porttitor augue ut ligula finibus varius.
+    Aenean fringilla congue efficitur. Duis mattis efficitur ante at dapibus. Curabitur convallis metus pulvinar purus tempus iaculis. Etiam
+    pellentesque neque leo, at venenatis nibh pulvinar vel. Nam convallis dolor quis purus ultrices, a rutrum dolor tincidunt. Etiam ut porta eros, ut
+    aliquet leo. Interdum et malesuada fames ac ante ipsum primis in faucibus. Praesent aliquet nulla non metus tristique bibendum. Duis porttitor
+    hendrerit metus, vel bibendum orci. Morbi mauris risus, convallis a eros nec, aliquam gravida dui.
+
+    Fusce vitae condimentum ante. Duis vel ante sit amet risus maximus fringilla. Phasellus id interdum lacus. Pellentesque id lacinia tortor, eget
+    finibus turpis. Sed blandit, libero sed aliquam laoreet, erat quam rutrum erat, fermentum condimentum nisl enim quis lectus. Sed suscipit orci
+    vitae velit vehicula, ac vulputate dolor tincidunt. Quisque eu euismod nisi. Duis lobortis turpis a augue ultrices, ut porttitor ex lacinia. Proin
+    venenatis, sapien in mollis bibendum, dui lorem viverra urna, sit amet vehicula nulla enim luctus tortor. Aliquam congue tempus urna, pellentesque
+    volutpat sapien. Morbi hendrerit lobortis vestibulum.
+
+    Maecenas pulvinar suscipit justo eget eleifend. Sed ac justo iaculis, consequat metus id, tincidunt leo. Integer molestie pellentesque leo. Proin
+    vitae rutrum tortor. Donec tristique vulputate sapien ut euismod. Maecenas tincidunt est quam, sit amet placerat velit hendrerit ac. Maecenas
+    pulvinar pretium ex, ut mattis ex blandit ut. Duis viverra, enim eu lacinia sollicitudin, risus diam interdum diam, pharetra posuere erat neque ac
+    nisl. Duis vitae fringilla magna. Curabitur sit amet dictum nisl. Mauris efficitur erat odio, at volutpat metus vestibulum in. Proin quis urna ut
+    nunc cursus tincidunt id id ipsum. Nullam condimentum lorem nisl, sed sagittis turpis ornare non.
+  </string>
+
+  <string name="drop_cap_edit_drop_cap_size">Edit Drop Cap Size</string>
+  <string name="drop_cap_edit_copy_size">Edit Copy Size</string>
+
+  <string name="drop_cap_edit_drop_cap_color">Edit Drop Cap Color</string>
+  <string name="drop_cap_edit_copy_color">Edit Copy Color</string>
+
+</resources>
