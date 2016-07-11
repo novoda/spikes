@@ -42,7 +42,11 @@ public class DropCapView extends View {
     private boolean hasPaintChanged;
 
     public DropCapView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
+    }
+
+    public DropCapView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
         typefaceFactory = new TypefaceFactory();
         spacer = getResources().getDimensionPixelSize(R.dimen.drop_cap_space_right);
         applyCustomAttributes(context, attrs);
