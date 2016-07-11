@@ -1,4 +1,4 @@
-package com.mecharyry.dropcap;
+package com.mecharyry.dropcap.demo;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.mecharyry.drop_cap.R;
+import com.mecharyry.dropcap.DropCapView;
 
 public class DropCapActivity extends Activity {
 

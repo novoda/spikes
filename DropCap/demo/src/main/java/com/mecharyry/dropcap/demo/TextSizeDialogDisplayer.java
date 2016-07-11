@@ -1,4 +1,4 @@
-package com.mecharyry.dropcap;
+package com.mecharyry.dropcap.demo;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;

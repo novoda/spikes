@@ -1,4 +1,4 @@
-package com.mecharyry.dropcap;
+package com.mecharyry.dropcap.demo;
 
 import android.support.annotation.StringRes;
 

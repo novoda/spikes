@@ -7,11 +7,11 @@
     android:icon="@drawable/ic_launcher"
     android:theme="@style/AppTheme">
 
-    <activity android:name="com.mecharyry.dropcap.DropCapActivity" />
+    <activity android:name="com.mecharyry.dropcap.demo.DropCapActivity" />
 
     <activity-alias
       android:name="activity.primary_launcher"
-      android:targetActivity="com.mecharyry.dropcap.DropCapActivity">
+      android:targetActivity="com.mecharyry.dropcap.demo.DropCapActivity">
 
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
