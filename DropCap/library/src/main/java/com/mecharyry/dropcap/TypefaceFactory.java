@@ -12,9 +12,8 @@ import java.util.Map;
 
 class TypefaceFactory {
 
-    private AssetManager assetManager;
     private static final Map<String, SoftReference<Typeface>> FONT_CACHE = new HashMap<>();
-    private static final Typeface DEFAULT_TYPEFACE = null;
+    private AssetManager assetManager;
 
     public Typeface createFrom(Context context, AttributeSet attrs) {
         initAssetManager(context);
