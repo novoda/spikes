@@ -6,7 +6,7 @@ import android.content.res.Resources;
 
 import com.mecharyry.drop_cap.R;
 
-public class TextColorDialogDisplayer {
+class TextColorDialogDisplayer {
 
     private final FragmentManager fragmentManager;
     private final Resources resources;

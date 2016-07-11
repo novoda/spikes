@@ -4,7 +4,7 @@ import android.support.annotation.StringRes;
 
 import com.mecharyry.drop_cap.R;
 
-public enum FontType {
+enum FontType {
 
     CABIN_REGULAR("Cabin Regular", R.string.sans_serif),
     FUNKROCKER("Funkrocker", R.string.funkrocker),
