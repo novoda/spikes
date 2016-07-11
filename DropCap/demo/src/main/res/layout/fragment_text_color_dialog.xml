@@ -38,7 +38,7 @@
       style="?android:attr/buttonBarButtonStyle"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="1"
+      android:layout_weight="100"
       android:text="@string/text_size_cancel" />
 
     <Button
@@ -46,7 +46,7 @@
       style="?android:attr/buttonBarButtonStyle"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="1"
+      android:layout_weight="100"
       android:text="@string/text_size_set" />
 
   </LinearLayout>
