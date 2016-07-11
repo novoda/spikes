@@ -25,4 +25,6 @@
   <string name="active_completed_tasks_statistics">Active tasks: %1$d\nCompleted tasks: %2$d</string>
   <string name="to_do_list">TO-DO List</string>
   <string name="to_dos">TO-DOs</string>
+  <string name="open_navigation">Open navigation</string>
+  <string name="close_navigation">Close navigation</string>
 </resources>

@@ -35,7 +35,9 @@ public class StatisticsView extends DrawerLayout implements StatisticsDisplayer 
         Toolbar toolbar = todoAppBar.getToolbar();
         toolbar.setTitle(R.string.statistics);
 
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle((Activity) getContext(), this, toolbar, R.string.app_name, R.string.app_name);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
+                (Activity) getContext(), this, toolbar, R.string.open_navigation, R.string.close_navigation
+        );
         addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 

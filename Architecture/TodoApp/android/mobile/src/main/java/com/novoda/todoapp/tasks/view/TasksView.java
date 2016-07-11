@@ -49,7 +49,9 @@ public class TasksView extends DrawerLayout implements TasksDisplayer {
         toolbar.setOnMenuItemClickListener(new TasksMenuItemClickListener());
         toolbar.setTitle(R.string.to_do_novoda);
 
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle((Activity) getContext(), this, toolbar, R.string.app_name, R.string.app_name);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
+                (Activity) getContext(), this, toolbar, R.string.open_navigation, R.string.close_navigation
+        );
         addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
