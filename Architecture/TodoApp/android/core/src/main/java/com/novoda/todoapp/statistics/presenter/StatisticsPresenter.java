@@ -1,8 +1,8 @@
 package com.novoda.todoapp.statistics.presenter;
 
 import com.novoda.event.DataObserver;
-import com.novoda.todoapp.navigation.NavDrawerActionListener;
-import com.novoda.todoapp.navigation.NavDrawerDisplayer;
+import com.novoda.todoapp.navigation.TopLevelMenuActionListener;
+import com.novoda.todoapp.navigation.TopLevelMenuDisplayer;
 import com.novoda.todoapp.navigation.Navigator;
 import com.novoda.todoapp.statistics.data.model.Statistics;
 import com.novoda.todoapp.statistics.displayer.StatisticsDisplayer;
@@ -16,18 +16,18 @@ public class StatisticsPresenter {
 
     private final StatisticsService statisticsService;
     private final StatisticsDisplayer statisticsDisplayer;
-    private final NavDrawerDisplayer navDrawerDisplayer;
+    private final TopLevelMenuDisplayer topLevelMenuDisplayer;
     private final Navigator navigator;
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
     public StatisticsPresenter(StatisticsService statisticsService,
                                StatisticsDisplayer statisticsDisplayer,
-                               NavDrawerDisplayer navDrawerDisplayer,
+                               TopLevelMenuDisplayer topLevelMenuDisplayer,
                                Navigator navigator) {
         this.statisticsService = statisticsService;
         this.statisticsDisplayer = statisticsDisplayer;
-        this.navDrawerDisplayer = navDrawerDisplayer;
+        this.topLevelMenuDisplayer = topLevelMenuDisplayer;
         this.navigator = navigator;
     }
 
@@ -37,13 +37,13 @@ public class StatisticsPresenter {
                         .compose(asData(Statistics.class))
                         .subscribe(new StatisticsObserver())
         );
-        navDrawerDisplayer.attach(navDrawerActionListener);
+        topLevelMenuDisplayer.attach(topLevelMenuActionListener);
     }
 
     public void stopPresenting() {
         subscriptions.clear();
         subscriptions = new CompositeSubscription();
-        navDrawerDisplayer.detach();
+        topLevelMenuDisplayer.detach();
     }
 
     private class StatisticsObserver extends DataObserver<Statistics> {
@@ -53,16 +53,16 @@ public class StatisticsPresenter {
         }
     }
 
-    final NavDrawerActionListener navDrawerActionListener = new NavDrawerActionListener() {
+    final TopLevelMenuActionListener topLevelMenuActionListener = new TopLevelMenuActionListener() {
         @Override
-        public void onToDoListNavDrawerItemSelected() {
-            navDrawerDisplayer.closeNavDrawer();
+        public void onToDoListItemSelected() {
+            topLevelMenuDisplayer.closeMenu();
             navigator.toTasksList();
         }
 
         @Override
-        public void onStatisticsNavDrawerItemSelected() {
-            navDrawerDisplayer.closeNavDrawer();
+        public void onStatisticsItemSelected() {
+            topLevelMenuDisplayer.closeMenu();
         }
     };
 }

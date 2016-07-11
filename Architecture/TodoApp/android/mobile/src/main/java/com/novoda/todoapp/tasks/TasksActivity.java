@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.novoda.notils.caster.Views;
 import com.novoda.todoapp.R;
 import com.novoda.todoapp.TodoApplication;
-import com.novoda.todoapp.navigation.AndroidNavDrawerDisplayer;
+import com.novoda.todoapp.navigation.AndroidTopLevelMenuDisplayer;
 import com.novoda.todoapp.navigation.AndroidNavigator;
 import com.novoda.todoapp.tasks.displayer.TasksActionListener;
 import com.novoda.todoapp.tasks.presenter.TasksPresenter;
@@ -28,7 +28,7 @@ public class TasksActivity extends AppCompatActivity {
                 TodoApplication.TASKS_SERVICE,
                 tasksView,
                 new AndroidTasksLoadingDisplayer(tasksView.getLoadingView(), tasksView.getContentView()),
-                new AndroidNavDrawerDisplayer(tasksView, tasksView.getNavDrawer()),
+                new AndroidTopLevelMenuDisplayer(tasksView, tasksView.getNavDrawer()),
                 new AndroidNavigator(this)
         );
         if (savedInstanceState != null && savedInstanceState.containsKey(KEY_FILTER)) {

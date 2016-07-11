@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableList
 import com.novoda.data.SyncState
 import com.novoda.data.SyncedData
 import com.novoda.event.Event
-import com.novoda.todoapp.navigation.NavDrawerDisplayer
 import com.novoda.todoapp.navigation.Navigator
+import com.novoda.todoapp.navigation.TopLevelMenuDisplayer
 import com.novoda.todoapp.task.data.model.Id
 import com.novoda.todoapp.task.data.model.Task
 import com.novoda.todoapp.tasks.NoEmptyTasksPredicate
@@ -41,7 +41,7 @@ class TasksPresenterTest {
 
     var displayer: TasksDisplayer = Mockito.mock(TasksDisplayer::class.java)
     var loadingDisplayer: TasksLoadingDisplayer = Mockito.mock(TasksLoadingDisplayer::class.java)
-    var navDrawerDisplayer: NavDrawerDisplayer = Mockito.mock(NavDrawerDisplayer::class.java)
+    var topLevelMenuDisplayer: TopLevelMenuDisplayer = Mockito.mock(TopLevelMenuDisplayer::class.java)
     var navigator: Navigator = Mockito.mock(Navigator::class.java)
 
     var refreshAction: Action0 = Mockito.mock(Action0::class.java)
@@ -49,12 +49,12 @@ class TasksPresenterTest {
     var activateAction: Action0 = Mockito.mock(Action0::class.java)
     var clearCompletedAction: Action0 = Mockito.mock(Action0::class.java)
 
-    var presenter = TasksPresenter(service, displayer, loadingDisplayer, navDrawerDisplayer, navigator)
+    var presenter = TasksPresenter(service, displayer, loadingDisplayer, topLevelMenuDisplayer, navigator)
 
     @Before
     fun setUp() {
         setUpService()
-        presenter = TasksPresenter(service, displayer, loadingDisplayer, navDrawerDisplayer, navigator)
+        presenter = TasksPresenter(service, displayer, loadingDisplayer, topLevelMenuDisplayer, navigator)
     }
 
     @After
@@ -445,7 +445,7 @@ class TasksPresenterTest {
 
         presenter.startPresenting()
 
-        Mockito.verify(navDrawerDisplayer).attach(presenter.navDrawerActionListener)
+        Mockito.verify(topLevelMenuDisplayer).attach(presenter.topLevelMenuActionListener)
     }
 
     @Test
@@ -454,16 +454,16 @@ class TasksPresenterTest {
 
         presenter.stopPresenting()
 
-        Mockito.verify(navDrawerDisplayer).detach()
+        Mockito.verify(topLevelMenuDisplayer).detach()
     }
 
     @Test
     fun given_ThePresenterIsPresenting_on_StatisticsNavDrawerItemSelected_it_ShouldCloseTheNavDrawerAndNavigateToStatistics() {
         givenThePresenterIsPresenting()
 
-        presenter.navDrawerActionListener.onStatisticsNavDrawerItemSelected()
+        presenter.topLevelMenuActionListener.onStatisticsItemSelected()
 
-        Mockito.verify(navDrawerDisplayer).closeNavDrawer()
+        Mockito.verify(topLevelMenuDisplayer).closeMenu()
         Mockito.verify(navigator).toStatistics()
     }
 
@@ -471,9 +471,9 @@ class TasksPresenterTest {
     fun given_ThePresenterIsPresenting_on_ToDoListNavDrawerItemSelected_it_ShouldCloseTheNavDrawer() {
         givenThePresenterIsPresenting()
 
-        presenter.navDrawerActionListener.onToDoListNavDrawerItemSelected()
+        presenter.topLevelMenuActionListener.onToDoListItemSelected()
 
-        Mockito.verify(navDrawerDisplayer).closeNavDrawer()
+        Mockito.verify(topLevelMenuDisplayer).closeMenu()
         Mockito.verifyZeroInteractions(navigator)
     }
 

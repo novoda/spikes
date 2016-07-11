@@ -8,8 +8,8 @@ import com.novoda.data.SyncedData;
 import com.novoda.event.DataObserver;
 import com.novoda.event.Event;
 import com.novoda.event.EventObserver;
-import com.novoda.todoapp.navigation.NavDrawerActionListener;
-import com.novoda.todoapp.navigation.NavDrawerDisplayer;
+import com.novoda.todoapp.navigation.TopLevelMenuActionListener;
+import com.novoda.todoapp.navigation.TopLevelMenuDisplayer;
 import com.novoda.todoapp.navigation.Navigator;
 import com.novoda.todoapp.task.data.model.Task;
 import com.novoda.todoapp.tasks.data.model.Tasks;
@@ -30,17 +30,23 @@ public class TasksPresenter {
     private final TasksService tasksService;
     private final TasksLoadingDisplayer loadingDisplayer;
     private final TasksDisplayer tasksDisplayer;
-    private final NavDrawerDisplayer navDrawerDisplayer;
+    private final TopLevelMenuDisplayer topLevelMenuDisplayer;
     private final Navigator navigator;
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
     private TasksActionListener.Filter currentFilter = TasksActionListener.Filter.ALL;
 
-    public TasksPresenter(TasksService tasksService, TasksDisplayer tasksDisplayer, TasksLoadingDisplayer loadingDisplayer, NavDrawerDisplayer navDrawerDisplayer, Navigator navigator) {
+    public TasksPresenter(
+            TasksService tasksService,
+            TasksDisplayer tasksDisplayer,
+            TasksLoadingDisplayer loadingDisplayer,
+            TopLevelMenuDisplayer topLevelMenuDisplayer,
+            Navigator navigator
+    ) {
         this.tasksService = tasksService;
         this.loadingDisplayer = loadingDisplayer;
         this.tasksDisplayer = tasksDisplayer;
-        this.navDrawerDisplayer = navDrawerDisplayer;
+        this.topLevelMenuDisplayer = topLevelMenuDisplayer;
         this.navigator = navigator;
     }
 
@@ -55,7 +61,7 @@ public class TasksPresenter {
     public void startPresenting() {
         loadingDisplayer.attach(retryActionListener);
         tasksDisplayer.attach(tasksActionListener);
-        navDrawerDisplayer.attach(navDrawerActionListener);
+        topLevelMenuDisplayer.attach(topLevelMenuActionListener);
         subscribeToSourcesFilteredWith(currentFilter);
     }
 
@@ -113,7 +119,7 @@ public class TasksPresenter {
     public void stopPresenting() {
         loadingDisplayer.detach(retryActionListener);
         tasksDisplayer.detach(tasksActionListener);
-        navDrawerDisplayer.detach();
+        topLevelMenuDisplayer.detach();
         clearSubscriptions();
     }
 
@@ -172,16 +178,16 @@ public class TasksPresenter {
         }
     };
 
-    final NavDrawerActionListener navDrawerActionListener = new NavDrawerActionListener() {
+    final TopLevelMenuActionListener topLevelMenuActionListener = new TopLevelMenuActionListener() {
 
         @Override
-        public void onToDoListNavDrawerItemSelected() {
-            navDrawerDisplayer.closeNavDrawer();
+        public void onToDoListItemSelected() {
+            topLevelMenuDisplayer.closeMenu();
         }
 
         @Override
-        public void onStatisticsNavDrawerItemSelected() {
-            navDrawerDisplayer.closeNavDrawer();
+        public void onStatisticsItemSelected() {
+            topLevelMenuDisplayer.closeMenu();
             navigator.toStatistics();
         }
     };

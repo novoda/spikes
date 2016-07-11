@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.novoda.notils.caster.Views;
 import com.novoda.todoapp.R;
 import com.novoda.todoapp.TodoApplication;
-import com.novoda.todoapp.navigation.AndroidNavDrawerDisplayer;
+import com.novoda.todoapp.navigation.AndroidTopLevelMenuDisplayer;
 import com.novoda.todoapp.navigation.AndroidNavigator;
 import com.novoda.todoapp.statistics.presenter.StatisticsPresenter;
 import com.novoda.todoapp.statistics.view.StatisticsView;
@@ -23,7 +23,7 @@ public class StatisticsActivity extends AppCompatActivity {
         presenter = new StatisticsPresenter(
                 TodoApplication.STATISTICS_SERVICE,
                 statisticsView,
-                new AndroidNavDrawerDisplayer(statisticsView, statisticsView.getNavDrawer()),
+                new AndroidTopLevelMenuDisplayer(statisticsView, statisticsView.getNavDrawer()),
                 new AndroidNavigator(this)
         );
     }

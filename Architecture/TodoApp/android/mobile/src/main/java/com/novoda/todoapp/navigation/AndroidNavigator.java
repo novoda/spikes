@@ -47,16 +47,18 @@ public class AndroidNavigator implements Navigator {
 
     @Override
     public void toStatistics() {
-        Intent intent = new Intent(activity, StatisticsActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        activity.startActivity(intent);
+        fireTopLevelMenuIntent(StatisticsActivity.class);
     }
 
     @Override
     public void toTasksList() {
-        Intent intent = new Intent(activity, TasksActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        activity.startActivity(intent);
+        fireTopLevelMenuIntent(TasksActivity.class);
     }
 
+    private void fireTopLevelMenuIntent(Class<? extends Activity> activityClass) {
+        Intent intent = new Intent(activity, activityClass);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.startActivity(intent);
+        activity.overridePendingTransition(0, 0);
+    }
 }
