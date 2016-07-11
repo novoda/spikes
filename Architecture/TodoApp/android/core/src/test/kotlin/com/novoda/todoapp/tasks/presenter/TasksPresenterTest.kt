@@ -449,6 +449,15 @@ class TasksPresenterTest {
     }
 
     @Test
+    fun given_ThePresenterIsPresenting_on_StopPresenting_it_ShouldDetachTheNavDrawerActionListener_FromTheDisplayer() {
+        givenThePresenterIsNotPresenting()
+
+        presenter.stopPresenting()
+
+        Mockito.verify(navDrawerDisplayer).detach()
+    }
+
+    @Test
     fun given_ThePresenterIsPresenting_on_StatisticsNavDrawerItemSelected_it_ShouldNavigateToStatistics() {
         givenThePresenterIsPresenting()
 

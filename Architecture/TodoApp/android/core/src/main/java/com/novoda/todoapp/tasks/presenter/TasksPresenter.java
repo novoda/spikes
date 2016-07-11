@@ -113,6 +113,7 @@ public class TasksPresenter {
     public void stopPresenting() {
         loadingDisplayer.detach(retryActionListener);
         tasksDisplayer.detach(tasksActionListener);
+        navDrawerDisplayer.detach();
         clearSubscriptions();
     }
 

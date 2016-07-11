@@ -10,13 +10,13 @@ import com.novoda.todoapp.statistics.presenter.StatisticsPresenter;
 
 public class StatisticsActivity extends AppCompatActivity {
 
-    private StatisticsPresenter taskPresenter;
+    private StatisticsPresenter presenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.statistics_activity);
-        taskPresenter = new StatisticsPresenter(
+        presenter = new StatisticsPresenter(
                 TodoApplication.STATISTICS_SERVICE,
                 ((StatisticsDisplayer) findViewById(R.id.content))
         );
@@ -25,13 +25,13 @@ public class StatisticsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        taskPresenter.startPresenting();
+        presenter.startPresenting();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        taskPresenter.stopPresenting();
+        presenter.stopPresenting();
     }
 
 }

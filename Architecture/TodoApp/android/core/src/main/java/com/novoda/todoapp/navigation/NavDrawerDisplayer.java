@@ -4,4 +4,6 @@ public interface NavDrawerDisplayer {
     void attach(NavDrawerActionListener navDrawerActionListener);
 
     void closeNavDrawer();
+
+    void detach();
 }
