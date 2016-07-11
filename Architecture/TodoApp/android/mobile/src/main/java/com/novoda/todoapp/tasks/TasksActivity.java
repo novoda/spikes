@@ -28,7 +28,7 @@ public class TasksActivity extends AppCompatActivity {
                 TodoApplication.TASKS_SERVICE,
                 tasksView,
                 new AndroidTasksLoadingDisplayer(tasksView.getLoadingView(), tasksView.getContentView()),
-                new AndroidNavDrawerDisplayer(drawerLayout, navigationView),
+                new AndroidNavDrawerDisplayer(tasksView, tasksView.getNavDrawer()),
                 new AndroidNavigator(this)
         );
         if (savedInstanceState != null && savedInstanceState.containsKey(KEY_FILTER)) {
