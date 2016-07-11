@@ -35,14 +35,14 @@
       android:id="@+id/drop_cap_size"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="1"
+      android:layout_weight="100"
       android:text="@string/drop_cap_edit_drop_cap_size" />
 
     <Button
       android:id="@+id/copy_size"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="1"
+      android:layout_weight="100"
       android:text="@string/drop_cap_edit_copy_size" />
 
   </LinearLayout>
@@ -56,18 +56,17 @@
       android:id="@+id/drop_cap_color"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="1"
+      android:layout_weight="100"
       android:text="@string/drop_cap_edit_drop_cap_color" />
 
     <Button
       android:id="@+id/copy_color"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="1"
+      android:layout_weight="100"
       android:text="@string/drop_cap_edit_copy_color" />
 
   </LinearLayout>
-
 
   <LinearLayout
     android:layout_width="match_parent"
@@ -78,13 +77,13 @@
       android:id="@+id/drop_cap_font_spinner"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="1" />
+      android:layout_weight="100" />
 
     <Spinner
       android:id="@+id/copy_font_spinner"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="1" />
+      android:layout_weight="100" />
 
   </LinearLayout>
 
