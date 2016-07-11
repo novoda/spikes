@@ -40,13 +40,6 @@
 
   </android.support.design.widget.CoordinatorLayout>
 
-  <android.support.design.widget.NavigationView
-    android:id="@+id/nav_drawer"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_gravity="start"
-    android:fitsSystemWindows="true"
-    app:headerLayout="@layout/nav_drawer_header"
-    app:menu="@menu/nav_drawer_menu" />
+  <include layout="@layout/nav_drawer_layout" />
 
 </merge>
