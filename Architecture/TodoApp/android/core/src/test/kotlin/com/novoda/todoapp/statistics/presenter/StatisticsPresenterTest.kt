@@ -167,14 +167,16 @@ class StatisticsPresenterTest {
         presenter.navDrawerActionListener.onStatisticsNavDrawerItemSelected()
 
         Mockito.verify(navDrawerDisplayer).closeNavDrawer()
+        Mockito.verifyZeroInteractions(navigator)
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_ToDoListNavDrawerItemSelected_it_ShouldCloseTheNavDrawer() {
+    fun given_ThePresenterIsPresenting_on_ToDoListNavDrawerItemSelected_it_ShouldCloseTheNavDrawerAndNavigateToTasksList() {
         givenThePresenterIsPresenting()
 
         presenter.navDrawerActionListener.onToDoListNavDrawerItemSelected()
 
+        Mockito.verify(navDrawerDisplayer).closeNavDrawer()
         Mockito.verify(navigator).toTasksList()
     }
 

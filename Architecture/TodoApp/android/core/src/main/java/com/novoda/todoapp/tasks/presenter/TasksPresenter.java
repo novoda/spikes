@@ -181,6 +181,7 @@ public class TasksPresenter {
 
         @Override
         public void onStatisticsNavDrawerItemSelected() {
+            navDrawerDisplayer.closeNavDrawer();
             navigator.toStatistics();
         }
     };

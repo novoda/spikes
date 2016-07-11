@@ -24,6 +24,7 @@ public class StatisticsPresenter {
     final NavDrawerActionListener navDrawerActionListener = new NavDrawerActionListener() {
         @Override
         public void onToDoListNavDrawerItemSelected() {
+            navDrawerDisplayer.closeNavDrawer();
             navigator.toTasksList();
         }
 
