@@ -1,6 +1,8 @@
 package com.novoda.todoapp.statistics.presenter
 
 import com.novoda.event.Event
+import com.novoda.todoapp.navigation.NavDrawerDisplayer
+import com.novoda.todoapp.navigation.Navigator
 import com.novoda.todoapp.statistics.data.model.Statistics
 import com.novoda.todoapp.statistics.displayer.StatisticsDisplayer
 import com.novoda.todoapp.statistics.service.StatisticsService
@@ -20,12 +22,16 @@ class StatisticsPresenterTest {
 
     var displayer: StatisticsDisplayer = Mockito.mock(StatisticsDisplayer::class.java)
 
-    var presenter = StatisticsPresenter(service, displayer)
+    var navDrawerDisplayer: NavDrawerDisplayer = Mockito.mock(NavDrawerDisplayer::class.java)
+
+    var navigator: Navigator = Mockito.mock(Navigator::class.java)
+
+    var presenter = StatisticsPresenter(service, displayer, navDrawerDisplayer, navigator)
 
     @Before
     fun setUp() {
         setUpService()
-        presenter = StatisticsPresenter(service, displayer)
+        presenter = StatisticsPresenter(service, displayer, navDrawerDisplayer, navigator)
     }
 
     @Test
@@ -134,6 +140,42 @@ class StatisticsPresenterTest {
         statisticsEventSubject.onNext(Event.error<Statistics>(SyncError()))
 
         Mockito.verifyNoMoreInteractions(displayer)
+    }
+
+    @Test
+    fun given_ThePresenterIsNotPresenting_on_StartPresenting_it_ShouldAttachTheNavDrawerActionListener_ToTheDisplayer() {
+        givenThePresenterIsNotPresenting()
+
+        presenter.startPresenting()
+
+        Mockito.verify(navDrawerDisplayer).attach(presenter.navDrawerActionListener)
+    }
+
+    @Test
+    fun given_ThePresenterIsPresenting_on_StopPresenting_it_ShouldDetachTheNavDrawerActionListener_FromTheDisplayer() {
+        givenThePresenterIsNotPresenting()
+
+        presenter.stopPresenting()
+
+        Mockito.verify(navDrawerDisplayer).detach()
+    }
+
+    @Test
+    fun given_ThePresenterIsPresenting_on_StatisticsNavDrawerItemSelected_it_ShouldCloseTheNavDrawer() {
+        givenThePresenterIsPresenting()
+
+        presenter.navDrawerActionListener.onStatisticsNavDrawerItemSelected()
+
+        Mockito.verify(navDrawerDisplayer).closeNavDrawer()
+    }
+
+    @Test
+    fun given_ThePresenterIsPresenting_on_ToDoListNavDrawerItemSelected_it_ShouldCloseTheNavDrawer() {
+        givenThePresenterIsPresenting()
+
+        presenter.navDrawerActionListener.onToDoListNavDrawerItemSelected()
+
+        Mockito.verify(navigator).toTasksList()
     }
 
     private fun givenThePresenterIsPresenting() {
