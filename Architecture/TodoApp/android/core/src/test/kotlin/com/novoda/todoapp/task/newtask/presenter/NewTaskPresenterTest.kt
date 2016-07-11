@@ -13,7 +13,6 @@ import org.junit.Test
 import org.mockito.Matchers
 import org.mockito.Mockito
 import org.mockito.Mockito.never
-import rx.functions.Action0
 
 class NewTaskPresenterTest {
 
@@ -24,7 +23,6 @@ class NewTaskPresenterTest {
     var taskDisplayer: TaskActionDisplayer = Mockito.mock(TaskActionDisplayer::class.java)
     var navigator: Navigator = Mockito.mock(Navigator::class.java)
 
-    var saveAction: Action0 = Mockito.mock(Action0::class.java)
     var idGenerator = Mockito.mock(IdProducer::class.java)
 
     var presenter = NewTaskPresenter(service, taskDisplayer, navigator, idGenerator)
@@ -70,7 +68,6 @@ class NewTaskPresenterTest {
         presenter.taskActionListener.save(task.title(), task.description())
 
         Mockito.verify(service).save(task)
-        Mockito.verify(saveAction).call()
     }
 
     @Test
@@ -84,7 +81,6 @@ class NewTaskPresenterTest {
         presenter.taskActionListener.save(task.title(), task.description())
 
         Mockito.verify(service).save(task)
-        Mockito.verify(saveAction).call()
     }
 
     @Test
@@ -98,7 +94,6 @@ class NewTaskPresenterTest {
         presenter.taskActionListener.save(task.title(), task.description())
 
         Mockito.verify(service).save(task)
-        Mockito.verify(saveAction).call()
     }
 
     @Test
@@ -108,7 +103,6 @@ class NewTaskPresenterTest {
         presenter.taskActionListener.save(Optional.absent(), Optional.absent())
 
         Mockito.verify(service, never()).save(Matchers.any())
-        Mockito.verify(saveAction, never()).call()
     }
 
     @Test
@@ -198,7 +192,6 @@ class NewTaskPresenterTest {
     }
 
     private fun setUpService() {
-        Mockito.`when`(service.save(Matchers.any())).thenReturn(saveAction)
         Mockito.`when`(idGenerator.produce()).thenReturn(TASK_ID)
     }
 }

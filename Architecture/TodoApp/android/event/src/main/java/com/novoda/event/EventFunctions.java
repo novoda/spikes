@@ -13,16 +13,16 @@ public final class EventFunctions {
         throw new IllegalStateException("NonInstantiableClassException");
     }
 
-    public static <T> boolean isInitialised(BehaviorRelay<Event<T>> subject) {
-        return hasData(subject) || isLoading(subject);
+    public static <T> boolean isNotInitialised(BehaviorRelay<Event<T>> subject) {
+        return hasNoData(subject) && isNotLoading(subject);
     }
 
-    private static <T> boolean hasData(BehaviorRelay<Event<T>> subject) {
-        return subject.getValue().data().isPresent();
+    private static <T> boolean hasNoData(BehaviorRelay<Event<T>> subject) {
+        return !subject.getValue().data().isPresent();
     }
 
-    private static <T> boolean isLoading(BehaviorRelay<Event<T>> subject) {
-        return subject.getValue().state() == Status.LOADING;
+    private static <T> boolean isNotLoading(BehaviorRelay<Event<T>> subject) {
+        return subject.getValue().state() != Status.LOADING;
     }
 
     public static <T> Observable.Transformer<T, Event<T>> asEvent(Class<T> clazz) {

@@ -50,9 +50,9 @@ public class TaskPresenter {
         @Override
         public void toggleCompletion(Task task) {
             if (task.isCompleted()) {
-                tasksService.activate(task).call();
+                tasksService.activate(task);
             } else {
-                tasksService.complete(task).call();
+                tasksService.complete(task);
             }
         }
 

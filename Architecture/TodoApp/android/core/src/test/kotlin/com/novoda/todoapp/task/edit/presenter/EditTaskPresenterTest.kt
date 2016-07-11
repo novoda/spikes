@@ -14,7 +14,6 @@ import org.junit.Test
 import org.mockito.Matchers
 import org.mockito.Mockito
 import org.mockito.Mockito.never
-import rx.functions.Action0
 import rx.subjects.BehaviorSubject
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -28,8 +27,6 @@ class EditTaskPresenterTest {
 
     var taskDisplayer: EditTaskDisplayer = Mockito.mock(EditTaskDisplayer::class.java)
     var navigator: Navigator = Mockito.mock(Navigator::class.java)
-
-    var saveAction: Action0 = Mockito.mock(Action0::class.java)
 
     var presenter = EditTaskPresenter(service, taskDisplayer, navigator, TASK_ID)
 
@@ -110,7 +107,6 @@ class EditTaskPresenterTest {
         presenter.taskActionListener.save(task.title(), task.description())
 
         Mockito.verify(service).save(task)
-        Mockito.verify(saveAction).call()
     }
 
     @Test
@@ -124,7 +120,6 @@ class EditTaskPresenterTest {
         presenter.taskActionListener.save(task.title(), task.description())
 
         Mockito.verify(service).save(task)
-        Mockito.verify(saveAction).call()
     }
 
     @Test
@@ -138,7 +133,6 @@ class EditTaskPresenterTest {
         presenter.taskActionListener.save(task.title(), task.description())
 
         Mockito.verify(service).save(task)
-        Mockito.verify(saveAction).call()
     }
 
     @Test
@@ -148,7 +142,6 @@ class EditTaskPresenterTest {
         presenter.taskActionListener.save(Optional.absent(), Optional.absent())
 
         Mockito.verify(service, never()).save(Matchers.any())
-        Mockito.verify(saveAction, never()).call()
     }
 
     @Test
@@ -219,7 +212,6 @@ class EditTaskPresenterTest {
     private fun setUpService() {
         taskSubject = BehaviorSubject.create()
         Mockito.`when`(service.getTask(TASK_ID)).thenReturn(taskSubject)
-        Mockito.`when`(service.save(Matchers.any())).thenReturn(saveAction)
     }
 }
 

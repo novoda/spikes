@@ -4,6 +4,7 @@ import com.google.auto.value.AutoValue;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSortedMap;
 import com.google.common.collect.Maps;
 
 import java.util.Collection;
@@ -19,14 +20,14 @@ public abstract class ImmutableMapWithCopy<K, V> {
     }
 
     public static <K, V> ImmutableMapWithCopy<K, V> from(Map<K, V> map) {
-        return new AutoValue_ImmutableMapWithCopy<>(ImmutableMap.copyOf(map));
+        return new AutoValue_ImmutableMapWithCopy<>(ImmutableSortedMap.copyOf(map));
     }
 
     ImmutableMapWithCopy() {
         // AutoValue best practices https://github.com/google/auto/blob/master/value/userguide/practices.md
     }
 
-    abstract ImmutableMap<K, V> internalMap();
+    abstract ImmutableSortedMap<K, V> internalMap();
 
     public int size() {
         return internalMap().size();

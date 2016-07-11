@@ -3,7 +3,6 @@ package com.novoda.todoapp.tasks.presenter;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.novoda.data.SyncState;
 import com.novoda.data.SyncedData;
 import com.novoda.event.DataObserver;
@@ -17,10 +16,6 @@ import com.novoda.todoapp.tasks.displayer.TasksDisplayer;
 import com.novoda.todoapp.tasks.loading.displayer.RetryActionListener;
 import com.novoda.todoapp.tasks.loading.displayer.TasksLoadingDisplayer;
 import com.novoda.todoapp.tasks.service.TasksService;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import rx.Observable;
 import rx.functions.Func1;
@@ -83,9 +78,7 @@ public class TasksPresenter {
                                         .all(),
                                 shouldDisplayTask()
                         );
-                        List<SyncedData<Task>> sortedNonDeletedTasks = Lists.newArrayList(nonDeletedTasks);
-                        Collections.sort(sortedNonDeletedTasks);
-                        return tasksEvent.updateData(Tasks.from(ImmutableList.copyOf(sortedNonDeletedTasks)));
+                        return tasksEvent.updateData(Tasks.from(ImmutableList.copyOf(nonDeletedTasks)));
                     }
                 });
     }
@@ -126,7 +119,7 @@ public class TasksPresenter {
     final RetryActionListener retryActionListener = new RetryActionListener() {
         @Override
         public void onRetry() {
-            tasksService.refreshTasks().call();
+            tasksService.refreshTasks();
         }
     };
 
@@ -139,20 +132,20 @@ public class TasksPresenter {
         @Override
         public void toggleCompletion(Task task) {
             if (task.isCompleted()) {
-                tasksService.activate(task).call();
+                tasksService.activate(task);
             } else {
-                tasksService.complete(task).call();
+                tasksService.complete(task);
             }
         }
 
         @Override
         public void onRefreshSelected() {
-            tasksService.refreshTasks().call();
+            tasksService.refreshTasks();
         }
 
         @Override
         public void onClearCompletedSelected() {
-            tasksService.clearCompletedTasks().call();
+            tasksService.clearCompletedTasks();
         }
 
         @Override

@@ -53,13 +53,21 @@ public abstract class Tasks {
         return internalMap().isEmpty();
     }
 
-    public boolean hasNoActionMoreRecentThan(SyncedData<Task> syncedData) {
-        return hasNoActionMoreRecentThan(syncedData.data().id(), syncedData.lastSyncAction());
+    public boolean actionIsAbsentOrNoMoreRecentThan(SyncedData<Task> syncedData) {
+        return actionIsAbsentOrNoMoreRecentThan(syncedData.data().id(), syncedData.lastSyncAction());
     }
 
-    public boolean hasNoActionMoreRecentThan(Id id, long lastSyncAction) {
+    public boolean actionIsAbsentOrNoMoreRecentThan(Id id, long lastSyncAction) {
         SyncedData<Task> internalData = internalMap().get(id);
-        return internalData == null || lastSyncAction >= internalData.lastSyncAction();
+        return internalData == null || internalData.lastSyncAction() <= lastSyncAction;
+    }
+
+    public boolean actionExistsAndIsOutdatedComparedTo(SyncedData<Task> syncedData) {
+        return actionExistsAndIsOutdatedComparedTo(syncedData.data().id(), syncedData.lastSyncAction());
+    }
+
+    public boolean actionExistsAndIsOutdatedComparedTo(Id id, long lastSyncAction) {
+        return internalMap().containsKey(id) && internalMap().get(id).lastSyncAction() < lastSyncAction;
     }
 
     public Tasks save(SyncedData<Task> taskSyncedData) {
@@ -125,7 +133,7 @@ public abstract class Tasks {
         ImmutableMapWithCopy<Id, SyncedData<Task>> filter = tasks.internalMap().filter(new Predicate<Map.Entry<Id, SyncedData<Task>>>() {
             @Override
             public boolean apply(Map.Entry<Id, SyncedData<Task>> input) {
-                return hasNoActionMoreRecentThan(input.getValue()) && internalMap().containsKey(input.getKey());
+                return actionExistsAndIsOutdatedComparedTo(input.getValue());
             }
         });
         return Tasks.from(internalMap().putAll(filter));
@@ -136,7 +144,7 @@ public abstract class Tasks {
         String result = "";
         String delimiter = ", ";
         for (Id id : internalMap().keySet()) {
-            result = result + delimiter + "{" + id + "; " + internalMap().get(id).syncState() + "}";
+            result = result + delimiter + "{" + id + "; " + internalMap().get(id).syncState() + "; " + internalMap().get(id).lastSyncAction() + "}";
         }
         return result.substring(delimiter.length());
     }

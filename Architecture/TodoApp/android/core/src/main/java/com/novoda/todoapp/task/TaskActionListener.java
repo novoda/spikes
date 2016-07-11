@@ -26,7 +26,7 @@ public class TaskActionListener {
                     .title(title)
                     .description(description)
                     .build();
-            tasksService.save(task).call();
+            tasksService.save(task);
             navigator.back();
         } else {
             taskDisplayer.showEmptyTaskError();
