@@ -89,6 +89,9 @@ public final class InMemoryLocalTaskDataSource implements LocalTasksDataSource {
                 return observable.doOnEach(new Action1<Notification<? super T>>() {
                     @Override
                     public void call(Notification<? super T> t) {
+                        if (t.getKind() == Notification.Kind.OnCompleted) {
+                            return;
+                        }
                         try {
                             Thread.sleep(localDelayUnit.toMillis(localDelay));
                         } catch (InterruptedException e) {

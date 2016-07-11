@@ -149,6 +149,9 @@ public final class InMemoryRemoteTaskDataSource implements RemoteTasksDataSource
                 return observable.doOnEach(new Action1<Notification<? super T>>() {
                     @Override
                     public void call(Notification<? super T> t) {
+                        if (t.getKind() == Notification.Kind.OnCompleted) {
+                            return;
+                        }
                         try {
                             Thread.sleep(remoteDelayUnit.toMillis(remoteDelay));
                         } catch (InterruptedException e) {
