@@ -48,12 +48,14 @@ public class AndroidNavigator implements Navigator {
     @Override
     public void toStatistics() {
         Intent intent = new Intent(activity, StatisticsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivity(intent);
     }
 
     @Override
     public void toTasksList() {
         Intent intent = new Intent(activity, TasksActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivity(intent);
     }
 
