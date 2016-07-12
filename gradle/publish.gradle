@@ -1,10 +1,8 @@
-if (project.hasProperty('pluginGroup')) {
-  apply plugin: 'com.novoda.bintray-release'
-  publish {
-    userOrg = 'novoda'
-    groupId = pluginGroup
-    artifactId = pluginId
-    publishVersion = pluginVersion
-    website = 'https://github.com/novoda/spikes/tree/master/BuildPropertiesPlugin'
-  }
+apply plugin: 'com.novoda.bintray-release'
+publish {
+  userOrg = 'novoda'
+  groupId = pluginGroup
+  artifactId = pluginId
+  publishVersion = pluginVersion
+  website = 'https://github.com/novoda/spikes/tree/master/BuildPropertiesPlugin'
 }
