@@ -1,6 +1,7 @@
 package com.novoda.todoapp.tasks.service;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
@@ -209,9 +210,23 @@ public class PersistedTasksService implements TasksService {
             @Override
             public Tasks call(Tasks tasks) {
                 Tasks currentTasks = taskRelay.getValue().data().or(Tasks.empty());
-                return tasks.overrideWithMostRecentActionsFrom(currentTasks, actionTimestamp);
+                return tasks.insertOrUpdate(currentTasks.filter(isMoreRecentAction(tasks, actionTimestamp)));
             }
         };
+    }
+
+    private static Predicate<SyncedData<Task>> isMoreRecentAction(final Tasks tasks, final long actionTimestamp) {
+        return new Predicate<SyncedData<Task>>() {
+            @Override
+            public boolean apply(SyncedData<Task> input) {
+                return input.lastSyncAction() > actionTimestamp || actionExistsAndIsOutdatedComparedTo(tasks, input);
+            }
+        };
+    }
+
+    private static boolean actionExistsAndIsOutdatedComparedTo(Tasks tasks, SyncedData<Task> syncedData) {
+        Optional<SyncedData<Task>> existingAction = tasks.get(syncedData.data().id());
+        return existingAction.isPresent() && existingAction.get().lastSyncAction() < syncedData.lastSyncAction();
     }
 
     private static Observable.Transformer<List<Task>, Tasks> confirmLocalDeletionsOrRevert(final BehaviorRelay<Event<Tasks>> taskRelay, final long actionTimestamp) {
@@ -343,7 +358,7 @@ public class PersistedTasksService implements TasksService {
             @Override
             public boolean ifMatches(Event<Tasks> value) {
                 Tasks currentTasks = taskRelay.getValue().data().or(Tasks.empty());
-                return currentTasks.actionIsAbsentOrNoMoreRecentThan(task.id(), deleteActionTimestamp);
+                return actionIsAbsentOrNoMoreRecentThan(currentTasks, task.id(), deleteActionTimestamp);
             }
 
             @Override
@@ -364,6 +379,11 @@ public class PersistedTasksService implements TasksService {
                 return Observable.empty();
             }
         });
+    }
+
+    private static boolean actionIsAbsentOrNoMoreRecentThan(Tasks currentTasks, Id id, long deleteActionTimestamp) {
+        Optional<SyncedData<Task>> syncedDataOptional = currentTasks.get(id);
+        return !syncedDataOptional.isPresent() || syncedDataOptional.get().lastSyncAction() <= deleteActionTimestamp;
     }
 
     private static Function<SyncedData<Task>, SyncedData<Task>> markTaskAsSyncErrorAt(final Task task, final long timeInMillis) {
@@ -422,7 +442,7 @@ public class PersistedTasksService implements TasksService {
                     @Override
                     public boolean ifMatches(SyncedData<Task> value) {
                         Tasks tasks = taskRelay.getValue().data().or(Tasks.empty());
-                        return tasks.actionIsAbsentOrNoMoreRecentThan(value);
+                        return actionIsAbsentOrNoMoreRecentThan(tasks, value);
                     }
 
                     @Override
@@ -447,6 +467,10 @@ public class PersistedTasksService implements TasksService {
                 }));
             }
         };
+    }
+
+    private static boolean actionIsAbsentOrNoMoreRecentThan(Tasks currentTasks, SyncedData<Task> syncedData) {
+        return actionIsAbsentOrNoMoreRecentThan(currentTasks, syncedData.data().id(), syncedData.lastSyncAction());
     }
 
     private static Observable.Transformer<Tasks, Event<Tasks>> asValidatedEvent(final Event<Tasks> value) {

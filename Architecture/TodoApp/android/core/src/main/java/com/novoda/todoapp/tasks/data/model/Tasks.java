@@ -1,6 +1,7 @@
 package com.novoda.todoapp.tasks.data.model;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -53,21 +54,8 @@ public abstract class Tasks {
         return internalMap().isEmpty();
     }
 
-    public boolean actionIsAbsentOrNoMoreRecentThan(SyncedData<Task> syncedData) {
-        return actionIsAbsentOrNoMoreRecentThan(syncedData.data().id(), syncedData.lastSyncAction());
-    }
-
-    public boolean actionIsAbsentOrNoMoreRecentThan(Id id, long lastSyncAction) {
-        SyncedData<Task> internalData = internalMap().get(id);
-        return internalData == null || internalData.lastSyncAction() <= lastSyncAction;
-    }
-
-    public boolean actionExistsAndIsOutdatedComparedTo(SyncedData<Task> syncedData) {
-        return actionExistsAndIsOutdatedComparedTo(syncedData.data().id(), syncedData.lastSyncAction());
-    }
-
-    public boolean actionExistsAndIsOutdatedComparedTo(Id id, long lastSyncAction) {
-        return internalMap().containsKey(id) && internalMap().get(id).lastSyncAction() < lastSyncAction;
+    public Optional<SyncedData<Task>> get(Id id) {
+        return Optional.fromNullable(internalMap().get(id));
     }
 
     public Tasks save(SyncedData<Task> taskSyncedData) {
@@ -129,18 +117,17 @@ public abstract class Tasks {
         };
     }
 
-    public Tasks overrideWithMostRecentActionsFrom(Tasks tasks, final long actionTimestamp) {
-        ImmutableMapWithCopy<Id, SyncedData<Task>> moreRecentActions = tasks.internalMap().filter(isMoreRecentAction(actionTimestamp));
-        return Tasks.from(internalMap().putAll(moreRecentActions));
-    }
-
-    private Predicate<Map.Entry<Id, SyncedData<Task>>> isMoreRecentAction(final long actionTimestamp) {
-        return new Predicate<Map.Entry<Id, SyncedData<Task>>>() {
+    public Tasks filter(final Predicate<SyncedData<Task>> predicate) {
+        return Tasks.from(internalMap().filter(new Predicate<Map.Entry<Id, SyncedData<Task>>>() {
             @Override
             public boolean apply(Map.Entry<Id, SyncedData<Task>> input) {
-                return input.getValue().lastSyncAction() > actionTimestamp || actionExistsAndIsOutdatedComparedTo(input.getValue());
+                return predicate.apply(input.getValue());
             }
-        };
+        }));
+    }
+
+    public Tasks insertOrUpdate(Tasks tasks) {
+        return Tasks.from(internalMap().putAll(tasks.internalMap()));
     }
 
     @Override
@@ -152,4 +139,5 @@ public abstract class Tasks {
         }
         return result.substring(delimiter.length());
     }
+
 }
