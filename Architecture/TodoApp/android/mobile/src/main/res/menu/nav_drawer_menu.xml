@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <item
+    android:id="@+id/to_do_list_nav_drawer_item"
+    android:icon="@drawable/ic_list"
+    android:title="@string/to_do_list" />
+  <item
+    android:id="@+id/statistics_nav_drawer_item"
+    android:icon="@drawable/ic_statistics"
+    android:title="@string/statistics" />
+</menu>

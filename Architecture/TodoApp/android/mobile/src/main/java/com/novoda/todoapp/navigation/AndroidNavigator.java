@@ -8,6 +8,7 @@ import com.novoda.todoapp.task.TaskDetailActivity;
 import com.novoda.todoapp.task.data.model.Task;
 import com.novoda.todoapp.task.edit.EditTaskActivity;
 import com.novoda.todoapp.task.newtask.NewTaskActivity;
+import com.novoda.todoapp.tasks.TasksActivity;
 
 public class AndroidNavigator implements Navigator {
 
@@ -46,8 +47,18 @@ public class AndroidNavigator implements Navigator {
 
     @Override
     public void toStatistics() {
-        Intent intent = new Intent(activity, StatisticsActivity.class);
-        activity.startActivity(intent);
+        fireTopLevelMenuIntent(StatisticsActivity.class);
     }
 
+    @Override
+    public void toTasksList() {
+        fireTopLevelMenuIntent(TasksActivity.class);
+    }
+
+    private void fireTopLevelMenuIntent(Class<? extends Activity> activityClass) {
+        Intent intent = new Intent(activity, activityClass);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.startActivity(intent);
+        activity.overridePendingTransition(0, 0);
+    }
 }
