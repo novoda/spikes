@@ -8,6 +8,8 @@ import com.novoda.data.SyncedData;
 import com.novoda.event.DataObserver;
 import com.novoda.event.Event;
 import com.novoda.event.EventObserver;
+import com.novoda.todoapp.navigation.TopLevelMenuActionListener;
+import com.novoda.todoapp.navigation.TopLevelMenuDisplayer;
 import com.novoda.todoapp.navigation.Navigator;
 import com.novoda.todoapp.task.data.model.Task;
 import com.novoda.todoapp.tasks.data.model.Tasks;
@@ -28,15 +30,23 @@ public class TasksPresenter {
     private final TasksService tasksService;
     private final TasksLoadingDisplayer loadingDisplayer;
     private final TasksDisplayer tasksDisplayer;
+    private final TopLevelMenuDisplayer topLevelMenuDisplayer;
     private final Navigator navigator;
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
     private TasksActionListener.Filter currentFilter = TasksActionListener.Filter.ALL;
 
-    public TasksPresenter(TasksService tasksService, TasksDisplayer tasksDisplayer, TasksLoadingDisplayer loadingDisplayer, Navigator navigator) {
+    public TasksPresenter(
+            TasksService tasksService,
+            TasksDisplayer tasksDisplayer,
+            TasksLoadingDisplayer loadingDisplayer,
+            TopLevelMenuDisplayer topLevelMenuDisplayer,
+            Navigator navigator
+    ) {
         this.tasksService = tasksService;
         this.loadingDisplayer = loadingDisplayer;
         this.tasksDisplayer = tasksDisplayer;
+        this.topLevelMenuDisplayer = topLevelMenuDisplayer;
         this.navigator = navigator;
     }
 
@@ -51,6 +61,7 @@ public class TasksPresenter {
     public void startPresenting() {
         loadingDisplayer.attach(retryActionListener);
         tasksDisplayer.attach(tasksActionListener);
+        topLevelMenuDisplayer.attach(topLevelMenuActionListener);
         subscribeToSourcesFilteredWith(currentFilter);
     }
 
@@ -108,6 +119,7 @@ public class TasksPresenter {
     public void stopPresenting() {
         loadingDisplayer.detach(retryActionListener);
         tasksDisplayer.detach(tasksActionListener);
+        topLevelMenuDisplayer.detach();
         clearSubscriptions();
     }
 
@@ -162,6 +174,20 @@ public class TasksPresenter {
 
         @Override
         public void onStatisticsSelected() {
+            navigator.toStatistics();
+        }
+    };
+
+    final TopLevelMenuActionListener topLevelMenuActionListener = new TopLevelMenuActionListener() {
+
+        @Override
+        public void onToDoListItemSelected() {
+            topLevelMenuDisplayer.closeMenu();
+        }
+
+        @Override
+        public void onStatisticsItemSelected() {
+            topLevelMenuDisplayer.closeMenu();
             navigator.toStatistics();
         }
     };

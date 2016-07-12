@@ -1,16 +1,24 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+<merge>
 
-  <com.novoda.todoapp.views.TodoAppBar
-    android:id="@+id/app_bar"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
-
-  <TextView
-    android:id="@+id/statistics_label"
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/activity_horizontal_margin"
-    android:textAppearance="?android:attr/textAppearanceMedium" />
+    android:orientation="vertical">
+
+    <com.novoda.todoapp.views.TodoAppBar
+      android:id="@+id/app_bar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
+
+    <TextView
+      android:id="@+id/statistics_label"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:padding="@dimen/statistics_text_view_padding"
+      android:textAppearance="?android:attr/textAppearanceMedium" />
+
+  </LinearLayout>
+
+  <include layout="@layout/nav_drawer_layout" />
 
 </merge>

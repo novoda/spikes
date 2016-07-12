@@ -14,4 +14,5 @@ public interface Navigator {
 
     void toStatistics();
 
+    void toTasksList();
 }
