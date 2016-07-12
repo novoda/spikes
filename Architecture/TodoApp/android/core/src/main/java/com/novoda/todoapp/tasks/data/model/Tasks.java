@@ -130,13 +130,17 @@ public abstract class Tasks {
     }
 
     public Tasks overrideWithMostRecentActionsFrom(Tasks tasks, final long actionTimestamp) {
-        ImmutableMapWithCopy<Id, SyncedData<Task>> filter = tasks.internalMap().filter(new Predicate<Map.Entry<Id, SyncedData<Task>>>() {
+        ImmutableMapWithCopy<Id, SyncedData<Task>> moreRecentActions = tasks.internalMap().filter(isMoreRecentAction(actionTimestamp));
+        return Tasks.from(internalMap().putAll(moreRecentActions));
+    }
+
+    private Predicate<Map.Entry<Id, SyncedData<Task>>> isMoreRecentAction(final long actionTimestamp) {
+        return new Predicate<Map.Entry<Id, SyncedData<Task>>>() {
             @Override
             public boolean apply(Map.Entry<Id, SyncedData<Task>> input) {
                 return input.getValue().lastSyncAction() > actionTimestamp || actionExistsAndIsOutdatedComparedTo(input.getValue());
             }
-        });
-        return Tasks.from(internalMap().putAll(filter));
+        };
     }
 
     @Override
