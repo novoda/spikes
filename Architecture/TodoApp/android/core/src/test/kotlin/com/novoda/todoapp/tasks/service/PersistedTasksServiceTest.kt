@@ -315,11 +315,7 @@ class PersistedTasksServiceTest {
 
     @Test
     fun given_ServiceHasPendingActionMoreRecentThanCurrentOne_on_CompleteTask_it_ShouldSkipTheUpdatesForCurrentAction() {
-        val tasksOld = sampleLocalTasks()
-        val taskOld = tasksOld.all().get(0)
-        val syncedTask = SyncedData.from(taskOld.data(), taskOld.syncState(), 456)
-        val updatedTasks = tasksOld.save(syncedTask)
-        val updatedTask = syncedTask.data()
+        val (updatedTasks, updatedTask) = taskListWithOneAhead(sampleLocalTaskList(), 0)
         putTasksIntoLocalDataSource(updatedTasks)
         taskRemoteDataSubject.onCompleted()
         `when`(freshnessChecker.isFresh(updatedTasks)).thenReturn(true)
@@ -382,11 +378,7 @@ class PersistedTasksServiceTest {
 
     @Test
     fun given_ServiceHasPendingActionMoreRecentThanCurrentOne_on_ActivateTask_it_ShouldSkipTheUpdatesForCurrentAction() {
-        val tasksOld = sampleLocalCompletedTasks()
-        val taskOld = tasksOld.all().get(0)
-        val syncedTask = SyncedData.from(taskOld.data(), taskOld.syncState(), 456)
-        val tasks = tasksOld.save(syncedTask)
-        val task = syncedTask.data()
+        val (tasks, task) = taskListWithOneAhead(sampleLocalCompletedTaskList(), 0)
         taskRemoteDataSubject.onCompleted()
         putTasksIntoLocalDataSource(tasks)
         `when`(freshnessChecker.isFresh(tasks)).thenReturn(true)
@@ -450,11 +442,7 @@ class PersistedTasksServiceTest {
 
     @Test
     fun given_ServiceHasPendingActionMoreRecentThanCurrentOne_on_SaveTask_it_ShouldSkipTheUpdatesForCurrentAction() {
-        val tasksOld = sampleLocalCompletedTasks()
-        val taskOld = tasksOld.all().get(0)
-        val syncedTask = SyncedData.from(taskOld.data(), taskOld.syncState(), 456)
-        val tasks = tasksOld.save(syncedTask)
-        val task = syncedTask.data()
+        val (tasks, task) = taskListWithOneAhead(sampleLocalCompletedTaskList(), 0)
         taskRemoteDataSubject.onCompleted()
         putTasksIntoLocalDataSource(tasks)
         `when`(freshnessChecker.isFresh(tasks)).thenReturn(true)
@@ -926,11 +914,7 @@ class PersistedTasksServiceTest {
 
     @Test
     fun given_WeHavePendingTaskInTheService_on_ClearCompletedTasks_it_ShouldNotUpdatePendingTask() {
-        val tasksOld = Tasks.asSynced(taskListWithSomeCompleted(), TEST_TIME)
-        val taskOld = tasksOld.all().get(1)
-        val syncedTask = SyncedData.from(taskOld.data(), SyncState.AHEAD, 456)
-        val tasks = tasksOld.save(syncedTask)
-        val task = syncedTask.data()
+        val (tasks, task) = taskListWithOneAhead(taskListWithSomeCompleted(), 1)
 
         val tasksWithDeletedLocallyAndAheadData = Tasks.from(ImmutableList.copyOf(listOf(
                 SyncedData.from(Task.builder().id(Id.from("24")).title("Bar").isCompleted(true).build(), SyncState.DELETED_LOCALLY, 321),
@@ -962,11 +946,7 @@ class PersistedTasksServiceTest {
 
     @Test
     fun given_WeHaveCompletedPendingTaskInTheService_on_ClearCompletedTasks_it_ShouldNotUpdatePendingTask() {
-        val tasksOld = Tasks.asSynced(taskListWithSomeCompleted(), TEST_TIME)
-        val taskOld = tasksOld.all().get(0)
-        val syncedTask = SyncedData.from(taskOld.data(), SyncState.AHEAD, 456)
-        val tasks = tasksOld.save(syncedTask)
-        val task = syncedTask.data()
+        val (tasks, task) = taskListWithOneAhead(taskListWithSomeCompleted(), 0)
 
         val tasksWithDeletedLocallyAndAheadData = Tasks.from(ImmutableList.copyOf(listOf(
                 SyncedData.from(Task.builder().id(Id.from("24")).title("Bar").isCompleted(true).build(), SyncState.AHEAD, 456),
@@ -1152,6 +1132,14 @@ class PersistedTasksServiceTest {
             Task.builder().id(Id.from("425")).title("Whizz").build()
     )
 
+    private fun taskListWithOneAhead(tasks: List<Task>, index: Int): Pair<Tasks, Task> {
+        val tasksOld = Tasks.asSynced(tasks, TEST_TIME)
+        val taskOld = tasksOld.all().get(index)
+        val syncedTask = SyncedData.from(taskOld.data(), SyncState.AHEAD, 456)
+        val tasks = tasksOld.save(syncedTask)
+        return Pair(tasks, syncedTask.data())
+    }
+
     private fun tasksWithCompletedMarkedDeleted(actionTimestamp: Long) = Tasks.from(ImmutableList.copyOf(listOf(
             SyncedData.from(Task.builder().id(Id.from("24")).title("Bar").isCompleted(true).build(), SyncState.DELETED_LOCALLY, actionTimestamp),
             SyncedData.from(Task.builder().id(Id.from("42")).title("Foo").build(), SyncState.AHEAD, actionTimestamp),
@@ -1175,13 +1163,17 @@ class PersistedTasksServiceTest {
             Task.builder().id(Id.from("42")).title("Foo").isCompleted(true).build()
     )
 
-    private fun sampleLocalTasks() = asSyncedTasks(listOf(
-            Task.builder().id(Id.from("24")).title("Bar").build()
-    ))
+    private fun sampleLocalTasks() = asSyncedTasks(sampleLocalTaskList())
 
-    private fun sampleLocalCompletedTasks() = asSyncedTasks(listOf(
+    private fun sampleLocalTaskList() = listOf(
+            Task.builder().id(Id.from("24")).title("Bar").build()
+    )
+
+    private fun sampleLocalCompletedTasks() = asSyncedTasks(sampleLocalCompletedTaskList())
+
+    private fun sampleLocalCompletedTaskList() = listOf(
             Task.builder().id(Id.from("42")).title("Foo").isCompleted(true).build()
-    ))
+    )
 
     private fun sampleLocalActivatedTasks() = asSyncedTasks(listOf(
             Task.builder().id(Id.from("24")).title("Bar").build()
