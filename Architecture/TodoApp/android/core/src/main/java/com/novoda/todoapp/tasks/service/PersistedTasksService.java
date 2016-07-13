@@ -358,12 +358,7 @@ public class PersistedTasksService implements TasksService {
                         Tasks updatedTasks = tasks.save(value);
                         return Observable.just(event.updateData(updatedTasks))
                                 .doOnNext(taskRelay)
-                                .flatMap(new Func1<Event<Tasks>, Observable<SyncedData<Task>>>() {
-                                    @Override
-                                    public Observable<SyncedData<Task>> call(Event<Tasks> tasksEvent) {
-                                        return localDataSource.saveTask(value);
-                                    }
-                                });
+                                .flatMap(persistTaskLocally(value));
                     }
 
                     @Override
@@ -371,6 +366,19 @@ public class PersistedTasksService implements TasksService {
                         return Observable.empty();
                     }
                 }));
+            }
+        };
+    }
+
+    private static boolean actionIsAbsentOrNoMoreRecentThan(Tasks currentTasks, SyncedData<Task> syncedData) {
+        return actionIsAbsentOrNoMoreRecentThan(currentTasks, syncedData.data().id(), syncedData.lastSyncAction());
+    }
+
+    private Func1<Event<Tasks>, Observable<SyncedData<Task>>> persistTaskLocally(final SyncedData<Task> value) {
+        return new Func1<Event<Tasks>, Observable<SyncedData<Task>>>() {
+            @Override
+            public Observable<SyncedData<Task>> call(Event<Tasks> tasksEvent) {
+                return localDataSource.saveTask(value);
             }
         };
     }
@@ -468,10 +476,6 @@ public class PersistedTasksService implements TasksService {
         } else {
             throw new RuntimeException("Trying to delete a task from empty data");
         }
-    }
-
-    private static boolean actionIsAbsentOrNoMoreRecentThan(Tasks currentTasks, SyncedData<Task> syncedData) {
-        return actionIsAbsentOrNoMoreRecentThan(currentTasks, syncedData.data().id(), syncedData.lastSyncAction());
     }
 
     private static Observable.Transformer<Tasks, Event<Tasks>> asValidatedEvent(final Event<Tasks> value) {
