@@ -131,7 +131,7 @@ public class TasksPresenter {
     final RetryActionListener retryActionListener = new RetryActionListener() {
         @Override
         public void onRetry() {
-            tasksService.refreshTasks().call();
+            tasksService.refreshTasks();
         }
     };
 
@@ -144,20 +144,20 @@ public class TasksPresenter {
         @Override
         public void toggleCompletion(Task task) {
             if (task.isCompleted()) {
-                tasksService.activate(task).call();
+                tasksService.activate(task);
             } else {
-                tasksService.complete(task).call();
+                tasksService.complete(task);
             }
         }
 
         @Override
         public void onRefreshSelected() {
-            tasksService.refreshTasks().call();
+            tasksService.refreshTasks();
         }
 
         @Override
         public void onClearCompletedSelected() {
-            tasksService.clearCompletedTasks().call();
+            tasksService.clearCompletedTasks();
         }
 
         @Override

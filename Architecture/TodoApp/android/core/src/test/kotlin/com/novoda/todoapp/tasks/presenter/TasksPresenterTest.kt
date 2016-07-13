@@ -18,10 +18,8 @@ import com.novoda.todoapp.tasks.service.TasksService
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Matchers
 import org.mockito.Mockito
 import org.mockito.Mockito.*
-import rx.functions.Action0
 import rx.subjects.BehaviorSubject
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -43,11 +41,6 @@ class TasksPresenterTest {
     var loadingDisplayer: TasksLoadingDisplayer = Mockito.mock(TasksLoadingDisplayer::class.java)
     var topLevelMenuDisplayer: TopLevelMenuDisplayer = Mockito.mock(TopLevelMenuDisplayer::class.java)
     var navigator: Navigator = Mockito.mock(Navigator::class.java)
-
-    var refreshAction: Action0 = Mockito.mock(Action0::class.java)
-    var completeAction: Action0 = Mockito.mock(Action0::class.java)
-    var activateAction: Action0 = Mockito.mock(Action0::class.java)
-    var clearCompletedAction: Action0 = Mockito.mock(Action0::class.java)
 
     var presenter = TasksPresenter(service, displayer, loadingDisplayer, topLevelMenuDisplayer, navigator)
 
@@ -226,7 +219,6 @@ class TasksPresenterTest {
         presenter.retryActionListener.onRetry()
 
         Mockito.verify(service).refreshTasks()
-        Mockito.verify(refreshAction).call()
     }
 
     @Test
@@ -327,7 +319,6 @@ class TasksPresenterTest {
         presenter.tasksActionListener.toggleCompletion(completedTask)
 
         Mockito.verify(service).activate(completedTask)
-        Mockito.verify(activateAction).call()
     }
 
     @Test
@@ -338,7 +329,6 @@ class TasksPresenterTest {
         presenter.tasksActionListener.toggleCompletion(activatedTask)
 
         Mockito.verify(service).complete(activatedTask)
-        Mockito.verify(completeAction).call()
     }
 
     @Test
@@ -358,7 +348,6 @@ class TasksPresenterTest {
         presenter.tasksActionListener.onRefreshSelected()
 
         Mockito.verify(service).refreshTasks()
-        Mockito.verify(refreshAction).call()
     }
 
     @Test
@@ -368,7 +357,6 @@ class TasksPresenterTest {
         presenter.tasksActionListener.onClearCompletedSelected()
 
         Mockito.verify(service).clearCompletedTasks()
-        Mockito.verify(clearCompletedAction).call()
     }
 
     @Test
@@ -548,10 +536,5 @@ class TasksPresenterTest {
         Mockito.`when`(service.activeTasksEvent).thenReturn(tasksActiveEventSubject)
 
         Mockito.`when`(service.completedTasksEvent).thenReturn(tasksCompletedEventSubject)
-
-        Mockito.`when`(service.refreshTasks()).thenReturn(refreshAction)
-        Mockito.`when`(service.clearCompletedTasks()).thenReturn(clearCompletedAction)
-        Mockito.`when`(service.complete(Matchers.any())).thenReturn(completeAction)
-        Mockito.`when`(service.activate(Matchers.any())).thenReturn(activateAction)
     }
 }

@@ -10,9 +10,7 @@ import com.novoda.todoapp.tasks.service.TasksService
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Matchers
 import org.mockito.Mockito
-import rx.functions.Action0
 import rx.subjects.BehaviorSubject
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -26,9 +24,6 @@ class TaskPresenterTest {
 
     var displayer: TaskDisplayer = Mockito.mock(TaskDisplayer::class.java)
     var navigator: Navigator = Mockito.mock(Navigator::class.java)
-
-    var completeAction: Action0 = Mockito.mock(Action0::class.java)
-    var activateAction: Action0 = Mockito.mock(Action0::class.java)
 
     var presenter = TaskPresenter(TASK_ID, service, displayer, navigator)
 
@@ -105,7 +100,6 @@ class TaskPresenterTest {
         presenter.taskActionListener.toggleCompletion(completedTask)
 
         Mockito.verify(service).activate(completedTask)
-        Mockito.verify(activateAction).call()
     }
 
     @Test
@@ -116,7 +110,6 @@ class TaskPresenterTest {
         presenter.taskActionListener.toggleCompletion(activatedTask)
 
         Mockito.verify(service).complete(activatedTask)
-        Mockito.verify(completeAction).call()
     }
 
     @Test
@@ -172,8 +165,6 @@ class TaskPresenterTest {
     private fun setUpService() {
         taskSubject = BehaviorSubject.create()
         Mockito.`when`(service.getTask(TASK_ID)).thenReturn(taskSubject)
-        Mockito.`when`(service.complete(Matchers.any())).thenReturn(completeAction)
-        Mockito.`when`(service.activate(Matchers.any())).thenReturn(activateAction)
     }
 }
 

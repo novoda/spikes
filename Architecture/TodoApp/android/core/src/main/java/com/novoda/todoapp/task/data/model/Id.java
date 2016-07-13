@@ -3,7 +3,7 @@ package com.novoda.todoapp.task.data.model;
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-public abstract class Id {
+public abstract class Id implements Comparable<Id> {
 
     public static Id from(String value) {
         return new AutoValue_Id(value);
@@ -19,4 +19,10 @@ public abstract class Id {
     public String toString() {
         return "Id=" + value();
     }
+
+    @Override
+    public int compareTo(Id o) {
+        return value().compareTo(o.value());
+    }
+
 }

@@ -31,12 +31,12 @@ public final class InMemoryRemoteTaskDataSource implements RemoteTasksDataSource
     private static void populateFakeTasks(InMemoryRemoteTaskDataSource dataSource) {
         ImmutableList<Task> remoteTasks = ImmutableList.<Task>of(
                 Task.builder()
-                        .id(Id.from("42"))
+                        .id(Id.from("24"))
                         .title("First Task")
                         .description("Hardcoded stuff")
                         .build(),
                 Task.builder()
-                        .id(Id.from("24"))
+                        .id(Id.from("42"))
                         .title("Second Task")
                         .description("Hardcoded stuff again")
                         .build(),
@@ -132,17 +132,6 @@ public final class InMemoryRemoteTaskDataSource implements RemoteTasksDataSource
     }
 
     @Override
-    public Observable<Void> deleteAllTasks() {
-        return Observable.defer(new Func0<Observable<Void>>() {
-            @Override
-            public Observable<Void> call() {
-                dataSourceTasks.clear();
-                return Observable.empty();
-            }
-        }).compose(this.<Void>delay());
-    }
-
-    @Override
     public Observable<Void> deleteTask(final Id taskId) {
         return Observable.defer(new Func0<Observable<Void>>() {
             @Override
@@ -160,6 +149,9 @@ public final class InMemoryRemoteTaskDataSource implements RemoteTasksDataSource
                 return observable.doOnEach(new Action1<Notification<? super T>>() {
                     @Override
                     public void call(Notification<? super T> t) {
+                        if (t.getKind() == Notification.Kind.OnCompleted) {
+                            return;
+                        }
                         try {
                             Thread.sleep(remoteDelayUnit.toMillis(remoteDelay));
                         } catch (InterruptedException e) {

@@ -7,7 +7,6 @@ import com.novoda.todoapp.task.data.model.Task;
 import com.novoda.todoapp.tasks.data.model.Tasks;
 
 import rx.Observable;
-import rx.functions.Action0;
 
 public interface TasksService {
 
@@ -19,17 +18,15 @@ public interface TasksService {
 
     Observable<SyncedData<Task>> getTask(Id taskId);
 
-    Action0 refreshTasks();
+    void refreshTasks();
 
-    Action0 clearCompletedTasks();
+    void clearCompletedTasks();
 
-    Action0 deleteAllTasks();
+    void complete(Task task);
 
-    Action0 complete(Task task);
+    void activate(Task task);
 
-    Action0 activate(Task task);
-
-    Action0 save(Task task);
+    void save(Task task);
 
     void delete(Task task);
 }

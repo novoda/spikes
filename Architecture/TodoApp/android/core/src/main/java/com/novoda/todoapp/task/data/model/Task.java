@@ -5,7 +5,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 
 @AutoValue
-public abstract class Task {
+public abstract class Task implements Comparable<Task> {
 
     public static Builder builder() {
         return new AutoValue_Task.Builder()
@@ -38,6 +38,11 @@ public abstract class Task {
 
     public Optional<String> titleOrDescription() {
         return title().or(description());
+    }
+
+    @Override
+    public int compareTo(Task o) {
+        return id().compareTo(o.id());
     }
 
     @AutoValue.Builder

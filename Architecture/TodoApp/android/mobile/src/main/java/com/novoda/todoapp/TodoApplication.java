@@ -10,18 +10,23 @@ import com.novoda.todoapp.tasks.data.source.InMemoryRemoteTaskDataSource;
 import com.novoda.todoapp.tasks.service.Clock;
 import com.novoda.todoapp.tasks.service.PersistedTasksService;
 import com.novoda.todoapp.tasks.service.TasksService;
-import com.novoda.todoapp.tasks.service.TasksServiceAsync;
+import com.novoda.todoapp.tasks.service.TasksServiceObserveOn;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class TodoApplication extends Application {
 
     //TODO use proper dependency injection
-    public static final TasksService TASKS_SERVICE = new TasksServiceAsync(
+    public static final TasksService TASKS_SERVICE = new TasksServiceObserveOn(
             new PersistedTasksService(
                     InMemoryLocalTaskDataSource.newInstance(),
                     InMemoryRemoteTaskDataSource.newInstance(),
                     new AlwaysOutOfDateTasksFreshnessChecker(),
-                    new Clock()
-            )
+                    new Clock(),
+                    Schedulers.io()
+            ),
+            AndroidSchedulers.mainThread()
     );
 
     //TODO use proper dependency injection

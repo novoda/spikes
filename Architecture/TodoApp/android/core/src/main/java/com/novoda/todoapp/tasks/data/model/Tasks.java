@@ -1,6 +1,7 @@
 package com.novoda.todoapp.tasks.data.model;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -53,13 +54,8 @@ public abstract class Tasks {
         return internalMap().isEmpty();
     }
 
-    public boolean hasNoActionMoreRecentThan(SyncedData<Task> syncedData) {
-        return hasNoActionMoreRecentThan(syncedData.data().id(), syncedData.lastSyncAction());
-    }
-
-    public boolean hasNoActionMoreRecentThan(Id id, long lastSyncAction) {
-        SyncedData<Task> internalData = internalMap().get(id);
-        return internalData == null || lastSyncAction >= internalData.lastSyncAction();
+    public Optional<SyncedData<Task>> get(Id id) {
+        return Optional.fromNullable(internalMap().get(id));
     }
 
     public Tasks save(SyncedData<Task> taskSyncedData) {
@@ -121,13 +117,27 @@ public abstract class Tasks {
         };
     }
 
+    public Tasks filter(final Predicate<SyncedData<Task>> predicate) {
+        return Tasks.from(internalMap().filter(new Predicate<Map.Entry<Id, SyncedData<Task>>>() {
+            @Override
+            public boolean apply(Map.Entry<Id, SyncedData<Task>> input) {
+                return predicate.apply(input.getValue());
+            }
+        }));
+    }
+
+    public Tasks insertOrUpdate(Tasks tasks) {
+        return Tasks.from(internalMap().putAll(tasks.internalMap()));
+    }
+
     @Override
     public String toString() {
         String result = "";
         String delimiter = ", ";
         for (Id id : internalMap().keySet()) {
-            result = result + delimiter + "{" + id + "; " + internalMap().get(id).syncState() + "}";
+            result = result + delimiter + "{" + id + "; " + internalMap().get(id).syncState() + "; " + internalMap().get(id).lastSyncAction() + "}";
         }
         return result.substring(delimiter.length());
     }
+
 }
