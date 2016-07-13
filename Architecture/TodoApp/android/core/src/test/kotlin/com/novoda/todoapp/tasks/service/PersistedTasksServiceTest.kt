@@ -126,7 +126,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun `Given the local data is empty and remote fails, On getTasksEvent, It should return and error`() {
+    fun `Given the local data is empty and remote fails, On getTasksEvent, It should return an error`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val throwable = Throwable()
         taskRemoteDataSubject.onError(throwable)

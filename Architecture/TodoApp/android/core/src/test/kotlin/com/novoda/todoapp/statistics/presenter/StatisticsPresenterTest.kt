@@ -134,7 +134,7 @@ class StatisticsPresenterTest {
     }
 
     @Test
-    fun `Given the presenter is not presenting, On emission of a new error loading event, It should not present anything to the displayer`() {
+    fun `Given the presenter is not presenting, On emission of a new empty error loading event, It should not present anything to the displayer`() {
         givenThePresenterIsNotPresenting()
 
         statisticsEventSubject.onNext(Event.error<Statistics>(SyncError()))

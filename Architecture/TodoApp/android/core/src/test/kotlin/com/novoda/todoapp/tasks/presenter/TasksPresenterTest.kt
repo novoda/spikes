@@ -83,7 +83,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun `Given the presenter is presenting, On emission of an empty loading event, It should present to the loading screen`() {
+    fun `Given the presenter is presenting, On emission of an empty loading event, It should present the loading screen`() {
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(emptyLoadingEvent())
@@ -92,7 +92,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun `Given the presenter is presenting, On emission of a loading event with data, It should present to the loading indicator`() {
+    fun `Given the presenter is presenting, On emission of a loading event with data, It should present the loading indicator`() {
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(defaultLoadingEventWith(simpleTasks()))
@@ -102,7 +102,7 @@ class TasksPresenterTest {
 
 
     @Test
-    fun `Given the presenter is presenting, On emission of a loading event with some deleted data, It should present to the loading indicator`() {
+    fun `Given the presenter is presenting, On emission of a loading event with some deleted data, It should present the loading indicator`() {
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(defaultLoadingEventWith(someDeletedLocallyTasks()))
@@ -111,7 +111,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun `Given the presenter is presenting, On emission of a loading event with all deleted data, It should present to the loading screen`() {
+    fun `Given the presenter is presenting, On emission of a loading event with all deleted data, It should present the loading screen`() {
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(nonEmptyLoadingEventWith(allDeletedLocallyTasks()))
@@ -120,7 +120,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun `Given the current filter is all, On emission of an empty idle event, It should present to the empty screen`() {
+    fun `Given the current filter is all, On emission of an empty idle event, It should present the empty screen`() {
         presenter.setInitialFilterTo(TasksActionListener.Filter.ALL)
         givenThePresenterIsPresenting()
 
@@ -420,7 +420,7 @@ class TasksPresenterTest {
 
     @Test
     fun `Given the presenter is presenting, On stopPresenting, It should detach the action listener from the topLevelMenuDisplayer`() {
-        givenThePresenterIsNotPresenting()
+        givenThePresenterIsPresenting()
 
         presenter.stopPresenting()
 
