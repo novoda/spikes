@@ -4,6 +4,7 @@ import com.jakewharton.rxrelay.BehaviorRelay;
 
 import rx.Notification;
 import rx.Observable;
+import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.functions.Func2;
 
@@ -11,6 +12,17 @@ public final class EventFunctions {
 
     private EventFunctions() {
         throw new IllegalStateException("NonInstantiableClassException");
+    }
+
+    public static <T> Action0 initialiseIfNeeded(final BehaviorRelay<Event<T>> subject, final Action0 initialiseAction) {
+        return new Action0() {
+            @Override
+            public void call() {
+                if (isNotInitialised(subject)) {
+                    initialiseAction.call();
+                }
+            }
+        };
     }
 
     public static <T> boolean isNotInitialised(BehaviorRelay<Event<T>> subject) {
@@ -101,6 +113,23 @@ public final class EventFunctions {
             @Override
             public T call(Event<T> event) {
                 return event.data().get();
+            }
+        };
+    }
+
+    public static <T> Observable.Transformer<T, Event<T>> asValidatedEvent(final Event<T> value, final Func1<Event<T>, Event<T>> validator) {
+        return new Observable.Transformer<T, Event<T>>() {
+            @Override
+            public Observable<Event<T>> call(Observable<T> tasksObservable) {
+                return tasksObservable
+                        .compose(EventFunctions.asEvent(value))
+                        .map(new Func1<Event<T>, Event<T>>() {
+                                 @Override
+                                 public Event<T> call(Event<T> tasksEvent) {
+                                     return validator.call(tasksEvent);
+                                 }
+                             }
+                        ).distinctUntilChanged();
             }
         };
     }
