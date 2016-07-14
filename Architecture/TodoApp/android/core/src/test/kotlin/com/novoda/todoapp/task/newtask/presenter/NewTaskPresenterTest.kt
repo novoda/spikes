@@ -39,7 +39,7 @@ class NewTaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsNotPresenting_on_StartPresenting_it_ShouldAttachListenerToTheView() {
+    fun `Given the presenter is not presenting, On start presenting, It should attach the action listener to the displayer`() {
         givenThePresenterIsNotPresenting()
 
         presenter.startPresenting()
@@ -48,7 +48,7 @@ class NewTaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_StopPresenting_it_ShouldDetachListenerFromTheView() {
+    fun `Given the presenter is presenting, On stop presenting, It should detach the action listener from the displayer`() {
         givenThePresenterIsPresenting()
 
         presenter.stopPresenting()
@@ -57,7 +57,7 @@ class NewTaskPresenterTest {
     }
 
     @Test
-    fun given_TaskTitleAndDescriptionAreValid_on_SaveTask_it_ShouldSaveTaskToService() {
+    fun `Given task title and description are valid, On save task, It should save task to the service`() {
         givenThePresenterIsPresenting()
         val task = Task.builder()
                 .id(TASK_ID)
@@ -71,7 +71,7 @@ class NewTaskPresenterTest {
     }
 
     @Test
-    fun given_TaskTitleIsValid_on_SaveTask_it_ShouldSaveTaskToService() {
+    fun `Given task title is valid and no description, On save task, It should save task to the service`() {
         givenThePresenterIsPresenting()
         val task = Task.builder()
                 .id(TASK_ID)
@@ -84,7 +84,7 @@ class NewTaskPresenterTest {
     }
 
     @Test
-    fun given_TaskDescriptionIsValid_on_SaveTask_it_ShouldSaveTaskToService() {
+    fun `Given task description is valid and no title, On save task, It should save task to the service`() {
         givenThePresenterIsPresenting()
         val task = Task.builder()
                 .id(TASK_ID)
@@ -97,7 +97,7 @@ class NewTaskPresenterTest {
     }
 
     @Test
-    fun given_TaskTitleAndDescriptionAreInvalid_on_SaveTask_it_ShouldNotSaveTaskToService() {
+    fun `Given task title and description are missing, On save task, It should not save task to the service`() {
         givenThePresenterIsPresenting()
 
         presenter.taskActionListener.save(Optional.absent(), Optional.absent())
@@ -106,7 +106,7 @@ class NewTaskPresenterTest {
     }
 
     @Test
-    fun given_TaskDescriptionIsValid_on_SaveTask_it_ShouldNavigateBack() {
+    fun `Given task description is valid and no title, On save task, It should navigate back`() {
         givenThePresenterIsPresenting()
         val task = Task.builder()
                 .id(TASK_ID)
@@ -119,7 +119,7 @@ class NewTaskPresenterTest {
     }
 
     @Test
-    fun given_TaskTitleAndDescriptionAreInvalid_on_SaveTask_it_ShouldNotNavigateBack() {
+    fun `Given task title and description are missing, On save task, It should not navigate back`() {
         givenThePresenterIsPresenting()
 
         presenter.taskActionListener.save(Optional.absent(), Optional.absent())
@@ -128,7 +128,7 @@ class NewTaskPresenterTest {
     }
 
     @Test
-    fun given_TaskTitleIsValid_on_SaveTask_it_ShouldNavigateBack() {
+    fun `Given task title is valid and no description, On save task, It should navigate back`() {
         givenThePresenterIsPresenting()
         val task = Task.builder()
                 .id(TASK_ID)
@@ -141,7 +141,7 @@ class NewTaskPresenterTest {
     }
 
     @Test
-    fun given_TaskTitleIsValid_on_SaveTask_it_ShouldGenerateId() {
+    fun `Given task title is valid and no description, On save task, It should generate an id`() {
         givenThePresenterIsPresenting()
         val task = Task.builder()
                 .id(TASK_ID)
@@ -154,7 +154,7 @@ class NewTaskPresenterTest {
     }
 
     @Test
-    fun given_TaskDescriptionIsValid_on_SaveTask_it_ShouldGenerateId() {
+    fun `Given task description is valid and no title, On save task, It should generate an id`() {
         givenThePresenterIsPresenting()
         val task = Task.builder()
                 .id(TASK_ID)
@@ -167,7 +167,7 @@ class NewTaskPresenterTest {
     }
 
     @Test
-    fun given_TaskTitleAndDescriptionAreInvalid_on_SaveTask_it_ShouldNotGenerateId() {
+    fun `Given task title and description are missing, On save task, It should not generate an id`() {
         givenThePresenterIsPresenting()
 
         presenter.taskActionListener.save(Optional.absent(), Optional.absent())
@@ -176,7 +176,7 @@ class NewTaskPresenterTest {
     }
 
     @Test
-    fun given_TaskTitleAndDescriptionAreInvalid_on_SaveTask_it_ShouldPresentEmptyTaskError() {
+    fun `Given task title and description are missing, On save task, It should present empty task error`() {
         givenThePresenterIsPresenting()
 
         presenter.taskActionListener.save(Optional.absent(), Optional.absent())

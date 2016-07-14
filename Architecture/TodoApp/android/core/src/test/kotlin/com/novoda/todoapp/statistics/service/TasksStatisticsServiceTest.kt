@@ -28,7 +28,7 @@ class TasksStatisticsServiceTest {
     }
 
     @Test
-    fun given_TasksEventIsIdleAndEmpty_on_getStatisticsEvent_it_ShouldSendAnIdleEventWithEmptyStatistics() {
+    fun `Given tasksEvent is idle and empty, On getStatisticsEvent, It should send an idle event with empty statistics`() {
         tasksEventSubject.onNext(Event.idle())
         val testObserver = TestObserver<Event<Statistics>>()
 
@@ -40,7 +40,7 @@ class TasksStatisticsServiceTest {
     }
 
     @Test
-    fun given_TasksEventIsLoadingAndEmpty_on_getStatisticsEvent_it_ShouldSendALoadingEventWithEmptyStatistics() {
+    fun `Given tasksEvent is loading and empty, On getStatisticsEvent, It should send a loading event with empty statistics`() {
         tasksEventSubject.onNext(Event.loading())
         val testObserver = TestObserver<Event<Statistics>>()
 
@@ -52,7 +52,7 @@ class TasksStatisticsServiceTest {
     }
 
     @Test
-    fun given_TasksEventIsErrorAndEmpty_on_getStatisticsEvent_it_ShouldSendAnErrorEventWithEmptyStatistics() {
+    fun `Given tasksEvent is an error and empty, On getStatisticsEvent, It should send an error event with empty statistics`() {
         tasksEventSubject.onNext(Event.error(SyncError()))
         val testObserver = TestObserver<Event<Statistics>>()
 
@@ -64,7 +64,7 @@ class TasksStatisticsServiceTest {
     }
 
     @Test
-    fun given_TasksEventIsIdleAndHasTasks_on_getStatisticsEvent_it_ShouldSendAnIdleEventWithStatisticsMatchingTasks() {
+    fun `Given tasksEvent is idle and has tasks, On getStatisticsEvent, It should send an idle event with statisticsmatching tasks`() {
         tasksEventSubject.onNext(Event.idle<Tasks>().updateData(tasksWithSomeActiveAndSomeCompleted()))
         val testObserver = TestObserver<Event<Statistics>>()
 
@@ -76,7 +76,7 @@ class TasksStatisticsServiceTest {
     }
 
     @Test
-    fun given_TasksEventIsLoadingAndHasTasks_on_getStatisticsEvent_it_ShouldSendALoadingEventWithStatisticsMatchingTasks() {
+    fun `Given tasksEvent is loading and has tasks, On getStatisticsEvent, It should send a loading event with statisticsmatching tasks`() {
         tasksEventSubject.onNext(Event.loading<Tasks>().updateData(tasksWithSomeActiveAndSomeCompleted()))
         val testObserver = TestObserver<Event<Statistics>>()
 
@@ -88,7 +88,7 @@ class TasksStatisticsServiceTest {
     }
 
     @Test
-    fun given_TasksEventIsErrorAndHasTasks_on_getStatisticsEvent_it_ShouldSendAnErrorEventWithStatisticsMatchingTasks() {
+    fun `Given tasksEvent is an error and has tasks, On getStatisticsEvent, It should send an error event with statisticsmatching tasks`() {
         tasksEventSubject.onNext(Event.error<Tasks>(SyncError()).updateData(tasksWithSomeActiveAndSomeCompleted()))
         val testObserver = TestObserver<Event<Statistics>>()
 

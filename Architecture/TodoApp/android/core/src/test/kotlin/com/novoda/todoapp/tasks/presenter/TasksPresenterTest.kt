@@ -56,7 +56,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfNewTasks_it_ShouldPresentTheTasksToTheView() {
+    fun `Given the presenter is presenting, On emission of new tasks, It should present the tasks to the displayer`() {
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(nonEmptyIdleEventWith(simpleTasks()))
@@ -65,7 +65,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfSomeNewDeletedLocallyTasks_it_ShouldPresentNonDeletedTasksToTheView() {
+    fun `Given the presenter is presenting, On emission of some new deleted locally tasks, It should present non deleted tasks to the displayer`() {
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(nonEmptyIdleEventWith(someDeletedLocallyTasks()))
@@ -74,7 +74,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfAllDeletedLocallyTasks_it_ShouldNotPresentToTheView() {
+    fun `Given the presenter is presenting, On emission of all new deleted locally tasks, It should not present to the displayer`() {
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(nonEmptyIdleEventWith(allDeletedLocallyTasks()))
@@ -83,7 +83,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfALoadingEventWithNoData_it_ShouldPresentTheLoadingScreen() {
+    fun `Given the presenter is presenting, On emission of an empty loading event, It should present the loading screen`() {
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(emptyLoadingEvent())
@@ -92,7 +92,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfALoadingEventWithData_it_ShouldPresentTheLoadingIndicator() {
+    fun `Given the presenter is presenting, On emission of a loading event with data, It should present the loading indicator`() {
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(defaultLoadingEventWith(simpleTasks()))
@@ -102,7 +102,7 @@ class TasksPresenterTest {
 
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfLoadingEventWithSomeDeletedData_it_ShouldPresentLoadingIndicator() {
+    fun `Given the presenter is presenting, On emission of a loading event with some deleted data, It should present the loading indicator`() {
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(defaultLoadingEventWith(someDeletedLocallyTasks()))
@@ -111,7 +111,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfLoadingEventWithAllDeletedData_it_ShouldPresentLoadingScreen() {
+    fun `Given the presenter is presenting, On emission of a loading event with all deleted data, It should present the loading screen`() {
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(nonEmptyLoadingEventWith(allDeletedLocallyTasks()))
@@ -120,7 +120,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_TheCurrentFilterIsAll_on_EmissionOfAnIdleEventWithNoData_it_ShouldPresentTheEmptyScreen() {
+    fun `Given the current filter is all, On emission of an empty idle event, It should present the empty screen`() {
         presenter.setInitialFilterTo(TasksActionListener.Filter.ALL)
         givenThePresenterIsPresenting()
 
@@ -130,7 +130,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfIdleEventWithSomeDeletedData_it_ShouldPresentData() {
+    fun `Given the presenter is presenting, On emission of an idle event with some deleted data, It should present data`() {
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(defaultIdleEventWith(someDeletedLocallyTasks()))
@@ -139,7 +139,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfIdleEventWithAllDeletedData_it_ShouldPresentEmptyTasksScreen() {
+    fun `Given the presenter is presenting, On emission of an idle event with all deleted data, It should present the empty tasks screen`() {
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(nonEmptyIdleEventWith(allDeletedLocallyTasks()))
@@ -148,7 +148,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_TheCurrentFilterIsActive_on_EmissionOfAnIdleEventWithNoData_it_ShouldPresentTheEmptyActiveTasksScreen() {
+    fun `Given the current filter is active, On emission of an empty idle event, It should present the empty active tasks screen`() {
         presenter.setInitialFilterTo(TasksActionListener.Filter.ACTIVE)
         givenThePresenterIsPresenting()
 
@@ -158,7 +158,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_TheCurrentFilterIsCompleted_on_EmissionOfAnIdleEventWithNoData_it_ShouldPresentTheEmptyCompletedTasksScreen() {
+    fun `Given the current filter is completed, On emission of an empty idle event, It should present the empty completed tasks screen`() {
         presenter.setInitialFilterTo(TasksActionListener.Filter.COMPLETED)
         givenThePresenterIsPresenting()
 
@@ -168,7 +168,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfAnIdleEventWithData_it_ShouldPresentData() {
+    fun `Given the presenter is presenting, On emission of an idle event with data, It should present data`() {
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(defaultIdleEventWith(simpleTasks()))
@@ -177,7 +177,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfAnErrorEventWithNoData_it_ShouldPresentTheErrorScreen() {
+    fun `Given the presenter is presenting, On emission of an empty event, It should present the error screen`() {
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(errorEvent())
@@ -186,7 +186,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfErrorEventWithSomeDeletedData_it_ShouldPresentErrorIndicator() {
+    fun `Given the presenter is presenting, On emission of an error event with some deleted data, It should present the error indicator`() {
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(errorEventWith(someDeletedLocallyTasks()))
@@ -195,7 +195,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfErrorEventWithAllDeletedData_it_ShouldPresentErrorScreen() {
+    fun `Given the presenter is presenting, On emission of an error event with all deleted data, It should present the error screen`() {
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(errorEventWith(allDeletedLocallyTasks()))
@@ -204,7 +204,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfAnErrorEventWithData_it_ShouldPresentTheErrorIndicator() {
+    fun `Given the presenter is presenting, On emission of an error event with data, It should present the error indicator`() {
         givenThePresenterIsPresenting()
 
         tasksEventSubject.onNext(errorEventWith(simpleTasks()))
@@ -213,7 +213,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_RetryClicked_it_ShouldRefreshTheService() {
+    fun `Given the presenter is presenting, On retry clicked, It should refresh the service`() {
         givenThePresenterIsPresenting()
 
         presenter.retryActionListener.onRetry()
@@ -222,7 +222,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterStoppedPresenting_on_EmissionOfNewTasks_it_ShouldNotPresentTheTasksToTheView() {
+    fun `Given the presenter stopped presenting, On emission of new tasks, It should not present anything to the displayer`() {
         givenThePresenterStoppedPresenting()
 
         tasksEventSubject.onNext(nonEmptyIdleEventWith(simpleTasks()))
@@ -231,7 +231,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterStoppedPresenting_on_EmissionOfAnEvent_it_ShouldNotPresentToTheLoadingView() {
+    fun `Given the presenter stopped presenting, On emission of an event, It should not present anything to the loading displayer`() {
         givenThePresenterStoppedPresenting()
 
         tasksEventSubject.onNext(defaultLoadingEvent())
@@ -240,7 +240,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsNotPresenting_on_StartPresenting_it_ShouldAttachListenerToTheLoadingView() {
+    fun `Given the presenter is not presenting, On startPresenting, It should attach the action listener to the loading displayer`() {
         givenThePresenterIsNotPresenting()
 
         presenter.startPresenting()
@@ -249,7 +249,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsNotPresenting_on_StartPresenting_it_ShouldAttachListenerToTheView() {
+    fun `Given the presenter is not presenting, On startPresenting, It should attach the action listener to the displayer`() {
         givenThePresenterIsNotPresenting()
 
         presenter.startPresenting()
@@ -258,7 +258,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_StopPresenting_it_ShouldDetachListenerFromTheLoadingView() {
+    fun `Given the presenter is presenting, On stopPresenting, It should detach the action listener from the loading displayer`() {
         givenThePresenterIsPresenting()
 
         presenter.stopPresenting()
@@ -267,7 +267,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_StopPresenting_it_ShouldDetachListenerFromTheView() {
+    fun `Given the presenter is presenting, On stopPresenting, It should detach the action listener from the displayer`() {
         givenThePresenterIsPresenting()
 
         presenter.stopPresenting()
@@ -276,7 +276,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsNotPresenting_on_StartPresenting_it_ShouldSubscribeToTheTasksStream() {
+    fun `Given the presenter is not presenting, On startPresenting, It should subscribe to the tasks stream`() {
         givenThePresenterIsNotPresenting()
 
         presenter.startPresenting()
@@ -285,16 +285,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsNotPresenting_on_StartPresenting_it_ShouldSubscribeToTheEventStream() {
-        givenThePresenterIsNotPresenting()
-
-        presenter.startPresenting()
-
-        assertTrue(tasksEventSubject.hasObservers())
-    }
-
-    @Test
-    fun given_ThePresenterIsPresenting_on_StopPresenting_it_ShouldUnsubscribeFromTheTasksStream() {
+    fun `Given the presenter is presenting, On stopPresenting, It should unsubscribe from the tasks stream`() {
         givenThePresenterIsPresenting()
 
         presenter.stopPresenting()
@@ -303,16 +294,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_StopPresenting_it_ShouldUnsubscribeFromTheEventStream() {
-        givenThePresenterIsPresenting()
-
-        presenter.stopPresenting()
-
-        assertFalse(tasksEventSubject.hasObservers())
-    }
-
-    @Test
-    fun given_ThePresenterIsPresenting_on_ToggleCompleteSelectedForCompletedTask_it_ShouldReactivateTask() {
+    fun `Given the presenter is presenting, On toggleCompletion for a completed task, It should reactivate the task`() {
         givenThePresenterIsPresenting()
         val completedTask = simpleTask().complete()
 
@@ -322,7 +304,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_ToggleCompleteSelectedForActivatedTask_it_ShouldCompleteTask() {
+    fun `Given the presenter is presenting, On toggleCompletion for an active task, It should complete the task`() {
         givenThePresenterIsPresenting()
         val activatedTask = simpleTask().activate()
 
@@ -332,7 +314,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_TaskSelected_it_ShouldNavigateToTaskDetail() {
+    fun `Given the presenter is presenting, On task selected, It should navigate to task details`() {
         givenThePresenterIsPresenting()
         val simpleTask = simpleTask()
 
@@ -342,7 +324,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_RefreshSelected_it_ShouldRefreshTheService() {
+    fun `Given the presenter is presenting, On refresh selected, It should refresh the service`() {
         givenThePresenterIsPresenting()
 
         presenter.tasksActionListener.onRefreshSelected()
@@ -351,7 +333,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_ClearCompletedSelected_it_ShouldClearCompletedOnTheService() {
+    fun `Given the presenter is presenting, On clear completed selected, It should clear completed on the service`() {
         givenThePresenterIsPresenting()
 
         presenter.tasksActionListener.onClearCompletedSelected()
@@ -360,7 +342,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_AddTaskSelected_it_ShouldNavigateToAddTask() {
+    fun `Given the presenter is presenting, On add task selected, It should navigate to add task`() {
         givenThePresenterIsPresenting()
 
         presenter.tasksActionListener.onAddTaskSelected()
@@ -369,7 +351,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_AllFilterSelected_it_ShouldReSubscribeToTasksEventStream() {
+    fun `Given the presenter is presenting, On all filter selected, It should subscribe to event stream`() {
         givenThePresenterIsPresenting()
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.ALL)
@@ -379,7 +361,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_ActiveFilterSelected_it_ShouldSubscribeToActiveTasksEventStream() {
+    fun `Given the presenter is presenting, On active filter selected, It should subscribe to active event stream`() {
         givenThePresenterIsPresenting()
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.ACTIVE)
@@ -389,7 +371,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_CompletedFilterSelected_it_ShouldSubscribeToCompletedTasksEventStream() {
+    fun `Given the presenter is presenting, On completed filter selected, It should subscribe to completed event stream`() {
         givenThePresenterIsPresenting()
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.COMPLETED)
@@ -399,7 +381,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_CompletedFilterSelected_it_ShouldUpdateCurrentFilter() {
+    fun `Given the presenter is presenting, On completed filter selected, It should update current filter`() {
         givenThePresenterIsPresenting()
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.COMPLETED)
@@ -408,7 +390,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_ActiveFilterSelected_it_ShouldUpdateCurrentFilter() {
+    fun `Given the presenter is presenting, On active filter selected, It should update current filter`() {
         givenThePresenterIsPresenting()
 
         presenter.tasksActionListener.onFilterSelected(TasksActionListener.Filter.ACTIVE)
@@ -417,7 +399,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsSetWithInitialFilter_on_StartPresenting_it_ShouldSubscribeToTheCorrespondingEventStream() {
+    fun `Given the presenter is set with initial filter, On startPresenting, It should subscribe to the corresponding event stream`() {
         givenThePresenterIsNotPresenting()
         presenter.setInitialFilterTo(TasksActionListener.Filter.ACTIVE)
 
@@ -428,7 +410,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsNotPresenting_on_StartPresenting_it_ShouldAttachTheNavDrawerActionListener_ToTheDisplayer() {
+    fun `Given the presenter is not presenting, On startPresenting, It should attach the action listener to the topLevelMenuDisplayer`() {
         givenThePresenterIsNotPresenting()
 
         presenter.startPresenting()
@@ -437,8 +419,8 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_StopPresenting_it_ShouldDetachTheNavDrawerActionListener_FromTheDisplayer() {
-        givenThePresenterIsNotPresenting()
+    fun `Given the presenter is presenting, On stopPresenting, It should detach the action listener from the topLevelMenuDisplayer`() {
+        givenThePresenterIsPresenting()
 
         presenter.stopPresenting()
 
@@ -446,7 +428,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_StatisticsNavDrawerItemSelected_it_ShouldCloseTheNavDrawerAndNavigateToStatistics() {
+    fun `Given the presenter is presenting, On statistics item selected, It should close the top level menu and navigate to statistics`() {
         givenThePresenterIsPresenting()
 
         presenter.topLevelMenuActionListener.onStatisticsItemSelected()
@@ -456,7 +438,7 @@ class TasksPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_ToDoListNavDrawerItemSelected_it_ShouldCloseTheNavDrawer() {
+    fun `Given the presenter is presenting, On todo list item selected, It should close the top level menu`() {
         givenThePresenterIsPresenting()
 
         presenter.topLevelMenuActionListener.onToDoListItemSelected()

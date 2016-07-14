@@ -42,7 +42,7 @@ class EditTaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfNewTask_it_ShouldPresentTheTaskToTheView() {
+    fun `Given the presenter is presenting, On emission of a new task, It should present the task to the displayer`() {
         givenThePresenterIsPresenting()
 
         taskSubject.onNext(simpleSyncedTask())
@@ -51,7 +51,7 @@ class EditTaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterStoppedPresenting_on_EmissionOfNewTask_it_ShouldNotPresentTheTaskToTheView() {
+    fun `Given the presenter stopped presenting, On emission of a new task, It should not present anything to the displayer`() {
         givenThePresenterStoppedPresenting()
 
         taskSubject.onNext(simpleSyncedTask())
@@ -60,7 +60,7 @@ class EditTaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsNotPresenting_on_StartPresenting_it_ShouldAttachListenerToTheView() {
+    fun `Given the presenter is not presenting, On startPresenting, It should attach the action listener to the displayer`() {
         givenThePresenterIsNotPresenting()
 
         presenter.startPresenting()
@@ -69,7 +69,7 @@ class EditTaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_StopPresenting_it_ShouldDetachListenerFromTheView() {
+    fun `Given the presenter is presenting, On stopPresenting, It should detach the action listener from the displayer`() {
         givenThePresenterIsPresenting()
 
         presenter.stopPresenting()
@@ -78,7 +78,7 @@ class EditTaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsNotPresenting_on_StartPresenting_it_ShouldSubscribeToTheTaskStream() {
+    fun `Given the presenter is not presenting, On startPresenting, It should subscribe to the task stream`() {
         givenThePresenterIsNotPresenting()
 
         presenter.startPresenting()
@@ -87,7 +87,7 @@ class EditTaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_StopPresenting_it_ShouldUnsubscribeFromTheTasksStream() {
+    fun `Given the presenter is presenting, On stopPresenting, It should unsubscribe from the task stream`() {
         givenThePresenterIsPresenting()
 
         presenter.stopPresenting()
@@ -96,7 +96,7 @@ class EditTaskPresenterTest {
     }
 
     @Test
-    fun given_TaskTitleAndDescriptionAreValid_on_SaveTask_it_ShouldSaveTaskToService() {
+    fun `Given task title and description are valid, On save task, It should save task to the service`() {
         givenThePresenterIsPresenting()
         val task = Task.builder()
                 .id(TASK_ID)
@@ -110,7 +110,7 @@ class EditTaskPresenterTest {
     }
 
     @Test
-    fun given_TaskTitleIsValid_on_SaveTask_it_ShouldSaveTaskToService() {
+    fun `Given task title is valid and no description, On save task, It should save task to the service`() {
         givenThePresenterIsPresenting()
         val task = Task.builder()
                 .id(TASK_ID)
@@ -123,7 +123,7 @@ class EditTaskPresenterTest {
     }
 
     @Test
-    fun given_TaskDescriptionIsValid_on_SaveTask_it_ShouldSaveTaskToService() {
+    fun `Given task description is valid and no title, On save task, It should save task to the service`() {
         givenThePresenterIsPresenting()
         val task = Task.builder()
                 .id(TASK_ID)
@@ -136,7 +136,7 @@ class EditTaskPresenterTest {
     }
 
     @Test
-    fun given_TaskTitleAndDescriptionAreInvalid_on_SaveTask_it_ShouldNotSaveTaskToService() {
+    fun `Given task title and description are missing, On save task, It should not save task to the service`() {
         givenThePresenterIsPresenting()
 
         presenter.taskActionListener.save(Optional.absent(), Optional.absent())
@@ -145,7 +145,7 @@ class EditTaskPresenterTest {
     }
 
     @Test
-    fun given_TaskTitleIsValid_on_SaveTask_it_ShouldNavigateBack() {
+    fun `Given task title is valid and no description, On save task, It should navigate back`() {
         givenThePresenterIsPresenting()
         val task = Task.builder()
                 .id(TASK_ID)
@@ -158,7 +158,7 @@ class EditTaskPresenterTest {
     }
 
     @Test
-    fun given_TaskDescriptionIsValid_on_SaveTask_it_ShouldNavigateBack() {
+    fun `Given task description is valid and no title, On save task, It should navigate back`() {
         givenThePresenterIsPresenting()
         val task = Task.builder()
                 .id(TASK_ID)
@@ -171,7 +171,7 @@ class EditTaskPresenterTest {
     }
 
     @Test
-    fun given_TaskTitleAndDescriptionAreInvalid_on_SaveTask_it_ShouldNotNavigateBack() {
+    fun `Given task title and description are missing, On save task, It should not navigate back`() {
         givenThePresenterIsPresenting()
 
         presenter.taskActionListener.save(Optional.absent(), Optional.absent())
@@ -180,7 +180,7 @@ class EditTaskPresenterTest {
     }
 
     @Test
-    fun given_TaskTitleAndDescriptionAreInvalid_on_SaveTask_it_ShouldPresentEmptyTaskError() {
+    fun `Given task title and description are missing, On save task, It should present empty task error`() {
         givenThePresenterIsPresenting()
 
         presenter.taskActionListener.save(Optional.absent(), Optional.absent())

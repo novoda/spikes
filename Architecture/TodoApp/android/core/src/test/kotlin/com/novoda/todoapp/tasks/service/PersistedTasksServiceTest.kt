@@ -53,7 +53,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataHasTasksAndTasksAreExpired_on_GetTasks_it_ShouldSaveTasksFromTheRemoteInTheLocalData() {
+    fun `Given the local data has tasks and tasks are expired, On getTasksEvent, It should save tasks from the remote in the local data`() {
         val remoteTasks = sampleRemoteTasks()
         val localTasks = sampleLocalTasks()
         putTaskListIntoRemoteDataSource(remoteTasks)
@@ -67,7 +67,7 @@ class PersistedTasksServiceTest {
 
 
     @Test
-    fun given_TheLocalDataIsEmpty_on_GetTasksEvents_it_ShouldReturnTasksFromTheRemote() {
+    fun `Given the local data is empty, On getTasksEvent, It should return tasks from the remote`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val tasks = sampleRemoteTasks()
         putTaskListIntoRemoteDataSource(tasks)
@@ -85,7 +85,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataHasTasksAndTasksAreFresh_on_GetTasksEvents_it_ShouldReturnTasksFromTheLocalData() {
+    fun `Given the local has tasks and tasks are fresh, On getTasksEvent, It should return tasks from the local data`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val remoteTasks = sampleRemoteTasks()
         val localTasks = sampleLocalTasks()
@@ -105,7 +105,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataHasTasksAndTasksAreExpired_on_GetTasksEvents_it_ShouldReturnTasksFromTheLocalDataThenTasksFromTheRemote() {
+    fun `Given the local data has tasks and tasks are expired, On getTasksEvent, It should return tasks from the local data then tasks from the remote`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val remoteTasks = sampleRemoteTasks()
         val localTasks = sampleLocalTasks()
@@ -126,7 +126,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataIsEmptyAndRemoteFails_on_GetTasksEvents_it_ShouldReturnError() {
+    fun `Given the local data is empty and remote fails, On getTasksEvent, It should return an error`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val throwable = Throwable()
         taskRemoteDataSubject.onError(throwable)
@@ -143,7 +143,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataIsEmptyAndRemoteIsEmpty_on_GetTasksEvents_it_ShouldReturnEmpty() {
+    fun `Given the local data is empty and remote is empty, On getTasksEvent, It should return empty`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
@@ -159,7 +159,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataFailsAndRemoteIsEmpty_on_GetTasksEvents_it_ShouldReturnError() {
+    fun `Given the local data fails and remote is empty, On getTasksEvent, It should return an error`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val throwable = Throwable()
         taskRemoteDataSubject.onCompleted()
@@ -176,7 +176,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataFailsAndRemoteHasData_on_GetTasksEvents_it_ShouldReturnError() {
+    fun `Given the local data fails and remote has data, On getTasksEvent, It should return an error`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val tasks = sampleRemoteTasks()
         val throwable = Throwable()
@@ -194,7 +194,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataHasDataAndRemoteFails_on_GetTasksEvents_it_ShouldReturnErrorWithData() {
+    fun `Given the local data has data and remote fails, On getTasksEvent, It should return an error with data`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val localTasks = sampleLocalTasks()
         val throwable = Throwable()
@@ -213,7 +213,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_remoteDataSourceDataHasChanged_on_RefreshTasks_it_ShouldReturnNewData() {
+    fun `Given the remote data source has changed, On refreshTasks, It should return new data`() {
         val tasks = sampleRemoteTasks()
         val tasksRefreshed = sampleRefreshedTasks()
         putTaskListIntoRemoteDataSource(tasks)
@@ -236,7 +236,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_remoteDataSourceDataHasNotChanged_on_RefreshTasks_it_ShouldReturnNoAdditionalData() {
+    fun `Given the remote data source has not changed, On refreshTasks, It should return no additional data`() {
         val tasks = sampleRemoteTasks()
         putTaskListIntoRemoteDataSource(tasks)
         taskLocalDataSubject.onCompleted()
@@ -257,7 +257,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_remoteDataSourceDataHasChanged_on_RefreshTasks_it_ShouldPersistNewDataToLocalDatasitory() {
+    fun `Given the remote data source has changed, On refreshTasks, It should persist the new data to the local data source`() {
         val tasks = sampleRemoteTasks()
         val tasksRefreshed = sampleRefreshedTasks()
         putTaskListIntoRemoteDataSource(tasks)
@@ -273,7 +273,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_ServiceHasAlreadySentData_on_RefreshTasks_it_ShouldRestartLoading() {
+    fun `Given the service has already sent data, On refreshTasks, It should restart loading`() {
         val tasks = sampleRemoteTasks()
         val tasksRefreshed = sampleRefreshedTasks()
         putTaskListIntoRemoteDataSource(tasks)
@@ -294,7 +294,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_RemoteIsAcceptingUpdates_on_CompleteTask_it_ShouldSendAheadThenInSyncInfo() {
+    fun `Given remote is accepting updates, On completeTask, It should send AHEAD then IN_SYNC`() {
         val localTasks = sampleLocalTasks()
         val task = localTasks.all().get(0).data()
         putTasksIntoLocalDataSource(localTasks)
@@ -314,7 +314,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_ServiceHasPendingActionMoreRecentThanCurrentOne_on_CompleteTask_it_ShouldSkipTheUpdatesForCurrentAction() {
+    fun `Given the service has pending action more recent than current one, On completeTask, It should skip the updates for the current action`() {
         val (updatedTasks, updatedTask) = taskListWithOneAhead(sampleLocalTaskList(), 0)
         putTasksIntoLocalDataSource(updatedTasks)
         taskRemoteDataSubject.onCompleted()
@@ -332,7 +332,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_RemoteIsFailingUpdates_on_CompleteTask_it_ShouldSendAheadThenThenMarkAsError() {
+    fun `Given remote is failing updates, On completeTask, It should send AHEAD then SYNC_ERROR`() {
         val localTasks = sampleLocalTasks()
         val task = localTasks.all().get(0).data()
         putTasksIntoLocalDataSource(localTasks)
@@ -356,7 +356,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_RemoteIsAcceptingUpdates_on_ActivateTask_it_ShouldSendAheadThenInSyncInfo() {
+    fun `Given remote is accepting updates, On activateTask, It should send AHEAD then IN_SYNC`() {
         val localTasks = sampleLocalCompletedTasks()
         val task = localTasks.all().get(0).data()
         putTasksIntoLocalDataSource(localTasks)
@@ -377,7 +377,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_ServiceHasPendingActionMoreRecentThanCurrentOne_on_ActivateTask_it_ShouldSkipTheUpdatesForCurrentAction() {
+    fun `Given the service has pending action more recent than current one, On activateTask, It should skip the updates for the current action`() {
         val (tasks, task) = taskListWithOneAhead(sampleLocalCompletedTaskList(), 0)
         taskRemoteDataSubject.onCompleted()
         putTasksIntoLocalDataSource(tasks)
@@ -395,7 +395,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_RemoteIsFailingUpdates_on_ActivateTask_it_ShouldSendAheadThenMarkAsError() {
+    fun `Given remote is failing updates, On activateTask, It should send AHEAD then SYNC_ERROR`() {
         val localTasks = sampleLocalCompletedTasks()
         val task = localTasks.all().get(0).data()
         taskRemoteDataSubject.onCompleted()
@@ -419,7 +419,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_RemoteIsAcceptingUpdates_on_SaveTask_it_ShouldSendAheadThenInSyncInfo() {
+    fun `Given remote is accepting updates, On saveTask, It should send AHEAD then IN_SYNC`() {
         val localTasks = sampleLocalCompletedTasks()
         val task = localTasks.all().get(0).data()
         putTasksIntoLocalDataSource(localTasks)
@@ -441,7 +441,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_ServiceHasPendingActionMoreRecentThanCurrentOne_on_SaveTask_it_ShouldSkipTheUpdatesForCurrentAction() {
+    fun `Given the service has pending action more recent than current one, On saveTask, It should skip the updates for the current action`() {
         val (tasks, task) = taskListWithOneAhead(sampleLocalCompletedTaskList(), 0)
         taskRemoteDataSubject.onCompleted()
         putTasksIntoLocalDataSource(tasks)
@@ -460,7 +460,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_RemoteIsFailingUpdates_on_SaveTask_it_ShouldSendAheadThenMarkAsError() {
+    fun `Given remote is failing updates, On saveTask, It should send AHEAD then SYNC_ERROR`() {
         val localTasks = sampleLocalCompletedTasks()
         val task = localTasks.all().get(0).data()
         taskRemoteDataSubject.onCompleted()
@@ -485,7 +485,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataIsEmpty_on_GetActiveTasks_it_ShouldSaveTasksFromTheRemoteInTheLocalData() {
+    fun `Given the local data is empty, On getActiveTasksEvent, It should save tasks from the remote in the local data source`() {
         val tasks = sampleRemoteTasks()
         putTaskListIntoRemoteDataSource(tasks)
         taskLocalDataSubject.onCompleted()
@@ -496,7 +496,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataHasTasksAndTasksAreExpired_on_GetActiveTasks_it_ShouldSaveTasksFromTheRemoteInTheLocalData() {
+    fun `Given the local data has tasks and tasks are expired, On getActiveTasksEvent, It should save tasks from the remote in the local data source`() {
         val remoteTasks = sampleRemoteTasks()
         val localTasks = sampleLocalTasks()
         putTaskListIntoRemoteDataSource(remoteTasks)
@@ -509,7 +509,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataIsEmpty_on_GetActiveTasksEvents_it_ShouldReturnTasksFromTheRemote() {
+    fun `Given the local data is empty, On getActiveTasksEvent, It should return tasks from the remote`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val tasks = sampleRemoteTasks()
         putTaskListIntoRemoteDataSource(tasks)
@@ -527,7 +527,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataHasTasksAndTasksAreFresh_on_GetActiveTasksEvents_it_ShouldReturnTasksFromTheLocalData() {
+    fun `Given the local data has tasks and tasks are fresh, On getActiveTasksEvent, It should return tasks from the local data`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val remoteTasks = sampleRemoteTasks()
         val localTasks = sampleLocalTasks()
@@ -547,7 +547,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataHasTasksAndTasksAreExpired_on_GetActiveTasksEvents_it_ShouldReturnTasksFromTheLocalDataThenTasksFromTheRemote() {
+    fun `Given the local data has tasks and tasks are expired, On getActiveTasksEvent, It should return tasks from the local data then tasks from remote`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val remoteTasks = sampleRemoteTasks()
         val localTasks = sampleLocalTasks()
@@ -568,7 +568,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataIsEmptyAndRemoteFails_on_GetActiveTasksEvents_it_ShouldReturnError() {
+    fun `Given the local data is empty and remote fails, On getActiveTasksEvent, It should return an error`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val throwable = Throwable()
         taskRemoteDataSubject.onError(throwable)
@@ -585,7 +585,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataIsEmptyAndRemoteIsEmpty_on_GetActiveTasksEvents_it_ShouldReturnEmpty() {
+    fun `Given the local data is empty and remote is empty, On getActiveTasksEvent, It should return empty`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
@@ -601,7 +601,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataFailsAndRemoteIsEmpty_on_GetActiveTasksEvents_it_ShouldReturnError() {
+    fun `Given the local data fails and remote is empty, On getActiveTasksEvent, It should return an error`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val throwable = Throwable()
         taskRemoteDataSubject.onCompleted()
@@ -618,7 +618,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataFailsAndRemoteHasData_on_GetActiveTasksEvents_it_ShouldReturnError() {
+    fun `Given the local data fails and remote has data, On getActiveTasksEvent, It should return an error`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val tasks = sampleRemoteTasks()
         val throwable = Throwable()
@@ -636,7 +636,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataHasDataAndRemoteFails_on_GetActiveTasksEvents_it_ShouldReturnErrorWithData() {
+    fun `Given the local data has data and remote fails, On getActiveTasksEvent, It should return an error with data`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val localTasks = sampleLocalTasks()
         val throwable = Throwable()
@@ -655,7 +655,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheTasksAreAllCompleted_on_GetActiveTasksEvents_it_ShouldReturnEmpty() {
+    fun `Given the tasks are all completed, On getActiveTasksEvent, It should return empty`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val tasks = sampleLocalCompletedTasks()
         taskRemoteDataSubject.onCompleted()
@@ -673,7 +673,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheTasksSomeTasksAreCompleted_on_GetActiveTasksEvents_it_ShouldFilterTasks() {
+    fun `Given some tasks are completed, On getActiveTasksEvent, It should filter tasks`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val tasks = sampleLocalSomeCompletedTasks()
         taskRemoteDataSubject.onCompleted()
@@ -691,7 +691,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataIsEmpty_on_GetCompletedTasks_it_ShouldSaveTasksFromTheRemoteInTheLocalData() {
+    fun `Given the local data is empty, On getCompletedTasksEvent, It should save tasks from the remote in the local data source`() {
         val tasks = sampleRemoteCompletedTasks()
         putTaskListIntoRemoteDataSource(tasks)
         taskLocalDataSubject.onCompleted()
@@ -702,7 +702,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataHasTasksAndTasksAreExpired_on_GetCompletedTasks_it_ShouldSaveTasksFromTheRemoteInTheLocalData() {
+    fun `Given the local data has tasks and tasks are expired, On getCompletedTasksEvent, It should save tasks from the remote in the local data source`() {
         val remoteTasks = sampleRemoteCompletedTasks()
         val localTasks = sampleLocalCompletedTasks()
         putTaskListIntoRemoteDataSource(remoteTasks)
@@ -715,7 +715,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataIsEmpty_on_GetCompletedTasksEvents_it_ShouldReturnTasksFromTheRemote() {
+    fun `Given the local data is empty, On getCompletedTasksEvent, It should return tasks from the remote`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val tasks = sampleRemoteCompletedTasks()
         putTaskListIntoRemoteDataSource(tasks)
@@ -733,7 +733,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataHasTasksAndTasksAreFresh_on_GetCompletedTasksEvents_it_ShouldReturnTasksFromTheLocalData() {
+    fun `Given the local data has tasks and tasks are fresh, On getCompletedTasksEvent, It should return tasks from the local data`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val remoteTasks = sampleRemoteCompletedTasks()
         val localTasks = sampleLocalCompletedTasks()
@@ -753,7 +753,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataHasTasksAndTasksAreExpired_on_GetCompletedTasksEvents_it_ShouldReturnTasksFromTheLocalDataThenTasksFromTheRemote() {
+    fun `Given the local data has tasks and tasks are expired, On getCompletedTasksEvent, It should return tasks from the local data then tasks from the remote`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val remoteTasks = sampleRemoteCompletedTasks()
         val localTasks = sampleLocalCompletedTasks()
@@ -774,7 +774,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataIsEmptyAndRemoteFails_on_GetCompletedTasksEvents_it_ShouldReturnError() {
+    fun `Given the local data is empty and remote fails, On getCompletedTasksEvent, It should return an error`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val throwable = Throwable()
         taskRemoteDataSubject.onError(throwable)
@@ -791,7 +791,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataIsEmptyAndRemoteIsEmpty_on_GetCompletedTasksEvents_it_ShouldReturnEmpty() {
+    fun `Given the local data is empty and remote is empty, On getCompletedTasksEvent, It should return empty`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         taskRemoteDataSubject.onCompleted()
         taskLocalDataSubject.onCompleted()
@@ -807,7 +807,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataFailsAndRemoteIsEmpty_on_GetCompletedTasksEvents_it_ShouldReturnError() {
+    fun `Given the local data fails and remote is empty, On getCompletedTasksEvent, It should return an error`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val throwable = Throwable()
         taskRemoteDataSubject.onCompleted()
@@ -824,7 +824,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataFailsAndRemoteHasData_on_GetCompletedTasksEvents_it_ShouldReturnError() {
+    fun `Given the local data fails and remote has data, On getCompletedTasksEvent, It should return an error`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val tasks = sampleRemoteCompletedTasks()
         val throwable = Throwable()
@@ -842,7 +842,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheLocalDataHasDataAndRemoteFails_on_GetCompletedTasksEvents_it_ShouldReturnErrorWithData() {
+    fun `Given the local data has data and remote fails, On getCompletedTasksEvent, It should return an error with data`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val localTasks = sampleLocalCompletedTasks()
         val throwable = Throwable()
@@ -861,7 +861,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheTasksAreAllActivated_on_GetCompletedTasksEvents_it_ShouldReturnEmpty() {
+    fun `Given the tasks are all activated, On getCompletedTasksEvent, It should return empty`() {
         val testScheduler = givenPresenterWithReturnedScheduler()
         val tasks = sampleLocalActivatedTasks()
         taskRemoteDataSubject.onCompleted()
@@ -879,7 +879,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_TheTasksSomeTasksAreCompleted_on_GetCompletedTasksEvents_it_ShouldFilterTasks() {
+    fun `Given some tasks are activated, On getCompletedTasksEvent, It should filter tasks`() {
         val tasks = sampleLocalSomeCompletedTasks()
         taskRemoteDataSubject.onCompleted()
         putTasksIntoLocalDataSource(tasks)
@@ -893,7 +893,7 @@ class PersistedTasksServiceTest {
 
 
     @Test
-    fun given_WeHaveTasksInTheService_on_ClearCompletedTasks_it_ShouldReturnLocallyClearedTaskFirstThenConfirm() {
+    fun `Given the service has completed tasks, On clearCompletedTasks, It should return locally cleared tasks first then confirm`() {
         val tasks = taskListWithSomeCompleted()
         putTaskListIntoRemoteDataSource(tasks)
         taskLocalDataSubject.onCompleted()
@@ -913,7 +913,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_WeHavePendingTaskInTheService_on_ClearCompletedTasks_it_ShouldNotUpdatePendingTask() {
+    fun `Given the service has pending action more recent than current one, On clearCompletedTasks, It should not update the pending task`() {
         val (tasks, task) = taskListWithOneAhead(taskListWithSomeCompleted(), 1)
 
         val tasksWithDeletedLocallyAndAheadData = Tasks.from(ImmutableList.copyOf(listOf(
@@ -945,7 +945,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_WeHaveCompletedPendingTaskInTheService_on_ClearCompletedTasks_it_ShouldNotUpdatePendingTask() {
+    fun `Given the service has completed pending action more recent than current one, On clearCompletedTasks, It should not update the pending task`() {
         val (tasks, task) = taskListWithOneAhead(taskListWithSomeCompleted(), 0)
 
         val tasksWithDeletedLocallyAndAheadData = Tasks.from(ImmutableList.copyOf(listOf(
@@ -978,7 +978,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_RemoteSourceFailsToClearCompletedTasks_on_ClearCompletedTasks_it_ShouldReturnLocallyClearedTaskFirstThenSyncError() {
+    fun `Given the remote fails to clear completed tasks, On clearCompletedTasks, It should return locally cleared first then SyncError`() {
         val tasks = taskListWithSomeCompleted()
         putTaskListIntoRemoteDataSource(tasks)
         taskLocalDataSubject.onCompleted()
@@ -997,7 +997,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_WeHaveTasksInTheService_on_DeleteTask_it_ShouldReturnIdleEventWithAllTasksExceptThatOne() {
+    fun `Given the service has tasks, On deleteTask, It should return all tasks except that one`() {
         `when`(remoteDataSource.deleteTask(any())).thenReturn(Observable.empty())
 
         val initialRemoteTaskList = taskListWithSomeCompleted()
@@ -1026,7 +1026,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_WeHaveAnErrorFromRemote_on_DeleteTask_it_ShouldMarkDeletedTaskAsSyncError() {
+    fun `Given the remote fails to delete task, On deleteTask, It should mark deleted task as SyncError`() {
         `when`(remoteDataSource.deleteTask(any())).thenReturn(Observable.error(Throwable("oh no")))
 
         val initialRemoteTaskList = taskListWithSomeCompleted()
@@ -1051,7 +1051,7 @@ class PersistedTasksServiceTest {
     }
 
     @Test
-    fun given_WeHaveAnOutdatedResponseFromRemote_on_DeleteTask_it_ShouldNotDeleteTheTask() {
+    fun `Given we have an outdated response from remote, On deleteTask, It should not delete the task`() {
         `when`(remoteDataSource.deleteTask(any())).thenReturn(Observable.empty())
 
         val localTasks = firstTaskAhead()

@@ -39,7 +39,7 @@ class TaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfNewTask_it_ShouldPresentTheTaskToTheView() {
+    fun `Given the presenter is presenting, On emission of a new task, It should present the task to the displayer`() {
         givenThePresenterIsPresenting()
 
         taskSubject.onNext(simpleSyncedTask())
@@ -48,7 +48,7 @@ class TaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterStoppedPresenting_on_EmissionOfNewTask_it_ShouldNotPresentTheTaskToTheView() {
+    fun `Given the presenter stopped presenting, On emission of a new task, It should not present anything to the displayer`() {
         givenThePresenterStoppedPresenting()
 
         taskSubject.onNext(simpleSyncedTask())
@@ -57,7 +57,7 @@ class TaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsNotPresenting_on_StartPresenting_it_ShouldAttachListenerToTheView() {
+    fun `Given the presenter is not presenting, On startPresenting, It should attach the action listener to the displayer`() {
         givenThePresenterIsNotPresenting()
 
         presenter.startPresenting()
@@ -66,7 +66,7 @@ class TaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_StopPresenting_it_ShouldDetachListenerFromTheView() {
+    fun `Given the presenter is presenting, On stopPresenting, It should detach the action listener from the displayer`() {
         givenThePresenterIsPresenting()
 
         presenter.stopPresenting()
@@ -75,7 +75,7 @@ class TaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsNotPresenting_on_StartPresenting_it_ShouldSubscribeToTheTaskStream() {
+    fun `Given the presenter is not presenting, On startPresenting, It should subscribe to the task stream`() {
         givenThePresenterIsNotPresenting()
 
         presenter.startPresenting()
@@ -84,7 +84,7 @@ class TaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_StopPresenting_it_ShouldUnsubscribeFromTheTasksStream() {
+    fun `Given the presenter is presenting, On stopPresenting, It should unsubscribe from the task stream`() {
         givenThePresenterIsPresenting()
 
         presenter.stopPresenting()
@@ -93,7 +93,7 @@ class TaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_ToggleCompleteSelectedForCompletedTask_it_ShouldReactivateTask() {
+    fun `Given the presenter is presenting, On toggleCompletion selected for a completed task, It should reactivate the task`() {
         givenThePresenterIsPresenting()
         val completedTask = simpleTask().complete()
 
@@ -103,7 +103,7 @@ class TaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_ToggleCompleteSelectedForActivatedTask_it_ShouldCompleteTask() {
+    fun `Given the presenter is presenting, On toggleCompletion selected for an active task, It should completed the task`() {
         givenThePresenterIsPresenting()
         val activatedTask = simpleTask().activate()
 
@@ -113,7 +113,7 @@ class TaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EditTaskSelected_it_ShouldNavigateToTaskEdit() {
+    fun `Given the presenter is presenting, On edit task selected, It should navigate to task edit`() {
         givenThePresenterIsPresenting()
         val simpleTask = simpleTask()
 
@@ -123,7 +123,7 @@ class TaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_DeleteTaskSelected_it_ShouldDeleteTheTask() {
+    fun `Given the presenter is presenting, On delete task selected, It should delete the task on the service`() {
         givenThePresenterIsPresenting()
         val simpleTask = simpleTask()
 
@@ -133,7 +133,7 @@ class TaskPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_DeleteTaskSelected_it_ShouldGoBack() {
+    fun `Given the presenter is presenting, On delete task selected, It should navigate back`() {
         givenThePresenterIsPresenting()
         val simpleTask = simpleTask()
 

@@ -35,7 +35,7 @@ class StatisticsPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfNewIdleEventWithStatistics_it_ShouldPresentTheStatisticsToTheView() {
+    fun `Given the presenter is presenting, On emission of a new idle event with statistics, It should present the statistics to the displayer`() {
         givenThePresenterIsPresenting()
 
         statisticsEventSubject.onNext(Event.idle<Statistics>().updateData(statistics()))
@@ -44,7 +44,7 @@ class StatisticsPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfNewLoadingEventWithStatistics_it_ShouldPresentTheStatisticsToTheView() {
+    fun `Given the presenter is presenting, On emission of a new loading event with statistics, It should present the statistics to the displayer`() {
         givenThePresenterIsPresenting()
 
         statisticsEventSubject.onNext(Event.loading<Statistics>().updateData(statistics()))
@@ -53,7 +53,7 @@ class StatisticsPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfNewErrorEventWithStatistics_it_ShouldPresentTheStatisticsToTheView() {
+    fun `Given the presenter is presenting, On emission of a new error event with statistics, It should present the statistics to the displayer`() {
         givenThePresenterIsPresenting()
 
         statisticsEventSubject.onNext(Event.error<Statistics>(SyncError()).updateData(statistics()))
@@ -62,7 +62,7 @@ class StatisticsPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfNewIdleEventWithNoStatistics_it_ShouldNotPresentAnyStatisticsToTheView() {
+    fun `Given the presenter is presenting, On emission of a new empty idle event, It should not present any statistics to the displayer`() {
         givenThePresenterIsPresenting()
 
         statisticsEventSubject.onNext(Event.idle<Statistics>())
@@ -71,7 +71,7 @@ class StatisticsPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfNewLoadingEventWithNoStatistics_it_ShouldNotPresentAnyStatisticsToTheView() {
+    fun `Given the presenter is presenting, On emission of a new empty loading event, It should not present any statistics to the displayer`() {
         givenThePresenterIsPresenting()
 
         statisticsEventSubject.onNext(Event.loading<Statistics>())
@@ -80,7 +80,7 @@ class StatisticsPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_EmissionOfNewErrorEventWithNoStatistics_it_ShouldNotPresentAnyStatisticsToTheView() {
+    fun `Given the presenter is presenting, On emission of a new error loading event, It should not present any statistics to the displayer`() {
         givenThePresenterIsPresenting()
 
         statisticsEventSubject.onNext(Event.error<Statistics>(SyncError()))
@@ -89,7 +89,7 @@ class StatisticsPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsNotPresenting_on_EmissionOfNewIdleEventWithStatistics_it_ShouldNotPresentAnythingToTheView() {
+    fun `Given the presenter is not presenting, On emission of a new idle event with statistics, It should not present anything to the displayer`() {
         givenThePresenterIsNotPresenting()
 
         statisticsEventSubject.onNext(Event.idle<Statistics>().updateData(statistics()))
@@ -98,7 +98,7 @@ class StatisticsPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsNotPresenting_on_EmissionOfNewLoadingEventWithStatistics_it_ShouldNotPresentAnythingToTheView() {
+    fun `Given the presenter is not presenting, On emission of a new loading event with statistics, It should not present anything to the displayer`() {
         givenThePresenterIsNotPresenting()
 
         statisticsEventSubject.onNext(Event.loading<Statistics>().updateData(statistics()))
@@ -107,7 +107,7 @@ class StatisticsPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsNotPresenting_on_EmissionOfNewErrorEventWithStatistics_it_ShouldNotPresentAnythingToTheView() {
+    fun `Given the presenter is not presenting, On emission of a new error event with statistics, It should not present anything to the displayer`() {
         givenThePresenterIsNotPresenting()
 
         statisticsEventSubject.onNext(Event.error<Statistics>(SyncError()).updateData(statistics()))
@@ -116,7 +116,7 @@ class StatisticsPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsNotPresenting_on_EmissionOfNewIdleEventWithNoStatistics_it_ShouldNotPresentAnythingToTheView() {
+    fun `Given the presenter is not presenting, On emission of a new empty idle event, It should not present anything to the displayer`() {
         givenThePresenterIsNotPresenting()
 
         statisticsEventSubject.onNext(Event.idle<Statistics>())
@@ -125,7 +125,7 @@ class StatisticsPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsNotPresenting_on_EmissionOfNewLoadingEventWithNoStatistics_it_ShouldNotPresentAnythingToTheView() {
+    fun `Given the presenter is not presenting, On emission of a new empty loading event, It should not present anything to the displayer`() {
         givenThePresenterIsNotPresenting()
 
         statisticsEventSubject.onNext(Event.loading<Statistics>())
@@ -134,7 +134,7 @@ class StatisticsPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsNotPresenting_on_EmissionOfNewErrorEventWithNoStatistics_it_ShouldNotPresentAnythingToTheView() {
+    fun `Given the presenter is not presenting, On emission of a new empty error loading event, It should not present anything to the displayer`() {
         givenThePresenterIsNotPresenting()
 
         statisticsEventSubject.onNext(Event.error<Statistics>(SyncError()))
@@ -143,7 +143,7 @@ class StatisticsPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsNotPresenting_on_StartPresenting_it_ShouldAttachTheNavDrawerActionListener_ToTheDisplayer() {
+    fun `Given the presenter is not presenting, On start presenting, It should attach the action listener to the topLevelMenuDisplayer`() {
         givenThePresenterIsNotPresenting()
 
         presenter.startPresenting()
@@ -152,8 +152,8 @@ class StatisticsPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_StopPresenting_it_ShouldDetachTheNavDrawerActionListener_FromTheDisplayer() {
-        givenThePresenterIsNotPresenting()
+    fun `Given the presenter is presenting, On stop presenting, It should detach the action listener to the topLevelMenuDisplayer`() {
+        givenThePresenterIsPresenting()
 
         presenter.stopPresenting()
 
@@ -161,7 +161,7 @@ class StatisticsPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_StatisticsNavDrawerItemSelected_it_ShouldCloseTheNavDrawer() {
+    fun `Given the presenter is presenting, On statistics item selected, It should close the top level menu`() {
         givenThePresenterIsPresenting()
 
         presenter.topLevelMenuActionListener.onStatisticsItemSelected()
@@ -171,7 +171,7 @@ class StatisticsPresenterTest {
     }
 
     @Test
-    fun given_ThePresenterIsPresenting_on_ToDoListNavDrawerItemSelected_it_ShouldCloseTheNavDrawerAndNavigateToTasksList() {
+    fun `Given the presenter is presenting, On todo list item selected, It should close the top level menu and navigate to the tasks list`() {
         givenThePresenterIsPresenting()
 
         presenter.topLevelMenuActionListener.onToDoListItemSelected()
