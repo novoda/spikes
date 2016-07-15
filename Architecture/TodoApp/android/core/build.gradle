@@ -10,7 +10,7 @@ dependencies {
     compile project(':data')
 
     compile "io.reactivex:rxjava:$rootProject.rxJavaVersion"
-    compile "com.jakewharton.rxrelay:rxrelay:$rootProject.rxJavaVersion"
+    compile "com.jakewharton.rxrelay:rxrelay:$rootProject.rxRelayVersion"
     compile "com.google.guava:guava:$rootProject.guavaVersion"
 
     compileOnly "com.jakewharton.auto.value:auto-value-annotations:$rootProject.autoValueAnnotationsVersion"
@@ -31,9 +31,14 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$rootProject.kotlinVersion"
     }
 }
+
 repositories {
     mavenCentral()
+    maven {
+        url "http://repository.jetbrains.com/all"
+    }
 }
+
 sourceSets {
     test.java.srcDirs += 'src/test/kotlin'
 }

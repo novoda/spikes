@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'com.android.tools.build:gradle:2.1.2'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -24,13 +24,16 @@ task clean(type: Delete) {
 // Define versions in a single place
 ext {
     // App dependencies
-    supportLibraryVersion = '23.3.0'
+    supportLibraryVersion = '24.0.0'
+    notilsVersion = '2.2.16'
     junitVersion = '4.12'
     guavaVersion = '18.0'
-    rxJavaVersion = '1.1.0'
+    rxJavaVersion = '1.1.7'
+    rxRelayVersion = '1.1.0'
+    rxandroidVersion = '1.2.1'
     autoValueVersion = '1.2'
     autoValueAnnotationsVersion = '1.2-update1'
     junitVersion = '4.12'
     mockitoVersion = '1.10.19'
-    kotlinVersion = '1.0.1-2'
+    kotlinVersion = '1.0.2'
 }
