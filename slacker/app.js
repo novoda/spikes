@@ -1,15 +1,24 @@
 const token = process.env.token;
 var Slack = require('./slack.js');
 var slack = new Slack(token);
-const GENERAL_CHANNEL_ID = 'C029J9QTH'
+const GENERAL_CHANNEL_ID = 'C029J9QTH';
+const LONDON_CHANNEL_ID = 'C096DG4EN';
+const BERLIN_CHANNEL_ID = 'C029K2NUY';
+const BARCELONA_CHANNEL_ID = 'C096CQ5QW';
+const LIVERPOOL_CHANNEL_ID = 'C054WA0TJ';
 
 var latest = new Date();
 var oldest = new Date();
 oldest.setMinutes(latest.getMinutes() - 1000);
 
-getBiggestSlacker(oldest, latest, result => {
+// getBiggestSlacker(oldest, latest, result => {
+//   console.log(result);
+// });
+
+slack.getChannels(result => {
   console.log(result);
 });
+
 
 function getBiggestSlacker(oldest, latest, callback) {
   var latestEpoch = latest / 1000;
