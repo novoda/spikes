@@ -34,9 +34,6 @@ buildscript {
 
 repositories {
     mavenCentral()
-    maven {
-        url "http://repository.jetbrains.com/all"
-    }
 }
 
 sourceSets {

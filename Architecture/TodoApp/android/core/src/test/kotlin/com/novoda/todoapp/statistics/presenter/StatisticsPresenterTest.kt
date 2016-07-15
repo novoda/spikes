@@ -1,197 +1,216 @@
 package com.novoda.todoapp.statistics.presenter
 
 import com.novoda.event.Event
-import com.novoda.todoapp.navigation.TopLevelMenuDisplayer
+import com.novoda.spektacle.Spektacle
 import com.novoda.todoapp.navigation.Navigator
+import com.novoda.todoapp.navigation.TopLevelMenuDisplayer
 import com.novoda.todoapp.statistics.data.model.Statistics
 import com.novoda.todoapp.statistics.displayer.StatisticsDisplayer
 import com.novoda.todoapp.statistics.service.StatisticsService
 import com.novoda.todoapp.tasks.service.SyncError
-import org.junit.Before
-import org.junit.Test
 import org.mockito.Mockito
-import org.mockito.Mockito.any
 import org.mockito.Mockito.never
+import org.mockito.Mockito.reset
 import rx.subjects.BehaviorSubject
 
-class StatisticsPresenterTest {
+class StatisticsPresenterTest: Spektacle<StatisticsPresenterTest.TestState>( {
 
-    var statisticsEventSubject: BehaviorSubject<Event<Statistics>> = BehaviorSubject.create()
+    fun statistics(active: Int, completed: Int) = Statistics.builder().activeTasks(active).completedTasks(completed).build()!!
+    fun statistics() = statistics(1, 3)
 
-    var service: StatisticsService = Mockito.mock(StatisticsService::class.java)
+    given("the presenter is presenting") {
+        definedAs {
+            val testState = TestState()
+            Mockito.`when`(testState.service.getStatisticsEvent()).thenReturn(testState.statisticsEventSubject)
+            testState.presenter.startPresenting()
+            return@definedAs testState
+        }
 
-    var displayer: StatisticsDisplayer = Mockito.mock(StatisticsDisplayer::class.java)
+        on("emission of a new idle event with statistics") {
+            definedAs {
+                resetMocks(it!!)
+                it.statisticsEventSubject.onNext(Event.idle<Statistics>().updateData(statistics()))
+                return@definedAs it
+            }
+            it("should present the statistics to the displayer") {
+                Mockito.verify(it!!.displayer).display(statistics())
+            }
+        }
 
-    var topLevelMenuDisplayer: TopLevelMenuDisplayer = Mockito.mock(TopLevelMenuDisplayer::class.java)
+        on ("emission of a new loading event with statistics") {
+            definedAs {
+                resetMocks(it!!)
+                it.statisticsEventSubject.onNext(Event.loading<Statistics>().updateData(statistics(4,2)))
+                return@definedAs it
+            }
+            it("should present the statistics to the displayer") {
+                Mockito.verify(it!!.displayer).display(statistics(4, 2))
+            }
+        }
 
-    var navigator: Navigator = Mockito.mock(Navigator::class.java)
+        on ("emission of a new error event with statistics") {
+            definedAs {
+                resetMocks(it!!)
+                it.statisticsEventSubject.onNext(Event.error<Statistics>(SyncError()).updateData(statistics(4, 3)))
+                return@definedAs it
+            }
+            it("should present the statistics to the displayer") {
+                Mockito.verify(it!!.displayer).display(statistics(4, 3))
+            }
+        }
 
-    var presenter = StatisticsPresenter(service, displayer, topLevelMenuDisplayer, navigator)
+        on ("emission of a new empty idle event") {
+            definedAs {
+                resetMocks(it!!)
+                it.statisticsEventSubject.onNext(Event.idle<Statistics>())
+                return@definedAs it
+            }
+            it("should not present any statistics to the displayer") {
+                Mockito.verify(it!!.displayer, never()).display(statistics())
+            }
+        }
 
-    @Before
-    fun setUp() {
-        setUpService()
-        presenter = StatisticsPresenter(service, displayer, topLevelMenuDisplayer, navigator)
+        on ("emission of a new empty loading event") {
+            definedAs {
+                resetMocks(it!!)
+                it.statisticsEventSubject.onNext(Event.loading<Statistics>())
+                return@definedAs it
+            }
+            it("should not present any statistics to the displayer") {
+                Mockito.verify(it!!.displayer, never()).display(statistics())
+            }
+        }
+
+        on ("emission of a new empty error event") {
+            definedAs {
+                resetMocks(it!!)
+                it.statisticsEventSubject.onNext(Event.error<Statistics>(SyncError()))
+                return@definedAs it
+            }
+            it("should not present any statistics to the displayer") {
+                Mockito.verify(it!!.displayer, never()).display(statistics())
+            }
+        }
+
+        on("statistics item selected") {
+            definedAs {
+                resetMocks(it!!)
+                it.presenter.topLevelMenuActionListener.onStatisticsItemSelected()
+                return@definedAs it
+            }
+            it("should close the top level menu") {
+                Mockito.verify(it!!.topLevelMenuDisplayer).closeMenu()
+                Mockito.verifyZeroInteractions(it.navigator)
+
+            }
+        }
+
+        on ("todo list item selected") {
+            definedAs {
+                resetMocks(it!!)
+                it.presenter.topLevelMenuActionListener.onToDoListItemSelected()
+                return@definedAs it
+            }
+            it("should close the top level menu") {
+                Mockito.verify(it!!.topLevelMenuDisplayer).closeMenu()
+                Mockito.verify(it.navigator).toTasksList()
+
+            }
+        }
+
     }
 
-    @Test
-    fun `Given the presenter is presenting, On emission of a new idle event with statistics, It should present the statistics to the displayer`() {
-        givenThePresenterIsPresenting()
+    given ("the presenter is not presenting") {
+        definedAs {
+            val testState = TestState()
+            Mockito.`when`(testState.service.getStatisticsEvent()).thenReturn(testState.statisticsEventSubject)
+            return@definedAs testState
+        }
 
-        statisticsEventSubject.onNext(Event.idle<Statistics>().updateData(statistics()))
+        on ("emission of a new idle event with statistics") {
+            definedAs {
+                resetMocks(it!!)
+                it.statisticsEventSubject.onNext(Event.idle<Statistics>().updateData(statistics()))
+                return@definedAs it
+            }
+            it("should not present any statistics to the displayer") {
+                Mockito.verify(it!!.displayer, never()).display(statistics())
+            }
+        }
 
-        Mockito.verify(displayer).display(statistics())
+        on("emission of a new loading event with statistics") {
+            definedAs {
+                resetMocks(it!!)
+                it.statisticsEventSubject.onNext(Event.loading<Statistics>().updateData(statistics()))
+                return@definedAs it
+            }
+            it("should not present any statistics to the displayer") {
+                Mockito.verify(it!!.displayer, never()).display(statistics())
+            }
+        }
+
+        on("emission of a new error event with statistics") {
+            definedAs {
+                resetMocks(it!!)
+                it.statisticsEventSubject.onNext(Event.error<Statistics>(SyncError()).updateData(statistics()))
+                return@definedAs it
+            }
+            it("should not present any statistics to the displayer") {
+                Mockito.verify(it!!.displayer, never()).display(statistics())
+            }
+        }
+
+        on("emission of a new empty idle event") {
+            definedAs {
+                resetMocks(it!!)
+                it.statisticsEventSubject.onNext(Event.idle<Statistics>())
+                return@definedAs it
+            }
+            it("should not present any statistics to the displayer") {
+                Mockito.verify(it!!.displayer, never()).display(statistics())
+            }
+        }
+
+        on("emission of a new empty loading event") {
+            definedAs {
+                resetMocks(it!!)
+                it.statisticsEventSubject.onNext(Event.loading<Statistics>())
+                return@definedAs it
+            }
+            it("should not present any statistics to the displayer") {
+                Mockito.verify(it!!.displayer, never()).display(statistics())
+            }
+        }
+
+        on("emission of a new empty error event") {
+            definedAs {
+                resetMocks(it!!)
+                it.statisticsEventSubject.onNext(Event.error<Statistics>(SyncError()))
+                return@definedAs it
+            }
+            it("should not present any statistics to the displayer") {
+                Mockito.verify(it!!.displayer, never()).display(statistics())
+            }
+        }
+
     }
 
-    @Test
-    fun `Given the presenter is presenting, On emission of a new loading event with statistics, It should present the statistics to the displayer`() {
-        givenThePresenterIsPresenting()
+}) {
+    class TestState {
 
-        statisticsEventSubject.onNext(Event.loading<Statistics>().updateData(statistics()))
+        val statisticsEventSubject: BehaviorSubject<Event<Statistics>> = BehaviorSubject.create()
+        val service: StatisticsService = Mockito.mock(StatisticsService::class.java)
+        val displayer: StatisticsDisplayer = Mockito.mock(StatisticsDisplayer::class.java)
+        val topLevelMenuDisplayer: TopLevelMenuDisplayer = Mockito.mock(TopLevelMenuDisplayer::class.java)
+        val navigator: Navigator = Mockito.mock(Navigator::class.java)
+        val presenter = StatisticsPresenter(service, displayer, topLevelMenuDisplayer, navigator)
 
-        Mockito.verify(displayer).display(statistics())
     }
 
-    @Test
-    fun `Given the presenter is presenting, On emission of a new error event with statistics, It should present the statistics to the displayer`() {
-        givenThePresenterIsPresenting()
+}
 
-        statisticsEventSubject.onNext(Event.error<Statistics>(SyncError()).updateData(statistics()))
-
-        Mockito.verify(displayer).display(statistics())
-    }
-
-    @Test
-    fun `Given the presenter is presenting, On emission of a new empty idle event, It should not present any statistics to the displayer`() {
-        givenThePresenterIsPresenting()
-
-        statisticsEventSubject.onNext(Event.idle<Statistics>())
-
-        Mockito.verify(displayer, never()).display(any(Statistics::class.java))
-    }
-
-    @Test
-    fun `Given the presenter is presenting, On emission of a new empty loading event, It should not present any statistics to the displayer`() {
-        givenThePresenterIsPresenting()
-
-        statisticsEventSubject.onNext(Event.loading<Statistics>())
-
-        Mockito.verify(displayer, never()).display(any(Statistics::class.java))
-    }
-
-    @Test
-    fun `Given the presenter is presenting, On emission of a new error loading event, It should not present any statistics to the displayer`() {
-        givenThePresenterIsPresenting()
-
-        statisticsEventSubject.onNext(Event.error<Statistics>(SyncError()))
-
-        Mockito.verify(displayer, never()).display(any(Statistics::class.java))
-    }
-
-    @Test
-    fun `Given the presenter is not presenting, On emission of a new idle event with statistics, It should not present anything to the displayer`() {
-        givenThePresenterIsNotPresenting()
-
-        statisticsEventSubject.onNext(Event.idle<Statistics>().updateData(statistics()))
-
-        Mockito.verifyNoMoreInteractions(displayer)
-    }
-
-    @Test
-    fun `Given the presenter is not presenting, On emission of a new loading event with statistics, It should not present anything to the displayer`() {
-        givenThePresenterIsNotPresenting()
-
-        statisticsEventSubject.onNext(Event.loading<Statistics>().updateData(statistics()))
-
-        Mockito.verifyNoMoreInteractions(displayer)
-    }
-
-    @Test
-    fun `Given the presenter is not presenting, On emission of a new error event with statistics, It should not present anything to the displayer`() {
-        givenThePresenterIsNotPresenting()
-
-        statisticsEventSubject.onNext(Event.error<Statistics>(SyncError()).updateData(statistics()))
-
-        Mockito.verifyNoMoreInteractions(displayer)
-    }
-
-    @Test
-    fun `Given the presenter is not presenting, On emission of a new empty idle event, It should not present anything to the displayer`() {
-        givenThePresenterIsNotPresenting()
-
-        statisticsEventSubject.onNext(Event.idle<Statistics>())
-
-        Mockito.verifyNoMoreInteractions(displayer)
-    }
-
-    @Test
-    fun `Given the presenter is not presenting, On emission of a new empty loading event, It should not present anything to the displayer`() {
-        givenThePresenterIsNotPresenting()
-
-        statisticsEventSubject.onNext(Event.loading<Statistics>())
-
-        Mockito.verifyNoMoreInteractions(displayer)
-    }
-
-    @Test
-    fun `Given the presenter is not presenting, On emission of a new empty error loading event, It should not present anything to the displayer`() {
-        givenThePresenterIsNotPresenting()
-
-        statisticsEventSubject.onNext(Event.error<Statistics>(SyncError()))
-
-        Mockito.verifyNoMoreInteractions(displayer)
-    }
-
-    @Test
-    fun `Given the presenter is not presenting, On start presenting, It should attach the action listener to the topLevelMenuDisplayer`() {
-        givenThePresenterIsNotPresenting()
-
-        presenter.startPresenting()
-
-        Mockito.verify(topLevelMenuDisplayer).attach(presenter.topLevelMenuActionListener)
-    }
-
-    @Test
-    fun `Given the presenter is presenting, On stop presenting, It should detach the action listener to the topLevelMenuDisplayer`() {
-        givenThePresenterIsPresenting()
-
-        presenter.stopPresenting()
-
-        Mockito.verify(topLevelMenuDisplayer).detach()
-    }
-
-    @Test
-    fun `Given the presenter is presenting, On statistics item selected, It should close the top level menu`() {
-        givenThePresenterIsPresenting()
-
-        presenter.topLevelMenuActionListener.onStatisticsItemSelected()
-
-        Mockito.verify(topLevelMenuDisplayer).closeMenu()
-        Mockito.verifyZeroInteractions(navigator)
-    }
-
-    @Test
-    fun `Given the presenter is presenting, On todo list item selected, It should close the top level menu and navigate to the tasks list`() {
-        givenThePresenterIsPresenting()
-
-        presenter.topLevelMenuActionListener.onToDoListItemSelected()
-
-        Mockito.verify(topLevelMenuDisplayer).closeMenu()
-        Mockito.verify(navigator).toTasksList()
-    }
-
-    private fun givenThePresenterIsPresenting() {
-        presenter.startPresenting()
-    }
-
-    private fun givenThePresenterIsNotPresenting() {
-    }
-
-    private fun statistics() = Statistics.builder().activeTasks(1).completedTasks(3).build()
-
-    private fun setUpService() {
-        statisticsEventSubject = BehaviorSubject.create()
-        Mockito.`when`(service.getStatisticsEvent()).thenReturn(statisticsEventSubject)
-    }
-
+private fun resetMocks(it: StatisticsPresenterTest.TestState) {
+    reset(it.displayer)
+    reset(it.navigator)
+    reset(it.topLevelMenuDisplayer)
 }
