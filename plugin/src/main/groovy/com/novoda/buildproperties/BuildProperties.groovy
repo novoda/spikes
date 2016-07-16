@@ -30,18 +30,18 @@ class BuildProperties {
   }
 
   File getParentFile() {
-    entries.call().parentFile
+    entries.parentFile
   }
 
   Enumeration<String> getKeys() {
-    entries.call().keys
+    entries.keys
   }
 
   Entry getAt(String key) {
     if (project.hasProperty(key)) {
       new Entry(key, { project[key] })
     } else {
-      entries.call().getAt(key)
+      entries.getAt(key)
     }
   }
 
