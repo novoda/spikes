@@ -1,5 +1,6 @@
 package com.novoda.buildproperties
 
+import org.gradle.api.GradleException
 import org.gradle.api.Project
 
 class BuildProperties {
@@ -17,7 +18,10 @@ class BuildProperties {
     name
   }
 
-  void file(File file) {
+  void file(File file, String errorMessage = null) {
+    if (!file.exists()) {
+      throw new GradleException("File $file.name does not exist.${errorMessage ? "\n$errorMessage" : ''}")
+    }
     entries(FilePropertiesEntries.create(name, file))
   }
 
