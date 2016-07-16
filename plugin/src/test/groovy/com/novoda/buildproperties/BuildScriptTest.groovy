@@ -53,4 +53,41 @@ public class BuildScriptTest {
     assertThat(project.plugins.hasPlugin(BuildPropertiesPlugin)).isTrue()
   }
 
+  @Test
+  public void shouldFailBuildWhenPropertiesFileDoesNotExist() {
+    project.apply plugin: 'com.android.library'
+    project.apply plugin: BuildPropertiesPlugin
+
+    try {
+      project.buildProperties {
+        foo {
+          file project.file('foo.properties')
+        }
+      }
+      fail('Gradle exception not thrown')
+    } catch (GradleException e) {
+      assertThat(e.getMessage()).endsWith('foo.properties does not exist.')
+    }
+  }
+
+  @Test
+  public void shouldProvideErrorMessageWhenPropertiesFileDoesNotExist() {
+    project.apply plugin: 'com.android.library'
+    project.apply plugin: BuildPropertiesPlugin
+
+    def errorMessage = 'This file should contain the following properties:\n- foo\n- bar'
+    try {
+      project.buildProperties {
+        foo {
+          file project.file('foo.properties'), errorMessage
+        }
+      }
+      fail('Gradle exception not thrown')
+    } catch (GradleException e) {
+      String message = e.getMessage()
+      assertThat(message).contains('foo.properties does not exist.')
+      assertThat(message).endsWith(errorMessage)
+    }
+  }
+
 }
