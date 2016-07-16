@@ -7,7 +7,7 @@ class BuildProperties {
 
   private final String name
   private final Project project
-  private Closure<Entries> entries
+  private Entries entries
 
   BuildProperties(String name, Project project) {
     this.name = name
@@ -26,9 +26,7 @@ class BuildProperties {
   }
 
   void entries(Entries entries) {
-    this.entries = {
-      entries
-    }.memoize()
+    this.entries = entries
   }
 
   File getParentFile() {
