@@ -338,9 +338,31 @@ public class PersistedTasksService implements TasksService {
         remoteDataSource.saveTask(updatedTask)
                 .compose(startAheadThenConfirmOrMarkAsError(updatedTask, actionTimestamp))
                 .map(asUpdatedEvent())
-                .filter(actionIsAbsentOrNoMoreRecentThan(updatedTask.id(), actionTimestamp))
+                .filter(actionIsNoMoreRecentThan(updatedTask.id(), actionTimestamp))
                 .subscribeOn(scheduler)
                 .subscribe(updateAndPersist());
+    }
+
+    private Func1<Event<Tasks>, Boolean> actionIsNoMoreRecentThan(final Id taskId, final long actionTimestamp) {
+        Tasks currentTasks = taskRelay.getValue().data().or(Tasks.empty());
+        final Func1<Event<Tasks>, Boolean> actionIsPresentAndNoMoreRecentThan = actionIsPresentAndNoMoreRecentThan(taskId, actionTimestamp);
+        final Func1<Event<Tasks>, Boolean> actionIsAbsentOrNoMoreRecentThan = actionIsAbsentOrNoMoreRecentThan(taskId, actionTimestamp);
+        if (currentTasks.containsTask(taskId)) {
+            return actionIsPresentAndNoMoreRecentThan;
+        } else {
+            return new Func1<Event<Tasks>, Boolean>() {
+                boolean isFirst = true;
+                @Override
+                public Boolean call(Event<Tasks> tasksEvent) {
+                    if (isFirst) {
+                        isFirst = false;
+                        return actionIsAbsentOrNoMoreRecentThan.call(tasksEvent);
+                    } else {
+                        return actionIsPresentAndNoMoreRecentThan.call(tasksEvent);
+                    }
+                }
+            };
+        }
     }
 
     private static Observable.Transformer<Task, SyncedData<Task>> startAheadThenConfirmOrMarkAsError(
@@ -393,12 +415,23 @@ public class PersistedTasksService implements TasksService {
         };
     }
 
+    private Func1<Event<Tasks>, Boolean> actionIsPresentAndNoMoreRecentThan(final Id taskId, final long deleteActionTimestamp) {
+        return new Func1<Event<Tasks>, Boolean>() {
+            @Override
+            public Boolean call(Event<Tasks> tasksEvent) {
+                Tasks currentTasks = taskRelay.getValue().data().or(Tasks.empty());
+                Optional<SyncedData<Task>> syncedDataOptional = currentTasks.get(taskId);
+                return syncedDataOptional.isPresent() && syncedDataOptional.get().lastSyncAction() <= deleteActionTimestamp;
+            }
+        };
+    }
+
     @Override
     public void delete(final Task task) {
         final long deleteActionTimestamp = clock.timeInMillis();
         remoteDataSource.deleteTask(task.id())
                 .compose(deleteLocallyThenConfirmOrMarkAsError(task, deleteActionTimestamp))
-                .filter(actionIsAbsentOrNoMoreRecentThan(task.id(), deleteActionTimestamp))
+                .filter(actionIsNoMoreRecentThan(task.id(), deleteActionTimestamp))
                 .subscribeOn(scheduler)
                 .subscribe(updateAndPersist());
     }
