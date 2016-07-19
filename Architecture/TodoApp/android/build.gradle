@@ -35,5 +35,5 @@ ext {
     autoValueAnnotationsVersion = '1.2-update1'
     junitVersion = '4.12'
     mockitoVersion = '1.10.19'
-    kotlinVersion = '1.0.2'
+    kotlinVersion = '1.0.3'
 }

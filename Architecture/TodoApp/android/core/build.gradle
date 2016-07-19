@@ -17,6 +17,7 @@ dependencies {
     javapt "com.google.auto.value:auto-value:$rootProject.autoValueVersion"
 
 
+    testCompile project(':spektacle')
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$rootProject.kotlinVersion"
     testCompile "org.jetbrains.kotlin:kotlin-test:$rootProject.kotlinVersion"
     testCompile "org.mockito:mockito-core:$rootProject.mockitoVersion"
