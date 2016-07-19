@@ -45,6 +45,14 @@ public class TaskDetailView extends CoordinatorLayout implements TaskDisplayer {
         TodoAppBar todoAppBar = Views.findById(this, R.id.app_bar_with_delete_button);
         Toolbar toolbar = todoAppBar.getToolbar();
         toolbar.setTitle(R.string.to_do_novoda);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        toolbar.setNavigationContentDescription(R.string.navigate_up);
+        toolbar.setNavigationOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                taskActionListener.onUpSelected();
+            }
+        });
     }
 
     @Override

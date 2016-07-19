@@ -9,4 +9,7 @@ public interface TaskActionListener {
     void onEditSelected(Task task);
 
     void onDeleteSelected(Task task);
+
+    void onUpSelected();
+
 }

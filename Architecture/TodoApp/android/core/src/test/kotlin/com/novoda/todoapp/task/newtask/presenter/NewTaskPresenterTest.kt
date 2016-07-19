@@ -184,6 +184,15 @@ class NewTaskPresenterTest {
         Mockito.verify(taskDisplayer).showEmptyTaskError()
     }
 
+    @Test
+    fun `Given the presenter is presenting, On up selected, It should navigate back`() {
+        givenThePresenterIsPresenting()
+
+        presenter.taskActionListener.onUpSelected()
+
+        Mockito.verify(navigator).back()
+    }
+
     private fun givenThePresenterIsPresenting() {
         presenter.startPresenting()
     }

@@ -32,4 +32,9 @@ public class TaskActionListener {
             taskDisplayer.showEmptyTaskError();
         }
     }
+
+    public void onUpSelected() {
+        navigator.back();
+    }
+
 }

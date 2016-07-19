@@ -66,6 +66,11 @@ public class TaskPresenter {
             tasksService.delete(task);
             navigator.back();
         }
+
+        @Override
+        public void onUpSelected() {
+            navigator.back();
+        }
     };
 
     private final DataObserver<SyncedData<Task>> taskObserver = new DataObserver<SyncedData<Task>>() {

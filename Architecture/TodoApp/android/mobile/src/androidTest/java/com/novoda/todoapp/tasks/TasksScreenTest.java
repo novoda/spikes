@@ -16,6 +16,7 @@
 
 package com.novoda.todoapp.tasks;
 
+import android.os.SystemClock;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.RecyclerView;
@@ -138,11 +139,14 @@ public class TasksScreenTest {
         // Save the task
         onView(withId(R.id.fab_task_done)).perform(click());
 
-        // Verify task is displayed on screen in the task list.
-        onView(withItemText(editTaskTitle)).check(matches(isDisplayed()));
+        // Click on the navigation up button to go back to the list
+        onView(withContentDescription(R.string.navigate_up)).perform(click());
 
         // Verify previous task is not displayed
         onView(withItemText(TITLE1)).check(doesNotExist());
+
+        // Verify task is displayed on screen in the task list.
+        onView(withItemText(editTaskTitle)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -299,7 +303,7 @@ public class TasksScreenTest {
         onView(withId(R.id.task_detail_complete)).perform(click());
 
         // Click on the navigation up button to go back to the list
-        onView(withContentDescription(R.string.open_navigation)).perform(click());
+        onView(withContentDescription(R.string.navigate_up)).perform(click());
 
         // Check that the task is marked as completed
         onView(allOf(withId(R.id.complete),
@@ -321,7 +325,7 @@ public class TasksScreenTest {
         onView(withId(R.id.task_detail_complete)).perform(click());
 
         // Click on the navigation up button to go back to the list
-        onView(withContentDescription(R.string.open_navigation)).perform(click());
+        onView(withContentDescription(R.string.navigate_up)).perform(click());
 
         // Check that the task is marked as active
         onView(allOf(withId(R.id.complete),
@@ -345,7 +349,7 @@ public class TasksScreenTest {
         onView(withId(R.id.task_detail_complete)).perform(click());
 
         // Click on the navigation up button to go back to the list
-        onView(withContentDescription(R.string.open_navigation)).perform(click());
+        onView(withContentDescription(R.string.navigate_up)).perform(click());
 
         // Check that the task is marked as active
         onView(allOf(withId(R.id.complete),
@@ -370,7 +374,7 @@ public class TasksScreenTest {
         onView(withId(R.id.task_detail_complete)).perform(click());
 
         // Click on the navigation up button to go back to the list
-        onView(withContentDescription(R.string.open_navigation)).perform(click());
+        onView(withContentDescription(R.string.navigate_up)).perform(click());
 
         // Check that the task is marked as active
         onView(allOf(withId(R.id.complete),
@@ -415,7 +419,6 @@ public class TasksScreenTest {
 
         // then nothing changes
         onView(withText(TITLE1)).check(matches(isDisplayed()));
-        onView(withText(R.string.nav_completed)).check(matches(isDisplayed()));
     }
 
     private void viewAllTasks() {
@@ -434,6 +437,7 @@ public class TasksScreenTest {
     }
 
     private void createTask(String title, String description) {
+        SystemClock.sleep(500);
         // Click on the add task button
         onView(withId(R.id.fab_add_task)).perform(click());
 

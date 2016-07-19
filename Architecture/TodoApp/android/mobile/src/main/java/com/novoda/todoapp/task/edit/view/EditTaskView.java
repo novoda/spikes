@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ public class EditTaskView extends CoordinatorLayout implements EditTaskDisplayer
     private TextView titleView;
     private TextView descriptionView;
     private FloatingActionButton editActionButton;
+    private TodoAppBar todoAppBar;
 
     public EditTaskView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -34,8 +36,11 @@ public class EditTaskView extends CoordinatorLayout implements EditTaskDisplayer
         titleView = Views.findById(this, R.id.task_title);
         descriptionView = Views.findById(this, R.id.task_description);
         editActionButton = Views.findById(this, R.id.fab_task_done);
-        TodoAppBar todoAppBar = Views.findById(this, R.id.app_bar);
-        todoAppBar.getToolbar().setTitle(R.string.edit_to_do);
+        todoAppBar = Views.findById(this, R.id.app_bar);
+        Toolbar toolbar = todoAppBar.getToolbar();
+        toolbar.setTitle(R.string.edit_to_do);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        toolbar.setNavigationContentDescription(R.string.navigate_up);
     }
 
     @Override
@@ -46,11 +51,18 @@ public class EditTaskView extends CoordinatorLayout implements EditTaskDisplayer
                 taskActionListener.save(getTitle(), getDescription());
             }
         });
+        todoAppBar.getToolbar().setNavigationOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                taskActionListener.onUpSelected();
+            }
+        });
     }
 
     @Override
     public void detach(TaskActionListener taskActionListener) {
         editActionButton.setOnClickListener(null);
+        todoAppBar.getToolbar().setNavigationOnClickListener(null);
     }
 
     @Override

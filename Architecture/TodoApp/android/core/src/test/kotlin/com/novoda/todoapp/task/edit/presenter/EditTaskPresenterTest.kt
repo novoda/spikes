@@ -21,6 +21,7 @@ import kotlin.test.assertTrue
 class EditTaskPresenterTest {
 
     val TASK_ID = Id.from("TEST_ID")!!
+    val TASK_ID2 = Id.from("TEST_ID2")!!
 
     var taskSubject: BehaviorSubject<SyncedData<Task>> = BehaviorSubject.create()
     var service: TasksService = Mockito.mock(TasksService::class.java)
@@ -48,6 +49,16 @@ class EditTaskPresenterTest {
         taskSubject.onNext(simpleSyncedTask())
 
         Mockito.verify(taskDisplayer).display(simpleSyncedTask())
+    }
+
+    @Test
+    fun `Given the presenter already has received a task, On emission of a new task, It should not present the task to the displayer`() {
+        givenThePresenterIsPresenting()
+        taskSubject.onNext(simpleSyncedTask())
+
+        taskSubject.onNext(simpleSyncedTask2())
+
+        Mockito.verify(taskDisplayer, never()).display(simpleSyncedTask2())
     }
 
     @Test
@@ -188,6 +199,14 @@ class EditTaskPresenterTest {
         Mockito.verify(taskDisplayer).showEmptyTaskError()
     }
 
+    @Test
+    fun `Given the presenter is presenting, On up selected, It should navigate back`() {
+        givenThePresenterIsPresenting()
+
+        presenter.taskActionListener.onUpSelected()
+
+        Mockito.verify(navigator).back()
+    }
 
     private fun givenThePresenterIsPresenting() {
         presenter.startPresenting()
@@ -204,9 +223,16 @@ class EditTaskPresenterTest {
 
     private fun simpleSyncedTask() = SyncedData.from(simpleTask(), SyncState.IN_SYNC, 123)
 
+    private fun simpleSyncedTask2() = SyncedData.from(simpleTask2(), SyncState.IN_SYNC, 321)
+
     private fun simpleTask() = Task.builder()
             .id(TASK_ID)
             .title("Foo")
+            .build()
+
+    private fun simpleTask2() = Task.builder()
+            .id(TASK_ID2)
+            .title("Bar")
             .build()
 
     private fun setUpService() {

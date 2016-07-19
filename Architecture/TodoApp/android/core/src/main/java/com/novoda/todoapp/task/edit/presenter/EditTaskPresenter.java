@@ -1,7 +1,7 @@
 package com.novoda.todoapp.task.edit.presenter;
 
 import com.novoda.data.SyncedData;
-import com.novoda.event.DataObserver;
+import com.novoda.event.SingleDataObserver;
 import com.novoda.todoapp.navigation.Navigator;
 import com.novoda.todoapp.task.TaskActionListener;
 import com.novoda.todoapp.task.data.model.Id;
@@ -10,6 +10,7 @@ import com.novoda.todoapp.task.edit.displayer.EditTaskDisplayer;
 import com.novoda.todoapp.task.presenter.IdProducer;
 import com.novoda.todoapp.tasks.service.TasksService;
 
+import rx.Observer;
 import rx.subscriptions.CompositeSubscription;
 
 public class EditTaskPresenter {
@@ -38,6 +39,7 @@ public class EditTaskPresenter {
         taskDisplayer.attach(taskActionListener);
         subscriptions.add(
                 tasksService.getTask(id)
+                        .take(1)
                         .subscribe(taskObserver)
         );
     }
@@ -52,7 +54,7 @@ public class EditTaskPresenter {
         subscriptions = new CompositeSubscription();
     }
 
-    private final DataObserver<SyncedData<Task>> taskObserver = new DataObserver<SyncedData<Task>>() {
+    private final Observer<SyncedData<Task>> taskObserver = new SingleDataObserver<SyncedData<Task>>() {
         @Override
         public void onNext(SyncedData<Task> syncedData) {
             taskDisplayer.display(syncedData);
