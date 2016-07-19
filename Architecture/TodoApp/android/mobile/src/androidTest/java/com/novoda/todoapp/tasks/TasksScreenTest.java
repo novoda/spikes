@@ -437,7 +437,7 @@ public class TasksScreenTest {
     }
 
     private void createTask(String title, String description) {
-        SystemClock.sleep(500);
+        SystemClock.sleep(1000);
         // Click on the add task button
         onView(withId(R.id.fab_add_task)).perform(click());
 
