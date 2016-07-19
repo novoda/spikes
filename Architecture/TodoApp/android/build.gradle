@@ -36,4 +36,6 @@ ext {
     junitVersion = '4.12'
     mockitoVersion = '1.10.19'
     kotlinVersion = '1.0.2'
+    runnerVersion = '0.5'
+    espressoVersion = '2.2.2'
 }
