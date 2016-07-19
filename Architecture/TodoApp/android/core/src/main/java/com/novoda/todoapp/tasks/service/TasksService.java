@@ -29,4 +29,7 @@ public interface TasksService {
     void save(Task task);
 
     void delete(Task task);
+
+    void deleteAllTasks();
+
 }

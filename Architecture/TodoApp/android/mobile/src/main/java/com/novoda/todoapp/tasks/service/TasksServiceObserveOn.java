@@ -73,4 +73,9 @@ public class TasksServiceObserveOn implements TasksService {
         tasksService.delete(task);
     }
 
+    @Override
+    public void deleteAllTasks() {
+        tasksService.deleteAllTasks();
+    }
+
 }

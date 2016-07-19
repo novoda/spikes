@@ -132,6 +132,18 @@ public final class InMemoryRemoteTaskDataSource implements RemoteTasksDataSource
     }
 
     @Override
+    public Observable<List<Task>> deleteAllTasks() {
+        return Observable.defer(new Func0<Observable<List<Task>>>() {
+            @Override
+            public Observable<List<Task>> call() {
+                dataSourceTasks.clear();
+                List<Task> tasks = ImmutableList.copyOf(dataSourceTasks.values());
+                return Observable.just(tasks);
+            }
+        }).compose(this.<List<Task>>delay());
+    }
+
+    @Override
     public Observable<Void> deleteTask(final Id taskId) {
         return Observable.defer(new Func0<Observable<Void>>() {
             @Override
