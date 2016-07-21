@@ -7,7 +7,9 @@ module.exports = {
 }
 
 function biggestSlacker(messages) {
-  var allMessages = flattenToUser(messages);
+  var timeSortedMessages = messages.sort(sortMessagesByTimestamp);
+
+  var allMessages = flattenToUser(timeSortedMessages);
   allMessages.sort(sortByMessagesLength);;
   return allMessages[0];
 }
@@ -26,7 +28,8 @@ function mostGifs(messages) {
 }
 
 function mostActiveChannel(messages) {
-  var allMessages = flattenToChannel(messages);
+  var timeSortedMessages = messages.sort(sortMessagesByTimestamp);
+  var allMessages = flattenToChannel(timeSortedMessages);
   allMessages.sort(sortByMessagesLength);
   return allMessages[0];
 
@@ -74,6 +77,9 @@ var sortByMessagesLength = (a, b) => {
   return b.messages.length - a.messages.length;
 }
 
+var sortMessagesByTimestamp = (a, b) => {
+  return b.ts - a.ts;
+}
 
 function mostCommonWord(messages) {
   var words = messages.map(each => {
