@@ -40,11 +40,7 @@ function mostActiveChannel(messages) {
 function longestMessage(messages) {
   var allMessages = [].concat(messages);
   allMessages.sort((a, b) => {
-      if (a.text && b.text) {
       return b.text.length - a.text.length;
-    } else {
-      return 0;
-    }
   });
   return allMessages[0];
 }
