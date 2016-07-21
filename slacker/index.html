@@ -1,0 +1,109 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="./public/theme.css">
+</head>
+
+<body bgcolor="26A3DB">
+  <div id="biggest-slacker"></div>
+  <div id="most-active-channel"></div>
+  <div id="longest-message"></div>
+  <div id="most-common-word"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io();
+    var statPosition = 3;
+
+    var things = [
+      {
+        element: document.getElementById('biggest-slacker'),
+        data: function(data) {
+          return biggestSlacker(data.biggestSlacker, this.element);
+        },
+      },
+      {
+        element: document.getElementById('most-active-channel'),
+        data: function(data) {
+          return mostActiveChannel(data.mostActiveChannel, this.element);
+        },
+      },
+      {
+        element: document.getElementById('longest-message'),
+        data: function(data) {
+          return longestMessage(data.longestMessage, this.element);
+        }
+      },
+      {
+        element: document.getElementById('most-common-word'),
+        data: function(data) {
+          return mostCommonWord(data.mostCommonWord, this.element);
+        }
+      }
+    ];
+
+    statRotationLoop();
+
+    socket.on('message', function(msg){
+
+      things.forEach(each => {
+        each.data(msg);
+      });
+    });
+
+    function statRotationLoop() {
+      statPosition = Math.floor((Math.random() * things.length));
+      console.log('stat rotation loop : ' + statPosition);
+      show(statPosition);
+      setTimeout(statRotationLoop, 1000 * 30);
+    }
+
+    function show(position) {
+      things.forEach(each => {
+        each.element.style.display = 'none';
+      });
+      things[position].element.style.display = 'block';
+    }
+
+    function initElement(element) {
+      if (!element.style) {
+        element.style = {};
+      }
+    }
+
+    function biggestSlacker(data, element) {
+      element.innerHTML =
+      '<p>Biggest slacker is...</p>' +
+      '<br>' +
+      user(data.user);
+    }
+
+    function mostActiveChannel(data, element) {
+      element.innerHTML =
+      '<p>Most active channel is...</p>' +
+      '<br>' +
+      '<p>#' + data.name + '</p>';
+    }
+
+    function longestMessage(data, element) {
+      element.innerHTML =
+      '<p>Longest message is...</p>' +
+      '<p>' + data.payload.text + '</p>' +
+      '<br>' +
+      user(data.user);
+    }
+
+    function user(user) {
+      var avatar = user.profile.image_512;
+      return `<a><img src=${avatar} height="150" width="150" alt="${user.name}"/><p>${user.profile.real_name}</p><a/>`;
+    }
+
+    function mostCommonWord(data, element) {
+      element.innerHTML =
+      '<p>Most common word is...</p>' +
+      '<br>' +
+      '<p>"' + data.word + '" at #' + data.count + ' usages</p>';
+    }
+
+  </script>
+</body>
+</html>

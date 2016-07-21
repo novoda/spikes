@@ -2,7 +2,7 @@
   "name": "slacker",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "@slack/client": "^3.5.1",
-    "request": "^2.73.0"
+    "express": "^4.14.0",
+    "request": "^2.73.0",
+    "socket.io": "^1.4.8"
   }
 }
