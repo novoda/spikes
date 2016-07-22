@@ -34,12 +34,29 @@ function Slacker(token) {
   }
 
   function runRules(messages, callback) {
-    // most [word] usages
+    // most [x word] usages | lol etc
     // common words
     // most used emoticon
-    // nice quote - find text with " foo bar "
-    // user with most channel spread
-    // user most dedicated to a single channel (by character)
+    // most unused emoticon
+    // quote - find text with " foo bar "
+    // user with most channel spread | most channels, most messages
+    // user most dedicated to a single channel (by character) | least channels least messages
+    // biggest laugher | ha* or lol or laughing emoticon
+    // most questions
+    // most @here
+    // most I/Me user
+    // biggest guess user
+    // most actually/btw
+    // most boss pings @carl / @kevin
+    // most use of symbols rather than a-z
+    // longest word
+    // most negative
+    // first person to mention monday on monday
+    // first person to mention going home
+    // first person to mention lunch
+    // dynamic duo, people who talk to each other
+    // tourist abroad, active in an office chat that they aren't based in
+
 
     callback({
       biggestSlacker: biggestSlacker(messages),
@@ -71,8 +88,11 @@ function Slacker(token) {
   function mostGifs(messages) {
     var mostGifs = slackerRules.mostGifs(messages);
     if (mostGifs) {
-    var user = rtm.dataStore.getUserById(longestMessage.user);
-    return { user: user, payload: mostGifs };
+      var user = rtm.dataStore.getUserById(longestMessage.user);
+      return {
+        user: user,
+        payload: mostGifs
+      };
     } else {
       return null;
     }
