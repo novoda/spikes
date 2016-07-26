@@ -17,6 +17,12 @@ http.listen(3001, function(){
   console.log('listening on *:3001');
 });
 
-slacker.startListening(function(data) {
+var notifyClient = function(data) {
   io.emit('message', data);
+}
+
+slacker.startListening(notifyClient);
+
+io.sockets.on('connection', function (socket) {
+  slacker.forceUpdate(notifyClient);
 });

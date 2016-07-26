@@ -12,6 +12,12 @@ var index = 0;
 function Slacker(token) {
   var rtm = new RtmClient( token, { dataStore: new MemoryDataStore() });
 
+  this.forceUpdate = function(callback) {
+    if (messages.length > 0) {
+      runRules(messages, callback);
+    }
+  }
+
   this.startListening = function(callback) {
     rtm.start();
     rtm.on(RTM_EVENTS.MESSAGE, function (message) {
