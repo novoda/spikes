@@ -3,7 +3,8 @@ module.exports = {
   mostActiveChannel: mostActiveChannel,
   longestMessage: longestMessage,
   mostGifs: mostGifs,
-  mostCommonWord: mostCommonWord
+  mostCommonWord: mostCommonWord,
+  mostRecentQuestion: mostRecentQuestion
 }
 
 function biggestSlacker(messages) {
@@ -102,4 +103,12 @@ function mostCommonWord(messages) {
     word: result,
     count: max
   }
+}
+
+function mostRecentQuestion(messages) {
+    var timeSortedMessages = messages.sort(sortMessagesByTimestamp);
+    var questionMessages = timeSortedMessages.filter(function(message) {
+      return message.text.indexOf('?') !== -1;
+    });
+    return questionMessages.length > 0 ? questionMessages[0] : null;
 }

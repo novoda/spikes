@@ -69,7 +69,8 @@ function Slacker(token) {
       mostActiveChannel: mostActiveChannel(messages),
       longestMessage: longestMessage(messages),
       mostGifs: mostGifs(messages),
-      mostCommonWord: slackerRules.mostCommonWord(messages)
+      mostCommonWord: slackerRules.mostCommonWord(messages),
+      mostRecentQuestion: slackerRules.mostRecentQuestion(messages)
     });
   }
 

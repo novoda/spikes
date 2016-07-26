@@ -8,11 +8,12 @@
   <div id="most-active-channel"></div>
   <div id="longest-message"></div>
   <div id="most-common-word"></div>
-  
+  <div id="most-recent-question"></div>
+
   <script src="/socket.io/socket.io.js"></script>
   <script>
     var socket = io();
-    var statPosition = 3;
+    var statPosition = 0;
 
     var things = [
       {
@@ -38,21 +39,26 @@
         data: function(data) {
           return mostCommonWord(data.mostCommonWord, this.element);
         }
+      },
+      {
+        element: document.getElementById('most-recent-question'),
+        data: function(data) {
+          return mostRecentQuestion(data.mostRecentQuestion, this.element);
+        }
       }
     ];
 
     statRotationLoop();
 
     socket.on('message', function(msg){
-
       things.forEach(each => {
         each.data(msg);
       });
     });
 
     function statRotationLoop() {
-      statPosition = Math.floor((Math.random() * things.length));
       console.log('stat rotation loop : ' + statPosition);
+      statPosition = Math.floor((Math.random() * things.length));
       show(statPosition);
       setTimeout(statRotationLoop, 1000 * 30);
     }
@@ -102,6 +108,12 @@
       '<p>Most common word is...</p>' +
       '<br>' +
       '<p>"' + data.word + '" at #' + data.count + ' usages</p>';
+    }
+
+    function mostRecentQuestion(data, element) {
+      element.innerHTML =
+      '<br>' +
+      '<p>"' + data.text + '"</p>';
     }
 
   </script>
