@@ -5,11 +5,10 @@
 </head>
 
 <body bgcolor="26A3DB">
-  <div id="biggest-slacker"></div>
-  <div id="most-active-channel"></div>
+  <!-- <div id="most-active-channel"></div>
   <div id="longest-message"></div>
   <div id="most-common-word"></div>
-  <div id="most-recent-question"></div>
+  <div id="most-recent-question"></div> -->
 
   <div class="centered-horiz" style="padding-top: 40px;">
     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" x="0px" y="0px" width="240px" height="100px" viewBox="0 -0.102 130 35" overflow="visible" enable-background="new 0 -0.102 130 35" xml:space="preserve">
@@ -95,7 +94,7 @@
           }
 
           .block {
-            top: 25%;
+            top: 45%;
             width: 50%;
           }
 
@@ -147,9 +146,16 @@
             padding-left: 180px;
           }
 
+          .shadow {
+            box-shadow: 0px 20px 57px -28px #000000;
+          }
+
       </style>
 
-  <div class="centered-horiz block">
+      <div id="most-active-channel"></div>
+      <div id="biggest-slacker"></div>
+
+  <!-- <div class="centered-horiz block">
     <div>
       <div class="right semi-circle">
         <div class="content centered-vert">
@@ -183,9 +189,93 @@
       </div>
       <img src="./public/slack.png" class="left avatar"></img>
     </div>
-  </div>
+  </div> -->
 
+  <script src="./app.js"></script>
   <script src="/socket.io/socket.io.js"></script>
+
+  <script>
+    var socket = io();
+    var statPosition = 0;
+
+    var things = [
+      {
+        element: document.getElementById('biggest-slacker'),
+        data: function(data) {
+          this.element.innerHTML = presentBiggestSlacker(data.biggestSlacker);
+        },
+      },
+      {
+        element: document.getElementById('most-active-channel'),
+        data: function(data) {
+          this.element.innerHTML = presentMostActive(data.mostActiveChannel);
+        }
+      }
+    ];
+
+    var blocks = ['block', 'block1', 'block2'];
+
+    statRotationLoop();
+
+    socket.on('message', function(msg){
+      things.forEach(each => {
+        each.data(msg);
+      });
+    });
+
+    function presentMostActive(data) {
+      return '<div class="centered-horiz block">' +
+      '<div>' +
+          '<div class="right semi-circle shadow">' +
+            '<div class="content centered-vert">' +
+              '<h1 class="text title">#' + data.name + '</h1>' +
+              '<p class="text summary">The most active channel 💬</p>' +
+            '</div>' +
+          '</div>' +
+          '<img src="./public/slack.png" class="left avatar"></img>' +
+        '</div>' +
+      '</div>';
+    }
+
+    function presentBiggestSlacker(data) {
+      console.log(data);
+      return '<div class="centered-horiz block">' +
+      '<div>' +
+          '<div class="right semi-circle shadow">' +
+            '<div class="content centered-vert">' +
+              '<h1 class="text title">@' + data.user.name + '</h1>' +
+              '<p class="text summary">Is the biggest Slacker! 😎</p>' +
+            '</div>' +
+          '</div>' +
+          '<img src="'+ data.user.profile.image_512 + '" class="left avatar"></img>' +
+        '</div>' +
+      '</div>';
+    }
+
+
+    function statRotationLoop() {
+      console.log('stat rotation loop : ' + statPosition);
+      statPosition = Math.floor((Math.random() * things.length));
+      show(statPosition);
+      setTimeout(statRotationLoop, 1000 * 30);
+    }
+
+    function show(position) {
+      things.forEach(each => {
+        each.element.style.display = 'none';
+      });
+      things[position].element.style.display = 'block';
+    }
+
+    function initElement(element) {
+      if (!element.style) {
+        element.style = {};
+      }
+    }
+
+
+  </script>
+
   <!-- <script>
     var socket = io();
     var statPosition = 0;
