@@ -214,6 +214,10 @@
       }
     ];
 
+    things.forEach(each => {
+      initElement(each.element);
+    });
+
     var blocks = ['block', 'block1', 'block2'];
 
     statRotationLoop();
@@ -255,9 +259,13 @@
 
     function statRotationLoop() {
       console.log('stat rotation loop : ' + statPosition);
-      statPosition = Math.floor((Math.random() * things.length));
+      if (statPosition < (things.length - 1)) {
+        statPosition++;
+      } else {
+        statPosition = 0;
+      }
       show(statPosition);
-      setTimeout(statRotationLoop, 1000 * 30);
+      setTimeout(statRotationLoop, 1000 * 60);
     }
 
     function show(position) {
