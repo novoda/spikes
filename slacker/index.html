@@ -2,6 +2,9 @@
 <head>
   <!-- <link rel="stylesheet" type="text/css" href="./public/theme.css"> -->
   <link href='https://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="./public/animate.min.css">
+
+
 </head>
 
 <body bgcolor="26A3DB">
@@ -270,9 +273,11 @@
 
     function show(position) {
       things.forEach(each => {
-        each.element.style.display = 'none';
+        each.element.className = 'animated bounceOutRight';
+        each.element.style.display = 'inline';
       });
-      things[position].element.style.display = 'block';
+      things[position].element.className = 'animated bounceInLeft';
+      things[position].element.style.display = 'inline';
     }
 
     function initElement(element) {
