@@ -38,28 +38,31 @@
     style="@style/Label.Greetings"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_below="@+id/time_container"
+    android:layout_alignParentRight="true"
     android:layout_centerVertical="true"
     android:drawableBottom="@drawable/novoda_logo"
-    android:visibility="gone"
+    android:layout_alignParentTop="true"
     tools:text="Good evening" />
 
   <TextView
     android:id="@+id/label_tweet"
     style="@style/Label.Tweet"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentRight="true"
+    android:layout_centerVertical="true"
     android:layout_below="@+id/label_greetings"
-    android:layout_above="@+id/weather_container"
-    android:gravity="center_vertical"
+    android:layout_toRightOf="@+id/time_container"
+    android:gravity="right|bottom"
     tools:text="Tweeeet" />
 
   <FrameLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_above="@+id/weather_container"
-    android:visibility="gone"
-    android:layout_below="@+id/time_container">
+    android:layout_below="@+id/time_container"
+    android:visibility="gone">
 
     <ListView
       android:id="@+id/todo_list"
@@ -81,10 +84,10 @@
     android:orientation="vertical">
 
     <ImageView
-      android:contentDescription="@null"
       android:id="@+id/weather_icon"
       android:layout_width="@dimen/weather_icon_width"
-      android:layout_height="@dimen/weather_icon_height" />
+      android:layout_height="@dimen/weather_icon_height"
+      android:contentDescription="@null" />
 
     <TextView
       android:id="@+id/label_weather_temperature"

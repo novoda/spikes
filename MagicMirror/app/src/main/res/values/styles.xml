@@ -25,6 +25,10 @@
     <item name="android:textSize">@dimen/tweet_text</item>
   </style>
 
+  <style name="Label.Greetings">
+    <item name="android:textSize">@dimen/greetings_text</item>
+  </style>
+
   <style name="Label.TodoItem">
     <item name="android:textSize">@dimen/todo_item</item>
   </style>
