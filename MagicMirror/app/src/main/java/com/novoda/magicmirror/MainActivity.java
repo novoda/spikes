@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.novoda.magicmirror.modules.DashboardModule;
 import com.novoda.magicmirror.modules.DashboardModuleComposite;
+import com.novoda.magicmirror.modules.greetings.GreetingsModule;
 import com.novoda.magicmirror.modules.time.TimeModule;
 import com.novoda.magicmirror.modules.twitter.TwitterModule;
 import com.novoda.magicmirror.modules.weather.WeatherIconMapper;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView timeLabel;
     private TextView dateLabel;
     private TextView tweetLabel;
+    private TextView greetingsLabel;
     private TextView weatherTemperatureLabel;
     private TextView todayForecastLabel;
     private ListView todoList;
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         timeLabel = Views.findById(this, R.id.label_time);
         dateLabel = Views.findById(this, R.id.label_date);
         tweetLabel = Views.findById(this, R.id.label_tweet);
+        greetingsLabel = Views.findById(this, R.id.label_greetings);
         todoList = Views.findById(this, R.id.todo_list);
         weatherTemperatureLabel = Views.findById(this, R.id.label_weather_temperature);
         todayForecastLabel = Views.findById(this, R.id.label_today_forecast);
@@ -80,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         modulesList.add(new TimeModule(timeLabel, dateLabel));
         modulesList.add(WeatherModule.newInstance(this, weatherListener));
         modulesList.add(TwitterModule.newInstance(this, tweetListener));
+        modulesList.add(new GreetingsModule(greetingsLabel));
 
         modules = new DashboardModuleComposite(modulesList);
     }
