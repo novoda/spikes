@@ -4,12 +4,12 @@ var RtmClient = require('@slack/client').RtmClient;
 var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 var RTM_CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS.RTM;
 var MemoryDataStore = require('@slack/client').MemoryDataStore;
-var slackerRules = require('./slacker-rules');
 
 var biggestSlackerRule = require('./biggest-slacker.js').rule;
 var mostActiveChannelRule = require('./most-active-channel.js').rule;
 var mostRecentQuestionRule = require('./most-recent-question.js').rule;
 var mostRecentGifRule = require('./most-recent-gif.js').rule;
+var mostCommonWordsRule = require('./most-common-words.js').rule;
 
 var messages = [];
 var index = 0;
@@ -71,9 +71,8 @@ function Slacker(token) {
     callback({
       biggestSlacker: biggestSlacker(messages),
       mostActiveChannel: mostActiveChannel(messages),
-      longestMessage: longestMessage(messages),
       mostGifs: mostRecentGif(messages),
-      mostCommonWord: slackerRules.mostCommonWord(messages),
+      mostCommonWord: mostCommonWordsRule(messages),
       mostRecentQuestion: mostRecentQuestionRule(messages)
     });
   }
@@ -88,12 +87,6 @@ function Slacker(token) {
     var mostActiveChannel = mostActiveChannelRule(messages);
     var channel = rtm.dataStore.getChannelById(mostActiveChannel.key);
     return channel;
-  }
-
-  function longestMessage(messages) {
-    var longestMessage = slackerRules.longestMessage(messages);
-    var user = rtm.dataStore.getUserById(longestMessage.user);
-    return { user: user, payload: longestMessage };
   }
 
   function mostRecentGif(messages) {
