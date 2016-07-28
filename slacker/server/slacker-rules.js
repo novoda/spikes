@@ -8,6 +8,7 @@ module.exports = {
 }
 
 var biggestSlackerRule = require('./biggest-slacker.js').rule;
+var mostActiveChannelRule = require('./most-active-channel.js').rule;
 
 function biggestSlacker(messages) {
   return biggestSlackerRule(messages);
@@ -27,16 +28,7 @@ function mostGifs(messages) {
 }
 
 function mostActiveChannel(messages) {
-  var timeSortedMessages = messages.sort(sortMessagesByTimestamp);
-  var allMessages = flattenToChannel(timeSortedMessages);
-  allMessages.sort(sortByMessagesLength);
-  return allMessages[0];
-
-  var channel = rtm.dataStore.getChannelById(allMessages[0].key);
-  if (previousActiveChannel !== channel) {
-    previousActiveChannel = channel;
-    rtm.sendMessage('most active channel : ' + channel.name, TEST_CHANNEL_ID);
-  }
+  return mostActiveChannelRule(messages);
 }
 
 function longestMessage(messages) {
