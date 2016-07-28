@@ -3,6 +3,7 @@
   <!-- <link rel="stylesheet" type="text/css" href="./public/theme.css"> -->
   <link href='https://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="./public/animate.min.css">
+  <link rel="stylesheet" href="./public/theme.css">
 
 
 </head>
@@ -65,135 +66,8 @@
     </svg>
   </div>
 
-  <style type="text/css">
-          .oval {
-              width: 500px;
-              height: 100px;
-              background: #FFFFFF;
-              border-radius: 50%;
-          }
-
-          .centered-horiz {
-            position: absolute;
-            left: 50%;
-            margin-right: -50%;
-            transform: translate(-50%, 0%);
-          }
-
-          .centered-vert {
-            position: absolute;
-            top: 50%;
-            margin-bottom: -50%;
-            transform: translate(0%, -50%);
-          }
-
-          .semi-circle {
-            display: block;
-            height: 120px;
-            width: 95%;
-            background: #FFFFFF;
-            margin-top: 21px;
-            -webkit-border-radius: 90px 90px 90px 90px;
-          }
-
-          .block {
-            top: 45%;
-            width: 50%;
-          }
-
-          .block2 {
-            top: 45%;
-            width: 50%;
-          }
-
-          .block3 {
-            top: 65%;
-            width: 50%;
-          }
-
-          .avatar {
-            position: absolute;
-            display: block;
-            height: 160px;
-            width: 160px;
-            left: 0px;
-            top: 0;
-            margin: 0;
-            border-radius: 50%;
-          }
-
-          .left {
-            float: left;
-          }
-
-          .right {
-            float: right;
-          }
-
-          .text {
-            color: black;
-            font-family: Bitter,serif;
-            margin: 0;
-          }
-
-          .title {
-            font-size: 34px;
-            color: #07C;
-          }
-
-          .summary {
-            font-size: 30px;
-          }
-
-          .content {
-            padding-top: 20px;
-            padding-left: 180px;
-          }
-
-          .shadow {
-            box-shadow: 0px 20px 57px -28px #000000;
-          }
-
-      </style>
-
-      <div id="most-active-channel"></div>
-      <div id="biggest-slacker"></div>
-
-  <!-- <div class="centered-horiz block">
-    <div>
-      <div class="right semi-circle">
-        <div class="content centered-vert">
-          <h1 class="text title">#some channel name</h1>
-          <p class="text summary">The most active channel</p>
-        </div>
-      </div>
-      <img src="./public/slack.png" class="left avatar"></img>
-    </div>
-  </div>
-
-  <div class="centered-horiz block2">
-    <div>
-      <div class="right semi-circle">
-        <div class="content centered-vert">
-          <h1 class="text title">#some channel name</h1>
-          <p class="text summary">The most active channel</p>
-        </div>
-      </div>
-      <img src="./public/slack.png" class="left avatar"></img>
-    </div>
-  </div>
-
-  <div class="centered-horiz block3">
-    <div>
-      <div class="right semi-circle">
-        <div class="content centered-vert">
-          <h1 class="text title">#some channel name</h1>
-          <p class="text summary">The most active channel</p>
-        </div>
-      </div>
-      <img src="./public/slack.png" class="left avatar"></img>
-    </div>
-  </div> -->
+  <div id="most-active-channel"></div>
+  <div id="biggest-slacker"></div>
 
   <script src="./app.js"></script>
   <script src="/socket.io/socket.io.js"></script>
