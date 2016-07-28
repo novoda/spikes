@@ -7,12 +7,10 @@ module.exports = {
   mostRecentQuestion: mostRecentQuestion
 }
 
-function biggestSlacker(messages) {
-  var timeSortedMessages = messages.sort(sortMessagesByTimestamp);
+var biggestSlackerRule = require('./biggest-slacker.js').rule;
 
-  var allMessages = flattenToUser(timeSortedMessages);
-  allMessages.sort(sortByMessagesLength);;
-  return allMessages[0];
+function biggestSlacker(messages) {
+  return biggestSlackerRule(messages);
 }
 
 function mostGifs(messages) {
