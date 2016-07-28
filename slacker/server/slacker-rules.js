@@ -1,17 +1,8 @@
 module.exports = {
-  biggestSlacker: biggestSlacker,
-  mostActiveChannel: mostActiveChannel,
   longestMessage: longestMessage,
   mostGifs: mostGifs,
   mostCommonWord: mostCommonWord,
   mostRecentQuestion: mostRecentQuestion
-}
-
-var biggestSlackerRule = require('./biggest-slacker.js').rule;
-var mostActiveChannelRule = require('./most-active-channel.js').rule;
-
-function biggestSlacker(messages) {
-  return biggestSlackerRule(messages);
 }
 
 function mostGifs(messages) {
@@ -25,10 +16,6 @@ function mostGifs(messages) {
   var allMessages = flattenToUser(gifMessages);
   allMessages.sort(sortByMessagesLength);;
   return allMessages[0];
-}
-
-function mostActiveChannel(messages) {
-  return mostActiveChannelRule(messages);
 }
 
 function longestMessage(messages) {

@@ -6,6 +6,9 @@ var RTM_CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS.RTM;
 var MemoryDataStore = require('@slack/client').MemoryDataStore;
 var slackerRules = require('./slacker-rules');
 
+var biggestSlackerRule = require('./biggest-slacker.js').rule;
+var mostActiveChannelRule = require('./most-active-channel.js').rule;
+
 var messages = [];
 var index = 0;
 
@@ -75,13 +78,13 @@ function Slacker(token) {
   }
 
   function biggestSlacker(messages) {
-    var biggestSlacker = slackerRules.biggestSlacker(messages);
+    var biggestSlacker = biggestSlackerRule(messages);
     var user = rtm.dataStore.getUserById(biggestSlacker.key);
     return { user: user, payload: biggestSlacker };
   }
 
   function mostActiveChannel(messages) {
-    var mostActiveChannel = slackerRules.mostActiveChannel(messages);
+    var mostActiveChannel = mostActiveChannelRule(messages);
     var channel = rtm.dataStore.getChannelById(mostActiveChannel.key);
     return channel;
   }
