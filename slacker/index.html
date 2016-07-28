@@ -103,9 +103,9 @@
       }
 
       function show(position) {
-        for(i = 0; i < loadedThings.length; i++) {
+        for(index = 0; index < loadedThings.length; index++) {
           if (i !== position) {
-            loadedThings[i].element.className = 'animated fadeOut';
+            loadedThings[index].element.className = 'animated fadeOut';
           }
         }
         loadedThings[position].element.className = 'animated fadeIn';
