@@ -8,6 +8,8 @@ var slackerRules = require('./slacker-rules');
 
 var biggestSlackerRule = require('./biggest-slacker.js').rule;
 var mostActiveChannelRule = require('./most-active-channel.js').rule;
+var mostRecentQuestionRule = require('./most-recent-question.js').rule;
+var mostRecentGifRule = require('./most-recent-gif.js').rule;
 
 var messages = [];
 var index = 0;
@@ -66,14 +68,13 @@ function Slacker(token) {
     // dynamic duo, people who talk to each other
     // tourist abroad, active in an office chat that they aren't based in
 
-
     callback({
       biggestSlacker: biggestSlacker(messages),
       mostActiveChannel: mostActiveChannel(messages),
       longestMessage: longestMessage(messages),
-      mostGifs: mostGifs(messages),
+      mostGifs: mostRecentGif(messages),
       mostCommonWord: slackerRules.mostCommonWord(messages),
-      mostRecentQuestion: slackerRules.mostRecentQuestion(messages)
+      mostRecentQuestion: mostRecentQuestionRule(messages)
     });
   }
 
@@ -95,8 +96,8 @@ function Slacker(token) {
     return { user: user, payload: longestMessage };
   }
 
-  function mostGifs(messages) {
-    var mostGifs = slackerRules.mostGifs(messages);
+  function mostRecentGif(messages) {
+    var mostGifs = mostRecentGifRule(messages);
     if (mostGifs) {
       var user = rtm.dataStore.getUserById(longestMessage.user);
       return {
