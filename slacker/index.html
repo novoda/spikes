@@ -1,19 +1,11 @@
 <html>
 <head>
-  <!-- <link rel="stylesheet" type="text/css" href="./public/theme.css"> -->
   <link href='https://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="./public/animate.min.css">
   <link rel="stylesheet" href="./public/theme.css">
-
-
 </head>
 
 <body bgcolor="26A3DB">
-  <!-- <div id="most-active-channel"></div>
-  <div id="longest-message"></div>
-  <div id="most-common-word"></div>
-  <div id="most-recent-question"></div> -->
-
   <div class="centered-horiz" style="padding-top: 40px;">
     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" x="0px" y="0px" width="240px" height="100px" viewBox="0 -0.102 130 35" overflow="visible" enable-background="new 0 -0.102 130 35" xml:space="preserve">
     <defs>
@@ -159,115 +151,6 @@
         element.style = {};
       }
     }
-
-
   </script>
-
-  <!-- <script>
-    var socket = io();
-    var statPosition = 0;
-
-    var things = [
-      {
-        element: document.getElementById('biggest-slacker'),
-        data: function(data) {
-          return biggestSlacker(data.biggestSlacker, this.element);
-        },
-      },
-      {
-        element: document.getElementById('most-active-channel'),
-        data: function(data) {
-          return mostActiveChannel(data.mostActiveChannel, this.element);
-        },
-      },
-      {
-        element: document.getElementById('longest-message'),
-        data: function(data) {
-          return longestMessage(data.longestMessage, this.element);
-        }
-      },
-      {
-        element: document.getElementById('most-common-word'),
-        data: function(data) {
-          return mostCommonWord(data.mostCommonWord, this.element);
-        }
-      },
-      {
-        element: document.getElementById('most-recent-question'),
-        data: function(data) {
-          return mostRecentQuestion(data.mostRecentQuestion, this.element);
-        }
-      }
-    ];
-
-    statRotationLoop();
-
-    socket.on('message', function(msg){
-      things.forEach(each => {
-        each.data(msg);
-      });
-    });
-
-    function statRotationLoop() {
-      console.log('stat rotation loop : ' + statPosition);
-      statPosition = Math.floor((Math.random() * things.length));
-      show(statPosition);
-      setTimeout(statRotationLoop, 1000 * 30);
-    }
-
-    function show(position) {
-      things.forEach(each => {
-        each.element.style.display = 'none';
-      });
-      things[position].element.style.display = 'block';
-    }
-
-    function initElement(element) {
-      if (!element.style) {
-        element.style = {};
-      }
-    }
-
-    function biggestSlacker(data, element) {
-      element.innerHTML =
-      '<p>Biggest slacker is...</p>' +
-      '<br>' +
-      user(data.user);
-    }
-
-    function mostActiveChannel(data, element) {
-      element.innerHTML =
-      '<p>Most active channel is...</p>' +
-      '<br>' +
-      '<p>#' + data.name + '</p>';
-    }
-
-    function longestMessage(data, element) {
-      element.innerHTML =
-      '<p>Longest message is...</p>' +
-      '<p>' + data.payload.text + '</p>' +
-      '<br>' +
-      user(data.user);
-    }
-
-    function user(user) {
-      var avatar = user.profile.image_512;
-      return `<a><img src=${avatar} height="150" width="150" alt="${user.name}"/><p>${user.profile.real_name}</p><a/>`;
-    }
-
-    function mostCommonWord(data, element) {
-      element.innerHTML =
-      '<p>Most common word is...</p>' +
-      '<br>' +
-      '<p>"' + data.word + '" at #' + data.count + ' usages</p>';
-    }
-
-    function mostRecentQuestion(data, element) {
-      element.innerHTML =
-      '<br>' +
-      '<p>"' + data.text + '"</p>';
-    }
-
-  </script> -->
 </body>
 </html>
