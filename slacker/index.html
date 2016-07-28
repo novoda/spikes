@@ -3,6 +3,9 @@
   <link href='https://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="./public/animate.min.css">
   <link rel="stylesheet" href="./public/theme.css">
+  <script>
+  var things = {};
+  </script>
 </head>
 
 <body bgcolor="26A3DB">
@@ -61,96 +64,57 @@
   <div id="most-active-channel"></div>
   <div id="biggest-slacker"></div>
 
-  <script src="./app.js"></script>
+  <script src="./public/biggest-slacker.js"></script>
+  <script src="./public/most-active.js"></script>
   <script src="/socket.io/socket.io.js"></script>
 
   <script>
-    var socket = io();
-    var statPosition = 0;
+    var main = function() {
+      var socket = io();
+      var statPosition = 0;
+      var loadedThings = loadThings();
 
-    var things = [
-      {
-        element: document.getElementById('biggest-slacker'),
-        data: function(data) {
-          this.element.innerHTML = presentBiggestSlacker(data.biggestSlacker);
-        },
-      },
-      {
-        element: document.getElementById('most-active-channel'),
-        data: function(data) {
-          this.element.innerHTML = presentMostActive(data.mostActiveChannel);
+      statRotationLoop();
+      socket.on('message', function(msg){
+        loadedThings.forEach(each => {
+          each.data(msg);
+        });
+      });
+
+      function loadThings() {
+        var result = [];
+        for (var prop in things) {
+          var potentialFunc = things[prop];
+          if (things.hasOwnProperty(prop) && typeof potentialFunc === "function") {
+            result.push(potentialFunc());
+          }
         }
+        return result;
       }
-    ];
 
-    things.forEach(each => {
-      initElement(each.element);
-    });
-
-    var blocks = ['block', 'block1', 'block2'];
-
-    statRotationLoop();
-
-    socket.on('message', function(msg){
-      things.forEach(each => {
-        each.data(msg);
-      });
-    });
-
-    function presentMostActive(data) {
-      return '<div class="centered-horiz block">' +
-      '<div>' +
-          '<div class="right semi-circle shadow">' +
-            '<div class="content centered-vert">' +
-              '<h1 class="text title">#' + data.name + '</h1>' +
-              '<p class="text summary">The most active channel 💬</p>' +
-            '</div>' +
-          '</div>' +
-          '<img src="./public/slack.png" class="left avatar"></img>' +
-        '</div>' +
-      '</div>';
-    }
-
-    function presentBiggestSlacker(data) {
-      console.log(data);
-      return '<div class="centered-horiz block">' +
-      '<div>' +
-          '<div class="right semi-circle shadow">' +
-            '<div class="content centered-vert">' +
-              '<h1 class="text title">@' + data.user.name + '</h1>' +
-              '<p class="text summary">Is the biggest Slacker! 😎</p>' +
-            '</div>' +
-          '</div>' +
-          '<img src="'+ data.user.profile.image_512 + '" class="left avatar"></img>' +
-        '</div>' +
-      '</div>';
-    }
-
-    function statRotationLoop() {
-      console.log('stat rotation loop : ' + statPosition);
-      if (statPosition < (things.length - 1)) {
-        statPosition++;
-      } else {
-        statPosition = 0;
+      function statRotationLoop() {
+        statPosition = incrementStatPosition(statPosition);
+        show(statPosition);
+        setTimeout(statRotationLoop, 1000 * 5);
       }
-      show(statPosition);
-      setTimeout(statRotationLoop, 1000 * 60);
-    }
 
-    function show(position) {
-      things.forEach(each => {
-        each.element.className = 'animated bounceOutRight';
-        each.element.style.display = 'inline';
-      });
-      things[position].element.className = 'animated bounceInLeft';
-      things[position].element.style.display = 'inline';
-    }
-
-    function initElement(element) {
-      if (!element.style) {
-        element.style = {};
+      function incrementStatPosition(statPosition) {
+        return (statPosition < (loadedThings.length - 1)) ? statPosition + 1 : 0;
       }
-    }
+
+      function show(position) {
+        for(i = 0; i < loadedThings.length; i++) {
+          if (i !== position) {
+            loadedThings[i].element.className = 'animated fadeOut';
+          }
+        }
+        loadedThings[position].element.className = 'animated fadeIn';
+      }
+    };
+
+    main();
+
   </script>
+
 </body>
 </html>
