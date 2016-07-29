@@ -1,0 +1,29 @@
+apply plugin: 'com.android.application'
+apply plugin: 'android-command'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
+
+    defaultConfig {
+        applicationId "com.novoda.monkey"
+        minSdkVersion 16
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    dependencies {
+        def supportVersion = '24.1.1'
+        compile "com.android.support:appcompat-v7:${supportVersion}"
+        compile "com.android.support:support-v13:${supportVersion}"
+    }
+
+}
+
+apply from: '../monkey/android-monkey.gradle'
+
