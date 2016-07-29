@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-command'
 
+apply plugin: com.novoda.monkey.MonkeyConfigurationPlugin
+
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.1"
@@ -24,6 +26,3 @@ android {
     }
 
 }
-
-apply from: '../monkey/android-monkey.gradle'
-
