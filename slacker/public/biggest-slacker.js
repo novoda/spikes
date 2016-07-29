@@ -3,7 +3,7 @@ if (things.biggestSlacker) throw "BiggestSlacker already exists";
 things.biggestSlacker = function() {
   return {
     element: document.getElementById('biggest-slacker'),
-    data: function(data) {
+    present: function(data) {
       this.element.innerHTML = presentBiggestSlacker(data.biggestSlacker);
     }
   };

@@ -3,7 +3,7 @@ if (things.mostRecentGif) throw "mostRecentGif already exists";
 things.mostActive = function() {
   return {
     element: document.getElementById('most-recent-gif'),
-    data: function(data) {
+    present: function(data) {
       // gifs are not always present, maybe handle some default state?
       if (data.mostRecentGif) {
         this.element.innerHTML = presentMostRecentGif(data.mostRecentGif);

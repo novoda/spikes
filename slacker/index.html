@@ -79,7 +79,7 @@
       statRotationLoop();
       socket.on('message', function(msg){
         loadedThings.forEach(each => {
-          each.data(msg);
+          each.present(msg);
         });
       });
 

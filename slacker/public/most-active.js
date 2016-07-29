@@ -3,7 +3,7 @@ if (things.mostActive) throw "MostActive already exists";
 things.mostActive = function() {
   return {
     element: document.getElementById('most-active-channel'),
-    data: function(data) {
+    present: function(data) {
       this.element.innerHTML = presentMostActive(data.mostActiveChannel);
     }
   };
