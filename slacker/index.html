@@ -101,9 +101,10 @@
 
         if (loadedThings[statPosition].element.innerHTML) {
           show(statPosition);
+          setTimeout(statRotationLoop, 1000 * 5);
+        } else {
+          setTimeout(statRotationLoop, 1000);
         }
-
-        setTimeout(statRotationLoop, 1000 * 5);
       }
 
       function incrementStatPosition(statPosition) {
