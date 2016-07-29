@@ -97,24 +97,30 @@
       }
 
       function statRotationLoop() {
-        statPosition = incrementStatPosition(statPosition);
+        statPosition = incrementToNextAvailableStatPosition(statPosition, 0);
 
-        if (loadedThings[statPosition].element.innerHTML) {
+        if (statPosition || statPosition === 0) {
           show(statPosition);
-          setTimeout(statRotationLoop, 1000 * 5);
-        } else {
-          setTimeout(statRotationLoop, 1000);
         }
+        setTimeout(statRotationLoop, 1000 * 5);
       }
 
-      function incrementStatPosition(statPosition) {
-        return (statPosition < (loadedThings.length - 1)) ? statPosition + 1 : 0;
+      function incrementToNextAvailableStatPosition(statPosition, failCount) {
+        if (failCount === loadedThings.length) {
+          return null;
+        }
+        var incrementedPosition = (statPosition < (loadedThings.length - 1)) ? statPosition + 1 : 0;
+        return loadedThings[incrementedPosition].element.innerHTML ? incrementedPosition : incrementToNextAvailableStatPosition(incrementedPosition, failCount + 1);
       }
 
       function show(position) {
+        console.log('show : ' + position);
+
         for(index = 0; index < loadedThings.length; index++) {
           if (index !== position) {
-            loadedThings[index].element.className = 'animated fadeOut';
+            if (loadedThings[index].element.innerHTML) {
+              loadedThings[index].element.className = 'animated fadeOut';
+            }
           }
         }
         loadedThings[position].element.className = 'animated fadeIn';

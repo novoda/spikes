@@ -4,8 +4,8 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 const token = process.env.token;
-var SlackerBar = require('./server/slacker');
-var slacker = new SlackerBar(token);
+var Slacker = require('./server/slacker.js');
+var slacker = new Slacker(token);
 
 app.use("/public", express.static(__dirname + '/public'));
 
