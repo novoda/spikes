@@ -1,6 +1,6 @@
 if (things.mostRecentGif) throw "mostRecentGif already exists";
 
-things.mostActive = function() {
+things.mostRecentGif = function() {
   return {
     element: document.getElementById('most-recent-gif'),
     present: function(data) {
