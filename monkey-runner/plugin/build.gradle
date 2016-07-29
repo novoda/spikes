@@ -1,0 +1,10 @@
+apply plugin: 'groovy'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile gradleApi()
+    compile 'com.novoda:gradle-android-command-plugin:1.6.2'
+}
