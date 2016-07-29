@@ -3,6 +3,7 @@ module.exports = {
   mostActiveChannel: mostActiveChannel,
   longestMessage: longestMessage,
   mostGifs: mostGifs,
+  thanks: thanks,
   mostCommonWord: mostCommonWord,
   mostRecentQuestion: mostRecentQuestion
 }
@@ -13,6 +14,14 @@ function biggestSlacker(messages) {
   var allMessages = flattenToUser(timeSortedMessages);
   allMessages.sort(sortByMessagesLength);;
   return allMessages[0];
+}
+
+function thanks(testChannelId, messages) {
+  var thanksMessages = messages.filter(each => {
+    return each.channel == testChannelId;
+  });
+
+  return thanksMessages[0];
 }
 
 function mostGifs(messages) {

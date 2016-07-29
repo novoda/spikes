@@ -67,10 +67,11 @@ function Slacker(token) {
     callback({
       biggestSlacker: biggestSlacker(messages),
       mostActiveChannel: mostActiveChannel(messages),
-      longestMessage: longestMessage(messages),
-      mostGifs: mostGifs(messages),
-      mostCommonWord: slackerRules.mostCommonWord(messages),
-      mostRecentQuestion: slackerRules.mostRecentQuestion(messages)
+      thanks: thanks(messages),
+      //longestMessage: longestMessage(messages),
+      //mostGifs: mostGifs(messages),
+      //mostCommonWord: slackerRules.mostCommonWord(messages),
+      //mostRecentQuestion: slackerRules.mostRecentQuestion(messages)
     });
   }
 
@@ -84,6 +85,18 @@ function Slacker(token) {
     var mostActiveChannel = slackerRules.mostActiveChannel(messages);
     var channel = rtm.dataStore.getChannelById(mostActiveChannel.key);
     return channel;
+  }
+
+  function thanks(messages) {
+    var channel = rtm.dataStore.getChannelByName('thanks');
+    var randomThankYou = slackerRules.thanks(channel.id, messages);
+    if (randomThankYou) {
+      var user = rtm.dataStore.getUserById(randomThankYou.user);
+      return {user: user, payload: randomThankYou};
+    }
+    else {
+      return null;
+    }
   }
 
   function longestMessage(messages) {

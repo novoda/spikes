@@ -96,6 +96,15 @@
             -webkit-border-radius: 90px 90px 90px 90px;
           }
 
+          .large-semi-circle {
+            display: inline-block;
+            min-height: 120px;
+            width: 95%;
+            background: #FFFFFF;
+            margin-top: 21px;
+            -webkit-border-radius: 90px 90px 90px 90px;
+          }
+
           .block {
             top: 45%;
             width: 50%;
@@ -141,6 +150,10 @@
             color: #07C;
           }
 
+          .username {
+            color: #07c;
+          }
+
           .summary {
             font-size: 30px;
           }
@@ -158,6 +171,7 @@
 
       <div id="most-active-channel"></div>
       <div id="biggest-slacker"></div>
+      <div id="thanks"></div>
 
   <!-- <div class="centered-horiz block">
     <div>
@@ -214,6 +228,12 @@
         data: function(data) {
           this.element.innerHTML = presentMostActive(data.mostActiveChannel);
         }
+      },
+      {
+        element: document.getElementById('thanks'),
+        data: function(data) {
+          this.element.innerHTML = presentThanks(data.thanks);
+        }
       }
     ];
 
@@ -255,9 +275,23 @@
               '<p class="text summary">Is the biggest Slacker! 😎</p>' +
             '</div>' +
           '</div>' +
-          '<img src="'+ data.user.profile.image_512 + '" class="left avatar"></img>' +
         '</div>' +
       '</div>';
+    }
+
+    function presentThanks(data) {
+      console.log(data);
+      return '<div class="centered-horiz block">' +
+      '<div>' +
+        '<div class="right large-semi-circle shadow">' +
+          '<div class="content centered-vert">' +
+            '<h1 class="text title">#thanks</h1>' +
+            '<p class="text summary"><span class="username">@' + data.user.name + ': </span>' + data.payload.text + '  💙</p>' +
+          '</div>' +
+        '</div>' +
+        '<img src="'+ data.user.profile.image_512 + '" class="left avatar"></img>' +
+      '</div>' +
+    '</div>';
     }
 
     function statRotationLoop() {
@@ -268,7 +302,7 @@
         statPosition = 0;
       }
       show(statPosition);
-      setTimeout(statRotationLoop, 1000 * 60);
+      setTimeout(statRotationLoop, 1000 * 3);
     }
 
     function show(position) {
@@ -304,6 +338,12 @@
         element: document.getElementById('most-active-channel'),
         data: function(data) {
           return mostActiveChannel(data.mostActiveChannel, this.element);
+        },
+      },
+      {
+        element: document.getElementById('thanks'),
+        data: function(data) {
+          return thanks(data.thanks, this.element);
         },
       },
       {
