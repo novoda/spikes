@@ -28,6 +28,15 @@
   -webkit-border-radius: 90px 90px 90px 90px;
 }
 
+.large-semi-circle {
+  display: inline-block;
+  min-height: 120px;
+  width: 95%;
+  background: #FFFFFF;
+  margin-top: 21px;
+  -webkit-border-radius: 90px 90px 90px 90px;
+}
+
 .block {
   top: 45%;
   width: 50%;
@@ -71,6 +80,11 @@
 .title {
   font-size: 34px;
   color: #07C;
+}
+
+
+.username {
+  color: #07c;
 }
 
 .summary {

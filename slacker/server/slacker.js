@@ -10,6 +10,7 @@ var mostActiveChannelRule = require('./most-active-channel.js').rule;
 var mostRecentQuestionRule = require('./most-recent-question.js').rule;
 var mostRecentGifRule = require('./most-recent-gif.js').rule;
 var mostCommonWordsRule = require('./most-common-words.js').rule;
+var thanksRule = require('./thanks.js').rule;
 
 var messages = [];
 var index = 0;
@@ -73,7 +74,8 @@ function Slacker(token) {
       mostActiveChannel: mostActiveChannel(messages),
       mostRecentGif: mostRecentGif(messages),
       mostCommonWord: mostCommonWordsRule(messages),
-      mostRecentQuestion: mostRecentQuestionRule(messages)
+      mostRecentQuestion: mostRecentQuestionRule(messages),
+      thanks: thanks(messages),
     });
   }
 
@@ -98,6 +100,18 @@ function Slacker(token) {
         payload: mostRecentGif
       };
     } else {
+      return null;
+    }
+  }
+
+  function thanks(messages) {
+    var channel = rtm.dataStore.getChannelByName('thanks');
+    var randomThankYou = thanksRule(channel.id, messages);
+    if (randomThankYou) {
+      var user = rtm.dataStore.getUserById(randomThankYou.user);
+      return {user: user, payload: randomThankYou};
+    }
+    else {
       return null;
     }
   }
