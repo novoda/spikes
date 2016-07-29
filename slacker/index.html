@@ -98,7 +98,11 @@
 
       function statRotationLoop() {
         statPosition = incrementStatPosition(statPosition);
-        show(statPosition);
+
+        if (loadedThings[statPosition].element.innerHTML) {
+          show(statPosition);
+        }
+
         setTimeout(statRotationLoop, 1000 * 5);
       }
 
