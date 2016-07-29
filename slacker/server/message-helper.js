@@ -1,15 +1,15 @@
 module.exports = {
   sortByTimestamp: sortMessagesByTimestamp,
-  sortByLength: sortByMessagesLength,
+  sortByCount: sortByMessagesLength,
   flattenToUser: flattenToUser,
   flattenToChannel: flattenToChannel
 }
 
-var sortMessagesByTimestamp = (a, b) => {
+function sortMessagesByTimestamp(a, b) {
   return b.ts - a.ts;
 }
 
-var sortByMessagesLength = (a, b) => {
+function sortByMessagesLength(a, b) {
   return b.messages.length - a.messages.length;
 }
 

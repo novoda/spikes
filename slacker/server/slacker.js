@@ -71,7 +71,7 @@ function Slacker(token) {
     callback({
       biggestSlacker: biggestSlacker(messages),
       mostActiveChannel: mostActiveChannel(messages),
-      mostGifs: mostRecentGif(messages),
+      mostRecentGif: mostRecentGif(messages),
       mostCommonWord: mostCommonWordsRule(messages),
       mostRecentQuestion: mostRecentQuestionRule(messages)
     });
@@ -90,12 +90,12 @@ function Slacker(token) {
   }
 
   function mostRecentGif(messages) {
-    var mostGifs = mostRecentGifRule(messages);
-    if (mostGifs) {
-      var user = rtm.dataStore.getUserById(longestMessage.user);
+    var mostRecentGif = mostRecentGifRule(messages);
+    if (mostRecentGif) {
+      var user = rtm.dataStore.getUserById(mostRecentGif.user);
       return {
         user: user,
-        payload: mostGifs
+        payload: mostRecentGif
       };
     } else {
       return null;
