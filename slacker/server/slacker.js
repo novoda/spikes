@@ -43,41 +43,23 @@ function ignored(message) {
   return message.type !== 'message' || message.bot_id || !message.text;
 }
 
-Slacker.prototype.forceUpdate = function(callback) {
-  if (this.messages.length > 0) {
-    callback(runRules(this.rtm.dataStore, this.messages, this.ruleIndex));
-    if (this.ruleIndex >= (rules.length - 1)) {
-      this.ruleIndex = 0;
-    } else {
-      this.ruleIndex++;
-    }
-  }
+Slacker.prototype.moveToNext = function() {
+  incrementRuleIndex(this);
 };
 
-function runRules(dataStore, messages, ruleIndex) {
-  // most [x word] usages | lol etc
-  // common words
-  // most used emoticon
-  // most unused emoticon
-  // quote - find text with " foo bar "
-  // user with most channel spread | most channels, most messages
-  // user most dedicated to a single channel (by character) | least channels least messages
-  // biggest laugher | ha* or lol or laughing emoticon
-  // most questions
-  // most @here
-  // most I/Me user
-  // biggest guess user
-  // most actually/btw
-  // most boss pings @carl / @kevin
-  // most use of symbols rather than a-z
-  // longest word
-  // most negative
-  // first person to mention monday on monday
-  // first person to mention going home
-  // first person to mention lunch
-  // dynamic duo, people who talk to each other
-  // tourist abroad, active in an office chat that they aren't based in
-  return rules[ruleIndex](dataStore, messages);
+function incrementRuleIndex(self) {
+  if (self.ruleIndex >= (rules.length - 1)) {
+    self.ruleIndex = 0;
+  } else {
+    self.ruleIndex++;
+  }
 }
+
+Slacker.prototype.get = function(callback) {
+  if (this.messages.length > 0) {
+    var result = rules[this.ruleIndex](this.rtm.dataStore, this.messages);
+    callback(result);
+  }
+};
 
 module.exports = Slacker;

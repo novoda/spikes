@@ -22,11 +22,12 @@ var notifyClient = function(data) {
 }
 
 io.sockets.on('connection', function (socket) {
-  slacker.forceUpdate(notifyClient);
+  slacker.get(notifyClient);
 });
 
 var updateLoop = function() {
-  slacker.forceUpdate(notifyClient);
+  slacker.moveToNext();
+  slacker.get(notifyClient);
   setTimeout(updateLoop, 1000 * 5);
 }
 
