@@ -4,7 +4,7 @@ things.biggestSlacker = function() {
   return {
     element: document.getElementById('biggest-slacker'),
     present: function(data) {
-      this.element.innerHTML = presentBiggestSlacker(data.biggestSlacker);
+      this.element.innerHTML = presentBiggestSlacker(data.payload);
     }
   };
 }

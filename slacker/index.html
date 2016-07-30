@@ -79,7 +79,12 @@
       var socket = io();
 
       socket.on('message', function(msg) {
-        var thing = things[msg.thingKey];
+        if (!things[msg.thingKey]) {
+          console.log(msg.thingKey + ' is unhandled, skipping');
+          return;
+        }
+
+        var thing = things[msg.thingKey]();
         thing.present(msg);
         show(thing)
         previousThing = thing;

@@ -74,20 +74,29 @@ function runRules(dataStore, messages, callback) {
   // dynamic duo, people who talk to each other
   // tourist abroad, active in an office chat that they aren't based in
 
-  callback({
-    biggestSlacker: biggestSlacker(dataStore, messages),
-    mostActiveChannel: mostActiveChannel(dataStore, messages),
-    mostRecentGif: mostRecentGif(dataStore, messages),
-    mostCommonWord: mostCommonWordsRule(messages),
-    mostRecentQuestion: mostRecentQuestionRule(messages),
-    thanks: thanks(dataStore, messages),
-  });
+
+  biggestSlacker(dataStore, messages, callback);
+  //
+  // callback({
+  //   biggestSlacker: biggestSlacker(dataStore, messages)
+  //   // mostActiveChannel: mostActiveChannel(dataStore, messages),
+  //   // mostRecentGif: mostRecentGif(dataStore, messages),
+  //   // mostCommonWord: mostCommonWordsRule(messages),
+  //   // mostRecentQuestion: mostRecentQuestionRule(messages),
+  //   // thanks: thanks(dataStore, messages),
+  // });
 }
 
-function biggestSlacker(dataStore, messages) {
+function biggestSlacker(dataStore, messages, callback) {
   var biggestSlacker = biggestSlackerRule(messages);
   var user = dataStore.getUserById(biggestSlacker.key);
-  return { user: user, payload: biggestSlacker };
+  callback({
+    thingKey: 'biggestSlacker',
+    payload: {
+      user: user,
+      biggestSlacker: biggestSlacker
+    }
+  });
 }
 
 function mostActiveChannel(dataStore, messages) {
