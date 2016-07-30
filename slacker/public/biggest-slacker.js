@@ -10,7 +10,6 @@ things.biggestSlacker = function() {
 }
 
 function presentBiggestSlacker(data) {
-  console.log(data);
   return '<div class="centered-horiz block">' +
   '<div>' +
       '<div class="right semi-circle shadow">' +
