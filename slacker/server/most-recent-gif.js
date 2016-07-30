@@ -4,21 +4,29 @@ module.exports = {
 
 var helper = require('./message-helper.js');
 
-function mostRecentGif(messages) {
+function mostRecentGif(dataStore, messages) {
   var gifMessages = messages.filter(each => {
     return each.text.indexOf('.gif') !== -1;
   });
-
-  if (gifMessages.length === 0) {
-    return null;
-  }
-
   gifMessages.sort(helper.sortByTimestamp);
 
-  var latestMessage = gifMessages[0];
-  latestMessage.gif = findGifUrlFrom(latestMessage.text.replace('<', '').replace('>', ''));
+  var gifMessage = gifMessages.length > 0 ? gifMessages[0] : null;
+  return {
+    thingKey: 'mostRecentGif',
+    payload: createPayload(dataStore, gifMessage)
+  };
+}
 
-  return latestMessage;
+function createPayload(dataStore, gifMessage) {
+  if (gifMessage) {
+    gifMessage.gif = findGifUrlFrom(gifMessage.text.replace('<', '').replace('>', ''));
+    return {
+      user: dataStore.getUserById(gifMessage.user),
+      mostRecentGif: gifMessage
+    };
+  } else {
+    return null;
+  }
 }
 
 function findGifUrlFrom(text) {

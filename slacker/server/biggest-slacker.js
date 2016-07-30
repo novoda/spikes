@@ -4,9 +4,17 @@ module.exports = {
 
 var helper = require('./message-helper.js');
 
-function biggestSlacker(messages) {
+function biggestSlacker(dataStore, messages) {
   var timeSortedMessages = messages.sort(helper.sortByTimestamp);
   var allMessages = helper.flattenToUser(timeSortedMessages);
   allMessages.sort(helper.sortByCount);
-  return allMessages[0];
+  var biggestSlacker = allMessages[0];
+  var user = dataStore.getUserById(biggestSlacker.key);
+  return {
+    thingKey: 'biggestSlacker',
+    payload: {
+      user: user,
+      biggestSlacker: biggestSlacker
+    }
+  };
 }

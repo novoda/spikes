@@ -3,32 +3,27 @@ var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 var RTM_CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS.RTM;
 var MemoryDataStore = require('@slack/client').MemoryDataStore;
 
-var biggestSlackerRule = require('./biggest-slacker.js').rule;
-var mostActiveChannelRule = require('./most-active-channel.js').rule;
 var mostRecentQuestionRule = require('./most-recent-question.js').rule;
-var mostRecentGifRule = require('./most-recent-gif.js').rule;
 var mostCommonWordsRule = require('./most-common-words.js').rule;
-var thanksRule = require('./thanks.js').rule;
+
+var rules = [
+  require('./biggest-slacker.js').rule,
+  require('./most-active-channel.js').rule,
+  require('./thanks.js').rule,
+  require('./most-recent-gif.js').rule
+]
 
 var Slacker = function(token) {
   this.messages = [];
   this.index = 0;
+  this.ruleIndex = 0;
   this.rtm = new RtmClient(
     token,
     { dataStore: new MemoryDataStore() }
   );
+  this.rtm.start();
+  this.rtm.on(RTM_EVENTS.MESSAGE, messageHandler(this));
 }
-
-Slacker.prototype.forceUpdate = function(callback) {
-  if (this.messages.length > 0) {
-    runRules(this.rtm.dataStore, this.messages, callback);
-  }
-};
-
-Slacker.prototype.startListening = function(callback) {
-    this.rtm.start();
-    this.rtm.on(RTM_EVENTS.MESSAGE, messageHandler(this, callback));
-};
 
 function messageHandler(self, callback) {
   return function(message) {
@@ -41,8 +36,6 @@ function messageHandler(self, callback) {
     }
     self.messages.splice(self.index, 0 , message);
     self.index++;
-
-    runRules(self.rtm.dataStore, self.messages, callback);
   }
 }
 
@@ -50,7 +43,18 @@ function ignored(message) {
   return message.type !== 'message' || message.bot_id || !message.text;
 }
 
-function runRules(dataStore, messages, callback) {
+Slacker.prototype.forceUpdate = function(callback) {
+  if (this.messages.length > 0) {
+    callback(runRules(this.rtm.dataStore, this.messages, this.ruleIndex));
+    if (this.ruleIndex >= (rules.length - 1)) {
+      this.ruleIndex = 0;
+    } else {
+      this.ruleIndex++;
+    }
+  }
+};
+
+function runRules(dataStore, messages, ruleIndex) {
   // most [x word] usages | lol etc
   // common words
   // most used emoticon
@@ -73,61 +77,7 @@ function runRules(dataStore, messages, callback) {
   // first person to mention lunch
   // dynamic duo, people who talk to each other
   // tourist abroad, active in an office chat that they aren't based in
-
-
-  biggestSlacker(dataStore, messages, callback);
-  //
-  // callback({
-  //   biggestSlacker: biggestSlacker(dataStore, messages)
-  //   // mostActiveChannel: mostActiveChannel(dataStore, messages),
-  //   // mostRecentGif: mostRecentGif(dataStore, messages),
-  //   // mostCommonWord: mostCommonWordsRule(messages),
-  //   // mostRecentQuestion: mostRecentQuestionRule(messages),
-  //   // thanks: thanks(dataStore, messages),
-  // });
-}
-
-function biggestSlacker(dataStore, messages, callback) {
-  var biggestSlacker = biggestSlackerRule(messages);
-  var user = dataStore.getUserById(biggestSlacker.key);
-  callback({
-    thingKey: 'biggestSlacker',
-    payload: {
-      user: user,
-      biggestSlacker: biggestSlacker
-    }
-  });
-}
-
-function mostActiveChannel(dataStore, messages) {
-  var mostActiveChannel = mostActiveChannelRule(messages);
-  var channel = dataStore.getChannelById(mostActiveChannel.key);
-  return channel;
-}
-
-function mostRecentGif(dataStore, messages) {
-  var mostRecentGif = mostRecentGifRule(messages);
-  if (mostRecentGif) {
-    var user = dataStore.getUserById(mostRecentGif.user);
-    return {
-      user: user,
-      payload: mostRecentGif
-    };
-  } else {
-    return null;
-  }
-}
-
-function thanks(dataStore, messages) {
-  var channel = dataStore.getChannelByName('thanks');
-  var randomThankYou = thanksRule(channel.id, messages);
-  if (randomThankYou) {
-    var user = dataStore.getUserById(randomThankYou.user);
-    return {user: user, payload: randomThankYou};
-  }
-  else {
-    return null;
-  }
+  return rules[ruleIndex](dataStore, messages);
 }
 
 module.exports = Slacker;

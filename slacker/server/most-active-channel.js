@@ -4,9 +4,17 @@ module.exports = {
 
 var helper = require('./message-helper.js');
 
-function mostActiveChannel(messages) {
+function mostActiveChannel(dataStore, messages) {
   var timeSortedMessages = messages.sort(helper.sortByTimestamp);
   var allMessages = helper.flattenToChannel(timeSortedMessages);
   allMessages.sort(helper.sortByCount);
-  return allMessages[0];
+  var mostActiveChannel = allMessages[0];
+  var channel = dataStore.getChannelById(mostActiveChannel.key);
+  return {
+    thingKey: 'mostActiveChannel',
+    payload: {
+      channel: channel,
+      mostActiveChannel: mostActiveChannel
+    }
+  };
 }

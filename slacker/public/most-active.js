@@ -1,10 +1,10 @@
-if (things.mostActive) throw "MostActive already exists";
+if (things.mostActiveChannel) throw "MostActiveChannel already exists";
 
-things.mostActive = function() {
+things.mostActiveChannel = function() {
   return {
     element: document.getElementById('most-active-channel'),
     present: function(data) {
-      this.element.innerHTML = presentMostActive(data.mostActiveChannel);
+      this.element.innerHTML = presentMostActive(data.payload.channel);
     }
   };
 }

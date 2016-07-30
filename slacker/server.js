@@ -21,8 +21,13 @@ var notifyClient = function(data) {
   io.emit('message', data);
 }
 
-slacker.startListening(notifyClient);
-
 io.sockets.on('connection', function (socket) {
   slacker.forceUpdate(notifyClient);
 });
+
+var updateLoop = function() {
+  slacker.forceUpdate(notifyClient);
+  setTimeout(updateLoop, 1000 * 5);
+}
+
+setTimeout(updateLoop, 1000 * 5);

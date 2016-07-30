@@ -5,8 +5,8 @@ things.mostRecentGif = function() {
     element: document.getElementById('most-recent-gif'),
     present: function(data) {
       // gifs are not always present, maybe handle some default state?
-      if (data.mostRecentGif) {
-        this.element.innerHTML = presentMostRecentGif(data.mostRecentGif);
+      if (data.payload) {
+        this.element.innerHTML = presentMostRecentGif(data.payload);
       }
     }
   };
@@ -15,7 +15,7 @@ things.mostRecentGif = function() {
 function presentMostRecentGif(data) {
   return '<div class="centered-horiz block">' +
   '<div>' +
-    '<img class="right" src="' + data.payload.gif + '"></img>' +
+    '<img class="right" src="' + data.mostRecentGif.gif + '"></img>' +
     '<img class="left avatar" src="'+ data.user.profile.image_512 + '"></img>' +
   '</div>';
 }
