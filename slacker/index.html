@@ -73,55 +73,23 @@
   <script src="/socket.io/socket.io.js"></script>
 
   <script>
-    var main = function() {
-      var socket = io();
-      var statPosition = 0;
-      var loadedThings = loadThings();
 
-      statRotationLoop();
-      socket.on('message', function(msg){
-        loadedThings.forEach(each => {
-          each.present(msg);
-        });
+    var main = function() {
+      var previousThing;
+      var socket = io();
+
+      socket.on('message', function(msg) {
+        var thing = things[msg.thingKey];
+        thing.present(msg);
+        show(thing)
+        previousThing = thing;
       });
 
-      function loadThings() {
-        var result = [];
-        for (var prop in things) {
-          var potentialFunc = things[prop];
-          if (things.hasOwnProperty(prop) && typeof potentialFunc === "function") {
-            result.push(potentialFunc());
-          }
+      function show(thing) {
+        if (previousThing) {
+          previousThing.element.className = 'animated fadeOut';
         }
-        return result;
-      }
-
-      function statRotationLoop() {
-        statPosition = incrementToNextAvailableStatPosition(statPosition, 0);
-
-        if (statPosition || statPosition === 0) {
-          show(statPosition);
-        }
-        setTimeout(statRotationLoop, 1000 * 5);
-      }
-
-      function incrementToNextAvailableStatPosition(statPosition, failCount) {
-        if (failCount === loadedThings.length) {
-          return null;
-        }
-        var incrementedPosition = (statPosition < (loadedThings.length - 1)) ? statPosition + 1 : 0;
-        return loadedThings[incrementedPosition].element.innerHTML ? incrementedPosition : incrementToNextAvailableStatPosition(incrementedPosition, failCount + 1);
-      }
-
-      function show(position) {
-        for(index = 0; index < loadedThings.length; index++) {
-          if (index !== position) {
-            if (loadedThings[index].element.innerHTML) {
-              loadedThings[index].element.className = 'animated fadeOut';
-            }
-          }
-        }
-        loadedThings[position].element.className = 'animated fadeIn';
+        thing.element.className = 'animated fadeIn';
       }
     };
 
