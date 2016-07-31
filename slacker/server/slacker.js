@@ -55,7 +55,7 @@ function incrementRuleIndex(self) {
   }
 }
 
-Slacker.prototype.get = function(callback) {
+Slacker.prototype.getCurrentStat = function(callback) {
   if (this.messages.length > 0) {
     var result = rules[this.ruleIndex](this.rtm.dataStore, this.messages);
     callback(result);

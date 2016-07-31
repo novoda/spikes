@@ -27,7 +27,7 @@ io.sockets.on('connection', function (socket) {
 
 var updateLoop = function() {
   slacker.moveToNext();
-  slacker.get(notifyClient);
+  slacker.getCurrentStat(notifyClient);
   setTimeout(updateLoop, 1000 * 5);
 }
 
