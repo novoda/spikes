@@ -7,9 +7,15 @@ class NotificationBarOverlay extends AdbTask {
 
     boolean show
 
+    /**
+     * Executes shell command <i>startservice</i> to toggle MonkeyTrap visibility
+     * <p>
+     * This command needs <code>--user 0</code> flag to run correctly in certain devices (like Samsung Galaxy S3)
+     * The reason is user permissions. By default command would be executed by "user 2" and will fail due lack of permissions.
+     */
     @TaskAction
     void show() {
-        assertDeviceAndRunCommand(["shell", "am", "startservice", "-a", "com.novoda.monkeytrap.SHOW_OVERLAY", "--ez", "show", show])
+        assertDeviceAndRunCommand(["shell", "am", "startservice", "--user", "0", "-a", "com.novoda.monkeytrap.SHOW_OVERLAY", "--ez", "show", show])
     }
 
     @Override
