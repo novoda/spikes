@@ -22,7 +22,7 @@ var notifyClient = function(data) {
 }
 
 io.sockets.on('connection', function (socket) {
-  slacker.get(notifyClient);
+  slacker.getCurrentStat(notifyClient);
 });
 
 var updateLoop = function() {
