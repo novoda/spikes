@@ -55,6 +55,12 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
                 deviceId = device.id
             }
 
+            def uninstallApp = project.task("uninstallMonkeyDevice${index}", type: TargetedUninstall) {
+                packageName = extension.packageNameFilter
+                deviceId = device.id
+            }
+
+            hideOverlay.dependsOn uninstallApp
             monkeyTask.dependsOn showOverlayTask
             monkeyTask.dependsOn extension.taskDependency
             monkeyTask.finalizedBy hideOverlay
