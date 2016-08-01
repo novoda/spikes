@@ -53,6 +53,13 @@ monkeyRunner {
 }
 ```
 
+In your app manifest, add the following category for your main Activity:
+```xml
+<intent-filter>
+  ...
+  <category android:name="android.intent.category.MONKEY" />
+</intent-filter>
+```
 
 ## Simple usage
 
