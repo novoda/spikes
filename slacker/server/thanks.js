@@ -3,7 +3,7 @@ module.exports = {
 }
 
 function thanks(dataStore, messages) {
-  var channel = dataStore.getChannelByName('test-test-channel');
+  var channel = dataStore.getChannelByName('thanks');
   var thanksMessages = messages.filter(each => {
     return (each.channel == channel.id) && (each.text.indexOf('thank') != -1);
   });
