@@ -23,7 +23,7 @@ class TypefaceFactory {
 
     public Typeface createFrom(Context context, String fontPath) {
         initAssetManager(context);
-        return getTypeFace(context, fontPath);
+        return getTypeFace(fontPath);
     }
 
     private void initAssetManager(Context context) {
@@ -44,17 +44,13 @@ class TypefaceFactory {
         }
     }
 
-    private boolean isValidId(String fontPath) {
-        return fontPath != null;
-    }
-
-    private Typeface getTypeFace(Context context, String fontPath) {
+    private Typeface getTypeFace(String fontPath) {
         synchronized (FONT_CACHE) {
             if (fontExistsInCache(fontPath)) {
                 return getCachedTypeFace(fontPath);
             }
 
-            Typeface typeface = createTypeFace(context, fontPath);
+            Typeface typeface = createTypeFace(fontPath);
             saveFontToCache(fontPath, typeface);
 
             return typeface;
@@ -69,7 +65,7 @@ class TypefaceFactory {
         return FONT_CACHE.get(fontPath).get();
     }
 
-    private Typeface createTypeFace(Context context, String fontPath) {
+    private Typeface createTypeFace(String fontPath) {
         return Typeface.createFromAsset(assetManager, fontPath);
     }
 
