@@ -17,7 +17,10 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
 
         project.afterEvaluate {
             extension.ensureMandatoryPropertiesPresent()
-            configureTask(project, extension.taskDependency, extension.eventsCount)
+            configureTask(
+                    project,
+                    extension
+            )
         }
     }
 
@@ -28,7 +31,7 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
         }
     }
 
-    private void configureTask(Project project, String taskDependency, Integer eventsCount) {
+    private void configureTask(Project project, MonkeyRunnerExtension extension) {
         def runMonkeyAllTask = project.task(TASK_NAME)
 
         def android = project.extensions.findByName("android")
@@ -39,11 +42,11 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
                 deviceId = device.id
             }
 
-            def monkeyTask = project.task("runMonkeyDevice${index}", type: TargetedMonkey, dependsOn: taskDependency) {
-                packageName = "com.novoda.monkey"
-                events = eventsCount
+            def monkeyTask = project.task("runMonkeyDevice${index}", type: TargetedMonkey, dependsOn: extension.taskDependency) {
+                packageName = extension.packageNameFilter
+                events = extension.eventsCount
                 deviceId = device.id
-                logFileName = 'monkey.log'
+                logFileName = extension.logFileName
                 categories = ["android.intent.category.MONKEY"]
             }
 
@@ -62,14 +65,20 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
 
         String taskDependency
         Integer eventsCount
+        String packageNameFilter
+        String logFileName
 
         void setDefaultsForOptionalProperties() {
             eventsCount = 50000
+            logFileName = 'monkey.log'
         }
 
         void ensureMandatoryPropertiesPresent() {
             if (taskDependency == null) {
                 notifyMissingProperty('taskDependency')
+            }
+            if (packageNameFilter == null) {
+                notifyMissingProperty('packageNameFilter')
             }
         }
 
