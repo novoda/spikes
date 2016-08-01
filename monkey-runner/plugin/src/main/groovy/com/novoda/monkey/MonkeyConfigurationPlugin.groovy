@@ -15,6 +15,7 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
         MonkeyRunnerExtension extension = project.extensions.create(EXTENSION_NAME, MonkeyRunnerExtension)
 
         project.afterEvaluate {
+            extension.ensureIsValid()
             configureTask(project, extension.taskDependency)
         }
     }
@@ -60,8 +61,14 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
 
         String taskDependency
 
+        void ensureIsValid() {
+            if (taskDependency == null) {
+                notifyMissingProperty('taskDependency')
+            }
         }
 
+        static void notifyMissingProperty(String propertyName) {
+            throw new IllegalArgumentException(propertyName + ' is not specified')
         }
     }
 }
