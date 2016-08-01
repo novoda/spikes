@@ -26,3 +26,7 @@ android {
     }
 
 }
+
+monkeyRunner {
+    taskDependency 'installDebug'
+}
