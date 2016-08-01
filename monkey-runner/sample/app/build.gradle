@@ -29,4 +29,5 @@ android {
 
 monkeyRunner {
     taskDependency 'installDebug'
+    eventsCount 1000
 }

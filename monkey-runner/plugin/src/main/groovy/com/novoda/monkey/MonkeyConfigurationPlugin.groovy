@@ -13,10 +13,11 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
     public void apply(Project project) {
         ensureAndroidPluginAppliedTo(project)
         MonkeyRunnerExtension extension = project.extensions.create(EXTENSION_NAME, MonkeyRunnerExtension)
+        extension.setDefaultsForOptionalProperties()
 
         project.afterEvaluate {
-            extension.ensureIsValid()
-            configureTask(project, extension.taskDependency)
+            extension.ensureMandatoryPropertiesPresent()
+            configureTask(project, extension.taskDependency, extension.eventsCount)
         }
     }
 
@@ -27,7 +28,7 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
         }
     }
 
-    private void configureTask(Project project, String taskDependency) {
+    private void configureTask(Project project, String taskDependency, Integer eventsCount) {
         def runMonkeyAllTask = project.task(TASK_NAME)
 
         def android = project.extensions.findByName("android")
@@ -40,7 +41,7 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
 
             def monkeyTask = project.task("runMonkeyDevice${index}", type: TargetedMonkey, dependsOn: taskDependency) {
                 packageName = "com.novoda.monkey"
-                events = 1000
+                events = eventsCount
                 deviceId = device.id
                 logFileName = 'monkey.log'
                 categories = ["android.intent.category.MONKEY"]
@@ -60,8 +61,13 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
     static class MonkeyRunnerExtension {
 
         String taskDependency
+        Integer eventsCount
 
-        void ensureIsValid() {
+        void setDefaultsForOptionalProperties() {
+            eventsCount = 50000
+        }
+
+        void ensureMandatoryPropertiesPresent() {
             if (taskDependency == null) {
                 notifyMissingProperty('taskDependency')
             }
