@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.mecharyry.drop_cap">
+  package="com.novoda.drop_cap">
 
   <application
     android:allowBackup="true"
@@ -7,11 +7,11 @@
     android:icon="@drawable/ic_launcher"
     android:theme="@style/AppTheme">
 
-    <activity android:name="com.mecharyry.dropcap.demo.DropCapActivity" />
+    <activity android:name="com.novoda.dropcap.demo.DropCapActivity" />
 
     <activity-alias
       android:name="activity.primary_launcher"
-      android:targetActivity="com.mecharyry.dropcap.demo.DropCapActivity">
+      android:targetActivity="com.novoda.dropcap.demo.DropCapActivity">
 
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />

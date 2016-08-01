@@ -1,10 +1,10 @@
-package com.mecharyry.dropcap.demo;
+package com.novoda.dropcap.demo;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.res.Resources;
 
-import com.mecharyry.drop_cap.R;
+import com.novoda.drop_cap.R;
 
 public class TextSizeDialogDisplayer {
 

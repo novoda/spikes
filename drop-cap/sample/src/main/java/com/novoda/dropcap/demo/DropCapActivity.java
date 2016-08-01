@@ -1,4 +1,4 @@
-package com.mecharyry.dropcap.demo;
+package com.novoda.dropcap.demo;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,8 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
-import com.mecharyry.drop_cap.R;
-import com.mecharyry.dropcap.DropCapView;
+import com.novoda.drop_cap.R;
+import com.novoda.dropcap.DropCapView;
 
 public class DropCapActivity extends Activity {
 

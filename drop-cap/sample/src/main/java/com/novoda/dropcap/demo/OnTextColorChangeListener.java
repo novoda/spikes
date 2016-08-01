@@ -1,4 +1,4 @@
-package com.mecharyry.dropcap.demo;
+package com.novoda.dropcap.demo;
 
 import android.support.annotation.ColorInt;
 
