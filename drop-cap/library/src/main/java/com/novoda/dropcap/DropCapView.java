@@ -1,4 +1,4 @@
-package com.mecharyry.dropcap;
+package com.novoda.dropcap;
 
 import android.content.Context;
 import android.content.res.TypedArray;

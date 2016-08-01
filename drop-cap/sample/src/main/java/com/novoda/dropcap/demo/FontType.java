@@ -1,8 +1,8 @@
-package com.mecharyry.dropcap.demo;
+package com.novoda.dropcap.demo;
 
 import android.support.annotation.StringRes;
 
-import com.mecharyry.drop_cap.R;
+import com.novoda.drop_cap.R;
 
 enum FontType {
 

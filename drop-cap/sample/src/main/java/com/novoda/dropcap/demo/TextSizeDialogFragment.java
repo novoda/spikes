@@ -1,4 +1,4 @@
-package com.mecharyry.dropcap.demo;
+package com.novoda.dropcap.demo;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.NumberPicker;
 
-import com.mecharyry.drop_cap.R;
+import com.novoda.drop_cap.R;
 
 public class TextSizeDialogFragment extends DialogFragment {
 

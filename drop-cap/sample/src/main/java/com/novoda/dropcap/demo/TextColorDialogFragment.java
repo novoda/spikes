@@ -1,4 +1,4 @@
-package com.mecharyry.dropcap.demo;
+package com.novoda.dropcap.demo;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -12,7 +12,7 @@ import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SaturationBar;
 import com.larswerkman.holocolorpicker.ValueBar;
-import com.mecharyry.drop_cap.R;
+import com.novoda.drop_cap.R;
 
 public class TextColorDialogFragment extends DialogFragment {
 

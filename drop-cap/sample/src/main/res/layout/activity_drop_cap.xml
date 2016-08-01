@@ -8,7 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/scroll_view_height">
 
-    <com.mecharyry.dropcap.DropCapView
+    <com.novoda.dropcap.DropCapView
       android:id="@+id/view_drop_cap"
       style="@style/DropCap"
       android:layout_width="match_parent"
