@@ -1,3 +1,4 @@
+apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'groovy'
 
 repositories {
@@ -7,4 +8,13 @@ repositories {
 dependencies {
     compile gradleApi()
     compile 'com.novoda:gradle-android-command-plugin:1.6.2'
+}
+
+publish {
+    userOrg = 'novoda'
+    groupId = 'com.novoda'
+    artifactId = 'monkey-runner'
+    version = project.version
+    description = 'Super duper easy way to configure and run your monkey'
+    website = "https://github.com/novoda/spikes/tree/master/monkey-runner"
 }

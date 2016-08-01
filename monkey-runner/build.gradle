@@ -5,6 +5,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.2'
         classpath 'com.novoda:gradle-android-command-plugin:1.5.0'
+        classpath 'com.novoda:bintray-release:0.3.4'
     }
 }
 
@@ -12,4 +13,5 @@ allprojects {
     repositories {
         jcenter()
     }
+    version = '0.0.1'
 }
