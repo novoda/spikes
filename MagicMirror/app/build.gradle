@@ -1,10 +1,18 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.novoda.build-properties'
 
-def openWeatherMapKey = hasProperty('openWeatherMapKey') ? openWeatherMapKey : 'provide this in gradle.properties'
-def twitterConsumerKey = hasProperty('twitterConsumerKey') ? twitterConsumerKey : 'provide this in gradle.properties'
-def twitterConsumerSecret = hasProperty('twitterConsumerSecret') ? twitterConsumerSecret : 'provide this in gradle.properties'
-def twitterAccessToken = hasProperty('twitterAccessToken') ? twitterAccessToken : 'provide this in gradle.properties'
-def twitterAccessTokenSecret = hasProperty('twitterAccessTokenSecret') ? twitterAccessTokenSecret : 'provide this in gradle.properties'
+buildProperties {
+    secrets {
+        file rootProject.file('secrets.properties'), """
+            This file should contain the following properties:
+            - openWeatherMapKey (see https://home.openweathermap.org/api_keys)
+            - twitterConsumerKey
+            - twitterConsumerSecret
+            - twitterAccessToken
+            - twitterAccessTokenSecret
+        """
+    }
+}
 
 android {
     compileSdkVersion 23
@@ -16,12 +24,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
-
-        buildConfigField "String", "OPENWEATHERMAP_API_KEY", "\"$openWeatherMapKey\""
-        buildConfigField "String", "TWITTER_CONSUMER_KEY", "\"$twitterConsumerKey\""
-        buildConfigField "String", "TWITTER_CONSUMER_SECRET", "\"$twitterConsumerSecret\""
-        buildConfigField "String", "TWITTER_ACCESS_TOKEN", "\"$twitterAccessToken\""
-        buildConfigField "String", "TWITTER_ACCESS_TOKEN_SECRET", "\"$twitterAccessTokenSecret\""
+        buildConfigProperties buildProperties.secrets
     }
     buildTypes {
         release {

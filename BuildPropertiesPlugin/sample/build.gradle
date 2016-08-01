@@ -1,1 +1,10 @@
-apply from: '../build.gradle'
+subprojects {
+  buildscript {
+    repositories {
+      jcenter()
+    }
+  }
+  repositories {
+    jcenter()
+  }
+}

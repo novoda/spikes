@@ -1,6 +1,7 @@
 package com.novoda.buildproperties
 
 import org.gradle.api.GradleException
+import org.gradle.api.NamedDomainObjectFactory
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -15,7 +16,13 @@ class BuildPropertiesPlugin implements Plugin<Project> {
             throw new GradleException('The build-properties plugin can be applied only after the Android plugin')
         }
 
-        project.extensions.add('buildProperties', project.container(BuildProperties))
+        def container = project.container(BuildProperties, new NamedDomainObjectFactory<BuildProperties>() {
+            @Override
+            BuildProperties create(String name) {
+                return new BuildProperties(name, project)
+            }
+        })
+        project.extensions.add('buildProperties', container)
 
         def android = project.extensions.findByName("android")
         android.defaultConfig.with {
@@ -64,8 +71,8 @@ class BuildPropertiesPlugin implements Plugin<Project> {
             }
         }
         target.ext.buildConfigProperties = { BuildProperties buildProperties ->
-            buildProperties.allEntries().each { BuildProperties.Entry entry ->
-                target.ext.buildConfigProperty entry
+            buildProperties.keys.each { String key ->
+                target.ext.buildConfigProperty buildProperties[key]
             }
         }
     }
@@ -101,8 +108,8 @@ class BuildPropertiesPlugin implements Plugin<Project> {
             }
         }
         target.ext.resValueProperties = { BuildProperties buildProperties ->
-            buildProperties.allEntries().each { BuildProperties.Entry entry ->
-                target.ext.resValueProperty entry
+            buildProperties.keys.each { String key ->
+                target.ext.resValueProperty buildProperties[key]
             }
         }
     }

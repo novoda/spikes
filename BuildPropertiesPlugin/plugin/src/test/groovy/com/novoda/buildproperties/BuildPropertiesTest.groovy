@@ -1,86 +1,84 @@
 package com.novoda.buildproperties
 
-import com.google.common.io.Resources
+import com.novoda.buildproperties.BuildProperties.Entries
+import org.gradle.api.Project
+import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TemporaryFolder
 
-import static com.google.common.truth.Truth.assertThat
-import static org.junit.Assert.fail
+import static com.google.common.truth.Truth.assertThat;
 
-public class BuildPropertiesTest {
+class BuildPropertiesTest {
 
-  private static final File PROPERTIES_FILE = new File(Resources.getResource('any.properties').toURI())
+  @Rule
+  public final TemporaryFolder temp = new TemporaryFolder()
 
+  private Project project
   private BuildProperties buildProperties
+  private Entries entries
 
   @Before
   public void setUp() {
-    buildProperties = BuildProperties.create('any', PROPERTIES_FILE)
+    project = ProjectBuilder.builder()
+            .withProjectDir(temp.newFolder())
+            .build()
+    buildProperties = new BuildProperties('name', project)
+    entries = new TestEntries()
+    buildProperties.entries(entries)
   }
 
   @Test
-  public void shouldAccessPropertiesLazily() {
-    BuildProperties.Entry entry1 = buildProperties['notThere']
-    BuildProperties.Entry entry2 = buildProperties['aProperty']
+  public void shouldReturnSamePropertyValueInEntries() {
+    def value = buildProperties['a'].value
+
+    assertThat(value).isEqualTo(entries['a'].value)
   }
 
   @Test
-  public void shouldRetrieveValueWhenPropertyDefined() {
-    def value = buildProperties['aProperty'].value
+  public void shouldReturnSameKeysInEntries() throws Exception {
+    Collection<String> keys = Collections.list(buildProperties.keys)
 
-    assertThat(value).isEqualTo('qwerty')
+    assertThat(keys).containsExactlyElementsIn(Collections.list(entries.keys))
   }
 
   @Test
-  public void shouldThrowIllegalArgumentExceptionWhenTryingToAccessValueOfUndefinedProperty() {
-    try {
-      buildProperties['notThere'].value
-      fail('IllegalArgumentException expected')
-    } catch (IllegalArgumentException e) {
-      assertThat(e.getMessage()).startsWith("No value defined for property 'notThere'")
+  public void shouldReturnDifferentValueFromEntriesWhenPropertyValueOverriddenInProject() {
+    project.ext.a = 1
+
+    def value = buildProperties['a'].value
+
+    assertThat(value).isNotEqualTo(entries['a'].value)
+    assertThat(value).isEqualTo(1)
+  }
+
+  static class TestEntries extends Entries {
+
+    private Map<String, ?> entries = [
+            a: 'a',
+            b: 'b',
+            c: 'c'
+    ]
+
+    @Override
+    boolean contains(String key) {
+      entries.containsKey(key)
+    }
+
+    @Override
+    protected Object getValueAt(String key) {
+      entries[key]
+    }
+
+    @Override
+    File getParentFile() {
+      throw new UnsupportedOperationException()
+    }
+
+    @Override
+    Enumeration<String> getKeys() {
+      Collections.enumeration(entries.keySet())
     }
   }
-
-  @Test
-  public void shouldConvertToTrueBooleanWhenPropertyDefinedAsTrue() {
-    Boolean value = buildProperties['positive'].boolean
-    assertThat(value).isTrue()
-  }
-
-  @Test
-  public void shouldConvertToFalseWhenPropertyNotDefinedAsBoolean() {
-    Boolean value = buildProperties['string'].boolean
-    assertThat(value).isFalse()
-  }
-
-  @Test
-  public void shouldThrowNumberFormatExceptionWhenPropertyNotDefinedAsInteger() {
-    try {
-      buildProperties['string'].int
-    } catch (NumberFormatException e) {
-      assertThat(e.getMessage()).contains('"hello world"')
-    }
-  }
-
-  @Test
-  public void shouldConvertToIntegerWhenPropertyDefinedAsInteger() {
-    Integer value = buildProperties['int'].int
-    assertThat(value).isEqualTo(123456)
-  }
-
-  @Test
-  public void shouldThrowNumberFormatExceptionWhenPropertyNotDefinedAsDouble() {
-    try {
-      buildProperties['string'].double
-    } catch (NumberFormatException e) {
-      assertThat(e.getMessage()).contains('"hello world"')
-    }
-  }
-
-  @Test
-  public void shouldConvertToDoubleWhenPropertyDefinedAsDouble() {
-    Double value = buildProperties['double'].double
-    assertThat(value).isEqualTo(0.001 as Double)
-  }
-
 }

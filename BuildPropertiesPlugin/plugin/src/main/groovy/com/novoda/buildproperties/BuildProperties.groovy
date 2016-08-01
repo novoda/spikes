@@ -1,58 +1,66 @@
 package com.novoda.buildproperties
 
+import org.gradle.api.GradleException
+import org.gradle.api.Project
+
 class BuildProperties {
 
   private final String name
-  private File file
-  private Closure<Properties> entries
+  private final Project project
+  private Entries entries
 
-  static BuildProperties create(String name = null, File file) {
-    BuildProperties buildProperties = new BuildProperties(name?:file.name)
-    buildProperties.file file
-    return buildProperties
-  }
-
-  BuildProperties(String name) {
+  BuildProperties(String name, Project project) {
     this.name = name
+    this.project = project
   }
 
   String getName() {
-    return name
+    name
   }
 
-  File getFile() {
-    return file
+  void file(File file, String errorMessage = null) {
+    if (!file.exists()) {
+      throw new GradleException("File $file.name does not exist.${errorMessage ? "\n$errorMessage" : ''}")
+    }
+    entries(FilePropertiesEntries.create(name, file))
   }
 
-  void file(File file) {
-    this.file = file
-    this.entries = {
-      Properties properties = new Properties()
-      properties.load(new FileInputStream(file))
-      properties
-    }.memoize()
+  void entries(Entries entries) {
+    this.entries = entries
   }
 
   File getParentFile() {
-    return file.getParentFile()
+    entries.parentFile
   }
 
-  Collection<Entry> allEntries() {
-    Properties properties = entries.call()
-    properties.stringPropertyNames().collect { String name ->
-      return new Entry(name, { properties[name] })
-    }
+  Enumeration<String> getKeys() {
+    entries.keys
   }
 
   Entry getAt(String key) {
-    def getValue = {
-      Object value = entries.call()[key]
-      if (value == null) {
-        throw new IllegalArgumentException("No value defined for property '$key' in '$name' properties ($file.absolutePath)")
-      }
-      return value
+    if (project.hasProperty(key)) {
+      new Entry(key, { project[key] })
+    } else {
+      entries.getAt(key)
     }
-    return new Entry(key, getValue)
+  }
+
+  static abstract class Entries {
+
+    abstract boolean contains(String key)
+
+    protected abstract Object getValueAt(String key)
+
+    Entry getAt(String key) {
+      new Entry(key, {
+        getValueAt(key)
+      })
+    }
+
+    abstract File getParentFile()
+
+    abstract Enumeration<String> getKeys()
+
   }
 
   static class Entry {

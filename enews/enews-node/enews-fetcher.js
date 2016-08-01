@@ -32,7 +32,7 @@ function EnewsFetcher(token) {
     Q.all(usersPromise).then(users => {
       var eNews = toEnews(eNewsMessages, users);
       callback(eNews);
-    });
+    }).done();
   }
 
   function isEnewsMessage(message) {
@@ -67,15 +67,25 @@ function EnewsFetcher(token) {
   function toEnews(messages, users) {
     return messages.map(message => {
         var posterName = users.filter(user => user.id === message.user).map(user => user.real_name)[0];
-        var attachment = message.attachments[0];
+        var attachment = message.attachments ? message.attachments[0] : '';
         return {
-            originalMessage: message.text,
-            title: attachment.title,
-            link: attachment.title_link,
+            originalMessage: sanitiseMessage(message.text),
+            title: attachment.title || attachment.text || '',
+            link: attachment.title_link || attachment.from_url || findUrlFrom(message.text) || '',
             poster: posterName,
-            imageUrl: attachment.image_url ? attachment.image_url : attachment.thumb_url
+            imageUrl: attachment.image_url || attachment.thumb_url || ''
         }
     });
+  }
+
+  function sanitiseMessage(message) {
+    return message.replace(/<.*?>/g, '').trim();
+  }
+
+  function findUrlFrom(message) {
+    var uriPattern = /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/ig;
+    var match = message.match(uriPattern)
+    return match ? match[0] : undefined;
   }
 
 }
