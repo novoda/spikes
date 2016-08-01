@@ -42,7 +42,7 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
                 deviceId = device.id
             }
 
-            def monkeyTask = project.task("runMonkeyDevice${index}", type: TargetedMonkey, dependsOn: extension.taskDependency) {
+            def monkeyTask = project.task("runMonkeyDevice${index}", type: TargetedMonkey) {
                 packageName = extension.packageNameFilter
                 events = extension.eventsCount
                 deviceId = device.id
@@ -56,6 +56,7 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
             }
 
             monkeyTask.dependsOn showOverlayTask
+            monkeyTask.dependsOn extension.taskDependency
             monkeyTask.finalizedBy hideOverlay
             runMonkeyAllTask.dependsOn monkeyTask
         }
