@@ -22,26 +22,20 @@
       width: 64%;
       height: 68%;
       border-radius: 10px;
-      box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.12);
-      border: solid 1px #979797;
-      border-style: solid;
-      border-width: 0.5px;
+      box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
     }
 
-    .inside {
-      background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), #000000);
-      float: bottom;
-      position: absolute;
-      width: 90%;
-      height: 15%;
+    .text-shadow {
+      width: 100%;
+      height: 25%;
       border-radius: 10px;
-      -webkit-filter: blur(25.2px);
-      bottom: -14px;
-      padding-left: 5%;
-      padding-right: 5%;
+      position: absolute;
+      top: 75%;
+      background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), #000000);
     }
 
     .image {
+      display: inline;
       border-radius: 10px;
       width: 100%;
       height: 100%;
@@ -49,37 +43,28 @@
 
     .avatar-bar {
       position: absolute;
-      height: 128px;
-      width: 100%;
-      bottom: 0;
-      left: 0;
-      margin-left: 50px;
-      margin-bottom: 50px;
+      width: 96%;
+      top: 75%;
+      left: 4%;
     }
 
     .avatar {
       float: left;
-      width: 128px;
-      height: 100%;
+      width: 10%;
       border-radius: 25px;
-      background-color: #d8d8d8;
-      border: solid 1px #979797;
     }
 
     .avatar-text-container {
-      width: 100%;
-      margin-top: auto;
-      margin-bottom: auto;
+      margin-top: 20px;
     }
 
     .user {
-      margin-left: 20px;
+      margin-left: 2%;
       height: 100%;
       width: 100%;
       font-family: Bitter;
-      font-size: 34px;
+      font-size: 2vw;
       font-weight: 700;
-      color: #FFFFFF;
     }
 
     .at-user {
@@ -88,15 +73,17 @@
       font-family: Bitter;
       font-size: 26px;
       font-weight: 700;
-      color: #FFFFFF;
     }
 
     .user-title {
-      margin-left: 20px;
+      margin-left: 2%;
       font-family: Bitter;
       font-size: 26px;
       font-weight: 400;
       font-style: italic;
+    }
+
+    .white {
       color: #ffffff;
     }
 
@@ -155,17 +142,17 @@
   </div>
 
   <div class="image-content">
-    <div class="inside"></div>
+    <div class="text-shadow"></div>
     <div class="avatar-bar">
-      <img class="avatar" src="./test.jpg"></img>
+      <img class="avatar" src="./adam.png"></img>
       <div class="avatar-text-container">
-        <span class="user">Daniele Bonaldo</span>
-        <span class="at-user">@daniele</span>
+        <span class="user white">Daniele Bonaldo</span>
+        <span class="at-user white">@daniele</span>
         <br>
-        <span class="user-title">I make watches and magic stuff</span>
+        <span class="user-title white">I make watches and magic stuff</span>
       </div>
     </div>
-    <img class="image" src="./test.jpg"></div>
+    <img class="image" src="./test.jpg"></img>
   </div>
 
 </body>
