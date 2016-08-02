@@ -5,7 +5,7 @@ apply plugin: com.novoda.monkey.MonkeyConfigurationPlugin
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    buildToolsVersion versions.androidBuildTools
 
     defaultConfig {
         applicationId "com.novoda.monkey"
@@ -20,9 +20,8 @@ android {
     }
 
     dependencies {
-        def supportVersion = '24.1.1'
-        compile "com.android.support:appcompat-v7:${supportVersion}"
-        compile "com.android.support:support-v13:${supportVersion}"
+        compile libraries.appCompat
+        compile libraries.androidV13Support
     }
 
 }
