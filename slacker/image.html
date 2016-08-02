@@ -5,19 +5,105 @@
 
 <body bgcolor="26A3DB">
 
-
   <style>
 
     .logo {
-      margin: 0 auto;
-      display: block;
+      width: 17%;
+      margin-left: auto;
+      margin-right: auto;
+      padding-top: 7vh;
+      padding-bottom: 7vh;
+    }
+
+    .image-content {
+      position: relative;
+      margin-left: auto;
+      margin-right: auto;
+      width: 64%;
+      height: 68%;
+      border-radius: 10px;
+      box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.12);
+      border: solid 1px #979797;
+      border-style: solid;
+      border-width: 0.5px;
+    }
+
+    .inside {
+      background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), #000000);
+      float: bottom;
+      position: absolute;
+      width: 90%;
+      height: 15%;
+      border-radius: 10px;
+      -webkit-filter: blur(25.2px);
+      bottom: -14px;
+      padding-left: 5%;
+      padding-right: 5%;
+    }
+
+    .image {
+      border-radius: 10px;
+      width: 100%;
+      height: 100%;
+    }
+
+    .avatar-bar {
+      position: absolute;
+      height: 128px;
+      width: 100%;
+      bottom: 0;
+      left: 0;
+      margin-left: 50px;
+      margin-bottom: 50px;
+    }
+
+    .avatar {
+      float: left;
+      width: 128px;
+      height: 100%;
+      border-radius: 25px;
+      background-color: #d8d8d8;
+      border: solid 1px #979797;
+    }
+
+    .avatar-text-container {
+      width: 100%;
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+
+    .user {
+      margin-left: 20px;
+      height: 100%;
+      width: 100%;
+      font-family: Bitter;
+      font-size: 34px;
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+
+    .at-user {
+      margin-left: 20px;
+      height: 100%;
+      font-family: Bitter;
+      font-size: 26px;
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+
+    .user-title {
+      margin-left: 20px;
+      font-family: Bitter;
+      font-size: 26px;
+      font-weight: 400;
+      font-style: italic;
+      color: #ffffff;
     }
 
   </style>
 
-
   <div class="logo">
-    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" x="0px" y="0px" width="240px" height="100px" viewBox="0 -0.102 130 35" overflow="visible" enable-background="new 0 -0.102 130 35" xml:space="preserve">
+    <svg viewBox="0 -0.102 130 35" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" x="0px" y="0px"  overflow="visible" xml:space="preserve">
     <defs>
     </defs>
     <g>
@@ -66,6 +152,20 @@
     <circle fill="#F9A326" cx="78.31" cy="22.341" r="3.614"></circle>
     <circle fill="#F9A326" cx="117.269" cy="22.341" r="3.614"></circle>
     </svg>
+  </div>
+
+  <div class="image-content">
+    <div class="inside"></div>
+    <div class="avatar-bar">
+      <img class="avatar" src="./test.jpg"></img>
+      <div class="avatar-text-container">
+        <span class="user">Daniele Bonaldo</span>
+        <span class="at-user">@daniele</span>
+        <br>
+        <span class="user-title">I make watches and magic stuff</span>
+      </div>
+    </div>
+    <img class="image" src="./test.jpg"></div>
   </div>
 
 </body>
