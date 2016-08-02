@@ -7,7 +7,7 @@ repositories {
 
 dependencies {
     compile gradleApi()
-    compile 'com.novoda:gradle-android-command-plugin:1.6.2'
+    compile gradlePlugins.gradleAndroidCommandPlugin
 }
 
 publish {

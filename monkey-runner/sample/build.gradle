@@ -1,9 +1,11 @@
 buildscript {
+    apply from: '../dependencies.gradle'
+
     repositories {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath gradlePlugins.gradle
     }
 }
 

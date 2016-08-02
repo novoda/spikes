@@ -1,3 +1,4 @@
+apply from: '../../dependencies.gradle'
 apply plugin: 'groovy'
 
 repositories {
@@ -8,7 +9,7 @@ repositories {
 // the dependencies are not transitive (we specify only sourceset below)
 dependencies {
     compile gradleApi()
-    compile 'com.novoda:gradle-android-command-plugin:1.6.2'
+    compile gradlePlugins.gradleAndroidCommandPlugin
 }
 
 // Allows us to add the code from the `plugin` module to the same classpath as this module

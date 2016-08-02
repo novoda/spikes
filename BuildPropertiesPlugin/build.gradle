@@ -2,4 +2,12 @@ ext {
   pluginGroup = 'com.novoda'
   pluginVersion = '1.0.1'
   pluginId = 'build-properties-plugin'
+
+  buildDependencies = [
+          gradle: 'com.android.tools.build:gradle:2.1.2'
+  ]
+
+  dependencies = [
+
+  ]
 }
