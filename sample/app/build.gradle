@@ -1,6 +1,6 @@
 buildscript {
   dependencies {
-    classpath buildDependencies.gradle
+    classpath 'com.android.tools.build:gradle:2.1.2'
   }
 }
 
