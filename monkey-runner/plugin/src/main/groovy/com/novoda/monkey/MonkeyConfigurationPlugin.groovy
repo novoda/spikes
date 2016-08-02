@@ -6,13 +6,13 @@ import org.gradle.api.Project
 
 public class MonkeyConfigurationPlugin implements Plugin<Project> {
 
-    private static final String EXTENSION_NAME = 'monkeyRunner'
+    private static final String MONKEY_RUNNER_EXTENSION_NAME = 'monkeyRunner'
     private static final String TASK_NAME = 'runMonkeyAll'
 
     @Override
     public void apply(Project project) {
         ensureAndroidPluginAppliedTo(project)
-        MonkeyRunnerExtension extension = project.extensions.create(EXTENSION_NAME, MonkeyRunnerExtension)
+        MonkeyRunnerExtension extension = project.extensions.create(MONKEY_RUNNER_EXTENSION_NAME, MonkeyRunnerExtension)
         extension.setDefaultsForOptionalProperties()
 
         project.afterEvaluate {
@@ -90,7 +90,7 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
         }
 
         static void notifyMissingProperty(String propertyName) {
-            throw new IllegalArgumentException("${EXTENSION_NAME}.${propertyName} is not specified")
+            throw new IllegalArgumentException("${MONKEY_RUNNER_EXTENSION_NAME}.${propertyName} is not specified")
         }
     }
 }
