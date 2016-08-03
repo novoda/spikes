@@ -35,7 +35,7 @@ var updateLoop = function() {
     slacker.getCurrentStat(notifyClient);
   }
   index++;
-  setTimeout(updateLoop, 1000 * 60);
+  setTimeout(updateLoop, 1000 * 30);
 }
 
-setTimeout(updateLoop, 1000 * 60);
+setTimeout(updateLoop, 1000 * 30);

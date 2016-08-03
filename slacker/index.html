@@ -83,22 +83,34 @@
       var socket = io();
 
       socket.on('message', function(msg) {
+        console.log(msg.thingKey)
         if (!things[msg.thingKey]) {
           console.log(msg.thingKey + ' is unhandled, skipping');
           return;
         }
 
         var thing = things[msg.thingKey]();
-        thing.present(msg);
-        show(thing)
+        show(thing, msg)
         previousThing = thing;
       });
 
-      function show(thing) {
+      var fade = function(previous, thing, data) {
+        return function() {
+          previous.element.innerHTML = '';
+          previous.element.className = '';
+          thing.present(data);
+          thing.element.className = 'animated fadeIn';
+        }
+      }
+
+      function show(thing, data) {
         if (previousThing) {
           previousThing.element.className = 'animated fadeOut';
+          setTimeout(fade(previousThing, thing, data), 1000);
+        } else {
+          thing.present(data);
+          thing.element.className = 'animated fadeIn';
         }
-        thing.element.className = 'animated fadeIn';
       }
     };
 

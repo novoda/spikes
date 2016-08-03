@@ -1,3 +1,9 @@
+.frame {
+  border: none;
+  height: 70%;
+  width: 100%;
+}
+
 .oval {
     width: 500px;
     height: 100px;
