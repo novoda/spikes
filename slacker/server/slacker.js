@@ -62,8 +62,13 @@ Slacker.prototype.getCurrentStat = function(callback) {
   }
 };
 
-Slacker.prototype.getCount = function() {
-  return rules.length;
+Slacker.prototype.getRules = function() {
+  var self = this;
+  return rules.map(each => {
+    return function() {
+      return each(self.rtm.dataStore, self.messages);
+    }
+  });
 }
 
 module.exports = Slacker;

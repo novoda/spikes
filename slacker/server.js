@@ -19,11 +19,10 @@ http.listen(3001, function(){
 
 var notifyClient = function(data) {
   io.emit('message', data);
-  console.log('update : ' + data.thingKey);
 }
 
 dashboard.start(notifyClient);
 
 io.sockets.on('connection', function (socket) {
-  dashboard.getCurrentStat(notifyClient);
+  // dashboard.getCurrentStat(notifyClient);
 });
