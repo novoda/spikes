@@ -25,10 +25,17 @@ io.sockets.on('connection', function (socket) {
   slacker.getCurrentStat(notifyClient);
 });
 
+var index = 0;
+
 var updateLoop = function() {
-  slacker.moveToNext();
-  slacker.getCurrentStat(notifyClient);
-  setTimeout(updateLoop, 1000 * 5);
+  if (index % 3 == 0) {
+      notifyClient({ thingKey: 'ciWall'});
+  } else {
+    slacker.moveToNext();
+    slacker.getCurrentStat(notifyClient);
+  }
+  index++;
+  setTimeout(updateLoop, 1000 * 60);
 }
 
-setTimeout(updateLoop, 1000 * 5);
+setTimeout(updateLoop, 1000 * 60);
