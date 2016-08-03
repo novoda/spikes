@@ -2,10 +2,10 @@ var app = require('express')();
 var express = require('express');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+const slackToken = process.env.token;
 
-const token = process.env.token;
-var Slacker = require('./server/slacker.js');
-var slacker = new Slacker(token);
+var Dashboard = require('./server/dashboard.js');
+var dashboard = new Dashboard(slackToken);
 
 app.use("/public", express.static(__dirname + '/public'));
 
@@ -19,23 +19,11 @@ http.listen(3001, function(){
 
 var notifyClient = function(data) {
   io.emit('message', data);
+  console.log('update : ' + data.thingKey);
 }
+
+dashboard.start(notifyClient);
 
 io.sockets.on('connection', function (socket) {
-  slacker.getCurrentStat(notifyClient);
+  dashboard.getCurrentStat(notifyClient);
 });
-
-var index = 0;
-
-var updateLoop = function() {
-  if (index % 3 == 0) {
-      notifyClient({ thingKey: 'ciWall'});
-  } else {
-    slacker.moveToNext();
-    slacker.getCurrentStat(notifyClient);
-  }
-  index++;
-  setTimeout(updateLoop, 1000 * 30);
-}
-
-setTimeout(updateLoop, 1000 * 30);
