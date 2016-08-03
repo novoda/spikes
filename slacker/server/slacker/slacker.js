@@ -7,9 +7,9 @@ var mostRecentQuestionRule = require('./most-recent-question.js').rule;
 var mostCommonWordsRule = require('./most-common-words.js').rule;
 
 var rules = [
-  require('./biggest-slacker.js').rule,
-  require('./most-active-channel.js').rule,
-  require('./thanks.js').rule,
+  // require('./biggest-slacker.js')
+  // require('./most-active-channel.js').rule,
+  // require('./thanks.js').rule,
   require('./gallery').rule
 ]
 
@@ -42,25 +42,6 @@ function messageHandler(self, callback) {
 function ignored(message) {
   return message.type !== 'message' || message.bot_id || !message.text;
 }
-
-Slacker.prototype.moveToNext = function() {
-  incrementRuleIndex(this);
-};
-
-function incrementRuleIndex(self) {
-  if (self.ruleIndex >= (rules.length - 1)) {
-    self.ruleIndex = 0;
-  } else {
-    self.ruleIndex++;
-  }
-}
-
-Slacker.prototype.getCurrentStat = function(callback) {
-  if (this.messages.length > 0) {
-    var result = rules[this.ruleIndex](this.rtm.dataStore, this.messages);
-    callback(result);
-  }
-};
 
 Slacker.prototype.getRules = function() {
   var self = this;
