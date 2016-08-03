@@ -8,13 +8,20 @@ function mostActiveChannel(dataStore, messages) {
   var timeSortedMessages = messages.sort(helper.sortByTimestamp);
   var allMessages = helper.flattenToChannel(timeSortedMessages);
   allMessages.sort(helper.sortByCount);
-  var mostActiveChannel = allMessages[0];
-  var channel = dataStore.getChannelById(mostActiveChannel.key);
+  var mostActiveChannel = allMessages.length > 0 ? allMessages[0] : null;
   return {
     thingKey: 'mostActiveChannel',
-    payload: {
-      channel: channel,
-      mostActiveChannel: mostActiveChannel
-    }
+    payload: createPayload(dataStore, mostActiveChannel)
   };
+}
+
+function createPayload(dataStore, message) {
+  if (message) {
+    return {
+      channel: dataStore.getChannelById(message.key),
+      message: message
+    };
+  } else {
+    return null;
+  }
 }

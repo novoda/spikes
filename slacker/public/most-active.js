@@ -4,7 +4,7 @@ things.mostActiveChannel = function() {
   return {
     element: document.getElementById('most-active-channel'),
     present: function(data) {
-      this.element.innerHTML = presentMostActive(data.payload.channel);
+      this.element.innerHTML = presentMostActive(data.payload);
     }
   };
 }
@@ -14,7 +14,7 @@ function presentMostActive(data) {
   '<div>' +
       '<div class="right semi-circle shadow">' +
         '<div class="content centered-vert">' +
-          '<h1 class="text title">#' + data.name + '</h1>' +
+          '<h1 class="text title">#' + data.channel.name + '</h1>' +
           '<p class="text summary">The most active channel 💬</p>' +
         '</div>' +
       '</div>' +

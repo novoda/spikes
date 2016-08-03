@@ -83,7 +83,7 @@
       var socket = io();
 
       socket.on('message', function(msg) {
-        console.log(msg.thingKey)
+        console.log(msg)
         if (!things[msg.thingKey]) {
           console.log(msg.thingKey + ' is unhandled, skipping');
           return;

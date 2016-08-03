@@ -4,10 +4,7 @@ things.mostRecentGif = function() {
   return {
     element: document.getElementById('most-recent-gif'),
     present: function(data) {
-      // gifs are not always present, maybe handle some default state?
-      if (data.payload) {
-        this.element.innerHTML = presentMostRecentGif(data.payload);
-      }
+      this.element.innerHTML = presentMostRecentGif(data.payload);
     }
   };
 }

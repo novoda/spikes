@@ -4,9 +4,7 @@ things.gallery = function() {
   return {
     element: document.getElementById('gallery'),
     present: function(data) {
-      if (data.payload) {
-        this.element.innerHTML = presentGallery(data.payload);
-      }
+      this.element.innerHTML = presentGallery(data.payload);
     }
   };
 }
