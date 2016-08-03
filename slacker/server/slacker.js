@@ -62,4 +62,8 @@ Slacker.prototype.getCurrentStat = function(callback) {
   }
 };
 
+Slacker.prototype.getCount = function() {
+  return rules.length;
+}
+
 module.exports = Slacker;
