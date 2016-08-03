@@ -18,7 +18,7 @@ function presentMostActive(data) {
           '<p class="text summary">The most active channel 💬</p>' +
         '</div>' +
       '</div>' +
-      '<img src="./public/slack.png" class="left avatar"></img>' +
+      '<img src="./public/slack.png" class="left old-avatar"></img>' +
     '</div>' +
   '</div>';
 }

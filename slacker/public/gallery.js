@@ -1,0 +1,28 @@
+if (things.gallery) throw "Gallery already exists";
+
+things.gallery = function() {
+  return {
+    element: document.getElementById('gallery'),
+    present: function(data) {
+      if (data.payload) {
+        this.element.innerHTML = presentGallery(data.payload);
+      }
+    }
+  };
+}
+
+function presentGallery(data) {
+  return '<div class="image-content">' +
+    '<div class="text-shadow"></div>' +
+    '<div class="avatar-bar">' +
+      '<img class="avatar" src="' + data.user.profile.image_512 + '"></img>' +
+      '<div class="avatar-text-container">' +
+        '<span class="user white">' + data.user.real_name + '</span>' +
+        '<span class="at-user white">@' + data.user.name + '</span>' +
+        '<br>' +
+        '<span class="user-title white">' + data.user.profile.title + '</span>' +
+      '</div>' +
+    '</div>' +
+    '<img class="image" src="' + data.gallery.url + '"></img>' +
+  '</div>';
+}

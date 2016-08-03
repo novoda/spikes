@@ -21,7 +21,7 @@ function presentThanks(data) {
         '<p class="text summary"><span class="username">@' + data.user.name + ': </span>' + data.thanks.text + '  💙</p>' +
       '</div>' +
     '</div>' +
-    '<img src="'+ data.user.profile.image_512 + '" class="left avatar"></img>' +
+    '<img src="'+ data.user.profile.image_512 + '" class="left old-avatar"></img>' +
   '</div>' +
 '</div>';
 }

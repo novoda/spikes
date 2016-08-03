@@ -18,7 +18,7 @@ function presentBiggestSlacker(data) {
           '<p class="text summary">Is the biggest Slacker! 😎</p>' +
         '</div>' +
       '</div>' +
-      '<img src="'+ data.user.profile.image_512 + '" class="left avatar"></img>' +
+      '<img src="'+ data.user.profile.image_512 + '" class="left old-avatar"></img>' +
     '</div>' +
   '</div>';
 }

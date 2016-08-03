@@ -10,7 +10,7 @@ var rules = [
   require('./biggest-slacker.js').rule,
   require('./most-active-channel.js').rule,
   require('./thanks.js').rule,
-  require('./most-recent-gif.js').rule
+  require('./gallery').rule,
 ]
 
 var Slacker = function(token) {

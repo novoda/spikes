@@ -16,6 +16,6 @@ function presentMostRecentGif(data) {
   return '<div class="centered-horiz block">' +
   '<div>' +
     '<img class="right" src="' + data.mostRecentGif.gif + '"></img>' +
-    '<img class="left avatar" src="'+ data.user.profile.image_512 + '"></img>' +
+    '<img class="left old-avatar" src="'+ data.user.profile.image_512 + '"></img>' +
   '</div>';
 }
