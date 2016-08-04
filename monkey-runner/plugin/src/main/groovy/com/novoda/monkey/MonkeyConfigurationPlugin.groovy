@@ -89,7 +89,7 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
             }
         }
 
-        static void notifyMissingProperty(String propertyName) {
+        private static void notifyMissingProperty(String propertyName) {
             throw new IllegalArgumentException("${MONKEY_RUNNER_EXTENSION_NAME}.${propertyName} is not specified")
         }
     }
