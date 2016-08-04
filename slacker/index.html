@@ -80,6 +80,7 @@
 
     var main = function() {
       var previousThing;
+      var previousPayload;
       var socket = io();
 
       socket.on('message', function(msg) {
@@ -90,8 +91,12 @@
         }
 
         var thing = things[msg.thingKey]();
+        if (thing === previousThing && previousPayload === msg.payload) {
+          return;
+        }
         show(thing, msg)
         previousThing = thing;
+        previousPayload = msg.payload;
       });
 
       var fade = function(previous, thing, data) {
