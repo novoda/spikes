@@ -8,11 +8,6 @@ class TargetedMonkey extends Monkey {
     def logFileName
 
     @Override
-    def getPackageName() {
-        packageName
-    }
-
-    @Override
     protected handleCommandOutput(def text) {
         super.handleCommandOutput(text)
         saveToFile(text)
