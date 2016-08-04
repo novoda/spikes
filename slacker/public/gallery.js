@@ -10,7 +10,7 @@ things.gallery = function() {
 }
 
 function presentGallery(data) {
-  return '<div class="image-content">' +
+  return '<div class="content-container">' +
     '<div class="text-shadow"></div>' +
     '<div class="avatar-bar">' +
       '<img class="avatar" src="' + data.user.profile.image_512 + '"></img>' +

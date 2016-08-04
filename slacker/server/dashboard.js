@@ -13,7 +13,7 @@ var Dashboard = function(token) {
 Dashboard.prototype.start = function(callback) {
   var self = this;
   var updateLoop = function() {
-    var ruleResult = self.rules[self.index]();
+    var ruleResult = self.rules[2]();
     incrementIndex(self);
     if (ruleResult.payload) {
       callback(ruleResult);
