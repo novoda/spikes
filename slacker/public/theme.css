@@ -188,8 +188,6 @@
 
 .active-channel-header {
   font-size: 100px;
-  font-weight: 400;
-  line-height: 1;
 }
 
 .active-container {
@@ -199,14 +197,15 @@
 }
 
 .active-channel-name {
-
-  font-family: Bitter;
-  font-size: 40px;
-  color: #000000;
+  font-weight: 2000;
 }
 
 .active-channel-copy {
   font-family: Bitter;
-  font-size: 40px;
+  font-size: 60px;
   color: #000000;
+}
+
+.active-filler {
+  height: 20%;
 }

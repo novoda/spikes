@@ -12,11 +12,11 @@ things.mostActiveChannel = function() {
 function presentMostActive(data) {
   return '<div class="content-container">' +
   '<div class="active-container">' +
-    '<span class="active-channel-header">' + '💬' + '</span>' +
+    '<div class="active-filler"></div>' +
+    '<span class="active-channel-header">' + '&#128172;' + '</span>' +
     '<br>' +
     '<div>' +
-      '<span class="active-channel-copy"><b>#' + data.channel.name + '</b></span>' +
-      '<span class="active-channel-copy"><i> is the most active channel' + '</i></span>' +
+      '<span class="active-channel-copy"><b class="active-channel-name">#' + data.channel.name + '</b><i> is the most active channel</i></span>' +
     '</div>' +
   '</div>' +
     // '<img class="image" src="' + data.gallery.url + '"></img>' +
