@@ -68,61 +68,15 @@
   <div id="gallery"></div>
   <div id="ci-wall"></div>
 
-
   <script src="./public/biggest-slacker.js"></script>
   <script src="./public/most-active.js"></script>
   <script src="./public/most-recent-gif.js"></script>
   <script src="./public/thanks.js"></script>
   <script src="./public/gallery.js"></script>
   <script src="./public/ci-wall.js"></script>
+
   <script src="/socket.io/socket.io.js"></script>
-
-  <script>
-
-    var main = function() {
-      var previousThing;
-      var previousPayload;
-      var socket = io();
-
-      socket.on('message', function(msg) {
-        console.log(msg)
-        if (!things[msg.thingKey]) {
-          console.log(msg.thingKey + ' is unhandled, skipping');
-          return;
-        }
-
-        var thing = things[msg.thingKey]();
-        if (thing === previousThing && previousPayload === msg.payload) {
-          return;
-        }
-        show(thing, msg)
-        previousThing = thing;
-        previousPayload = msg.payload;
-      });
-
-      var fade = function(previous, thing, data) {
-        return function() {
-          previous.element.innerHTML = '';
-          previous.element.className = '';
-          thing.present(data);
-          thing.element.className = 'animated fadeIn';
-        }
-      }
-
-      function show(thing, data) {
-        if (previousThing) {
-          previousThing.element.className = 'animated fadeOut';
-          setTimeout(fade(previousThing, thing, data), 1000);
-        } else {
-          thing.present(data);
-          thing.element.className = 'animated fadeIn';
-        }
-      }
-    };
-
-    main();
-
-  </script>
+  <script src="./public/client.js"></script>
 
 </body>
 </html>
