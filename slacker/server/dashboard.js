@@ -13,16 +13,20 @@ var Dashboard = function(token) {
 Dashboard.prototype.start = function(callback) {
   var self = this;
   var updateLoop = function() {
-    var ruleResult = self.rules[self.index]();
+    runRule(self, callback);
     incrementIndex(self);
-    if (ruleResult.payload) {
-      callback(ruleResult);
-    } else {
-      // TODO do something
-    }
     setTimeout(updateLoop, DASHBOARD_INTERVAL);
   }
   updateLoop();
+}
+
+function runRule(self, callback) {
+  var ruleResult = self.rules[self.index]();
+  if (ruleResult.payload) {
+    callback(ruleResult);
+  } else {
+    // TODO do something
+  }
 }
 
 function incrementIndex(self) {
@@ -31,6 +35,10 @@ function incrementIndex(self) {
   } else {
     self.index++;
   }
+}
+
+Dashboard.prototype.forceUpdate = function(callback) {
+  runRule(this, callback);
 }
 
 module.exports = Dashboard;

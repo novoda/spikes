@@ -24,5 +24,5 @@ var notifyClient = function(data) {
 dashboard.start(notifyClient);
 
 io.sockets.on('connection', function (socket) {
-  // dashboard.getCurrentStat(notifyClient);
+  dashboard.forceUpdate(notifyClient);
 });
