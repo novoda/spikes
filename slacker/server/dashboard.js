@@ -25,19 +25,6 @@ Dashboard.prototype.start = function(callback) {
   updateLoop();
 }
 
-function findRule(rules, currentIndex, counter) {
-  if (counter >= rules.length) {
-    return null;
-  }
-
-  var rule = self.rules[currentIndex];
-  if (rule) {
-    return rule;
-  } else {
-    return findRule(rules, currentIndex + 1, counter + 1);
-  }
-}
-
 function incrementIndex(self) {
   if (self.index >= self.rules.length - 1) {
     self.index = 0;
