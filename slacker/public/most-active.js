@@ -26,12 +26,12 @@ things.mostActiveChannel = function() {
 
 function presentMostActive(data) {
   return '<div class="content-container">' +
-  '<div>' +
+  '<div class="active-container">' +
     '<span class="active-channel-header">' + '💬' + '</span>' +
     '<br>' +
     '<div>' +
-      // '<span>#' + data.channel.name + '</span>' +
-      // '<span> is the most active channel' + '</span>' +
+      '<span class="active-channel-copy"><b>#' + data.channel.name + '</b></span>' +
+      '<span class="active-channel-copy"><i> is the most active channel' + '</i></span>' +
     '</div>' +
   '</div>' +
     // '<img class="image" src="' + data.gallery.url + '"></img>' +
