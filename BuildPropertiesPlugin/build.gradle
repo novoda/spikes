@@ -1,5 +1,5 @@
 ext {
   pluginGroup = 'com.novoda'
-  pluginVersion = '0.9.6'
+  pluginVersion = '1.0.1'
   pluginId = 'build-properties-plugin'
 }

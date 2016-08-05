@@ -22,7 +22,17 @@ This app is meant to be installed on phones, tablets or TV sticks used in smart 
 * More animations for the different face emotions
 
 ##Development
-In order to use all the features of the app, when building it from source, please make a copy of the `gradle.properties.example` file, rename it to `gradle.properties` and add the required keys.
+In order to use all the features of the app when building it from source add the `secrets.properties` file with the keys needed, as below:
+```
+# https://home.openweathermap.org/api_keys
+openWeatherMapKey=1234567890qwertyuipo
+
+# Twitter keys
+twitterConsumerKey=123456789
+twitterConsumerSecret=123456789
+twitterAccessToken=123456789
+twitterAccessTokenSecret=123456789
+
+```
 
 When deployed on an emulator, it is possible to quickly test the different emotions using the keyboard keys 0-4.
-

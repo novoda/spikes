@@ -1,12 +1,13 @@
 package com.novoda.buildproperties
 
+import org.gradle.api.GradleException
 import org.gradle.api.Project
 
 class BuildProperties {
 
   private final String name
   private final Project project
-  private Closure<Entries> entries
+  private Entries entries
 
   BuildProperties(String name, Project project) {
     this.name = name
@@ -17,29 +18,30 @@ class BuildProperties {
     name
   }
 
-  void file(File file) {
+  void file(File file, String errorMessage = null) {
+    if (!file.exists()) {
+      throw new GradleException("File $file.name does not exist.${errorMessage ? "\n$errorMessage" : ''}")
+    }
     entries(FilePropertiesEntries.create(name, file))
   }
 
   void entries(Entries entries) {
-    this.entries = {
-      entries
-    }.memoize()
+    this.entries = entries
   }
 
   File getParentFile() {
-    entries.call().parentFile
+    entries.parentFile
   }
 
   Enumeration<String> getKeys() {
-    entries.call().keys
+    entries.keys
   }
 
   Entry getAt(String key) {
     if (project.hasProperty(key)) {
       new Entry(key, { project[key] })
     } else {
-      entries.call().getAt(key)
+      entries.getAt(key)
     }
   }
 
