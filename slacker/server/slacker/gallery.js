@@ -9,7 +9,7 @@ function gallery(dataStore, messages) {
   });
   var imageMessage = imageMessages.length > 0 ? imageMessages[0] : null;
   return {
-    thingKey: 'gallery',
+    widgetKey: 'gallery',
     payload: createPayload(dataStore, imageMessage)
   };
 }

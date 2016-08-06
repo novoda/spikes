@@ -12,7 +12,7 @@ function mostRecentGif(dataStore, messages) {
 
   var gifMessage = gifMessages.length > 0 ? gifMessages[0] : null;
   return {
-    thingKey: 'mostRecentGif',
+    widgetKey: 'mostRecentGif',
     payload: createPayload(dataStore, gifMessage)
   };
 }

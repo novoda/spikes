@@ -10,7 +10,7 @@ function thanks(dataStore, messages) {
 
   var randomThankYou = thanksMessages.length > 0 ? thanksMessages[0] : null;
   return {
-    thingKey: 'thanks',
+    widgetKey: 'thanks',
     payload: createPayload(dataStore, randomThankYou)
   };
 }

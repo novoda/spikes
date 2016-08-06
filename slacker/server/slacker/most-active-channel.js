@@ -10,7 +10,7 @@ function mostActiveChannel(dataStore, messages) {
   allMessages.sort(helper.sortByCount);
   var mostActiveChannel = allMessages.length > 0 ? allMessages[0] : null;
   return {
-    thingKey: 'mostActiveChannel',
+    widgetKey: 'mostActiveChannel',
     payload: createPayload(dataStore, mostActiveChannel)
   };
 }

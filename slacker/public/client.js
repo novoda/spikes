@@ -4,12 +4,12 @@ var main = function() {
   var socket = io();
 
   socket.on('message', function(msg) {
-    if (!widgets[msg.thingKey]) {
-      console.log(msg.thingKey + ' is unhandled, skipping');
+    if (!widgets[msg.widgetKey]) {
+      console.log(msg.widgetKey + ' is unhandled, skipping');
       return;
     }
 
-    var widget = widgets[msg.thingKey]();
+    var widget = widgets[msg.widgetKey]();
     if (widget === previousWidget && previousPayload === msg.payload) {
       return;
     }

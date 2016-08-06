@@ -10,7 +10,7 @@ function biggestSlacker(dataStore, messages) {
   allMessages.sort(helper.sortByCount);
   var biggestSlacker = allMessages.length > 0 ? allMessages[0] : null;
   return {
-    thingKey: 'biggestSlacker',
+    widgetKey: 'biggestSlacker',
     payload: createPayload(dataStore, biggestSlacker)
   };
 }
