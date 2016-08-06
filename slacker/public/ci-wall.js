@@ -1,6 +1,6 @@
-if (things.ciWall) throw "CiWall already exists";
+if (widgets.ciWall) throw "CiWall already exists";
 
-things.ciWall = function() {
+widgets.ciWall = function() {
   return {
     element: document.getElementById('ci-wall'),
     present: function(data) {

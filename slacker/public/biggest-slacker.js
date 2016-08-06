@@ -1,6 +1,6 @@
-if (things.biggestSlacker) throw "BiggestSlacker already exists";
+if (widgets.biggestSlacker) throw "BiggestSlacker already exists";
 
-things.biggestSlacker = function() {
+widgets.biggestSlacker = function() {
   return {
     element: document.getElementById('biggest-slacker'),
     present: function(data) {

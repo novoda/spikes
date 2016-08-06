@@ -1,6 +1,6 @@
-if (things.thanks) throw "Thanks already exists";
+if (widgets.thanks) throw "Thanks already exists";
 
-things.thanks = function() {
+widgets.thanks = function() {
   return {
     element: document.getElementById('thanks'),
     present: function(data) {

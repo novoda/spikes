@@ -1,6 +1,6 @@
-if (things.gallery) throw "Gallery already exists";
+if (widgets.gallery) throw "Gallery already exists";
 
-things.gallery = function() {
+widgets.gallery = function() {
   return {
     element: document.getElementById('gallery'),
     present: function(data) {

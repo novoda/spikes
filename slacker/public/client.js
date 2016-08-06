@@ -1,39 +1,39 @@
 var main = function() {
-  var previousThing;
+  var previousWidget;
   var previousPayload;
   var socket = io();
 
   socket.on('message', function(msg) {
-    if (!things[msg.thingKey]) {
+    if (!widgets[msg.thingKey]) {
       console.log(msg.thingKey + ' is unhandled, skipping');
       return;
     }
 
-    var thing = things[msg.thingKey]();
-    if (thing === previousThing && previousPayload === msg.payload) {
+    var widget = widgets[msg.thingKey]();
+    if (widget === previousWidget && previousPayload === msg.payload) {
       return;
     }
-    show(thing, msg)
-    previousThing = thing;
+    show(widget, msg)
+    previousWidget = widget;
     previousPayload = msg.payload;
   });
 
-  var fade = function(previous, thing, data) {
+  var fade = function(previous, widget, data) {
     return function() {
       previous.element.innerHTML = '';
       previous.element.className = '';
-      thing.present(data);
-      thing.element.className = 'animated fadeIn';
+      widget.present(data);
+      widget.element.className = 'animated fadeIn';
     }
   }
 
-  function show(thing, data) {
-    if (previousThing) {
-      previousThing.element.className = 'animated fadeOut';
-      setTimeout(fade(previousThing, thing, data), 1000);
+  function show(widget, data) {
+    if (previousWidget) {
+      previousWidget.element.className = 'animated fadeOut';
+      setTimeout(fade(previousWidget, widget, data), 1000);
     } else {
-      thing.present(data);
-      thing.element.className = 'animated fadeIn';
+      widget.present(data);
+      widget.element.className = 'animated fadeIn';
     }
   }
 };

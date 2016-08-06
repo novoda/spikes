@@ -1,6 +1,6 @@
-if (things.mostActiveChannel) throw "MostActiveChannel already exists";
+if (widgets.mostActiveChannel) throw "MostActiveChannel already exists";
 
-things.mostActiveChannel = function() {
+widgets.mostActiveChannel = function() {
   return {
     element: document.getElementById('most-active-channel'),
     present: function(data) {
