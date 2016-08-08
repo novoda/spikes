@@ -1,0 +1,17 @@
+ext {
+    gradlePlugins = [
+            gradle                    : 'com.android.tools.build:gradle:2.1.2',
+            gradleAndroidCommandPlugin: 'com.novoda:gradle-android-command-plugin:1.6.2',
+            bintrayRelease            : 'com.novoda:bintray-release:0.3.4'
+    ]
+
+    versions = [
+            androidBuildTools   : '24.0.1',
+            androidSupportLibs  : '24.1.1'
+    ]
+
+    libraries = [
+            appCompat        : "com.android.support:appcompat-v7:${versions.androidSupportLibs}",
+            androidV13Support: "com.android.support:support-v13:${versions.androidSupportLibs}",
+    ]
+}
