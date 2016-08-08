@@ -1,21 +1,18 @@
 task wrapper(type: Wrapper) {
-    gradleVersion = versions.gradleWrapperVersion
-}
-
-buildscript {
-    apply from: '../dependencies.gradle'
-
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath gradlePlugins.gradle
-    }
+    gradleVersion = '2.14.1'
 }
 
 apply from: '../dependencies.gradle'
+subprojects {
+    buildscript {
+        repositories {
+            jcenter()
+        }
+        dependencies {
+            classpath gradlePlugins.gradle
+        }
+    }
 
-allprojects {
     repositories {
         jcenter()
     }
