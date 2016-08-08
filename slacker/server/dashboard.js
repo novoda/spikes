@@ -6,7 +6,8 @@ var Dashboard = function(token) {
   this.slacker = new Slacker(token);
   this.index = 0;
   this.rules = [
-    require('./ci-wall').rule
+    require('./ci-wall').rule,
+    require('./stackoverflow').rule
   ].concat(this.slacker.getRules());
 }
 
