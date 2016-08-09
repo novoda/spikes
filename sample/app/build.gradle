@@ -57,7 +57,7 @@ android {
       resValueInt 'debug_test_int', 100
       resValueBoolean 'debug_test_bool', true
       resValueString 'debug_test_string', 'dunno bro...'
-      resValueProperty buildProperties.secrets['superSecret']
+      resValueProperty 'super_secret', buildProperties.secrets['superSecret']
       resValueProperties buildProperties.resValues
     }
     release {
