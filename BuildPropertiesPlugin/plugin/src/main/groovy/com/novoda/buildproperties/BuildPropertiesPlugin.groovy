@@ -65,14 +65,14 @@ class BuildPropertiesPlugin implements Plugin<Project> {
         target.ext.buildConfigString = { String name, String value ->
             buildConfigField('String', name, { "\"$value\"" })
         }
-        target.ext.buildConfigProperty = { String name = null, BuildProperties.Entry entry ->
+        target.ext.buildConfigProperty = { String name, BuildProperties.Entry entry ->
             project.afterEvaluate {
-                target.buildConfigField 'String', name ?: formatBuildConfigField(entry.key), "\"${entry.string}\""
+                target.buildConfigField 'String', name, "\"${entry.string}\""
             }
         }
         target.ext.buildConfigProperties = { BuildProperties buildProperties ->
             buildProperties.keys.each { String key ->
-                target.ext.buildConfigProperty buildProperties[key]
+                target.ext.buildConfigProperty formatBuildConfigField(key), buildProperties[key]
             }
         }
     }
