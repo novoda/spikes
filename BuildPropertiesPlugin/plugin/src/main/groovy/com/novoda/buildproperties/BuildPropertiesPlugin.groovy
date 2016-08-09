@@ -102,14 +102,14 @@ class BuildPropertiesPlugin implements Plugin<Project> {
         target.ext.resValueString = { String name, String value ->
             resValue('string', name, { "\"$value\"" })
         }
-        target.ext.resValueProperty = { String name = null, BuildProperties.Entry entry ->
+        target.ext.resValueProperty = { String name, BuildProperties.Entry entry ->
             project.afterEvaluate {
-                target.resValue 'string', name ?: formatResValueName(entry.key), "\"${entry.string}\""
+                target.resValue 'string', name, "\"${entry.string}\""
             }
         }
         target.ext.resValueProperties = { BuildProperties buildProperties ->
             buildProperties.keys.each { String key ->
-                target.ext.resValueProperty buildProperties[key]
+                target.ext.resValueProperty formatResValueName(key), buildProperties[key]
             }
         }
     }
