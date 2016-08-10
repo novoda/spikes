@@ -222,7 +222,8 @@ public class DropCapView extends View {
         dropCapPaint.getTextBounds(dropCapText, 0, 1, dropCapBounds);
         int copyWidthForDropCap = width - dropCapWidth;
 
-        if (dropCapStaticLayout == null || dropCapStaticLayout.getWidth() != copyWidthForDropCap || hasPaintChanged) {
+        if (dropCapStaticLayout == null || dropCapStaticLayout.getWidth() != copyWidthForDropCap
+                || hasPaintChanged || textIsDifferent()) {
             dropCapStaticLayout = new StaticLayout(
                     dropCapText + copyText,
                     copyTextPaint,
