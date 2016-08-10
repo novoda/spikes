@@ -82,7 +82,7 @@ public class SampleProjectTest {
     File releaseBuildConfig
     File debugResValues
     File releaseResValues
-    BuildProperties.Entries secrets
+    Entries secrets
 
     @Override
     Statement apply(Statement base, Description description) {

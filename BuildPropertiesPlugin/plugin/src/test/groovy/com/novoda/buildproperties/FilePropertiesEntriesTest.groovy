@@ -21,7 +21,7 @@ public class FilePropertiesEntriesTest {
   @Test
   public void shouldNotAccessPropertyValueWhenGettingEntry() {
     try {
-      BuildProperties.Entry entry = entries['notThere']
+      Entry entry = entries['notThere']
     } catch (IllegalArgumentException ignored) {
       fail('Entry value should be evaluated lazily')
     }
