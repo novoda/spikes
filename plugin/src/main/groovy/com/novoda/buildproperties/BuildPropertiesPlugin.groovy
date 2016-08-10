@@ -65,7 +65,7 @@ class BuildPropertiesPlugin implements Plugin<Project> {
         target.ext.buildConfigString = { String name, String value ->
             buildConfigField('String', name, { "\"$value\"" })
         }
-        target.ext.buildConfigProperty = { String name, BuildProperties.Entry entry ->
+        target.ext.buildConfigProperty = { String name, Entry entry ->
             project.afterEvaluate {
                 target.buildConfigField 'String', name, "\"${entry.string}\""
             }
@@ -102,7 +102,7 @@ class BuildPropertiesPlugin implements Plugin<Project> {
         target.ext.resValueString = { String name, String value ->
             resValue('string', name, { "\"$value\"" })
         }
-        target.ext.resValueProperty = { String name, BuildProperties.Entry entry ->
+        target.ext.resValueProperty = { String name, Entry entry ->
             project.afterEvaluate {
                 target.resValue 'string', name, "\"${entry.string}\""
             }
