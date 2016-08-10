@@ -192,6 +192,7 @@ public class DropCapView extends View {
             copyText = (text == null) ? "" : text;
             shouldDisplayDropCap = false;
         }
+        requestLayout();
     }
 
     private boolean enoughTextForDropCap(CharSequence text) {
