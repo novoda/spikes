@@ -66,5 +66,6 @@
 
   <string name="drop_cap_edit_drop_cap_color">Edit Drop Cap Color</string>
   <string name="drop_cap_edit_copy_color">Edit Copy Color</string>
+  <string name="drop_cap_update_text">Update text</string>
 
 </resources>

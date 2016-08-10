@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.novoda.drop_cap.R;
@@ -32,6 +33,7 @@ public class DropCapActivity extends Activity {
         createTextSizeDialogDisplayers();
         createTextColorDialogDisplayers();
         createFontTypeSpinner();
+        createTextUpdater();
     }
 
     private void createTextSizeDialogDisplayers() {
@@ -173,5 +175,18 @@ public class DropCapActivity extends Activity {
         }
 
     };
+
+    private void createTextUpdater() {
+        final EditText textUpdateEditText = (EditText) findViewById(R.id.drop_cap_edit_text);
+        Button textUpdateButton = (Button) findViewById(R.id.edit_text_update);
+
+        textUpdateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String updatedText = textUpdateEditText.getText().toString();
+                dropCapView.setText(updatedText);
+            }
+        });
+    }
 
 }
