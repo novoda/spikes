@@ -3,15 +3,18 @@ module.exports = {
 }
 
 function gallery(dataStore, messages) {
-  var channel = dataStore.getChannelByName('dashboard-images');
-  var imageMessages = messages.filter(each => {
-    return (each.channel == channel.id) && each.file && (each.file.mimetype.indexOf('image') != -1);
-  });
-  var imageMessage = imageMessages.length > 0 ? imageMessages[0] : null;
-  return {
-    widgetKey: 'gallery',
-    payload: createPayload(dataStore, imageMessage)
-  };
+  var result = function(resolve, reject) {
+    var channel = dataStore.getChannelByName('dashboard-images');
+    var imageMessages = messages.filter(each => {
+      return (each.channel == channel.id) && each.file && (each.file.mimetype.indexOf('image') != -1);
+    });
+    var imageMessage = imageMessages.length > 0 ? imageMessages[0] : null;
+    resolve({
+      widgetKey: 'gallery',
+      payload: createPayload(dataStore, imageMessage)
+    });
+  }
+  return new Promise(result);
 }
 
 function createPayload(dataStore, message) {

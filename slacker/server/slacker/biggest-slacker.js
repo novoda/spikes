@@ -5,14 +5,17 @@ module.exports = {
 var helper = require('./message-helper.js');
 
 function biggestSlacker(dataStore, messages) {
-  var timeSortedMessages = messages.sort(helper.sortByTimestamp);
-  var allMessages = helper.flattenToUser(timeSortedMessages);
-  allMessages.sort(helper.sortByCount);
-  var biggestSlacker = allMessages.length > 0 ? allMessages[0] : null;
-  return {
-    widgetKey: 'biggestSlacker',
-    payload: createPayload(dataStore, biggestSlacker)
-  };
+  var result = function(resolve, reject) {
+    var timeSortedMessages = messages.sort(helper.sortByTimestamp);
+    var allMessages = helper.flattenToUser(timeSortedMessages);
+    allMessages.sort(helper.sortByCount);
+    var biggestSlacker = allMessages.length > 0 ? allMessages[0] : null;
+    resolve({
+      widgetKey: 'biggestSlacker',
+      payload: createPayload(dataStore, biggestSlacker)
+    });
+  }
+  return new Promise(result);
 }
 
 function createPayload(dataStore, message) {
