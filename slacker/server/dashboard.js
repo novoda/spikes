@@ -7,7 +7,7 @@ var Dashboard = function(token) {
   this.index = 0;
   this.rules = [
     require('./ci-wall').rule
-  ];
+  ].concat(this.slacker.getRules());
 }
 
 Dashboard.prototype.start = function(callback) {

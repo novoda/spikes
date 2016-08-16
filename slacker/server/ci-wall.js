@@ -3,8 +3,6 @@ module.exports = {
 }
 
 function ciWall() {
-  console.log('ci wall');
-
   var result = function(resolve, reject) {
     resolve({
       widgetKey: 'ciWall',

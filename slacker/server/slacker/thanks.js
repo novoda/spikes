@@ -3,16 +3,18 @@ module.exports = {
 }
 
 function thanks(dataStore, messages) {
-  var channel = dataStore.getChannelByName('thanks');
-  var thanksMessages = messages.filter(each => {
-    return (each.channel == channel.id) && (each.text.indexOf('thank') != -1);
-  });
-
-  var randomThankYou = thanksMessages.length > 0 ? thanksMessages[0] : null;
-  return {
-    widgetKey: 'thanks',
-    payload: createPayload(dataStore, randomThankYou)
-  };
+  var result = function(resolve, reject) {
+    var channel = dataStore.getChannelByName('thanks');
+    var thanksMessages = messages.filter(each => {
+      return (each.channel == channel.id) && (each.text.indexOf('thank') != -1);
+    });
+    var randomThankYou = thanksMessages.length > 0 ? thanksMessages[0] : null;
+    resolve({
+      widgetKey: 'thanks',
+      payload: createPayload(dataStore, randomThankYou)
+    });
+  }
+  return new Promise(result);
 }
 
 function createPayload(dataStore, thankYou) {
