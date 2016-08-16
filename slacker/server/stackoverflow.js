@@ -18,10 +18,12 @@ function fetch() {
 }
 
 function stackoverflow() {
-  console.log('... stackoverflow rule');
   questions = fetch();
-  return {
-    widgetKey: 'stackoverflow',
-    payload: '!!!' // TODO number of unanswered questions
-  };
+  let result = function(resolve, reject) {
+    resolve({
+      widgetKey: 'stackoverflow',
+      payload: 'CAT'
+    });
+  }
+  return new Promise(result);
 }

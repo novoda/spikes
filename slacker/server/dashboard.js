@@ -1,21 +1,26 @@
 var Slacker = require('./slacker/slacker.js');
 
-const DASHBOARD_INTERVAL = 1000 * 1;
+const DASHBOARD_INTERVAL = 1000 * 5;
 
 var Dashboard = function(token) {
   this.slacker = new Slacker(token);
   this.index = 0;
   this.rules = [
     require('./stackoverflow').rule
-  ].concat(this.slacker.getRules());
+    //require('./ci-wall').rule
+  ]//.concat(this.slacker.getRules());
 }
+
+// callback = io.emit('message', data); [from: server.js]
+// callback() will emit the result of each rule's operation/execution, i.e., 
+//  the html with data
 
 Dashboard.prototype.start = function(callback) {
   var self = this;
   var updateLoop = function() {
     runRule(self, callback);
     incrementIndex(self);
-    setTimeout(updateLoop, DASHBOARD_INTERVAL);
+    self.timeout = setTimeout(updateLoop, DASHBOARD_INTERVAL);
   }
   updateLoop();
 }
