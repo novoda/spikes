@@ -3,9 +3,6 @@ var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 var RTM_CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS.RTM;
 var MemoryDataStore = require('@slack/client').MemoryDataStore;
 
-var mostRecentQuestionRule = require('./most-recent-question.js').rule;
-var mostCommonWordsRule = require('./most-common-words.js').rule;
-
 var rules = [
   require('./biggest-slacker.js').rule,
   require('./most-active-channel.js').rule,
