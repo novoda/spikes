@@ -5,23 +5,25 @@ const DASHBOARD_INTERVAL = 1000 * 5;
 var Dashboard = function(token) {
   this.slacker = new Slacker(token);
   this.index = 0;
-  this.rules = [
-    require('./ci-wall').rule
-  ].concat(this.slacker.getRules());
+  this.widgets = [
+    require('./ci-wall')
+  ]
 }
 
 Dashboard.prototype.start = function(callback) {
   var self = this;
   var updateLoop = function() {
+    let timeoutInterval = getTimeoutInterval(self.widgets[self.index]);
+    log('running rule ' + self.index + ' for ' + timeoutInterval + 'ms...')
     runRule(self, callback);
     incrementIndex(self);
-    setTimeout(updateLoop, DASHBOARD_INTERVAL);
+    self.timeout = setTimeout(updateLoop, timeoutInterval);
   }
   updateLoop();
 }
 
 function runRule(self, callback) {
-  self.rules[self.index]().then(function(result) {
+  self.widgets[self.index].rule().then(function(result) {
     if (result.payload) {
       callback(result);
     } else {
@@ -31,15 +33,27 @@ function runRule(self, callback) {
 }
 
 function incrementIndex(self) {
-  if (self.index >= self.rules.length - 1) {
+  if (self.index >= self.widgets.length - 1) {
     self.index = 0;
   } else {
     self.index++;
   }
 }
 
+function getTimeoutInterval(widget) {
+  return DASHBOARD_INTERVAL * widget.rank
+}
+
 Dashboard.prototype.forceUpdate = function(callback) {
   runRule(this, callback);
+}
+
+function log(msg, tag) {
+  let separator = ''
+  if (tag) {
+    separator = '[' + tag + ']'
+  }
+  console.log(Math.floor(Date.now()/1000) + separator + ': ' + msg)
 }
 
 module.exports = Dashboard;
