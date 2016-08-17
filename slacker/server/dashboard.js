@@ -10,26 +10,24 @@ var Dashboard = function(token) {
   ]
 }
 
-Dashboard.prototype.start = function(callback) {
+function update(callback) {
   var self = this;
-  var updateLoop = function() {
-    let timeoutInterval = getTimeoutInterval(self);
-    log('running rule ' + self.index + ' for ' + timeoutInterval + 'ms...')
-    runRule(self, callback);
-    incrementIndex(self);
-    setTimeout(updateLoop, timeoutInterval);
+  var updateLoop = function(self) {
+    getCurrentRule(self).then(result => {
+        callback(result)
+        incrementIndex(self);
+        setTimeout(updateLoop, getTimeoutInterval(self));
+      }).catch(err => {
+        incrementIndex(self);
+        setTimeout(updateLoop, 1);
+    })
   }
-  updateLoop();
 }
 
-function runRule(self, callback) {
-  self.widgets[self.index].rule().then(function(result) {
-    if (result.payload) {
-      callback(result);
-    } else {
-      // TODO do something
-    }
-  });
+Dashboard.prototype.start = update;
+
+function getCurrentRule(self) {
+  return self.widgets[self.index].rule();
 }
 
 function incrementIndex(self) {
@@ -45,7 +43,7 @@ function getTimeoutInterval(self) {
 }
 
 Dashboard.prototype.forceUpdate = function(callback) {
-  runRule(this, callback);
+  update(callback);
 }
 
 function log(msg, tag) {
