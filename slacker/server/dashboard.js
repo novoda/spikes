@@ -13,7 +13,7 @@ var Dashboard = function(token) {
 Dashboard.prototype.start = function(callback) {
   var self = this;
   var updateLoop = function() {
-    let timeoutInterval = getTimeoutInterval(self.widgets[self.index]);
+    let timeoutInterval = getTimeoutInterval(self);
     log('running rule ' + self.index + ' for ' + timeoutInterval + 'ms...')
     runRule(self, callback);
     incrementIndex(self);
@@ -40,8 +40,8 @@ function incrementIndex(self) {
   }
 }
 
-function getTimeoutInterval(widget) {
-  return DASHBOARD_INTERVAL * widget.rank
+function getTimeoutInterval(self) {
+  return DASHBOARD_INTERVAL * self.widgets[self.index].rank
 }
 
 Dashboard.prototype.forceUpdate = function(callback) {
