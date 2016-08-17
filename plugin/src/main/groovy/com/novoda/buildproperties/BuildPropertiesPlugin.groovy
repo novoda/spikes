@@ -70,23 +70,6 @@ class BuildPropertiesPlugin implements Plugin<Project> {
                 target.buildConfigField 'String', name, "\"${entry.string}\""
             }
         }
-        target.ext.buildConfigProperties = { BuildProperties buildProperties ->
-            buildProperties.keys.each { String key ->
-                target.ext.buildConfigProperty formatBuildConfigField(key), buildProperties[key]
-            }
-        }
-    }
-
-    private String formatBuildConfigField(String name) {
-        return splitTokens(name)
-                .toUpperCase()
-    }
-
-    private String splitTokens(String name) {
-        return name
-                .replace('.', '_')
-                .split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")
-                .join('_')
     }
 
     private void addResValueSupportTo(target, Project project) {
@@ -107,16 +90,6 @@ class BuildPropertiesPlugin implements Plugin<Project> {
                 target.resValue 'string', name, "\"${entry.string}\""
             }
         }
-        target.ext.resValueProperties = { BuildProperties buildProperties ->
-            buildProperties.keys.each { String key ->
-                target.ext.resValueProperty formatResValueName(key), buildProperties[key]
-            }
-        }
-    }
-
-    private String formatResValueName(String name) {
-        return splitTokens(name)
-                .toLowerCase()
     }
 
     private void addSigningConfigSupportTo(target, Project project) {

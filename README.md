@@ -49,30 +49,7 @@ in the buildscript as `buildProperties.secrets`.
 
 ## Features
 
-#### 1. Store whole properties file in `BuildConfig`
-In any product flavor configuration (or `defaultConfig`) you can use
-`buildConfigProperties` as follows:
-
-```
-    defaultConfig {
-        ...
-        buildConfigProperties buildProperties.secrets
-        ...
-    }
-```
-All the entries in that properties files are converted to string fields
-in your `BuildConfig`. Names of the fields are created formatting the key
-of each entry to follow the standard constant field naming in Java
-(uppercase with underscores), eg:
-
-- `apiKey` -> `API_KEY`
-- `api_key` -> `API_KEY`
-- `api.key` -> `API_KEY`
-
-Note that properties files treat values as strings, therefore only string
-fields are generated in this case.
-
-#### 2. Store a property value into your `BuildConfig`
+#### 1. Store a property value into your `BuildConfig`
 In any product flavor configuration (or `defaultConfig`) you can use
 `buildConfigProperty` as follows:
 ```
@@ -82,25 +59,8 @@ In any product flavor configuration (or `defaultConfig`) you can use
         ...
     }
 ```
-You can omit the field name and let the plugin generate one for you
-(following the same rules at 1.)
 
-#### 3. Store whole properties file as generated string resources
-In any product flavor configuration (or `defaultConfig`) you can use
-`resValueProperties` as follows:
-
-```
-    defaultConfig {
-        ...
-        resValueProperties buildProperties.secrets
-        ...
-    }
-```
-All the entries in that properties files are converted to string resources,
-named after their key, enforcing snake casing over camel casing if necessary.
-
-
-#### 4. Store a property value as generated string resource
+#### 2. Store a property value as generated string resource
 In any product flavor configuration (or `defaultConfig`) you can use
 `resValueProperty` as follows:
 
@@ -111,11 +71,8 @@ In any product flavor configuration (or `defaultConfig`) you can use
         ...
     }
 ```
-You can omit the name of the resource and let the plugin generate one for
-you from the property key, enforcing snake casing over camel casing if necessary.
 
-
-#### 5. Load signing configuration from properties
+#### 3. Load signing configuration from properties
 Instead of inline your passwords and other details in your build script
 you can fill the signing configuration using a properties file.
 ```
@@ -131,7 +88,7 @@ to the path of the specified properties file.
 
 ## Bonus
 
-#### Typed `buildConfigField`/`resValue`
+#### Typed `buildConfigField` / `resValue`
 The plugin enhances the `buildConfigField` and `resValue` facilities to
 enforce types. To generate a string field in your `BuildConfig` you used to write:
 ```
