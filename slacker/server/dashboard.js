@@ -17,7 +17,7 @@ Dashboard.prototype.start = function(callback) {
     log('running rule ' + self.index + ' for ' + timeoutInterval + 'ms...')
     runRule(self, callback);
     incrementIndex(self);
-    self.timeout = setTimeout(updateLoop, timeoutInterval);
+    setTimeout(updateLoop, timeoutInterval);
   }
   updateLoop();
 }
