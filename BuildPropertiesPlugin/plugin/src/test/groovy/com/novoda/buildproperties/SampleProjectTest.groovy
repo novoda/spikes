@@ -21,7 +21,6 @@ public class SampleProjectTest {
   public void shouldGenerateTypedFieldsFromTypedValuesProvidedInDefaultBuildConfig() {
     [PROJECT.debugBuildConfig.text, PROJECT.releaseBuildConfig.text].each { String generatedBuildConfig ->
       assertThat(generatedBuildConfig).contains('public static final boolean TEST_BOOLEAN = false;')
-      assertThat(generatedBuildConfig).contains('public static final String TEST_BUILD_PROPERTY = "classified";')
       assertThat(generatedBuildConfig).contains('public static final double TEST_DOUBLE = 3.141592653589793;')
       assertThat(generatedBuildConfig).contains('public static final int TEST_INT = 42;')
       assertThat(generatedBuildConfig).contains('public static final long TEST_LONG = 9223372036854775807L;')
@@ -32,16 +31,8 @@ public class SampleProjectTest {
   @Test
   public void shouldGenerateStringFieldsFromPropertiesFileProvidedInDefaultBuildConfig() {
     [PROJECT.debugBuildConfig.text, PROJECT.releaseBuildConfig.text].each { String generatedBuildConfig ->
-      assertThat(generatedBuildConfig).contains("public static final String DIS__IS_CRAY_CRAY_ZAY = \"${PROJECT.secrets['DIS_Is_cray_crayZAY'].string}\";")
       assertThat(generatedBuildConfig).contains("public static final String GOOGLE_MAPS_KEY = \"${PROJECT.secrets['googleMapsKey'].string}\";")
       assertThat(generatedBuildConfig).contains("public static final String SUPER_SECRET = \"${PROJECT.secrets['superSecret'].string}\";")
-    }
-  }
-
-  @Test
-  public void shouldGenerateStringFieldForSinglePropertyProvidedInDefaultBuildConfig() {
-    [PROJECT.debugBuildConfig.text, PROJECT.releaseBuildConfig.text].each { String generatedBuildConfig ->
-      assertThat(generatedBuildConfig).contains("public static final String TEST_BUILD_PROPERTY = \"${PROJECT.secrets['superSecret'].string}\";")
     }
   }
 
