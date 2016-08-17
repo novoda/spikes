@@ -9,6 +9,9 @@ function gallery(dataStore, messages) {
       return (each.channel == channel.id) && each.file && (each.file.mimetype.indexOf('image') != -1);
     });
     var imageMessage = imageMessages.length > 0 ? imageMessages[0] : null;
+
+    if ()
+
     resolve({
       widgetKey: 'gallery',
       payload: createPayload(dataStore, imageMessage)

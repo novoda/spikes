@@ -2,9 +2,8 @@ if (widgets.coverage) throw "Coverage already exists";
 
 widgets.coverage = function() {
   return {
-    element: document.getElementById('coverage'),
-    present: function(data) {
-      this.element.innerHTML = presentCoverage(data.payload[Math.floor((Math.random() * data.payload.length))]);
+    present: function(data, element) {
+      element.innerHTML = presentCoverage(data.payload[Math.floor((Math.random() * data.payload.length))]);
     }
   };
 }

@@ -2,9 +2,8 @@ if (widgets.gallery) throw "Gallery already exists";
 
 widgets.gallery = function() {
   return {
-    element: document.getElementById('gallery'),
-    present: function(data) {
-      this.element.innerHTML = presentGallery(data.payload);
+    present: function(data, element) {
+      element.innerHTML = presentGallery(data.payload);
     }
   };
 }

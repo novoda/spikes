@@ -2,10 +2,9 @@ if (widgets.thanks) throw "Thanks already exists";
 
 widgets.thanks = function() {
   return {
-    element: document.getElementById('thanks'),
-    present: function(data) {
+    present: function(data, element) {
       if (data.payload) {
-        this.element.innerHTML = presentThanks(data.payload);
+        element.innerHTML = presentThanks(data.payload);
       }
     }
   };
