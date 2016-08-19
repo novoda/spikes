@@ -8,11 +8,12 @@ var Dashboard = function(token) {
   this.widgets = [
     require('./ci-wall')
   ]
+  update(this);
 }
 
 function update(callback) {
   var self = this;
-  var updateLoop = function(self) {
+  var updateLoop = function() {
     getCurrentRule(self).then(result => {
         callback(result)
         incrementIndex(self);
@@ -22,6 +23,7 @@ function update(callback) {
         setTimeout(updateLoop, 1);
     })
   }
+  updateLoop();
 }
 
 Dashboard.prototype.start = update;
