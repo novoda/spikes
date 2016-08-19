@@ -24,6 +24,9 @@ Dashboard.prototype.start = function(callback) {
 function runRule(self, callback) {
   self.rules[self.index]().then(function(result) {
     callback(result);
+  }).catch(function(err) {
+    console.log(err);
+    // TODO handle me
   });
 }
 
