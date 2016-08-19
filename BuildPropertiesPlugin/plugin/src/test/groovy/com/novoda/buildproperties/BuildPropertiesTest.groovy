@@ -1,6 +1,5 @@
 package com.novoda.buildproperties
 
-import com.novoda.buildproperties.BuildProperties.Entries
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Before
@@ -8,7 +7,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 
-import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth.assertThat
 
 class BuildPropertiesTest {
 

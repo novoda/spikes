@@ -1,6 +1,6 @@
 package com.novoda.buildproperties
 
-class FilePropertiesEntries extends BuildProperties.Entries {
+class FilePropertiesEntries extends Entries {
 
   private final String name
   private final File file
