@@ -23,11 +23,7 @@ Dashboard.prototype.start = function(callback) {
 
 function runRule(self, callback) {
   self.rules[self.index]().then(function(result) {
-    if (result.payload) {
-      callback(result);
-    } else {
-      // TODO do something
-    }
+    callback(result);
   });
 }
 
