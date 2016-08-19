@@ -6,19 +6,20 @@ var Dashboard = function(token) {
   this.slacker = new Slacker(token);
   this.index = 0;
   this.widgets = [
-    require('./ci-wall')
-  ]
-  update(this);
+    require('./ci-wall'),
+    require('./coverage')
+  ]//.concat(this.slacker.getRules());
 }
 
-function update(callback) {
-  var self = this;
+function update(self, callback) {
   var updateLoop = function() {
-    getCurrentRule(self).then(result => {
+    let rule = getCurrentRule(self);
+    rule().then(result => {
         callback(result)
         incrementIndex(self);
         setTimeout(updateLoop, getTimeoutInterval(self));
       }).catch(err => {
+        console.log(err);
         incrementIndex(self);
         setTimeout(updateLoop, 1);
     })
@@ -26,10 +27,12 @@ function update(callback) {
   updateLoop();
 }
 
-Dashboard.prototype.start = update;
+Dashboard.prototype.start = function(callback) {
+  update(this, callback);
+}
 
 function getCurrentRule(self) {
-  return self.widgets[self.index].rule();
+  return self.widgets[self.index].rule;
 }
 
 function incrementIndex(self) {
@@ -45,7 +48,7 @@ function getTimeoutInterval(self) {
 }
 
 Dashboard.prototype.forceUpdate = function(callback) {
-  update(callback);
+  //update(this, callback);
 }
 
 function log(msg, tag) {

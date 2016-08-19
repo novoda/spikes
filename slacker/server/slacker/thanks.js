@@ -4,26 +4,30 @@ module.exports = {
 
 function thanks(dataStore, messages) {
   var result = function(resolve, reject) {
-    var channel = dataStore.getChannelByName('thanks');
-    var thanksMessages = messages.filter(each => {
-      return (each.channel == channel.id) && (each.text.indexOf('thank') != -1);
-    });
-    var randomThankYou = thanksMessages.length > 0 ? thanksMessages[0] : null;
-    resolve({
-      widgetKey: 'thanks',
-      payload: createPayload(dataStore, randomThankYou)
-    });
+    var thankYouMessages = findThanksMessages(dataStore, messages);
+    if (!thankYouMessages || thankYouMessages.length === 0) {
+      reject('no thanks message found');
+    } else {
+      var latestThanksMessage = thankYouMessages[0];
+      resolve(createPayload(latestThanksMessage));
+    }
   }
   return new Promise(result);
 }
 
+function findThanksMessages(dataStore, messages) {
+  var channel = dataStore.getChannelByName('thanks');
+  return messages.filter(each => {
+    return (each.channel == channel.id) && (each.text.indexOf('thank') != -1);
+  });
+}
+
 function createPayload(dataStore, thankYou) {
-  if (thankYou) {
-    return {
+  return {
+    widgetKey: 'thanks',
+    payload: {
       user: dataStore.getUserById(thankYou.user),
       thanks: thankYou
-    };
-  } else {
-    return null;
-  }
+    }
+  };
 }
