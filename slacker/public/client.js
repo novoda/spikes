@@ -2,6 +2,7 @@ var main = function() {
   var previousWidget;
   var previousPayload;
   var socket = io();
+  var element = document.getElementById('element');
 
   socket.on('message', function(msg) {
     if (!widgets[msg.widgetKey]) {
@@ -20,20 +21,20 @@ var main = function() {
 
   var fade = function(previous, widget, data) {
     return function() {
-      previous.element.innerHTML = '';
-      previous.element.className = '';
-      widget.present(data);
-      widget.element.className = 'animated fadeIn';
+      element.innerHTML = '';
+      element.className = '';
+      widget.present(data, element);
+      element.className = 'animated fadeIn';
     }
   }
 
   function show(widget, data) {
     if (previousWidget) {
-      previousWidget.element.className = 'animated fadeOut';
+      element.className = 'animated fadeOut';
       setTimeout(fade(previousWidget, widget, data), 1000);
     } else {
-      widget.present(data);
-      widget.element.className = 'animated fadeIn';
+      widget.present(data, element);
+      element.className = 'animated fadeIn';
     }
   }
 };

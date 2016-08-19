@@ -2,9 +2,8 @@ if (widgets.biggestSlacker) throw "BiggestSlacker already exists";
 
 widgets.biggestSlacker = function() {
   return {
-    element: document.getElementById('biggest-slacker'),
-    present: function(data) {
-      this.element.innerHTML = presentBiggestSlacker(data.payload);
+    present: function(data, element) {
+      element.innerHTML = presentBiggestSlacker(data.payload);
     }
   };
 }

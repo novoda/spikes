@@ -2,9 +2,8 @@ if (widgets.mostActiveChannel) throw "MostActiveChannel already exists";
 
 widgets.mostActiveChannel = function() {
   return {
-    element: document.getElementById('most-active-channel'),
-    present: function(data) {
-      this.element.innerHTML = presentMostActive(data.payload);
+    present: function(data, element) {
+      element.innerHTML = presentMostActive(data.payload);
     }
   };
 }

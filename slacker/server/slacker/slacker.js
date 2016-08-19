@@ -4,10 +4,10 @@ var RTM_CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS.RTM;
 var MemoryDataStore = require('@slack/client').MemoryDataStore;
 
 var rules = [
-  require('./biggest-slacker.js').rule,
-  require('./most-active-channel.js').rule,
-  require('./thanks.js').rule,
-  require('./gallery').rule
+  require('./biggest-slacker.js'),
+  require('./most-active-channel.js'),
+  require('./thanks.js'),
+  require('./gallery')
 ]
 
 var Slacker = function(token) {
@@ -44,7 +44,10 @@ Slacker.prototype.getRules = function() {
   var self = this;
   return rules.map(each => {
     return function() {
-      return each(self.rtm.dataStore, self.messages);
+      return {
+        rule: each.rule(self.rtm.dataStore, self.messages),
+        rank: each.rank
+      }
     }
   });
 }

@@ -2,9 +2,8 @@ if (widgets.mostRecentGif) throw "mostRecentGif already exists";
 
 widgets.mostRecentGif = function() {
   return {
-    element: document.getElementById('most-recent-gif'),
-    present: function(data) {
-      this.element.innerHTML = presentMostRecentGif(data.payload);
+    present: function(data, element) {
+      element.innerHTML = presentMostRecentGif(data.payload);
     }
   };
 }

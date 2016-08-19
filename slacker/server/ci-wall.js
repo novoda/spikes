@@ -1,5 +1,6 @@
 module.exports = {
-  rule: ciWall
+  rule: ciWall,
+  rank: 1
 }
 
 function ciWall() {
