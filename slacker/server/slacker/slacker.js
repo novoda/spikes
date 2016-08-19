@@ -43,12 +43,12 @@ function ignored(message) {
 Slacker.prototype.getRules = function() {
   var self = this;
   return rules.map(each => {
-    return function() {
-      return {
-        rule: each.rule(self.rtm.dataStore, self.messages),
-        rank: each.rank
-      }
-    }
+    return {
+      rule: function() {
+        return each.rule(self.rtm.dataStore, self.messages)
+      },
+      rank: 1
+    };
   });
 }
 

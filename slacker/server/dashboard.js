@@ -8,12 +8,12 @@ var Dashboard = function(token) {
   this.widgets = [
     require('./ci-wall'),
     require('./coverage')
-  ]//.concat(this.slacker.getRules());
+  ].concat(this.slacker.getRules());
 }
 
 function update(self, callback) {
   var updateLoop = function() {
-    let rule = getCurrentRule(self);
+    var rule = getCurrentRule(self);
     rule().then(result => {
         callback(result)
         incrementIndex(self);
@@ -21,7 +21,7 @@ function update(self, callback) {
       }).catch(err => {
         console.log(err);
         incrementIndex(self);
-        setTimeout(updateLoop, 1);
+        setTimeout(updateLoop, 100);
     })
   }
   updateLoop();
@@ -52,7 +52,7 @@ Dashboard.prototype.forceUpdate = function(callback) {
 }
 
 function log(msg, tag) {
-  let separator = ''
+  var separator = ''
   if (tag) {
     separator = '[' + tag + ']'
   }
