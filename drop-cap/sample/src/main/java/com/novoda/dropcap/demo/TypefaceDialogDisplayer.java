@@ -19,7 +19,7 @@ public class TypefaceDialogDisplayer {
         this.onTypefaceChangeListener = onTypefaceChangeListener;
     }
 
-    public void showTypefaceDialog() {
+    public void showTypefaceDialog(FontType dropCapFontType) {
         String textSizeFragmentTag = resources.getString(R.string.fragment_tag_typeface);
         TypefaceDialogFragment typefaceFragment = (TypefaceDialogFragment) fragmentManager.findFragmentByTag(textSizeFragmentTag);
 
@@ -28,6 +28,7 @@ public class TypefaceDialogDisplayer {
         if (typefaceFragment == null) {
             typefaceFragment = new TypefaceDialogFragment();
             typefaceFragment.setTextSizeChangeListener(onTypefaceChangeListener);
+            typefaceFragment.setPreviousFontType(dropCapFontType);
         } else {
             transaction.remove(typefaceFragment);
         }

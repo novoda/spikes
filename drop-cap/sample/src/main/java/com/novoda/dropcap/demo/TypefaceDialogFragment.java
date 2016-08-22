@@ -18,7 +18,7 @@ public class TypefaceDialogFragment extends DialogFragment {
     private Button positiveButton;
     private Button negativeButton;
     private Spinner typefacePicker;
-    private int previousTypefacePosition = 0;
+    private FontType previousFontType;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -45,7 +45,8 @@ public class TypefaceDialogFragment extends DialogFragment {
                 FontType.values()
         );
         typefacePicker.setAdapter(fonts);
-        typefacePicker.setSelection(previousTypefacePosition);
+        int previousSelectedPosition = fonts.getPosition(previousFontType);
+        typefacePicker.setSelection(previousSelectedPosition);
 
         positiveButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -53,9 +54,7 @@ public class TypefaceDialogFragment extends DialogFragment {
                     public void onClick(View v) {
                         String fontName = typefacePicker.getSelectedItem().toString();
                         FontType fontType = FontType.valueOf(fontName);
-                        String fontPath = getResources().getString(fontType.getAssetUrl());
-                        onTypefaceChangeListener.onTypefaceChanged(fontPath);
-                        previousTypefacePosition = typefacePicker.getSelectedItemPosition();
+                        onTypefaceChangeListener.onTypefaceChanged(fontType);
                         dismiss();
                     }
                 }
@@ -75,4 +74,7 @@ public class TypefaceDialogFragment extends DialogFragment {
         this.onTypefaceChangeListener = onTypefaceChangeListener;
     }
 
+    public void setPreviousFontType(FontType previousFontType) {
+        this.previousFontType = previousFontType;
+    }
 }

@@ -20,6 +20,9 @@ public class DropCapActivity extends Activity {
     private TypefaceDialogDisplayer dropCapTypefaceDialogDisplayer;
     private TypefaceDialogDisplayer copyTypefaceDialogDisplayer;
 
+    private FontType dropCapFontType;
+    private FontType copyFontType;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,29 +158,33 @@ public class DropCapActivity extends Activity {
 
     private final OnTypefaceChangeListener onDropCapTypefaceChanged = new OnTypefaceChangeListener() {
         @Override
-        public void onTypefaceChanged(String newFontPath) {
-            dropCapView.setDropCapFontType(newFontPath);
+        public void onTypefaceChanged(FontType newFontType) {
+            String fontPath = getResources().getString(newFontType.getAssetUrl());
+            dropCapView.setDropCapFontType(fontPath);
+            dropCapFontType = newFontType;
         }
     };
 
     private final OnTypefaceChangeListener onCopyTypefaceChanged = new OnTypefaceChangeListener() {
         @Override
-        public void onTypefaceChanged(String newFontPath) {
-            dropCapView.setCopyFontType(newFontPath);
+        public void onTypefaceChanged(FontType newFontType) {
+            String fontPath = getResources().getString(newFontType.getAssetUrl());
+            dropCapView.setCopyFontType(fontPath);
+            copyFontType = newFontType;
         }
     };
 
     private final View.OnClickListener onClickDisplayDropCapTypefaceDialog = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            dropCapTypefaceDialogDisplayer.showTypefaceDialog();
+            dropCapTypefaceDialogDisplayer.showTypefaceDialog(dropCapFontType);
         }
     };
 
     private final View.OnClickListener onClickDisplayCopyTypefaceDialog = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            copyTypefaceDialogDisplayer.showTypefaceDialog();
+            copyTypefaceDialogDisplayer.showTypefaceDialog(copyFontType);
         }
     };
 

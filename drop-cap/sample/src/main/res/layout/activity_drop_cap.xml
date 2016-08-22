@@ -71,14 +71,14 @@
     <Button
       android:id="@+id/drop_cap_typeface"
       android:layout_width="0dp"
-      android:layout_height="wrap_content"
+      android:layout_height="match_parent"
       android:layout_weight="100"
       android:text="@string/drop_cap_edit_drop_cap_typeface" />
 
     <Button
       android:id="@+id/copy_typeface"
       android:layout_width="0dp"
-      android:layout_height="wrap_content"
+      android:layout_height="match_parent"
       android:layout_weight="100"
       android:text="@string/drop_cap_edit_copy_typeface" />
 
