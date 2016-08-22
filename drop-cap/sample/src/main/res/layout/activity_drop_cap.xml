@@ -68,17 +68,19 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <Spinner
-      android:id="@+id/drop_cap_font_spinner"
+    <Button
+      android:id="@+id/drop_cap_typeface"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="100" />
+      android:layout_weight="100"
+      android:text="@string/drop_cap_edit_drop_cap_typeface" />
 
-    <Spinner
-      android:id="@+id/copy_font_spinner"
+    <Button
+      android:id="@+id/copy_typeface"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_weight="100" />
+      android:layout_weight="100"
+      android:text="@string/drop_cap_edit_copy_typeface" />
 
   </LinearLayout>
 

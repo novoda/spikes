@@ -61,11 +61,13 @@
     nunc cursus tincidunt id id ipsum. Nullam condimentum lorem nisl, sed sagittis turpis ornare non.
   </string>
 
-  <string name="drop_cap_edit_drop_cap_size">Edit Drop Cap Size</string>
+  <string name="drop_cap_edit_drop_cap_size">Edit DropCap Size</string>
   <string name="drop_cap_edit_copy_size">Edit Copy Size</string>
 
-  <string name="drop_cap_edit_drop_cap_color">Edit Drop Cap Color</string>
+  <string name="drop_cap_edit_drop_cap_color">Edit DropCap Color</string>
   <string name="drop_cap_edit_copy_color">Edit Copy Color</string>
+  <string name="drop_cap_edit_drop_cap_typeface">Edit DropCap Typeface</string>
+  <string name="drop_cap_edit_copy_typeface">Edit Copy Typeface</string>
   <string name="drop_cap_update_text">Update text</string>
 
 </resources>

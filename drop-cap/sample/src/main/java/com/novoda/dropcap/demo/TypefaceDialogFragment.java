@@ -6,18 +6,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.NumberPicker;
+import android.widget.Spinner;
 
 import com.novoda.drop_cap.R;
 
-public class TextSizeDialogFragment extends DialogFragment {
+public class TypefaceDialogFragment extends DialogFragment {
 
-    private OnTextSizeChangeListener onTextSizeChangeListener;
+    private OnTypefaceChangeListener onTypefaceChangeListener;
     private Button positiveButton;
     private Button negativeButton;
-    private NumberPicker numberPicker;
-    private int previousTextSize;
+    private Spinner typefacePicker;
+    private int previousTypefacePosition = 0;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -28,26 +29,33 @@ public class TextSizeDialogFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_text_size_dialog, container);
+        View view = inflater.inflate(R.layout.fragment_typeface_dialog, container);
         positiveButton = (Button) view.findViewById(R.id.text_size_button_positive);
         negativeButton = (Button) view.findViewById(R.id.text_size_button_negative);
-        numberPicker = (NumberPicker) view.findViewById(R.id.typeface_picker);
+        typefacePicker = (Spinner) view.findViewById(R.id.typeface_picker);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        numberPicker.setMinValue(getResources().getDimensionPixelSize(R.dimen.text_size_number_picker_min));
-        numberPicker.setMaxValue(getResources().getDimensionPixelSize(R.dimen.text_size_number_picker_max));
-        numberPicker.setValue(previousTextSize);
+        ArrayAdapter<FontType> fonts = new ArrayAdapter<>(
+                view.getContext(),
+                android.R.layout.simple_spinner_item,
+                FontType.values()
+        );
+        typefacePicker.setAdapter(fonts);
+        typefacePicker.setSelection(previousTypefacePosition);
 
         positiveButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int newTextSize = numberPicker.getValue();
-                        onTextSizeChangeListener.onSizeChanged(newTextSize);
+                        String fontName = typefacePicker.getSelectedItem().toString();
+                        FontType fontType = FontType.valueOf(fontName);
+                        String fontPath = getResources().getString(fontType.getAssetUrl());
+                        onTypefaceChangeListener.onTypefaceChanged(fontPath);
+                        previousTypefacePosition = typefacePicker.getSelectedItemPosition();
                         dismiss();
                     }
                 }
@@ -63,12 +71,8 @@ public class TextSizeDialogFragment extends DialogFragment {
         );
     }
 
-    public void setTextSizeChangeListener(OnTextSizeChangeListener onTextSizeChangeListener) {
-        this.onTextSizeChangeListener = onTextSizeChangeListener;
-    }
-
-    public void setPreviousTextSize(int previousTextSize) {
-        this.previousTextSize = previousTextSize;
+    public void setTextSizeChangeListener(OnTypefaceChangeListener onTypefaceChangeListener) {
+        this.onTypefaceChangeListener = onTypefaceChangeListener;
     }
 
 }
