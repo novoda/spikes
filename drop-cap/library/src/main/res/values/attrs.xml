@@ -5,10 +5,11 @@
     <attr name="lineSpacingExtra" format="dimension" />
     <attr name="dropCapTextSize" format="dimension" />
     <attr name="dropCapTextColor" format="color" />
-    <attr name="fontPath" format="string" />
+    <attr name="dropCapFontPath" format="string" />
 
     <attr name="copyTextSize" format="dimension" />
     <attr name="copyTextColor" format="color" />
+    <attr name="copyFontPath" format="string" />
   </declare-styleable>
 
 </resources>
