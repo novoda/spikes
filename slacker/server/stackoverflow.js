@@ -7,7 +7,7 @@ var request = require('request');
 const SO_URL = 'http://api.stackexchange.com/2.2/search/advanced?order=desc&sort=activity&q=novoda&accepted=False&site=stackoverflow';
 
 function stackoverflow() {
-  return new Promise(getQuestions).then(getCardinality);
+  return new Promise(getQuestions).then(count);
 }
 
 function getQuestions(resolve, reject) {
@@ -28,7 +28,7 @@ function parseResponse(resolve, reject) {
   }
 }
 
-function getCardinality(data) {
+function count(data) {
   return new Promise(function(resolve, reject) {
     resolve({
       widgetKey: 'stackoverflow',
