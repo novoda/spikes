@@ -16,8 +16,12 @@ function presentQuestionCount(data) {
     '<span class="active-channel-header">' + '&#128172;' + '</span>' +
     '<br>' +
     '<div>' +
-      '<span class="active-channel-copy">We have ' + data + ' unanswered StackOverflow questions!</span>' +
+      '<span class="active-channel-copy">We have ' + linkify(data) + '!</span>' +
     '</div>' +
   '</div>' +
 '</div>';
+}
+
+function linkify(data) {
+    return '<a href="' + data.url + '">' + data.count + ' unanswered questions</a>'
 }
