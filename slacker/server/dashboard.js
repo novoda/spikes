@@ -7,8 +7,9 @@ var Dashboard = function(token) {
   this.index = 0;
   this.widgets = [
     require('./ci-wall'),
+    require('./coverage'),
     require('./stackoverflow')
-  ]//.concat(this.slacker.getRules());
+  ].concat(this.slacker.getRules());
 }
 
 function update(self, callback) {
@@ -49,14 +50,6 @@ function getTimeoutInterval(self) {
 
 Dashboard.prototype.forceUpdate = function(callback) {
   //update(this, callback);
-}
-
-function log(msg, tag) {
-  var separator = ''
-  if (tag) {
-    separator = '[' + tag + ']'
-  }
-  console.log(Math.floor(Date.now()/1000) + separator + ': ' + msg)
 }
 
 module.exports = Dashboard;
