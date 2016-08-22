@@ -138,7 +138,7 @@ public class DropCapActivity extends Activity {
         Spinner dropCapFontSpinner = (Spinner) findViewById(R.id.drop_cap_font_spinner);
         Spinner copyFontSpinner = (Spinner) findViewById(R.id.copy_font_spinner);
 
-        ArrayAdapter<FontType> fonts = new ArrayAdapter<FontType>(
+        ArrayAdapter<FontType> fonts = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
                 FontType.values()

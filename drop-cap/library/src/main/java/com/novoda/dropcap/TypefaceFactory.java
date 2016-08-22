@@ -3,6 +3,7 @@ package com.novoda.dropcap;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
+import android.util.Log;
 
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
@@ -44,7 +45,12 @@ class TypefaceFactory {
     }
 
     private Typeface createTypeFace(String fontPath) {
-        return Typeface.createFromAsset(assetManager, fontPath);
+        try {
+            return Typeface.createFromAsset(assetManager, fontPath);
+        } catch (RuntimeException exception) {
+            Log.e(TypefaceFactory.class.getSimpleName(), exception.getMessage() + " will default from style instead");
+            return Typeface.defaultFromStyle(Typeface.NORMAL);
+        }
     }
 
     private void saveFontToCache(String fontPath, Typeface typeface) {

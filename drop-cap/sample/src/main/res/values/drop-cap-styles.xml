@@ -11,7 +11,7 @@
     <item name="dropCapTextSize">@dimen/drop_cap_text</item>
     <item name="dropCapFontPath">fonts/funkrocker.otf</item>
     <item name="copyTextSize">@dimen/copy_text</item>
-    <item name="copyFontPath"></item>
+    <item name="copyFontPath">fonts/neuropolitical_rg.ttf</item>
     <item name="lineSpacingExtra">@dimen/drop_cap_linespacing_extra</item>
   </style>
 
