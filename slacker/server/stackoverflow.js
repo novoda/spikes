@@ -11,7 +11,6 @@ function stackoverflow() {
 }
 
 function getQuestions(resolve, reject) {
-  let numItems = -1;
   request.get({url: SO_URL, gzip: true}, parseResponse(resolve, reject));
 }
 
