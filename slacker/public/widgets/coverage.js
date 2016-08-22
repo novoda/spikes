@@ -12,7 +12,7 @@ function presentCoverage(data) {
   return '<div class="content-container active-image">' +
   '<div class="active-container">' +
     '<div class="active-filler"></div>' +
-    '<span class="active-channel-header">' + '&#128172;' + '</span>' +
+    '<span class="active-channel-header">' + '&#128202;' + '</span>' +
     '<br>' +
     '<div>' +
       '<span class="active-channel-copy"><b class="active-channel-name">#' + data.project + '</b><i> has ' + data.coverage + '% coverage</i></span>' +
