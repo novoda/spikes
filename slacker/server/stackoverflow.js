@@ -4,14 +4,15 @@ module.exports = {
 }
 
 var request = require('request');
-const SO_URL = 'http://api.stackexchange.com/2.2/search/advanced?order=desc&sort=activity&q=novoda&accepted=False&site=stackoverflow';
+const API_URL = 'http://api.stackexchange.com/2.2/search/advanced?order=desc&sort=activity&q=novoda&accepted=False&site=stackoverflow';
+const SO_URL = 'http://stackoverflow.com/search?q=novoda+hasaccepted%3Ano'
 
 function stackoverflow() {
-  return new Promise(getQuestions).then(count);
+  return new Promise(getQuestions).then(toRuleResult);
 }
 
 function getQuestions(resolve, reject) {
-  request.get({url: SO_URL, gzip: true}, parseResponse(resolve, reject));
+  request.get({url: API_URL, gzip: true}, parseResponse(resolve, reject));
 }
 
 function parseResponse(resolve, reject) {
@@ -20,15 +21,15 @@ function parseResponse(resolve, reject) {
       var jsonBody = JSON.parse(body);
       if (jsonBody.items) {
         numItems = jsonBody.items.length;
-      }
+        resolve({ count: numItems, url: SO_URL});
+      } 
     } else {
       reject(error);
     }
-    resolve(numItems);
   }
 }
 
-function count(data) {
+function toRuleResult(data) {
   return new Promise(function(resolve, reject) {
     resolve({
       widgetKey: 'stackoverflow',
