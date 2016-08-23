@@ -8,7 +8,6 @@ widgets.stackoverflow = function() {
   };
 }
 
-// TODO @RUI link to search
 function presentQuestionCount(data) {
   return '<div class="content-container active-image">' +
   '<div class="active-container">' +
