@@ -20,7 +20,7 @@ function parseResponse(resolve, reject) {
     if (!error && response.statusCode == 200) {
       var jsonBody = JSON.parse(body);
       if (jsonBody.items) {
-        resolve({ questions: jsonBody.items, url: SO_URL});
+        resolve({ questions: jsonBody.items, url: SO_URL });
       } 
     } else {
       reject(error);

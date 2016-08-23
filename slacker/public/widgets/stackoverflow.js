@@ -15,21 +15,21 @@ function presentQuestion(data) {
     '<span class="active-channel-header">' + '&#128172;' + '</span>' +
     '<br>' +
     '<div>' +
-      '<span class="active-channel-copy">We have ' + linkifyCount(data.questions) + '!</span>' +
-      '<p class="">Here\'s one: ' + linkifyQuestion(pickRandomQuestion(data.questions)) + '</p>' +
+      '<span class="active-channel-copy">We have ' + linkifyCount(data) + '!</span>' +
+      '<p class="">Here\'s one: ' + linkifyQuestion(pickRandomQuestion(data)) + '</p>' +
     '</div>' +
   '</div>' +
 '</div>';
 }
 
-function linkifyCount(questions) {
-  return '<a href="' + questions.url + '">' + questions.length + ' unanswered questions</a>'
+function linkifyCount(data) {
+  return '<a href="' + data.url + '">' + data.questions.length + ' unanswered questions</a>'
 }
 
 function linkifyQuestion(question) {
  return '<a href="' + question.link + '">' + question.title + '</a>' 
 }
 
-function pickRandomQuestion(questions) {
-  return questions[Math.floor(Math.random() * (questions.length))];
+function pickRandomQuestion(data) {
+  return data.questions[Math.floor(Math.random() * (data.questions.length))];
 }
