@@ -9,7 +9,7 @@ function gallery(dataStore, messages) {
       reject('no image message found');
     } else {
       var latestImageMessage = imageMessages[0];
-      resolve(createPayload(latestImageMessage));
+      resolve(createPayload(dataStore, latestImageMessage));
     }
   }
   return new Promise(result);
