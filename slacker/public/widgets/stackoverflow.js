@@ -16,7 +16,7 @@ function presentQuestion(data) {
     '<br>' +
     '<div>' +
       '<span class="active-channel-copy">We have ' + linkifyCount(data) + '!</span>' +
-      '<p class="">Here\'s one: ' + linkifyQuestion(pickRandomQuestion(data)) + '</p>' +
+      '<p>Here\'s one: ' + linkifyQuestion(pickRandomQuestion(data)) + '</p>' +
     '</div>' +
   '</div>' +
 '</div>';
