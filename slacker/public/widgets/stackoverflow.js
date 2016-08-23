@@ -16,7 +16,7 @@ function presentQuestion(data) {
     '<br>' +
     '<div>' +
       '<span class="active-channel-copy">We have ' + linkifyCount(data.questions) + '!</span>' +
-      '<p class="">Here\'s one: ' + linkifyQuestion(data.questions[0]) + '</p>' +
+      '<p class="">Here\'s one: ' + linkifyQuestion(pickRandomQuestion(data.questions)) + '</p>' +
     '</div>' +
   '</div>' +
 '</div>';
@@ -28,4 +28,8 @@ function linkifyCount(questions) {
 
 function linkifyQuestion(question) {
  return '<a href="' + question.link + '">' + question.title + '</a>' 
+}
+
+function pickRandomQuestion(questions) {
+  return questions[Math.floor(Math.random() * (questions.length))];
 }
