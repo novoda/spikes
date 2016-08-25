@@ -40,6 +40,7 @@ android {
     buildConfigProperty 'OVERRIDABLE', buildProperties.secrets['overridable']
     buildConfigProperty 'GOOGLE_MAPS_KEY', buildProperties.secrets['googleMapsKey']
     buildConfigProperty 'SUPER_SECRET', buildProperties.secrets['superSecret']
+    buildConfigProperty 'FOO', buildProperties.secrets['notThere'].or('bar')
   }
 
   signingConfigs {

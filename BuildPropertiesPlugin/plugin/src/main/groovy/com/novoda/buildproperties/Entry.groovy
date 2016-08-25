@@ -34,4 +34,29 @@ class Entry {
         value.call()
     }
 
+    Entry or(def fallback) {
+        def other = from(fallback)
+        new Entry(key, {
+            try {
+                return getValue()
+            } catch (Throwable e) {
+                try {
+                    return other.call()
+                } catch (Throwable e2) {
+                    throw CompositeException.from(e).add(e2)
+                }
+            }
+        })
+    }
+
+    private static def from(def fallback) {
+        if (fallback instanceof Entry) {
+            return { (fallback as Entry).getValue() }
+        }
+        if (fallback instanceof Closure) {
+            return fallback
+        }
+        return { fallback }
+    }
+
 }
