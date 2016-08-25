@@ -14,9 +14,9 @@ class EntryTest {
         Entry entry1 = new Entry('key1', { 'value1' })
         Entry entry2 = new Entry('key2', { 'value2' })
 
-        Entry or = entry1.or(entry2)
+        Entry entryWithFallback = entry1.or(entry2)
 
-        assertThat(or).hasValue('value1')
+        assertThat(entryWithFallback).hasValue('value1')
     }
 
     @Test
@@ -24,9 +24,9 @@ class EntryTest {
         Entry entry1 = new Entry('key1', { throw EXCEPTION_1 })
         Entry entry2 = new Entry('key2', { 'value2' })
 
-        Entry or = entry1.or(entry2)
+        Entry entryWithFallback = entry1.or(entry2)
 
-        assertThat(or).hasValue('value2')
+        assertThat(entryWithFallback).hasValue('value2')
     }
 
     @Test
@@ -34,9 +34,9 @@ class EntryTest {
         Entry entry1 = new Entry('key1', { throw EXCEPTION_1 })
         Entry entry2 = new Entry('key2', { throw EXCEPTION_2 })
 
-        Entry or = entry1.or(entry2)
+        Entry entryWithFallback = entry1.or(entry2)
 
-        assertThat(or).willThrow(CompositeException.from(EXCEPTION_1).add(EXCEPTION_2))
+        assertThat(entryWithFallback).willThrow(CompositeException.from(EXCEPTION_1).add(EXCEPTION_2))
     }
 
     @Test
@@ -44,18 +44,18 @@ class EntryTest {
         Entry entry = new Entry('key', { throw EXCEPTION_1 })
         def fallback = { 'fallback' }
 
-        Entry or = entry.or(fallback)
+        Entry entryWithFallback = entry.or(fallback)
 
-        assertThat(or).hasValue('fallback')
+        assertThat(entryWithFallback).hasValue('fallback')
     }
 
     @Test
     public void shouldReturnValueWhenFirstEntryValueThrows() {
         Entry entry = new Entry('key', { throw EXCEPTION_1 })
 
-        Entry or = entry.or('fallback')
+        Entry entryWithFallback = entry.or('fallback')
 
-        assertThat(or).hasValue('fallback')
+        assertThat(entryWithFallback).hasValue('fallback')
     }
 
 }
