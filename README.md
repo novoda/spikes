@@ -121,6 +121,17 @@ value for a given `Entry` via the `or()` operator, defined as:
 |a `Closure` | `buildProperties.secrets['notThere'].or({ Math.random() })` |
 |a value | `buildProperties.secrets['notThere'].or('fallback')` |
 
+If the whole fallback chain evaluation fails a `CompositeException` is thrown listing all
+the causes in the chain, eg:
+
+```java
+A problem occurred while evaluating entry:
+- exception message 1
+- exception message 2
+- exception message 3
+
+```
+
 #### Override properties at build time
 A property from any file listed in `buildProperties` can be overridden at
 build time specifying a new value as project property (ie: `-PapiKey=newValue`).
