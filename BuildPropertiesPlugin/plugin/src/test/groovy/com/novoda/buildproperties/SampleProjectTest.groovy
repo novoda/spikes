@@ -66,6 +66,14 @@ public class SampleProjectTest {
     }
   }
 
+  @Test
+  public void shouldEvaluateFallbackWhenNeeded() {
+    EntrySubject.assertThat(PROJECT.secrets['FOO']).willThrow(IllegalArgumentException)
+    [PROJECT.debugBuildConfig.text, PROJECT.releaseBuildConfig.text].each { String generatedBuildConfig ->
+      assertThat(generatedBuildConfig).contains('public static final String FOO = "bar";')
+    }
+  }
+
   static class ProjectRule implements TestRule {
     File projectDir
     BuildResult buildResult

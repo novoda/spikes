@@ -111,6 +111,27 @@ The full list of new typed facilities is as follows:
 |`resValueBoolean` | `resValueBoolean 'debug_test_bool', true`|
 |`resValueString` | `resValueString 'debug_test_string', 'dunno bro...'`|
 
+#### Fallback support
+If a property cannot be found an exception is thrown. It's possible to provide a fallback
+value for a given `Entry` via the `or()` operator, defined as:
+
+| | Example |
+|----|----|
+|another `Entry` | `buildProperties.secrets['notThere'].or(buildProperties.secrets['fallback'])` |
+|a `Closure` | `buildProperties.secrets['notThere'].or({ Math.random() })` |
+|a value | `buildProperties.secrets['notThere'].or('fallback')` |
+
+If the whole fallback chain evaluation fails a `CompositeException` is thrown listing all
+the causes in the chain, eg:
+
+```java
+A problem occurred while evaluating entry:
+- exception message 1
+- exception message 2
+- exception message 3
+
+```
+
 #### Override properties at build time
 A property from any file listed in `buildProperties` can be overridden at
 build time specifying a new value as project property (ie: `-PapiKey=newValue`).
@@ -128,7 +149,7 @@ If the specified file is not found an exception is thrown at build time.
 You can specify a custom error message to provide the user with more information.
 Given a `BuildProperties` instance one of its entries can be retrieved using the `getAt` operator:
 
-`BuildProperty.Entry entry = buildProperties.secrets['aProperty']`
+`Entry entry = buildProperties.secrets['aProperty']`
 
 The value of an entry can be retrieved via one of the following typed accessors:
 
