@@ -9,13 +9,13 @@ import javax.annotation.Nullable
 
 final class CompositeExceptionSubject extends Subject<CompositeExceptionSubject, CompositeException> {
 
-    private static
-    final SubjectFactory<CompositeExceptionSubject, CompositeException> FACTORY = new SubjectFactory<CompositeExceptionSubject, CompositeException>() {
-        @Override
-        CompositeExceptionSubject getSubject(FailureStrategy fs, CompositeException that) {
-            new CompositeExceptionSubject(fs, that)
-        }
-    }
+    private static final SubjectFactory<CompositeExceptionSubject, CompositeException> FACTORY =
+            new SubjectFactory<CompositeExceptionSubject, CompositeException>() {
+                @Override
+                CompositeExceptionSubject getSubject(FailureStrategy fs, CompositeException that) {
+                    new CompositeExceptionSubject(fs, that)
+                }
+            }
 
     public static CompositeExceptionSubject assertThat(CompositeException compositeException) {
         Truth.assertAbout(FACTORY).that(compositeException)
@@ -24,10 +24,6 @@ final class CompositeExceptionSubject extends Subject<CompositeExceptionSubject,
     private CompositeExceptionSubject(FailureStrategy failureStrategy,
                                       @Nullable CompositeException subject) {
         super(failureStrategy, subject)
-    }
-
-    public void contains(Throwable... throwables) {
-        Truth.assertThat(subject.exceptions).containsExactly(throwables)
     }
 
     public void hasMessage(String... messages) {
