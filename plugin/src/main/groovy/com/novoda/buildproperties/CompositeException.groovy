@@ -24,6 +24,10 @@ class CompositeException extends Exception {
         return new CompositeException(newExceptions)
     }
 
+    List<Throwable> getExceptions() {
+        exceptions
+    }
+
     @Override
     String getMessage() {
         return exceptions

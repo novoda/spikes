@@ -3,6 +3,7 @@ package com.novoda.buildproperties
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
+import static com.novoda.buildproperties.CompositeExceptionSubject.assertThat
 
 class CompositeExceptionTest {
 
@@ -20,21 +21,17 @@ class CompositeExceptionTest {
     }
 
     @Test
-    public void shouldContainWrappedExceptionMessage() {
+    public void shouldContainWrappedException() {
         CompositeException compositeException = CompositeException.from(EXCEPTION_1)
 
-        String message = compositeException.message
-
-        assertThat(message).contains(inOrder(EXCEPTION_1.message))
+        assertThat(compositeException).hasMessage(EXCEPTION_1.message)
     }
 
     @Test
-    public void shouldContainAddedExceptionMessage() {
+    public void shouldContainAddedException() {
         CompositeException compositeException = CompositeException.from(EXCEPTION_1).add(EXCEPTION_2)
 
-        String message = compositeException.message
-
-        assertThat(message).contains(inOrder(EXCEPTION_1.message, EXCEPTION_2.message))
+        assertThat(compositeException).hasMessage(EXCEPTION_1.message, EXCEPTION_2.message)
     }
 
     @Test
@@ -42,13 +39,7 @@ class CompositeExceptionTest {
         CompositeException innerException = CompositeException.from(EXCEPTION_1).add(EXCEPTION_2)
         CompositeException compositeException = innerException.add(EXCEPTION_3)
 
-        String message = compositeException.message
-
-        assertThat(message).contains(inOrder(EXCEPTION_1.message, EXCEPTION_2.message, EXCEPTION_3.message))
-    }
-
-    private static String inOrder(String... messages) {
-        messages.inject ('', { acc, val -> acc + "\n- $val"})
+        assertThat(compositeException).hasMessage(EXCEPTION_1.message, EXCEPTION_2.message, EXCEPTION_3.message)
     }
 
 }
