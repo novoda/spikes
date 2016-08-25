@@ -22,6 +22,7 @@ class BuildPropertiesPlugin implements Plugin<Project> {
                 return new BuildProperties(name, project)
             }
         })
+        container.create('env').entries(new EnvironmentPropertiesEntries(project))
         project.extensions.add('buildProperties', container)
 
         def android = project.extensions.findByName("android")

@@ -5,6 +5,8 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.internal.DefaultGradleRunner
 import org.junit.ClassRule
 import org.junit.Test
+import org.junit.contrib.java.lang.system.EnvironmentVariables
+import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
@@ -13,9 +15,15 @@ import static com.google.common.truth.Truth.assertThat
 
 public class SampleProjectTest {
 
-  @ClassRule
   public static final ProjectRule PROJECT = new ProjectRule()
+  public static final EnvironmentVariables ENV = new EnvironmentVariables()
   public static final String COMMAND_LINE_PROPERTY = 'modified from command line'
+  public static final String ENV_VAR_VALUE = '123456'
+
+  @ClassRule
+  public static TestRule classRule() {
+    RuleChain.outerRule(PROJECT).around(ENV)
+  }
 
   @Test
   public void shouldGenerateTypedFieldsFromTypedValuesProvidedInDefaultBuildConfig() {
@@ -74,6 +82,14 @@ public class SampleProjectTest {
     }
   }
 
+  @Test
+  public void shouldEvaluateEnvironmentVariable() {
+    assertThat(System.getenv('WAT')).isEqualTo(ENV_VAR_VALUE)
+    [PROJECT.debugBuildConfig.text, PROJECT.releaseBuildConfig.text].each { String generatedBuildConfig ->
+      assertThat(generatedBuildConfig).contains("public static final String WAT = \"$ENV_VAR_VALUE\";")
+    }
+  }
+
   static class ProjectRule implements TestRule {
     File projectDir
     BuildResult buildResult
@@ -85,6 +101,8 @@ public class SampleProjectTest {
 
     @Override
     Statement apply(Statement base, Description description) {
+      ENV.set('WAT', ENV_VAR_VALUE)
+
       File propertiesFile = new File(Resources.getResource('any.properties').toURI())
       File rootDir = propertiesFile.parentFile.parentFile.parentFile.parentFile.parentFile
 

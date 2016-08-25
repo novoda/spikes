@@ -142,7 +142,15 @@ another properties files (specified via an `include` property).
 Inherited properties can be overridden by the including set, just redefine
 the property in the file and its value will be used instead of the one
 from the included set.
- 
+
+#### Other built-in `Entry` sets
+It's possible to access a system enviroment variable as `Entry` via a predefined set of entries, ie:
+
+```groovy
+buildProperties.env['FOO']
+```
+Such entries are particularly handy when used alongside the `Entry.or()` operator in order to provide
+fallback values.
 
 #### More on loading properties
 If the specified file is not found an exception is thrown at build time.
