@@ -16,6 +16,7 @@ function presentQuestion(data) {
     '<br>' +
     '<div>' +
       '<span class="active-channel-copy">We have ' + linkifyCount(data) + '!</span>' +
+      '<p>surl.novoda.com/stackoverflow</p>' +
       '<p>Here\'s one: ' + linkifyQuestion(pickRandomQuestion(data)) + '</p>' +
     '</div>' +
   '</div>' +
