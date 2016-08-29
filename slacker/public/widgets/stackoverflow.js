@@ -23,11 +23,11 @@ function presentQuestion(data) {
 }
 
 function linkifyCount(data) {
-  return '<a href="' + data.url + '">' + data.questions.length + ' unanswered questions</a>'
+  return '<a style="color: black; text-decoration:none; cursor:default" href="' + data.url + '">' + data.questions.length + ' unanswered questions</a>'
 }
 
 function linkifyQuestion(question) {
- return '<a href="' + question.link + '">' + question.title + '</a>' 
+ return '<a style="color: black; text-decoration:none; cursor:default" href="' + question.link + '">' + question.title + '</a>' 
 }
 
 function pickRandomQuestion(data) {
