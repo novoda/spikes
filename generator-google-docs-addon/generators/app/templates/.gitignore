@@ -1,0 +1,7 @@
+.tmp/
+bower_components/
+build/**
+coverage/
+node_modules/
+gapps.config.json
+src/config.json
