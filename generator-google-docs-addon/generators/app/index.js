@@ -96,7 +96,6 @@ module.exports = yeoman.Base.extend({
             message: 'Type the file ID of your Google Apps Script project (e.g., for ' +
             '"https://script.google.com/d/1e7mfWrjs5zHV-1IOLAlaTTn6TNlezL2cqzXydb2NEpfXyBMNswmRI8FW/edit" the file ID is ' +
             '"1e7mfWrjs5zHV-1IOLAlaTTn6TNlezL2cqzXydb2NEpfXyBMNswmRI8FW").',
-            default: '1e7mfWrjs5zHV-1IOLAlaTTn6TNlezL2cqzXydb2NEpfXyBMNswmRI8FW',
             when: () => {
               return !this.options.skipFileId;
             }
@@ -132,7 +131,6 @@ module.exports = yeoman.Base.extend({
             name: 'secretFile',
             message: 'In the Developers Console Project, create a new OAuth Client ID of type "Other", then download ' +
             'the credentials JSON and type the path here.',
-            default: '/Users/fra/Downloads/client_secret_1011541283870-14svn4n0pdlm1clhkg66oovup9dcu75m.apps.googleusercontent.com.json',
             when: () => {
               return !this.options.skipAuth;
             }
