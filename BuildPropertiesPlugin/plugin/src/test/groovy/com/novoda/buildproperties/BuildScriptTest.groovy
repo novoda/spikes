@@ -9,7 +9,7 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 
 import static com.google.common.truth.Truth.assertThat
-import static junit.framework.Assert.fail
+import static org.junit.Assert.fail
 
 public class BuildScriptTest {
 
@@ -54,16 +54,28 @@ public class BuildScriptTest {
   }
 
   @Test
-  public void shouldFailBuildWhenPropertiesFileDoesNotExist() {
+  public void shouldNotFailBuildWhenDefiningPropertiesFromNonExistentFile() {
     project.apply plugin: 'com.android.library'
     project.apply plugin: BuildPropertiesPlugin
+    project.buildProperties {
+      foo {
+        file project.file('foo.properties')
+      }
+    }
+  }
+
+  @Test
+  public void shouldFailBuildWhenAccessingPropertyFromNonExistentFile() {
+    project.apply plugin: 'com.android.library'
+    project.apply plugin: BuildPropertiesPlugin
+    project.buildProperties {
+      foo {
+        file project.file('foo.properties')
+      }
+    }
 
     try {
-      project.buildProperties {
-        foo {
-          file project.file('foo.properties')
-        }
-      }
+      project.buildProperties.foo['any'].value
       fail('Gradle exception not thrown')
     } catch (GradleException e) {
       assertThat(e.getMessage()).endsWith('foo.properties does not exist.')
@@ -71,7 +83,7 @@ public class BuildScriptTest {
   }
 
   @Test
-  public void shouldProvideErrorMessageWhenPropertiesFileDoesNotExist() {
+  public void shouldProvideSpecifiedErrorMessageWhenAccessingPropertyFromNonExistentFile() {
     project.apply plugin: 'com.android.library'
     project.apply plugin: BuildPropertiesPlugin
 
@@ -82,6 +94,7 @@ public class BuildScriptTest {
           file project.file('foo.properties'), errorMessage
         }
       }
+      project.buildProperties.foo['any'].value
       fail('Gradle exception not thrown')
     } catch (GradleException e) {
       String message = e.getMessage()

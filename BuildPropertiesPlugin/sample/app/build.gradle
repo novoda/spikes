@@ -8,6 +8,11 @@ apply plugin: 'com.android.application'
 apply plugin: com.novoda.buildproperties.BuildPropertiesPlugin
 
 buildProperties {
+  notThere {
+    file rootProject.file('whatever'), '''
+      This file actually doesn't exists. This is used to show properties fiels are lazy-loaded.
+    '''
+  }
   secrets {
     file rootProject.file('properties/secrets.properties')
   }
@@ -40,7 +45,7 @@ android {
     buildConfigProperty 'OVERRIDABLE', buildProperties.secrets['overridable']
     buildConfigProperty 'GOOGLE_MAPS_KEY', buildProperties.secrets['googleMapsKey']
     buildConfigProperty 'SUPER_SECRET', buildProperties.secrets['superSecret']
-    buildConfigProperty 'FOO', buildProperties.secrets['notThere'].or('bar')
+    buildConfigProperty 'FOO', buildProperties.secrets['notThere'].or(buildProperties.notThere['foo']).or('bar')
     buildConfigProperty 'WAT', buildProperties.env['WAT']
   }
 
