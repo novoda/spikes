@@ -153,8 +153,9 @@ Such entries are particularly handy when used alongside the `Entry.or()` operato
 fallback values.
 
 #### More on loading properties
-If the specified file is not found an exception is thrown at build time.
+If the specified file is not found an exception is thrown at build time as soon as one of its properties is evaluated.
 You can specify a custom error message to provide the user with more information.
+
 Given a `BuildProperties` instance one of its entries can be retrieved using the `getAt` operator:
 
 `Entry entry = buildProperties.secrets['aProperty']`

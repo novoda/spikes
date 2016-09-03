@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 1.2.0 *(03/09/2016)*
+----------------------------
+
+- Added lazy-loading for properties files
+
 Version 1.1.0 *(25/08/2016)*
 ----------------------------
 
