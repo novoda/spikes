@@ -53,13 +53,15 @@ monkeyRunner {
 }
 ```
 
-In your app manifest, add the following category for your main Activity:
-```xml
-<intent-filter>
-  ...
-  <category android:name="android.intent.category.MONKEY" />
-</intent-filter>
-```
+## Configuration
+
+You can configure the following properties on the `monkeyRunner` extension:
+- `taskDependency`: task to be run before the monkey runner starts (usually this is an install task for your app)
+ - `eventsCount` (optional): number of events executed by the monkey runner (**default: 50000**)
+ - `packageNameFilter`: your app package name
+ - `logFileName` (optional): name of the monkey runner log (**default: monkey.log**)
+ - `useMonkeyTrap` (optional): whether to use the monkey trap or not (**default: true**) 
+
 
 ## Simple usage
 
