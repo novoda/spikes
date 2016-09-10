@@ -47,7 +47,7 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
                 events = extension.eventsCount
                 deviceId = device.id
                 logFileName = extension.logFileName
-                categories = ["android.intent.category.MONKEY"]
+                categories = extension.categories
             }
 
             def hideOverlay = project.task("hideOverlayDevice${index}", type: NotificationBarOverlay) {
@@ -74,6 +74,7 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
         Integer eventsCount
         String packageNameFilter
         String logFileName
+        List<String> categories
 
         void setDefaultsForOptionalProperties() {
             eventsCount = 50000
