@@ -6,11 +6,12 @@ import org.junit.Test
 import static com.google.common.truth.Truth.assertThat
 
 class MonkeyRunnerExtensionTest {
-    private MonkeyConfigurationPlugin.MonkeyRunnerExtension extension
+
+    private MonkeyRunnerExtension extension
 
     @Before
     public void setUp() {
-        extension = new MonkeyConfigurationPlugin.MonkeyRunnerExtension()
+        extension = new MonkeyRunnerExtension()
     }
 
     @Test(expected = IllegalArgumentException.class)

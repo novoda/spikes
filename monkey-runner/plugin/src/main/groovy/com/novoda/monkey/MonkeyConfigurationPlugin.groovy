@@ -6,13 +6,12 @@ import org.gradle.api.Project
 
 public class MonkeyConfigurationPlugin implements Plugin<Project> {
 
-    private static final String MONKEY_RUNNER_EXTENSION_NAME = 'monkeyRunner'
     private static final String TASK_NAME = 'runMonkeyAll'
 
     @Override
     public void apply(Project project) {
         ensureAndroidPluginAppliedTo(project)
-        MonkeyRunnerExtension extension = project.extensions.create(MONKEY_RUNNER_EXTENSION_NAME, MonkeyRunnerExtension)
+        MonkeyRunnerExtension extension = project.extensions.create(MonkeyRunnerExtension.NAME, MonkeyRunnerExtension)
         extension.setDefaultsForOptionalProperties()
 
         project.afterEvaluate {
@@ -65,33 +64,6 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
             monkeyTask.dependsOn extension.taskDependency
             monkeyTask.finalizedBy hideOverlay
             runMonkeyAllTask.dependsOn monkeyTask
-        }
-    }
-
-    static class MonkeyRunnerExtension {
-
-        String taskDependency
-        Integer eventsCount
-        String packageNameFilter
-        String logFileName
-        List<String> categories
-
-        void setDefaultsForOptionalProperties() {
-            eventsCount = 50000
-            logFileName = 'monkey.log'
-        }
-
-        void ensureMandatoryPropertiesPresent() {
-            if (taskDependency == null) {
-                notifyMissingProperty('taskDependency')
-            }
-            if (packageNameFilter == null) {
-                notifyMissingProperty('packageNameFilter')
-            }
-        }
-
-        private static void notifyMissingProperty(String propertyName) {
-            throw new IllegalArgumentException("${MONKEY_RUNNER_EXTENSION_NAME}.${propertyName} is not specified")
         }
     }
 }

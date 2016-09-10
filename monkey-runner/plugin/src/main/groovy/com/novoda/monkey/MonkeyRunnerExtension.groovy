@@ -1,0 +1,30 @@
+package com.novoda.monkey
+
+public class MonkeyRunnerExtension {
+
+    public static final String NAME = 'monkeyRunner'
+
+    String taskDependency
+    Integer eventsCount
+    String packageNameFilter
+    String logFileName
+    List<String> categories
+
+    void setDefaultsForOptionalProperties() {
+        eventsCount = 50000
+        logFileName = 'monkey.log'
+    }
+
+    void ensureMandatoryPropertiesPresent() {
+        if (taskDependency == null) {
+            notifyMissingProperty('taskDependency')
+        }
+        if (packageNameFilter == null) {
+            notifyMissingProperty('packageNameFilter')
+        }
+    }
+
+    private static void notifyMissingProperty(String propertyName) {
+        throw new IllegalArgumentException("${NAME}.${propertyName} is not specified")
+    }
+}
