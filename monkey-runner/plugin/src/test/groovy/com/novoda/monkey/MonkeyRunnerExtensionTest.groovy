@@ -41,4 +41,11 @@ class MonkeyRunnerExtensionTest {
 
         assertThat(extension.logFileName).isEqualTo('monkey.log')
     }
+
+    @Test
+    public void defaultMonkeyTrapIsTrue() {
+        extension.setDefaultsForOptionalProperties()
+
+        assertThat(extension.useMonkeyTrap).isTrue()
+    }
 }

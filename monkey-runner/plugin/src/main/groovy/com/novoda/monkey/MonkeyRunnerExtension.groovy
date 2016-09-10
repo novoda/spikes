@@ -9,10 +9,12 @@ public class MonkeyRunnerExtension {
     String packageNameFilter
     String logFileName
     List<String> categories
+    boolean useMonkeyTrap
 
     void setDefaultsForOptionalProperties() {
         eventsCount = 50000
         logFileName = 'monkey.log'
+        useMonkeyTrap = true
     }
 
     void ensureMandatoryPropertiesPresent() {

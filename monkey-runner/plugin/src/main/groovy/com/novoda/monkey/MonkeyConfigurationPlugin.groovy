@@ -36,11 +36,6 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
         def android = project.extensions.findByName("android")
         android.command.devices().eachWithIndex { device, index ->
 
-            def showOverlayTask = project.task("showOverlayDevice${index}", type: NotificationBarOverlay) {
-                show = true
-                deviceId = device.id
-            }
-
             def monkeyTask = project.task("runMonkeyDevice${index}", type: TargetedMonkey) {
                 packageName = extension.packageNameFilter
                 events = extension.eventsCount
@@ -49,20 +44,30 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
                 categories = extension.categories
             }
 
-            def hideOverlay = project.task("hideOverlayDevice${index}", type: NotificationBarOverlay) {
-                show = false
-                deviceId = device.id
-            }
-
             def uninstallApp = project.task("uninstallMonkeyDevice${index}", type: TargetedUninstall) {
                 packageName = extension.packageNameFilter
                 deviceId = device.id
             }
 
-            hideOverlay.dependsOn uninstallApp
-            monkeyTask.dependsOn showOverlayTask
+            if (extension.useMonkeyTrap) {
+                def showOverlayTask = project.task("showOverlayDevice${index}", type: NotificationBarOverlay) {
+                    show = true
+                    deviceId = device.id
+                }
+
+                def hideOverlay = project.task("hideOverlayDevice${index}", type: NotificationBarOverlay) {
+                    show = false
+                    deviceId = device.id
+                }
+
+                hideOverlay.dependsOn uninstallApp
+                monkeyTask.dependsOn showOverlayTask
+                monkeyTask.finalizedBy hideOverlay
+            } else {
+                monkeyTask.finalizedBy uninstallApp
+            }
+
             monkeyTask.dependsOn extension.taskDependency
-            monkeyTask.finalizedBy hideOverlay
             runMonkeyAllTask.dependsOn monkeyTask
         }
     }
