@@ -8,6 +8,10 @@ repositories {
 dependencies {
     compile gradleApi()
     compile gradlePlugins.gradleAndroidCommandPlugin
+
+    testCompile gradleTestKit()
+    testCompile gradlePlugins.gradle
+    testCompile testLibraries.truth
 }
 
 publish {

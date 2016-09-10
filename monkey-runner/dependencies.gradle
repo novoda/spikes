@@ -6,12 +6,16 @@ ext {
     ]
 
     versions = [
-            androidBuildTools   : '24.0.1',
-            androidSupportLibs  : '24.1.1'
+            androidBuildTools : '24.0.1',
+            androidSupportLibs: '24.1.1'
     ]
 
     libraries = [
             appCompat        : "com.android.support:appcompat-v7:${versions.androidSupportLibs}",
             androidV13Support: "com.android.support:support-v13:${versions.androidSupportLibs}",
+    ]
+
+    testLibraries = [
+            truth: 'com.google.truth:truth:0.28'
     ]
 }
