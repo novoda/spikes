@@ -24,7 +24,7 @@ public class MonkeyConfigurationPluginTest {
     }
 
     @Test
-    public void givenAndroidPluginApplied_whenApplyingMonkey_thenItApplies() {
+    public void givenAndroidPluginApplied_whenApplyingMonkey_thenItDoesNotThrowException() {
         project.apply plugin: MonkeyConfigurationPlugin
     }
 }
