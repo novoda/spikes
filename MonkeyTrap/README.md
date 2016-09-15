@@ -35,3 +35,9 @@ adb shell am startservice -a com.novoda.monkeytrap.SHOW_OVERLAY --ez show true #
 
 adb shell am startservice -a com.novoda.monkeytrap.SHOW_OVERLAY --ez show false # Will hide the overlay
 ```
+
+### Result
+
+Trap is disabled | Trap is enabled
+--- | ---
+![without](https://cloud.githubusercontent.com/assets/1626673/16620735/df638abe-4393-11e6-8cdd-ebb88ac04f0a.png) | ![with](https://cloud.githubusercontent.com/assets/1626673/16620738/e0c56c60-4393-11e6-94c3-104848f8e019.png)
