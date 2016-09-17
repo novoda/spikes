@@ -46,7 +46,7 @@ android {
     buildConfigProperty 'GOOGLE_MAPS_KEY', buildProperties.secrets['googleMapsKey']
     buildConfigProperty 'SUPER_SECRET', buildProperties.secrets['superSecret']
     buildConfigProperty 'FOO', buildProperties.secrets['notThere'].or(buildProperties.notThere['foo']).or('bar')
-    buildConfigProperty 'WAT', buildProperties.env['WAT']
+    buildConfigProperty 'WAT', buildProperties.env['WAT'].or('?!?')
   }
 
   signingConfigs {
