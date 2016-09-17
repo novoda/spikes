@@ -10,7 +10,7 @@ apply plugin: com.novoda.buildproperties.BuildPropertiesPlugin
 buildProperties {
   notThere {
     file rootProject.file('whatever'), '''
-      This file actually doesn't exists. This is used to show properties fiels are lazy-loaded.
+      This file actually doesn't exists. This is used to show properties files are lazy-loaded.
     '''
   }
   secrets {
