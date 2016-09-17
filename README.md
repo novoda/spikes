@@ -23,7 +23,7 @@ buildscript {
     jcenter()
    }
   dependencies {
-    classpath 'com.novoda:build-properties-plugin:1.1.0'
+    classpath 'com.novoda:build-properties-plugin:1.2.1'
   }
 }
 ```
