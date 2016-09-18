@@ -90,6 +90,11 @@ public class SampleProjectTest {
     }
   }
 
+  @Test
+  public void shouldSignReleaseBuildUsingProperties() throws Exception {
+    assertThat(new File(PROJECT.apkDir, 'app-release.apk').exists()).isTrue()
+  }
+
   static class ProjectRule implements TestRule {
     File projectDir
     BuildResult buildResult
@@ -97,6 +102,7 @@ public class SampleProjectTest {
     File releaseBuildConfig
     File debugResValues
     File releaseResValues
+    File apkDir
     Entries secrets
 
     @Override
@@ -105,19 +111,20 @@ public class SampleProjectTest {
 
       File propertiesFile = new File(Resources.getResource('any.properties').toURI())
       File rootDir = propertiesFile.parentFile.parentFile.parentFile.parentFile.parentFile
-
       projectDir = new File(rootDir, 'sample')
+      File buildDir = new File(projectDir, 'app/build')
+      apkDir = new File(buildDir, 'outputs/apk')
       buildResult = DefaultGradleRunner.create()
-              .withProjectDir(PROJECT.projectDir)
+              .withProjectDir(projectDir)
               .withDebug(true)
               .forwardStdOutput(new OutputStreamWriter(System.out))
-              .withArguments('clean', "-Poverridable=$COMMAND_LINE_PROPERTY", 'compileDebugSources', 'compileReleaseSources')
+              .withArguments('clean', "-Poverridable=$COMMAND_LINE_PROPERTY", 'assemble')
               .build()
-      debugBuildConfig = new File(PROJECT.projectDir, 'app/build/generated/source/buildConfig/debug/com/novoda/buildpropertiesplugin/sample/BuildConfig.java')
-      releaseBuildConfig = new File(PROJECT.projectDir, 'app/build/generated/source/buildConfig/release/com/novoda/buildpropertiesplugin/sample/BuildConfig.java')
-      debugResValues = new File(PROJECT.projectDir, 'app/build/generated/res/resValues/debug/values/generated.xml')
-      releaseResValues = new File(PROJECT.projectDir, 'app/build/generated/res/resValues/release/values/generated.xml')
-      secrets = FilePropertiesEntries.create(new File(PROJECT.projectDir, 'properties/secrets.properties'))
+      debugBuildConfig = new File(buildDir, 'generated/source/buildConfig/debug/com/novoda/buildpropertiesplugin/sample/BuildConfig.java')
+      releaseBuildConfig = new File(buildDir, 'generated/source/buildConfig/release/com/novoda/buildpropertiesplugin/sample/BuildConfig.java')
+      debugResValues = new File(buildDir, 'generated/res/resValues/debug/values/generated.xml')
+      releaseResValues = new File(buildDir, 'generated/res/resValues/release/values/generated.xml')
+      secrets = FilePropertiesEntries.create(new File(projectDir, 'properties/secrets.properties'))
       return base;
     }
   }

@@ -28,8 +28,8 @@ buildProperties {
 }
 
 android {
-  compileSdkVersion 23
-  buildToolsVersion "23.0.2"
+  compileSdkVersion 24
+  buildToolsVersion "24.0.2"
 
   defaultConfig {
     applicationId "com.novoda.buildpropertiesplugin.sample"
@@ -46,7 +46,7 @@ android {
     buildConfigProperty 'GOOGLE_MAPS_KEY', buildProperties.secrets['googleMapsKey']
     buildConfigProperty 'SUPER_SECRET', buildProperties.secrets['superSecret']
     buildConfigProperty 'FOO', buildProperties.secrets['notThere'].or(buildProperties.notThere['foo']).or('bar')
-    buildConfigProperty 'WAT', buildProperties.env['WAT']
+    buildConfigProperty 'WAT', buildProperties.env['WAT'].or('?!?')
   }
 
   signingConfigs {

@@ -95,12 +95,10 @@ class BuildPropertiesPlugin implements Plugin<Project> {
 
     private void addSigningConfigSupportTo(target, Project project) {
         target.ext.signingConfigProperties = { BuildProperties buildProperties ->
-            project.afterEvaluate {
-                target.storeFile new File(buildProperties.parentFile, buildProperties['storeFile'].string)
-                target.storePassword buildProperties['storePassword'].string
-                target.keyAlias buildProperties['keyAlias'].string
-                target.keyPassword buildProperties['keyPassword'].string
-            }
+            target.storeFile new File(buildProperties.parentFile, buildProperties['storeFile'].string)
+            target.storePassword buildProperties['storePassword'].string
+            target.keyAlias buildProperties['keyAlias'].string
+            target.keyPassword buildProperties['keyPassword'].string
         }
     }
 
