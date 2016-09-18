@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-Version 1.2.1 *(17/09/2016)*
+Version 1.2.1 *(18/09/2016)*
 ----------------------------
 
 - Fixed bug with `signingConfigProperties` not filling signing configuration
