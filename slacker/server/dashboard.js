@@ -1,15 +1,16 @@
 var Slacker = require('./slacker/slacker.js');
 
-const DASHBOARD_INTERVAL = 1000 * 5;
+const DASHBOARD_INTERVAL = 1000 * 15;
 
 var Dashboard = function(token) {
   this.slacker = new Slacker(token);
   this.index = 0;
   this.widgets = [
-    require('./ci-wall'),
-    require('./coverage'),
-    require('./stackoverflow')
-  ].concat(this.slacker.getRules());
+    // require('./ci-wall'),
+    // require('./coverage'),
+    // require('./stackoverflow'),
+    require('./reviews')];
+  // ].concat(this.slacker.getRules());
 }
 
 function update(self, callback) {
