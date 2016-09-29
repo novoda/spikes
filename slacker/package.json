@@ -1,0 +1,18 @@
+{
+  "name": "slacker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@slack/client": "^3.5.1",
+    "express": "^4.14.0",
+    "request": "^2.74.0",
+    "socket.io": "^1.4.8"
+  }
+}
