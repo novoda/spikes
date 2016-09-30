@@ -4,3 +4,9 @@ The project includes the following units:
 * **Remote control unit**: an Android sender app with the remote control UI which will send movement commands to a receiver Android app, installed in the bot device.
 * **HW-SW bridge unit**: a serial channel between the receiver Android app and the movement unit. It will be included in the receiver App, once finished.
 * **Movement unit**: Arduino-controlled motors connected to a frame holding the Adroid device
+
+
+## Movement unit development
+1. Download the official Arduino IDE from https://www.arduino.cc/en/Main/Software
+2. Install the official library for the Adafruit Motor shield V1 https://github.com/adafruit/Adafruit-Motor-Shield-library
+3. Load the sketch in `movement-unit`, compile and upload!
