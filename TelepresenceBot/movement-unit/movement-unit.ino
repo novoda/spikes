@@ -6,6 +6,10 @@ AF_DCMotor motorRight2(2);
 AF_DCMotor motorLeft1(4);
 AF_DCMotor motorLeft2(3);
 
+const char COMMAND_FORWARD = 'w';
+const char COMMAND_BACKWARD = 's';
+const char COMMAND_TEST = 't';
+
 void setup() {
   Serial.begin(9600);           
   Serial.println("Movement unit starting");
@@ -22,9 +26,32 @@ void setup() {
 //  motorLeft2.run(RELEASE);
 }
 
-int i;
-
 void loop() {
+  if (Serial.available() == 0) {
+    return;
+  }
+  
+  char inChar = Serial.read();
+  Serial.println("received " + inChar);
+
+  switch(inChar) {
+    case (COMMAND_FORWARD):
+      // TODO: increase speed
+      break;
+    case (COMMAND_BACKWARD):
+      // TODO: decrease speed
+      break;
+    case (COMMAND_TEST):
+      testMotors();
+      break;
+    default:
+       Serial.println("Unknown command " + inChar);
+  }
+}
+
+void testMotors() {
+  int i;
+  
   setRightDirection(FORWARD);
   setLeftDirection(FORWARD);
   for (i=0; i<255; i++) {
