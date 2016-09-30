@@ -25,54 +25,54 @@ void setup() {
 int i;
 
 void loop() {
-  setMotorsRightDirection(FORWARD);
-  setMotorsLeftDirection(FORWARD);
+  setRightDirection(FORWARD);
+  setLeftDirection(FORWARD);
   for (i=0; i<255; i++) {
-    setMotorsRightSpeed(i);  
-    setMotorsLeftSpeed(i);  
+    setRightSpeed(i);  
+    setLeftSpeed(i);  
     delay(3);
- }
+  }
 
-    setMotorsRightSpeed(255);  
-    setMotorsLeftSpeed(255);   
+    setRightSpeed(255);  
+    setLeftSpeed(255);   
     delay(5000);
  
  
   for (i=255; i!=0; i--) {
-    setMotorsRightSpeed(i);  
-    setMotorsLeftSpeed(i);  
+    setRightSpeed(i);  
+    setLeftSpeed(i);  
     delay(3);
- }
+  }
  
-  setMotorsRightDirection(BACKWARD);
-  setMotorsLeftDirection(BACKWARD);
+  setRightDirection(BACKWARD);
+  setLeftDirection(BACKWARD);
   for (i=0; i<255; i++) {
-    setMotorsRightSpeed(i);  
-    setMotorsLeftSpeed(i);   
+    setRightSpeed(i);  
+    setLeftSpeed(i);   
     delay(3);
- }
+  }
  
   for (i=255; i!=0; i--) {
-    setMotorsRightSpeed(i);  
-    setMotorsLeftSpeed(i);  
+    setRightSpeed(i);  
+    setLeftSpeed(i);  
     delay(3);
- }
+  }
 }
 
-void setMotorsRightDirection(int direction) {
+void setRightDirection(int direction) {
   motorRight1.run(direction);
   motorRight2.run(direction);
 }
-void setMotorsLeftDirection(int direction) {
+void setLeftDirection(int direction) {
   motorLeft1.run(direction);
   motorLeft2.run(direction);
 }
 
-void setMotorsRightSpeed(int speed) {
+void setRightSpeed(int speed) {
   motorRight1.setSpeed(speed);
   motorRight2.setSpeed(speed);
 }
-void setMotorsLeftSpeed(int speed) {
+void setLeftSpeed(int speed) {
   motorLeft1.setSpeed(speed);
   motorLeft2.setSpeed(speed);
 }
