@@ -11,14 +11,15 @@ void setup() {
   Serial.println("Movement unit starting");
    
   // turn on motors
-  motorRight1.setSpeed(200);
-  motorRight1.run(RELEASE);
-  motorRight2.setSpeed(200);
-  motorRight2.run(RELEASE);
-  motorLeft1.setSpeed(200);
-  motorLeft1.run(RELEASE);
-  motorLeft2.setSpeed(200);
-  motorLeft2.run(RELEASE);
+  // TODO: check if these are actually needed
+//  motorRight1.setSpeed(200);
+//  motorRight1.run(RELEASE);
+//  motorRight2.setSpeed(200);
+//  motorRight2.run(RELEASE);
+//  motorLeft1.setSpeed(200);
+//  motorLeft1.run(RELEASE);
+//  motorLeft2.setSpeed(200);
+//  motorLeft2.run(RELEASE);
 }
 
 int i;
