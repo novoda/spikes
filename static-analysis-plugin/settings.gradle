@@ -1,1 +1,3 @@
+include ':plugin'
+
 rootProject.name = 'static-analysis-plugin'
