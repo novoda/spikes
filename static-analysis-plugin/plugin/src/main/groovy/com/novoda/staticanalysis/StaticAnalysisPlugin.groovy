@@ -6,6 +6,6 @@ import org.gradle.api.Project
 class StaticAnalysisPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
-        // TODO
+        project.extensions.create('staticAnalysis', StaticAnalysisExtension)
     }
 }
