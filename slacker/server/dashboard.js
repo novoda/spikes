@@ -48,8 +48,4 @@ function getTimeoutInterval(self) {
   return DASHBOARD_INTERVAL * self.widgets[self.index].rank
 }
 
-Dashboard.prototype.forceUpdate = function(callback) {
-  //update(this, callback);
-}
-
 module.exports = Dashboard;
