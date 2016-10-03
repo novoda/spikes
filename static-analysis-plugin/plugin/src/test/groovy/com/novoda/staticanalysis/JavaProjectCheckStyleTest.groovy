@@ -4,11 +4,9 @@ import org.gradle.testkit.runner.BuildResult
 import org.junit.Rule
 import org.junit.Test
 
-import static com.google.common.truth.Truth.assertThat
-
+import static com.novoda.staticanalysis.BuildResultSubject.assertThat
 
 class JavaProjectCheckStyleTest {
-    private static final String CHECKSTYLE_VIOLATIONS_LOG = '> Checkstyle rule violations were found.'
 
     @Rule
     public TestProjectRule project = new TestProjectRule()
@@ -20,7 +18,7 @@ class JavaProjectCheckStyleTest {
         BuildResult result = project.withBuildScript(buildScript)
                 .build('check')
 
-        assertThat(result.output).doesNotContain(CHECKSTYLE_VIOLATIONS_LOG)
+        assertThat(result).doesNotContainCheckstyleViolationsLog()
     }
 
     @Test
@@ -31,7 +29,7 @@ class JavaProjectCheckStyleTest {
         BuildResult result = project.withBuildScript(buildScript)
                 .build('check')
 
-        assertThat(result.output).doesNotContain(CHECKSTYLE_VIOLATIONS_LOG)
+        assertThat(result).doesNotContainCheckstyleViolationsLog()
     }
 
     @Test
@@ -43,7 +41,7 @@ class JavaProjectCheckStyleTest {
                 .withBuildScript(buildScript)
                 .buildAndFail('check')
 
-        assertThat(result.output).contains(CHECKSTYLE_VIOLATIONS_LOG)
+        assertThat(result).containsCheckstyleViolations()
     }
 
     @Test
@@ -54,7 +52,7 @@ class JavaProjectCheckStyleTest {
         BuildResult result = project.withBuildScript(buildScript)
                 .build('check')
 
-        assertThat(result.output).doesNotContain(CHECKSTYLE_VIOLATIONS_LOG)
+        assertThat(result).doesNotContainCheckstyleViolationsLog()
     }
 
     @Test
@@ -66,7 +64,7 @@ class JavaProjectCheckStyleTest {
         BuildResult result = project.withBuildScript(buildScript)
                 .build('check')
 
-        assertThat(result.output).doesNotContain(CHECKSTYLE_VIOLATIONS_LOG)
+        assertThat(result).doesNotContainCheckstyleViolationsLog()
     }
 
     @Test
@@ -78,7 +76,7 @@ class JavaProjectCheckStyleTest {
         BuildResult result = project.withBuildScript(buildScript)
                 .build('check')
 
-        assertThat(result.output).doesNotContain(CHECKSTYLE_VIOLATIONS_LOG)
+        assertThat(result).containsCheckstyleViolations()
     }
 
     @Test
@@ -89,7 +87,7 @@ class JavaProjectCheckStyleTest {
         BuildResult result = project.withBuildScript(buildScript)
                 .build('check')
 
-        assertThat(result.output).doesNotContain(CHECKSTYLE_VIOLATIONS_LOG)
+        assertThat(result).doesNotContainCheckstyleViolationsLog()
     }
 
     @Test
@@ -101,7 +99,7 @@ class JavaProjectCheckStyleTest {
         BuildResult result = project.withBuildScript(buildScript)
                 .build('check')
 
-        assertThat(result.output).doesNotContain(CHECKSTYLE_VIOLATIONS_LOG)
+        assertThat(result).doesNotContainCheckstyleViolationsLog()
     }
 
     @Test
@@ -113,7 +111,7 @@ class JavaProjectCheckStyleTest {
         BuildResult result = project.withBuildScript(buildScript)
                 .buildAndFail('check')
 
-        assertThat(result.output).contains(CHECKSTYLE_VIOLATIONS_LOG)
+        assertThat(result).containsCheckstyleViolations()
     }
 
     @Test
@@ -124,7 +122,7 @@ class JavaProjectCheckStyleTest {
         BuildResult result = project.withBuildScript(buildScript)
                 .build('check')
 
-        assertThat(result.output).doesNotContain(CHECKSTYLE_VIOLATIONS_LOG)
+        assertThat(result).doesNotContainCheckstyleViolationsLog()
     }
 
     @Test
@@ -136,7 +134,7 @@ class JavaProjectCheckStyleTest {
         BuildResult result = project.withBuildScript(buildScript)
                 .buildAndFail('check')
 
-        assertThat(result.output).contains(CHECKSTYLE_VIOLATIONS_LOG)
+        assertThat(result).containsCheckstyleViolations()
     }
 
     @Test
@@ -148,6 +146,6 @@ class JavaProjectCheckStyleTest {
         BuildResult result = project.withBuildScript(buildScript)
                 .buildAndFail('check')
 
-        assertThat(result.output).contains(CHECKSTYLE_VIOLATIONS_LOG)
+        assertThat(result).containsCheckstyleViolations()
     }
 }
