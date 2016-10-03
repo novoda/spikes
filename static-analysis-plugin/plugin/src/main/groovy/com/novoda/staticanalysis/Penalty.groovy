@@ -1,5 +1,5 @@
 package com.novoda.staticanalysis
 
 enum Penalty {
-    NONE, ERRORS, WARNINGS
+    NONE, FAIL_ON_ERRORS, FAIL_ON_WARNINGS
 }

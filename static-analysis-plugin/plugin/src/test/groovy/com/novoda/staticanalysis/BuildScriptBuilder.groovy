@@ -2,16 +2,6 @@ package com.novoda.staticanalysis;
 
 class BuildScriptBuilder {
 
-    private final List<File> srcDirs = new ArrayList<>()
-    private Penalty penalty
-    private Closure<String> extensionTemplate = {
-        """
-staticAnalysis {
-    ${penalty ? "penalty = ${Penalty.class.canonicalName}.${penalty.name()}" :''}
-}
-"""
-    }
-
     private final Closure<String> javaTemplate = {
         """
 plugins {
@@ -24,13 +14,18 @@ apply plugin: 'java'
 sourceSets {
     main {
         java {
-            ${srcDirs.collect { "srcDir '$it'" }.join("\n\t\t\t\t\t")}
+            ${format(srcDirs)}
         }
     }
 }
-${extensionTemplate.call()}
+staticAnalysis {
+    ${format(penalty)}
+}
 """
     }
+
+    private final List<File> srcDirs = new ArrayList<>()
+    private Penalty penalty
 
     BuildScriptBuilder withSrcDirs(File... srcDirs) {
         this.srcDirs.addAll(srcDirs)
@@ -44,6 +39,23 @@ ${extensionTemplate.call()}
 
     String build() {
         javaTemplate.call()
+    }
+
+    private static String format(List<File> srcDirs) {
+        srcDirs.collect { "srcDir '$it'" }.join("\n\t\t\t\t\t")
+    }
+
+    private static String format(Penalty penalty) {
+        switch (penalty) {
+            case Penalty.NONE:
+                return 'penalty = none'
+            case Penalty.FAIL_ON_ERRORS:
+                return 'penalty = failOnErrors'
+            case Penalty.FAIL_ON_WARNINGS:
+                return 'penalty = failOnWarnings'
+            default:
+                return ''
+        }
     }
 
 }
