@@ -9,6 +9,11 @@ AF_DCMotor motorLeft2(3);
 const char COMMAND_FORWARD = 'w';
 const char COMMAND_BACKWARD = 's';
 const char COMMAND_TEST = 't';
+const int MAX_SPEED = 255;
+const int DELTA_SPEED = 50;
+
+int currentDirection = RELEASE;
+int currentSpeed = 0;
 
 void setup() {
   Serial.begin(9600);           
@@ -21,14 +26,13 @@ void loop() {
   }
   
   char inChar = Serial.read();
-  Serial.println("received " + inChar);
 
   switch(inChar) {
     case (COMMAND_FORWARD):
-      // TODO: increase speed
+      increaseForward();
       break;
     case (COMMAND_BACKWARD):
-      // TODO: decrease speed
+      increaseBackward();
       break;
     case (COMMAND_TEST):
       testMotors();
@@ -72,6 +76,47 @@ void testMotors() {
     setRightSpeed(i);  
     setLeftSpeed(i);  
     delay(3);
+  }
+}
+
+void increaseForward() {
+  if (currentSpeed == 0) {
+    currentDirection = FORWARD;
+    setRightDirection(FORWARD);
+    setLeftDirection(FORWARD);
+  }
+  if (currentDirection == FORWARD) {
+    currentSpeed = currentSpeed + DELTA_SPEED;
+  } else {
+    currentSpeed = currentSpeed - DELTA_SPEED;
+  }
+  checkSpeedWithinLimits();
+  setRightSpeed(currentSpeed);  
+  setLeftSpeed(currentSpeed);
+}
+
+void increaseBackward() {
+  if (currentSpeed == 0) {
+    currentDirection = BACKWARD;
+    setRightDirection(BACKWARD);
+    setLeftDirection(BACKWARD);
+  }
+  if (currentDirection == BACKWARD) {
+    currentSpeed = currentSpeed + DELTA_SPEED;
+  } else {
+    currentSpeed = currentSpeed - DELTA_SPEED;
+  }
+  checkSpeedWithinLimits();
+  setRightSpeed(currentSpeed);  
+  setLeftSpeed(currentSpeed);
+}
+
+void checkSpeedWithinLimits() {
+  if (currentSpeed > MAX_SPEED) {
+    currentSpeed = MAX_SPEED;
+  }
+  if (currentSpeed < 0) {
+    currentSpeed = 0;
   }
 }
 
