@@ -10,3 +10,6 @@ The project includes the following units:
 1. Download the official Arduino IDE from https://www.arduino.cc/en/Main/Software
 2. Install the official library for the Adafruit Motor shield V1 https://github.com/adafruit/Adafruit-Motor-Shield-library
 3. Load the sketch in `movement-unit`, compile and upload!
+
+## Schematics
+In order to view and edit the schematics you need Fritzing (http://fritzing.org/) with the Adafruit Fritzing Library (https://github.com/adafruit/Fritzing-Library)
