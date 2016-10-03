@@ -7,6 +7,21 @@ apply plugin: 'groovy'
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
+configurations {
+    fixtures
+}
+
+sourceSets {
+    fixtures {
+        java {
+            srcDir file('fixtures/checkstyle/warnings')
+            srcDir file('fixtures/checkstyle/errors')
+        }
+    }
+}
+
 dependencies {
     compile gradleApi()
+
+    testCompile files(fixturesClasses)
 }
