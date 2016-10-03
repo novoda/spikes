@@ -1,10 +1,10 @@
 #include <AFMotor.h> // from https://github.com/adafruit/Adafruit-Motor-Shield-library
 #include <Servo.h> 
 
-AF_DCMotor motorRight1(1);
+AF_DCMotor motorRight1(3);
 AF_DCMotor motorRight2(2);
 AF_DCMotor motorLeft1(4);
-AF_DCMotor motorLeft2(3);
+AF_DCMotor motorLeft2(1);
 
 const char COMMAND_FORWARD = 'w';
 const char COMMAND_BACKWARD = 's';
