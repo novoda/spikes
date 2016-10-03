@@ -24,10 +24,10 @@ var notifyClient = function(data) {
   io.emit('message', data);
 }
 
-dashboard.start(notifyClient);
-
 io.sockets.on('connection', function (socket) {
   if (cache) {
     notifyClient(cache);
   }
 });
+
+dashboard.start(notifyClient);
