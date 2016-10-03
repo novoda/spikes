@@ -8,6 +8,7 @@ final class Fixtures {
     public static final File BUILD_DIR = new File(ROOT_DIR, 'build')
     public static final File CHECKSTYLE_CONFIG = fixture('checkstyle/config/modules.xml')
     public static final File SOURCES_WITH_CHECKSTYLE_ERRORS = fixture('checkstyle/errors')
+    public static final File SOURCES_WITH_CHECKSTYLE_WARNINGS = fixture('checkstyle/warnings')
 
     private Fixtures() {
         throw new UnsupportedOperationException("No instance allowed")
