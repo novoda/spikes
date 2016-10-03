@@ -1,6 +1,6 @@
 var Slacker = require('./slacker/slacker.js');
 
-const DASHBOARD_INTERVAL = 1000 * 5;
+const DASHBOARD_INTERVAL = 1000 * 30;
 
 var Dashboard = function(token) {
   this.slacker = new Slacker(token);
