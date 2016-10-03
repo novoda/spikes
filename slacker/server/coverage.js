@@ -6,6 +6,8 @@ module.exports = {
 const sonarAuth = process.env.SONAR_AUTH;
 var httpClient = require('request');
 
+var currentIndex = 0;
+
 function coverage() {
   return new Promise(getProjects).then(toAllCoverage).then(toRuleResult);
 }
@@ -71,10 +73,19 @@ function toRuleResult(data) {
   var filtered = data.filter(each => {
     return each;
   });
+
+  console.log(currentIndex);
+
+  if (currentIndex >= filtered.length) {
+    currentIndex = 0;
+  } else {
+    currentIndex++;
+  }
+
   return new Promise(function(resolve, reject) {
     resolve({
       widgetKey: 'coverage',
-      payload: filtered
+      payload: filtered[currentIndex]
     });
   });
 }

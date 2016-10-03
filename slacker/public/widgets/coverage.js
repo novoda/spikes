@@ -3,7 +3,7 @@ if (widgets.coverage) throw "Coverage already exists";
 widgets.coverage = function() {
   return {
     present: function(data, element) {
-      element.innerHTML = presentCoverage(data.payload[Math.floor((Math.random() * data.payload.length))]);
+      element.innerHTML = presentCoverage(data.payload);
     }
   };
 }
