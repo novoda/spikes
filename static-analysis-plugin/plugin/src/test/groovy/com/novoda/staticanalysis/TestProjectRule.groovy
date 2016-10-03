@@ -16,7 +16,7 @@ class TestProjectRule implements TestRule {
         return new Statement() {
             @Override
             void evaluate() throws Throwable {
-                projectDir =  createProjectDir("${description.className}/${description.displayName}")
+                projectDir =  createProjectDir("${System.currentTimeMillis()}")
                 gradleRunner = GradleRunner.create()
                         .withProjectDir(projectDir)
                         .withDebug(true)
@@ -38,12 +38,19 @@ class TestProjectRule implements TestRule {
         return dir
     }
 
-    File getProjectDir() {
-        return projectDir
-    }
-
     TestProjectRule withBuildScript(String buildScript) {
         new File(projectDir, 'build.gradle').text = buildScript
+        return this
+    }
+
+    TestProjectRule withDefaultCheckstyleConfig() {
+        return withFile(Fixtures.CHECKSTYLE_CONFIG, 'config/checkstyle/checkstyle.xml')
+    }
+
+    private TestProjectRule withFile(File source, String path) {
+        File file = new File(projectDir, path)
+        file.parentFile.mkdirs()
+        file.text = source.text
         return this
     }
 
