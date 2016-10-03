@@ -3,6 +3,14 @@ package com.novoda.staticanalysis;
 class BuildScriptBuilder {
 
     private final List<File> srcDirs = new ArrayList<>()
+    private Penalty penalty
+    private Closure<String> extensionTemplate = {
+        """
+staticAnalysis {
+    ${penalty ? "penalty = ${Penalty.class.canonicalName}.${penalty.name()}" :''}
+}
+"""
+    }
 
     private final Closure<String> javaTemplate = {
         """
@@ -20,11 +28,17 @@ sourceSets {
         }
     }
 }
+${extensionTemplate.call()}
 """
     }
 
-    BuildScriptBuilder withSrcDir(File srcDir) {
-        srcDirs.add(srcDir)
+    BuildScriptBuilder withSrcDirs(File... srcDirs) {
+        this.srcDirs.addAll(srcDirs)
+        return this
+    }
+
+    BuildScriptBuilder withPenalty(Penalty penalty) {
+        this.penalty = penalty
         return this
     }
 

@@ -43,7 +43,21 @@ class TestProjectRule implements TestRule {
         return this
     }
 
-    TestProjectRule withDefaultCheckstyleConfig() {
+    BuildResult buildAndFail(String... arguments) {
+        withDefaultCheckstyleConfig()
+        gradleRunner
+                .withArguments(arguments)
+                .buildAndFail()
+    }
+
+    BuildResult build(String... arguments) {
+        withDefaultCheckstyleConfig()
+        gradleRunner
+                .withArguments(arguments)
+                .build()
+    }
+
+    private TestProjectRule withDefaultCheckstyleConfig() {
         return withFile(Fixtures.CHECKSTYLE_CONFIG, 'config/checkstyle/checkstyle.xml')
     }
 
@@ -52,18 +66,6 @@ class TestProjectRule implements TestRule {
         file.parentFile.mkdirs()
         file.text = source.text
         return this
-    }
-
-    BuildResult buildAndFail(String... arguments) {
-        gradleRunner
-                .withArguments(arguments)
-                .buildAndFail()
-    }
-
-    BuildResult build(String... arguments) {
-        gradleRunner
-                .withArguments(arguments)
-                .build()
     }
 
 }
