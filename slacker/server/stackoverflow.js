@@ -21,7 +21,7 @@ function parseResponse(resolve, reject) {
       var jsonBody = JSON.parse(body);
       if (jsonBody.items) {
         resolve({ questions: jsonBody.items, url: SO_URL });
-      } 
+      }
     } else {
       reject(error);
     }
@@ -29,10 +29,8 @@ function parseResponse(resolve, reject) {
 }
 
 function toRuleResult(data) {
-  return new Promise(function(resolve, reject) {
-    resolve({
-      widgetKey: 'stackoverflow',
-      payload: data
-    });
+  return Promise.resolve({
+    widgetKey: 'stackoverflow',
+    payload: data
   });
 }
