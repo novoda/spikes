@@ -8,6 +8,11 @@ apply plugin: 'com.android.application'
 apply plugin: com.novoda.buildproperties.BuildPropertiesPlugin
 
 buildProperties {
+  notThere {
+    file rootProject.file('whatever'), '''
+      This file actually doesn't exists. This is used to show properties files are lazy-loaded.
+    '''
+  }
   secrets {
     file rootProject.file('properties/secrets.properties')
   }
@@ -23,8 +28,8 @@ buildProperties {
 }
 
 android {
-  compileSdkVersion 23
-  buildToolsVersion "23.0.2"
+  compileSdkVersion 24
+  buildToolsVersion "24.0.2"
 
   defaultConfig {
     applicationId "com.novoda.buildpropertiesplugin.sample"
@@ -37,8 +42,11 @@ android {
     buildConfigLong 'TEST_LONG', Long.MAX_VALUE
     buildConfigDouble 'TEST_DOUBLE', Math.PI
     buildConfigString 'TEST_STRING', "whateva"
-    buildConfigProperty 'TEST_BUILD_PROPERTY', buildProperties.secrets['superSecret']
-    buildConfigProperties buildProperties.secrets
+    buildConfigProperty 'OVERRIDABLE', buildProperties.secrets['overridable']
+    buildConfigProperty 'GOOGLE_MAPS_KEY', buildProperties.secrets['googleMapsKey']
+    buildConfigProperty 'SUPER_SECRET', buildProperties.secrets['superSecret']
+    buildConfigProperty 'FOO', buildProperties.secrets['notThere'].or(buildProperties.notThere['foo']).or('bar')
+    buildConfigProperty 'WAT', buildProperties.env['WAT'].or('?!?')
   }
 
   signingConfigs {
@@ -57,8 +65,9 @@ android {
       resValueInt 'debug_test_int', 100
       resValueBoolean 'debug_test_bool', true
       resValueString 'debug_test_string', 'dunno bro...'
-      resValueProperty buildProperties.secrets['superSecret']
-      resValueProperties buildProperties.resValues
+      resValueProperty 'super_secret', buildProperties.secrets['superSecret']
+      resValueProperty 'google_maps_key', buildProperties.resValues['google_maps_key']
+      resValueProperty 'another_key', buildProperties.resValues['another_key']
     }
     release {
       minifyEnabled false

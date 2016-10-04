@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
+import android.widget.EditText;
 
 import com.novoda.drop_cap.R;
 import com.novoda.dropcap.DropCapView;
@@ -19,6 +17,11 @@ public class DropCapActivity extends Activity {
     private TextSizeDialogDisplayer dropCapSizeDialogDisplayer;
     private TextColorDialogDisplayer dropCapTextColorDialogDisplayer;
     private TextColorDialogDisplayer copyTextColorDialogDisplayer;
+    private TypefaceDialogDisplayer dropCapTypefaceDialogDisplayer;
+    private TypefaceDialogDisplayer copyTypefaceDialogDisplayer;
+
+    private FontType dropCapFontType;
+    private FontType copyFontType;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,7 +34,8 @@ public class DropCapActivity extends Activity {
 
         createTextSizeDialogDisplayers();
         createTextColorDialogDisplayers();
-        createFontTypeSpinner();
+        createTypefaceDialogDisplayers();
+        createTextUpdater();
     }
 
     private void createTextSizeDialogDisplayers() {
@@ -132,46 +136,69 @@ public class DropCapActivity extends Activity {
         }
     };
 
-    private void createFontTypeSpinner() {
-        Spinner dropCapFontSpinner = (Spinner) findViewById(R.id.drop_cap_font_spinner);
-        Spinner copyFontSpinner = (Spinner) findViewById(R.id.copy_font_spinner);
-
-        ArrayAdapter<FontType> fonts = new ArrayAdapter<FontType>(
-                this,
-                android.R.layout.simple_spinner_item,
-                FontType.values()
+    private void createTypefaceDialogDisplayers() {
+        dropCapTypefaceDialogDisplayer = new TypefaceDialogDisplayer(
+                getFragmentManager(),
+                getResources(),
+                onDropCapTypefaceChanged
         );
-        dropCapFontSpinner.setAdapter(fonts);
-        dropCapFontSpinner.setSelection(0);
-        dropCapFontSpinner.setOnItemSelectedListener(dropCapSelectedFontListener);
 
-        copyFontSpinner.setAdapter(fonts);
-        copyFontSpinner.setSelection(0);
-        copyFontSpinner.setOnItemSelectedListener(copySelectedFontListener);
+        copyTypefaceDialogDisplayer = new TypefaceDialogDisplayer(
+                getFragmentManager(),
+                getResources(),
+                onCopyTypefaceChanged
+        );
+
+        Button dropCapTypefaceButton = (Button) findViewById(R.id.drop_cap_typeface);
+        dropCapTypefaceButton.setOnClickListener(onClickDisplayDropCapTypefaceDialog);
+
+        Button copyTypefaceButton = (Button) findViewById(R.id.copy_typeface);
+        copyTypefaceButton.setOnClickListener(onClickDisplayCopyTypefaceDialog);
     }
 
-    private final SimpleSpinnerItemSelectedListener dropCapSelectedFontListener = new SimpleSpinnerItemSelectedListener() {
-
+    private final OnTypefaceChangeListener onDropCapTypefaceChanged = new OnTypefaceChangeListener() {
         @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            String fontName = parent.getItemAtPosition(position).toString();
-            FontType fontType = FontType.valueOf(fontName);
-            String fontPath = getResources().getString(fontType.getAssetUrl());
+        public void onTypefaceChanged(FontType newFontType) {
+            String fontPath = getResources().getString(newFontType.getAssetUrl());
             dropCapView.setDropCapFontType(fontPath);
+            dropCapFontType = newFontType;
         }
-
     };
 
-    private final SimpleSpinnerItemSelectedListener copySelectedFontListener = new SimpleSpinnerItemSelectedListener() {
-
+    private final OnTypefaceChangeListener onCopyTypefaceChanged = new OnTypefaceChangeListener() {
         @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            String fontName = parent.getItemAtPosition(position).toString();
-            FontType fontType = FontType.valueOf(fontName);
-            String fontPath = getResources().getString(fontType.getAssetUrl());
+        public void onTypefaceChanged(FontType newFontType) {
+            String fontPath = getResources().getString(newFontType.getAssetUrl());
             dropCapView.setCopyFontType(fontPath);
+            copyFontType = newFontType;
         }
-
     };
+
+    private final View.OnClickListener onClickDisplayDropCapTypefaceDialog = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            dropCapTypefaceDialogDisplayer.showTypefaceDialog(dropCapFontType);
+        }
+    };
+
+    private final View.OnClickListener onClickDisplayCopyTypefaceDialog = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            copyTypefaceDialogDisplayer.showTypefaceDialog(copyFontType);
+        }
+    };
+
+    private void createTextUpdater() {
+        final EditText textUpdateEditText = (EditText) findViewById(R.id.drop_cap_edit_text);
+        Button textUpdateButton = (Button) findViewById(R.id.edit_text_update);
+
+        textUpdateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String updatedText = textUpdateEditText.getText().toString();
+                dropCapView.setText(updatedText);
+            }
+        });
+    }
 
 }

@@ -31,7 +31,7 @@ public class TextSizeDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_text_size_dialog, container);
         positiveButton = (Button) view.findViewById(R.id.text_size_button_positive);
         negativeButton = (Button) view.findViewById(R.id.text_size_button_negative);
-        numberPicker = (NumberPicker) view.findViewById(R.id.text_size_number_picker);
+        numberPicker = (NumberPicker) view.findViewById(R.id.typeface_picker);
         return view;
     }
 

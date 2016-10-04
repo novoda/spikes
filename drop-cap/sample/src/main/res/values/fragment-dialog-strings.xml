@@ -1,0 +1,14 @@
+<resources>
+
+  <string name="fragment_tag_text_size">text_size_fragment</string>
+  <string name="fragment_tag_text_color">text_color_fragment</string>
+  <string name="fragment_tag_typeface">typeface_fragment</string>
+
+  <string name="fragment_cancel">Cancel</string>
+  <string name="fragment_set">Set</string>
+
+  <string name="text_size_title">Text Size Selection</string>
+  <string name="text_color_title">Text Color Selection</string>
+  <string name="typeface_title">Typeface Selection</string>
+
+</resources>

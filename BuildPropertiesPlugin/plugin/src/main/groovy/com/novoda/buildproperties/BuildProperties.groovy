@@ -19,10 +19,12 @@ class BuildProperties {
   }
 
   void file(File file, String errorMessage = null) {
-    if (!file.exists()) {
-      throw new GradleException("File $file.name does not exist.${errorMessage ? "\n$errorMessage" : ''}")
-    }
-    entries(FilePropertiesEntries.create(name, file))
+    entries(LazyEntries.from {
+      if (!file.exists()) {
+        throw new GradleException("File $file.name does not exist.${errorMessage ? "\n$errorMessage" : ''}")
+      }
+      FilePropertiesEntries.create(name, file)
+    })
   }
 
   void entries(Entries entries) {
@@ -45,56 +47,42 @@ class BuildProperties {
     }
   }
 
-  static abstract class Entries {
+  private static class LazyEntries extends Entries {
 
-    abstract boolean contains(String key)
+    private final Closure<Entries> entriesProvider
 
-    protected abstract Object getValueAt(String key)
-
-    Entry getAt(String key) {
-      new Entry(key, {
-        getValueAt(key)
-      })
+    static LazyEntries from(Closure<Entries> entriesProvider) {
+      new LazyEntries(entriesProvider)
     }
 
-    abstract File getParentFile()
-
-    abstract Enumeration<String> getKeys()
-
-  }
-
-  static class Entry {
-    private final String key
-    private final Closure<Object> value
-
-    Entry(String key, Closure<Object> value) {
-      this.key = key
-      this.value = value
+    private LazyEntries(Closure<Entries> entriesProvider) {
+      this.entriesProvider = entriesProvider.memoize()
     }
 
-    String getKey() {
-      key
+    private Entries getEntries() {
+      entriesProvider.call()
     }
 
-    Boolean getBoolean() {
-      Boolean.parseBoolean(string)
+    @Override
+    boolean contains(String key) {
+      entries.contains(key)
     }
 
-    Integer getInt() {
-      value.call() as Integer
+    @Override
+    protected Object getValueAt(String key) {
+      entries.getValueAt(key)
     }
 
-    Double getDouble() {
-      value.call() as Double
+    @Override
+    File getParentFile() {
+      entries.getParentFile()
     }
 
-    String getString() {
-      value.call() as String
+    @Override
+    Enumeration<String> getKeys() {
+      entries.getKeys()
     }
 
-    Object getValue() {
-      value.call()
-    }
   }
 
 }

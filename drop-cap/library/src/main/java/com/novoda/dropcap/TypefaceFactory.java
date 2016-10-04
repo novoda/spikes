@@ -2,9 +2,8 @@ package com.novoda.dropcap;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.content.res.TypedArray;
 import android.graphics.Typeface;
-import android.util.AttributeSet;
+import android.util.Log;
 
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
@@ -15,12 +14,6 @@ class TypefaceFactory {
     private static final Map<String, SoftReference<Typeface>> FONT_CACHE = new HashMap<>();
     private AssetManager assetManager;
 
-    public Typeface createFrom(Context context, AttributeSet attrs) {
-        initAssetManager(context);
-        String fontPath = getFontPath(context, attrs);
-        return createFrom(context, fontPath);
-    }
-
     public Typeface createFrom(Context context, String fontPath) {
         initAssetManager(context);
         return getTypeFace(fontPath);
@@ -28,20 +21,6 @@ class TypefaceFactory {
 
     private void initAssetManager(Context context) {
         this.assetManager = context.getAssets();
-    }
-
-    private String getFontPath(Context context, AttributeSet attrs) {
-        int[] attrsValues = {R.attr.fontPath};
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, attrsValues);
-        if (typedArray == null) {
-            return null;
-        }
-
-        try {
-            return typedArray.getString(0);
-        } finally {
-            typedArray.recycle();
-        }
     }
 
     private Typeface getTypeFace(String fontPath) {
@@ -66,7 +45,12 @@ class TypefaceFactory {
     }
 
     private Typeface createTypeFace(String fontPath) {
-        return Typeface.createFromAsset(assetManager, fontPath);
+        try {
+            return Typeface.createFromAsset(assetManager, fontPath);
+        } catch (RuntimeException exception) {
+            Log.e(TypefaceFactory.class.getSimpleName(), exception.getMessage() + " will default from style instead");
+            return Typeface.defaultFromStyle(Typeface.NORMAL);
+        }
     }
 
     private void saveFontToCache(String fontPath, Typeface typeface) {

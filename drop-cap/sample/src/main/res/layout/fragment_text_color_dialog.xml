@@ -39,7 +39,7 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="100"
-      android:text="@string/text_size_cancel" />
+      android:text="@string/fragment_cancel" />
 
     <Button
       android:id="@+id/text_color_button_positive"
@@ -47,7 +47,7 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="100"
-      android:text="@string/text_size_set" />
+      android:text="@string/fragment_set" />
 
   </LinearLayout>
 

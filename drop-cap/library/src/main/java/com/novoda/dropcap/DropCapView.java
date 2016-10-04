@@ -60,13 +60,17 @@ public class DropCapView extends View {
         }
 
         try {
-            Typeface typeface = typefaceFactory.createFrom(context, attrs);
+            String dropCapFontPath = typedArray.getString(R.styleable.DropCapView_dropCapFontPath);
+            Typeface dropCapTypeface = typefaceFactory.createFrom(context, dropCapFontPath);
 
-            dropCapPaint.setTypeface(typeface);
+            String copyFontPath = typedArray.getString(R.styleable.DropCapView_copyFontPath);
+            Typeface copyTypeface = typefaceFactory.createFrom(context, copyFontPath);
+
+            dropCapPaint.setTypeface(dropCapTypeface);
             dropCapPaint.setAntiAlias(true);
             dropCapPaint.setSubpixelText(true);
 
-            copyTextPaint.setTypeface(typeface);
+            copyTextPaint.setTypeface(copyTypeface);
             copyTextPaint.setAntiAlias(true);
             copyTextPaint.setSubpixelText(true);
 
@@ -192,6 +196,7 @@ public class DropCapView extends View {
             copyText = (text == null) ? "" : text;
             shouldDisplayDropCap = false;
         }
+        requestLayout();
     }
 
     private boolean enoughTextForDropCap(CharSequence text) {
@@ -221,7 +226,8 @@ public class DropCapView extends View {
         dropCapPaint.getTextBounds(dropCapText, 0, 1, dropCapBounds);
         int copyWidthForDropCap = width - dropCapWidth;
 
-        if (dropCapStaticLayout == null || dropCapStaticLayout.getWidth() != copyWidthForDropCap || hasPaintChanged) {
+        if (dropCapStaticLayout == null || dropCapStaticLayout.getWidth() != copyWidthForDropCap
+                || hasPaintChanged || textIsDifferent()) {
             dropCapStaticLayout = new StaticLayout(
                     dropCapText + copyText,
                     copyTextPaint,

@@ -17,23 +17,23 @@ This plugin aims to provide a simple way to:
 The plugin is deployed to Bintray's JCenter. Ensure it's correctly defined
 as dependency for your build script:
 
-```
+```gradle
 buildscript {
   repositories {
     jcenter()
    }
   dependencies {
-    classpath 'com.novoda:build-properties-plugin:1.0.1'
+    classpath 'com.novoda:build-properties-plugin:1.2.1'
   }
 }
 ```
 Then apply the plugin in your buildscript **after the android plugin** via:  
-```
+```gradle
 apply plugin: 'com.novoda.build-properties'
 ```
 Add a `buildProperties` configuration to your android buildscript listing
 all the properties files you intend to reference in your `android` configuration:
-```
+```gradle
 buildProperties {
     secrets {
         file project.file('secrets.properties')
@@ -49,76 +49,33 @@ in the buildscript as `buildProperties.secrets`.
 
 ## Features
 
-#### 1. Store whole properties file in `BuildConfig`
-In any product flavor configuration (or `defaultConfig`) you can use
-`buildConfigProperties` as follows:
-
-```
-    defaultConfig {
-        ...
-        buildConfigProperties buildProperties.secrets
-        ...
-    }
-```
-All the entries in that properties files are converted to string fields
-in your `BuildConfig`. Names of the fields are created formatting the key
-of each entry to follow the standard constant field naming in Java
-(uppercase with underscores), eg:
-
-- `apiKey` -> `API_KEY`
-- `api_key` -> `API_KEY`
-- `api.key` -> `API_KEY`
-
-Note that properties files treat values as strings, therefore only string
-fields are generated in this case.
-
-#### 2. Store a property value into your `BuildConfig`
+#### 1. Store a property value into your `BuildConfig`
 In any product flavor configuration (or `defaultConfig`) you can use
 `buildConfigProperty` as follows:
-```
+```gradle
     defaultConfig {
         ...
         buildConfigProperty 'API_KEY', buildProperties.secrets['apiKey']
         ...
     }
 ```
-You can omit the field name and let the plugin generate one for you
-(following the same rules at 1.)
 
-#### 3. Store whole properties file as generated string resources
-In any product flavor configuration (or `defaultConfig`) you can use
-`resValueProperties` as follows:
-
-```
-    defaultConfig {
-        ...
-        resValueProperties buildProperties.secrets
-        ...
-    }
-```
-All the entries in that properties files are converted to string resources,
-named after their key, enforcing snake casing over camel casing if necessary.
-
-
-#### 4. Store a property value as generated string resource
+#### 2. Store a property value as generated string resource
 In any product flavor configuration (or `defaultConfig`) you can use
 `resValueProperty` as follows:
 
-```
+```gradle
     defaultConfig {
         ...
         resValueProperty 'api_key', buildProperties.secrets['apiKey']
         ...
     }
 ```
-You can omit the name of the resource and let the plugin generate one for
-you from the property key, enforcing snake casing over camel casing if necessary.
 
-
-#### 5. Load signing configuration from properties
+#### 3. Load signing configuration from properties
 Instead of inline your passwords and other details in your build script
 you can fill the signing configuration using a properties file.
-```
+```gradle
 signingConfigs {
   release {
     signingConfigProperties buildProperties.releaseSigning
@@ -131,14 +88,14 @@ to the path of the specified properties file.
 
 ## Bonus
 
-#### Typed `buildConfigField`/`resValue`
+#### Typed `buildConfigField` / `resValue`
 The plugin enhances the `buildConfigField` and `resValue` facilities to
 enforce types. To generate a string field in your `BuildConfig` you used to write:
-```
+```gradle
 buildConfigField 'String', 'LOL', '\"sometimes the picture take\"'
 ```
 but now you can instead write:
-```
+```gradle
 buildConfigString 'LOL', 'sometimes the picture take'
 ```
 The full list of new typed facilities is as follows:
@@ -154,6 +111,27 @@ The full list of new typed facilities is as follows:
 |`resValueBoolean` | `resValueBoolean 'debug_test_bool', true`|
 |`resValueString` | `resValueString 'debug_test_string', 'dunno bro...'`|
 
+#### Fallback support
+If a property cannot be found an exception is thrown. It's possible to provide a fallback
+value for a given `Entry` via the `or()` operator, defined as:
+
+| | Example |
+|----|----|
+|another `Entry` | `buildProperties.secrets['notThere'].or(buildProperties.secrets['fallback'])` |
+|a `Closure` | `buildProperties.secrets['notThere'].or({ Math.random() })` |
+|a value | `buildProperties.secrets['notThere'].or('fallback')` |
+
+If the whole fallback chain evaluation fails a `CompositeException` is thrown listing all
+the causes in the chain, eg:
+
+```
+A problem occurred while evaluating entry:
+- exception message 1
+- exception message 2
+- exception message 3
+
+```
+
 #### Override properties at build time
 A property from any file listed in `buildProperties` can be overridden at
 build time specifying a new value as project property (ie: `-PapiKey=newValue`).
@@ -164,14 +142,25 @@ another properties files (specified via an `include` property).
 Inherited properties can be overridden by the including set, just redefine
 the property in the file and its value will be used instead of the one
 from the included set.
- 
+
+#### Other built-in `Entry` sets
+It's possible to access a system enviroment variable as `Entry` via a predefined set of entries, ie:
+
+```groovy
+buildProperties.env['FOO']
+```
+Such entries are particularly handy when used alongside the `Entry.or()` operator in order to provide
+fallback values.
 
 #### More on loading properties
-If the specified file is not found an exception is thrown at build time.
+If the specified file is not found an exception is thrown at build time as soon as one of its properties is evaluated.
 You can specify a custom error message to provide the user with more information.
+
 Given a `BuildProperties` instance one of its entries can be retrieved using the `getAt` operator:
 
-`BuildProperty.Entry entry = buildProperties.secrets['aProperty']`
+```gradle
+Entry entry = buildProperties.secrets['aProperty']
+```
 
 The value of an entry can be retrieved via one of the following typed accessors:
 

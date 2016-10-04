@@ -5,6 +5,8 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.internal.DefaultGradleRunner
 import org.junit.ClassRule
 import org.junit.Test
+import org.junit.contrib.java.lang.system.EnvironmentVariables
+import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
@@ -13,15 +15,20 @@ import static com.google.common.truth.Truth.assertThat
 
 public class SampleProjectTest {
 
-  @ClassRule
   public static final ProjectRule PROJECT = new ProjectRule()
+  public static final EnvironmentVariables ENV = new EnvironmentVariables()
   public static final String COMMAND_LINE_PROPERTY = 'modified from command line'
+  public static final String ENV_VAR_VALUE = '123456'
+
+  @ClassRule
+  public static TestRule classRule() {
+    RuleChain.outerRule(PROJECT).around(ENV)
+  }
 
   @Test
   public void shouldGenerateTypedFieldsFromTypedValuesProvidedInDefaultBuildConfig() {
     [PROJECT.debugBuildConfig.text, PROJECT.releaseBuildConfig.text].each { String generatedBuildConfig ->
       assertThat(generatedBuildConfig).contains('public static final boolean TEST_BOOLEAN = false;')
-      assertThat(generatedBuildConfig).contains('public static final String TEST_BUILD_PROPERTY = "classified";')
       assertThat(generatedBuildConfig).contains('public static final double TEST_DOUBLE = 3.141592653589793;')
       assertThat(generatedBuildConfig).contains('public static final int TEST_INT = 42;')
       assertThat(generatedBuildConfig).contains('public static final long TEST_LONG = 9223372036854775807L;')
@@ -32,16 +39,8 @@ public class SampleProjectTest {
   @Test
   public void shouldGenerateStringFieldsFromPropertiesFileProvidedInDefaultBuildConfig() {
     [PROJECT.debugBuildConfig.text, PROJECT.releaseBuildConfig.text].each { String generatedBuildConfig ->
-      assertThat(generatedBuildConfig).contains("public static final String DIS__IS_CRAY_CRAY_ZAY = \"${PROJECT.secrets['DIS_Is_cray_crayZAY'].string}\";")
       assertThat(generatedBuildConfig).contains("public static final String GOOGLE_MAPS_KEY = \"${PROJECT.secrets['googleMapsKey'].string}\";")
       assertThat(generatedBuildConfig).contains("public static final String SUPER_SECRET = \"${PROJECT.secrets['superSecret'].string}\";")
-    }
-  }
-
-  @Test
-  public void shouldGenerateStringFieldForSinglePropertyProvidedInDefaultBuildConfig() {
-    [PROJECT.debugBuildConfig.text, PROJECT.releaseBuildConfig.text].each { String generatedBuildConfig ->
-      assertThat(generatedBuildConfig).contains("public static final String TEST_BUILD_PROPERTY = \"${PROJECT.secrets['superSecret'].string}\";")
     }
   }
 
@@ -75,6 +74,27 @@ public class SampleProjectTest {
     }
   }
 
+  @Test
+  public void shouldEvaluateFallbackWhenNeeded() {
+    EntrySubject.assertThat(PROJECT.secrets['FOO']).willThrow(IllegalArgumentException)
+    [PROJECT.debugBuildConfig.text, PROJECT.releaseBuildConfig.text].each { String generatedBuildConfig ->
+      assertThat(generatedBuildConfig).contains('public static final String FOO = "bar";')
+    }
+  }
+
+  @Test
+  public void shouldEvaluateEnvironmentVariable() {
+    assertThat(System.getenv('WAT')).isEqualTo(ENV_VAR_VALUE)
+    [PROJECT.debugBuildConfig.text, PROJECT.releaseBuildConfig.text].each { String generatedBuildConfig ->
+      assertThat(generatedBuildConfig).contains("public static final String WAT = \"$ENV_VAR_VALUE\";")
+    }
+  }
+
+  @Test
+  public void shouldSignReleaseBuildUsingProperties() throws Exception {
+    assertThat(new File(PROJECT.apkDir, 'app-release.apk').exists()).isTrue()
+  }
+
   static class ProjectRule implements TestRule {
     File projectDir
     BuildResult buildResult
@@ -82,25 +102,29 @@ public class SampleProjectTest {
     File releaseBuildConfig
     File debugResValues
     File releaseResValues
-    BuildProperties.Entries secrets
+    File apkDir
+    Entries secrets
 
     @Override
     Statement apply(Statement base, Description description) {
+      ENV.set('WAT', ENV_VAR_VALUE)
+
       File propertiesFile = new File(Resources.getResource('any.properties').toURI())
       File rootDir = propertiesFile.parentFile.parentFile.parentFile.parentFile.parentFile
-
       projectDir = new File(rootDir, 'sample')
+      File buildDir = new File(projectDir, 'app/build')
+      apkDir = new File(buildDir, 'outputs/apk')
       buildResult = DefaultGradleRunner.create()
-              .withProjectDir(PROJECT.projectDir)
+              .withProjectDir(projectDir)
               .withDebug(true)
               .forwardStdOutput(new OutputStreamWriter(System.out))
-              .withArguments('clean', "-Poverridable=$COMMAND_LINE_PROPERTY", 'compileDebugSources', 'compileReleaseSources')
+              .withArguments('clean', "-Poverridable=$COMMAND_LINE_PROPERTY", 'assemble')
               .build()
-      debugBuildConfig = new File(PROJECT.projectDir, 'app/build/generated/source/buildConfig/debug/com/novoda/buildpropertiesplugin/sample/BuildConfig.java')
-      releaseBuildConfig = new File(PROJECT.projectDir, 'app/build/generated/source/buildConfig/release/com/novoda/buildpropertiesplugin/sample/BuildConfig.java')
-      debugResValues = new File(PROJECT.projectDir, 'app/build/generated/res/resValues/debug/values/generated.xml')
-      releaseResValues = new File(PROJECT.projectDir, 'app/build/generated/res/resValues/release/values/generated.xml')
-      secrets = FilePropertiesEntries.create(new File(PROJECT.projectDir, 'properties/secrets.properties'))
+      debugBuildConfig = new File(buildDir, 'generated/source/buildConfig/debug/com/novoda/buildpropertiesplugin/sample/BuildConfig.java')
+      releaseBuildConfig = new File(buildDir, 'generated/source/buildConfig/release/com/novoda/buildpropertiesplugin/sample/BuildConfig.java')
+      debugResValues = new File(buildDir, 'generated/res/resValues/debug/values/generated.xml')
+      releaseResValues = new File(buildDir, 'generated/res/resValues/release/values/generated.xml')
+      secrets = FilePropertiesEntries.create(new File(projectDir, 'properties/secrets.properties'))
       return base;
     }
   }

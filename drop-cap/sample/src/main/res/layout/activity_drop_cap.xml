@@ -68,18 +68,31 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <Spinner
-      android:id="@+id/drop_cap_font_spinner"
+    <Button
+      android:id="@+id/drop_cap_typeface"
       android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_weight="100" />
+      android:layout_height="match_parent"
+      android:layout_weight="100"
+      android:text="@string/drop_cap_edit_drop_cap_typeface" />
 
-    <Spinner
-      android:id="@+id/copy_font_spinner"
+    <Button
+      android:id="@+id/copy_typeface"
       android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_weight="100" />
+      android:layout_height="match_parent"
+      android:layout_weight="100"
+      android:text="@string/drop_cap_edit_copy_typeface" />
 
   </LinearLayout>
+
+  <EditText
+    android:id="@+id/drop_cap_edit_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
+  <Button
+    android:id="@+id/edit_text_update"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/drop_cap_update_text" />
 
 </LinearLayout>

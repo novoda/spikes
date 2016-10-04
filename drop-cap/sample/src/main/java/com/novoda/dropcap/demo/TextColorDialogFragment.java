@@ -29,7 +29,7 @@ public class TextColorDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
-        dialog.setTitle(getResources().getString(R.string.text_size_title));
+        dialog.setTitle(getResources().getString(R.string.text_color_title));
         return dialog;
     }
 

@@ -20,9 +20,8 @@ function parseResponse(resolve, reject) {
     if (!error && response.statusCode == 200) {
       var jsonBody = JSON.parse(body);
       if (jsonBody.items) {
-        numItems = jsonBody.items.length;
-        resolve({ count: numItems, url: SO_URL});
-      } 
+        resolve({ questions: jsonBody.items, url: SO_URL });
+      }
     } else {
       reject(error);
     }
@@ -30,10 +29,8 @@ function parseResponse(resolve, reject) {
 }
 
 function toRuleResult(data) {
-  return new Promise(function(resolve, reject) {
-    resolve({
-      widgetKey: 'stackoverflow',
-      payload: data
-    });
+  return Promise.resolve({
+    widgetKey: 'stackoverflow',
+    payload: data
   });
 }

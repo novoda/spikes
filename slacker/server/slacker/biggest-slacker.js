@@ -7,7 +7,7 @@ var helper = require('./message-helper.js');
 function biggestSlacker(dataStore, messages) {
   var result = function(resolve, reject) {
     if (!messages || messages.length === 0) {
-      reject('no messages');
+      reject('biggest slacker skipped, no messages');
     } else {
       resolve(createPayload(dataStore, messages));
     }
