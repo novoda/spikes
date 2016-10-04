@@ -13,7 +13,7 @@ public class CheckstyleConfigurationTest {
 
     @Parameterized.Parameters
     public static List<Object[]> rules() {
-        return [TestProjectRule.forJavaProject()].collect { [it] as Object[] }
+        return [TestProjectRule.forJavaProject(), TestProjectRule.forAndroidProject()].collect { [it] as Object[] }
     }
 
     @Rule

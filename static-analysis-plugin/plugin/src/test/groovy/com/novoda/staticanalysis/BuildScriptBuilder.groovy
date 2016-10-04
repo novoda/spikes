@@ -21,12 +21,56 @@ staticAnalysis {
 """
     }
 
+    private static final Closure<String> ANDROID_TEMPLATE = { BuildScriptBuilder builder ->
+        """
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.0'
+    }
+}
+plugins {
+    id 'static-analysis'
+}
+repositories {
+    jcenter()
+}
+apply plugin: 'com.android.library'
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    sourceSets {
+        main {
+            manifest.srcFile '${Fixtures.ANDROID_MANIFEST}'
+            ${builder.formatSrcDirs()}
+        }
+    }
+}
+staticAnalysis {
+    ${builder.formatPenalty()}
+}
+"""
+    }
+
     private final Closure<String> template
     private final List<File> srcDirs = new ArrayList<>()
     private Penalty penalty
 
     public static BuildScriptBuilder forJava() {
         new BuildScriptBuilder(JAVA_TEMPLATE)
+    }
+
+    public static BuildScriptBuilder forAndroid() {
+        new BuildScriptBuilder(ANDROID_TEMPLATE)
     }
 
     private BuildScriptBuilder(Closure<String> template) {

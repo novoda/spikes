@@ -20,6 +20,26 @@ abstract class TestProjectRule implements TestRule {
         }
     }
 
+    static TestProjectRule forAndroidProject() {
+        new TestProjectRule() {
+            @Override
+            protected BuildScriptBuilder newBuildScriptBuilder() {
+                BuildScriptBuilder.forAndroid()
+            }
+
+            @Override
+            protected void initProject() {
+                super.initProject()
+                copyFile(Fixtures.LOCAL_PROPERTIES, 'local.properties')
+            }
+
+            @Override
+            protected List<String> defaultArguments() {
+                ['-x', 'lint'] + super.defaultArguments()
+            }
+        }
+    }
+
     protected TestProjectRule() {
     }
 

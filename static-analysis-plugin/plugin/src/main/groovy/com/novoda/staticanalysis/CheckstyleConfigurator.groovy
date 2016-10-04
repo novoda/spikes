@@ -11,6 +11,12 @@ class CheckstyleConfigurator {
         project.apply plugin: 'checkstyle'
         project.afterEvaluate {
             Penalty penalty = extension.penalty
+            boolean isAndroidApp = project.plugins.hasPlugin('com.android.application')
+            boolean isAndroidLib = project.plugins.hasPlugin('com.android.library')
+            if (isAndroidApp || isAndroidLib) {
+                def variants = isAndroidApp ? project.android.applicationVariants : project.android.libraryVariants
+                configureAndroid(project, variants)
+            }
             project.tasks.withType(Checkstyle) { task ->
                 task.group = 'verification'
                 task.showViolations = false
@@ -29,5 +35,29 @@ class CheckstyleConfigurator {
             }
         }
     }
+
+    private static void configureAndroid(Project project, Object variants) {
+        project.with {
+            def check = tasks['check']
+            android.sourceSets.all { sourceSet ->
+                def sourceDirs = sourceSet.java.srcDirs
+                def notEmptyDirs = sourceDirs.findAll { it.list()?.length > 0 }
+                if (notEmptyDirs.empty) {
+                    return
+                }
+                Checkstyle checkstyle = tasks.create("checkstyle${sourceSet.name.capitalize()}", Checkstyle)
+                checkstyle.with {
+                    description = "Run Checkstyle analysis for ${sourceSet.name} classes"
+                    source = sourceSet.java.srcDirs
+                    classpath = files("$buildDir/intermediates/classes/")
+                }
+                variants.all { variant ->
+                    checkstyle.mustRunAfter variant.javaCompile
+                }
+                check.dependsOn checkstyle
+            }
+        }
+    }
+
 
 }
