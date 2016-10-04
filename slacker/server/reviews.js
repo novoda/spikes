@@ -3,36 +3,60 @@ module.exports = {
   rank: 1
 }
 
-var gplay = require('google-play-scraper');
+const gplay = require('google-play-scraper');
+
+const APPS = [
+  {
+    package: 'com.channel4.ondemand',
+    name: 'All 4'
+  },
+  {
+    package: 'uk.co.thetimes',
+    name: 'The Times'
+  }
+];
+
+var currentIndex = 0;
 
 function reviews() {
+  var app = APPS[currentIndex];
+  incrementIndex(APPS.length);
+
   var request = gplay.reviews({
-    appId: 'com.channel4.ondemand',
+    appId: app.package,
     page: 0,
     sort: gplay.sort.NEWEST
   });
-  return request.then(toRuleResult);
+  return request.then(toRuleResult(app));
 }
 
-function toRuleResult(data) {
-  var total = 0;
-  data.forEach(each => {
-    total += each.score;
-  })
-  var average = total / data.length;
-  console.log(total + ' : ' + data.length + ' ' + average);
+function incrementIndex(dataLength) {
+  if (currentIndex >= dataLength - 1) {
+    currentIndex = 0;
+  } else {
+    currentIndex++;
+  }
+}
 
-  var demotivators = data.filter(each => each.score < 2);
-  var motivators = data.filter(each => each.score > 2);
+function toRuleResult(app) {
+  return function(data) {
+    var total = 0;
+    data.forEach(each => {
+      total += each.score;
+    });
 
-  return new Promise(function(resolve, reject) {
-    resolve({
+    var average = total / data.length;
+    var demotivators = data.filter(each => each.score < 2);
+    var motivators = data.filter(each => each.score > 2);
+
+    return Promise.resolve({
       widgetKey: 'reviews',
       payload: {
         average: average,
         demotivators: demotivators,
-        motivators: motivators
+        motivators: motivators,
+        appName: app.name
       }
     });
-  });
+  }
 }

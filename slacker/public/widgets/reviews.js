@@ -10,10 +10,14 @@ widgets.reviews = function() {
 }
 
 function presentReviewsAverage(data) {
+  var selection = data.motivators[Math.floor((Math.random() * data.motivators.length))];
+  var rating = '&#xfeb68;'.repeat(selection.score);
   return '<div class="content-container active-image">' +
   '<div class="active-container">' +
     '<div class="active-filler"></div>' +
-    '<span class="active-channel-copy">' + data.demotivators[Math.floor((Math.random() * data.demotivators.length))].text + '</span>' +
+    '<span class="active-channel-copy"><b>' + data.appName + '</b></span><br>' +
+    '<span class="active-channel-copy"><b>' + rating + '</b></span><br><br>' +
+    '<span class="active-channel-copy">' + selection.text + '</span>' +
   '</div>' +
 '</div>';
 }

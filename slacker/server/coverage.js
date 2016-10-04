@@ -85,7 +85,7 @@ function toRuleResult(data) {
 }
 
 function incrementIndex(dataLength) {
-  if (currentIndex >= dataLength) {
+  if (currentIndex >= dataLength - 1) {
     currentIndex = 0;
   } else {
     currentIndex++;
