@@ -11,7 +11,7 @@ widgets.reviews = function() {
 
 function presentReviewsAverage(data) {
   var selection = data.motivators[Math.floor((Math.random() * data.motivators.length))];
-  var rating = '&#xfeb68;'.repeat(selection.score);
+  var rating = '&#11088;'.repeat(selection.score);
   return '<div class="content-container active-image">' +
   '<div class="active-container">' +
     '<div class="active-filler"></div>' +
