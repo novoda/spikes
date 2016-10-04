@@ -5,7 +5,7 @@ Provides gradle closure to configure the monkey runner.
 
 ## Description
 
-Decorates the [Android monkey runner](https://developer.android.com/studio/test/monkey.html) with the [monkey trap](https://github.com/novoda/spikes/tree/master/MonkeyTrap/), which is designed to block the monkey from accessing the system notifications tray (and the quick toggles).
+Decorates the [Android monkey](https://developer.android.com/studio/test/monkey.html) with the [monkey trap](https://github.com/novoda/spikes/tree/master/MonkeyTrap/), which is designed to block the monkey from accessing the system notifications tray (and the quick toggles).
 
 ## Adding to project
 
