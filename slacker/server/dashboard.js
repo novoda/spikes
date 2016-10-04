@@ -6,11 +6,11 @@ var Dashboard = function(token) {
   this.slacker = new Slacker(token);
   this.index = 0;
   this.widgets = [
-    // require('./ci-wall'),
-    // require('./coverage'),
-    // require('./stackoverflow'),
+    require('./ci-wall'),
+    require('./coverage'),
+    require('./stackoverflow'),
     require('./reviews')];
-  // ].concat(this.slacker.getRules());
+  ].concat(this.slacker.getRules());
 }
 
 function update(self, callback) {
