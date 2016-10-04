@@ -9,7 +9,7 @@ var Dashboard = function(token) {
     require('./ci-wall'),
     require('./coverage'),
     require('./stackoverflow'),
-    require('./reviews')];
+    require('./reviews')
   ].concat(this.slacker.getRules());
 }
 
