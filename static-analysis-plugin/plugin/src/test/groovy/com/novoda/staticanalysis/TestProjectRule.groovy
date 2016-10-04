@@ -6,29 +6,47 @@ import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 
-class TestProjectRule implements TestRule {
+abstract class TestProjectRule implements TestRule {
 
-    private File projectDir
-    private GradleRunner gradleRunner
+    protected File projectDir
+    protected GradleRunner gradleRunner
+
+    static TestProjectRule forJavaProject() {
+        new TestProjectRule() {
+            @Override
+            BuildScriptBuilder newBuildScriptBuilder() {
+                BuildScriptBuilder.forJava()
+            }
+        }
+    }
+
+    protected TestProjectRule() {
+    }
 
     @Override
     Statement apply(Statement base, Description description) {
         return new Statement() {
             @Override
             void evaluate() throws Throwable {
-                projectDir =  createProjectDir("${System.currentTimeMillis()}")
-                gradleRunner = GradleRunner.create()
-                        .withProjectDir(projectDir)
-                        .withDebug(true)
-                        .withPluginClasspath()
-                        .forwardStdOutput(new OutputStreamWriter(System.out))
-                        .forwardStdError(new OutputStreamWriter(System.out))
+                initProject()
                 base.evaluate()
                 projectDir.deleteDir()
                 projectDir = null
                 gradleRunner = null
             }
+
         }
+    }
+
+    protected void initProject() {
+        projectDir = createProjectDir("${System.currentTimeMillis()}")
+        gradleRunner = GradleRunner.create()
+                .withProjectDir(projectDir)
+                .withDebug(true)
+                .withPluginClasspath()
+                .forwardStdOutput(new OutputStreamWriter(System.out))
+                .forwardStdError(new OutputStreamWriter(System.out))
+        copyFile(Fixtures.CHECKSTYLE_CONFIG, 'config/checkstyle/checkstyle.xml')
     }
 
     private static File createProjectDir(String path) {
@@ -38,30 +56,34 @@ class TestProjectRule implements TestRule {
         return dir
     }
 
+    protected abstract BuildScriptBuilder newBuildScriptBuilder()
+
+    protected List<String> defaultArguments() {
+        Collections.singletonList('--stacktrace')
+    }
+
     TestProjectRule withBuildScript(String buildScript) {
         new File(projectDir, 'build.gradle').text = buildScript
         return this
     }
 
     BuildResult buildAndFail(String... arguments) {
-        withDefaultCheckstyleConfig()
-        gradleRunner
-                .withArguments(arguments)
-                .buildAndFail()
+        withArguments(arguments).buildAndFail()
     }
 
     BuildResult build(String... arguments) {
-        withDefaultCheckstyleConfig()
-        gradleRunner
-                .withArguments(arguments)
-                .build()
+        withArguments(arguments).build()
     }
 
-    private TestProjectRule withDefaultCheckstyleConfig() {
-        return withFile(Fixtures.CHECKSTYLE_CONFIG, 'config/checkstyle/checkstyle.xml')
+    private GradleRunner withArguments(String... arguments) {
+        List<String> defaultArgs = defaultArguments()
+        List<String> args = new ArrayList<>(arguments.size() + defaultArgs.size())
+        args.addAll(defaultArgs)
+        args.addAll(arguments)
+        gradleRunner.withArguments(args)
     }
 
-    private TestProjectRule withFile(File source, String path) {
+    protected TestProjectRule copyFile(File source, String path) {
         File file = new File(projectDir, path)
         file.parentFile.mkdirs()
         file.text = source.text

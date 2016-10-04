@@ -3,17 +3,29 @@ package com.novoda.staticanalysis
 import org.gradle.testkit.runner.BuildResult
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
 
 import static com.novoda.staticanalysis.BuildResultSubject.assertThat
 
-class JavaProjectCheckStyleTest {
+@RunWith(Parameterized.class)
+public class CheckstyleConfigurationTest {
+
+    @Parameterized.Parameters
+    public static List<Object[]> rules() {
+        return [TestProjectRule.forJavaProject()].collect { [it] as Object[] }
+    }
 
     @Rule
-    public TestProjectRule project = new TestProjectRule()
+    public final TestProjectRule project
+
+    public CheckstyleConfigurationTest(TestProjectRule project) {
+        this.project = project
+    }
 
     @Test
     public void shouldNotFailBuildByDefaultWhenNoCheckstyleWarningsEncountered() {
-        String buildScript = new BuildScriptBuilder()
+        String buildScript = project.newBuildScriptBuilder()
                 .build()
         BuildResult result = project.withBuildScript(buildScript)
                 .build('check')
@@ -23,7 +35,7 @@ class JavaProjectCheckStyleTest {
 
     @Test
     public void shouldNotFailBuildByDefaultWhenCheckstyleWarningsEncountered() {
-        String buildScript = new BuildScriptBuilder()
+        String buildScript = project.newBuildScriptBuilder()
                 .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
                 .build()
         BuildResult result = project.withBuildScript(buildScript)
@@ -34,7 +46,7 @@ class JavaProjectCheckStyleTest {
 
     @Test
     public void shouldFailBuildByDefaultWhenCheckstyleErrorsEncountered() {
-        String buildScript = new BuildScriptBuilder()
+        String buildScript = project.newBuildScriptBuilder()
                 .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
                 .build()
         BuildResult result = project
@@ -46,7 +58,7 @@ class JavaProjectCheckStyleTest {
 
     @Test
     public void shouldNotFailBuildWhenNoCheckstyleWarningsEncounteredAndNoPenalty() {
-        String buildScript = new BuildScriptBuilder()
+        String buildScript = project.newBuildScriptBuilder()
                 .withPenalty(Penalty.NONE)
                 .build()
         BuildResult result = project.withBuildScript(buildScript)
@@ -57,7 +69,7 @@ class JavaProjectCheckStyleTest {
 
     @Test
     public void shouldNotFailBuildWhenCheckstyleWarningsEncounteredAndNoPenalty() {
-        String buildScript = new BuildScriptBuilder()
+        String buildScript = project.newBuildScriptBuilder()
                 .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
                 .withPenalty(Penalty.NONE)
                 .build()
@@ -69,7 +81,7 @@ class JavaProjectCheckStyleTest {
 
     @Test
     public void shouldNotFailBuildWhenCheckstyleErrorsEncounteredAndNoPenalty() {
-        String buildScript = new BuildScriptBuilder()
+        String buildScript = project.newBuildScriptBuilder()
                 .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
                 .withPenalty(Penalty.NONE)
                 .build()
@@ -81,7 +93,7 @@ class JavaProjectCheckStyleTest {
 
     @Test
     public void shouldNotFailBuildWhenNoCheckstyleWarningsEncounteredAndPenaltyOnErrors() {
-        String buildScript = new BuildScriptBuilder()
+        String buildScript = project.newBuildScriptBuilder()
                 .withPenalty(Penalty.FAIL_ON_ERRORS)
                 .build()
         BuildResult result = project.withBuildScript(buildScript)
@@ -92,7 +104,7 @@ class JavaProjectCheckStyleTest {
 
     @Test
     public void shouldNotFailBuildWhenCheckstyleWarningsEncounteredAndPenaltyOnErrors() {
-        String buildScript = new BuildScriptBuilder()
+        String buildScript = project.newBuildScriptBuilder()
                 .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
                 .withPenalty(Penalty.FAIL_ON_ERRORS)
                 .build()
@@ -104,7 +116,7 @@ class JavaProjectCheckStyleTest {
 
     @Test
     public void shouldFailBuildWhenCheckstyleErrorsEncounteredAndPenaltyOnErrors() {
-        String buildScript = new BuildScriptBuilder()
+        String buildScript = project.newBuildScriptBuilder()
                 .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
                 .withPenalty(Penalty.FAIL_ON_ERRORS)
                 .build()
@@ -116,7 +128,7 @@ class JavaProjectCheckStyleTest {
 
     @Test
     public void shouldNotFailBuildWhenNoCheckstyleWarningsEncounteredAndPenaltyOnWarnings() {
-        String buildScript = new BuildScriptBuilder()
+        String buildScript = project.newBuildScriptBuilder()
                 .withPenalty(Penalty.FAIL_ON_WARNINGS)
                 .build()
         BuildResult result = project.withBuildScript(buildScript)
@@ -127,7 +139,7 @@ class JavaProjectCheckStyleTest {
 
     @Test
     public void shouldFailBuildWhenCheckstyleWarningsEncounteredAndPenaltyOnWarnings() {
-        String buildScript = new BuildScriptBuilder()
+        String buildScript = project.newBuildScriptBuilder()
                 .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
                 .withPenalty(Penalty.FAIL_ON_WARNINGS)
                 .build()
@@ -139,7 +151,7 @@ class JavaProjectCheckStyleTest {
 
     @Test
     public void shouldFailBuildWhenCheckstyleErrorsEncounteredAndPenaltyOnWarnings() {
-        String buildScript = new BuildScriptBuilder()
+        String buildScript = project.newBuildScriptBuilder()
                 .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
                 .withPenalty(Penalty.FAIL_ON_WARNINGS)
                 .build()

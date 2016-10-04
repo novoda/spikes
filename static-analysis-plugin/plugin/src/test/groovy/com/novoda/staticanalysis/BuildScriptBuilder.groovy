@@ -1,8 +1,7 @@
 package com.novoda.staticanalysis;
 
 class BuildScriptBuilder {
-
-    private final Closure<String> javaTemplate = {
+    private static final Closure<String> JAVA_TEMPLATE = { BuildScriptBuilder builder ->
         """
 plugins {
     id 'static-analysis'
@@ -13,19 +12,26 @@ repositories {
 apply plugin: 'java'
 sourceSets {
     main {
-        java {
-            ${format(srcDirs)}
-        }
+        ${builder.formatSrcDirs()}
     }
 }
 staticAnalysis {
-    ${format(penalty)}
+    ${builder.formatPenalty()}
 }
 """
     }
 
+    private final Closure<String> template
     private final List<File> srcDirs = new ArrayList<>()
     private Penalty penalty
+
+    public static BuildScriptBuilder forJava() {
+        new BuildScriptBuilder(JAVA_TEMPLATE)
+    }
+
+    private BuildScriptBuilder(Closure<String> template) {
+        this.template = template
+    }
 
     BuildScriptBuilder withSrcDirs(File... srcDirs) {
         this.srcDirs.addAll(srcDirs)
@@ -38,14 +44,16 @@ staticAnalysis {
     }
 
     String build() {
-        javaTemplate.call()
+        template.call(this)
     }
 
-    private static String format(List<File> srcDirs) {
-        srcDirs.collect { "srcDir '$it'" }.join("\n\t\t\t\t\t")
+    private String formatSrcDirs() {
+        srcDirs.isEmpty() ? '' : """java {
+            ${srcDirs.collect { "srcDir '$it'" }.join("\n\t\t\t\t\t")}
+        }"""
     }
 
-    private static String format(Penalty penalty) {
+    private String formatPenalty() {
         switch (penalty) {
             case Penalty.NONE:
                 return 'penalty = none'
