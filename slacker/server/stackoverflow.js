@@ -3,28 +3,27 @@ module.exports = {
   rank: 1
 }
 
-var request = require('request');
-const API_URL = 'http://api.stackexchange.com/2.2/search/advanced?order=desc&sort=activity&q=novoda&accepted=False&site=stackoverflow';
 const SO_URL = 'http://stackoverflow.com/search?q=novoda+hasaccepted%3Ano'
+const httpClient = require('request-promise-native');
+const REQUEST = {
+  url: 'http://api.stackexchange.com/2.2/search/advanced?order=desc&sort=activity&q=novoda&accepted=False&site=stackoverflow',
+  gzip: true
+};
 
 function stackoverflow() {
-  return new Promise(getQuestions).then(toRuleResult);
+  return getQuestions().then(toRuleResult);
 }
 
-function getQuestions(resolve, reject) {
-  request.get({url: API_URL, gzip: true}, parseResponse(resolve, reject));
+function getQuestions() {
+  return httpClient(REQUEST).then(parseResponse);
 }
 
-function parseResponse(resolve, reject) {
-  return function(error, response, body) {
-    if (!error && response.statusCode == 200) {
-      var jsonBody = JSON.parse(body);
-      if (jsonBody.items) {
-        resolve({ questions: jsonBody.items, url: SO_URL });
-      }
-    } else {
-      reject(error);
-    }
+function parseResponse(body) {
+  var jsonBody = JSON.parse(body);
+  if (jsonBody.items) {
+    return Promise.resolve({ questions: jsonBody.items, url: SO_URL });
+  } else {
+    return Promise.reject('stackoverflow: no items');
   }
 }
 

@@ -15,8 +15,8 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
-http.listen(3001, function(){
-  console.log('listening on *:3001');
+http.listen(3002, function(){
+  console.log('listening on *:3002');
 });
 
 var notifyClient = function(data) {
