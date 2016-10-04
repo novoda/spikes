@@ -90,7 +90,7 @@ void increaseForward() {
   } else {
     currentSpeed = currentSpeed - DELTA_SPEED;
   }
-  checkSpeedWithinLimits();
+  enforceSpeedWithinLimits();
   setRightSpeed(currentSpeed);  
   setLeftSpeed(currentSpeed);
 }
@@ -106,12 +106,12 @@ void increaseBackward() {
   } else {
     currentSpeed = currentSpeed - DELTA_SPEED;
   }
-  checkSpeedWithinLimits();
+  enforceSpeedWithinLimits();
   setRightSpeed(currentSpeed);  
   setLeftSpeed(currentSpeed);
 }
 
-void checkSpeedWithinLimits() {
+void enforceSpeedWithinLimits() {
   if (currentSpeed > MAX_SPEED) {
     currentSpeed = MAX_SPEED;
   }
@@ -124,6 +124,7 @@ void setRightDirection(int direction) {
   motorRight1.run(direction);
   motorRight2.run(direction);
 }
+
 void setLeftDirection(int direction) {
   motorLeft1.run(direction);
   motorLeft2.run(direction);
@@ -133,6 +134,7 @@ void setRightSpeed(int speed) {
   motorRight1.setSpeed(speed);
   motorRight2.setSpeed(speed);
 }
+
 void setLeftSpeed(int speed) {
   motorLeft1.setSpeed(speed);
   motorLeft2.setSpeed(speed);
