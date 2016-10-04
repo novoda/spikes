@@ -47,18 +47,18 @@ void testMotors() {
   
   setRightDirection(FORWARD);
   setLeftDirection(FORWARD);
-  for (i=0; i<255; i++) {
+  for (i=0; i<MAX_SPEED; i++) {
     setRightSpeed(i);  
     setLeftSpeed(i);  
     delay(3);
   }
 
-    setRightSpeed(255);  
-    setLeftSpeed(255);   
-    delay(5000);
+  setRightSpeed(MAX_SPEED);  
+  setLeftSpeed(MAX_SPEED);   
+  delay(5000);
  
  
-  for (i=255; i!=0; i--) {
+  for (i=MAX_SPEED; i!=0; i--) {
     setRightSpeed(i);  
     setLeftSpeed(i);  
     delay(3);
@@ -66,13 +66,13 @@ void testMotors() {
  
   setRightDirection(BACKWARD);
   setLeftDirection(BACKWARD);
-  for (i=0; i<255; i++) {
+  for (i=0; i<MAX_SPEED; i++) {
     setRightSpeed(i);  
     setLeftSpeed(i);   
     delay(3);
   }
  
-  for (i=255; i!=0; i--) {
+  for (i=MAX_SPEED; i!=0; i--) {
     setRightSpeed(i);  
     setLeftSpeed(i);  
     delay(3);
