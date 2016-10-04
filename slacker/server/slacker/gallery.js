@@ -3,16 +3,13 @@ module.exports = {
 }
 
 function gallery(dataStore, messages) {
-  var result = function(resolve, reject) {
-    var imageMessages = findImageMessages(dataStore, messages);
-    if (!imageMessages || imageMessages.length === 0) {
-      reject('no image message found');
-    } else {
-      var latestImageMessage = imageMessages[0];
-      resolve(createPayload(dataStore, latestImageMessage));
-    }
+  var imageMessages = findImageMessages(dataStore, messages);
+  if (!imageMessages || imageMessages.length === 0) {
+    return Promise.reject('no image message found');
+  } else {
+    var latestImageMessage = imageMessages[0];
+    return Promise.resolve(createPayload(dataStore, latestImageMessage));
   }
-  return new Promise(result);
 }
 
 function findImageMessages(dataStore, messages) {

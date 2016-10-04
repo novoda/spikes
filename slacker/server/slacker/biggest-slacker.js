@@ -5,14 +5,11 @@ module.exports = {
 var helper = require('./message-helper.js');
 
 function biggestSlacker(dataStore, messages) {
-  var result = function(resolve, reject) {
-    if (!messages || messages.length === 0) {
-      reject('biggest slacker skipped, no messages');
-    } else {
-      resolve(createPayload(dataStore, messages));
-    }
+  if (!messages || messages.length === 0) {
+    return Promise.reject('biggest slacker skipped, no messages');
+  } else {
+    return Promise.resolve(createPayload(dataStore, messages));
   }
-  return new Promise(result);
 }
 
 function createPayload(dataStore, messages) {

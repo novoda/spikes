@@ -3,16 +3,13 @@ module.exports = {
 }
 
 function thanks(dataStore, messages) {
-  var result = function(resolve, reject) {
-    var thankYouMessages = findThanksMessages(dataStore, messages);
-    if (!thankYouMessages || thankYouMessages.length === 0) {
-      reject('no thanks message found');
-    } else {
-      var latestThanksMessage = thankYouMessages[0];
-      resolve(createPayload(latestThanksMessage));
-    }
+  var thankYouMessages = findThanksMessages(dataStore, messages);
+  if (!thankYouMessages || thankYouMessages.length === 0) {
+    return Promise.reject('no thanks message found');
+  } else {
+    var latestThanksMessage = thankYouMessages[0];
+    return Promise.resolve(createPayload(latestThanksMessage));
   }
-  return new Promise(result);
 }
 
 function findThanksMessages(dataStore, messages) {
