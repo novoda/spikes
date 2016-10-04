@@ -15,9 +15,9 @@ function presentReviewsAverage(data) {
   return '<div class="content-container active-image">' +
   '<div class="active-container">' +
     '<div class="active-filler"></div>' +
-    '<span class="active-channel-copy"><b>' + data.appName + '</b></span><br>' +
-    '<span class="active-channel-copy"><b>' + rating + '</b></span><br><br>' +
-    '<span class="active-channel-copy">' + selection.text + '</span>' +
+    '<span class="active-channel-copy review"><b>' + data.appName + '</b><br><br>' +
+    '<b>' + rating + '</b><br><br>' +
+    '' + selection.text + '</span>' +
   '</div>' +
 '</div>';
 }

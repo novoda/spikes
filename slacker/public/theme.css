@@ -206,6 +206,12 @@
   color: #000000;
 }
 
+.review {
+  text-overflow: ellipsis;
+  line-height: 60px;
+  height: 60%;
+}
+
 .active-filler {
   height: 20%;
 }
