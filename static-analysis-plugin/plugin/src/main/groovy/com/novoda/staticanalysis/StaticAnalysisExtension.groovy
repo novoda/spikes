@@ -1,17 +1,27 @@
 package com.novoda.staticanalysis
 
+import org.gradle.api.Action
+
 class StaticAnalysisExtension {
-    final Closure<Penalty> none = { Penalty.NONE}
-    final Closure<Penalty> failOnErrors = { Penalty.FAIL_ON_ERRORS }
-    final Closure<Penalty> failOnWarnings = { Penalty.FAIL_ON_WARNINGS }
+    final Action<? super PenaltyExtension> none = {
+        it.maxWarnings(Integer.MAX_VALUE)
+        it.maxErrors(Integer.MAX_VALUE)
+    }
+    final Action<? super PenaltyExtension> failOnErrors = {
+        it.maxWarnings(Integer.MAX_VALUE)
+        it.maxErrors(0)
+    }
+    final Action<? super PenaltyExtension> failOnWarnings = {
+        it.maxWarnings(0)
+        it.maxErrors(0)
+    }
+    private PenaltyExtension currentPenalty = new PenaltyExtension()
 
-    private Closure<Penalty> currentPenalty = failOnErrors
-
-    Penalty getPenalty() {
-        currentPenalty.call()
+    void penalty(Action<? super PenaltyExtension> action) {
+        action.execute(currentPenalty)
     }
 
-    void penalty(Closure<Penalty> penalty) {
-        currentPenalty = penalty
+    PenaltyExtension getPenalty() {
+        currentPenalty
     }
 }

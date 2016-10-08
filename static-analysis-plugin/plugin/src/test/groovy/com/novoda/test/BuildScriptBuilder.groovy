@@ -1,6 +1,6 @@
 package com.novoda.test
 
-import com.novoda.staticanalysis.Penalty;
+import com.novoda.staticanalysis.Penalty
 
 class BuildScriptBuilder {
     private final Closure<String> template
@@ -23,7 +23,7 @@ class BuildScriptBuilder {
 
     String formatSrcDirs() {
         srcDirs.isEmpty() ? '' : """java {
-            ${srcDirs.collect { "srcDir '$it'" }.join("\n\t\t\t\t\t")}
+            ${srcDirs.collect { "srcDir '$it'" }.join("\n\t\t\t")}
         }"""
     }
 

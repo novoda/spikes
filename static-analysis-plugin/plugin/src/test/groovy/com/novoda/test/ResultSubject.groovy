@@ -9,7 +9,7 @@ import com.novoda.test.TestProject.Result
 import javax.annotation.Nullable;
 
 class ResultSubject extends Subject<ResultSubject, Result> {
-    private static final String CHECKSTYLE_VIOLATIONS_LOG = 'Checkstyle rule violations were found.'
+    private static final String CHECKSTYLE_VIOLATIONS_LOG = 'Checkstyle rule violations were found'
 
     private static final SubjectFactory<ResultSubject, Result> FACTORY = new SubjectFactory<ResultSubject, Result>() {
         @Override
@@ -33,5 +33,4 @@ class ResultSubject extends Subject<ResultSubject, Result> {
     public void doesNotContainCheckstyleViolationsLog() {
         Truth.assertThat(actual().output).doesNotContain(CHECKSTYLE_VIOLATIONS_LOG)
     }
-
 }

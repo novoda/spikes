@@ -28,7 +28,7 @@ abstract class TestProject {
     }
 
     List<String> defaultArguments() {
-        Collections.singletonList('--stacktrace')
+        Collections.emptyList()
     }
 
     void copyFile(File source, String path) {
