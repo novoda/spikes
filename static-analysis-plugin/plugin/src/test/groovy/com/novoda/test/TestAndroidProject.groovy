@@ -1,4 +1,4 @@
-package com.novoda.test;
+package com.novoda.test
 
 class TestAndroidProject extends TestProject {
 
@@ -11,5 +11,4 @@ class TestAndroidProject extends TestProject {
     List<String> defaultArguments() {
         ['-x', 'lint'] + super.defaultArguments()
     }
-
 }

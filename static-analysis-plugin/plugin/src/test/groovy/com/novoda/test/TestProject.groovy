@@ -50,13 +50,20 @@ abstract class TestProject {
     public Result build(String... arguments) {
         copyFile(Fixtures.CHECKSTYLE_CONFIG, 'config/checkstyle/checkstyle.xml')
         new File(projectDir, 'build.gradle').text = buildScriptBuilder.build()
-        new Result(withArguments(arguments).build())
+        BuildResult buildResult = withArguments(arguments).build()
+        createResult(buildResult)
     }
 
     public Result buildAndFail(String... arguments) {
         copyFile(Fixtures.CHECKSTYLE_CONFIG, 'config/checkstyle/checkstyle.xml')
         new File(projectDir, 'build.gradle').text = buildScriptBuilder.build()
-        new Result(withArguments(arguments).buildAndFail())
+        BuildResult buildResult = withArguments(arguments).buildAndFail()
+        createResult(buildResult)
+    }
+
+    private createResult(BuildResult buildResult) {
+        File reportsDir = new File(projectDir, 'build/reports')
+        new Result(buildResult, [new File(reportsDir, 'checkstyle/main.xml')])
     }
 
     private GradleRunner withArguments(String... arguments) {
@@ -73,9 +80,11 @@ abstract class TestProject {
 
     public static class Result {
         private final BuildResult buildResult
+        private final List<File> checkstyleReports
 
-        Result(BuildResult buildResult) {
+        Result(BuildResult buildResult, List<File> checkstyleReports) {
             this.buildResult = buildResult
+            this.checkstyleReports = checkstyleReports
         }
 
         BuildResult getBuildResult() {
