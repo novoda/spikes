@@ -102,11 +102,11 @@ staticAnalysis {
     private String formatPenalty() {
         switch (penalty) {
             case Penalty.NONE:
-                return 'penalty = none'
+                return 'penalty none'
             case Penalty.FAIL_ON_ERRORS:
-                return 'penalty = failOnErrors'
+                return 'penalty failOnErrors'
             case Penalty.FAIL_ON_WARNINGS:
-                return 'penalty = failOnWarnings'
+                return 'penalty failOnWarnings'
             default:
                 return ''
         }
