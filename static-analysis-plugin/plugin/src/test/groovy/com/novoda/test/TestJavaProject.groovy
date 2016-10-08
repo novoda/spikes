@@ -16,9 +16,7 @@ sourceSets {
         ${builder.formatSrcDirs()}
     }
 }
-staticAnalysis {
-    ${builder.formatPenalty()}
-}
+${builder.formatExtension()}
 """
     }
 

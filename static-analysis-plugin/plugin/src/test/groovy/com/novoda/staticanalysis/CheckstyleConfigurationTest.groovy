@@ -55,7 +55,7 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldNotFailBuildWhenNoCheckstyleWarningsEncounteredAndNoPenalty() {
         TestProject.Result result = projectRule.newProject()
-                .withPenalty(Penalty.NONE)
+                .withPenalty('none')
                 .build('check')
 
         assertThat(result).doesNotContainCheckstyleViolationsLog()
@@ -65,7 +65,7 @@ public class CheckstyleConfigurationTest {
     public void shouldNotFailBuildWhenCheckstyleWarningsEncounteredAndNoPenalty() {
         TestProject.Result result = projectRule.newProject()
                 .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
-                .withPenalty(Penalty.NONE)
+                .withPenalty('none')
                 .build('check')
 
         assertThat(result).doesNotContainCheckstyleViolationsLog()
@@ -76,7 +76,7 @@ public class CheckstyleConfigurationTest {
         TestProject.Result result = projectRule.newProject()
                 .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
                 .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
-                .withPenalty(Penalty.NONE)
+                .withPenalty('none')
                 .build('check')
 
         assertThat(result).containsCheckstyleViolationsLog()
@@ -85,7 +85,7 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldNotFailBuildWhenNoCheckstyleWarningsEncounteredAndPenaltyOnErrors() {
         TestProject.Result result = projectRule.newProject()
-                .withPenalty(Penalty.FAIL_ON_ERRORS)
+                .withPenalty('failOnErrors')
                 .build('check')
 
         assertThat(result).doesNotContainCheckstyleViolationsLog()
@@ -95,7 +95,7 @@ public class CheckstyleConfigurationTest {
     public void shouldNotFailBuildWhenCheckstyleWarningsEncounteredAndPenaltyOnErrors() {
         TestProject.Result result = projectRule.newProject()
                 .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
-                .withPenalty(Penalty.FAIL_ON_ERRORS)
+                .withPenalty('failOnErrors')
                 .build('check')
 
         assertThat(result).doesNotContainCheckstyleViolationsLog()
@@ -106,7 +106,7 @@ public class CheckstyleConfigurationTest {
         TestProject.Result result = projectRule.newProject()
                 .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
                 .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
-                .withPenalty(Penalty.FAIL_ON_ERRORS)
+                .withPenalty('failOnErrors')
                 .buildAndFail('check')
 
         assertThat(result).containsCheckstyleViolationsLog()
@@ -115,7 +115,7 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldNotFailBuildWhenNoCheckstyleWarningsEncounteredAndPenaltyOnWarnings() {
         TestProject.Result result = projectRule.newProject()
-                .withPenalty(Penalty.FAIL_ON_WARNINGS)
+                .withPenalty('failOnWarnings')
                 .build('check')
 
         assertThat(result).doesNotContainCheckstyleViolationsLog()
@@ -125,7 +125,7 @@ public class CheckstyleConfigurationTest {
     public void shouldFailBuildWhenCheckstyleWarningsEncounteredAndPenaltyOnWarnings() {
         TestProject.Result result = projectRule.newProject()
                 .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
-                .withPenalty(Penalty.FAIL_ON_WARNINGS)
+                .withPenalty('failOnWarnings')
                 .buildAndFail('check')
 
         assertThat(result).containsCheckstyleViolationsLog()
@@ -136,7 +136,7 @@ public class CheckstyleConfigurationTest {
         TestProject.Result result = projectRule.newProject()
                 .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
                 .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
-                .withPenalty(Penalty.FAIL_ON_WARNINGS)
+                .withPenalty('failOnWarnings')
                 .buildAndFail('check')
 
         assertThat(result).containsCheckstyleViolationsLog()

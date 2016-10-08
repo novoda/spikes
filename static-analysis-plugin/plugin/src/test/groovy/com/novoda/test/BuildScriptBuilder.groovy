@@ -1,14 +1,19 @@
 package com.novoda.test
 
-import com.novoda.staticanalysis.Penalty
-
 class BuildScriptBuilder {
-    private final Closure<String> template
+    private final Closure<String> PENALTY_TEMPLATE = {
+        """
+staticAnalysis {
+    penalty ${penalty}
+}
+"""
+    }
+    private final Closure<String> fullTemplate
     private final List<File> srcDirs = new ArrayList<>()
-    private Penalty penalty
+    private String penalty
 
-    BuildScriptBuilder(Closure<String> template) {
-        this.template = template
+    BuildScriptBuilder(Closure<String> fullTemplate) {
+        this.fullTemplate = fullTemplate
     }
 
     BuildScriptBuilder withSrcDirs(File... srcDirs) {
@@ -16,7 +21,7 @@ class BuildScriptBuilder {
         return this
     }
 
-    BuildScriptBuilder withPenalty(Penalty penalty) {
+    BuildScriptBuilder withPenalty(String penalty) {
         this.penalty = penalty
         return this
     }
@@ -27,20 +32,11 @@ class BuildScriptBuilder {
         }"""
     }
 
-    String formatPenalty() {
-        switch (penalty) {
-            case Penalty.NONE:
-                return 'penalty none'
-            case Penalty.FAIL_ON_ERRORS:
-                return 'penalty failOnErrors'
-            case Penalty.FAIL_ON_WARNINGS:
-                return 'penalty failOnWarnings'
-            default:
-                return ''
-        }
+    String formatExtension() {
+        PENALTY_TEMPLATE.call()
     }
 
     String build() {
-        template.call(this)
+        fullTemplate.call(this)
     }
 }

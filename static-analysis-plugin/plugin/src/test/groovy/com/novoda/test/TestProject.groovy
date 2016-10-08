@@ -1,6 +1,5 @@
 package com.novoda.test
 
-import com.novoda.staticanalysis.Penalty
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 
@@ -42,7 +41,7 @@ abstract class TestProject {
         return this
     }
 
-    public TestProject withPenalty(Penalty penalty) {
+    public TestProject withPenalty(String penalty) {
         buildScriptBuilder.withPenalty(penalty)
         return this
     }
@@ -85,10 +84,6 @@ abstract class TestProject {
         Result(BuildResult buildResult, List<File> checkstyleReports) {
             this.buildResult = buildResult
             this.checkstyleReports = checkstyleReports
-        }
-
-        BuildResult getBuildResult() {
-            buildResult
         }
 
         String getOutput() {

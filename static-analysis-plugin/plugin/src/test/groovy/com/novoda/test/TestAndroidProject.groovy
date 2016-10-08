@@ -35,9 +35,7 @@ android {
         }
     }
 }
-staticAnalysis {
-    ${builder.formatPenalty()}
-}
+${builder.formatExtension()}
 """
     }
 
