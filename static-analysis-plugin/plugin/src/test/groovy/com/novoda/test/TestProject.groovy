@@ -90,5 +90,9 @@ abstract class TestProject {
         BuildResult getBuildResult() {
             buildResult
         }
+
+        String getOutput() {
+            buildResult.output
+        }
     }
 }

@@ -8,7 +8,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
-import static com.novoda.test.BuildResultSubject.assertThat
+import static com.novoda.test.ResultSubject.assertThat
 
 @RunWith(Parameterized.class)
 public class CheckstyleConfigurationTest {
@@ -30,7 +30,7 @@ public class CheckstyleConfigurationTest {
         TestProject.Result result = projectRule.newProject()
                 .build('check')
 
-        assertThat(result.buildResult).doesNotContainCheckstyleViolationsLog()
+        assertThat(result).doesNotContainCheckstyleViolationsLog()
     }
 
     @Test
@@ -39,7 +39,7 @@ public class CheckstyleConfigurationTest {
                 .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
                 .build('check')
 
-        assertThat(result.buildResult).doesNotContainCheckstyleViolationsLog()
+        assertThat(result).doesNotContainCheckstyleViolationsLog()
     }
 
     @Test
@@ -49,7 +49,7 @@ public class CheckstyleConfigurationTest {
                 .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
                 .buildAndFail('check')
 
-        assertThat(result.buildResult).containsCheckstyleViolations()
+        assertThat(result).containsCheckstyleViolationsLog()
     }
 
     @Test
@@ -58,7 +58,7 @@ public class CheckstyleConfigurationTest {
                 .withPenalty(Penalty.NONE)
                 .build('check')
 
-        assertThat(result.buildResult).doesNotContainCheckstyleViolationsLog()
+        assertThat(result).doesNotContainCheckstyleViolationsLog()
     }
 
     @Test
@@ -68,7 +68,7 @@ public class CheckstyleConfigurationTest {
                 .withPenalty(Penalty.NONE)
                 .build('check')
 
-        assertThat(result.buildResult).doesNotContainCheckstyleViolationsLog()
+        assertThat(result).doesNotContainCheckstyleViolationsLog()
     }
 
     @Test
@@ -79,7 +79,7 @@ public class CheckstyleConfigurationTest {
                 .withPenalty(Penalty.NONE)
                 .build('check')
 
-        assertThat(result.buildResult).containsCheckstyleViolations()
+        assertThat(result).containsCheckstyleViolationsLog()
     }
 
     @Test
@@ -88,7 +88,7 @@ public class CheckstyleConfigurationTest {
                 .withPenalty(Penalty.FAIL_ON_ERRORS)
                 .build('check')
 
-        assertThat(result.buildResult).doesNotContainCheckstyleViolationsLog()
+        assertThat(result).doesNotContainCheckstyleViolationsLog()
     }
 
     @Test
@@ -98,7 +98,7 @@ public class CheckstyleConfigurationTest {
                 .withPenalty(Penalty.FAIL_ON_ERRORS)
                 .build('check')
 
-        assertThat(result.buildResult).doesNotContainCheckstyleViolationsLog()
+        assertThat(result).doesNotContainCheckstyleViolationsLog()
     }
 
     @Test
@@ -109,7 +109,7 @@ public class CheckstyleConfigurationTest {
                 .withPenalty(Penalty.FAIL_ON_ERRORS)
                 .buildAndFail('check')
 
-        assertThat(result.buildResult).containsCheckstyleViolations()
+        assertThat(result).containsCheckstyleViolationsLog()
     }
 
     @Test
@@ -118,7 +118,7 @@ public class CheckstyleConfigurationTest {
                 .withPenalty(Penalty.FAIL_ON_WARNINGS)
                 .build('check')
 
-        assertThat(result.buildResult).doesNotContainCheckstyleViolationsLog()
+        assertThat(result).doesNotContainCheckstyleViolationsLog()
     }
 
     @Test
@@ -128,7 +128,7 @@ public class CheckstyleConfigurationTest {
                 .withPenalty(Penalty.FAIL_ON_WARNINGS)
                 .buildAndFail('check')
 
-        assertThat(result.buildResult).containsCheckstyleViolations()
+        assertThat(result).containsCheckstyleViolationsLog()
     }
 
     @Test
@@ -139,6 +139,6 @@ public class CheckstyleConfigurationTest {
                 .withPenalty(Penalty.FAIL_ON_WARNINGS)
                 .buildAndFail('check')
 
-        assertThat(result.buildResult).containsCheckstyleViolations()
+        assertThat(result).containsCheckstyleViolationsLog()
     }
 }
