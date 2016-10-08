@@ -1,4 +1,6 @@
-package com.novoda.staticanalysis;
+package com.novoda.test
+
+import com.novoda.staticanalysis.Penalty;
 
 class BuildScriptBuilder {
     private static final Closure<String> JAVA_TEMPLATE = { BuildScriptBuilder builder ->

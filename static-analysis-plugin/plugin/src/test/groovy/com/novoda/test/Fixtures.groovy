@@ -1,4 +1,4 @@
-package com.novoda.staticanalysis
+package com.novoda.test
 
 import com.google.common.io.Resources
 

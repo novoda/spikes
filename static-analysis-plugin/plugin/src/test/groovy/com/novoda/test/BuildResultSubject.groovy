@@ -1,4 +1,4 @@
-package com.novoda.staticanalysis
+package com.novoda.test
 
 import com.google.common.truth.FailureStrategy
 import com.google.common.truth.Subject
