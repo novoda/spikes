@@ -46,7 +46,7 @@ staticAnalysis {
         file.text = source.text
     }
 
-    public TestProject withSrcDirs(String sourceSet, File... srcDirs) {
+    public TestProject withSourceSet(String sourceSet, File... srcDirs) {
         sourceSets[sourceSet] = srcDirs
         return this
     }
