@@ -44,13 +44,13 @@ public class LondonParallaxWallpaper extends GLWallpaperService {
             setRenderer(renderer);
 
             // TODO: use RENDERMODE_WHEN_DIRTY if not showing snow
-            setRenderMode(RENDERMODE_CONTINUOUSLY);
+            setRenderMode(RENDERMODE_WHEN_DIRTY);
 
             initLayers();
             requestRender();
         }
 
-        public void initLayers() {
+        void initLayers() {
             try {
                 renderer.reloadLayers();
                 renderer.resizeLayers();
