@@ -141,4 +141,18 @@ public class CheckstyleConfigurationTest {
 
         assertThat(result).containsCheckstyleViolationsLog()
     }
+
+    @Test
+    public void shouldNotFailBuildWhenCheckstyleErrorsEncounteredAndThresholdsNotReached() {
+        TestProject.Result result = projectRule.newProject()
+                .withSourceSet('main', Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
+                .withSourceSet('test', Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
+                .withPenalty('''{
+        maxWarnings 1
+        maxErrors 1
+                }''')
+                .build('check')
+
+        assertThat(result).containsCheckstyleViolationsLog()
+    }
 }
