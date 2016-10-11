@@ -1,7 +1,7 @@
 package com.novoda.test
 
 class TestAndroidProject extends TestProject {
-    private static final Closure<String> TEMPLATE = { BuildScriptBuilder builder ->
+    private static final Closure<String> TEMPLATE = { TestProject project ->
         """
 buildscript {
     repositories {
@@ -29,19 +29,30 @@ android {
         versionName "1.0"
     }
     sourceSets {
-        main {
-            manifest.srcFile '${Fixtures.ANDROID_MANIFEST}'
-            ${builder.formatSrcDirs()}
-        }
+        ${formatSourceSets(project)}
     }
 }
-${builder.formatExtension()}
+${formatExtension(project)}
 """
     }
 
     TestAndroidProject() {
-        super(new BuildScriptBuilder(TEMPLATE))
+        super(TEMPLATE)
         copyFile(Fixtures.LOCAL_PROPERTIES, 'local.properties')
+    }
+
+    private static String formatSourceSets(TestProject project) {
+        project.sourceSets
+                .entrySet()
+                .collect { Map.Entry<String, List<String>> entry ->
+        """$entry.key {
+            manifest.srcFile '${Fixtures.ANDROID_MANIFEST}'
+            java {
+                ${entry.value.collect { "srcDir '$it'" }.join('\n\t\t\t\t')}
+            }
+        }"""
+        }
+        .join('\n\t\t')
     }
 
     @Override

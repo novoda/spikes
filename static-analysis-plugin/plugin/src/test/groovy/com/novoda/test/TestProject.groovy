@@ -4,12 +4,22 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 
 abstract class TestProject {
-    private final BuildScriptBuilder buildScriptBuilder
+    private static final Closure<String> EXTENSION_TEMPLATE = { TestProject project ->
+        """
+staticAnalysis {
+    ${formatPenalty(project)}
+}
+"""
+    }
+
     private final File projectDir
     private final GradleRunner gradleRunner
+    private final Closure<String> template
+    Map<String, List<File>> sourceSets = [main: []]
+    String penalty
 
-    TestProject(BuildScriptBuilder buildScriptBuilder) {
-        this.buildScriptBuilder = buildScriptBuilder
+    TestProject(Closure<String> template) {
+        this.template = template
         this.projectDir = createProjectDir("${System.currentTimeMillis()}")
         this.gradleRunner = GradleRunner.create()
                 .withProjectDir(projectDir)
@@ -36,26 +46,26 @@ abstract class TestProject {
         file.text = source.text
     }
 
-    public TestProject withSrcDirs(File... srcDirs) {
-        buildScriptBuilder.withSrcDirs(srcDirs)
+    public TestProject withSrcDirs(String sourceSet, File... srcDirs) {
+        sourceSets[sourceSet] = srcDirs
         return this
     }
 
     public TestProject withPenalty(String penalty) {
-        buildScriptBuilder.withPenalty(penalty)
+        this.penalty = "penalty $penalty"
         return this
     }
 
     public Result build(String... arguments) {
         copyFile(Fixtures.CHECKSTYLE_CONFIG, 'config/checkstyle/checkstyle.xml')
-        new File(projectDir, 'build.gradle').text = buildScriptBuilder.build()
+        new File(projectDir, 'build.gradle').text = template.call(this)
         BuildResult buildResult = withArguments(arguments).build()
         createResult(buildResult)
     }
 
     public Result buildAndFail(String... arguments) {
         copyFile(Fixtures.CHECKSTYLE_CONFIG, 'config/checkstyle/checkstyle.xml')
-        new File(projectDir, 'build.gradle').text = buildScriptBuilder.build()
+        new File(projectDir, 'build.gradle').text = template.call(this)
         BuildResult buildResult = withArguments(arguments).buildAndFail()
         createResult(buildResult)
     }
@@ -75,6 +85,14 @@ abstract class TestProject {
 
     public void deleteDir() {
         projectDir.deleteDir()
+    }
+
+    protected static String formatExtension(TestProject project) {
+        EXTENSION_TEMPLATE.call(project)
+    }
+
+    private static String formatPenalty(TestProject project) {
+        project.penalty ?: ''
     }
 
     public static class Result {

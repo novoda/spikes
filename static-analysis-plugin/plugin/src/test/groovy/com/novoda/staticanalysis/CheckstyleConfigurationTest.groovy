@@ -36,7 +36,7 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldNotFailBuildByDefaultWhenCheckstyleWarningsEncountered() {
         TestProject.Result result = projectRule.newProject()
-                .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
+                .withSrcDirs('main', Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
                 .build('check')
 
         assertThat(result).doesNotContainCheckstyleViolationsLog()
@@ -45,8 +45,8 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldFailBuildByDefaultWhenCheckstyleErrorsEncountered() {
         TestProject.Result result = projectRule.newProject()
-                .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
-                .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
+                .withSrcDirs('main', Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
+                .withSrcDirs('test', Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
                 .buildAndFail('check')
 
         assertThat(result).containsCheckstyleViolationsLog()
@@ -64,7 +64,7 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldNotFailBuildWhenCheckstyleWarningsEncounteredAndNoPenalty() {
         TestProject.Result result = projectRule.newProject()
-                .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
+                .withSrcDirs('main', Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
                 .withPenalty('none')
                 .build('check')
 
@@ -74,8 +74,8 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldNotFailBuildWhenCheckstyleErrorsEncounteredAndNoPenalty() {
         TestProject.Result result = projectRule.newProject()
-                .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
-                .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
+                .withSrcDirs('main', Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
+                .withSrcDirs('test', Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
                 .withPenalty('none')
                 .build('check')
 
@@ -94,7 +94,7 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldNotFailBuildWhenCheckstyleWarningsEncounteredAndPenaltyOnErrors() {
         TestProject.Result result = projectRule.newProject()
-                .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
+                .withSrcDirs('main', Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
                 .withPenalty('failOnErrors')
                 .build('check')
 
@@ -104,8 +104,8 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldFailBuildWhenCheckstyleErrorsEncounteredAndPenaltyOnErrors() {
         TestProject.Result result = projectRule.newProject()
-                .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
-                .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
+                .withSrcDirs('main', Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
+                .withSrcDirs('test', Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
                 .withPenalty('failOnErrors')
                 .buildAndFail('check')
 
@@ -124,7 +124,7 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldFailBuildWhenCheckstyleWarningsEncounteredAndPenaltyOnWarnings() {
         TestProject.Result result = projectRule.newProject()
-                .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
+                .withSrcDirs('main', Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
                 .withPenalty('failOnWarnings')
                 .buildAndFail('check')
 
@@ -134,8 +134,8 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldFailBuildWhenCheckstyleErrorsEncounteredAndPenaltyOnWarnings() {
         TestProject.Result result = projectRule.newProject()
-                .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
-                .withSrcDirs(Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
+                .withSrcDirs('main', Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
+                .withSrcDirs('test', Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
                 .withPenalty('failOnWarnings')
                 .buildAndFail('check')
 
