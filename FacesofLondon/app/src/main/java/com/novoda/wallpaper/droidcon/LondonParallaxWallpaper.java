@@ -22,16 +22,6 @@ public class LondonParallaxWallpaper extends GLWallpaperService {
     private LondonParallaxWallpaperRenderer renderer;
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public WallpaperService.Engine onCreateEngine() {
         return new ParallaxEngine();
     }
@@ -43,7 +33,6 @@ public class LondonParallaxWallpaper extends GLWallpaperService {
             renderer = new LondonParallaxWallpaperRenderer(LondonParallaxWallpaper.this.getAssets());
             setRenderer(renderer);
 
-            // TODO: use RENDERMODE_WHEN_DIRTY if not showing snow
             setRenderMode(RENDERMODE_WHEN_DIRTY);
 
             initLayers();
