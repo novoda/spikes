@@ -1,5 +1,7 @@
 package com.novoda.wallpaper.droidcon;
 
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
 
@@ -20,6 +22,7 @@ public class LondonParallaxWallpaper extends GLWallpaperService {
     public static final String TAG = "LondonParallaxWallpaper";
 
     private LondonParallaxWallpaperRenderer renderer;
+    private TimeOfDayAssetRefresher refresher;
 
     @Override
     public WallpaperService.Engine onCreateEngine() {
@@ -53,5 +56,18 @@ public class LondonParallaxWallpaper extends GLWallpaperService {
             renderer.setOffset(xOffset);
             requestRender();
         }
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        refresher = new TimeOfDayAssetRefresher(renderer, new TimeOfDayCalculator());
+        registerReceiver(refresher, new IntentFilter(Intent.ACTION_SCREEN_ON));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(refresher);
     }
 }

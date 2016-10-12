@@ -5,7 +5,7 @@ import java.util.Locale;
 
 import static com.novoda.wallpaper.droidcon.TimeOfDay.*;
 
-class PartOfDayCalculator {
+class TimeOfDayCalculator {
 
     TimeOfDay currentTimeOfDay() {
         Calendar calendar = Calendar.getInstance();

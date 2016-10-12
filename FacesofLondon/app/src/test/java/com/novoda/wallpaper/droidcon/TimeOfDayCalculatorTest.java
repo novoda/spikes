@@ -4,8 +4,8 @@ import org.junit.Test;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class PartOfDayCalculatorTest {
-    private PartOfDayCalculator factory = new PartOfDayCalculator();
+public class TimeOfDayCalculatorTest {
+    private TimeOfDayCalculator factory = new TimeOfDayCalculator();
 
     @Test
     public void sixIsDawn() {
