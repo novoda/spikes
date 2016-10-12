@@ -46,7 +46,6 @@ class CheckstyleConfigurator {
 
     private static void configureAndroid(Project project, Object variants) {
         project.with {
-            def check = tasks['check']
             android.sourceSets.all { sourceSet ->
                 def sourceDirs = sourceSet.java.srcDirs
                 def notEmptyDirs = sourceDirs.findAll { it.list()?.length > 0 }
@@ -62,7 +61,7 @@ class CheckstyleConfigurator {
                 variants.all { variant ->
                     checkstyle.mustRunAfter variant.javaCompile
                 }
-                check.dependsOn checkstyle
+                tasks['check'].dependsOn checkstyle
             }
         }
     }
