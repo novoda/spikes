@@ -4,13 +4,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-public class TimeOfDayAssetRefresher extends BroadcastReceiver {
+class TimeOfDayAssetRefresher extends BroadcastReceiver {
 
     private final TimeOfDayCalculator calculator;
     private final LondonParallaxWallpaperRenderer renderer;
     private TimeOfDay currentTime;
 
-    public TimeOfDayAssetRefresher(LondonParallaxWallpaperRenderer renderer, TimeOfDayCalculator calculator) {
+    TimeOfDayAssetRefresher(LondonParallaxWallpaperRenderer renderer, TimeOfDayCalculator calculator) {
         this.renderer = renderer;
         this.calculator = calculator;
     }
