@@ -26,7 +26,7 @@ public class TimeOfDayCalculatorTest {
     }
 
     @Test
-    public void twentyTwoIsDusk() {
+    public void twentyTwoIsNight() {
         TimeOfDay time = factory.forHourOfDay(22);
         assertThat(time).isEqualTo(TimeOfDay.NIGHT);
     }
