@@ -19,7 +19,7 @@ import uk.co.halfninja.wallpaper.parallax.gl.Utils;
 import static android.content.ContentValues.TAG;
 import static javax.microedition.khronos.opengles.GL10.*;
 
-final class LondonParallaxWallpaperRenderer implements GLSurfaceView.Renderer {
+class LondonParallaxWallpaperRenderer implements GLSurfaceView.Renderer {
 
     private static final String[] PORTRAIT_LAYERS_FILES_NAMES = {
             "phone_wallpaper_blue.png",
@@ -161,4 +161,7 @@ final class LondonParallaxWallpaperRenderer implements GLSurfaceView.Renderer {
         offset = xOffset;
     }
 
+    void loadAssetsFor(TimeOfDay timeOfDay) {
+        // TODO for a follow up PR
+    }
 }
