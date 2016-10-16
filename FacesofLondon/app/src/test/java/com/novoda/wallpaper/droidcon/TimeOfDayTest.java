@@ -1,10 +1,13 @@
 package com.novoda.wallpaper.droidcon;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class TimeOfDayCalculatorTest {
+@RunWith(MockitoJUnitRunner.class)
+public class TimeOfDayTest {
 
     @Test
     public void sixIsDawn() {
@@ -39,4 +42,5 @@ public class TimeOfDayCalculatorTest {
     public void tooBigHourThrowsException() {
         TimeOfDay.forHourOfDay(490);
     }
+
 }
