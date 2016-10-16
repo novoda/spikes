@@ -9,6 +9,9 @@ class CheckstyleConfigurator {
 
     void configure(Project project, StaticAnalysisExtension extension) {
         project.apply plugin: 'checkstyle'
+        project.checkstyle {
+            toolVersion = '7.1.2'
+        }
         project.afterEvaluate {
             PenaltyExtension penalty = extension.penalty
             EvaluateViolationsTask evaluateViolationsTask = createEvaluateViolationsTask(project, penalty)
