@@ -4,7 +4,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
 
-class EvaluateViolationsTask<T> extends DefaultTask {
+class EvaluateViolationsTask extends DefaultTask {
     public PenaltyExtension penalty
     public Class<?> tool
     private int errors = 0

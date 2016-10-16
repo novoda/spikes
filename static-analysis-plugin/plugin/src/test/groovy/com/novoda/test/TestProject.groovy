@@ -71,8 +71,7 @@ staticAnalysis {
     }
 
     private createResult(BuildResult buildResult) {
-        File reportsDir = new File(projectDir, 'build/reports')
-        new Result(buildResult, [new File(reportsDir, 'checkstyle/main.xml')])
+        new Result(buildResult, new File(projectDir, 'build'))
     }
 
     private GradleRunner withArguments(String... arguments) {
@@ -97,15 +96,27 @@ staticAnalysis {
 
     public static class Result {
         private final BuildResult buildResult
-        private final List<File> checkstyleReports
+        private final File buildDir
 
-        Result(BuildResult buildResult, List<File> checkstyleReports) {
+        Result(BuildResult buildResult, File buildDir) {
             this.buildResult = buildResult
-            this.checkstyleReports = checkstyleReports
+            this.buildDir = buildDir
         }
 
-        String getOutput() {
-            buildResult.output
+        Logs getLogs() {
+            new Logs(buildResult.output)
+        }
+
+        File buildFile(String path) {
+            new File(buildDir, path)
+        }
+
+        public static class Logs {
+            final String output
+
+            Logs(String output) {
+                this.output = output
+            }
         }
     }
 }

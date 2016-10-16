@@ -1,7 +1,6 @@
 package com.novoda.staticanalysis
 
 import groovy.util.slurpersupport.GPathResult
-import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.plugins.quality.Checkstyle
 import org.gradle.internal.logging.ConsoleRenderer
@@ -12,36 +11,38 @@ class CheckstyleConfigurator {
         project.apply plugin: 'checkstyle'
         project.afterEvaluate {
             PenaltyExtension penalty = extension.penalty
+            EvaluateViolationsTask evaluateViolationsTask = createEvaluateViolationsTask(project, penalty)
             boolean isAndroidApp = project.plugins.hasPlugin('com.android.application')
             boolean isAndroidLib = project.plugins.hasPlugin('com.android.library')
             if (isAndroidApp || isAndroidLib) {
                 def variants = isAndroidApp ? project.android.applicationVariants : project.android.libraryVariants
                 configureAndroid(project, variants)
             }
-            Map<String, Integer> violations = [errors: 0, warnings: 0]
-            List<String> reports = []
-            project.tasks['check'].doLast {
-                if (violations.errors > penalty.maxErrors || violations.warnings > penalty.maxWarnings) {
-                    String message = "Checkstyle rule violations were found ($violations.errors errors, $violations.warnings warnings). " +
-                            "See the reports at: ${reports.collect { "\n* $it" }.join('')}"
-                    throw new GradleException(message)
-                }
-            }
-            project.tasks.withType(Checkstyle) { task ->
-                task.group = 'verification'
-                task.showViolations = false
-                task.ignoreFailures = true
-                task.metaClass.getLogger = { QuietLogger.INSTANCE }
-                task.doLast {
-                    File xmlReportFile = task.reports.xml.destination
+            project.tasks.withType(Checkstyle) { checkstyle ->
+                checkstyle.group = 'verification'
+                checkstyle.showViolations = false
+                checkstyle.ignoreFailures = true
+                checkstyle.metaClass.getLogger = { QuietLogger.INSTANCE }
+                checkstyle.doLast {
+                    File xmlReportFile = checkstyle.reports.xml.destination
                     File htmlReportFile = new File(xmlReportFile.absolutePath - '.xml' + '.html')
 
                     GPathResult xml = new XmlSlurper().parse(xmlReportFile)
-                    violations.errors += xml.'**'.findAll { node -> node.name() == 'error' && node.@severity == 'error' }.size()
-                    violations.warnings += xml.'**'.findAll { node -> node.name() == 'error' && node.@severity == 'warning' }.size()
-                    reports += new ConsoleRenderer().asClickableFileUrl(htmlReportFile ?: xmlReportFile)
+                    int errors = xml.'**'.findAll { node -> node.name() == 'error' && node.@severity == 'error' }.size()
+                    int warnings = xml.'**'.findAll { node -> node.name() == 'error' && node.@severity == 'warning' }.size()
+                    String reportUrl = new ConsoleRenderer().asClickableFileUrl(htmlReportFile ?: xmlReportFile)
+                    evaluateViolationsTask.addViolations(errors, warnings, reportUrl)
                 }
+                evaluateViolationsTask.dependsOn checkstyle
             }
+        }
+    }
+
+    private EvaluateViolationsTask createEvaluateViolationsTask(Project project, PenaltyExtension penalty) {
+        project.tasks.create('evaluateCheckstyleViolations', EvaluateViolationsTask) { task ->
+            task.tool = Checkstyle
+            task.penalty = penalty
+            project.tasks['check'].dependsOn task
         }
     }
 
@@ -62,7 +63,6 @@ class CheckstyleConfigurator {
                 variants.all { variant ->
                     checkstyle.mustRunAfter variant.javaCompile
                 }
-                tasks['check'].dependsOn checkstyle
             }
         }
     }
