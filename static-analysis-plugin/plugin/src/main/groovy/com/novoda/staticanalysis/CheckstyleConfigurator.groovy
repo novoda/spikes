@@ -38,7 +38,7 @@ class CheckstyleConfigurator {
         }
     }
 
-    private EvaluateViolationsTask createEvaluateViolationsTask(Project project, PenaltyExtension penalty) {
+    private static EvaluateViolationsTask createEvaluateViolationsTask(Project project, PenaltyExtension penalty) {
         project.tasks.create('evaluateCheckstyleViolations', EvaluateViolationsTask) { task ->
             task.tool = Checkstyle
             task.penalty = penalty

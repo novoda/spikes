@@ -36,7 +36,7 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldNotFailBuildByDefaultWhenCheckstyleWarningsEncountered() {
         TestProject.Result result = projectRule.newProject()
-                .withSourceSet('main', Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
+                .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
                 .build('check')
 
         assertThat(result.logs).containsCheckstyleViolations(0, 1,
@@ -46,8 +46,8 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldFailBuildByDefaultWhenCheckstyleErrorsEncountered() {
         TestProject.Result result = projectRule.newProject()
-                .withSourceSet('main', Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
-                .withSourceSet('test', Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
+                .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
+                .withSourceSet('test', Fixtures.Checkstyle.SOURCES_WITH_ERRORS)
                 .buildAndFail('check')
 
         assertThat(result.logs).containsCheckstyleViolations(1, 1,
@@ -67,7 +67,7 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldNotFailBuildWhenCheckstyleWarningsEncounteredAndNoPenalty() {
         TestProject.Result result = projectRule.newProject()
-                .withSourceSet('main', Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
+                .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
                 .withPenalty('none')
                 .build('check')
 
@@ -78,8 +78,8 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldNotFailBuildWhenCheckstyleErrorsEncounteredAndNoPenalty() {
         TestProject.Result result = projectRule.newProject()
-                .withSourceSet('main', Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
-                .withSourceSet('test', Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
+                .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
+                .withSourceSet('test', Fixtures.Checkstyle.SOURCES_WITH_ERRORS)
                 .withPenalty('none')
                 .build('check')
 
@@ -100,7 +100,7 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldNotFailBuildWhenCheckstyleWarningsEncounteredAndPenaltyOnErrors() {
         TestProject.Result result = projectRule.newProject()
-                .withSourceSet('main', Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
+                .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
                 .withPenalty('failOnErrors')
                 .build('check')
 
@@ -111,8 +111,8 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldFailBuildWhenCheckstyleErrorsEncounteredAndPenaltyOnErrors() {
         TestProject.Result result = projectRule.newProject()
-                .withSourceSet('main', Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
-                .withSourceSet('test', Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
+                .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
+                .withSourceSet('test', Fixtures.Checkstyle.SOURCES_WITH_ERRORS)
                 .withPenalty('failOnErrors')
                 .buildAndFail('check')
 
@@ -133,7 +133,7 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldFailBuildWhenCheckstyleWarningsEncounteredAndPenaltyOnWarnings() {
         TestProject.Result result = projectRule.newProject()
-                .withSourceSet('main', Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
+                .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
                 .withPenalty('failOnWarnings')
                 .buildAndFail('check')
 
@@ -144,8 +144,8 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldFailBuildWhenCheckstyleErrorsEncounteredAndPenaltyOnWarnings() {
         TestProject.Result result = projectRule.newProject()
-                .withSourceSet('main', Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
-                .withSourceSet('test', Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
+                .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
+                .withSourceSet('test', Fixtures.Checkstyle.SOURCES_WITH_ERRORS)
                 .withPenalty('failOnWarnings')
                 .buildAndFail('check')
 
@@ -157,8 +157,8 @@ public class CheckstyleConfigurationTest {
     @Test
     public void shouldNotFailBuildWhenCheckstyleErrorsEncounteredAndThresholdsNotReached() {
         TestProject.Result result = projectRule.newProject()
-                .withSourceSet('main', Fixtures.SOURCES_WITH_CHECKSTYLE_WARNINGS)
-                .withSourceSet('test', Fixtures.SOURCES_WITH_CHECKSTYLE_ERRORS)
+                .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
+                .withSourceSet('test', Fixtures.Checkstyle.SOURCES_WITH_ERRORS)
                 .withPenalty('''{
         maxWarnings 1
         maxErrors 1

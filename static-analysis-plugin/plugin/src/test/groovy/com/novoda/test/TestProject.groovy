@@ -57,14 +57,14 @@ staticAnalysis {
     }
 
     public Result build(String... arguments) {
-        copyFile(Fixtures.CHECKSTYLE_CONFIG, 'config/checkstyle/checkstyle.xml')
+        copyFile(Fixtures.Checkstyle.MODULES, 'config/checkstyle/checkstyle.xml')
         new File(projectDir, 'build.gradle').text = template.call(this)
         BuildResult buildResult = withArguments(arguments).build()
         createResult(buildResult)
     }
 
     public Result buildAndFail(String... arguments) {
-        copyFile(Fixtures.CHECKSTYLE_CONFIG, 'config/checkstyle/checkstyle.xml')
+        copyFile(Fixtures.Checkstyle.MODULES, 'config/checkstyle/checkstyle.xml')
         new File(projectDir, 'build.gradle').text = template.call(this)
         BuildResult buildResult = withArguments(arguments).buildAndFail()
         createResult(buildResult)

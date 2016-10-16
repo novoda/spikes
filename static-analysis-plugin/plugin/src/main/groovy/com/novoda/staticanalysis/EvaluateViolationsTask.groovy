@@ -28,8 +28,7 @@ class EvaluateViolationsTask extends DefaultTask {
                 "${reports.collect { "- $it" }.join('\n')}"
         if (errors > penalty.maxErrors || warnings > penalty.maxWarnings) {
             throw new GradleException(message)
-        } else {
-            project.logger.warn(message)
         }
+        project.logger.warn(message)
     }
 }
