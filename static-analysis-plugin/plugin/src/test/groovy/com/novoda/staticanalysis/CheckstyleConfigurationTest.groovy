@@ -79,7 +79,7 @@ public class CheckstyleConfigurationTest {
                 .withPenalty('none')
                 .build('check')
 
-        assertThat(result).containsCheckstyleViolationsLog()
+        assertThat(result).doesNotContainCheckstyleViolationsLog()
     }
 
     @Test
@@ -153,6 +153,6 @@ public class CheckstyleConfigurationTest {
                 }''')
                 .build('check')
 
-        assertThat(result).containsCheckstyleViolationsLog()
+        assertThat(result).doesNotContainCheckstyleViolationsLog()
     }
 }

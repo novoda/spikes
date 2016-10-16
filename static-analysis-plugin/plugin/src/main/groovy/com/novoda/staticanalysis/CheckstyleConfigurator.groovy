@@ -31,6 +31,7 @@ class CheckstyleConfigurator {
                 task.group = 'verification'
                 task.showViolations = false
                 task.ignoreFailures = true
+                task.metaClass.getLogger = { QuietLogger.INSTANCE }
                 task.doLast {
                     File xmlReportFile = task.reports.xml.destination
                     File htmlReportFile = new File(xmlReportFile.absolutePath - '.xml' + '.html')
