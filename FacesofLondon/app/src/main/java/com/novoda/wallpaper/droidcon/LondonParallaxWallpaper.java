@@ -25,6 +25,13 @@ public class LondonParallaxWallpaper extends GLWallpaperService {
     private TimeOfDayAssetRefresher refresher;
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        refresher = new TimeOfDayAssetRefresher(renderer, new TimeOfDayCalculator());
+        registerReceiver(refresher, new IntentFilter(Intent.ACTION_SCREEN_ON));
+    }
+
+    @Override
     public WallpaperService.Engine onCreateEngine() {
         return new ParallaxEngine();
     }
@@ -56,13 +63,6 @@ public class LondonParallaxWallpaper extends GLWallpaperService {
             renderer.setOffset(xOffset);
             requestRender();
         }
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        refresher = new TimeOfDayAssetRefresher(renderer, new TimeOfDayCalculator());
-        registerReceiver(refresher, new IntentFilter(Intent.ACTION_SCREEN_ON));
     }
 
     @Override

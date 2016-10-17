@@ -8,6 +8,7 @@ class TimeOfDayAssetRefresher extends BroadcastReceiver {
 
     private final TimeOfDayCalculator calculator;
     private final LondonParallaxWallpaperRenderer renderer;
+
     private TimeOfDay currentTime;
 
     TimeOfDayAssetRefresher(LondonParallaxWallpaperRenderer renderer, TimeOfDayCalculator calculator) {
