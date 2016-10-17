@@ -50,6 +50,7 @@ public class CheckstyleConfigurationTest {
                 .withSourceSet('test', Fixtures.Checkstyle.SOURCES_WITH_ERRORS)
                 .buildAndFail('check')
 
+        assertThat(result.logs).containsLimitExceeded(1, 0)
         assertThat(result.logs).containsCheckstyleViolations(1, 1,
                 result.buildFile('reports/checkstyle/main.html'),
                 result.buildFile('reports/checkstyle/test.html'))
@@ -116,6 +117,7 @@ public class CheckstyleConfigurationTest {
                 .withPenalty('failOnErrors')
                 .buildAndFail('check')
 
+        assertThat(result.logs).containsLimitExceeded(1, 0)
         assertThat(result.logs).containsCheckstyleViolations(1, 1,
                 result.buildFile('reports/checkstyle/main.html'),
                 result.buildFile('reports/checkstyle/test.html'))
@@ -137,6 +139,7 @@ public class CheckstyleConfigurationTest {
                 .withPenalty('failOnWarnings')
                 .buildAndFail('check')
 
+        assertThat(result.logs).containsLimitExceeded(0, 1)
         assertThat(result.logs).containsCheckstyleViolations(0, 1,
                 result.buildFile('reports/checkstyle/main.html'))
     }
@@ -149,6 +152,7 @@ public class CheckstyleConfigurationTest {
                 .withPenalty('failOnWarnings')
                 .buildAndFail('check')
 
+        assertThat(result.logs).containsLimitExceeded(1, 1)
         assertThat(result.logs).containsCheckstyleViolations(1, 1,
                 result.buildFile('reports/checkstyle/main.html'),
                 result.buildFile('reports/checkstyle/test.html'))
