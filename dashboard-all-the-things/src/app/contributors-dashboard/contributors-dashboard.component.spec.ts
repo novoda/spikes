@@ -156,7 +156,7 @@ describe('Component: ContributorsDashboard', () => {
 
       component.ngOnDestroy();
 
-      expect(component.subscription.isUnsubscribed).toBe(true);
+      expect(component.subscription.closed).toBe(true);
     });
 
     it('does not unsubscribe from the service if it was already unsubscribed', () => {

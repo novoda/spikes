@@ -44,7 +44,7 @@ export class DashboardCarouselComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (!this.animation.isUnsubscribed) {
+    if (!this.animation.closed) {
       this.animation.unsubscribe();
     }
   }

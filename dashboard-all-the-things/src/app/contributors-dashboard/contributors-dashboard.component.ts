@@ -51,7 +51,7 @@ export class ContributorsDashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (!this.subscription.isUnsubscribed) {
+    if (!this.subscription.closed) {
       this.subscription.unsubscribe();
     }
   }
