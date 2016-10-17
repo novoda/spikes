@@ -1,0 +1,7 @@
+<app-project-contributor *ngFor="let user of projectContributors" [user]="user">
+</app-project-contributor>
+
+<div class="no-project-contributor" *ngIf="projectContributors?.length === 0">
+  <h3 class="title">Woohoo! Everyone is amazing!</h3>
+  <img src="nyancat.gif"/>
+</div>

@@ -17,6 +17,9 @@ function createPayload(dataStore, messages) {
   var allMessages = helper.flattenToUser(timeSortedMessages);
   allMessages.sort(helper.sortByCount);
   var biggestSlacker = allMessages[0];
+    if (biggestSlacker === undefined) {
+    return {};
+  }
   return {
     widgetKey: 'biggestSlacker',
     payload: {

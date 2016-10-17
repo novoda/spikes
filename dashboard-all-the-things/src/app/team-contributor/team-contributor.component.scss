@@ -1,0 +1,65 @@
+@import "team-contributor.dimen";
+
+$team-contributor-padding: 15px;
+$team-contributor-height: 130px;
+
+@mixin ellipsis() {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+}
+
+:host {
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+  height: $team-contributor-height;
+
+  justify-content: flex-start;
+  align-items: center;
+
+  border-radius: 11px;
+  background-color: white;
+  box-shadow: 0 40px 40px -30px rgba(0, 0, 0, 0.6);
+
+  padding: 15px;
+  margin: $team-contributor-margin 0 $team-contributor-margin $team-contributor-margin;
+  box-sizing: border-box;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  flex-basis: calc(var(--team-contributor-size));
+}
+
+img {
+  border-radius: 25%;
+  max-height: $team-contributor-height - $team-contributor-padding*2;
+}
+
+.team-contributor-info {
+  padding: $team-contributor-padding;
+  @include ellipsis();
+
+  h3 {
+    font-family: 'Bitter', serif;
+    font-weight: 700;
+    @include ellipsis();
+
+    margin-top: 10px;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  p {
+    font-family: 'Bitter', serif;
+    font-weight: 400;
+    font-size: 0.9em;
+    font-style: italic;
+    opacity: 0.6;
+
+    @include ellipsis();
+
+    margin: 0;
+  }
+}
