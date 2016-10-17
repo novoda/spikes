@@ -2,19 +2,18 @@ package com.novoda.staticanalysis
 
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.api.plugins.quality.Checkstyle
 import org.gradle.internal.logging.ConsoleRenderer
 
 class CheckstyleConfigurator {
 
-    void configure(Project project, StaticAnalysisExtension extension) {
+    void configure(Project project, Violations violations, Task evaluateViolations) {
         project.apply plugin: 'checkstyle'
         project.checkstyle {
             toolVersion = '7.1.2'
         }
         project.afterEvaluate {
-            PenaltyExtension penalty = extension.penalty
-            EvaluateViolationsTask evaluateViolationsTask = createEvaluateViolationsTask(project, penalty)
             boolean isAndroidApp = project.plugins.hasPlugin('com.android.application')
             boolean isAndroidLib = project.plugins.hasPlugin('com.android.library')
             if (isAndroidApp || isAndroidLib) {
@@ -34,18 +33,10 @@ class CheckstyleConfigurator {
                     int errors = xml.'**'.findAll { node -> node.name() == 'error' && node.@severity == 'error' }.size()
                     int warnings = xml.'**'.findAll { node -> node.name() == 'error' && node.@severity == 'warning' }.size()
                     String reportUrl = new ConsoleRenderer().asClickableFileUrl(htmlReportFile ?: xmlReportFile)
-                    evaluateViolationsTask.addViolations(errors, warnings, reportUrl)
+                    violations.addViolations(errors, warnings, reportUrl)
                 }
-                evaluateViolationsTask.dependsOn checkstyle
+                evaluateViolations.dependsOn checkstyle
             }
-        }
-    }
-
-    private static EvaluateViolationsTask createEvaluateViolationsTask(Project project, PenaltyExtension penalty) {
-        project.tasks.create('evaluateCheckstyleViolations', EvaluateViolationsTask) { task ->
-            task.tool = Checkstyle
-            task.penalty = penalty
-            project.tasks['check'].dependsOn task
         }
     }
 
