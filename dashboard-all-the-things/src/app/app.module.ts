@@ -20,6 +20,7 @@ import { TimezoneDetectorService } from './dashboards/github-contributors/timezo
 import { DashboardCarouselComponent } from './dashboard-carousel/dashboard-carousel.component';
 import { SonarCoverageComponent } from './dashboards/sonar-coverage/sonar-coverage.component';
 import { SonarService } from './dashboards/sonar-coverage/sonar.service';
+import { SocketService } from './dashboard-carousel/socket.service';
 
 @NgModule({
   imports: [
@@ -47,7 +48,8 @@ import { SonarService } from './dashboards/sonar-coverage/sonar.service';
     reportsServiceProvider,
     ReportsClient,
     TimezoneDetectorService,
-    SonarService
+    SonarService,
+    SocketService
   ],
   entryComponents: [AppComponent],
   bootstrap: [AppComponent]
