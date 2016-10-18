@@ -1,12 +1,18 @@
 package com.novoda.wallpaper.droidcon;
 
-import java.util.Calendar;
-
 class TimeOfDayCalculator {
 
+    private static int flag = 0;
+
     TimeOfDay currentTimeOfDay() {
-        Calendar calendar = Calendar.getInstance();
-        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
-        return TimeOfDay.forHourOfDay(hourOfDay);
+        TimeOfDay[] values = TimeOfDay.values();
+        flag++;
+        if (flag >= values.length) {
+            flag = 0;
+        }
+        return values[flag];
+//        Calendar calendar = Calendar.getInstance();
+//        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+//        return TimeOfDay.forHourOfDay(hourOfDay);
     }
 }

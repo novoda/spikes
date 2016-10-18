@@ -23,11 +23,13 @@ public class LondonParallaxWallpaper extends GLWallpaperService {
 
     private LondonParallaxWallpaperRenderer renderer;
     private TimeOfDayAssetRefresher refresher;
+    private TimeOfDayCalculator calculator = new TimeOfDayCalculator();
 
     @Override
     public void onCreate() {
         super.onCreate();
-        refresher = new TimeOfDayAssetRefresher(renderer, new TimeOfDayCalculator());
+        renderer = new LondonParallaxWallpaperRenderer(getAssets());
+        refresher = new TimeOfDayAssetRefresher(renderer, calculator);
         registerReceiver(refresher, new IntentFilter(Intent.ACTION_SCREEN_ON));
     }
 
@@ -40,9 +42,7 @@ public class LondonParallaxWallpaper extends GLWallpaperService {
 
         ParallaxEngine() {
             super();
-            renderer = new LondonParallaxWallpaperRenderer(LondonParallaxWallpaper.this.getAssets());
             setRenderer(renderer);
-
             setRenderMode(RENDERMODE_WHEN_DIRTY);
 
             initLayers();
@@ -51,7 +51,8 @@ public class LondonParallaxWallpaper extends GLWallpaperService {
 
         void initLayers() {
             try {
-                renderer.reloadLayers();
+                TimeOfDay timeOfDay = calculator.currentTimeOfDay();
+                renderer.reloadLayersFor(timeOfDay);
                 renderer.resizeLayers();
             } catch (IOException e) {
                 Log.e(TAG, "Error loading textures", e);

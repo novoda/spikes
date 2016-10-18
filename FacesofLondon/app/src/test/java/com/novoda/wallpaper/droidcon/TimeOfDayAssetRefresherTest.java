@@ -87,7 +87,6 @@ public class TimeOfDayAssetRefresherTest {
         verify(mockRender, times(1)).loadAssetsFor(DUSK);
     }
 
-
     @Test
     public void givenItsNight_whenReceivingBroadcast_thenNightAssetsAreLoaded() {
         givenItIs(NIGHT);

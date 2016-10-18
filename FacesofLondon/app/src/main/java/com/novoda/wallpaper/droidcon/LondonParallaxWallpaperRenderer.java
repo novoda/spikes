@@ -8,7 +8,9 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import uk.co.halfninja.wallpaper.parallax.gl.Capabilities;
 import uk.co.halfninja.wallpaper.parallax.gl.Quad;
@@ -21,32 +23,27 @@ import static javax.microedition.khronos.opengles.GL10.*;
 
 class LondonParallaxWallpaperRenderer implements GLSurfaceView.Renderer {
 
-    private static final String[] PORTRAIT_LAYERS_FILES_NAMES = {
-            "phone_wallpaper_blue.png",
-            "phone_wallpaper_green.png",
-            "phone_wallpaper_sepia.png"
-    };
-
-    private static final String[] LANDSCAPE_LAYERS_FILES_NAMES = {
-            "phone_wallpaper_blue.png",
-            "phone_wallpaper_green.png",
-            "phone_wallpaper_sepia.png"
-    };
-
     private float offset = 0.0f;
     private int surfaceHeight;
     private int surfaceWidth;
 
     private final Capabilities capabilities = new Capabilities();
     private final TextureLoader textureLoader;
-    private List<Quad> portraitLayers = new ArrayList<>(PORTRAIT_LAYERS_FILES_NAMES.length);
-    private List<Quad> landscapeLayers = new ArrayList<>(LANDSCAPE_LAYERS_FILES_NAMES.length);
+    private List<Quad> portraitLayers = new ArrayList<>(1);
+    private List<Quad> landscapeLayers = new ArrayList<>(1);
     private List<Quad> currentLayers = new ArrayList<>();
 
     private GL10 gl;
 
+    private final TimeOfDayCalculator calculator = new TimeOfDayCalculator();
+    private final Map<TimeOfDay, String> assets = new HashMap<>();
+
     LondonParallaxWallpaperRenderer(AssetManager assets) {
         this.textureLoader = new TextureLoader(capabilities, assets);
+        this.assets.put(TimeOfDay.DAWN, "phone_wallpaper_sepia.png");
+        this.assets.put(TimeOfDay.DAY, "phone_wallpaper_green.png");
+        this.assets.put(TimeOfDay.DUSK, "phone_wallpaper_sepia.png");
+        this.assets.put(TimeOfDay.NIGHT, "phone_wallpaper_blue.png");
     }
 
     @Override
@@ -54,29 +51,23 @@ class LondonParallaxWallpaperRenderer implements GLSurfaceView.Renderer {
         this.gl = gl;
         capabilities.reload(gl);
 
+        TimeOfDay timeOfDay = calculator.currentTimeOfDay();
         try {
-            reloadLayers();
+            reloadLayersFor(timeOfDay);
         } catch (IOException e) {
             Log.e(TAG, "Error loading textures", e);
         }
     }
 
-    void reloadLayers() throws IOException {
-        if (gl != null && layersNotAlreadyLoaded()) {
+    void reloadLayersFor(TimeOfDay timeOfDay) throws IOException {
+        if (gl != null) {
             portraitLayers.clear();
             landscapeLayers.clear();
             textureLoader.clear(gl);
-            for (String bitmapPath : LANDSCAPE_LAYERS_FILES_NAMES) {
-                loadLayerTo(bitmapPath, landscapeLayers);
-            }
-            for (String bitmapPath : PORTRAIT_LAYERS_FILES_NAMES) {
-                loadLayerTo(bitmapPath, portraitLayers);
-            }
+            String bitmapPath = assets.get(timeOfDay);
+            loadLayerTo(bitmapPath, landscapeLayers);
+            loadLayerTo(bitmapPath, portraitLayers);
         }
-    }
-
-    private boolean layersNotAlreadyLoaded() {
-        return portraitLayers.isEmpty() && landscapeLayers.isEmpty();
     }
 
     private void loadLayerTo(String bitmapPath, List<Quad> layerList) throws IOException {
@@ -162,6 +153,10 @@ class LondonParallaxWallpaperRenderer implements GLSurfaceView.Renderer {
     }
 
     void loadAssetsFor(TimeOfDay timeOfDay) {
-        // TODO for a follow up PR
+        try {
+            reloadLayersFor(timeOfDay);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
