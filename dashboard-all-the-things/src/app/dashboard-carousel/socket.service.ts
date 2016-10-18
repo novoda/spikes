@@ -21,7 +21,7 @@ export class SocketService {
       socket.on('connection', (data) => {
         console.log("CLIENT CONNECTED");
       });
-      socket.on('event', (event) => {
+      socket.on('message', (event) => {
         observer.next(event);
       });
       socket.on('disconnect', () => {

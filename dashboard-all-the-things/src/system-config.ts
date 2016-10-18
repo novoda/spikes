@@ -9,17 +9,13 @@
  **********************************************************************************************/
 /** Map relative paths to URLs. */
 const map: any = {
-  'jstz': 'jstz/dist/jstz.js',
-  'socket.io-client': 'socket.io-client/socket.io.js'
+  'jstz': 'jstz/dist/jstz.js'
 };
 
 /** User packages configuration. */
 const packages: any = {
   'jstz': {
     format: 'cjs'
-  },
-  'socket.io-client': {
-    defaultExtension: 'js'
   }
 };
 
