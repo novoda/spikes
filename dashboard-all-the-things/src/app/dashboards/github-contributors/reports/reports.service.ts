@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, URLSearchParams, Response } from '@angular/http';
 import { Observable } from 'rxjs';
-import { ConfigService } from '../config.service';
+import { ConfigService } from '../../../config.service';
 
 @Injectable()
 export class ReportsService {
