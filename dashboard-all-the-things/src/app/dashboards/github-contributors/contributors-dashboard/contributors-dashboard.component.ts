@@ -5,7 +5,7 @@ import { ReportsClient } from '../reports/reports-client.service';
 import { CompanyStats } from '../reports/company-stats';
 import { UserStats } from '../reports/user-stats';
 import { Subscription, Observable } from 'rxjs';
-import { OnErrorIgnoreOperator } from '../shared/OnErrorIgnoreOperator';
+import { OnErrorIgnoreOperator } from '../../../shared/OnErrorIgnoreOperator';
 import { TimezoneDetectorService } from '../timezone-detector.service';
 
 @Component({
