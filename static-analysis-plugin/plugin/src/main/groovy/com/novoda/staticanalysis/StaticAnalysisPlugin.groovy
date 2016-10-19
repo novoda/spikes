@@ -1,7 +1,6 @@
 package com.novoda.staticanalysis
 
-import org.gradle.api.Plugin
-import org.gradle.api.Project
+import org.gradle.api.*
 
 class StaticAnalysisPlugin implements Plugin<Project> {
     private final CheckstyleConfigurator checkstyleConfigurator = new CheckstyleConfigurator()
@@ -9,7 +8,16 @@ class StaticAnalysisPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
         StaticAnalysisExtension extension = project.extensions.create('staticAnalysis', StaticAnalysisExtension)
-        checkstyleConfigurator.configure(project, extension)
+
+        NamedDomainObjectContainer<Violations> allViolations = project.container(Violations)
+        Task evaluateViolations = project.tasks.create('evaluateViolations', EvaluateViolationsTask) { task ->
+            task.penalty = extension.penalty
+            task.allViolations = allViolations
+        }
+        checkstyleConfigurator.configure(project, allViolations.create('Checkstyle'), evaluateViolations)
+        project.afterEvaluate {
+            project.tasks['check'].dependsOn evaluateViolations
+        }
     }
 
 }
