@@ -38,7 +38,7 @@ public class LondonParallaxWallpaper extends GLWallpaperService {
         return new ParallaxEngine();
     }
 
-    class ParallaxEngine extends GLEngine {
+    protected class ParallaxEngine extends GLEngine {
 
         ParallaxEngine() {
             super();

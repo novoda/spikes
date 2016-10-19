@@ -6,12 +6,12 @@ import android.content.Intent;
 
 class TimeOfDayAssetRefresher extends BroadcastReceiver {
 
-    private final TimeOfDayCalculator calculator;
+    private final Calculator calculator;
     private final LondonParallaxWallpaperRenderer renderer;
 
     private TimeOfDay currentTime;
 
-    TimeOfDayAssetRefresher(LondonParallaxWallpaperRenderer renderer, TimeOfDayCalculator calculator) {
+    TimeOfDayAssetRefresher(LondonParallaxWallpaperRenderer renderer, Calculator calculator) {
         this.renderer = renderer;
         this.calculator = calculator;
     }
