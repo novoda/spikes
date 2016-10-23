@@ -8,7 +8,7 @@ abstract class TestProject {
         """
 staticAnalysis {
     ${(project.penalty ?: '').replace('            ', '')}
-    ${(project.checkstyle ?: '').replace('            ', '')}
+    ${(project.checkstyle ?: '').replace('        ', '    ')}
 }
 """
     }
@@ -79,9 +79,7 @@ staticAnalysis {
     }
 
     private GradleRunner newRunner(String... arguments) {
-        if (checkstyle == null) {
-            withFile(Fixtures.Checkstyle.MODULES, 'config/checkstyle/checkstyle.xml')
-        }
+        withFile(Fixtures.Checkstyle.MODULES, 'config/checkstyle/checkstyle.xml')
         new File(projectDir, 'build.gradle').text = template.call(this)
         List<String> defaultArgs = defaultArguments()
         List<String> args = new ArrayList<>(arguments.size() + defaultArgs.size())

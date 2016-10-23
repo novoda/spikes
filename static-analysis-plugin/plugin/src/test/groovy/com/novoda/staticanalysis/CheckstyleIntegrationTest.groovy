@@ -16,6 +16,7 @@ public class CheckstyleIntegrationTest {
     private static final String EMPTY_MODULES = '''<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.3//EN" "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 <module name="Checker"/>
 '''
+    public static final String DEFAULT_CONFIG = "configFile new File('${Fixtures.Checkstyle.MODULES.path}')"
 
     @Parameterized.Parameters
     public static List<Object[]> rules() {
@@ -37,6 +38,7 @@ public class CheckstyleIntegrationTest {
                     maxWarnings 0
                     maxErrors 0
                 }''')
+                .withCheckstyle(checkstyle(DEFAULT_CONFIG))
                 .buildAndFail('check')
 
         assertThat(result.logs).containsLimitExceeded(0, 1)
@@ -53,6 +55,7 @@ public class CheckstyleIntegrationTest {
                     maxWarnings 100
                     maxErrors 0
                 }''')
+                .withCheckstyle(checkstyle(DEFAULT_CONFIG))
                 .buildAndFail('check')
 
         assertThat(result.logs).containsLimitExceeded(1, 0)
@@ -68,6 +71,7 @@ public class CheckstyleIntegrationTest {
                     maxWarnings 0
                     maxErrors 0
                 }''')
+                .withCheckstyle(checkstyle(DEFAULT_CONFIG))
                 .build('check')
 
         assertThat(result.logs).doesNotContainLimitExceeded()
@@ -83,6 +87,7 @@ public class CheckstyleIntegrationTest {
                     maxWarnings 100
                     maxErrors 100
                 }''')
+                .withCheckstyle(checkstyle(DEFAULT_CONFIG))
                 .build('check')
 
         assertThat(result.logs).doesNotContainLimitExceeded()
@@ -101,9 +106,7 @@ public class CheckstyleIntegrationTest {
                     maxWarnings 0
                     maxErrors 0
                 }''')
-                .withCheckstyle('''checkstyle {
-                    configFile project.file('checkstyle.xml')
-                }''')
+                .withCheckstyle(checkstyle("configFile project.file('checkstyle.xml')"))
                 .build('check')
 
         assertThat(result.logs).doesNotContainLimitExceeded()
@@ -120,9 +123,7 @@ public class CheckstyleIntegrationTest {
                     maxWarnings 1
                     maxErrors 1
                 }''')
-                .withCheckstyle('''checkstyle {
-                    ignoreFailures false
-                }''')
+                .withCheckstyle(checkstyle(DEFAULT_CONFIG, "ignoreFailures false"))
                 .build('check')
     }
 
@@ -136,13 +137,34 @@ public class CheckstyleIntegrationTest {
                     maxWarnings 1
                     maxErrors 0
                 }''')
-                .withCheckstyle('''checkstyle {
-                    exclude 'Greeter.java'
-                }''')
+                .withCheckstyle(checkstyle(DEFAULT_CONFIG, "exclude 'Greeter.java'"))
                 .build('check')
 
         assertThat(result.logs).doesNotContainLimitExceeded()
         assertThat(result.logs).containsCheckstyleViolations(0, 1,
                 result.buildFile('reports/checkstyle/main.html'))
+    }
+
+    @Test
+    public void shouldNotFailWhenCheckstyleNotConfigured() {
+        TestProject.Result result = projectRule.newProject()
+                .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
+                .withSourceSet('test', Fixtures.Checkstyle.SOURCES_WITH_ERRORS)
+                .withPenalty('''{
+                    maxWarnings 0
+                    maxErrors 0
+                }''')
+                .build('check')
+
+        assertThat(result.logs).doesNotContainLimitExceeded()
+        assertThat(result.logs).doesNotContainCheckstyleViolations()
+    }
+
+
+    private static String checkstyle(String configFile, String... configs) {
+        """checkstyle {
+            ${configFile}
+            ${configs.join('\n\t\t\t')}
+        }"""
     }
 }
