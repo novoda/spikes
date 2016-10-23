@@ -13,6 +13,7 @@ import static com.google.common.truth.Truth.assertThat;
 class PenaltyExtensionSubject extends Subject<PenaltyExtensionSubject, PenaltyExtension> {
 
     private static final SubjectFactory<PenaltyExtensionSubject, PenaltyExtension> FACTORY = newFactory()
+
     private static SubjectFactory<PenaltyExtensionSubject, PenaltyExtension> newFactory() {
         new SubjectFactory<PenaltyExtensionSubject, PenaltyExtension>() {
             @Override

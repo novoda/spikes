@@ -45,7 +45,7 @@ ${formatExtension(project)}
         project.sourceSets
                 .entrySet()
                 .collect { Map.Entry<String, List<String>> entry ->
-        """$entry.key {
+            """$entry.key {
             manifest.srcFile '${Fixtures.ANDROID_MANIFEST}'
             java {
                 ${entry.value.collect { "srcDir '$it'" }.join('\n\t\t\t\t')}

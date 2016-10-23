@@ -41,7 +41,7 @@ class LogsSubject extends Subject<LogsSubject, Logs> {
 
     public void containsCheckstyleViolations(int errors, int warnings, File... reports) {
         def output = Truth.assertThat(actual().output)
-        output.contains( "$CHECKSTYLE_VIOLATIONS_FOUND ($errors errors, $warnings warnings). See the reports at:\n")
+        output.contains("$CHECKSTYLE_VIOLATIONS_FOUND ($errors errors, $warnings warnings). See the reports at:\n")
         for (File report : reports) {
             output.contains(report.path)
         }
