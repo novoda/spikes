@@ -126,4 +126,23 @@ public class CheckstyleIntegrationTest {
                 .build('check')
     }
 
+    @Test
+    public void shouldNotFailBuildWhenCheckstyleConfiguredIgnoreSourceSets() {
+        TestProject.Result result = projectRule.newProject()
+                .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
+                .withSourceSet('test', Fixtures.Checkstyle.SOURCES_WITH_ERRORS)
+                .withFile(Fixtures.Checkstyle.MODULES, 'config/checkstyle/checkstyle.xml')
+                .withPenalty('''{
+                    maxWarnings 1
+                    maxErrors 0
+                }''')
+                .withCheckstyle('''checkstyle {
+                    exclude 'Greeter.java'
+                }''')
+                .build('check')
+
+        assertThat(result.logs).doesNotContainLimitExceeded()
+        assertThat(result.logs).containsCheckstyleViolations(0, 1,
+                result.buildFile('reports/checkstyle/main.html'))
+    }
 }

@@ -4,14 +4,19 @@ import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.plugins.quality.Checkstyle
+import org.gradle.api.plugins.quality.CheckstyleExtension
 import org.gradle.internal.logging.ConsoleRenderer
 
 class CheckstyleConfigurator {
 
     void configure(Project project, Violations violations, Task evaluateViolations) {
+        List<String> excludes = []
         project.apply plugin: 'checkstyle'
         project.checkstyle {
             toolVersion = '7.1.2'
+            ext.exclude = { String filter ->
+                excludes.addAll(filter)
+            }
         }
         project.afterEvaluate {
             boolean isAndroidApp = project.plugins.hasPlugin('com.android.application')
@@ -25,6 +30,7 @@ class CheckstyleConfigurator {
                 checkstyle.showViolations = false
                 checkstyle.ignoreFailures = true
                 checkstyle.metaClass.getLogger = { QuietLogger.INSTANCE }
+                checkstyle.exclude(excludes)
                 checkstyle.doLast {
                     File xmlReportFile = checkstyle.reports.xml.destination
                     File htmlReportFile = new File(xmlReportFile.absolutePath - '.xml' + '.html')
