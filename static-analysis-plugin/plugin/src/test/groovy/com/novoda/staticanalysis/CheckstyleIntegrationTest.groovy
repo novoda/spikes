@@ -11,7 +11,7 @@ import org.junit.runners.Parameterized
 import static com.novoda.test.LogsSubject.assertThat
 
 @RunWith(Parameterized.class)
-public class CheckstyleConfigurationTest {
+public class CheckstyleIntegrationTest {
 
     @Parameterized.Parameters
     public static List<Object[]> rules() {
@@ -21,7 +21,7 @@ public class CheckstyleConfigurationTest {
     @Rule
     public final TestProjectRule projectRule
 
-    public CheckstyleConfigurationTest(TestProjectRule projectRule) {
+    public CheckstyleIntegrationTest(TestProjectRule projectRule) {
         this.projectRule = projectRule
     }
 
