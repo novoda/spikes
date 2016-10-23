@@ -38,7 +38,7 @@ ${formatExtension(project)}
 
     TestAndroidProject() {
         super(TEMPLATE)
-        copyFile(Fixtures.LOCAL_PROPERTIES, 'local.properties')
+        withFile(Fixtures.LOCAL_PROPERTIES, 'local.properties')
     }
 
     private static String formatSourceSets(TestProject project) {

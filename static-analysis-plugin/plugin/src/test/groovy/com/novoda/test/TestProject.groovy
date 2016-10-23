@@ -7,7 +7,8 @@ abstract class TestProject {
     private static final Closure<String> EXTENSION_TEMPLATE = { TestProject project ->
         """
 staticAnalysis {
-    ${formatPenalty(project)}
+    ${(project.penalty ?: '').replace('            ', '')}
+    ${(project.checkstyle ?: '').replace('            ', '')}
 }
 """
     }
@@ -17,6 +18,7 @@ staticAnalysis {
     private final Closure<String> template
     Map<String, List<File>> sourceSets = [main: []]
     String penalty
+    String checkstyle
 
     TestProject(Closure<String> template) {
         this.template = template
@@ -40,10 +42,20 @@ staticAnalysis {
         Collections.emptyList()
     }
 
-    void copyFile(File source, String path) {
+    public TestProject withFile(File source, String path) {
+        write(source.text, path)
+        return this
+    }
+
+    public TestProject withFile(String text, String path) {
+        write(text, path)
+        return this
+    }
+
+    private void write(String text, String path) {
         File file = new File(gradleRunner.projectDir, path)
         file.parentFile.mkdirs()
-        file.text = source.text
+        file.text = text
     }
 
     public TestProject withSourceSet(String sourceSet, File... srcDirs) {
@@ -56,30 +68,35 @@ staticAnalysis {
         return this
     }
 
+    public TestProject withCheckstyle(String checkstyle) {
+        this.checkstyle = checkstyle
+        return this
+    }
+
     public Result build(String... arguments) {
-        copyFile(Fixtures.Checkstyle.MODULES, 'config/checkstyle/checkstyle.xml')
-        new File(projectDir, 'build.gradle').text = template.call(this)
-        BuildResult buildResult = withArguments(arguments).build()
+        BuildResult buildResult = newRunner(arguments).build()
         createResult(buildResult)
     }
 
-    public Result buildAndFail(String... arguments) {
-        copyFile(Fixtures.Checkstyle.MODULES, 'config/checkstyle/checkstyle.xml')
+    private GradleRunner newRunner(String... arguments) {
+        if (checkstyle == null) {
+            withFile(Fixtures.Checkstyle.MODULES, 'config/checkstyle/checkstyle.xml')
+        }
         new File(projectDir, 'build.gradle').text = template.call(this)
-        BuildResult buildResult = withArguments(arguments).buildAndFail()
-        createResult(buildResult)
+        List<String> defaultArgs = defaultArguments()
+        List<String> args = new ArrayList<>(arguments.size() + defaultArgs.size())
+        args.addAll(defaultArgs)
+        args.addAll(arguments)
+        gradleRunner.withArguments(args)
     }
 
     private createResult(BuildResult buildResult) {
         new Result(buildResult, new File(projectDir, 'build'))
     }
 
-    private GradleRunner withArguments(String... arguments) {
-        List<String> defaultArgs = defaultArguments()
-        List<String> args = new ArrayList<>(arguments.size() + defaultArgs.size())
-        args.addAll(defaultArgs)
-        args.addAll(arguments)
-        gradleRunner.withArguments(args)
+    public Result buildAndFail(String... arguments) {
+        BuildResult buildResult = newRunner(arguments).buildAndFail()
+        createResult(buildResult)
     }
 
     public void deleteDir() {
@@ -88,10 +105,6 @@ staticAnalysis {
 
     protected static String formatExtension(TestProject project) {
         EXTENSION_TEMPLATE.call(project)
-    }
-
-    private static String formatPenalty(TestProject project) {
-        project.penalty ?: ''
     }
 
     public static class Result {
