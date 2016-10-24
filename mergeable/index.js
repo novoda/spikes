@@ -7,7 +7,7 @@ const OPEN_PRS = { state: 'open' }
 const github = new GitHub(secrets.gitHub.credentials);
 const slack = new Slack(secrets.slack.token);
 
-let repo = github.getRepo(
+const repo = github.getRepo(
   secrets.gitHub.repoOwner,
   secrets.gitHub.repoName
 );
@@ -19,7 +19,7 @@ repo.listPullRequests(OPEN_PRS)
   .catch(console.log);
 
 function getIndividualPullRequests(listOfPrs) {
-  let allPrs = listOfPrs.data.map(each => {
+  const allPrs = listOfPrs.data.map(each => {
     return repo.getPullRequest(each.number)
       .then(toData);
   });
@@ -31,11 +31,11 @@ function toData(pullRequest) {
 }
 
 function findUnmergeablePrs(pullRequests) {
-  let unmergablePrs = pullRequests.filter(filterUnmergeable)
+  const unmergablePrs = pullRequests.filter(filterUnmergeable)
   return Promise.resolve(unmergablePrs);
 }
 
-let filterUnmergeable = (pr) => !pr.mergeable;
+const filterUnmergeable = (pr) => !pr.mergeable;
 
 function notifySlack(unmergeablePrs) {
   return Promise.all(unmergeablePrs.map(each => {
