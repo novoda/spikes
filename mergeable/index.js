@@ -31,11 +31,11 @@ function toData(pullRequest) {
 }
 
 function findUnmergeablePrs(pullRequests) {
-  let unmergablePrs = pullRequests.filter(pullRequest => {
-    return !pullRequest.mergeable;
-  });
+  let unmergablePrs = pullRequests.filter(filterUnmergeable)
   return Promise.resolve(unmergablePrs);
 }
+
+let filterUnmergeable = (pr) => !pr.mergeable;
 
 function notifySlack(unmergeablePrs) {
   return Promise.all(unmergeablePrs.map(each => {
