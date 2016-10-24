@@ -4,10 +4,10 @@ const secrets = require('./secrets');
 
 const OPEN_PRS = { state: 'open' }
 
-const api = new GitHub(secrets.gitHub.credentials);
+const github = new GitHub(secrets.gitHub.credentials);
 const slack = new Slack(secrets.slack.token);
 
-let repo = api.getRepo(
+let repo = github.getRepo(
   secrets.gitHub.repoOwner,
   secrets.gitHub.repoName
 );
