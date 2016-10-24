@@ -39,7 +39,7 @@ function findUnmergeablePrs(pullRequests) {
 
 function notifySlack(unmergeablePrs) {
   return Promise.all(unmergeablePrs.map(each => {
-    return slack.chat.postMessage(secrets.slack.recipient, createSlackMessage(each))
+    return slack.chat.postMessage(secrets.slack.recipient, createSlackMessage(each), { as_user: true})
       .then(Promise.resolve(unmergeablePrs));
   }));
 }
