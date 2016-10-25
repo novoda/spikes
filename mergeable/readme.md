@@ -22,7 +22,9 @@ Create a secrets.json with the following structure:
 }
 ```
 
+```
 npm install
 node index.js
+```
 
 EZ PZ
