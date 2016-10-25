@@ -15,7 +15,7 @@ const APPS = [
     name: 'The Times'
   },
   {
-    package: 'om.soundcloud.creators',
+    package: 'com.soundcloud.creators',
     name: 'Soundcloud Pulse'
   }
 ];
