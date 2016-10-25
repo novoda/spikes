@@ -9,8 +9,7 @@ Create a secrets.json with the following structure:
 {
   "gitHub": {
     "credentials": {
-      "username": "",
-      "password": ""
+      "token": ""
     },
     "repoOwner": "",
     "repoName": ""
