@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
-import android.support.annotation.DimenRes;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -238,15 +237,7 @@ public class DropCapView extends View {
                     true
             );
 
-            int currentLineTop = 0;
-            for (int i = 0; i < dropCapStaticLayout.getLineCount(); i++) {
-                currentLineTop = dropCapStaticLayout.getLineTop(i);
-                if (currentLineTop >= dropCapBounds.height()) {
-                    numberOfLinesToSpan = i;
-                    i = dropCapStaticLayout.getLineCount();
-                }
-            }
-            dropCapLineHeight = currentLineTop;
+            calculateLinesToSpan();
         }
 
         if (numberOfLinesToSpan < 1) {
@@ -256,6 +247,20 @@ public class DropCapView extends View {
 
         float baseline = dropCapBounds.height() + getPaddingTop();
         dropCapBaseline = baseline - dropCapBounds.bottom;
+    }
+
+    private void calculateLinesToSpan() {
+        int currentLineTop = 0;
+        numberOfLinesToSpan = 0;
+
+        for (int i = 0; i < dropCapStaticLayout.getLineCount(); i++) {
+            currentLineTop = dropCapStaticLayout.getLineTop(i);
+            if (currentLineTop >= dropCapBounds.height()) {
+                numberOfLinesToSpan = i;
+                i = dropCapStaticLayout.getLineCount();
+            }
+        }
+        dropCapLineHeight = currentLineTop;
     }
 
     private void measureCopyFor(int totalWidth) {
