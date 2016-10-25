@@ -13,6 +13,10 @@ const APPS = [
   {
     package: 'uk.co.thetimes',
     name: 'The Times'
+  },
+  {
+    package: 'om.soundcloud.creators',
+    name: 'Soundcloud Pulse'
   }
 ];
 
