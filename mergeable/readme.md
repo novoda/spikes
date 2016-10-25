@@ -9,8 +9,7 @@ Create a secrets.json with the following structure:
 {
   "gitHub": {
     "credentials": {
-      "username": "",
-      "password": ""
+      "token": ""
     },
     "repoOwner": "",
     "repoName": ""
@@ -22,7 +21,9 @@ Create a secrets.json with the following structure:
 }
 ```
 
+```
 npm install
 node index.js
+```
 
 EZ PZ
