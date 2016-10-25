@@ -6,6 +6,7 @@ const OPEN_PRS = { state: 'open' }
 
 function Mergeable(secrets) {
   this.gitHubSecrets = secrets.gitHub;
+  this.slackRecipient = secrets.slack.recipient;
   this.gitHub = new GitHub(secrets.gitHub.credentials);
   this.slack = new Slack(secrets.slack.token);
 }
@@ -18,7 +19,7 @@ Mergeable.prototype.checkMergeability = function() {
   return repo.listPullRequests(OPEN_PRS)
     .then(getIndividualPullRequests(repo))
     .then(findUnmergeablePrs)
-    .then(notifySlack);
+    .then(notifySlack(this.slack, this.slackRecipient));
 }
 
 function getIndividualPullRequests(repo) {
@@ -42,11 +43,13 @@ function findUnmergeablePrs(pullRequests) {
 
 const filterUnmergeable = (pr) => !pr.mergeable;
 
-function notifySlack(unmergeablePrs) {
-  return Promise.all(unmergeablePrs.map(each => {
-    return this.slack.chat.postMessage(secrets.slack.recipient, createSlackMessage(each), { as_user: true})
-      .then(Promise.resolve(unmergeablePrs));
-  }));
+function notifySlack(slack, slackRecipient) {
+  return function(unmergeablePrs) {
+    return Promise.all(unmergeablePrs.map(each => {
+      return slack.chat.postMessage(slackRecipient, createSlackMessage(each), { as_user: true})
+        .then(Promise.resolve(unmergeablePrs));
+    }));
+  }
 }
 
 function createSlackMessage(pr) {
