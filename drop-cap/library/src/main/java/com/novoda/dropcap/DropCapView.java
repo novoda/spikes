@@ -128,7 +128,7 @@ public class DropCapView extends View {
         requestLayout();
     }
 
-    public void setDropCapTextSize(@DimenRes float textSize) {
+    public void setDropCapTextSize(float textSize) {
         if (textSize == dropCapPaint.getTextSize()) {
             return;
         }
@@ -157,7 +157,7 @@ public class DropCapView extends View {
         return copyTextPaint.getColor();
     }
 
-    public void setCopyTextSize(@DimenRes float textSize) {
+    public void setCopyTextSize(float textSize) {
         if (textSize == copyTextPaint.getTextSize()) {
             return;
         }
