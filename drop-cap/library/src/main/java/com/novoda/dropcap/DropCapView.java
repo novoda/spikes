@@ -227,7 +227,7 @@ public class DropCapView extends View {
         int copyWidthForDropCap = width - dropCapWidth;
 
         if (dropCapStaticLayout == null || dropCapStaticLayout.getWidth() != copyWidthForDropCap
-                || hasPaintChanged || textIsDifferent()) {
+                || hasPaintChanged || copyTextIsDifferent()) {
             dropCapStaticLayout = new StaticLayout(
                     dropCapText + copyText,
                     copyTextPaint,
@@ -280,7 +280,7 @@ public class DropCapView extends View {
             dropCapBaseline = dropCapBaseline + translateBy;
 
         } else {
-            if (copyStaticLayout == null || copyStaticLayout.getWidth() != totalWidth || textIsDifferent()) {
+            if (copyStaticLayout == null || copyStaticLayout.getWidth() != totalWidth || copyTextIsDifferent()) {
                 copyStaticLayout = new StaticLayout(
                         dropCapText + copyText,
                         copyTextPaint,
@@ -305,7 +305,7 @@ public class DropCapView extends View {
         return lineBaseline - dHeight;
     }
 
-    private boolean textIsDifferent() {
+    private boolean copyTextIsDifferent() {
         return !copyStaticLayout.getText().equals(dropCapText + copyText);
     }
 
