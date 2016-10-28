@@ -37,7 +37,6 @@ public class DropCapView extends View {
     private int dropCapLineHeight;
     private float dropCapBaseline;
 
-    private boolean shouldDisplayDropCap;
     private boolean hasPaintChanged;
     private boolean textHasChanged;
 
@@ -194,11 +193,9 @@ public class DropCapView extends View {
         if (enoughTextForDropCap(text)) {
             dropCapText = String.valueOf(text.charAt(0));
             copyText = String.valueOf(text.subSequence(1, text.length()));
-            shouldDisplayDropCap = true;
         } else {
             dropCapText = String.valueOf('\0');
             copyText = (text == null) ? "" : text;
-            shouldDisplayDropCap = false;
         }
         requestLayout();
         invalidate();
@@ -214,10 +211,7 @@ public class DropCapView extends View {
         int horizontalPadding = getPaddingLeft() + getPaddingRight();
         int widthWithoutPadding = totalWidth - horizontalPadding;
 
-        if (shouldDisplayDropCap) {
-            measureDropCapFor(widthWithoutPadding);
-        }
-
+        measureDropCapFor(widthWithoutPadding);
         measureCopyFor(widthWithoutPadding);
 
         int desiredHeight = dropCapLineHeight + copyStaticLayout.getHeight() + getPaddingTop() + getPaddingBottom();
@@ -246,9 +240,6 @@ public class DropCapView extends View {
             calculateLinesToSpan();
         }
 
-        if (numberOfLinesToSpan < 1) {
-            shouldDisplayDropCap = false;
-            return;
         }
 
         float baseline = dropCapBounds.height() + getPaddingTop();
@@ -270,7 +261,7 @@ public class DropCapView extends View {
     }
 
     private void measureCopyFor(int totalWidth) {
-        if (shouldDisplayDropCap && enoughLinesForDropCap()) {
+        if (enoughLinesForDropCap()) {
             int lineStart = dropCapStaticLayout.getLineEnd(numberOfLinesToSpan - 1);
             int lineEnd = dropCapStaticLayout.getText().length();
             String remainingText = String.valueOf(dropCapStaticLayout.getText().subSequence(lineStart, lineEnd));
@@ -318,14 +309,13 @@ public class DropCapView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (shouldDisplayDropCap && enoughLinesForDropCap()) {
+        if (enoughLinesForDropCap()) {
             drawDropCap(canvas);
             drawCopyForDropCap(canvas);
             drawRemainingCopy(canvas);
         } else {
             drawCopyWithoutDropCap(canvas);
         }
-        shouldDisplayDropCap = false;
         hasPaintChanged = false;
         textHasChanged = false;
     }
