@@ -111,6 +111,7 @@ public class DropCapView extends View {
 
         hasPaintChanged = true;
         requestLayout();
+        invalidate();
     }
 
     public void setCopyFontType(String fontPath) {
@@ -125,6 +126,7 @@ public class DropCapView extends View {
 
         hasPaintChanged = true;
         requestLayout();
+        invalidate();
     }
 
     public void setDropCapTextSize(float textSize) {
@@ -135,6 +137,7 @@ public class DropCapView extends View {
         dropCapPaint.setTextSize(textSize);
         hasPaintChanged = true;
         requestLayout();
+        invalidate();
     }
 
     public float getDropCapTextSize() {
@@ -164,6 +167,7 @@ public class DropCapView extends View {
         copyTextPaint.setTextSize(textSize);
         hasPaintChanged = true;
         requestLayout();
+        invalidate();
     }
 
     public float getCopyTextSize() {
@@ -266,7 +270,8 @@ public class DropCapView extends View {
             int lineEnd = dropCapStaticLayout.getText().length();
             String remainingText = String.valueOf(dropCapStaticLayout.getText().subSequence(lineStart, lineEnd));
 
-            if (copyStaticLayout == null || copyStaticLayout.getWidth() != totalWidth || !remainingText.equals(copyStaticLayout.getText())) {
+            if (copyStaticLayout == null || copyStaticLayout.getWidth() != totalWidth || hasPaintChanged
+                    || !remainingText.equals(copyStaticLayout.getText())) {
                 copyStaticLayout = new StaticLayout(
                         remainingText,
                         copyTextPaint,
@@ -282,7 +287,7 @@ public class DropCapView extends View {
             }
 
         } else {
-            if (copyStaticLayout == null || copyStaticLayout.getWidth() != totalWidth || textHasChanged) {
+            if (copyStaticLayout == null || copyStaticLayout.getWidth() != totalWidth || textHasChanged || hasPaintChanged) {
                 copyStaticLayout = new StaticLayout(
                         dropCapText + copyText,
                         copyTextPaint,
