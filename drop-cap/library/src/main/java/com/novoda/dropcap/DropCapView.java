@@ -297,7 +297,7 @@ public class DropCapView extends View {
     }
 
     private boolean enoughLinesForDropCap() {
-        return dropCapStaticLayout.getLineCount() > numberOfLinesToSpan;
+        return dropCapStaticLayout.getLineCount() > numberOfLinesToSpan && numberOfLinesToSpan > 0;
     }
 
     private float getCopyDistanceFromViewPortTop() {
