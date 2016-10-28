@@ -201,6 +201,7 @@ public class DropCapView extends View {
             shouldDisplayDropCap = false;
         }
         requestLayout();
+        invalidate();
     }
 
     private boolean enoughTextForDropCap(CharSequence text) {
