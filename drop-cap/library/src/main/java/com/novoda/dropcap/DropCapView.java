@@ -39,6 +39,7 @@ public class DropCapView extends View {
 
     private boolean shouldDisplayDropCap;
     private boolean hasPaintChanged;
+    private boolean textHasChanged;
 
     public DropCapView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -186,6 +187,10 @@ public class DropCapView extends View {
     }
 
     public void setText(String text) {
+        if (text != null) {
+            textHasChanged = !text.equals(dropCapText + copyText);
+        }
+
         if (enoughTextForDropCap(text)) {
             dropCapText = String.valueOf(text.charAt(0));
             copyText = String.valueOf(text.subSequence(1, text.length()));
@@ -226,7 +231,7 @@ public class DropCapView extends View {
         int copyWidthForDropCap = width - dropCapWidth;
 
         if (dropCapStaticLayout == null || dropCapStaticLayout.getWidth() != copyWidthForDropCap
-                || hasPaintChanged || copyTextIsDifferent()) {
+                || hasPaintChanged || textHasChanged) {
             dropCapStaticLayout = new StaticLayout(
                     dropCapText + copyText,
                     copyTextPaint,
@@ -285,7 +290,7 @@ public class DropCapView extends View {
             dropCapBaseline = dropCapBaseline + translateBy;
 
         } else {
-            if (copyStaticLayout == null || copyStaticLayout.getWidth() != totalWidth || copyTextIsDifferent()) {
+            if (copyStaticLayout == null || copyStaticLayout.getWidth() != totalWidth || textHasChanged) {
                 copyStaticLayout = new StaticLayout(
                         dropCapText + copyText,
                         copyTextPaint,
@@ -310,10 +315,6 @@ public class DropCapView extends View {
         return lineBaseline - dHeight;
     }
 
-    private boolean copyTextIsDifferent() {
-        return !copyStaticLayout.getText().equals(dropCapText + copyText);
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
         if (shouldDisplayDropCap && enoughLinesForDropCap()) {
@@ -323,7 +324,9 @@ public class DropCapView extends View {
         } else {
             drawCopyWithoutDropCap(canvas);
         }
+        shouldDisplayDropCap = false;
         hasPaintChanged = false;
+        textHasChanged = false;
     }
 
     private void drawCopyWithoutDropCap(Canvas canvas) {
