@@ -238,12 +238,12 @@ public class DropCapView extends View {
             );
 
             calculateLinesToSpan();
-        }
 
+            if (enoughLinesForDropCap()) {
+                float baseline = dropCapBounds.height() + getPaddingTop();
+                dropCapBaseline = baseline - dropCapBounds.bottom;
+            }
         }
-
-        float baseline = dropCapBounds.height() + getPaddingTop();
-        dropCapBaseline = baseline - dropCapBounds.bottom;
     }
 
     private void calculateLinesToSpan() {
@@ -276,10 +276,10 @@ public class DropCapView extends View {
                         lineSpacingExtra,
                         true
                 );
-            }
 
-            float translateBy = getCopyDistanceFromViewPortTop();
-            dropCapBaseline = dropCapBaseline + translateBy;
+                float translateBy = getCopyDistanceFromViewPortTop();
+                dropCapBaseline = dropCapBaseline + translateBy;
+            }
 
         } else {
             if (copyStaticLayout == null || copyStaticLayout.getWidth() != totalWidth || textHasChanged) {
