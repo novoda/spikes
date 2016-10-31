@@ -19,8 +19,10 @@ import { ConfigService } from './config.service';
 import { TimezoneDetectorService } from './dashboards/github-contributors/timezone-detector.service';
 import { DashboardCarouselComponent } from './dashboard-carousel/dashboard-carousel.component';
 import { SonarCoverageComponent } from './dashboards/sonar-coverage/sonar-coverage.component';
-import { SonarService } from './dashboards/sonar-coverage/sonar.service';
 import { SocketService } from './dashboard-carousel/socket.service';
+import { ExternalUrlComponent } from './dashboards/external-url/external-url.component';
+import { SafePipe } from './dashboards/external-url/safe.pipe';
+import { ReviewComponent } from './dashboards/review/review.component';
 
 @NgModule({
   imports: [
@@ -39,7 +41,10 @@ import { SocketService } from './dashboard-carousel/socket.service';
     TeamContributorComponent,
     ProjectContributorComponent,
     DashboardCarouselComponent,
-    SonarCoverageComponent
+    SonarCoverageComponent,
+    ExternalUrlComponent,
+    SafePipe,
+    ReviewComponent
   ],
   providers: [
     SystemClock,
@@ -48,7 +53,6 @@ import { SocketService } from './dashboard-carousel/socket.service';
     reportsServiceProvider,
     ReportsClient,
     TimezoneDetectorService,
-    SonarService,
     SocketService
   ],
   entryComponents: [AppComponent],
