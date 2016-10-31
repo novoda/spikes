@@ -15,26 +15,18 @@ export class SocketService {
   }
 
   private createObservable(url): ConnectableObservable<any> {
-    let socket = io(url);
+    let socket = io.connect(url, {
+      'reconnection': true,
+      'reconnectionDelay': 3000,
+      'reconnectionAttempts': 100
+    });
 
     let observable: Observable<any> = Observable.create((observer: Observer<any>) => {
-      socket.on('connection', (data) => {
-        console.log("CLIENT CONNECTED");
-      });
+      // The Observable will not complete or fail since we want to reconnect if possible.
       socket.on('message', (event) => {
         observer.next(event);
       });
-      socket.on('disconnect', () => {
-        observer.complete();
-      });
-      socket.on('connect_error', (error) => {
-        observer.error(error);
-      });
-      socket.on('reconnect_error', (error) => {
-        observer.error(error);
-      });
     });
-
     return observable.publish();
   }
 
