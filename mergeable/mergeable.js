@@ -19,7 +19,6 @@ Mergeable.prototype.checkMergeability = function() {
   return repo.listPullRequests(OPEN_PRS)
     .then(getIndividualPullRequests(repo))
     .then(findUnmergeablePrs)
-    .then(console.log)
     .then(notifySlack(this.slack, this.slackRecipient));
 }
 
@@ -39,6 +38,7 @@ function toData(pullRequest) {
 
 function findUnmergeablePrs(pullRequests) {
   const unmergablePrs = pullRequests.filter(filterUnmergeable)
+  console.log(unmergablePrs);
   return Promise.resolve(unmergablePrs);
 }
 
