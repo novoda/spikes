@@ -19,6 +19,7 @@ Mergeable.prototype.checkMergeability = function() {
   return repo.listPullRequests(OPEN_PRS)
     .then(getIndividualPullRequests(repo))
     .then(findUnmergeablePrs)
+    .then(console.log)
     .then(notifySlack(this.slack, this.slackRecipient));
 }
 
