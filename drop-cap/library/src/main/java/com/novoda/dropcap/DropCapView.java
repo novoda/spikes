@@ -95,6 +95,8 @@ public class DropCapView extends View {
             copyTextPaint.setTextSize(copyTextSize);
             copyTextPaint.setColor(copyTextColor);
 
+            String text = typedArray.getString(R.styleable.DropCapView_text);
+            setText(text);
         } finally {
             typedArray.recycle();
         }

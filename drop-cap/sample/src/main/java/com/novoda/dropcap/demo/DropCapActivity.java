@@ -29,9 +29,6 @@ public class DropCapActivity extends Activity {
         setContentView(R.layout.activity_drop_cap);
         dropCapView = (DropCapView) findViewById(R.id.view_drop_cap);
 
-        String dropCapText = getResources().getString(R.string.drop_cap_dummy_text);
-        dropCapView.setText(dropCapText);
-
         createTextSizeDialogDisplayers();
         createTextColorDialogDisplayers();
         createTypefaceDialogDisplayers();
