@@ -85,4 +85,19 @@ class PenaltyExtensionTest {
         assertThat(penaltyExtension).hasMaxErrors(10)
     }
 
+    @Test
+    public void shouldFailWhenCustomPenaltySpecifiedWithInvalidThresholds() {
+        project.staticAnalysis {
+            penalty {
+                maxWarnings(-100)
+                maxErrors(-100)
+            }
+        }
+
+        PenaltyExtension penaltyExtension = project.staticAnalysis.penalty
+
+        assertThat(penaltyExtension).hasMaxWarnings(0)
+        assertThat(penaltyExtension).hasMaxErrors(0)
+    }
+
 }

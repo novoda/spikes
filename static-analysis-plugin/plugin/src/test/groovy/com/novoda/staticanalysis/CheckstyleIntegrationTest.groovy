@@ -160,6 +160,36 @@ public class CheckstyleIntegrationTest {
         assertThat(result.logs).doesNotContainCheckstyleViolations()
     }
 
+    @Test
+    public void shouldNotFailBuildWhenNoCheckstyleWarningsOrErrorsEncounteredAndNegativeThresholdsProvided() {
+        TestProject.Result result = projectRule.newProject()
+                .withPenalty('''{
+                    maxWarnings(-10)
+                    maxErrors(-10)
+                }''')
+                .withCheckstyle(checkstyle(DEFAULT_CONFIG))
+                .build('check')
+
+        assertThat(result.logs).doesNotContainLimitExceeded()
+        assertThat(result.logs).doesNotContainCheckstyleViolations()
+    }
+
+    @Test
+    public void shouldFailBuildWhenCheckstyleWarningsOrErrorsEncounteredAndNegativeThresholdsProvided() {
+        TestProject.Result result = projectRule.newProject()
+                .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
+                .withPenalty('''{
+                    maxWarnings(-10)
+                    maxErrors(-10)
+                }''')
+                .withCheckstyle(checkstyle(DEFAULT_CONFIG))
+                .buildAndFail('check')
+
+        assertThat(result.logs).containsLimitExceeded(0, 1)
+        assertThat(result.logs).containsCheckstyleViolations(0, 1,
+                result.buildFile('reports/checkstyle/main.html'))
+    }
+
 
     private static String checkstyle(String configFile, String... configs) {
         """checkstyle {
