@@ -1,8 +1,8 @@
-package com.novoda.staticanalysis;
+package com.novoda.staticanalysis
 
-import org.gradle.api.logging.LogLevel;
-import org.gradle.api.logging.Logger;
-import org.slf4j.Marker;
+import org.gradle.api.logging.LogLevel
+import org.gradle.api.logging.Logger
+import org.slf4j.Marker
 
 class QuietLogger implements Logger {
 
