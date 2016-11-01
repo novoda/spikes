@@ -38,6 +38,7 @@ function toData(pullRequest) {
 
 function findUnmergeablePrs(pullRequests) {
   const unmergablePrs = pullRequests.filter(filterUnmergeable)
+  console.log(unmergablePrs);
   return Promise.resolve(unmergablePrs);
 }
 
