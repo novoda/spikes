@@ -1,13 +1,19 @@
 import { Coverage } from './Coverage';
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
+import { WidgetEvent } from './../WidgetEvent';
+import { DashboardComponent } from './../DashboardComponent';
 
 @Component({
   selector: 'app-sonar-coverage',
   templateUrl: 'sonar-coverage.component.html',
   styleUrls: ['sonar-coverage.component.scss']
 })
-export class SonarCoverageComponent {
+export class SonarCoverageComponent implements DashboardComponent {
 
-  @Input() sonarCoverage: Coverage;
+  private sonarCoverage: Coverage;
+
+  public update(event: WidgetEvent) {
+    this.sonarCoverage = <Coverage> event.payload;
+  }
 
 }

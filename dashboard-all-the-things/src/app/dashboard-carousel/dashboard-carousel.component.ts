@@ -1,104 +1,74 @@
-import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
-import { Subscription, Observable, ConnectableObservable } from 'rxjs';
+import { ExternalUrlComponent } from '../dashboards/external-url/external-url.component';
+import { ReviewComponent } from '../dashboards/review';
+import { SonarCoverageComponent } from '../dashboards/sonar-coverage';
+import { StackOverflowComponent } from '../dashboards/stackoverflow/stackoverflow.component';
+import { WidgetEvent } from '../dashboards/WidgetEvent';
+import { DynamicComponent } from './dynamic.component';
 import { SocketService } from './socket.service';
-import { Coverage } from './../dashboards/sonar-coverage/Coverage';
-import { Review } from './../dashboards/review/Review';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ConnectableObservable, Subscription } from 'rxjs';
+
+class DashboardComponents {
+  constructor(private foo: any) { }
+
+  toList(): any[] {
+    let result: any[] = [];
+    for (let key in this.foo) {
+      if (result[key] != undefined) {
+        continue;
+      } 
+      let value = this.foo[key];
+      result.push(value);
+    }
+    return result;
+  }
+
+  get(key: string): any {
+    return this.foo[key];
+  }
+}
+
+let COMPONENTS = new DashboardComponents({
+  "coverage": SonarCoverageComponent,
+  "ciWall": ExternalUrlComponent,
+  "reviews": ReviewComponent,
+  "stackoverflow": StackOverflowComponent
+});
 
 @Component({
   selector: 'app-dashboard-carousel',
   templateUrl: 'dashboard-carousel.component.html',
-  styleUrls: ['dashboard-carousel.component.scss']
+  styleUrls: ['dashboard-carousel.component.scss'],
+  entryComponents: COMPONENTS.toList()
 })
 export class DashboardCarouselComponent implements OnInit, OnDestroy {
 
-  // private CAROUSEL_CURRENT_POSITION = '--carousel-current-position';
-  // static ROTATE_RATE_IN_MILLISECONDS = 3 * 1000;
-
-  // animation: Subscription;
-  // position: number;
-  // dasboardCount: number = 3;
-  // element: ElementRef;
   socketService: SocketService;
   connection: Subscription;
-  sonarCoverage: Coverage;
-  ciWallUrl: string;
-  review: Review;
-  question: Question;
-  numberOfQuestions: number;
 
-  constructor(element: ElementRef, socketService: SocketService) {
-    // this.element = element;
+  type: any;
+  event: WidgetEvent;
+
+  @ViewChild(DynamicComponent) dynamicComponent: DynamicComponent;
+
+  constructor(socketService: SocketService) {
     this.socketService = socketService;
-    // this.position = 1;
   }
 
   ngOnInit(): void {
-    // this.animation = Observable
-    //   .timer(DashboardCarouselComponent.ROTATE_RATE_IN_MILLISECONDS, DashboardCarouselComponent.ROTATE_RATE_IN_MILLISECONDS)
-    //   .subscribe(() => {
-    //     this.showNextDashboard();
-    //   });
-
     let observable: ConnectableObservable<any> = this.socketService.create('http://localhost:3002');
     this.connection = observable
-      .subscribe((event: MessageEvent) => {
-        if (this.isCoverage(event)) {
-          this.sonarCoverage = new Coverage(event['payload']['project'], event['payload']['coverage']);
-        } else if (this.isCiWall(event)) {
-          this.ciWallUrl = event['payload'];
-        } else if (this.isReview(event)) {
-          let selection = event['payload'].motivators[Math.floor((Math.random() * event['payload'].motivators.length))];
-          this.review = new Review(event['payload']['appName'], selection.score, selection.text);
-        } else if (this.isStackOverflow(event)) {
-          let questions = event['payload']['questions'];
-          this.numberOfQuestions = questions.length;
-          this.question = this.pickRandomQuestion(questions);
-        } else {
-          console.log("GOT SOMETHING");
-          console.log(event);
+      .subscribe((event: WidgetEvent) => {
+        if (event.widgetKey === undefined) {
+          return;
         }
+        this.type = COMPONENTS.get(event.widgetKey) || undefined;
+        this.event = event;
       });
     observable.connect();
   }
 
-  private isCoverage(event: MessageEvent) {
-    return 'widgetKey' in event && event['widgetKey'] === 'coverage';
-  }
-
-  private isCiWall(event: MessageEvent) {
-    return 'widgetKey' in event && event['widgetKey'] === 'ciWall';
-  }
-
-  private isReview(event: MessageEvent) {
-    return 'widgetKey' in event && event['widgetKey'] === 'reviews';
-  }
-
-  // private showNextDashboard() {
-  //   if (this.dasboardCount > this.position) {
-  //     this.position += 1;
-  //   } else {
-  //     this.position = 1;
-  //   }
-  //   this.setContributorPosition(this.position);
-  // }
-  private isStackOverflow(event: MessageEvent) {
-    return 'widgetKey' in event && event['widgetKey'] === 'stackoverflow';
-  }
-
-  private pickRandomQuestion(questions: Array<any>): Question {
-    let question = questions[Math.floor(Math.random() * (questions.length))];
-    return new Question(question.title, question.url);
-  }
-
-
-  // private setContributorPosition(position: number) {
-  //   this.element.nativeElement.style.setProperty(this.CAROUSEL_CURRENT_POSITION, position);
-  // }
-
   ngOnDestroy(): void {
-    // if (!this.animation.closed) {
-    //   this.animation.unsubscribe();
-    // }
     if (!this.connection.closed) {
       this.connection.unsubscribe();
     }

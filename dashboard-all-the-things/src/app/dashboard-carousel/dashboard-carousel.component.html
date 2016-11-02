@@ -51,8 +51,5 @@
   </div>-->
 
   <div id="element" class="carousel">
-    <app-sonar-coverage [sonarCoverage]="sonarCoverage" class="component"></app-sonar-coverage>
-    <app-external-url [url]="ciWallUrl" class="component"></app-external-url>
-    <app-review [review]="review" class="component"></app-review>
-    <app-stackoverflow [question]="question" [numberOfQuestions]="numberOfQuestions" class="component"></app-stackoverflow>
+    <app-dynamic class="component" [type]="type" [event]="event"></app-dynamic>
   </div>
