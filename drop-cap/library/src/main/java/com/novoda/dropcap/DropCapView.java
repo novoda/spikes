@@ -348,8 +348,8 @@ public class DropCapView extends View {
     }
 
     private void drawDropCap(Canvas canvas) {
-        float dropCapBaselineFromViewPortTop = dropCapBaseline + distanceFromViewPortTop;
-        canvas.drawText(dropCapStaticLayout.getText(), 0, 1, getPaddingLeft(), dropCapBaselineFromViewPortTop, dropCapPaint);
+        float dropCapBaselineFromCopyTop = dropCapBaseline + distanceFromViewPortTop;
+        canvas.drawText(dropCapStaticLayout.getText(), 0, 1, getPaddingLeft(), dropCapBaselineFromCopyTop, dropCapPaint);
     }
 
     private void drawCopyForDropCap(Canvas canvas) {
