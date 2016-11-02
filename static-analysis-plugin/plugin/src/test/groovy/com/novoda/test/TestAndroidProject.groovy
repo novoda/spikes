@@ -38,7 +38,10 @@ ${formatExtension(project)}
 
     TestAndroidProject() {
         super(TEMPLATE)
-        withFile(Fixtures.LOCAL_PROPERTIES, 'local.properties')
+        File localProperties = Fixtures.LOCAL_PROPERTIES
+        if (localProperties.exists()) {
+            withFile(localProperties, 'local.properties')
+        }
     }
 
     private static String formatSourceSets(TestProject project) {
