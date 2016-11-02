@@ -23,6 +23,8 @@ export class DashboardCarouselComponent implements OnInit, OnDestroy {
   sonarCoverage: Coverage;
   ciWallUrl: string;
   review: Review;
+  question: Question;
+  numberOfQuestions: number;
 
   constructor(element: ElementRef, socketService: SocketService) {
     // this.element = element;
@@ -44,9 +46,13 @@ export class DashboardCarouselComponent implements OnInit, OnDestroy {
           this.sonarCoverage = new Coverage(event['payload']['project'], event['payload']['coverage']);
         } else if (this.isCiWall(event)) {
           this.ciWallUrl = event['payload'];
-        }  else if (this.isReview(event)) {
+        } else if (this.isReview(event)) {
           let selection = event['payload'].motivators[Math.floor((Math.random() * event['payload'].motivators.length))];
           this.review = new Review(event['payload']['appName'], selection.score, selection.text);
+        } else if (this.isStackOverflow(event)) {
+          let questions = event['payload']['questions'];
+          this.numberOfQuestions = questions.length;
+          this.question = this.pickRandomQuestion(questions);
         } else {
           console.log("GOT SOMETHING");
           console.log(event);
@@ -75,6 +81,15 @@ export class DashboardCarouselComponent implements OnInit, OnDestroy {
   //   }
   //   this.setContributorPosition(this.position);
   // }
+  private isStackOverflow(event: MessageEvent) {
+    return 'widgetKey' in event && event['widgetKey'] === 'stackoverflow';
+  }
+
+  private pickRandomQuestion(questions: Array<any>): Question {
+    let question = questions[Math.floor(Math.random() * (questions.length))];
+    return new Question(question.title, question.url);
+  }
+
 
   // private setContributorPosition(position: number) {
   //   this.element.nativeElement.style.setProperty(this.CAROUSEL_CURRENT_POSITION, position);

@@ -23,6 +23,7 @@ import { SocketService } from './dashboard-carousel/socket.service';
 import { ExternalUrlComponent } from './dashboards/external-url/external-url.component';
 import { SafePipe } from './dashboards/external-url/safe.pipe';
 import { ReviewComponent } from './dashboards/review/review.component';
+import { StackoverflowComponent } from './dashboards/stackoverflow/stackoverflow.component';
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import { ReviewComponent } from './dashboards/review/review.component';
     SonarCoverageComponent,
     ExternalUrlComponent,
     SafePipe,
-    ReviewComponent
+    ReviewComponent,
+    StackoverflowComponent
   ],
   providers: [
     SystemClock,

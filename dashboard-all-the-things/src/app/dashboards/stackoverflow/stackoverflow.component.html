@@ -1,0 +1,8 @@
+<p>surl.novoda.com/stackoverflow</p>
+
+<p *ngIf="numberOfQuestions != undefined">
+  We have {{numberOfQuestions}} unanswered questions on StackOverflow.
+</p>
+<p *ngIf="question != undefined">
+  Here's one: {{question.title}}: {{question.url}}
+</p>
