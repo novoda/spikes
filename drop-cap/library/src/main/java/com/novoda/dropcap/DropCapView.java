@@ -10,6 +10,7 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 
 public class DropCapView extends View {
@@ -146,12 +147,21 @@ public class DropCapView extends View {
         invalidate();
     }
 
-    public void setDropCapTextSize(float textSizePx) {
-        if (textSizePx == dropCapPaint.getTextSize()) {
+    public void setDropCapTextSize(float textSizeSp) {
+        setDropCapTextSize(TypedValue.COMPLEX_UNIT_SP, textSizeSp);
+    }
+
+    public void setDropCapTextSize(int unit, float size) {
+        float sizeForDisplay = TypedValue.applyDimension(unit, size, getResources().getDisplayMetrics());
+        setRawDropCapTextSize(sizeForDisplay);
+    }
+
+    private void setRawDropCapTextSize(float size) {
+        if (size == dropCapPaint.getTextSize()) {
             return;
         }
 
-        dropCapPaint.setTextSize(textSizePx);
+        dropCapPaint.setTextSize(size);
         hasPaintChanged = true;
         requestLayout();
         invalidate();
