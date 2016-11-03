@@ -5,26 +5,25 @@ function EnewsFetcher(token) {
   this.slack = new Slack(token);
 }
 
-EnewsFetcher.prototype.getLastSevenDays = function(callback) {
-    var latest = new Date();
-    var oldest = new Date();
-    oldest.setDate(latest.getDate() - 7);
+EnewsFetcher.prototype.getLastSevenDays = function() {
+  var latest = new Date();
+  var oldest = new Date();
+  oldest.setDate(latest.getDate() - 7);
 
-    getEnewsInternal(this.slack, oldest, latest, callback)
-  }
+  return getEnewsInternal(this.slack, oldest, latest)
+}
 
-EnewsFetcher.prototype.getEnews = function(oldest, latest, callback) {
-  getEnewsInternal(this.slack, oldest, latest, callback)
+EnewsFetcher.prototype.getEnews = function(oldest, latest) {
+  return getEnewsInternal(this.slack, oldest, latest)
 }
 
 function getEnewsInternal(slack, oldest, latest, callback) {
   // node timestamps are in milliseconds, need to convert to epoch
   const latestEpoch = latest / 1000;
   const oldestEpoch = oldest / 1000;
-  slack.getMessages(GENERAL_CHANNEL_ID, oldestEpoch, latestEpoch)
+  return slack.getMessages(GENERAL_CHANNEL_ID, oldestEpoch, latestEpoch)
     .then(filterNonNews)
-    .then(convertToEnews(slack))
-    .then(callback);
+    .then(convertToEnews(slack));
 }
 
 function filterNonNews(messages) {
