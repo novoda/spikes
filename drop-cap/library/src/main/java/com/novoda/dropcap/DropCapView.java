@@ -177,7 +177,6 @@ public class DropCapView extends View {
         }
 
         dropCapPaint.setColor(color);
-        hasPaintChanged = true;
         invalidate();
     }
 
@@ -216,7 +215,6 @@ public class DropCapView extends View {
         }
 
         copyTextPaint.setColor(color);
-        hasPaintChanged = true;
         invalidate();
     }
 
