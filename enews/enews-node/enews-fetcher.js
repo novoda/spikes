@@ -1,5 +1,4 @@
 const Slack = require('./slack.js');
-const Q = require('q');
 
 function EnewsFetcher(token) {
   const GENERAL_CHANNEL_ID = 'C029J9QTH'
@@ -26,10 +25,10 @@ function EnewsFetcher(token) {
   function convertToEnews(messages, callback) {
     const eNewsMessages = messages.filter(isEnewsMessage);
     const usersPromise = getUsersFrom(eNewsMessages);
-    Q.all(usersPromise).then(users => {
+    Promise.all(usersPromise).then(users => {
       const eNews = toEnews(eNewsMessages, users);
       callback(eNews);
-    }).done();
+    }).then();
   }
 
   function isEnewsMessage(message) {
@@ -56,7 +55,7 @@ function EnewsFetcher(token) {
   }
 
   function getUser(userId) {
-    return Q.promise(function(resolve, reject, notify) {
+    return new Promise(function(resolve, reject) {
       var wrap = function(user) {
           resolve(user);
       };
