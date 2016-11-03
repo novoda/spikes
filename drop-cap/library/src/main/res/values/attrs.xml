@@ -10,8 +10,6 @@
     <attr name="copyTextSize" format="dimension" />
     <attr name="copyTextColor" format="color" />
     <attr name="copyFontPath" format="string" />
-
-    <attr name="text" format="string" />
   </declare-styleable>
 
 </resources>

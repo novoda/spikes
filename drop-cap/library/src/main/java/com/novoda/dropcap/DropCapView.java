@@ -14,6 +14,11 @@ import android.view.View;
 
 public class DropCapView extends View {
 
+    private static final int TEXT_SET_INDEX = 0;
+    private static final int[] androidAttributeSet = {
+            android.R.attr.text
+    };
+
     private static final float SPACING_MULTIPLIER = 1.0f;
 
     private final TextPaint dropCapPaint = new TextPaint();
@@ -94,11 +99,20 @@ public class DropCapView extends View {
 
             copyTextPaint.setTextSize(copyTextSize);
             copyTextPaint.setColor(copyTextColor);
-
-            String text = typedArray.getString(R.styleable.DropCapView_text);
-            setText(text);
         } finally {
             typedArray.recycle();
+        }
+
+        TypedArray androidTypedArray = context.obtainStyledAttributes(attrs, androidAttributeSet);
+        if (androidTypedArray == null) {
+            return;
+        }
+
+        try {
+            String text = typedArray.getString(TEXT_SET_INDEX);
+            setText(text);
+        } finally {
+            androidTypedArray.recycle();
         }
     }
 
