@@ -13,9 +13,6 @@ import static com.novoda.test.LogsSubject.assertThat
 @RunWith(Parameterized.class)
 public class CheckstyleIntegrationTest {
 
-    private static final String EMPTY_MODULES = '''<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.3//EN" "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
-<module name="Checker"/>
-'''
     public static final String DEFAULT_CONFIG = "configFile new File('${Fixtures.Checkstyle.MODULES.path}')"
 
     @Parameterized.Parameters
