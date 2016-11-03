@@ -15,6 +15,12 @@ class PmdConfigurator {
             List<String> excludes = []
             configureExtension(project.extensions.findByType(PmdExtension), excludes, config)
             project.afterEvaluate {
+                boolean isAndroidApp = project.plugins.hasPlugin('com.android.application')
+                boolean isAndroidLib = project.plugins.hasPlugin('com.android.library')
+                if (isAndroidApp || isAndroidLib) {
+                    def variants = isAndroidApp ? project.android.applicationVariants : project.android.libraryVariants
+                    configureAndroid(project, variants)
+                }
                 project.tasks.withType(Pmd) { pmd ->
                     configureTask(pmd, violations, excludes)
                     evaluateViolations.dependsOn pmd
@@ -31,6 +37,26 @@ class PmdConfigurator {
             }
             config.delegate = it
             config()
+        }
+    }
+
+    private void configureAndroid(Project project, Object variants) {
+        project.with {
+            android.sourceSets.all { sourceSet ->
+                def sourceDirs = sourceSet.java.srcDirs
+                def notEmptyDirs = sourceDirs.findAll { it.list()?.length > 0 }
+                if (notEmptyDirs.empty) {
+                    return
+                }
+                Pmd pmd = tasks.create("pmd${sourceSet.name.capitalize()}", Pmd)
+                pmd.with {
+                    description = "Run PMD analysis for ${sourceSet.name} classes"
+                    source = sourceSet.java.srcDirs
+                }
+                variants.all { variant ->
+                    pmd.mustRunAfter variant.javaCompile
+                }
+            }
         }
     }
 
