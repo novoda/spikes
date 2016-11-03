@@ -17,6 +17,9 @@ function createPayload(dataStore, messages) {
   var allMessages = helper.flattenToChannel(timeSortedMessages);
   allMessages.sort(helper.sortByCount);
   var mostActiveChannel = allMessages[0];
+  if (mostActiveChannel === undefined) {
+    return {};
+  }
   return {
     widgetKey: 'mostActiveChannel',
     payload: {
