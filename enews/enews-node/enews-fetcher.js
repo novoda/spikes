@@ -17,53 +17,28 @@ function EnewsFetcher(token) {
     const latestEpoch = latest / 1000;
     const oldestEpoch = oldest / 1000;
     slack.getMessages(GENERAL_CHANNEL_ID, oldestEpoch, latestEpoch)
-      .then(result => {
-        convertToEnews(result, callback);
-    });
+      .then(filterNonNews)
+      .then(convertToEnews)
+      .then(callback);
+  }
+
+  function filterNonNews(messages) {
+    return Promise.resolve(messages.filter(message => {
+      const text = message.text;
+      return text.includes('#enews') || text.includes('#eNews') || text.includes('#C1V389HGB|enews') || text.includes('#C0YNBKANM');
+    }));
   }
 
   function convertToEnews(messages, callback) {
-    const eNewsMessages = messages.filter(isEnewsMessage);
-    const usersPromise = getUsersFrom(eNewsMessages);
-    Promise.all(usersPromise).then(users => {
-      const eNews = toEnews(eNewsMessages, users);
-      callback(eNews);
-    }).then();
-  }
-
-  function isEnewsMessage(message) {
-    const messageText = message.text;
-    return contains(messageText, '#enews')
-      || contains(messageText, '#eNews')
-      || contains(messageText, '#C1V389HGB|enews')
-      || contains(messageText, '#C0YNBKANM');
-  }
-
-  function contains(input, check) {
-    return input.indexOf(check) > -1;
-  }
-
-  function getUsersFrom(messages) {
-    const userIds = messages.map(each => {
-      return each.user;
-    });
-    const promises = [];
-    userIds.forEach(function(userId) {
-      promises.push(getUser(userId));
-    });
-    return promises;
-  }
-
-  function getUser(userId) {
-    return new Promise(function(resolve, reject) {
-      var wrap = function(user) {
-          resolve(user);
-      };
-      slack.getUser(userId, wrap);
+    return Promise.all(getUsers(messages))
+      .then(users => {
+        return Promise.resolve(toEnewsModel(messages, users));
     });
   }
 
-  function toEnews(messages, users) {
+  const getUsers = (messages) => messages.map(each => slack.getUser(each.user) );
+
+  function toEnewsModel(messages, users) {
     return messages.map(message => {
         const posterName = users.filter(user => user.id === message.user).map(user => user.real_name)[0];
         const attachment = message.attachments ? message.attachments[0] : '';

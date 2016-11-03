@@ -57,12 +57,11 @@ function Slack(token) {
     }
   };
 
-  this.getUser = function(userId, callback) {
+  this.getUser = function(userId) {
     var request = createUserRequest(userId);
-    http(request).then(response => {
+    return http(request).then(response => {
       var jsonBody = JSON.parse(response);
-      var user = jsonBody.user;
-      callback(user);
+      return Promise.resolve(jsonBody.user);
     });
   }
 
