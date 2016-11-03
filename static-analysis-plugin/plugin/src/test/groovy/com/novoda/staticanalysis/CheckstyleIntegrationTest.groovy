@@ -106,7 +106,7 @@ public class CheckstyleIntegrationTest {
                     maxWarnings 1
                     maxErrors 1
                 }''')
-                .withCheckstyle(checkstyle(DEFAULT_CONFIG, "ignoreFailures false"))
+                .withCheckstyle(checkstyle(DEFAULT_CONFIG, "ignoreFailures = false"))
                 .build('check')
     }
 
