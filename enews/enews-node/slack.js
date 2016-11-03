@@ -1,33 +1,43 @@
 const http = require('request-promise-native');
 
+const HISTORY_ENDPOINT = 'https://slack.com/api/channels.history'
+const USER_ENDPOINT = 'https://slack.com/api/users.info'
+const MESSAGE_COUNT = 1000;
+
 module.exports = Slack;
 
 function Slack(token) {
-  const HISTORY_ENDPOINT = 'https://slack.com/api/channels.history'
-  const USER_ENDPOINT = 'https://slack.com/api/users.info'
-  const MESSAGE_COUNT = 1000;
-
   this.getMessages = function getMessages(channel, oldest, latest, callback) {
-    var allMessages = [];
-    var handler = function(messages, hasMore, reducedLatest) {
-      allMessages = allMessages.concat(messages);
-      if (hasMore) {
-        var historyRequest = createHistoryRequest(channel, oldest, reducedLatest);
-        getSlackHistory(historyRequest, handler);
-      } else {
-        callback(allMessages);
-      }
-    }
-    var historyRequest = createHistoryRequest(channel, oldest, latest);
-    getSlackHistory(historyRequest, handler);
+    getAllHistory(channel, oldest, latest)
+      .then(callback);
   }
 
-  function getSlackHistory(request, callback) {
-    http(request).then(response => {
+  function getAllHistory(channel, oldest, latest, messages) {
+    var historyRequest = createHistoryRequest(channel, oldest, latest);
+    return getSlackHistory(historyRequest).then(result => {
+      if (result.hasMore) {
+        return getAllHistory(
+            channel,
+            oldest,
+            result.reducedLatest,
+            messages.concat(result.messages)
+          );
+      } else {
+        return Promise.resolve(result.messages);
+      }
+    });
+  }
+
+  function getSlackHistory(request) {
+    return http(request).then(response => {
       var jsonBody = JSON.parse(response);
       var messages = jsonBody.messages.filter(isValidMessage);
       var reducedLatest = messages[messages.length - 1].ts;
-      callback(messages, jsonBody.has_more, reducedLatest);
+      return Promise.resolve({
+        messages: messages,
+        hasMore: jsonBody.has_more,
+        nextLatest: reducedLatest
+      })
     });
   }
 
