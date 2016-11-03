@@ -115,7 +115,7 @@ public class DropCapView extends View {
         dropCapPaint.setAntiAlias(true);
         dropCapPaint.setSubpixelText(true);
 
-        performRemeasureAndRedraw();
+        remeasureAndRedraw();
     }
 
     public void setCopyFontType(String fontPath) {
@@ -128,7 +128,7 @@ public class DropCapView extends View {
         copyTextPaint.setAntiAlias(true);
         copyTextPaint.setSubpixelText(true);
 
-        performRemeasureAndRedraw();
+        remeasureAndRedraw();
     }
 
     public void setDropCapTextSize(float textSizeSp) {
@@ -147,7 +147,7 @@ public class DropCapView extends View {
 
         dropCapPaint.setTextSize(size);
 
-        performRemeasureAndRedraw();
+        remeasureAndRedraw();
     }
 
     public float getDropCapTextSize() {
@@ -185,7 +185,7 @@ public class DropCapView extends View {
 
         copyTextPaint.setTextSize(size);
 
-        performRemeasureAndRedraw();
+        remeasureAndRedraw();
     }
 
     public float getCopyTextSize() {
@@ -220,10 +220,10 @@ public class DropCapView extends View {
             copyText = (text == null) ? "" : text;
         }
 
-        performRemeasureAndRedraw();
+        remeasureAndRedraw();
     }
 
-    private void performRemeasureAndRedraw() {
+    private void remeasureAndRedraw() {
         if (dropCapStaticLayout != null || copyStaticLayout != null) {
             copyStaticLayout = null;
             dropCapStaticLayout = null;
