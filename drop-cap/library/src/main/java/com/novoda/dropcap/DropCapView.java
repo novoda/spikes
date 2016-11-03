@@ -118,6 +118,15 @@ public class DropCapView extends View {
         remeasureAndRedraw();
     }
 
+    private void remeasureAndRedraw() {
+        if (dropCapStaticLayout != null || copyStaticLayout != null) {
+            copyStaticLayout = null;
+            dropCapStaticLayout = null;
+            requestLayout();
+            invalidate();
+        }
+    }
+
     public void setCopyFontType(String fontPath) {
         Typeface typeface = typefaceFactory.createFrom(getContext(), fontPath);
         if (copyTextPaint.getTypeface() == typeface) {
@@ -221,15 +230,6 @@ public class DropCapView extends View {
         }
 
         remeasureAndRedraw();
-    }
-
-    private void remeasureAndRedraw() {
-        if (dropCapStaticLayout != null || copyStaticLayout != null) {
-            copyStaticLayout = null;
-            dropCapStaticLayout = null;
-            requestLayout();
-            invalidate();
-        }
     }
 
     private boolean isSameText(String text) {
