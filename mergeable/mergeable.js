@@ -37,24 +37,48 @@ function toData(pullRequest) {
 }
 
 function findUnmergeablePrs(pullRequests) {
-  const unmergablePrs = pullRequests.filter(filterUnmergeable)
-  console.log(unmergablePrs);
-  return Promise.resolve(unmergablePrs);
+  const unmergablePrs = pullRequests.filter(filterUnmergeable);
+  return Promise.resolve({
+    isCalculating: unmergablePrs.filter(filterCalculating).length > 0,
+    prs: unmergablePrs
+  });
 }
 
 const filterUnmergeable = (pr) => !pr.mergeable;
+const filterCalculating = (pr) => pr.mergeable !== null;
 
 function notifySlack(slack, slackRecipient) {
-  return function(unmergeablePrs) {
-    return Promise.all(unmergeablePrs.map(each => {
-      return slack.chat.postMessage(slackRecipient, createSlackMessage(each), { as_user: true})
-        .then(Promise.resolve(unmergeablePrs));
-    }));
+  return function(result) {
+    if (result.isCalculating) {
+      return postToSlack(slack, slackRecipient, calculatingMessage())
+        .then(Promise.resolve(result));
+    } else if (result.prs.length === 0) {
+      return postToSlack(slack, slackRecipient, noConflictsMessage())
+        .then(Promise.resolve(result));
+    } else {
+      return Promise.all(result.prs.map(each => {
+        const message = createSlackMessage(each);
+        return postToSlack(slack, slackRecipient, conflictMessage(each))
+          .then(Promise.resolve(result));
+      }));
+    }
   }
 }
 
-function createSlackMessage(pr) {
+function calculatingMessage() {
+  return `Github is still calculating conflicts ¯\_(ツ)_/¯`;
+}
+
+function conflictMessage(pr) {
   return `<${pr.html_url}|${pr.title}> has conflicts with master!`;
+}
+
+function noConflictsMessage() {
+  return `no merge conflicts found!`;
+}
+
+function postToSlack(slack, slackRecipient, message) {
+  return slack.chat.postMessage(slackRecipient, message, { as_user: true})
 }
 
 module.exports = Mergeable;
