@@ -9,6 +9,7 @@ abstract class TestProject {
 staticAnalysis {
     ${(project.penalty ?: '').replace('            ', '')}
     ${(project.checkstyle ?: '').replace('        ', '    ')}
+    ${(project.pmd ?: '').replace('        ', '    ')}
 }
 """
     }
@@ -19,6 +20,7 @@ staticAnalysis {
     Map<String, List<File>> sourceSets = [main: []]
     String penalty
     String checkstyle
+    String pmd
 
     TestProject(Closure<String> template) {
         this.template = template
@@ -73,13 +75,17 @@ staticAnalysis {
         return this
     }
 
+    public TestProject withPmd(String pmd) {
+        this.pmd = pmd
+        return this
+    }
+
     public Result build(String... arguments) {
         BuildResult buildResult = newRunner(arguments).build()
         createResult(buildResult)
     }
 
     private GradleRunner newRunner(String... arguments) {
-        withFile(Fixtures.Checkstyle.MODULES, 'config/checkstyle/checkstyle.xml')
         new File(projectDir, 'build.gradle').text = template.call(this)
         List<String> defaultArgs = defaultArguments()
         List<String> args = new ArrayList<>(arguments.size() + defaultArgs.size())
