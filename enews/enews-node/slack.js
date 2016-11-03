@@ -1,11 +1,11 @@
+const http = require('request-promise-native');
+
 module.exports = Slack;
 
 function Slack(token) {
   const HISTORY_ENDPOINT = 'https://slack.com/api/channels.history'
   const USER_ENDPOINT = 'https://slack.com/api/users.info'
   const MESSAGE_COUNT = 1000;
-
-  var httpClient = require('request');
 
   this.getMessages = function getMessages(channel, oldest, latest, callback) {
     var allMessages = [];
@@ -23,8 +23,8 @@ function Slack(token) {
   }
 
   function getSlackHistory(request, callback) {
-    httpClient.get(request, function(error, response, body) {
-      var jsonBody = JSON.parse(body);
+    http(request).then(response => {
+      var jsonBody = JSON.parse(response);
       var messages = jsonBody.messages.filter(isValidMessage);
       var reducedLatest = messages[messages.length - 1].ts;
       callback(messages, jsonBody.has_more, reducedLatest);
@@ -50,8 +50,8 @@ function Slack(token) {
 
   this.getUser = function(userId, callback) {
     var request = createUserRequest(userId);
-    httpClient.get(request, function(error, response, body) {
-      var jsonBody = JSON.parse(body);
+    http(request).then(response => {
+      var jsonBody = JSON.parse(response);
       var user = jsonBody.user;
       callback(user);
     });
