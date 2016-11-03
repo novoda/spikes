@@ -15,12 +15,14 @@ let COMPONENTS = [
   { key: "stackoverflow", type: StackOverflowComponent }
 ];
 
+let toTypes = (elem) => elem.type;
+let distinct = (elem, index, arr) => arr.indexOf(elem) === index;
+
 @Component({
   selector: 'app-dashboard-carousel',
   templateUrl: 'dashboard-carousel.component.html',
   styleUrls: ['dashboard-carousel.component.scss'],
-  entryComponents: COMPONENTS.map((el) => el.type)
-    .filter((elem, index, arr) => arr.indexOf(elem) === index)
+  entryComponents: COMPONENTS.map(toTypes).filter(distinct)
 })
 export class DashboardCarouselComponent implements OnInit, OnDestroy {
 

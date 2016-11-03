@@ -1,3 +1,8 @@
-<p *ngIf="review != undefined">
-  {{review.project}}: {{review.rating}} stars with comment {{review.review}}
-</p>
+<div class="content-container active-image" *ngIf="review != undefined">
+  <div class="active-container">
+    <div class="active-filler"></div>
+    <span class="active-channel-copy review"><b>{{review.project}}</b><br><br>
+    <!--<b *ngFor="let r of Array(review.rating)">⭐</b><br><br>   TODO FIX THIS -->
+    {{review.review}}</span>
+  </div>
+</div>

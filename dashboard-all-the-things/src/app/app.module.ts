@@ -18,6 +18,7 @@ import { ProjectContributorsComponent } from './dashboards/github-contributors/p
 import { ConfigService } from './config.service';
 import { TimezoneDetectorService } from './dashboards/github-contributors/timezone-detector.service';
 import { DashboardCarouselComponent } from './dashboard-carousel/dashboard-carousel.component';
+import { CarouselHeaderComponent } from './dashboard-carousel/carousel-header.component';
 import { SonarCoverageComponent } from './dashboards/sonar-coverage/sonar-coverage.component';
 import { SocketService } from './dashboard-carousel/socket.service';
 import { ExternalUrlComponent } from './dashboards/external-url/external-url.component';
@@ -43,6 +44,7 @@ import { DynamicComponent } from './dashboard-carousel/dynamic.component';
     TeamContributorComponent,
     ProjectContributorComponent,
     DashboardCarouselComponent,
+    CarouselHeaderComponent,
     SonarCoverageComponent,
     ExternalUrlComponent,
     SafePipe,
