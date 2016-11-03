@@ -53,8 +53,7 @@ function notifySlack(slack, slackRecipient) {
       return postToSlack(slack, slackRecipient, calculatingMessage())
         .then(Promise.resolve(result));
     } else if (result.prs.length === 0) {
-      return postToSlack(slack, slackRecipient, noConflictsMessage())
-        .then(Promise.resolve(result));
+      return Promise.resolve(result);
     } else {
       return Promise.all(result.prs.map(each => {
         const message = conflictMessage(each);
@@ -71,10 +70,6 @@ function calculatingMessage() {
 
 function conflictMessage(pr) {
   return `<${pr.html_url}|${pr.title}> has conflicts with master!`;
-}
-
-function noConflictsMessage() {
-  return `no merge conflicts found!`;
 }
 
 function postToSlack(slack, slackRecipient, message) {
