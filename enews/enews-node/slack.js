@@ -7,9 +7,8 @@ const MESSAGE_COUNT = 1000;
 module.exports = Slack;
 
 function Slack(token) {
-  this.getMessages = function getMessages(channel, oldest, latest, callback) {
-    getAllHistory(channel, oldest, latest)
-      .then(callback);
+  this.getMessages = function getMessages(channel, oldest, latest) {
+    return getAllHistory(channel, oldest, latest);
   }
 
   function getAllHistory(channel, oldest, latest, messages) {

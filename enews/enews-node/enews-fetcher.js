@@ -16,10 +16,10 @@ function EnewsFetcher(token) {
     // node timestamps are in milliseconds, need to convert to epoch
     const latestEpoch = latest / 1000;
     const oldestEpoch = oldest / 1000;
-    const wrap = function(messages) {
-      convertToEnews(messages, callback);
-    };
-    slack.getMessages(GENERAL_CHANNEL_ID, oldestEpoch, latestEpoch, wrap);
+    slack.getMessages(GENERAL_CHANNEL_ID, oldestEpoch, latestEpoch)
+      .then(result => {
+        convertToEnews(result, callback);
+    });
   }
 
   function convertToEnews(messages, callback) {
