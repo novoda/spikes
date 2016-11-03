@@ -1,0 +1,7 @@
+<app-team-contributor *ngFor="let user of teamContributors" [user]="user">
+</app-team-contributor>
+
+<div class="no-team-contributors" *ngIf="teamContributors?.length === 0">
+  <h3 class="title">Become the first contributor; interact with another Novoda project!</h3>
+  <h2 class="url">~ surl.novoda.com/prs ~</h2>
+</div>

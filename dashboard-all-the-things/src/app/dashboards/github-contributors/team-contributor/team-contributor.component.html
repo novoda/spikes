@@ -1,0 +1,7 @@
+<img [src]="'https://github.com/' + user?.username + '.png?size=200px'" [alt]="'Github avatar for ' + user?.username"/>
+<div class="team-contributor-info">
+  <h3>{{user?.username}}</h3>
+  <p>{{ user?.assignedProjects }} ({{user?.assignedCount}})</p>
+  <p>Others ({{user?.externalCount}})</p>
+</div>
+

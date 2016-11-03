@@ -1,0 +1,35 @@
+{
+  "name": "<%= projectName %>",
+  "version": "0.0.0",
+  "description": "<%= projectDescription %>",
+  "homepage": "<%= projectHomepage %>",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp test",
+    "upload": "gulp upload"
+  },
+  "devDependencies": {
+    "bower": "^1.7.9",
+    "glob": "^7.0.6",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-connect": "^4.2.0",
+    "gulp-eslint": "^3.0.1",
+    "gulp-flatmap": "^1.0.0",
+    "gulp-inject": "^4.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-shell": "^0.5.2",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "~0.2.2",
+    "karma-coverage": "^1.0.0",
+    "karma-firefox-launcher": "~0.1.7",
+    "karma-jasmine": "^0.3.8",
+    "karma-junit-reporter": "^1.1.0",
+    "karma-phantomjs-launcher": "^1.0.1",
+    "main-bower-files": "^2.13.1",
+    "matchdep": "~1.0.0",
+    "open": "0.0.5",
+    "phantomjs-prebuilt": "^2.1.3"
+  }
+}
