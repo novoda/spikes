@@ -260,7 +260,12 @@ public class DropCapView extends View {
         int widthWithoutPadding = totalWidth - horizontalPadding;
 
         measureDropCapFor(widthWithoutPadding);
-        measureCopyFor(widthWithoutPadding);
+
+        if (enoughLinesForDropCap()) {
+            measureRemainingCopyFor(totalWidth);
+        } else {
+            measureWholeTextFor(totalWidth);
+        }
 
         int desiredHeight = dropCapLineHeight + copyStaticLayout.getHeight() + getPaddingTop() + getPaddingBottom();
         int desiredHeightMeasureSpec = MeasureSpec.makeMeasureSpec(desiredHeight, MeasureSpec.EXACTLY);
@@ -307,38 +312,37 @@ public class DropCapView extends View {
         dropCapLineHeight = currentLineTop;
     }
 
-    private void measureCopyFor(int totalWidth) {
-        if (enoughLinesForDropCap()) {
-            int lineStart = dropCapStaticLayout.getLineEnd(numberOfLinesToSpan - 1);
-            int lineEnd = dropCapStaticLayout.getText().length();
-            String remainingText = String.valueOf(dropCapStaticLayout.getText().subSequence(lineStart, lineEnd));
+    private void measureRemainingCopyFor(int totalWidth) {
+        int lineStart = dropCapStaticLayout.getLineEnd(numberOfLinesToSpan - 1);
+        int lineEnd = dropCapStaticLayout.getText().length();
+        String remainingText = String.valueOf(dropCapStaticLayout.getText().subSequence(lineStart, lineEnd));
 
-            if (copyStaticLayout == null || copyStaticLayout.getWidth() != totalWidth || !remainingText.equals(copyStaticLayout.getText())) {
-                copyStaticLayout = new StaticLayout(
-                        remainingText,
-                        copyTextPaint,
-                        totalWidth,
-                        Layout.Alignment.ALIGN_NORMAL,
-                        SPACING_MULTIPLIER,
-                        lineSpacingExtra,
-                        true
-                );
+        if (copyStaticLayout == null || copyStaticLayout.getWidth() != totalWidth || !remainingText.equals(copyStaticLayout.getText())) {
+            copyStaticLayout = new StaticLayout(
+                    remainingText,
+                    copyTextPaint,
+                    totalWidth,
+                    Layout.Alignment.ALIGN_NORMAL,
+                    SPACING_MULTIPLIER,
+                    lineSpacingExtra,
+                    true
+            );
 
-                distanceFromViewPortTop = calculateCopyDistanceFromViewPortTop();
-            }
+            distanceFromViewPortTop = calculateCopyDistanceFromViewPortTop();
+        }
+    }
 
-        } else {
-            if (copyStaticLayout == null || copyStaticLayout.getWidth() != totalWidth) {
-                copyStaticLayout = new StaticLayout(
-                        dropCapText + copyText,
-                        copyTextPaint,
-                        totalWidth,
-                        Layout.Alignment.ALIGN_NORMAL,
-                        SPACING_MULTIPLIER,
-                        lineSpacingExtra,
-                        true
-                );
-            }
+    private void measureWholeTextFor(int totalWidth) {
+        if (copyStaticLayout == null || copyStaticLayout.getWidth() != totalWidth) {
+            copyStaticLayout = new StaticLayout(
+                    dropCapText + copyText,
+                    copyTextPaint,
+                    totalWidth,
+                    Layout.Alignment.ALIGN_NORMAL,
+                    SPACING_MULTIPLIER,
+                    lineSpacingExtra,
+                    true
+            );
         }
     }
 
