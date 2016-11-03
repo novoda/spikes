@@ -34,7 +34,10 @@ function EnewsFetcher(token) {
 
   function isEnewsMessage(message) {
     const messageText = message.text;
-    return contains(messageText, '#enews') || contains(messageText, '#eNews') || contains(messageText, '#C0YNBKANM');
+    return contains(messageText, '#enews')
+      || contains(messageText, '#eNews')
+      || contains(messageText, '#C1V389HGB|enews')
+      || contains(messageText, '#C0YNBKANM');
   }
 
   function contains(input, check) {
