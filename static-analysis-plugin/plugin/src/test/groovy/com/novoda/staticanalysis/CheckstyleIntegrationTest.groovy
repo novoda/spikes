@@ -97,23 +97,6 @@ public class CheckstyleIntegrationTest {
     }
 
     @Test
-    public void shouldNotFailBuildWhenNoCheckstyleWarningsOrErrorsEncounteredAccordingToCustomModules() {
-        TestProject.Result result = projectRule.newProject()
-                .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
-                .withSourceSet('test', Fixtures.Checkstyle.SOURCES_WITH_ERRORS)
-                .withFile(EMPTY_MODULES, 'checkstyle.xml')
-                .withPenalty('''{
-                    maxWarnings 0
-                    maxErrors 0
-                }''')
-                .withCheckstyle(checkstyle("configFile project.file('checkstyle.xml')"))
-                .build('check')
-
-        assertThat(result.logs).doesNotContainLimitExceeded()
-        assertThat(result.logs).doesNotContainCheckstyleViolations()
-    }
-
-    @Test
     public void shouldNotFailBuildWhenCheckstyleConfiguredToNotIgnoreFailures() {
         projectRule.newProject()
                 .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
