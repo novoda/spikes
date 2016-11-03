@@ -13,29 +13,37 @@ class PmdConfigurator {
         extension.ext.pmd = { Closure config ->
             project.apply plugin: 'pmd'
             List<String> excludes = []
-            project.extensions.findByType(PmdExtension).with {
-                toolVersion = '5.5.1'
-                ext.exclude = { String filter ->
-                    excludes.add(filter)
-                }
-                config.delegate = it
-                config()
-            }
+            configureExtension(project.extensions.findByType(PmdExtension), excludes, config)
             project.afterEvaluate {
                 project.tasks.withType(Pmd) { pmd ->
-                    pmd.group = 'verification'
-                    pmd.ignoreFailures = true
-                    pmd.rulePriority = 5
-                    pmd.metaClass.getLogger = { QuietLogger.INSTANCE }
-                    pmd.exclude(excludes)
-                    pmd.doLast {
-                        File xmlReportFile = pmd.reports.xml.destination
-                        File htmlReportFile = new File(xmlReportFile.absolutePath - '.xml' + '.html')
-                        evaluateReports(xmlReportFile, htmlReportFile, violations)
-                    }
+                    configureTask(pmd, violations, excludes)
                     evaluateViolations.dependsOn pmd
                 }
             }
+        }
+    }
+
+    private Object configureExtension(PmdExtension extension, List<String> excludes, Closure config) {
+        extension.with {
+            toolVersion = '5.5.1'
+            ext.exclude = { String filter ->
+                excludes.add(filter)
+            }
+            config.delegate = it
+            config()
+        }
+    }
+
+    private void configureTask(Pmd pmd, Violations violations, List<String> excludes) {
+        pmd.group = 'verification'
+        pmd.ignoreFailures = true
+        pmd.rulePriority = 5
+        pmd.metaClass.getLogger = { QuietLogger.INSTANCE }
+        pmd.exclude(excludes)
+        pmd.doLast {
+            File xmlReportFile = pmd.reports.xml.destination
+            File htmlReportFile = new File(xmlReportFile.absolutePath - '.xml' + '.html')
+            evaluateReports(xmlReportFile, htmlReportFile, violations)
         }
     }
 
