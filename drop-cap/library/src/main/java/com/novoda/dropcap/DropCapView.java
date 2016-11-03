@@ -146,12 +146,12 @@ public class DropCapView extends View {
         invalidate();
     }
 
-    public void setDropCapTextSize(float textSize) {
-        if (textSize == dropCapPaint.getTextSize()) {
+    public void setDropCapTextSize(float textSizePx) {
+        if (textSizePx == dropCapPaint.getTextSize()) {
             return;
         }
 
-        dropCapPaint.setTextSize(textSize);
+        dropCapPaint.setTextSize(textSizePx);
         hasPaintChanged = true;
         requestLayout();
         invalidate();
@@ -176,12 +176,12 @@ public class DropCapView extends View {
         return copyTextPaint.getColor();
     }
 
-    public void setCopyTextSize(float textSize) {
-        if (textSize == copyTextPaint.getTextSize()) {
+    public void setCopyTextSize(float textSizePx) {
+        if (textSizePx == copyTextPaint.getTextSize()) {
             return;
         }
 
-        copyTextPaint.setTextSize(textSize);
+        copyTextPaint.setTextSize(textSizePx);
         hasPaintChanged = true;
         requestLayout();
         invalidate();
