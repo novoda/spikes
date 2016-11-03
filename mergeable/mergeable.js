@@ -45,7 +45,7 @@ function findUnmergeablePrs(pullRequests) {
 }
 
 const filterUnmergeable = (pr) => !pr.mergeable;
-const filterCalculating = (pr) => pr.mergeable !== null;
+const filterCalculating = (pr) => pr.mergeable === null;
 
 function notifySlack(slack, slackRecipient) {
   return function(result) {
@@ -65,7 +65,7 @@ function notifySlack(slack, slackRecipient) {
 }
 
 function calculatingMessage() {
-  return `Github is still calculating conflicts ¯\_(ツ)_/¯`;
+  return `Github is still calculating conflicts ¯\\_(ツ)_/¯`;
 }
 
 function conflictMessage(pr) {
