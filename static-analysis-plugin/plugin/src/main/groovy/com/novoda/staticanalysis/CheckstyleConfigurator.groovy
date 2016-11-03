@@ -16,7 +16,7 @@ class CheckstyleConfigurator {
             project.extensions.findByType(CheckstyleExtension).with {
                 toolVersion = '7.1.2'
                 ext.exclude = { String filter ->
-                    excludes.addAll(filter)
+                    excludes.add(filter)
                 }
                 config.delegate = it
                 config()
