@@ -64,39 +64,30 @@ public class DropCapView extends View {
 
         try {
             String dropCapFontPath = typedArray.getString(R.styleable.DropCapView_dropCapFontPath);
-            Typeface dropCapTypeface = typefaceFactory.createFrom(context, dropCapFontPath);
+            setDropCapFontType(dropCapFontPath);
 
             String copyFontPath = typedArray.getString(R.styleable.DropCapView_copyFontPath);
-            Typeface copyTypeface = typefaceFactory.createFrom(context, copyFontPath);
-
-            dropCapPaint.setTypeface(dropCapTypeface);
-            dropCapPaint.setAntiAlias(true);
-            dropCapPaint.setSubpixelText(true);
-
-            copyTextPaint.setTypeface(copyTypeface);
-            copyTextPaint.setAntiAlias(true);
-            copyTextPaint.setSubpixelText(true);
+            setCopyFontType(copyFontPath);
 
             int defaultLineSpacingExtra = 0;
             lineSpacingExtra = typedArray.getDimensionPixelSize(R.styleable.DropCapView_lineSpacingExtra, defaultLineSpacingExtra);
 
             int dropCapDefaultTextSize = getResources().getDimensionPixelSize(R.dimen.drop_cap_default_text_size);
             int dropCapTextSize = typedArray.getDimensionPixelSize(R.styleable.DropCapView_dropCapTextSize, dropCapDefaultTextSize);
+            setDropCapTextSize(TypedValue.COMPLEX_UNIT_PX, dropCapTextSize);
 
             int dropCapDefaultTextColor = getResources().getColor(R.color.drop_cap_default_text);
             int dropCapTextColor = typedArray.getColor(R.styleable.DropCapView_dropCapTextColor, dropCapDefaultTextColor);
+            setDropCapTextColor(dropCapTextColor);
 
             int copyDefaultTextSize = getResources().getDimensionPixelSize(R.dimen.drop_cap_copy_default_text_size);
             int copyTextSize = typedArray.getDimensionPixelSize(R.styleable.DropCapView_copyTextSize, copyDefaultTextSize);
+            setCopyTextSize(TypedValue.COMPLEX_UNIT_PX, copyTextSize);
 
             int copyDefaultTextColor = getResources().getColor(R.color.drop_cap_copy_default_text);
             int copyTextColor = typedArray.getColor(R.styleable.DropCapView_copyTextColor, copyDefaultTextColor);
+            setCopyTextColor(copyTextColor);
 
-            dropCapPaint.setTextSize(dropCapTextSize);
-            dropCapPaint.setColor(dropCapTextColor);
-
-            copyTextPaint.setTextSize(copyTextSize);
-            copyTextPaint.setColor(copyTextColor);
         } finally {
             typedArray.recycle();
         }
