@@ -23,23 +23,25 @@ class PmdConfigurator {
                 pmd.doLast {
                     File xmlReportFile = pmd.reports.xml.destination
                     File htmlReportFile = new File(xmlReportFile.absolutePath - '.xml' + '.html')
-
-                    PmdViolationsEvaluator evaluator = new PmdViolationsEvaluator(xmlReportFile)
-                    Map<String, Integer> result = evaluator.collectViolations().inject([errors: 0, warnings: 0]) {
-                        LinkedHashMap<String, Integer> map, PmdViolation violation ->
-                            if (violation.isError()) {
-                                map['errors'] += 1
-                            } else {
-                                map['warnings'] += 1
-                            }
-                            map
-                    }
-                    String reportUrl = new ConsoleRenderer().asClickableFileUrl(htmlReportFile ?: xmlReportFile)
-                    violations.addViolations(result['errors'], result['warnings'], reportUrl)
+                    evaluateReports(xmlReportFile, htmlReportFile, violations)
                 }
                 evaluateViolations.dependsOn pmd
             }
         }
+    }
+
+    private void evaluateReports(File xmlReportFile, File htmlReportFile, Violations violations) {
+        PmdViolationsEvaluator evaluator = new PmdViolationsEvaluator(xmlReportFile)
+        int errors = 0, warnings = 0
+        evaluator.collectViolations().each { PmdViolation violation ->
+            if (violation.isError()) {
+                errors += 1
+            } else {
+                warnings += 1
+            }
+        }
+        String reportUrl = new ConsoleRenderer().asClickableFileUrl(htmlReportFile ?: xmlReportFile)
+        violations.addViolations(errors, warnings, reportUrl)
     }
 
 }
