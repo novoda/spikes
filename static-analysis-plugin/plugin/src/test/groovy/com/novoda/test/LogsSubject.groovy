@@ -40,6 +40,10 @@ class LogsSubject extends Subject<LogsSubject, Logs> {
         Truth.assertThat(actual().output).doesNotContain(CHECKSTYLE_VIOLATIONS_FOUND)
     }
 
+    public void doesNotContainPmdViolations() {
+        Truth.assertThat(actual().output).doesNotContain(PMD_VIOLATIONS_FOUND)
+    }
+
     public void containsCheckstyleViolations(int errors, int warnings, File... reports) {
         def output = Truth.assertThat(actual().output)
         output.contains("$CHECKSTYLE_VIOLATIONS_FOUND ($errors errors, $warnings warnings). See the reports at:\n")
