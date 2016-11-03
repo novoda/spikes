@@ -5,11 +5,11 @@ class PenaltyExtension {
     private int maxErrors = 0
 
     void maxErrors(int value) {
-        maxErrors = value
+        maxErrors = Math.max(0, value)
     }
 
     void maxWarnings(int value) {
-        maxWarnings = value
+        maxWarnings = Math.max(0, value)
     }
 
     int getMaxErrors() {

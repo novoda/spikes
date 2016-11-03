@@ -38,14 +38,17 @@ ${formatExtension(project)}
 
     TestAndroidProject() {
         super(TEMPLATE)
-        copyFile(Fixtures.LOCAL_PROPERTIES, 'local.properties')
+        File localProperties = Fixtures.LOCAL_PROPERTIES
+        if (localProperties.exists()) {
+            withFile(localProperties, 'local.properties')
+        }
     }
 
     private static String formatSourceSets(TestProject project) {
         project.sourceSets
                 .entrySet()
                 .collect { Map.Entry<String, List<String>> entry ->
-        """$entry.key {
+            """$entry.key {
             manifest.srcFile '${Fixtures.ANDROID_MANIFEST}'
             java {
                 ${entry.value.collect { "srcDir '$it'" }.join('\n\t\t\t\t')}
