@@ -8,38 +8,19 @@ import { SocketService } from './socket.service';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ConnectableObservable, Subscription } from 'rxjs';
 
-class DashboardComponents {
-  constructor(private foo: any) { }
-
-  toList(): any[] {
-    let result: any[] = [];
-    for (let key in this.foo) {
-      if (result[key] != undefined) {
-        continue;
-      } 
-      let value = this.foo[key];
-      result.push(value);
-    }
-    return result;
-  }
-
-  get(key: string): any {
-    return this.foo[key];
-  }
-}
-
-let COMPONENTS = new DashboardComponents({
-  "coverage": SonarCoverageComponent,
-  "ciWall": ExternalUrlComponent,
-  "reviews": ReviewComponent,
-  "stackoverflow": StackOverflowComponent
-});
+let COMPONENTS = [
+  { key: "coverage", type: SonarCoverageComponent },
+  { key: "ciWall", type: ExternalUrlComponent },
+  { key: "reviews", type: ReviewComponent },
+  { key: "stackoverflow", type: StackOverflowComponent }
+];
 
 @Component({
   selector: 'app-dashboard-carousel',
   templateUrl: 'dashboard-carousel.component.html',
   styleUrls: ['dashboard-carousel.component.scss'],
-  entryComponents: COMPONENTS.toList()
+  entryComponents: COMPONENTS.map((el) => el.type)
+    .filter((elem, index, arr) => arr.indexOf(elem) === index)
 })
 export class DashboardCarouselComponent implements OnInit, OnDestroy {
 
@@ -62,10 +43,17 @@ export class DashboardCarouselComponent implements OnInit, OnDestroy {
         if (event.widgetKey === undefined) {
           return;
         }
-        this.type = COMPONENTS.get(event.widgetKey) || undefined;
-        this.event = event;
+        let res = this.findComponentFor(event.widgetKey);
+        if (res != undefined) {
+          this.type = res.type;
+          this.event = event;
+        }
       });
     observable.connect();
+  }
+
+  findComponentFor(key: string) {
+    return COMPONENTS.filter((elem, index, arr) => elem.key === key)[0];
   }
 
   ngOnDestroy(): void {
