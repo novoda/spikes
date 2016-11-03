@@ -124,14 +124,7 @@ public class DropCapView extends View {
         dropCapPaint.setAntiAlias(true);
         dropCapPaint.setSubpixelText(true);
 
-        nullLayouts();
-        requestLayout();
-        invalidate();
-    }
-
-    private void nullLayouts() {
-        copyStaticLayout = null;
-        dropCapStaticLayout = null;
+        performRemeasureAndRedraw();
     }
 
     public void setCopyFontType(String fontPath) {
@@ -144,9 +137,7 @@ public class DropCapView extends View {
         copyTextPaint.setAntiAlias(true);
         copyTextPaint.setSubpixelText(true);
 
-        nullLayouts();
-        requestLayout();
-        invalidate();
+        performRemeasureAndRedraw();
     }
 
     public void setDropCapTextSize(float textSizeSp) {
@@ -165,9 +156,7 @@ public class DropCapView extends View {
 
         dropCapPaint.setTextSize(size);
 
-        nullLayouts();
-        requestLayout();
-        invalidate();
+        performRemeasureAndRedraw();
     }
 
     public float getDropCapTextSize() {
@@ -180,6 +169,7 @@ public class DropCapView extends View {
         }
 
         dropCapPaint.setColor(color);
+
         invalidate();
     }
 
@@ -204,9 +194,7 @@ public class DropCapView extends View {
 
         copyTextPaint.setTextSize(size);
 
-        nullLayouts();
-        requestLayout();
-        invalidate();
+        performRemeasureAndRedraw();
     }
 
     public float getCopyTextSize() {
@@ -219,6 +207,7 @@ public class DropCapView extends View {
         }
 
         copyTextPaint.setColor(color);
+
         invalidate();
     }
 
@@ -240,9 +229,16 @@ public class DropCapView extends View {
             copyText = (text == null) ? "" : text;
         }
 
-        nullLayouts();
-        requestLayout();
-        invalidate();
+        performRemeasureAndRedraw();
+    }
+
+    private void performRemeasureAndRedraw() {
+        if (dropCapStaticLayout != null || copyStaticLayout != null) {
+            copyStaticLayout = null;
+            dropCapStaticLayout = null;
+            requestLayout();
+            invalidate();
+        }
     }
 
     private boolean isSameText(String text) {
