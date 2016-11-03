@@ -9,28 +9,32 @@ import org.gradle.internal.logging.ConsoleRenderer
 
 class PmdConfigurator {
 
-    void configure(Project project, Violations violations, Task evaluateViolations) {
-        project.apply plugin: 'pmd'
-        List<String> excludes = []
-        project.extensions.findByType(PmdExtension).with {
-            toolVersion = '5.5.1'
-            ext.exclude = { String filter ->
-                 excludes.add(filter)
-            }
-        }
-        project.afterEvaluate {
-            project.tasks.withType(Pmd) { pmd ->
-                pmd.group = 'verification'
-                pmd.ignoreFailures = true
-                pmd.rulePriority = 5
-                pmd.metaClass.getLogger = { QuietLogger.INSTANCE }
-                pmd.exclude(excludes)
-                pmd.doLast {
-                    File xmlReportFile = pmd.reports.xml.destination
-                    File htmlReportFile = new File(xmlReportFile.absolutePath - '.xml' + '.html')
-                    evaluateReports(xmlReportFile, htmlReportFile, violations)
+    void configure(Project project, Violations violations, StaticAnalysisExtension extension, Task evaluateViolations) {
+        extension.ext.pmd = { Closure config ->
+            project.apply plugin: 'pmd'
+            List<String> excludes = []
+            project.extensions.findByType(PmdExtension).with {
+                toolVersion = '5.5.1'
+                ext.exclude = { String filter ->
+                    excludes.add(filter)
                 }
-                evaluateViolations.dependsOn pmd
+                config.delegate = it
+                config()
+            }
+            project.afterEvaluate {
+                project.tasks.withType(Pmd) { pmd ->
+                    pmd.group = 'verification'
+                    pmd.ignoreFailures = true
+                    pmd.rulePriority = 5
+                    pmd.metaClass.getLogger = { QuietLogger.INSTANCE }
+                    pmd.exclude(excludes)
+                    pmd.doLast {
+                        File xmlReportFile = pmd.reports.xml.destination
+                        File htmlReportFile = new File(xmlReportFile.absolutePath - '.xml' + '.html')
+                        evaluateReports(xmlReportFile, htmlReportFile, violations)
+                    }
+                    evaluateViolations.dependsOn pmd
+                }
             }
         }
     }

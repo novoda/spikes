@@ -145,6 +145,21 @@ public class PmdIntegrationTest {
         assertThat(result.logs).doesNotContainPmdViolations()
     }
 
+    @Test
+    public void shouldNotFailBuildWhenPmdNotConfigured() {
+        TestProject.Result result = projectRule.newProject()
+                .withSourceSet('main', Fixtures.Pmd.SOURCES_WITH_PRIORITY_1_VIOLATION)
+                .withSourceSet('main2', Fixtures.Pmd.SOURCES_WITH_PRIORITY_2_VIOLATION)
+                .withPenalty('''{
+                    maxWarnings 0
+                    maxErrors 0
+                }''')
+                .build('check')
+
+        assertThat(result.logs).doesNotContainLimitExceeded()
+        assertThat(result.logs).doesNotContainPmdViolations()
+    }
+
     private String pmd(String rules, String... configs) {
         """pmd {
             ruleSetFiles = $rules

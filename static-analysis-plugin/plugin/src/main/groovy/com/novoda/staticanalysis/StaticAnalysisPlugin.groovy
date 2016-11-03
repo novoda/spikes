@@ -19,7 +19,7 @@ class StaticAnalysisPlugin implements Plugin<Project> {
             task.allViolations = allViolations
         }
         checkstyleConfigurator.configure(project, allViolations.create('Checkstyle'), extension, evaluateViolations)
-        pmdConfigurator.configure(project, allViolations.create('PMD'), evaluateViolations)
+        pmdConfigurator.configure(project, allViolations.create('PMD'), extension, evaluateViolations)
         project.afterEvaluate {
             project.tasks['check'].dependsOn evaluateViolations
         }
