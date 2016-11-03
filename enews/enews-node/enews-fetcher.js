@@ -1,12 +1,9 @@
-module.exports = EnewsFetcher;
-
-var Slack = require('./slack.js');
-var Q = require('q');
+const Slack = require('./slack.js');
+const Q = require('q');
 
 function EnewsFetcher(token) {
   const GENERAL_CHANNEL_ID = 'C029J9QTH'
-
-  var slack = new Slack(token);
+  const slack = new Slack(token);
 
   this.getLastSevenDays = function(callback) {
     var latest = new Date();
@@ -18,25 +15,25 @@ function EnewsFetcher(token) {
 
   this.getEnews = function(oldest, latest, callback) {
     // node timestamps are in milliseconds, need to convert to epoch
-    var latestEpoch = latest / 1000;
-    var oldestEpoch = oldest / 1000;
-    var wrap = function(messages) {
+    const latestEpoch = latest / 1000;
+    const oldestEpoch = oldest / 1000;
+    const wrap = function(messages) {
       convertToEnews(messages, callback);
     };
     slack.getMessages(GENERAL_CHANNEL_ID, oldestEpoch, latestEpoch, wrap);
   }
 
   function convertToEnews(messages, callback) {
-    var eNewsMessages = messages.filter(isEnewsMessage);
-    var usersPromise = getUsersFrom(eNewsMessages);
+    const eNewsMessages = messages.filter(isEnewsMessage);
+    const usersPromise = getUsersFrom(eNewsMessages);
     Q.all(usersPromise).then(users => {
-      var eNews = toEnews(eNewsMessages, users);
+      const eNews = toEnews(eNewsMessages, users);
       callback(eNews);
     }).done();
   }
 
   function isEnewsMessage(message) {
-    var messageText = message.text;
+    const messageText = message.text;
     return contains(messageText, '#enews') || contains(messageText, '#eNews') || contains(messageText, '#C0YNBKANM');
   }
 
@@ -45,10 +42,10 @@ function EnewsFetcher(token) {
   }
 
   function getUsersFrom(messages) {
-    var userIds = messages.map(each => {
+    const userIds = messages.map(each => {
       return each.user;
     });
-    var promises = [];
+    const promises = [];
     userIds.forEach(function(userId) {
       promises.push(getUser(userId));
     });
@@ -66,8 +63,8 @@ function EnewsFetcher(token) {
 
   function toEnews(messages, users) {
     return messages.map(message => {
-        var posterName = users.filter(user => user.id === message.user).map(user => user.real_name)[0];
-        var attachment = message.attachments ? message.attachments[0] : '';
+        const posterName = users.filter(user => user.id === message.user).map(user => user.real_name)[0];
+        const attachment = message.attachments ? message.attachments[0] : '';
         return {
             originalMessage: sanitiseMessage(message.text),
             title: attachment.title || attachment.text || '',
@@ -83,9 +80,11 @@ function EnewsFetcher(token) {
   }
 
   function findUrlFrom(message) {
-    var uriPattern = /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/ig;
-    var match = message.match(uriPattern)
+    const uriPattern = /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/ig;
+    const match = message.match(uriPattern)
     return match ? match[0] : undefined;
   }
 
 }
+
+module.exports = EnewsFetcher;
