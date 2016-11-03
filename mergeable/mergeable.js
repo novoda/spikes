@@ -57,8 +57,8 @@ function notifySlack(slack, slackRecipient) {
         .then(Promise.resolve(result));
     } else {
       return Promise.all(result.prs.map(each => {
-        const message = createSlackMessage(each);
-        return postToSlack(slack, slackRecipient, conflictMessage(each))
+        const message = conflictMessage(each);
+        return postToSlack(slack, slackRecipient, message)
           .then(Promise.resolve(result));
       }));
     }
