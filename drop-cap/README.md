@@ -39,6 +39,9 @@ Simply add `DropCapView` to one of your layout xml files and use the following x
   <attr name="copyFontPath" format="string" />
 ```
 
+For ease of use the `DropCapView` uses the `android:text` attribute to specify text via the xml layout.
+
+
 For further usage or to delve more deeply checkout the associated [`sample`](https://github.com/novoda/spikes/tree/master/drop-cap/sample) app. 
 
 ## Links
