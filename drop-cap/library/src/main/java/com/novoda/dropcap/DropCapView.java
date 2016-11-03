@@ -44,9 +44,6 @@ public class DropCapView extends View {
     private float dropCapBaseline;
     private float distanceFromViewPortTop;
 
-    private boolean hasPaintChanged;
-    private boolean textHasChanged;
-
     public DropCapView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -127,9 +124,14 @@ public class DropCapView extends View {
         dropCapPaint.setAntiAlias(true);
         dropCapPaint.setSubpixelText(true);
 
-        hasPaintChanged = true;
+        nullLayouts();
         requestLayout();
         invalidate();
+    }
+
+    private void nullLayouts() {
+        copyStaticLayout = null;
+        dropCapStaticLayout = null;
     }
 
     public void setCopyFontType(String fontPath) {
@@ -142,7 +144,7 @@ public class DropCapView extends View {
         copyTextPaint.setAntiAlias(true);
         copyTextPaint.setSubpixelText(true);
 
-        hasPaintChanged = true;
+        nullLayouts();
         requestLayout();
         invalidate();
     }
@@ -162,7 +164,8 @@ public class DropCapView extends View {
         }
 
         dropCapPaint.setTextSize(size);
-        hasPaintChanged = true;
+
+        nullLayouts();
         requestLayout();
         invalidate();
     }
@@ -200,7 +203,8 @@ public class DropCapView extends View {
         }
 
         copyTextPaint.setTextSize(size);
-        hasPaintChanged = true;
+
+        nullLayouts();
         requestLayout();
         invalidate();
     }
@@ -224,8 +228,8 @@ public class DropCapView extends View {
     }
 
     public void setText(String text) {
-        if (text != null) {
-            textHasChanged = !text.equals(dropCapText + copyText);
+        if (isSameText(text)) {
+            return;
         }
 
         if (enoughTextForDropCap(text)) {
@@ -235,8 +239,14 @@ public class DropCapView extends View {
             dropCapText = String.valueOf('\0');
             copyText = (text == null) ? "" : text;
         }
+
+        nullLayouts();
         requestLayout();
         invalidate();
+    }
+
+    private boolean isSameText(String text) {
+        return text != null && text.equals(dropCapText + copyText);
     }
 
     private boolean enoughTextForDropCap(CharSequence text) {
@@ -263,8 +273,7 @@ public class DropCapView extends View {
         dropCapPaint.getTextBounds(dropCapText, 0, 1, dropCapBounds);
         int copyWidthForDropCap = width - dropCapWidth;
 
-        if (dropCapStaticLayout == null || dropCapStaticLayout.getWidth() != copyWidthForDropCap
-                || hasPaintChanged || textHasChanged) {
+        if (dropCapStaticLayout == null || dropCapStaticLayout.getWidth() != copyWidthForDropCap) {
             dropCapStaticLayout = new StaticLayout(
                     dropCapText + copyText,
                     copyTextPaint,
@@ -304,8 +313,7 @@ public class DropCapView extends View {
             int lineEnd = dropCapStaticLayout.getText().length();
             String remainingText = String.valueOf(dropCapStaticLayout.getText().subSequence(lineStart, lineEnd));
 
-            if (copyStaticLayout == null || copyStaticLayout.getWidth() != totalWidth || hasPaintChanged
-                    || !remainingText.equals(copyStaticLayout.getText())) {
+            if (copyStaticLayout == null || copyStaticLayout.getWidth() != totalWidth || !remainingText.equals(copyStaticLayout.getText())) {
                 copyStaticLayout = new StaticLayout(
                         remainingText,
                         copyTextPaint,
@@ -320,7 +328,7 @@ public class DropCapView extends View {
             }
 
         } else {
-            if (copyStaticLayout == null || copyStaticLayout.getWidth() != totalWidth || textHasChanged || hasPaintChanged) {
+            if (copyStaticLayout == null || copyStaticLayout.getWidth() != totalWidth) {
                 copyStaticLayout = new StaticLayout(
                         dropCapText + copyText,
                         copyTextPaint,
@@ -354,8 +362,6 @@ public class DropCapView extends View {
         } else {
             drawCopyWithoutDropCap(canvas);
         }
-        hasPaintChanged = false;
-        textHasChanged = false;
     }
 
     private void drawCopyWithoutDropCap(Canvas canvas) {
