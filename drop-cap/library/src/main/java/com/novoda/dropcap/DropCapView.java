@@ -186,12 +186,21 @@ public class DropCapView extends View {
         return copyTextPaint.getColor();
     }
 
-    public void setCopyTextSize(float textSizePx) {
-        if (textSizePx == copyTextPaint.getTextSize()) {
+    public void setCopyTextSize(float textSizeSp) {
+        setCopyTextSize(TypedValue.COMPLEX_UNIT_SP, textSizeSp);
+    }
+
+    public void setCopyTextSize(int unit, float size) {
+        float sizeForDisplay = TypedValue.applyDimension(unit, size, getResources().getDisplayMetrics());
+        setRawCopyTextSize(sizeForDisplay);
+    }
+
+    private void setRawCopyTextSize(float size) {
+        if (size == copyTextPaint.getTextSize()) {
             return;
         }
 
-        copyTextPaint.setTextSize(textSizePx);
+        copyTextPaint.setTextSize(size);
         hasPaintChanged = true;
         requestLayout();
         invalidate();

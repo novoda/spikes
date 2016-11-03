@@ -67,7 +67,7 @@ public class DropCapActivity extends Activity {
     private final OnTextSizeChangeListener onCopyTextSizeChanged = new OnTextSizeChangeListener() {
         @Override
         public void onSizeChanged(int newTextSize) {
-            dropCapView.setDropCapTextSize(TypedValue.COMPLEX_UNIT_PX, newTextSize);
+            dropCapView.setCopyTextSize(TypedValue.COMPLEX_UNIT_PX, newTextSize);
         }
     };
 
