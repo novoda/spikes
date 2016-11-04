@@ -10,6 +10,9 @@ This library can be used to create a DropCap in your app! A DropCap is the first
 bigger size than the rest that follow. The formatting is such that the DropCap spans (drops down) to cover the few lines
 following the first.
 
+If there are not enough lines to wrap the `DropCap` then the style on the first character will default to the style
+of the copy text. This styling is to keep the text consist when a `DropCap` is not present.
+
 ## Adding to your project
 
 To start using this library, add these lines to the `build.gradle` of your project:
