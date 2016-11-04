@@ -37,19 +37,20 @@ export class DashboardCarouselComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const observable: ConnectableObservable<any> = this.socketService.create('http://localhost:3002');
-    this.connection = observable
-      .subscribe((event: WidgetEvent) => {
-        if (event.widgetKey === undefined) {
-          return;
-        }
-        const res = this.findComponentFor(event.widgetKey);
-        if (res != undefined) {
-          this.type = res.type;
-          this.event = event;
-        }
-      });
+    this.connection = observable.subscribe(this.onWidgetEvent);
     observable.connect();
   }
+
+  private onWidgetEvent(event: WidgetEvent) {
+    if (event.widgetKey === undefined) {
+      return;
+    }
+    const res = this.findComponentFor(event.widgetKey);
+    if (res != undefined) {
+      this.type = res.type;
+      this.event = event;
+    }
+  };
 
   findComponentFor(key: string) {
     return COMPONENTS.filter((elem, index, arr) => elem.key === key)[0];
