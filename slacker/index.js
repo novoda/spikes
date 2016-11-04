@@ -4,7 +4,7 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const CONFIG = require('./config.json');
 const Dashboard = require('./server/dashboard.js');
-const dashboard = new Dashboard(CONFIG);
+const dashboard = new Dashboard(CONFIG.widgets);
 
 let cache;
 

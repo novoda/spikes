@@ -5,11 +5,11 @@ const DASHBOARD_INTERVAL = 1000 * 30;
 const DASHBOARD_ERROR_INTERVAL = 1000 * 1;
 
 function Dashboard(config) {
-  this.slacker = new Slacker(config.widgets.slack);
+  this.slacker = new Slacker(config.slack);
   this.index = 0;
   this.widgets = [
     require('./widget/ci-wall'),
-    new Coverage(config.widgets.sonar),
+    new Coverage(config.sonar),
     require('./widget/stackoverflow'),
     require('./widget/reviews')
   ].concat(this.slacker.getRules());
