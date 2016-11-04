@@ -35,8 +35,8 @@ public class CheckstyleIntegrationTest {
         TestProject.Result result = projectRule.newProject()
                 .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
                 .withPenalty('''{
-                    maxWarnings 0
-                    maxErrors 0
+                    maxWarnings = 0
+                    maxErrors = 0
                 }''')
                 .withCheckstyle(checkstyle(DEFAULT_CONFIG))
                 .buildAndFail('check')
@@ -52,8 +52,8 @@ public class CheckstyleIntegrationTest {
                 .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
                 .withSourceSet('test', Fixtures.Checkstyle.SOURCES_WITH_ERRORS)
                 .withPenalty('''{
-                    maxWarnings 100
-                    maxErrors 0
+                    maxWarnings = 100
+                    maxErrors = 0
                 }''')
                 .withCheckstyle(checkstyle(DEFAULT_CONFIG))
                 .buildAndFail('check')
@@ -68,8 +68,8 @@ public class CheckstyleIntegrationTest {
     public void shouldNotFailBuildWhenNoCheckstyleWarningsOrErrorsEncounteredAndNoThresholdTrespassed() {
         TestProject.Result result = projectRule.newProject()
                 .withPenalty('''{
-                    maxWarnings 0
-                    maxErrors 0
+                    maxWarnings = 0
+                    maxErrors = 0
                 }''')
                 .withCheckstyle(checkstyle(DEFAULT_CONFIG))
                 .build('check')
@@ -84,8 +84,8 @@ public class CheckstyleIntegrationTest {
                 .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
                 .withSourceSet('test', Fixtures.Checkstyle.SOURCES_WITH_ERRORS)
                 .withPenalty('''{
-                    maxWarnings 100
-                    maxErrors 100
+                    maxWarnings = 100
+                    maxErrors = 100
                 }''')
                 .withCheckstyle(checkstyle(DEFAULT_CONFIG))
                 .build('check')
@@ -103,8 +103,8 @@ public class CheckstyleIntegrationTest {
                 .withSourceSet('test', Fixtures.Checkstyle.SOURCES_WITH_ERRORS)
                 .withFile(EMPTY_MODULES, 'checkstyle.xml')
                 .withPenalty('''{
-                    maxWarnings 0
-                    maxErrors 0
+                    maxWarnings = 0
+                    maxErrors = 0
                 }''')
                 .withCheckstyle(checkstyle("configFile project.file('checkstyle.xml')"))
                 .build('check')
@@ -120,8 +120,8 @@ public class CheckstyleIntegrationTest {
                 .withSourceSet('test', Fixtures.Checkstyle.SOURCES_WITH_ERRORS)
                 .withFile(Fixtures.Checkstyle.MODULES, 'config/checkstyle/checkstyle.xml')
                 .withPenalty('''{
-                    maxWarnings 1
-                    maxErrors 1
+                    maxWarnings = 1
+                    maxErrors = 1
                 }''')
                 .withCheckstyle(checkstyle(DEFAULT_CONFIG, "ignoreFailures false"))
                 .build('check')
@@ -134,8 +134,8 @@ public class CheckstyleIntegrationTest {
                 .withSourceSet('test', Fixtures.Checkstyle.SOURCES_WITH_ERRORS)
                 .withFile(Fixtures.Checkstyle.MODULES, 'config/checkstyle/checkstyle.xml')
                 .withPenalty('''{
-                    maxWarnings 1
-                    maxErrors 0
+                    maxWarnings = 1
+                    maxErrors = 0
                 }''')
                 .withCheckstyle(checkstyle(DEFAULT_CONFIG, "exclude 'Greeter.java'"))
                 .build('check')
@@ -151,8 +151,8 @@ public class CheckstyleIntegrationTest {
                 .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
                 .withSourceSet('test', Fixtures.Checkstyle.SOURCES_WITH_ERRORS)
                 .withPenalty('''{
-                    maxWarnings 0
-                    maxErrors 0
+                    maxWarnings = 0
+                    maxErrors = 0
                 }''')
                 .build('check')
 
@@ -164,8 +164,8 @@ public class CheckstyleIntegrationTest {
     public void shouldNotFailBuildWhenNoCheckstyleWarningsOrErrorsEncounteredAndNegativeThresholdsProvided() {
         TestProject.Result result = projectRule.newProject()
                 .withPenalty('''{
-                    maxWarnings(-10)
-                    maxErrors(-10)
+                    maxWarnings = -10
+                    maxErrors = -10
                 }''')
                 .withCheckstyle(checkstyle(DEFAULT_CONFIG))
                 .build('check')
@@ -179,8 +179,8 @@ public class CheckstyleIntegrationTest {
         TestProject.Result result = projectRule.newProject()
                 .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
                 .withPenalty('''{
-                    maxWarnings(-10)
-                    maxErrors(-10)
+                    maxWarnings = -10
+                    maxErrors = -10
                 }''')
                 .withCheckstyle(checkstyle(DEFAULT_CONFIG))
                 .buildAndFail('check')
