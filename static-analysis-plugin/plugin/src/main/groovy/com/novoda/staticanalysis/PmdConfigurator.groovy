@@ -15,17 +15,21 @@ class PmdConfigurator {
             List<String> excludes = []
             configureExtension(project.extensions.findByType(PmdExtension), excludes, config)
             project.afterEvaluate {
-                boolean isAndroidApp = project.plugins.hasPlugin('com.android.application')
-                boolean isAndroidLib = project.plugins.hasPlugin('com.android.library')
-                if (isAndroidApp || isAndroidLib) {
-                    def variants = isAndroidApp ? project.android.applicationVariants : project.android.libraryVariants
-                    configureAndroid(project, variants)
-                }
+                configureAndroidIfNeeded(project)
                 project.tasks.withType(Pmd) { pmd ->
                     configureTask(pmd, violations, excludes)
                     evaluateViolations.dependsOn pmd
                 }
             }
+        }
+    }
+
+    private void configureAndroidIfNeeded(Project project) {
+        boolean isAndroidApp = project.plugins.hasPlugin('com.android.application')
+        boolean isAndroidLib = project.plugins.hasPlugin('com.android.library')
+        if (isAndroidApp || isAndroidLib) {
+            def variants = isAndroidApp ? project.android.applicationVariants : project.android.libraryVariants
+            configureAndroid(project, variants)
         }
     }
 
