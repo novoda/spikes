@@ -1,5 +1,6 @@
-const Slacker = require('./widget/slacker/slacker.js');
+const Slacker = require('./widget/slacker/slacker');
 const Coverage = require('./widget/coverage');
+const StackOverflow = require('./widget/stackoverflow');
 
 const DASHBOARD_INTERVAL = 1000 * 30;
 const DASHBOARD_ERROR_INTERVAL = 1000 * 1;
@@ -10,7 +11,7 @@ function Dashboard(config) {
   this.widgets = [
     require('./widget/ci-wall'),
     new Coverage(config.sonar),
-    require('./widget/stackoverflow'),
+    new StackOverflow(),
     require('./widget/reviews')
   ].concat(this.slacker.getRules());
 }
