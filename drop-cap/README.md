@@ -29,14 +29,16 @@ dependencies {
 Simply add `DropCapView` to one of your layout xml files and use the following xml attributes for customization.
 
 ```
-  <attr name="lineSpacingExtra" format="dimension" />
-  <attr name="dropCapTextSize" format="dimension" />
-  <attr name="dropCapTextColor" format="color" />
-  <attr name="dropCapFontPath" format="string" />
+    <attr name="lineSpacingExtra" format="dimension" />
+    <attr name="dropCapTextSize" format="dimension" />
+    <attr name="dropCapTextColor" format="color" />
+    <attr name="dropCapFontPath" format="string" />
 
-  <attr name="copyTextSize" format="dimension" />
-  <attr name="copyTextColor" format="color" />
-  <attr name="copyFontPath" format="string" />
+    <attr name="copyTextSize" format="dimension" />
+    <attr name="copyTextColor" format="color" />
+    <attr name="copyFontPath" format="string" />
+
+    <attr name="android:text" />
 ```
 
 For ease of use the `DropCapView` uses the `android:text` attribute to specify text via the xml layout.
