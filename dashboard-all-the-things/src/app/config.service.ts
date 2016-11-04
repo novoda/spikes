@@ -36,4 +36,12 @@ export class ConfigService {
       .first();
   }
 
+  getServerUrl(): Observable<string> {
+    return this.getConfig()
+      .map((config: Config) => {
+        return config.serverUrl;
+      })
+      .first();
+  }
+
 }

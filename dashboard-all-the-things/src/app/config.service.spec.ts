@@ -33,7 +33,8 @@ describe('Service: Config', () => {
     beforeEach(() => {
       let response = new Response(new ResponseOptions({
         body: `{
-        "api": "https://your-webservice.com/api/"
+        "api": "https://your-webservice.com/api/",
+        "serverUrl": "https://your-webservice.com:[port]"        
       }`
       }));
       mockBackend.connections.subscribe(connection => connection.mockRespond(response));
@@ -52,6 +53,14 @@ describe('Service: Config', () => {
         .getApiBase()
         .subscribe((apiBase: string) => {
           expect(apiBase).toBe('https://your-webservice.com/api/');
+        });
+    }));
+
+    it('executes the input handler with the right server url', async(() => {
+      configService
+        .getServerUrl()
+        .subscribe((serverUrl: string) => {
+          expect(serverUrl).toBe('https://your-webservice.com:[port]');
         });
     }));
 

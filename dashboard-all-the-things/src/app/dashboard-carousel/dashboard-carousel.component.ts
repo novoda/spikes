@@ -6,9 +6,10 @@ import { WidgetEvent } from '../dashboards/WidgetEvent';
 import { DynamicComponent } from './dynamic.component';
 import { SocketService } from './socket.service';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ConnectableObservable, Subscription } from 'rxjs';
+import { ConnectableObservable, Subscription, Subscriber } from 'rxjs';
+import { ConfigService } from '../config.service';
 
-let COMPONENTS = [
+const COMPONENTS = [
   { key: "coverage", type: SonarCoverageComponent },
   { key: "ciWall", type: ExternalUrlComponent },
   { key: "reviews", type: ReviewComponent },
@@ -26,39 +27,49 @@ let distinct = (elem, index, arr) => arr.indexOf(elem) === index;
 })
 export class DashboardCarouselComponent implements OnInit, OnDestroy {
 
-  socketService: SocketService;
-  connection: Subscription;
-
-  type: any;
-  event: WidgetEvent;
+  private configService: ConfigService;
+  private configSubscription: Subscription;
+  private socketService: SocketService;
+  private connection: Subscription;
+  private type: any;
+  private event: WidgetEvent;
 
   @ViewChild(DynamicComponent) dynamicComponent: DynamicComponent;
 
-  constructor(socketService: SocketService) {
+  constructor(configService: ConfigService, socketService: SocketService) {
+    this.configService = configService;
     this.socketService = socketService;
   }
 
   ngOnInit(): void {
-    let observable: ConnectableObservable<any> = this.socketService.create('http://localhost:3002');
-    this.connection = observable
-      .subscribe((event: WidgetEvent) => {
-        if (event.widgetKey === undefined) {
-          return;
-        }
-        let res = this.findComponentFor(event.widgetKey);
-        if (res != undefined) {
-          this.type = res.type;
-          this.event = event;
-        }
+    this.configSubscription = this.configService.getServerUrl()
+      .map((serverUrl: string) => {
+        return this.socketService.create(serverUrl);
+      }).subscribe((observable: ConnectableObservable<any>) => {
+        this.connection = observable.subscribe(this.onWidgetEvent);
+        observable.connect();
       });
-    observable.connect();
   }
 
-  findComponentFor(key: string) {
+  private onWidgetEvent = (event: WidgetEvent) => {
+    if (event.widgetKey === undefined) {
+      return;
+    }
+    const res = this.findComponentFor(event.widgetKey);
+    if (res != undefined) {
+      this.type = res.type;
+      this.event = event;
+    }
+  };
+
+  private findComponentFor(key: string) {
     return COMPONENTS.filter((elem, index, arr) => elem.key === key)[0];
   }
 
   ngOnDestroy(): void {
+    if (!this.configSubscription.closed) {
+      this.configSubscription.unsubscribe();
+    }
     if (!this.connection.closed) {
       this.connection.unsubscribe();
     }

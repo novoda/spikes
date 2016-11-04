@@ -23,25 +23,22 @@ export class DynamicComponent implements OnChanges, AfterViewInit, OnDestroy {
   @ViewChild('target', { read: ViewContainerRef }) target;
   @Input() type;
   @Input() event: WidgetEvent;
-  cmpRef: ComponentRef<DashboardComponent>;
+  private componentRef: ComponentRef<DashboardComponent>;
   private isViewInitialized: boolean = false;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
 
-  updateComponent() {
-    if (this.type === undefined) {
+  private updateComponent() {
+    if (this.type === undefined || !this.isViewInitialized) {
       return;
     }
-    if (!this.isViewInitialized) {
-      return;
-    }
-    if (this.cmpRef) {
-      this.cmpRef.destroy();
+    if (this.componentRef != null) {
+      this.componentRef.destroy();
     }
 
-    let factory = this.componentFactoryResolver.resolveComponentFactory(this.type);
-    this.cmpRef = this.target.createComponent(factory)
-    this.cmpRef.instance.update(this.event);
+    const factory = this.componentFactoryResolver.resolveComponentFactory(this.type);
+    this.componentRef = this.target.createComponent(factory);
+    this.componentRef.instance.update(this.event);
   }
 
   ngOnChanges() {
@@ -54,8 +51,8 @@ export class DynamicComponent implements OnChanges, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.cmpRef) {
-      this.cmpRef.destroy();
+    if (this.componentRef) {
+      this.componentRef.destroy();
     }
   }
 }
