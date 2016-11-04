@@ -2,7 +2,7 @@
   <div class="active-container">
     <div class="active-filler"></div>
     <span class="active-channel-copy review"><b>{{review.project}}</b><br><br>
-    <!--<b *ngFor="let r of Array(review.rating)">⭐</b><br><br>   TODO FIX THIS -->
+    <b class="rating">{{"⭐".repeat(review.rating)}}</b><br><br>
     {{review.review}}</span>
   </div>
 </div>
