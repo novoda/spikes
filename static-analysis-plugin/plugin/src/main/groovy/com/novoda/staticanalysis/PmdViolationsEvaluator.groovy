@@ -77,15 +77,16 @@ class PmdViolationsEvaluator {
 
             PmdViolation that = (PmdViolation) o
 
-            if (beginColumn != that.beginColumn) return false
-            if (beginLine != that.beginLine) return false
-            if (className != that.className) return false
-            if (endColumn != that.endColumn) return false
-            if (endLine != that.endLine) return false
+            if (!beginColumn.equals(that.beginColumn)) return false
+            if (!beginLine.equals(that.beginLine)) return false
+            if (!className.equals(that.className)) return false
+            if (!endColumn.equals(that.endColumn)) return false
+            if (!endLine.equals(that.endLine)) return false
             if (methodName != that.methodName) return false
-            if (priority != that.priority) return false
-            if (rule != that.rule) return false
-            if (ruleSet != that.ruleSet) return false
+            if (methodName != null && that.methodName != null && !methodName.equals(that.methodName)) return false
+            if (!priority.equals(that.priority)) return false
+            if (!rule.equals(that.rule)) return false
+            if (!ruleSet.equals(that.ruleSet)) return false
 
             return true
         }
