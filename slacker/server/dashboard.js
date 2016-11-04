@@ -1,6 +1,7 @@
 var Slacker = require('./slacker/slacker.js');
 
 const DASHBOARD_INTERVAL = 1000 * 30;
+const DASHBOARD_ERROR_INTERVAL = 1000 * 1;
 
 var Dashboard = function(token) {
   this.slacker = new Slacker(token);
@@ -27,7 +28,7 @@ function update(self, listener) {
       }).catch(err => {
         console.log(err);
         incrementIndex(self);
-        setTimeout(updateLoop, 100);
+        setTimeout(updateLoop, DASHBOARD_ERROR_INTERVAL);
     })
   }
   updateLoop();
