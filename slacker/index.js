@@ -9,10 +9,10 @@ const dashboard = new Dashboard(slackToken);
 
 let cache;
 
-app.use("/public", express.static(__dirname + '/public'));
+app.use("/public", express.static(__dirname + '/client/public'));
 
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/client/index.html');
 });
 
 http.listen(3002, function(){
