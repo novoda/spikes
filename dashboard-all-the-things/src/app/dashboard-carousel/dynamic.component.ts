@@ -29,18 +29,15 @@ export class DynamicComponent implements OnChanges, AfterViewInit, OnDestroy {
   constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
 
   private updateComponent() {
-    if (this.type === undefined) {
+    if (this.type === undefined || !this.isViewInitialized) {
       return;
     }
-    if (!this.isViewInitialized) {
-      return;
-    }
-    if (this.componentRef) {
+    if (this.componentRef != null) {
       this.componentRef.destroy();
     }
 
     const factory = this.componentFactoryResolver.resolveComponentFactory(this.type);
-    this.componentRef = this.target.createComponent(factory)
+    this.componentRef = this.target.createComponent(factory);
     this.componentRef.instance.update(this.event);
   }
 
