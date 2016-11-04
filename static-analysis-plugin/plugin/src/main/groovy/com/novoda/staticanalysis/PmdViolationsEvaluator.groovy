@@ -17,7 +17,8 @@ class PmdViolationsEvaluator {
     Set<PmdViolation> collectViolations() {
         Collection files = xml.'**'.findAll { node -> node.name() == 'file' }
         files.inject(new HashSet<PmdViolation>()) { HashSet<PmdViolation> violations, file ->
-            violations += file.'**'.findAll { violation -> violation.name() == 'violation' }
+            violations += file.'**'
+                    .findAll { violation -> violation.name() == 'violation' }
                     .collect { violation -> new PmdViolation(violation, file.@name as String) }
             violations
         }
