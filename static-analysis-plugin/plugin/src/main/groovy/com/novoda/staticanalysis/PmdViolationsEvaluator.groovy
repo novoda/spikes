@@ -37,7 +37,7 @@ class PmdViolationsEvaluator {
 
         PmdViolation(def violation, String file) {
             this(violation.@beginline as String,
-                    violation.@endline as String, \
+                    violation.@endline as String,
                     violation.@begincolumn as String,
                     violation.@endcolumn as String,
                     violation.@rule as String,
