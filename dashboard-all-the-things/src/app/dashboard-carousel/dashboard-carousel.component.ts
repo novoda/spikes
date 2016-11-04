@@ -19,7 +19,7 @@ const COMPONENTS = [
   selector: 'app-dashboard-carousel',
   templateUrl: 'dashboard-carousel.component.html',
   styleUrls: ['dashboard-carousel.component.scss'],
-  entryComponents: COMPONENTS.map((el) => el.type)
+  entryComponents: COMPONENTS.map((elem) => elem.type)
     .filter((elem, index, arr) => arr.indexOf(elem) === index)
 })
 export class DashboardCarouselComponent implements OnInit, OnDestroy {
