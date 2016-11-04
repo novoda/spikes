@@ -6,7 +6,8 @@ import { WidgetEvent } from '../dashboards/WidgetEvent';
 import { DynamicComponent } from './dynamic.component';
 import { SocketService } from './socket.service';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ConnectableObservable, Subscription } from 'rxjs';
+import { ConnectableObservable, Subscription, Subscriber } from 'rxjs';
+import { ConfigService } from '../config.service';
 
 const COMPONENTS = [
   { key: "coverage", type: SonarCoverageComponent },
@@ -24,6 +25,8 @@ const COMPONENTS = [
 })
 export class DashboardCarouselComponent implements OnInit, OnDestroy {
 
+  private configService: ConfigService;
+  private configSubscription: Subscription;
   private socketService: SocketService;
   private connection: Subscription;
   private type: any;
@@ -31,14 +34,19 @@ export class DashboardCarouselComponent implements OnInit, OnDestroy {
 
   @ViewChild(DynamicComponent) dynamicComponent: DynamicComponent;
 
-  constructor(socketService: SocketService) {
+  constructor(configService: ConfigService, socketService: SocketService) {
+    this.configService = configService;
     this.socketService = socketService;
   }
 
   ngOnInit(): void {
-    const observable: ConnectableObservable<any> = this.socketService.create('http://localhost:3002');
-    this.connection = observable.subscribe(this.onWidgetEvent);
-    observable.connect();
+    this.configSubscription = this.configService.getServerUrl()
+      .map((serverUrl: string) => {
+        return this.socketService.create(serverUrl);
+      }).subscribe((observable: ConnectableObservable<any>) => {
+        this.connection = observable.subscribe(this.onWidgetEvent);
+        observable.connect();
+      });
   }
 
   private onWidgetEvent = (event: WidgetEvent) => {
@@ -57,6 +65,9 @@ export class DashboardCarouselComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (!this.configSubscription.closed) {
+      this.configSubscription.unsubscribe();
+    }
     if (!this.connection.closed) {
       this.connection.unsubscribe();
     }
