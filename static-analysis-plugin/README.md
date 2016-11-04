@@ -19,8 +19,6 @@ have been completed. The table below summarises the current status.
 Tool | Android | Java
 :----:|:--------:|:--------:
 `Checkstyle` | :white_check_mark: | :white_check_mark:
-`JaCoCo` | :x: | :x:
-`PMD` | :x: | :x:
+`PMD` | :white_check_mark: | :white_check_mark:
 `FindBugs` | :x: | :x:
-`Lint` | :x: | :x:
 <br/>
