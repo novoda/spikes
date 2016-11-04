@@ -74,8 +74,8 @@ class PenaltyExtensionTest {
     public void shouldUseCorrectThresholdsWhenCustomPenaltySpecified() {
         project.staticAnalysis {
             penalty {
-                maxWarnings 100
-                maxErrors 10
+                maxWarnings = 100
+                maxErrors = 10
             }
         }
 
@@ -89,8 +89,8 @@ class PenaltyExtensionTest {
     public void shouldFailWhenCustomPenaltySpecifiedWithInvalidThresholds() {
         project.staticAnalysis {
             penalty {
-                maxWarnings(-100)
-                maxErrors(-100)
+                maxWarnings = -100
+                maxErrors = -100
             }
         }
 
