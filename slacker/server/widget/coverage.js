@@ -1,30 +1,33 @@
-module.exports = {
-  rule: coverage,
-  rank: 1
-}
-
-const sonarAuth = process.env.SONAR_AUTH;
-const PROJECTS_REQUEST = {
-  url: 'https://sonar.novoda.com/api/projects/index',
-  auth: {
-    user: sonarAuth,
-    pass: '',
-  }
-};
 const httpClient = require('request-promise-native');
 
-var currentIndex = 0;
+function Coverage(sonarConfig) {
+  this.apiKey = sonarConfig.apiKey;
+}
 
-function coverage() {
-  return httpClient(PROJECTS_REQUEST)
+Coverage.prototype.rank = 1;
+
+Coverage.prototype.rule = function() {
+  return httpClient(createProjectRequest(this.apiKey))
     .then(parseProjects)
-    .then(toAllCoverage)
+    .then(toAllCoverage(this.apiKey))
     .then(toRuleResult);
 }
 
+function createProjectRequest(apiKey) {
+  return {
+    url: 'https://sonar.novoda.com/api/projects/index',
+    auth: {
+      user: apiKey,
+      pass: '',
+    }
+  };
+}
+
+let currentIndex = 0;
+
 function parseProjects(body) {
-  var jsonBody = JSON.parse(body);
-  var results = jsonBody.map(each => {
+  const jsonBody = JSON.parse(body);
+  const results = jsonBody.map(each => {
     return {
       name: each.nm,
       key: each.k
@@ -33,20 +36,22 @@ function parseProjects(body) {
   return Promise.resolve(results);
 }
 
-function toAllCoverage(data) {
-  var allCoverage = data.map(each => {
-    var coverageRequest = createCoverageRequest(each.key);
-    return httpClient(coverageRequest)
-      .then(parseCoverage(each.name));
-  });
-  return Promise.all(allCoverage);
+function toAllCoverage(apiKey) {
+  return function (data) {
+    const allCoverage = data.map(each => {
+      const coverageRequest = createCoverageRequest(apiKey, each.key);
+      return httpClient(coverageRequest)
+        .then(parseCoverage(each.name));
+    });
+    return Promise.all(allCoverage);
+  };
 }
 
-function createCoverageRequest(key) {
+function createCoverageRequest(apiKey, componentKey) {
   return {
     url:  'https://sonar.novoda.com/api/measures/component',
     qs: {
-      componentKey: key,
+      componentKey: componentKey,
       metricKeys: 'coverage'
     },
     auth: {
@@ -58,8 +63,8 @@ function createCoverageRequest(key) {
 
 function parseCoverage(projectName) {
   return function(body) {
-    var jsonBody = JSON.parse(body);
-    var measures = jsonBody.component.measures;
+    const jsonBody = JSON.parse(body);
+    const measures = jsonBody.component.measures;
     if (measures && measures.length > 0) {
       return Promise.resolve({
         project: projectName,
@@ -72,7 +77,7 @@ function parseCoverage(projectName) {
 }
 
 function toRuleResult(data) {
-  var filtered = data.filter(each => {
+  const filtered = data.filter(each => {
     return each.project;
   });
 
@@ -91,3 +96,5 @@ function incrementIndex(dataLength) {
     currentIndex++;
   }
 }
+
+module.exports = Coverage;
