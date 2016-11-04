@@ -16,12 +16,13 @@ const COMPONENTS = {
   stackoverflow: StackOverflowComponent
 };
 
+const distinct = (elem, index, arr) => arr.indexOf(elem) === index;
+
 @Component({
   selector: 'app-dashboard-carousel',
   templateUrl: 'dashboard-carousel.component.html',
   styleUrls: ['dashboard-carousel.component.scss'],
-  entryComponents: Object['values'](COMPONENTS)
-    .filter((elem, index, arr) => arr.indexOf(elem) === index)
+  entryComponents: Object['values'](COMPONENTS).filter(distinct)
 })
 export class DashboardCarouselComponent implements OnInit, OnDestroy {
 

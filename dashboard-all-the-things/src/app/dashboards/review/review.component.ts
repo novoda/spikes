@@ -6,7 +6,7 @@ import { DashboardComponent } from './../DashboardComponent';
 @Component({
   selector: 'app-review',
   templateUrl: 'review.component.html',
-  styleUrls: ['review.component.scss']
+  styleUrls: ['review.component.scss', '../dashboards-common.scss']
 })
 export class ReviewComponent implements DashboardComponent {
 
