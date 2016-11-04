@@ -9,21 +9,20 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ConnectableObservable, Subscription, Subscriber } from 'rxjs';
 import { ConfigService } from '../config.service';
 
-const COMPONENTS = [
-  { key: "coverage", type: SonarCoverageComponent },
-  { key: "ciWall", type: ExternalUrlComponent },
-  { key: "reviews", type: ReviewComponent },
-  { key: "stackoverflow", type: StackOverflowComponent }
-];
+const COMPONENTS = {
+  coverage: SonarCoverageComponent,
+  ciWall: ExternalUrlComponent,
+  reviews: ReviewComponent,
+  stackoverflow: StackOverflowComponent
+};
 
-let toTypes = (elem) => elem.type;
-let distinct = (elem, index, arr) => arr.indexOf(elem) === index;
+const distinct = (elem, index, arr) => arr.indexOf(elem) === index;
 
 @Component({
   selector: 'app-dashboard-carousel',
   templateUrl: 'dashboard-carousel.component.html',
   styleUrls: ['dashboard-carousel.component.scss'],
-  entryComponents: COMPONENTS.map(toTypes).filter(distinct)
+  entryComponents: Object['values'](COMPONENTS).filter(distinct)
 })
 export class DashboardCarouselComponent implements OnInit, OnDestroy {
 
@@ -55,16 +54,12 @@ export class DashboardCarouselComponent implements OnInit, OnDestroy {
     if (event.widgetKey === undefined) {
       return;
     }
-    const res = this.findComponentFor(event.widgetKey);
-    if (res != undefined) {
-      this.type = res.type;
+    const type = COMPONENTS[event.widgetKey];
+    if (type != undefined) {
+      this.type = type;
       this.event = event;
     }
   };
-
-  private findComponentFor(key: string) {
-    return COMPONENTS.filter((elem, index, arr) => elem.key === key)[0];
-  }
 
   ngOnDestroy(): void {
     if (!this.configSubscription.closed) {
