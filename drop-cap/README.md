@@ -2,7 +2,10 @@
 
 This library can be used to create a DropCap in your app!
 
-![drop_cap](https://cloud.githubusercontent.com/assets/3380092/12559924/bf2a7ff2-c38f-11e5-927f-c2b7e4993390.png)
+
+| DropCap | Not enough lines to wrap DropCap |
+| ------ | ----- |
+![drop_cap](https://cloud.githubusercontent.com/assets/3380092/20004464/638380e8-a284-11e6-8c35-6c473069cd4d.png) | ![not_enough_text](https://cloud.githubusercontent.com/assets/3380092/20004465/6385c7d6-a284-11e6-875e-b1647968865b.png)
 
 ## Description
 
