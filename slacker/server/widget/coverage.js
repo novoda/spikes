@@ -1,7 +1,7 @@
 const httpClient = require('request-promise-native');
 
-function Coverage(sonarConfig) {
-  this.apiKey = sonarConfig.apiKey;
+function Coverage(config) {
+  this.apiKey = config.apiKey;
 }
 
 Coverage.prototype.rank = 1;
@@ -55,7 +55,7 @@ function createCoverageRequest(apiKey, componentKey) {
       metricKeys: 'coverage'
     },
     auth: {
-      user: sonarAuth,
+      user: apiKey,
       pass: '',
     }
   };

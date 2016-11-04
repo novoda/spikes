@@ -18,27 +18,25 @@ function Dashboard(config) {
 }
 
 Dashboard.prototype.start = function(listener) {
-  update(this, listener);
+  updateLoop(this, listener)();
 }
 
-function update(self, listener) {
-  const updateLoop = function() {
-    const rule = getCurrentRule(self);
-    rule().then(result => {
+function updateLoop(self, listener) {
+  return function() {
+    getCurrentRule(self).then(result => {
         listener(result)
         incrementIndex(self);
-        setTimeout(updateLoop, getTimeoutInterval(self));
+        setTimeout(updateLoop(self, listener), getTimeoutInterval(self));
       }).catch(err => {
         console.log(err);
         incrementIndex(self);
-        setTimeout(updateLoop, DASHBOARD_ERROR_INTERVAL);
-    })
-  }
-  updateLoop();
+        setTimeout(updateLoop(self, listener), DASHBOARD_ERROR_INTERVAL);
+    });
+  };
 }
 
 function getCurrentRule(self) {
-  return self.widgets[self.index].rule;
+  return self.widgets[self.index].rule();
 }
 
 function incrementIndex(self) {
