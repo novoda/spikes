@@ -13,11 +13,15 @@ var Dashboard = function(token) {
   ].concat(this.slacker.getRules());
 }
 
-function update(self, callback) {
+Dashboard.prototype.start = function(listener) {
+  update(this, listener);
+}
+
+function update(self, listener) {
   var updateLoop = function() {
     var rule = getCurrentRule(self);
     rule().then(result => {
-        callback(result)
+        listener(result)
         incrementIndex(self);
         setTimeout(updateLoop, getTimeoutInterval(self));
       }).catch(err => {
@@ -27,10 +31,6 @@ function update(self, callback) {
     })
   }
   updateLoop();
-}
-
-Dashboard.prototype.start = function(callback) {
-  update(this, callback);
 }
 
 function getCurrentRule(self) {
