@@ -14,12 +14,12 @@ export class ReviewComponent implements DashboardComponent {
 
   public update(event: WidgetEvent) {
     const reviews = event.payload.motivators;
-    const selection = reviews[this.randomIndex(reviews)];
+    const selection = this.randomItem(reviews);
     this.review = new Review(event.payload.appName, selection.score, selection.text);
   }
 
-  private randomIndex(array: Array<any>) {
-    return Math.floor(Math.random() * array.length);
+  private randomItem(array: Array<any>) {
+    return array[Math.floor(Math.random() * array.length)];
   }
 
 }
