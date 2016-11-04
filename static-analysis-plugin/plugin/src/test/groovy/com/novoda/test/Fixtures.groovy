@@ -31,6 +31,7 @@ public final class Fixtures {
         public static final File SOURCES_WITH_PRIORITY_3_VIOLATION = new File(FIXTURES_DIR, 'pmd/priority3')
         public static final File SOURCES_WITH_PRIORITY_4_VIOLATION = new File(FIXTURES_DIR, 'pmd/priority4')
         public static final File SOURCES_WITH_PRIORITY_5_VIOLATION = new File(FIXTURES_DIR, 'pmd/priority5')
+        public static final File SAMPLE_REPORT = new File(FIXTURES_DIR, 'pmd/reports/sample.xml')
     }
 
 }
