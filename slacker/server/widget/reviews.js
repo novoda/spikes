@@ -1,10 +1,4 @@
-module.exports = {
-  rule: reviews,
-  rank: 1
-}
-
 const gplay = require('google-play-scraper');
-
 const APPS = [
   {
     package: 'com.channel4.ondemand',
@@ -20,9 +14,13 @@ const APPS = [
   }
 ];
 
-var currentIndex = 0;
+let currentIndex = 0;
 
-function reviews() {
+function Reviews() {}
+
+Reviews.prototype.rank = 1;
+
+Reviews.prototype.rule = function() {
   var app = APPS[currentIndex];
   incrementIndex(APPS.length);
 
@@ -64,3 +62,5 @@ function toRuleResult(app) {
     });
   }
 }
+
+module.exports = Reviews;
