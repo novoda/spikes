@@ -1,13 +1,13 @@
-var app = require('express')();
-var express = require('express');
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+const app = require('express')();
+const express = require('express');
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 const slackToken = process.env.token;
 
-var Dashboard = require('./server/dashboard.js');
-var dashboard = new Dashboard(slackToken);
+const Dashboard = require('./server/dashboard.js');
+const dashboard = new Dashboard(slackToken);
 
-var cache;
+let cache;
 
 app.use("/public", express.static(__dirname + '/public'));
 
@@ -19,15 +19,15 @@ http.listen(3002, function(){
   console.log('listening on *:3002');
 });
 
-var notifyClient = function(data) {
-  cache = data;
-  io.emit('message', data);
-}
-
 io.sockets.on('connection', function (socket) {
   if (cache) {
     notifyClient(cache);
   }
 });
+
+function notifyClient(data) {
+  cache = data;
+  io.emit('message', data);
+}
 
 dashboard.start(notifyClient);
