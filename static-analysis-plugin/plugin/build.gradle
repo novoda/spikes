@@ -17,6 +17,11 @@ sourceSets {
         java {
             srcDir file('fixtures/checkstyle/warnings')
             srcDir file('fixtures/checkstyle/errors')
+            srcDir file('fixtures/pmd/priority1')
+            srcDir file('fixtures/pmd/priority2')
+            srcDir file('fixtures/pmd/priority3')
+            srcDir file('fixtures/pmd/priority4')
+            srcDir file('fixtures/pmd/priority5')
         }
     }
 }

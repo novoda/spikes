@@ -45,7 +45,7 @@ function findUnmergeablePrs(pullRequests) {
 }
 
 const filterUnmergeable = (pr) => !pr.mergeable;
-const filterCalculating = (pr) => pr.mergeable !== null;
+const filterCalculating = (pr) => pr.mergeable === null;
 
 function notifySlack(slack, slackRecipient) {
   return function(result) {
@@ -53,12 +53,11 @@ function notifySlack(slack, slackRecipient) {
       return postToSlack(slack, slackRecipient, calculatingMessage())
         .then(Promise.resolve(result));
     } else if (result.prs.length === 0) {
-      return postToSlack(slack, slackRecipient, noConflictsMessage())
-        .then(Promise.resolve(result));
+      return Promise.resolve(result);
     } else {
       return Promise.all(result.prs.map(each => {
-        const message = createSlackMessage(each);
-        return postToSlack(slack, slackRecipient, conflictMessage(each))
+        const message = conflictMessage(each);
+        return postToSlack(slack, slackRecipient, message)
           .then(Promise.resolve(result));
       }));
     }
@@ -66,15 +65,11 @@ function notifySlack(slack, slackRecipient) {
 }
 
 function calculatingMessage() {
-  return `Github is still calculating conflicts ¯\_(ツ)_/¯`;
+  return `Github is still calculating conflicts ¯\\_(ツ)_/¯`;
 }
 
 function conflictMessage(pr) {
   return `<${pr.html_url}|${pr.title}> has conflicts with master!`;
-}
-
-function noConflictsMessage() {
-  return `no merge conflicts found!`;
 }
 
 function postToSlack(slack, slackRecipient, message) {

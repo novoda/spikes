@@ -5,7 +5,7 @@ var fs = require('fs');
 var token = process.env.token;
 var enewsFetcher = new EnewsFetcher(token);
 
-enewsFetcher.getLastSevenDays(function(eNews) {
+enewsFetcher.getLastSevenDays().then(function(eNews) {
   var html = htmlGenerator(eNews);
   writeToFile(html);
 });
