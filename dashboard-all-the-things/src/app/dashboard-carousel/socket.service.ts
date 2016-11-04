@@ -15,13 +15,13 @@ export class SocketService {
   }
 
   private createObservable(url): ConnectableObservable<any> {
-    let socket = io.connect(url, {
+    const socket = io.connect(url, {
       'reconnection': true,
       'reconnectionDelay': 3000,
       'reconnectionAttempts': 100
     });
 
-    let observable: Observable<any> = Observable.create((observer: Observer<any>) => {
+    const observable: Observable<any> = Observable.create((observer: Observer<any>) => {
       // The Observable will not complete or fail since we want to reconnect if possible.
       socket.on('message', (event) => {
         observer.next(event);

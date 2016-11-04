@@ -19,7 +19,7 @@ export class StackOverflowComponent implements DashboardComponent {
   }
 
   private pickRandomQuestion(): Question {
-    let question = this.questions[Math.floor(Math.random() * (this.questions.length))];
+    const question = this.questions[Math.floor(Math.random() * (this.questions.length))];
     return <Question> question;
   }
 

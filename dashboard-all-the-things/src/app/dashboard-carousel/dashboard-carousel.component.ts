@@ -8,7 +8,7 @@ import { SocketService } from './socket.service';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ConnectableObservable, Subscription } from 'rxjs';
 
-let COMPONENTS = [
+const COMPONENTS = [
   { key: "coverage", type: SonarCoverageComponent },
   { key: "ciWall", type: ExternalUrlComponent },
   { key: "reviews", type: ReviewComponent },
@@ -24,11 +24,10 @@ let COMPONENTS = [
 })
 export class DashboardCarouselComponent implements OnInit, OnDestroy {
 
-  socketService: SocketService;
-  connection: Subscription;
-
-  type: any;
-  event: WidgetEvent;
+  private socketService: SocketService;
+  private connection: Subscription;
+  private type: any;
+  private event: WidgetEvent;
 
   @ViewChild(DynamicComponent) dynamicComponent: DynamicComponent;
 
@@ -37,13 +36,13 @@ export class DashboardCarouselComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    let observable: ConnectableObservable<any> = this.socketService.create('http://localhost:3002');
+    const observable: ConnectableObservable<any> = this.socketService.create('http://localhost:3002');
     this.connection = observable
       .subscribe((event: WidgetEvent) => {
         if (event.widgetKey === undefined) {
           return;
         }
-        let res = this.findComponentFor(event.widgetKey);
+        const res = this.findComponentFor(event.widgetKey);
         if (res != undefined) {
           this.type = res.type;
           this.event = event;
