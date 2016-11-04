@@ -1,8 +1,8 @@
 .oval {
-    width: 500px;
-    height: 100px;
-    background: #FFFFFF;
-    border-radius: 50%;
+  width: 500px;
+  height: 100px;
+  background: #ffffff;
+  border-radius: 50%;
 }
 
 .centered-horiz {
@@ -23,7 +23,7 @@
   display: block;
   height: 120px;
   width: 95%;
-  background: #FFFFFF;
+  background: #ffffff;
   margin-top: 21px;
   -webkit-border-radius: 90px 90px 90px 90px;
 }
@@ -32,7 +32,7 @@
   display: inline-block;
   min-height: 120px;
   width: 95%;
-  background: #FFFFFF;
+  background: #ffffff;
   margin-top: 21px;
   -webkit-border-radius: 90px 90px 90px 90px;
 }
@@ -79,7 +79,7 @@
 
 .title {
   font-size: 34px;
-  color: #07C;
+  color: #07c;
 }
 
 .username {
@@ -106,7 +106,7 @@
   width: 64%;
   height: 68%;
   border-radius: 10px;
-  box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
 }
 
 .text-shadow {
@@ -203,6 +203,6 @@
 }
 
 .active-image {
-  background: linear-gradient(to bottom, rgba(255,255,255,0.8) 0%,rgba(255,255,255,1) 100%), url(./slack-bg.png);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 1) 100%), url(./slack-bg.png);
   background-position: center center;
 }
