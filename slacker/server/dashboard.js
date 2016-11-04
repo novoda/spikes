@@ -1,9 +1,9 @@
-var Slacker = require('./slacker/slacker.js');
+const Slacker = require('./slacker/slacker.js');
 
 const DASHBOARD_INTERVAL = 1000 * 30;
 const DASHBOARD_ERROR_INTERVAL = 1000 * 1;
 
-var Dashboard = function(token) {
+function Dashboard(token) {
   this.slacker = new Slacker(token);
   this.index = 0;
   this.widgets = [
@@ -19,8 +19,8 @@ Dashboard.prototype.start = function(listener) {
 }
 
 function update(self, listener) {
-  var updateLoop = function() {
-    var rule = getCurrentRule(self);
+  const updateLoop = function() {
+    const rule = getCurrentRule(self);
     rule().then(result => {
         listener(result)
         incrementIndex(self);
