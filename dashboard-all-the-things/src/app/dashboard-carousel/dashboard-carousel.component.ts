@@ -52,7 +52,7 @@ export class DashboardCarouselComponent implements OnInit, OnDestroy {
     }
   };
 
-  findComponentFor(key: string) {
+  private findComponentFor(key: string) {
     return COMPONENTS.filter((elem, index, arr) => elem.key === key)[0];
   }
 
