@@ -34,4 +34,10 @@ public final class Fixtures {
         public static final File SAMPLE_REPORT = new File(FIXTURES_DIR, 'pmd/reports/sample.xml')
     }
 
+    public final static class Findbugs {
+        public static final File SOURCES_WITH_HIGH_VIOLATION = new File(FIXTURES_DIR, 'findbugs/high')
+        public static final File SOURCES_WITH_MEDIUM_VIOLATION = new File(FIXTURES_DIR, 'findbugs/medium')
+        public static final File SOURCES_WITH_LOW_VIOLATION = new File(FIXTURES_DIR, 'findbugs/low')
+    }
+
 }
