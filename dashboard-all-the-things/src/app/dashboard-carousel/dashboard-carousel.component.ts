@@ -41,7 +41,7 @@ export class DashboardCarouselComponent implements OnInit, OnDestroy {
     observable.connect();
   }
 
-  private onWidgetEvent(event: WidgetEvent) {
+  private onWidgetEvent = (event: WidgetEvent) => {
     if (event.widgetKey === undefined) {
       return;
     }
