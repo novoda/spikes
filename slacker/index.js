@@ -2,10 +2,9 @@ const app = require('express')();
 const express = require('express');
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-const slackToken = process.env.token;
-
+const CONFIG = require('./config.json');
 const Dashboard = require('./server/dashboard.js');
-const dashboard = new Dashboard(slackToken);
+const dashboard = new Dashboard(CONFIG);
 
 let cache;
 
@@ -15,8 +14,8 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/client/index.html');
 });
 
-http.listen(3002, function(){
-  console.log('listening on *:3002');
+http.listen(CONFIG.server.port, function(){
+  console.log(`listening on *:${CONFIG.server.port}`);
 });
 
 io.sockets.on('connection', function (socket) {
