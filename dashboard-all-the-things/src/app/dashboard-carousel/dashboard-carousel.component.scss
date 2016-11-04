@@ -2,7 +2,6 @@
   display: block;
   background-color: #30a4d9;
   height: 100%;
-  --carousel-current-position: 1;
 
   .carousel {
     display: flex;
@@ -11,10 +10,6 @@
     .component {
       flex-basis: 100%;
       flex-shrink: 0;
-      display: none;
-    }
-
-    .component:nth-child(--carousel-current-position) {
       display: block;
     }
   }
