@@ -15,9 +15,9 @@ For example:
 apply plugin: DiffDependencyTaskPlugin
 
 task('testAll')
-    .dependsOn('prepareTest')
-    .ifDiffMatches(`'android/.*').dependsOn('testAndroid')
-    .ifDiffMatches(`'apple/.*').dependsOn('testApple')
+    .dependsOn('prepareTest') // regular dependency                       
+    .ifDiffMatches(~'android/.*').dependsOn('testAndroid') // conditional dependency
+    .ifDiffMatches(~'apple/.*').dependsOn('testApple') // conditional dependency
 ```
 
 ## Configuration
