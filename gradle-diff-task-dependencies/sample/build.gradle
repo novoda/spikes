@@ -1,0 +1,27 @@
+import com.novoda.gradle.diffdependencytask.DiffDependencyTaskPlugin
+
+apply plugin: 'java'
+apply plugin: DiffDependencyTaskPlugin
+
+diffDependency {
+    // custom changed files provider available to test in non-CI environments
+    changedFilesProvider = {
+        return ['apple/fastlane', 'android/build.gradle']
+    }
+}
+
+task('testAndroid') << {
+    println 'This is an android test task.'
+}
+
+task('testApple') << {
+    println 'This is an apple test task.'
+}
+
+task('selectiveTest') << {
+    println 'This will run after 0 or more between "testAndroid" and "testApple".'
+}
+
+tasks.getByName('selectiveTest')
+        .ifDiffMatches(~'android/.*').dependsOn('testAndroid')
+        .ifDiffMatches(~'apple/.*').dependsOn('testApple')
