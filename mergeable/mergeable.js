@@ -49,6 +49,7 @@ const filterCalculating = (pr) => pr.mergeable === null;
 
 function notifySlack(slack, slackRecipient) {
   return function(result) {
+    console.log(result);
     if (result.isCalculating) {
       return postToSlack(slack, slackRecipient, calculatingMessage())
         .then(Promise.resolve(result));
