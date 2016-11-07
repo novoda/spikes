@@ -6,6 +6,8 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.plugins.quality.FindBugs
 import org.gradle.api.plugins.quality.FindBugsExtension
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.JavaExec
 
 class FindbugsConfigurator {
 
@@ -28,7 +30,13 @@ class FindbugsConfigurator {
         findBugs.ignoreFailures = true
         findBugs.reports.xml.enabled = true
         findBugs.reports.html.enabled = false
-        evaluateViolations.dependsOn findBugs
+
+        project.tasks.create("${findBugs.name}GenerateHtmlReport", GenerateHtmlReport) { GenerateHtmlReport generateHtmlReport ->
+            generateHtmlReport.xmlReportFile = findBugs.reports.xml.destination
+            generateHtmlReport.classpath = findBugs.findbugsClasspath
+            generateHtmlReport.dependsOn findBugs
+            evaluateViolations.dependsOn generateHtmlReport
+        }
     }
 
     private void configureExtension(FindBugsExtension extension, List<String> excludes, Closure config) {
@@ -38,4 +46,24 @@ class FindbugsConfigurator {
             config()
         }
     }
+
+    static class GenerateHtmlReport extends JavaExec {
+        @Input
+        File xmlReportFile
+
+        @Override
+        void exec() {
+            if (xmlReportFile != null && xmlReportFile.exists()) {
+                main = 'edu.umd.cs.findbugs.PrintingBugReporter'
+                standardOutput = createHtmlReportOutput()
+                args '-html', xmlReportFile
+                super.exec()
+            }
+        }
+
+        private FileOutputStream createHtmlReportOutput() {
+            new FileOutputStream(new File(xmlReportFile.absolutePath - '.xml' + '.html'))
+        }
+    }
+
 }
