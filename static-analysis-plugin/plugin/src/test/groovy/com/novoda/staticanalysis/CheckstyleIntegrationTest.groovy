@@ -13,9 +13,6 @@ import static com.novoda.test.LogsSubject.assertThat
 @RunWith(Parameterized.class)
 public class CheckstyleIntegrationTest {
 
-    private static final String EMPTY_MODULES = '''<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.3//EN" "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
-<module name="Checker"/>
-'''
     public static final String DEFAULT_CONFIG = "configFile new File('${Fixtures.Checkstyle.MODULES.path}')"
 
     @Parameterized.Parameters
@@ -97,23 +94,6 @@ public class CheckstyleIntegrationTest {
     }
 
     @Test
-    public void shouldNotFailBuildWhenNoCheckstyleWarningsOrErrorsEncounteredAccordingToCustomModules() {
-        TestProject.Result result = projectRule.newProject()
-                .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
-                .withSourceSet('test', Fixtures.Checkstyle.SOURCES_WITH_ERRORS)
-                .withFile(EMPTY_MODULES, 'checkstyle.xml')
-                .withPenalty('''{
-                    maxWarnings = 0
-                    maxErrors = 0
-                }''')
-                .withCheckstyle(checkstyle("configFile project.file('checkstyle.xml')"))
-                .build('check')
-
-        assertThat(result.logs).doesNotContainLimitExceeded()
-        assertThat(result.logs).doesNotContainCheckstyleViolations()
-    }
-
-    @Test
     public void shouldNotFailBuildWhenCheckstyleConfiguredToNotIgnoreFailures() {
         projectRule.newProject()
                 .withSourceSet('main', Fixtures.Checkstyle.SOURCES_WITH_WARNINGS)
@@ -123,7 +103,7 @@ public class CheckstyleIntegrationTest {
                     maxWarnings = 1
                     maxErrors = 1
                 }''')
-                .withCheckstyle(checkstyle(DEFAULT_CONFIG, "ignoreFailures false"))
+                .withCheckstyle(checkstyle(DEFAULT_CONFIG, "ignoreFailures = false"))
                 .build('check')
     }
 

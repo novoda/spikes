@@ -1,0 +1,12 @@
+<div class="content-container active-image" *ngIf="questionToShow != undefined">
+  <div class="active-container">
+    <div class="active-filler"></div>
+    <span class="active-channel-header">💬</span>
+    <br>
+    <div>
+      <span class="active-channel-copy">We have {{questions.length}} unanswered questions!</span>
+      <p>surl.novoda.com/stackoverflow</p>
+      <p>Here's one: {{questionToShow.title}}: {{questionToShow.url}}</p>
+    </div>
+  </div>
+</div>
