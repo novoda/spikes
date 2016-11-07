@@ -4,9 +4,9 @@ import org.gradle.api.logging.LogLevel
 import org.gradle.api.logging.Logger
 import org.slf4j.Marker
 
-class QuietLogger implements Logger {
+enum QuietLogger implements Logger {
 
-    public static final QuietLogger INSTANCE = new QuietLogger()
+    INSTANCE
 
     private QuietLogger() {
         // no instance
