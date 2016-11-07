@@ -1,5 +1,6 @@
 package com.novoda.staticanalysis
 
+import com.novoda.staticanalysis.findbugs.FindbugsConfigurator
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -8,6 +9,7 @@ import org.gradle.api.Task
 class StaticAnalysisPlugin implements Plugin<Project> {
     private final CheckstyleConfigurator checkstyleConfigurator = new CheckstyleConfigurator()
     private final PmdConfigurator pmdConfigurator = new PmdConfigurator()
+    private final FindbugsConfigurator findbugsConfigurator = new FindbugsConfigurator()
 
     @Override
     void apply(Project project) {
@@ -20,6 +22,7 @@ class StaticAnalysisPlugin implements Plugin<Project> {
         }
         checkstyleConfigurator.configure(project, allViolations.create('Checkstyle'), extension, evaluateViolations)
         pmdConfigurator.configure(project, allViolations.create('PMD'), extension, evaluateViolations)
+        findbugsConfigurator.configure(project, allViolations.create('Findbugs'), extension, evaluateViolations)
         project.afterEvaluate {
             project.tasks['check'].dependsOn evaluateViolations
         }

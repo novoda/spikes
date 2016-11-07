@@ -10,6 +10,7 @@ staticAnalysis {
     ${(project.penalty ?: '').replace('            ', '')}
     ${(project.checkstyle ?: '').replace('        ', '    ')}
     ${(project.pmd ?: '').replace('        ', '    ')}
+    ${(project.findbugs ?: '').replace('        ', '    ')}
 }
 """
     }
@@ -21,6 +22,7 @@ staticAnalysis {
     String penalty
     String checkstyle
     String pmd
+    String findbugs
 
     TestProject(Closure<String> template) {
         this.template = template
@@ -77,6 +79,11 @@ staticAnalysis {
 
     public TestProject withPmd(String pmd) {
         this.pmd = pmd
+        return this
+    }
+
+    public TestProject withFindbugs(String findbugs) {
+        this.findbugs = findbugs
         return this
     }
 
