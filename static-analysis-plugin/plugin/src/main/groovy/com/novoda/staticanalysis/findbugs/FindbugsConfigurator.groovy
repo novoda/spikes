@@ -8,6 +8,7 @@ import org.gradle.api.plugins.quality.FindBugs
 import org.gradle.api.plugins.quality.FindBugsExtension
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.JavaExec
+import org.gradle.internal.logging.ConsoleRenderer
 
 class FindbugsConfigurator {
 
@@ -30,9 +31,15 @@ class FindbugsConfigurator {
         findBugs.ignoreFailures = true
         findBugs.reports.xml.enabled = true
         findBugs.reports.html.enabled = false
+        File xmlReportFile = findBugs.reports.xml.destination
+        File htmlReportFile = new File(xmlReportFile.absolutePath - '.xml' + '.html')
+        findBugs.doLast {
+            evaluateReports(xmlReportFile, htmlReportFile, violations)
+        }
 
         project.tasks.create("${findBugs.name}GenerateHtmlReport", GenerateHtmlReport) { GenerateHtmlReport generateHtmlReport ->
-            generateHtmlReport.xmlReportFile = findBugs.reports.xml.destination
+            generateHtmlReport.xmlReportFile = xmlReportFile
+            generateHtmlReport.htmlReportFile = htmlReportFile
             generateHtmlReport.classpath = findBugs.findbugsClasspath
             generateHtmlReport.dependsOn findBugs
             evaluateViolations.dependsOn generateHtmlReport
@@ -47,9 +54,18 @@ class FindbugsConfigurator {
         }
     }
 
+    private void evaluateReports(File xmlReportFile, File htmlReportFile, Violations violations) {
+        def evaluator = new FinbugsViolationsEvaluator(xmlReportFile)
+        String reportUrl = new ConsoleRenderer().asClickableFileUrl(htmlReportFile)
+        violations.addViolations(evaluator.errorsCount(), evaluator.warningsCount(), reportUrl)
+    }
+
     static class GenerateHtmlReport extends JavaExec {
         @Input
         File xmlReportFile
+
+        @Input
+        File htmlReportFile
 
         @Override
         void exec() {
@@ -62,7 +78,7 @@ class FindbugsConfigurator {
         }
 
         private FileOutputStream createHtmlReportOutput() {
-            new FileOutputStream(new File(xmlReportFile.absolutePath - '.xml' + '.html'))
+            new FileOutputStream(htmlReportFile)
         }
     }
 
