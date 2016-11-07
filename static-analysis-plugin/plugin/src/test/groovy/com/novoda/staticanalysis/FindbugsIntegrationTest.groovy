@@ -7,7 +7,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
-import static com.novoda.test.Fixtures.Findbugs.*
+import static com.novoda.test.Fixtures.Findbugs.SOURCES_WITH_HIGH_VIOLATION
+import static com.novoda.test.Fixtures.Findbugs.SOURCES_WITH_LOW_VIOLATION
+import static com.novoda.test.Fixtures.Findbugs.SOURCES_WITH_MEDIUM_VIOLATION
 import static com.novoda.test.LogsSubject.assertThat
 
 @RunWith(Parameterized.class)
@@ -15,7 +17,7 @@ class FindbugsIntegrationTest {
 
     @Parameterized.Parameters
     public static List<Object[]> rules() {
-        return [TestProjectRule.forJavaProject()].collect { [it] as Object[] }
+        return [TestProjectRule.forAndroidProject()].collect { [it] as Object[] }
     }
 
     @Rule
@@ -28,23 +30,23 @@ class FindbugsIntegrationTest {
     @Test
     public void shouldFailBuildWhenFindbugsWarningsOverTheThreshold() {
         TestProject.Result result = projectRule.newProject()
-                .withSourceSet('main', SOURCES_WITH_LOW_VIOLATION, SOURCES_WITH_MEDIUM_VIOLATION)
+                .withSourceSet('debug', SOURCES_WITH_LOW_VIOLATION, SOURCES_WITH_MEDIUM_VIOLATION)
                 .withPenalty('''{
-                    maxErrors = 0
-                    maxWarnings = 0
+                    maxErrors = 10
+                    maxWarnings = 10
                 }''')
                 .withFindbugs('findbugs {}')
-                .buildAndFail('check')
+                .build('check')
 
-        assertThat(result.logs).containsLimitExceeded(0, 2)
+        assertThat(result.logs).doesNotContainLimitExceeded()
         assertThat(result.logs).containsFindbugsViolations(0, 2,
-                result.buildFile('reports/findbugs/main.html'))
+                result.buildFile('reports/findbugs/debug.html'))
     }
 
     @Test
     public void shouldFailBuildWhenFindbugsErrorsOverTheThreshold() {
         TestProject.Result result = projectRule.newProject()
-                .withSourceSet('main', SOURCES_WITH_HIGH_VIOLATION)
+                .withSourceSet('debug', SOURCES_WITH_HIGH_VIOLATION)
                 .withPenalty('''{
                     maxErrors = 0
                     maxWarnings = 0
@@ -54,7 +56,7 @@ class FindbugsIntegrationTest {
 
         assertThat(result.logs).containsLimitExceeded(1, 0)
         assertThat(result.logs).containsFindbugsViolations(1, 0,
-                result.buildFile('reports/findbugs/main.html'))
+                result.buildFile('reports/findbugs/debug.html'))
     }
 
     @Test
@@ -74,8 +76,8 @@ class FindbugsIntegrationTest {
     @Test
     public void shouldNotFailBuildWhenFindbugsWarningsAndErrorsEncounteredAndNoThresholdTrespassed() {
         TestProject.Result result = projectRule.newProject()
-                .withSourceSet('main', SOURCES_WITH_LOW_VIOLATION, SOURCES_WITH_MEDIUM_VIOLATION)
-                .withSourceSet('main2', SOURCES_WITH_HIGH_VIOLATION)
+                .withSourceSet('debug', SOURCES_WITH_LOW_VIOLATION, SOURCES_WITH_MEDIUM_VIOLATION)
+                .withSourceSet('release', SOURCES_WITH_HIGH_VIOLATION)
                 .withPenalty('''{
                     maxErrors = 100
                     maxWarnings = 100
@@ -85,15 +87,15 @@ class FindbugsIntegrationTest {
 
         assertThat(result.logs).doesNotContainLimitExceeded()
         assertThat(result.logs).containsFindbugsViolations(1, 2,
-                result.buildFile('reports/findbugs/main.html'),
-                result.buildFile('reports/findbugs/main2.html'))
+                result.buildFile('reports/findbugs/debug.html'),
+                result.buildFile('reports/findbugs/release.html'))
     }
 
     @Test
     public void shouldNotFailBuildWhenFindbugsConfiguredToNotIgnoreFailures() {
         projectRule.newProject()
-                .withSourceSet('main', SOURCES_WITH_LOW_VIOLATION, SOURCES_WITH_MEDIUM_VIOLATION)
-                .withSourceSet('main2', SOURCES_WITH_HIGH_VIOLATION)
+                .withSourceSet('debug', SOURCES_WITH_LOW_VIOLATION, SOURCES_WITH_MEDIUM_VIOLATION)
+                .withSourceSet('release', SOURCES_WITH_HIGH_VIOLATION)
                 .withPenalty('''{
                     maxErrors = 100
                     maxWarnings = 100
@@ -105,8 +107,8 @@ class FindbugsIntegrationTest {
     @Test
     public void shouldNotFailBuildWhenFindbugsNotConfigured() {
         projectRule.newProject()
-                .withSourceSet('main', SOURCES_WITH_LOW_VIOLATION, SOURCES_WITH_MEDIUM_VIOLATION)
-                .withSourceSet('main2', SOURCES_WITH_HIGH_VIOLATION)
+                .withSourceSet('debug', SOURCES_WITH_LOW_VIOLATION, SOURCES_WITH_MEDIUM_VIOLATION)
+                .withSourceSet('release', SOURCES_WITH_HIGH_VIOLATION)
                 .withPenalty('''{
                     maxErrors = 0
                     maxWarnings = 0
@@ -117,8 +119,8 @@ class FindbugsIntegrationTest {
     @Test
     public void shouldNotFailBuildWhenFindbugsConfiguredToIgnoreFaultySourceSets() {
         TestProject.Result result = projectRule.newProject()
-                .withSourceSet('main', SOURCES_WITH_LOW_VIOLATION, SOURCES_WITH_MEDIUM_VIOLATION)
-                .withSourceSet('main2', SOURCES_WITH_HIGH_VIOLATION)
+                .withSourceSet('debug', SOURCES_WITH_LOW_VIOLATION, SOURCES_WITH_MEDIUM_VIOLATION)
+                .withSourceSet('release', SOURCES_WITH_HIGH_VIOLATION)
                 .withPenalty('''{
                     maxErrors = 0
                     maxWarnings = 10
@@ -128,7 +130,7 @@ class FindbugsIntegrationTest {
 
         assertThat(result.logs).doesNotContainLimitExceeded()
         assertThat(result.logs).containsFindbugsViolations(0, 2,
-                result.buildFile('reports/findbugs/main.html'))
+                result.buildFile('reports/findbugs/debug.html'))
     }
 
 }

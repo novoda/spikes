@@ -18,9 +18,33 @@ class FindbugsConfigurator {
             List<String> excludes = []
             configureExtension(project.extensions.findByType(FindBugsExtension), excludes, config)
             project.afterEvaluate {
+                configureAndroidIfNeeded(project)
                 project.tasks.withType(FindBugs) { FindBugs findBugs ->
                     configureTask(project, findBugs, evaluateViolations, violations, excludes)
                 }
+            }
+        }
+    }
+
+    private void configureAndroidIfNeeded(Project project) {
+        boolean isAndroidApp = project.plugins.hasPlugin('com.android.application')
+        boolean isAndroidLib = project.plugins.hasPlugin('com.android.library')
+        if (isAndroidApp || isAndroidLib) {
+            def variants = isAndroidApp ? project.android.applicationVariants : project.android.libraryVariants
+            configureAndroid(project, variants)
+        }
+    }
+
+    private void configureAndroid(Project project, Object variants) {
+        variants.all { variant ->
+            FindBugs task = project.tasks.create("findbugs${variant.name.capitalize()}", QuietFindbugsPlugin.Task)
+            task.with {
+                group = "verification"
+                description = "Run FindBugs analysis for ${variant.name} classes"
+                source = variant.sourceSets.java.srcDirs.collect { it.path }.flatten()
+                classes = project.fileTree(variant.javaCompile.destinationDir)
+                classpath = variant.javaCompile.classpath
+                dependsOn variant.javaCompile
             }
         }
     }
