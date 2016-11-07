@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BugCollection version="3.0.1" sequence="0" timestamp="1478529260684" analysisTimestamp="1478529260722" release="">
+  <Project projectName="">
+    <Jar>
+      static-analysis-plugin/plugin/build/test-projects/1478529252563/build/classes/main/HighPriorityViolator.class
+    </Jar>
+    <Jar>
+      static-analysis-plugin/plugin/build/test-projects/1478529252563/build/classes/main/LowPriorityViolator.class
+    </Jar>
+    <Jar>
+      static-analysis-plugin/plugin/build/test-projects/1478529252563/build/classes/main/MediumPriorityViolator.class
+    </Jar>
+    <SrcDir>static-analysis-plugin/plugin/fixtures/findbugs/low/LowPriorityViolator.java
+    </SrcDir>
+    <SrcDir>
+      static-analysis-plugin/plugin/fixtures/findbugs/medium/MediumPriorityViolator.java
+    </SrcDir>
+    <SrcDir>static-analysis-plugin/plugin/fixtures/findbugs/high/HighPriorityViolator.java
+    </SrcDir>
+  </Project>
+  <BugInstance type="BC_IMPOSSIBLE_CAST" priority="1" rank="9" abbrev="BC" category="CORRECTNESS">
+    <Class classname="HighPriorityViolator">
+      <SourceLine classname="HighPriorityViolator" start="1" end="7" sourcefile="HighPriorityViolator.java"
+        sourcepath="HighPriorityViolator.java" />
+    </Class>
+    <Method classname="HighPriorityViolator" name="impossibleCast" signature="()V" isStatic="false">
+      <SourceLine classname="HighPriorityViolator" start="4" end="7" startBytecode="0" endBytecode="16"
+        sourcefile="HighPriorityViolator.java" sourcepath="HighPriorityViolator.java" />
+    </Method>
+    <Type descriptor="Ljava/lang/Double;" role="TYPE_FOUND">
+      <SourceLine classname="java.lang.Double" start="49" end="1053" sourcefile="Double.java"
+        sourcepath="java/lang/Double.java" />
+    </Type>
+    <Type descriptor="Ljava/lang/Long;" role="TYPE_EXPECTED">
+      <SourceLine classname="java.lang.Long" start="54" end="1615" sourcefile="Long.java"
+        sourcepath="java/lang/Long.java" />
+    </Type>
+    <LocalVariable name="doubleValue" register="1" pc="5" role="LOCAL_VARIABLE_VALUE_OF" />
+    <SourceLine classname="HighPriorityViolator" start="5" end="5" startBytecode="6" endBytecode="6"
+      sourcefile="HighPriorityViolator.java" sourcepath="HighPriorityViolator.java" />
+  </BugInstance>
+  <BugInstance type="HE_EQUALS_USE_HASHCODE" priority="3" rank="19" abbrev="HE" category="BAD_PRACTICE">
+    <Class classname="LowPriorityViolator">
+      <SourceLine classname="LowPriorityViolator" start="1" end="3" sourcefile="LowPriorityViolator.java"
+        sourcepath="LowPriorityViolator.java" />
+    </Class>
+    <Method classname="LowPriorityViolator" name="equals" signature="(Ljava/lang/Object;)Z" isStatic="false">
+      <SourceLine classname="LowPriorityViolator" start="3" end="3" startBytecode="0" endBytecode="73"
+        sourcefile="LowPriorityViolator.java" sourcepath="LowPriorityViolator.java" />
+    </Method>
+  </BugInstance>
+  <BugInstance type="URF_UNREAD_FIELD" priority="2" rank="18" abbrev="UrF" category="PERFORMANCE">
+    <Class classname="MediumPriorityViolator">
+      <SourceLine classname="MediumPriorityViolator" start="4" end="6" sourcefile="MediumPriorityViolator.java"
+        sourcepath="MediumPriorityViolator.java" />
+    </Class>
+    <Field classname="MediumPriorityViolator" name="foo" signature="Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="MediumPriorityViolator" sourcefile="MediumPriorityViolator.java"
+        sourcepath="MediumPriorityViolator.java" />
+    </Field>
+    <SourceLine classname="MediumPriorityViolator" start="5" end="5" startBytecode="6" endBytecode="6"
+      sourcefile="MediumPriorityViolator.java" sourcepath="MediumPriorityViolator.java" />
+  </BugInstance>
+  <Errors errors="0" missingClasses="0"></Errors>
+  <FindBugsSummary timestamp="Mon, 7 Nov 2016 15:34:20 +0100" total_classes="3" referenced_classes="16" total_bugs="3"
+    total_size="19" num_packages="1" java_version="1.8.0_102" vm_version="25.102-b14" cpu_seconds="4.66"
+    clock_seconds="1.51" peak_mbytes="112.24" alloc_mbytes="1820.50" gc_seconds="0.04" priority_3="1" priority_2="1"
+    priority_1="1">
+    <PackageStats package="" total_bugs="3" total_types="3" total_size="19" priority_3="1" priority_2="1"
+      priority_1="1">
+      <ClassStats class="HighPriorityViolator" sourceFile="HighPriorityViolator.java" interface="false" size="8"
+        bugs="1" priority_1="1" />
+      <ClassStats class="LowPriorityViolator" sourceFile="LowPriorityViolator.java" interface="false" size="5" bugs="1"
+        priority_3="1" />
+      <ClassStats class="MediumPriorityViolator" sourceFile="MediumPriorityViolator.java" interface="false" size="6"
+        bugs="1" priority_2="1" />
+    </PackageStats>
+    <FindBugsProfile>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine" totalMilliseconds="323"
+        invocations="336" avgMicrosecondsPerInvocation="962" maxMicrosecondsPerInvocation="30204"
+        standardDeviationMircosecondsPerInvocation="2932" />
+      <ClassProfile name="edu.umd.cs.findbugs.util.TopologicalSort" totalMilliseconds="70" invocations="303"
+        avgMicrosecondsPerInvocation="233" maxMicrosecondsPerInvocation="8377"
+        standardDeviationMircosecondsPerInvocation="724" />
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FieldItemSummary" totalMilliseconds="59" invocations="16"
+        avgMicrosecondsPerInvocation="3715" maxMicrosecondsPerInvocation="18686"
+        standardDeviationMircosecondsPerInvocation="4920" />
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.MethodGenFactory" totalMilliseconds="57"
+        invocations="5" avgMicrosecondsPerInvocation="11422" maxMicrosecondsPerInvocation="55743"
+        standardDeviationMircosecondsPerInvocation="22161" />
+      <ClassProfile name="edu.umd.cs.findbugs.OpcodeStack$JumpInfoFactory" totalMilliseconds="51" invocations="68"
+        avgMicrosecondsPerInvocation="756" maxMicrosecondsPerInvocation="7920"
+        standardDeviationMircosecondsPerInvocation="1319" />
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.JavaClassAnalysisEngine" totalMilliseconds="41"
+        invocations="32" avgMicrosecondsPerInvocation="1299" maxMicrosecondsPerInvocation="23298"
+        standardDeviationMircosecondsPerInvocation="4145" />
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FindNoSideEffectMethods" totalMilliseconds="39" invocations="16"
+        avgMicrosecondsPerInvocation="2472" maxMicrosecondsPerInvocation="10403"
+        standardDeviationMircosecondsPerInvocation="3205" />
+      <ClassProfile name="edu.umd.cs.findbugs.detect.OverridingEqualsNotSymmetrical" totalMilliseconds="27"
+        invocations="16" avgMicrosecondsPerInvocation="1727" maxMicrosecondsPerInvocation="12931"
+        standardDeviationMircosecondsPerInvocation="3235" />
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FindOpenStream" totalMilliseconds="26" invocations="3"
+        avgMicrosecondsPerInvocation="8713" maxMicrosecondsPerInvocation="26089"
+        standardDeviationMircosecondsPerInvocation="12286" />
+      <ClassProfile name="edu.umd.cs.findbugs.detect.NoteDirectlyRelevantTypeQualifiers" totalMilliseconds="26"
+        invocations="16" avgMicrosecondsPerInvocation="1631" maxMicrosecondsPerInvocation="10411"
+        standardDeviationMircosecondsPerInvocation="2508" />
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FunctionsThatMightBeMistakenForProcedures" totalMilliseconds="24"
+        invocations="16" avgMicrosecondsPerInvocation="1533" maxMicrosecondsPerInvocation="5715"
+        standardDeviationMircosecondsPerInvocation="1914" />
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassDataAnalysisEngine" totalMilliseconds="21"
+        invocations="337" avgMicrosecondsPerInvocation="65" maxMicrosecondsPerInvocation="1195"
+        standardDeviationMircosecondsPerInvocation="93" />
+      <ClassProfile name="edu.umd.cs.findbugs.detect.BuildObligationPolicyDatabase" totalMilliseconds="20"
+        invocations="16" avgMicrosecondsPerInvocation="1250" maxMicrosecondsPerInvocation="6185"
+        standardDeviationMircosecondsPerInvocation="1733" />
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.TypeDataflowFactory" totalMilliseconds="18"
+        invocations="5" avgMicrosecondsPerInvocation="3687" maxMicrosecondsPerInvocation="15942"
+        standardDeviationMircosecondsPerInvocation="6151" />
+    </FindBugsProfile>
+  </FindBugsSummary>
+  <ClassFeatures></ClassFeatures>
+  <History></History>
+</BugCollection>
