@@ -12,6 +12,7 @@ import static com.novoda.test.TestProject.Result.Logs;
 class LogsSubject extends Subject<LogsSubject, Logs> {
     private static final String VIOLATIONS_LIMIT_EXCEEDED = "Violations limit exceeded"
     private static final String CHECKSTYLE_VIOLATIONS_FOUND = "Checkstyle rule violations were found"
+    private static final String PMD_VIOLATIONS_FOUND = "PMD rule violations were found"
     private static final SubjectFactory<LogsSubject, Logs> FACTORY = new SubjectFactory<LogsSubject, Logs>() {
         @Override
         LogsSubject getSubject(FailureStrategy failureStrategy, Logs logs) {
@@ -39,9 +40,21 @@ class LogsSubject extends Subject<LogsSubject, Logs> {
         Truth.assertThat(actual().output).doesNotContain(CHECKSTYLE_VIOLATIONS_FOUND)
     }
 
+    public void doesNotContainPmdViolations() {
+        Truth.assertThat(actual().output).doesNotContain(PMD_VIOLATIONS_FOUND)
+    }
+
     public void containsCheckstyleViolations(int errors, int warnings, File... reports) {
         def output = Truth.assertThat(actual().output)
         output.contains("$CHECKSTYLE_VIOLATIONS_FOUND ($errors errors, $warnings warnings). See the reports at:\n")
+        for (File report : reports) {
+            output.contains(report.path)
+        }
+    }
+
+    public void containsPmdViolations(int errors, int warnings, File... reports) {
+        def output = Truth.assertThat(actual().output)
+        output.contains("$PMD_VIOLATIONS_FOUND ($errors errors, $warnings warnings). See the reports at:\n")
         for (File report : reports) {
             output.contains(report.path)
         }

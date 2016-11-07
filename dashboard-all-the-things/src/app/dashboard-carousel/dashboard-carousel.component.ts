@@ -1,51 +1,72 @@
-import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { Observable } from 'rxjs/Observable';
+import { ExternalUrlComponent } from '../dashboards/external-url/external-url.component';
+import { ReviewComponent } from '../dashboards/review';
+import { SonarCoverageComponent } from '../dashboards/sonar-coverage';
+import { StackOverflowComponent } from '../dashboards/stackoverflow/stackoverflow.component';
+import { WidgetEvent } from '../dashboards/WidgetEvent';
+import { DynamicComponent } from './dynamic.component';
+import { SocketService } from './socket.service';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ConnectableObservable, Subscription, Subscriber } from 'rxjs';
+import { ConfigService } from '../config.service';
+
+const COMPONENTS = {
+  coverage: SonarCoverageComponent,
+  ciWall: ExternalUrlComponent,
+  reviews: ReviewComponent,
+  stackoverflow: StackOverflowComponent
+};
+
+const distinct = (elem, index, arr) => arr.indexOf(elem) === index;
 
 @Component({
   selector: 'app-dashboard-carousel',
   templateUrl: 'dashboard-carousel.component.html',
-  styleUrls: ['dashboard-carousel.component.scss']
+  styleUrls: ['dashboard-carousel.component.scss'],
+  entryComponents: Object['values'](COMPONENTS).filter(distinct)
 })
 export class DashboardCarouselComponent implements OnInit, OnDestroy {
 
-  private CAROUSEL_CURRENT_POSITION = '--carousel-current-position';
-  static ROTATE_RATE_IN_MILLISECONDS = 3 * 1000;
+  private configService: ConfigService;
+  private configSubscription: Subscription;
+  private socketService: SocketService;
+  private connection: Subscription;
+  private type: any;
+  private event: WidgetEvent;
 
-  animation: Subscription;
-  position: number;
-  dasboardCount: number = 3;
-  element: ElementRef;
+  @ViewChild(DynamicComponent) dynamicComponent: DynamicComponent;
 
-  constructor(element: ElementRef) {
-    this.element = element;
-    this.position = 1;
+  constructor(configService: ConfigService, socketService: SocketService) {
+    this.configService = configService;
+    this.socketService = socketService;
   }
 
   ngOnInit(): void {
-    this.animation = Observable
-      .timer(DashboardCarouselComponent.ROTATE_RATE_IN_MILLISECONDS, DashboardCarouselComponent.ROTATE_RATE_IN_MILLISECONDS)
-      .subscribe(() => {
-        this.showNextDashboard();
+    this.configSubscription = this.configService.getServerUrl()
+      .map((serverUrl: string) => {
+        return this.socketService.create(serverUrl);
+      }).subscribe((observable: ConnectableObservable<any>) => {
+        this.connection = observable.subscribe(this.onWidgetEvent);
+        observable.connect();
       });
   }
 
-  private showNextDashboard() {
-    if (this.dasboardCount > this.position) {
-      this.position += 1;
-    } else {
-      this.position = 1;
+  private onWidgetEvent = (event: WidgetEvent) => {
+    if (event.widgetKey === undefined) {
+      return;
     }
-    this.setContributorPosition(this.position);
-  }
-
-  private setContributorPosition(position: number) {
-    this.element.nativeElement.style.setProperty(this.CAROUSEL_CURRENT_POSITION, position);
-  }
+    const type = COMPONENTS[event.widgetKey];
+    if (type != undefined) {
+      this.type = type;
+      this.event = event;
+    }
+  };
 
   ngOnDestroy(): void {
-    if (!this.animation.closed) {
-      this.animation.unsubscribe();
+    if (!this.configSubscription.closed) {
+      this.configSubscription.unsubscribe();
+    }
+    if (!this.connection.closed) {
+      this.connection.unsubscribe();
     }
   }
 

@@ -24,5 +24,14 @@ public final class Fixtures {
         }
     }
 
+    public final static class Pmd {
+        public static final File RULES = new File(FIXTURES_DIR, 'pmd/config/rules.xml')
+        public static final File SOURCES_WITH_PRIORITY_1_VIOLATION = new File(FIXTURES_DIR, 'pmd/priority1')
+        public static final File SOURCES_WITH_PRIORITY_2_VIOLATION = new File(FIXTURES_DIR, 'pmd/priority2')
+        public static final File SOURCES_WITH_PRIORITY_3_VIOLATION = new File(FIXTURES_DIR, 'pmd/priority3')
+        public static final File SOURCES_WITH_PRIORITY_4_VIOLATION = new File(FIXTURES_DIR, 'pmd/priority4')
+        public static final File SOURCES_WITH_PRIORITY_5_VIOLATION = new File(FIXTURES_DIR, 'pmd/priority5')
+        public static final File SAMPLE_REPORT = new File(FIXTURES_DIR, 'pmd/reports/sample.xml')
+    }
 
 }

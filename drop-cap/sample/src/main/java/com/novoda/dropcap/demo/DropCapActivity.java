@@ -3,6 +3,7 @@ package com.novoda.dropcap.demo;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,9 +29,6 @@ public class DropCapActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drop_cap);
         dropCapView = (DropCapView) findViewById(R.id.view_drop_cap);
-
-        String dropCapText = getResources().getString(R.string.drop_cap_dummy_text);
-        dropCapView.setText(dropCapText);
 
         createTextSizeDialogDisplayers();
         createTextColorDialogDisplayers();
@@ -62,14 +60,14 @@ public class DropCapActivity extends Activity {
     private final OnTextSizeChangeListener onDropCapTextSizeChanged = new OnTextSizeChangeListener() {
         @Override
         public void onSizeChanged(int newTextSize) {
-            dropCapView.setDropCapTextSize(newTextSize);
+            dropCapView.setDropCapTextSize(TypedValue.COMPLEX_UNIT_PX, newTextSize);
         }
     };
 
     private final OnTextSizeChangeListener onCopyTextSizeChanged = new OnTextSizeChangeListener() {
         @Override
         public void onSizeChanged(int newTextSize) {
-            dropCapView.setCopyTextSize(newTextSize);
+            dropCapView.setCopyTextSize(TypedValue.COMPLEX_UNIT_PX, newTextSize);
         }
     };
 

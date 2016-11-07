@@ -12,7 +12,8 @@
       android:id="@+id/view_drop_cap"
       style="@style/DropCap"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content" />
+      android:layout_height="wrap_content"
+      android:text="@string/drop_cap_dummy_text" />
 
   </ScrollView>
 
