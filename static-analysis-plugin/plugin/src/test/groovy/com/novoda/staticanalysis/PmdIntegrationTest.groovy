@@ -30,8 +30,8 @@ public class PmdIntegrationTest {
         TestProject.Result result = projectRule.newProject()
                 .withSourceSet('main', Fixtures.Pmd.SOURCES_WITH_PRIORITY_3_VIOLATION)
                 .withPenalty('''{
-                    maxWarnings 0
-                    maxErrors 0
+                    maxWarnings = 0
+                    maxErrors = 0
                 }''')
                 .withPmd(pmd("project.files('${Fixtures.Pmd.RULES.path}')"))
                 .buildAndFail('check')
@@ -47,8 +47,8 @@ public class PmdIntegrationTest {
                 .withSourceSet('main', Fixtures.Pmd.SOURCES_WITH_PRIORITY_1_VIOLATION)
                 .withSourceSet('main2', Fixtures.Pmd.SOURCES_WITH_PRIORITY_2_VIOLATION)
                 .withPenalty('''{
-                    maxWarnings 0
-                    maxErrors 0
+                    maxWarnings = 0
+                    maxErrors = 0
                 }''')
                 .withPmd(pmd("project.files('${Fixtures.Pmd.RULES.path}')"))
                 .buildAndFail('check')
@@ -63,8 +63,8 @@ public class PmdIntegrationTest {
     public void shouldNotFailBuildWhenNoPmdWarningsOrErrorsEncounteredAndNoThresholdTrespassed() {
         TestProject.Result result = projectRule.newProject()
                 .withPenalty('''{
-                    maxWarnings 0
-                    maxErrors 0
+                    maxWarnings = 0
+                    maxErrors = 0
                 }''')
                 .withPmd(pmd("project.files('${Fixtures.Pmd.RULES.path}')"))
                 .build('check')
@@ -81,8 +81,8 @@ public class PmdIntegrationTest {
                 .withSourceSet('main3', Fixtures.Pmd.SOURCES_WITH_PRIORITY_3_VIOLATION)
                 .withSourceSet('main4', Fixtures.Pmd.SOURCES_WITH_PRIORITY_4_VIOLATION)
                 .withPenalty('''{
-                    maxWarnings 100
-                    maxErrors 100
+                    maxWarnings = 100
+                    maxErrors = 100
                 }''')
                 .withPmd(pmd("project.files('${Fixtures.Pmd.RULES.path}')"))
                 .build('check')
@@ -104,8 +104,8 @@ public class PmdIntegrationTest {
         TestProject.Result result = projectRule.newProject()
                 .withSourceSet('main', Fixtures.Pmd.SOURCES_WITH_PRIORITY_5_VIOLATION)
                 .withPenalty('''{
-                    maxWarnings 0
-                    maxErrors 0
+                    maxWarnings = 0
+                    maxErrors = 0
                 }''')
                 .withPmd(pmd("project.files('${Fixtures.Pmd.RULES.path}')"))
                 .buildAndFail('check')
@@ -122,8 +122,8 @@ public class PmdIntegrationTest {
                 .withSourceSet('main3', Fixtures.Pmd.SOURCES_WITH_PRIORITY_3_VIOLATION)
                 .withSourceSet('main4', Fixtures.Pmd.SOURCES_WITH_PRIORITY_4_VIOLATION)
                 .withPenalty('''{
-                    maxWarnings 100
-                    maxErrors 100
+                    maxWarnings = 100
+                    maxErrors = 100
                 }''')
                 .withPmd(pmd("project.files('${Fixtures.Pmd.RULES.path}')", "ignoreFailures = false"))
                 .build('check')
@@ -135,8 +135,8 @@ public class PmdIntegrationTest {
                 .withSourceSet('main', Fixtures.Pmd.SOURCES_WITH_PRIORITY_1_VIOLATION)
                 .withSourceSet('main2', Fixtures.Pmd.SOURCES_WITH_PRIORITY_2_VIOLATION)
                 .withPenalty('''{
-                    maxWarnings 0
-                    maxErrors 0
+                    maxWarnings = 0
+                    maxErrors = 0
                 }''')
                 .withPmd(pmd("project.files('${Fixtures.Pmd.RULES.path}')", "exclude 'Priority1Violator.java'", "exclude 'Priority2Violator.java'"))
                 .build('check')
@@ -151,8 +151,8 @@ public class PmdIntegrationTest {
                 .withSourceSet('main', Fixtures.Pmd.SOURCES_WITH_PRIORITY_1_VIOLATION)
                 .withSourceSet('main2', Fixtures.Pmd.SOURCES_WITH_PRIORITY_2_VIOLATION)
                 .withPenalty('''{
-                    maxWarnings 0
-                    maxErrors 0
+                    maxWarnings = 0
+                    maxErrors = 0
                 }''')
                 .build('check')
 
