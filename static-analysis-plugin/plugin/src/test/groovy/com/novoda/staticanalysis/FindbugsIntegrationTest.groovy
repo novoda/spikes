@@ -7,9 +7,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
-import static com.novoda.test.Fixtures.Findbugs.SOURCES_WITH_HIGH_VIOLATION
-import static com.novoda.test.Fixtures.Findbugs.SOURCES_WITH_LOW_VIOLATION
-import static com.novoda.test.Fixtures.Findbugs.SOURCES_WITH_MEDIUM_VIOLATION
+import static com.novoda.test.Fixtures.Findbugs.*
 import static com.novoda.test.LogsSubject.assertThat
 
 @RunWith(Parameterized.class)
@@ -114,6 +112,23 @@ class FindbugsIntegrationTest {
                     maxWarnings = 0
                 }''')
                 .build('check')
+    }
+
+    @Test
+    public void shouldNotFailBuildWhenFindbugsConfiguredToIgnoreFaultySourceSets() {
+        TestProject.Result result = projectRule.newProject()
+                .withSourceSet('main', SOURCES_WITH_LOW_VIOLATION, SOURCES_WITH_MEDIUM_VIOLATION)
+                .withSourceSet('main2', SOURCES_WITH_HIGH_VIOLATION)
+                .withPenalty('''{
+                    maxErrors = 0
+                    maxWarnings = 10
+                }''')
+                .withFindbugs('findbugs { exclude "HighPriorityViolator.java" }')
+                .build('check')
+
+        assertThat(result.logs).doesNotContainLimitExceeded()
+        assertThat(result.logs).containsFindbugsViolations(0, 2,
+                result.buildFile('reports/findbugs/main.html'))
     }
 
 }

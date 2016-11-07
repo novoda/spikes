@@ -19,18 +19,19 @@ class FindbugsConfigurator {
             configureExtension(project.extensions.findByType(FindBugsExtension), excludes, config)
             project.afterEvaluate {
                 project.tasks.withType(FindBugs) { FindBugs findBugs ->
-                    configureTask(project, findBugs, evaluateViolations, violations)
+                    configureTask(project, findBugs, evaluateViolations, violations, excludes)
                 }
             }
         }
     }
 
-    private void configureTask(Project project, FindBugs findBugs, Task evaluateViolations, Violations violations) {
+    private void configureTask(Project project, FindBugs findBugs, Task evaluateViolations, Violations violations, List<String> excludes) {
         findBugs.effort = 'max'
         findBugs.reportLevel = 'low'
         findBugs.ignoreFailures = true
         findBugs.reports.xml.enabled = true
         findBugs.reports.html.enabled = false
+        findBugs.exclude(excludes)
         File xmlReportFile = findBugs.reports.xml.destination
         File htmlReportFile = new File(xmlReportFile.absolutePath - '.xml' + '.html')
         findBugs.doLast {
@@ -49,6 +50,7 @@ class FindbugsConfigurator {
     private void configureExtension(FindBugsExtension extension, List<String> excludes, Closure config) {
         extension.with {
             toolVersion = '3.0.1'
+            ext.exclude = { String filter -> excludes.add(filter) }
             config.delegate = it
             config()
         }
