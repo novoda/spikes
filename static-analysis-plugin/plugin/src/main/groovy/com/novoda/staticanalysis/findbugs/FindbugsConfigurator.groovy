@@ -38,7 +38,7 @@ class FindbugsConfigurator {
             evaluateReports(xmlReportFile, htmlReportFile, violations)
         }
 
-        project.tasks.create("${findBugs.name}GenerateHtmlReport", GenerateHtmlReport) { GenerateHtmlReport generateHtmlReport ->
+        project.tasks.create("generate${findBugs.name.capitalize()}HtmlReport", GenerateHtmlReport) { GenerateHtmlReport generateHtmlReport ->
             generateHtmlReport.xmlReportFile = xmlReportFile
             generateHtmlReport.htmlReportFile = htmlReportFile
             generateHtmlReport.classpath = findBugs.findbugsClasspath
