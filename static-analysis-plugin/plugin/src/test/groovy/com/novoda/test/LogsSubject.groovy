@@ -1,9 +1,11 @@
 package com.novoda.test
 
 import com.google.common.truth.FailureStrategy
+import com.google.common.truth.StringSubject
 import com.google.common.truth.Subject
 import com.google.common.truth.SubjectFactory
 import com.google.common.truth.Truth
+import com.google.common.truth.TruthJUnit
 
 import javax.annotation.Nullable
 
@@ -25,51 +27,56 @@ class LogsSubject extends Subject<LogsSubject, Logs> {
         Truth.assertAbout(FACTORY).that(logs)
     }
 
+    public static LogsSubject assumeThat(Logs logs) {
+        TruthJUnit.assume().about(FACTORY).that(logs)
+    }
+
     LogsSubject(FailureStrategy failureStrategy, @Nullable Logs actual) {
         super(failureStrategy, actual)
     }
 
+    private StringSubject getOutputSubject() {
+        check().that(actual().output)
+    }
+
     public void doesNotContainLimitExceeded() {
-        Truth.assertThat(actual().output).doesNotContain(VIOLATIONS_LIMIT_EXCEEDED)
+        outputSubject.doesNotContain(VIOLATIONS_LIMIT_EXCEEDED)
     }
 
     public void containsLimitExceeded(int errors, int warnings) {
-        Truth.assertThat(actual().output).contains("$VIOLATIONS_LIMIT_EXCEEDED by $errors errors, $warnings warnings.")
+        outputSubject.contains("$VIOLATIONS_LIMIT_EXCEEDED by $errors errors, $warnings warnings.")
     }
 
     public void doesNotContainCheckstyleViolations() {
-        Truth.assertThat(actual().output).doesNotContain(CHECKSTYLE_VIOLATIONS_FOUND)
+        outputSubject.doesNotContain(CHECKSTYLE_VIOLATIONS_FOUND)
     }
 
     public void doesNotContainPmdViolations() {
-        Truth.assertThat(actual().output).doesNotContain(PMD_VIOLATIONS_FOUND)
+        outputSubject.doesNotContain(PMD_VIOLATIONS_FOUND)
     }
 
     public void doesNotContainFindbugsViolations() {
-        Truth.assertThat(actual().output).doesNotContain(FINDBUGS_VIOLATIONS_FOUND)
+        outputSubject.doesNotContain(FINDBUGS_VIOLATIONS_FOUND)
     }
 
     public void containsCheckstyleViolations(int errors, int warnings, File... reports) {
-        def output = Truth.assertThat(actual().output)
-        output.contains("$CHECKSTYLE_VIOLATIONS_FOUND ($errors errors, $warnings warnings). See the reports at:\n")
+        outputSubject.contains("$CHECKSTYLE_VIOLATIONS_FOUND ($errors errors, $warnings warnings). See the reports at:\n")
         for (File report : reports) {
-            output.contains(report.path)
+            outputSubject.contains(report.path)
         }
     }
 
     public void containsPmdViolations(int errors, int warnings, File... reports) {
-        def output = Truth.assertThat(actual().output)
-        output.contains("$PMD_VIOLATIONS_FOUND ($errors errors, $warnings warnings). See the reports at:\n")
+        outputSubject.contains("$PMD_VIOLATIONS_FOUND ($errors errors, $warnings warnings). See the reports at:\n")
         for (File report : reports) {
-            output.contains(report.path)
+            outputSubject.contains(report.path)
         }
     }
 
     public void containsFindbugsViolations(int errors, int warnings, File... reports) {
-        def output = Truth.assertThat(actual().output)
-        output.contains("$FINDBUGS_VIOLATIONS_FOUND ($errors errors, $warnings warnings). See the reports at:\n")
+        outputSubject.contains("$FINDBUGS_VIOLATIONS_FOUND ($errors errors, $warnings warnings). See the reports at:\n")
         for (File report : reports) {
-            output.contains(report.path)
+            outputSubject.contains(report.path)
         }
     }
 }
