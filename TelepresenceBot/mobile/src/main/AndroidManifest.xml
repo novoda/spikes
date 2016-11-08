@@ -4,11 +4,13 @@
 
   <application
     android:allowBackup="true"
-    android:icon="@drawable/ic_launcher"
+    android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
     android:supportsRtl="true"
     android:theme="@style/AppTheme">
-    <activity android:name=".TpBotActivity">
+    <activity
+      android:name=".BotControllerActivity"
+      android:label="@string/Bot_Controller">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
