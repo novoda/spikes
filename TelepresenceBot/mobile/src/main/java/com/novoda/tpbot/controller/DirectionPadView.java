@@ -33,10 +33,13 @@ public class DirectionPadView extends RelativeLayout {
         right.setOnTouchListener(onButtonTouchListener);
 
         View fire = Views.findById(this, R.id.controller_lazers_button);
-        fire.setOnClickListener(new OnClickListener() {
+        fire.setOnTouchListener(new OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                onDirectionPressedListener.onLazersPressed();
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    onDirectionPressedListener.onLazersFired();
+                }
+                return false;
             }
         });
     }

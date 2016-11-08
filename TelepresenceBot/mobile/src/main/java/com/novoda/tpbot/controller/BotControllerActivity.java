@@ -4,32 +4,62 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.novoda.notils.caster.Views;
-import com.novoda.notils.logger.simple.Log;
 import com.novoda.tpbot.R;
+import com.novoda.tpbot.SelfDestructingMessageView;
 
 public class BotControllerActivity extends AppCompatActivity {
+
+    private static final String LAZERS = String.valueOf(Character.toChars(0x1F4A5));
+
+    private static final long DURATION_DIRECTIONS = 1500L;
+    private static final long DURATION_LAZERS = 150L;
+
+    private SelfDestructingMessageView debugView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bot_controller);
+        debugView = Views.findById(this, R.id.bot_controller_debug_view);
+
         DirectionPadView padView = Views.findById(this, R.id.bot_controller_direction_view);
         padView.setOnDirectionPressedListener(new OnDirectionPressedListener() {
+
             @Override
             public void onDirectionPressed(BotDirection direction) {
-                Log.d("onDirectionPressed: " + direction);
+                String arrowCharacter = arrowOf(direction);
+                debugView.showPermanently(arrowCharacter);
             }
 
             @Override
             public void onDirectionReleased(BotDirection direction) {
-                Log.d("onDirectionReleased: " + direction);
+                String arrowCharacter = arrowOf(direction);
+                debugView.showTimed(arrowCharacter + " released", DURATION_DIRECTIONS);
+            }
+
+            private String arrowOf(BotDirection direction) {
+                switch (direction) {
+                    case FORWARD:
+                        return "↑";
+                    case BACKWARD:
+                        return "↓";
+                    case STEER_LEFT:
+                        return "←";
+                    case STEER_RIGHT:
+                        return "→";
+                }
+                throw new IllegalArgumentException("Invalid direction " + direction);
             }
 
             @Override
-            public void onLazersPressed() {
-                Log.d("Pew!");
+            public void onLazersFired() {
+                debugView.showTimed(LAZERS, DURATION_LAZERS);
+            }
+
+            @Override
+            public void onLazersReleased() {
+                debugView.clearMessage();
             }
         });
     }
-
 }
