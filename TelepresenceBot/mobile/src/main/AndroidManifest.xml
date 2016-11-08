@@ -12,6 +12,7 @@
     tools:ignore="AllowBackup,GoogleAppIndexingWarning">
     <activity
       android:name=".BotControllerActivity"
+      android:icon="@mipmap/ic_bot_controller_launcher"
       android:label="@string/Bot_Controller">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
