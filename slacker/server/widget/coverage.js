@@ -1,23 +1,23 @@
 const httpClient = require('request-promise-native');
 
 function Coverage(config) {
-  this.apiKey = config.apiKey;
+  this.token = config.token;
 }
 
 Coverage.prototype.rank = 1;
 
 Coverage.prototype.rule = function() {
-  return httpClient(createProjectRequest(this.apiKey))
+  return httpClient(createProjectRequest(this.token))
     .then(parseProjects)
-    .then(toAllCoverage(this.apiKey))
+    .then(toAllCoverage(this.token))
     .then(toRuleResult);
 }
 
-function createProjectRequest(apiKey) {
+function createProjectRequest(token) {
   return {
     url: 'https://sonar.novoda.com/api/projects/index',
     auth: {
-      user: apiKey,
+      user: token,
       pass: '',
     }
   };
@@ -36,10 +36,10 @@ function parseProjects(body) {
   return Promise.resolve(results);
 }
 
-function toAllCoverage(apiKey) {
+function toAllCoverage(token) {
   return function (data) {
     const allCoverage = data.map(each => {
-      const coverageRequest = createCoverageRequest(apiKey, each.key);
+      const coverageRequest = createCoverageRequest(token, each.key);
       return httpClient(coverageRequest)
         .then(parseCoverage(each.name));
     });
@@ -47,7 +47,7 @@ function toAllCoverage(apiKey) {
   };
 }
 
-function createCoverageRequest(apiKey, componentKey) {
+function createCoverageRequest(token, componentKey) {
   return {
     url:  'https://sonar.novoda.com/api/measures/component',
     qs: {
@@ -55,7 +55,7 @@ function createCoverageRequest(apiKey, componentKey) {
       metricKeys: 'coverage'
     },
     auth: {
-      user: apiKey,
+      user: token,
       pass: '',
     }
   };
