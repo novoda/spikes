@@ -1,40 +1,42 @@
-var Slacker = require('./slacker/slacker.js');
+const Slacker = require('./widget/slacker/slacker');
+const Coverage = require('./widget/coverage');
+const StackOverflow = require('./widget/stackoverflow');
+const Reviews = require('./widget/reviews');
 
 const DASHBOARD_INTERVAL = 1000 * 30;
+const DASHBOARD_ERROR_INTERVAL = 1000 * 1;
 
-var Dashboard = function(token) {
-  this.slacker = new Slacker(token);
+function Dashboard(config) {
+  this.slacker = new Slacker(config.slack);
   this.index = 0;
   this.widgets = [
-    require('./ci-wall'),
-    require('./coverage'),
-    require('./stackoverflow'),
-    require('./reviews')
+    require('./widget/ci-wall'),
+    new Coverage(config.sonar),
+    new StackOverflow(),
+    new Reviews()
   ].concat(this.slacker.getRules());
 }
 
-function update(self, callback) {
-  var updateLoop = function() {
-    var rule = getCurrentRule(self);
-    rule().then(result => {
-        callback(result)
+Dashboard.prototype.start = function(listener) {
+  updateLoop(this, listener)();
+}
+
+function updateLoop(self, listener) {
+  return function() {
+    getCurrentRule(self).then(result => {
+        listener(result)
         incrementIndex(self);
-        setTimeout(updateLoop, getTimeoutInterval(self));
+        setTimeout(updateLoop(self, listener), getTimeoutInterval(self));
       }).catch(err => {
         console.log(err);
         incrementIndex(self);
-        setTimeout(updateLoop, 100);
-    })
-  }
-  updateLoop();
-}
-
-Dashboard.prototype.start = function(callback) {
-  update(this, callback);
+        setTimeout(updateLoop(self, listener), DASHBOARD_ERROR_INTERVAL);
+    });
+  };
 }
 
 function getCurrentRule(self) {
-  return self.widgets[self.index].rule;
+  return self.widgets[self.index].rule();
 }
 
 function incrementIndex(self) {

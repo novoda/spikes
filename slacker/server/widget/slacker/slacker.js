@@ -10,12 +10,12 @@ var rules = [
   require('./gallery')
 ]
 
-var Slacker = function(token) {
+var Slacker = function(config) {
   this.messages = [];
   this.index = 0;
   this.ruleIndex = 0;
   this.rtm = new RtmClient(
-    token,
+    config.token,
     { dataStore: new MemoryDataStore() }
   );
   this.rtm.start();
