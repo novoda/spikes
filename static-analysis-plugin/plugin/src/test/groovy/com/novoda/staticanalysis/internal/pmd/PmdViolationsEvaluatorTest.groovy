@@ -1,11 +1,11 @@
-package com.novoda.staticanalysis
+package com.novoda.staticanalysis.internal.pmd
 
 import com.novoda.test.Fixtures
 import org.junit.Before
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
-import static com.novoda.staticanalysis.PmdViolationsEvaluator.PmdViolation
+import static com.novoda.staticanalysis.internal.pmd.PmdViolationsEvaluator.PmdViolation
 
 public class PmdViolationsEvaluatorTest {
 

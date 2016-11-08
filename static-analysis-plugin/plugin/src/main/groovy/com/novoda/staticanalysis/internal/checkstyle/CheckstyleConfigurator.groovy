@@ -1,5 +1,8 @@
-package com.novoda.staticanalysis
+package com.novoda.staticanalysis.internal.checkstyle
 
+import com.novoda.staticanalysis.internal.QuietLogger
+import com.novoda.staticanalysis.StaticAnalysisExtension
+import com.novoda.staticanalysis.internal.Violations
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Project
 import org.gradle.api.Task

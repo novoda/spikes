@@ -1,4 +1,4 @@
-package com.novoda.staticanalysis
+package com.novoda.staticanalysis.internal.pmd
 
 import groovy.util.slurpersupport.GPathResult
 

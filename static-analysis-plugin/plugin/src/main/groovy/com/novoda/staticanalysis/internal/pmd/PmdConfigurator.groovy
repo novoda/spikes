@@ -1,6 +1,8 @@
-package com.novoda.staticanalysis
+package com.novoda.staticanalysis.internal.pmd
 
-import com.novoda.staticanalysis.PmdViolationsEvaluator.PmdViolation
+import com.novoda.staticanalysis.internal.QuietLogger
+import com.novoda.staticanalysis.StaticAnalysisExtension
+import com.novoda.staticanalysis.internal.Violations
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.plugins.quality.Pmd
@@ -80,7 +82,7 @@ class PmdConfigurator {
     private void evaluateReports(File xmlReportFile, File htmlReportFile, Violations violations) {
         PmdViolationsEvaluator evaluator = new PmdViolationsEvaluator(xmlReportFile)
         int errors = 0, warnings = 0
-        evaluator.collectViolations().each { PmdViolation violation ->
+        evaluator.collectViolations().each { PmdViolationsEvaluator.PmdViolation violation ->
             if (violation.isError()) {
                 errors += 1
             } else {

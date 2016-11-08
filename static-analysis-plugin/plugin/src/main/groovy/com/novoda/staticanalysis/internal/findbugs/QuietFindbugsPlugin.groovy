@@ -1,6 +1,6 @@
-package com.novoda.staticanalysis.findbugs
+package com.novoda.staticanalysis.internal.findbugs
 
-import com.novoda.staticanalysis.QuietLogger
+import com.novoda.staticanalysis.internal.QuietLogger
 import org.gradle.api.logging.Logger
 import org.gradle.api.plugins.quality.FindBugs
 import org.gradle.api.plugins.quality.FindBugsPlugin

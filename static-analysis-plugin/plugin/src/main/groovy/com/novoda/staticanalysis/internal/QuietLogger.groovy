@@ -1,4 +1,4 @@
-package com.novoda.staticanalysis
+package com.novoda.staticanalysis.internal
 
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.logging.Logger
