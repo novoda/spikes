@@ -29,19 +29,19 @@
     android:text="RIGHT" />
 
   <Button
-    android:id="@+id/controller_top_button"
+    android:id="@+id/controller_up_button"
     android:layout_width="@dimen/button_size"
     android:layout_height="@dimen/button_size"
     android:layout_above="@id/controller_lazers_button"
     android:layout_centerHorizontal="true"
-    android:text="TOP" />
+    android:text="UP" />
 
   <Button
-    android:id="@+id/controller_bottom_button"
+    android:id="@+id/controller_down_button"
     android:layout_width="@dimen/button_size"
     android:layout_height="@dimen/button_size"
     android:layout_below="@id/controller_lazers_button"
     android:layout_centerHorizontal="true"
-    android:text="BOTTOM" />
+    android:text="DOWN" />
 
 </RelativeLayout>
