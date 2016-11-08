@@ -7,9 +7,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
-import static com.novoda.test.Fixtures.Findbugs.SOURCES_WITH_HIGH_VIOLATION
-import static com.novoda.test.Fixtures.Findbugs.SOURCES_WITH_LOW_VIOLATION
-import static com.novoda.test.Fixtures.Findbugs.SOURCES_WITH_MEDIUM_VIOLATION
+import static com.novoda.test.Fixtures.Findbugs.*
 import static com.novoda.test.LogsSubject.assertThat
 
 @RunWith(Parameterized.class)
@@ -17,7 +15,7 @@ class FindbugsIntegrationTest {
 
     @Parameterized.Parameters
     public static List<Object[]> rules() {
-        return [TestProjectRule.forAndroidProject()].collect { [it] as Object[] }
+        return [TestProjectRule.forJavaProject(), TestProjectRule.forAndroidProject()].collect { [it] as Object[] }
     }
 
     @Rule
@@ -79,8 +77,8 @@ class FindbugsIntegrationTest {
                 .withSourceSet('debug', SOURCES_WITH_LOW_VIOLATION, SOURCES_WITH_MEDIUM_VIOLATION)
                 .withSourceSet('release', SOURCES_WITH_HIGH_VIOLATION)
                 .withPenalty('''{
-                    maxErrors = 100
-                    maxWarnings = 100
+                    maxErrors = 10
+                    maxWarnings = 10
                 }''')
                 .withFindbugs('findbugs {}')
                 .build('check')
@@ -97,8 +95,8 @@ class FindbugsIntegrationTest {
                 .withSourceSet('debug', SOURCES_WITH_LOW_VIOLATION, SOURCES_WITH_MEDIUM_VIOLATION)
                 .withSourceSet('release', SOURCES_WITH_HIGH_VIOLATION)
                 .withPenalty('''{
-                    maxErrors = 100
-                    maxWarnings = 100
+                    maxErrors = 10
+                    maxWarnings = 10
                 }''')
                 .withFindbugs('findbugs { ignoreFailures = false }')
                 .build('check')
