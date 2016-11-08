@@ -20,5 +20,5 @@ Tool | Android | Java
 :----:|:--------:|:--------:
 `Checkstyle` | :white_check_mark: | :white_check_mark:
 `PMD` | :white_check_mark: | :white_check_mark:
-`FindBugs` | :x: | :x:
+`FindBugs` | :white_check_mark: | :white_check_mark:
 <br/>

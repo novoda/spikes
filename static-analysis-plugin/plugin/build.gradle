@@ -22,6 +22,9 @@ sourceSets {
             srcDir file('fixtures/pmd/priority3')
             srcDir file('fixtures/pmd/priority4')
             srcDir file('fixtures/pmd/priority5')
+            srcDir file('fixtures/findbugs/high')
+            srcDir file('fixtures/findbugs/medium')
+            srcDir file('fixtures/findbugs/low')
         }
     }
 }

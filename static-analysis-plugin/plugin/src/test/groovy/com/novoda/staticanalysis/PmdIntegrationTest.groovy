@@ -96,7 +96,7 @@ public class PmdIntegrationTest {
     }
 
     /**
-     * We found out PMD sometimes ... the same violation twice, but with different priority.
+     * We found out PMD sometimes detects the same violation twice, but with different priority.
      * The issue seems related to the customisation of a rule coming from one of the predefined rule sets.
      */
     @Test
