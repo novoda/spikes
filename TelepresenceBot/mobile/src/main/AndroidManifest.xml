@@ -12,7 +12,7 @@
     android:theme="@style/AppTheme"
     tools:ignore="AllowBackup,GoogleAppIndexingWarning">
     <activity
-      android:name=".BotControllerActivity"
+      android:name=".controller.BotControllerActivity"
       android:icon="@mipmap/ic_bot_controller_launcher"
       android:label="@string/Bot_Controller">
       <intent-filter>

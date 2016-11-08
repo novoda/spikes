@@ -3,7 +3,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context="com.novoda.tpbot.BotControllerActivity">
+  tools:context="com.novoda.tpbot.controller.BotControllerActivity">
 
   <Button
     android:id="@+id/controller_lazers_button"

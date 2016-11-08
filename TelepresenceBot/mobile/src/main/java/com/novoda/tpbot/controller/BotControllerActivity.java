@@ -1,4 +1,4 @@
-package com.novoda.tpbot;
+package com.novoda.tpbot.controller;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,8 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.novoda.notils.caster.Views;
-import com.novoda.tpbot.controller.BotDirection;
-import com.novoda.tpbot.controller.OnDirectionPressedListener;
+import com.novoda.tpbot.R;
 
 public class BotControllerActivity extends AppCompatActivity {
 
