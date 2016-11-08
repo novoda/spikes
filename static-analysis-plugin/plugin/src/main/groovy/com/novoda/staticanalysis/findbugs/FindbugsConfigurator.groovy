@@ -26,6 +26,15 @@ class FindbugsConfigurator {
         }
     }
 
+    private void configureExtension(FindBugsExtension extension, List<String> excludes, Closure config) {
+        extension.with {
+            toolVersion = '3.0.1'
+            ext.exclude = { String filter -> excludes.add(filter) }
+            config.delegate = it
+            config()
+        }
+    }
+
     private void configureAndroidIfNeeded(Project project) {
         boolean isAndroidApp = project.plugins.hasPlugin('com.android.application')
         boolean isAndroidLib = project.plugins.hasPlugin('com.android.library')
@@ -71,15 +80,6 @@ class FindbugsConfigurator {
             generateHtmlReport.classpath = findBugs.findbugsClasspath
             generateHtmlReport.dependsOn findBugs
             evaluateViolations.dependsOn generateHtmlReport
-        }
-    }
-
-    private void configureExtension(FindBugsExtension extension, List<String> excludes, Closure config) {
-        extension.with {
-            toolVersion = '3.0.1'
-            ext.exclude = { String filter -> excludes.add(filter) }
-            config.delegate = it
-            config()
         }
     }
 
