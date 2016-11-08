@@ -61,7 +61,10 @@ class FindbugsConfigurator {
         findBugs.doLast {
             evaluateReports(xmlReportFile, htmlReportFile, violations)
         }
+        createHtmlReportTask(project, findBugs, xmlReportFile, htmlReportFile, evaluateViolations)
+    }
 
+    private GenerateHtmlReport createHtmlReportTask(Project project, FindBugs findBugs, File xmlReportFile, File htmlReportFile, evaluateViolations) {
         project.tasks.create("generate${findBugs.name.capitalize()}HtmlReport", GenerateHtmlReport) { GenerateHtmlReport generateHtmlReport ->
             generateHtmlReport.xmlReportFile = xmlReportFile
             generateHtmlReport.htmlReportFile = htmlReportFile
