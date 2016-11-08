@@ -25,10 +25,6 @@ class TestProjectSubject extends Subject<TestProjectSubject, TestProject> {
     }
 
     public void isAndroidProject() {
-        if (!(actual() instanceof TestAndroidProject)) {
-            failureStrategy.fail(String.format('project was instance of <%s>, but was instance of <%s> instead',
-                    TestAndroidProject.simpleName,
-                    actual().getClass().simpleName))
-        }
+        check().that(actual()).isInstanceOf(TestAndroidProject)
     }
 }
