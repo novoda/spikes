@@ -9,6 +9,7 @@ import org.junit.runners.Parameterized
 
 import static com.novoda.test.Fixtures.Findbugs.*
 import static com.novoda.test.LogsSubject.assertThat
+import static com.novoda.test.TestProjectSubject.assumeThat
 
 @RunWith(Parameterized.class)
 class FindbugsIntegrationTest {
@@ -129,6 +130,26 @@ class FindbugsIntegrationTest {
         assertThat(result.logs).doesNotContainLimitExceeded()
         assertThat(result.logs).containsFindbugsViolations(0, 2,
                 result.buildFile('reports/findbugs/debug.html'))
+    }
+
+    @Test
+    public void shouldCollectDuplicatedFindbugsWarningsAndErrorsAcrossAndroidVariantsForSharedSourceSets() {
+        TestProject project = projectRule.newProject()
+        assumeThat(project).isAndroidProject()
+
+        TestProject.Result result = project
+                .withSourceSet('main', SOURCES_WITH_LOW_VIOLATION, SOURCES_WITH_MEDIUM_VIOLATION, SOURCES_WITH_HIGH_VIOLATION)
+                .withPenalty('''{
+                    maxErrors = 10
+                    maxWarnings = 10
+                }''')
+                .withFindbugs('findbugs {}')
+                .build('check')
+
+        assertThat(result.logs).doesNotContainLimitExceeded()
+        assertThat(result.logs).containsFindbugsViolations(2, 4,
+                result.buildFile('reports/findbugs/debug.html'),
+                result.buildFile('reports/findbugs/release.html'))
     }
 
 }
