@@ -1,0 +1,22 @@
+$margin: 15px;
+$doubleMargin: $margin * 2;
+$slackerSize: 100px;
+$shadowSize: 40px;
+
+:host {
+  text-align: center;
+  flex-shrink: 1;
+  height: $slackerSize + $shadowSize;
+
+  img {
+    height: $slackerSize;
+    border-radius: 25%;
+    box-shadow: 0 $shadowSize $shadowSize -30px rgba(0, 0, 0, 0.6);
+  }
+
+  margin: $margin;
+  box-sizing: border-box;
+
+  overflow-x: auto;
+
+}

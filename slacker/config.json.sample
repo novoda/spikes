@@ -1,0 +1,13 @@
+{
+  "server": {
+    "port": ""
+  },
+  "widgets": {
+    "sonar": {
+      "token": ""
+    },
+    "slack": {
+      "token": ""
+    }
+  }
+}

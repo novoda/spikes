@@ -1,0 +1,23 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  height: 100%;
+  background-color: #30a4d9;
+  overflow-y: hidden;
+  overflow-x: hidden;
+
+  hr {
+    border: 3px dashed white;
+    opacity: 0.5;
+    width: 100%;
+  }
+
+  .team-contributors, .project-contributors {
+    color: white;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
+}

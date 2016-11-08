@@ -1,0 +1,18 @@
+apply plugin: 'java'
+
+task('android-test') << {
+    println 'this is an android test task'
+}
+
+task('apple-test') << {
+    println 'this is an apple test task'
+}
+
+task('all-test') << {
+    println 'this is a test for everything'
+}
+
+task('selectiveTest')
+        .ifDiffMatches(/android\/.*/).dependsOn('android-test')
+        .ifDiffMatches(/apple\/.*/).dependsOn('apple-test')
+        .ifDiffMatchesNothing().dependsOn('all-test')

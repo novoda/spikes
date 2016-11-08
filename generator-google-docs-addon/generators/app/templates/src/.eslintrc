@@ -1,0 +1,13 @@
+{
+  "env": {
+    "jasmine": true
+  },
+  "globals": {
+    "Main": true,
+    "Spreadsheet": true,
+    "MockSpreadsheet": true,
+    "config": true,
+    "SpreadsheetApp": true,
+    "HtmlService": true
+  }
+}

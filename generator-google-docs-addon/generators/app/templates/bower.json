@@ -1,0 +1,13 @@
+{
+  "name": "<%= projectName %>",
+  "version": "0.0.0",
+  "description": "<%= projectDescription %>",
+  "homepage": "<%= projectHomepage %>",
+  "ignore": [
+    "node_modules",
+    "bower_components",
+    "build",
+    "coverage",
+    "test"
+  ]
+}

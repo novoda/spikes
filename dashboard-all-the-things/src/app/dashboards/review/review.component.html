@@ -1,0 +1,8 @@
+<div class="content-container active-image" *ngIf="review != undefined">
+  <div class="active-container">
+    <div class="active-filler"></div>
+    <span class="active-channel-copy review"><b>{{review.project}}</b><br><br>
+    <b class="rating">{{"⭐".repeat(review.rating)}}</b><br><br>
+    {{review.review}}</span>
+  </div>
+</div>

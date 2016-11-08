@@ -1,0 +1,12 @@
+{
+  "env": {
+    "browser": true,
+    "jquery": true
+  },
+  "globals": {
+    "WebHelper": true
+  },
+  "rules": {
+    "no-console": 0
+  }
+}

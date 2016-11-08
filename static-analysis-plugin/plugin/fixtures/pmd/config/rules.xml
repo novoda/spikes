@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<ruleset xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd"
+  name="Test ruleset">
+
+  <!-- priority 1 -->
+  <rule ref="rulesets/java/design.xml/ClassWithOnlyPrivateConstructorsShouldBeFinal"/>
+
+  <!-- priority 2 -->
+  <rule ref="rulesets/java/basic.xml/BrokenNullCheck"/>
+
+  <!-- priority 3 -->
+  <rule ref="rulesets/java/basic.xml/UnconditionalIfStatement"/>
+
+  <!-- priority 4 -->
+  <rule ref="rulesets/java/basic.xml/ExtendsObject"/>
+
+  <!-- priority 5 -->
+  <rule ref="rulesets/java/basic.xml/BooleanInstantiation">
+    <priority>5</priority>
+  </rule>
+
+</ruleset>

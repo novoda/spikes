@@ -3,6 +3,6 @@ const token = process.env.token;
 
 var enewsFetcher = new EnewsFetcher(token);
 
-enewsFetcher.getLastSevenDays(function(eNews) {
+enewsFetcher.getLastSevenDays().then(function(eNews) {
   console.log(eNews);
 });
