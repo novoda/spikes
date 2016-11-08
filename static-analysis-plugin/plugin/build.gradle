@@ -1,0 +1,42 @@
+repositories {
+    jcenter()
+}
+
+apply plugin: 'groovy'
+apply plugin: 'java-gradle-plugin'
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
+configurations {
+    fixtures
+}
+
+sourceSets {
+    fixtures {
+        java {
+            srcDir file('fixtures/checkstyle/warnings')
+            srcDir file('fixtures/checkstyle/errors')
+            srcDir file('fixtures/pmd/priority1')
+            srcDir file('fixtures/pmd/priority2')
+            srcDir file('fixtures/pmd/priority3')
+            srcDir file('fixtures/pmd/priority4')
+            srcDir file('fixtures/pmd/priority5')
+            srcDir file('fixtures/findbugs/high')
+            srcDir file('fixtures/findbugs/medium')
+            srcDir file('fixtures/findbugs/low')
+        }
+    }
+}
+
+dependencies {
+    compile gradleApi()
+
+    testCompile gradleTestKit()
+    testCompile 'com.google.truth:truth:0.30'
+    testCompile 'com.google.guava:guava:19.0'
+    testCompile 'com.google.code.findbugs:jsr305:3.0.0'
+    testCompile files(fixturesClasses)
+
+    testRuntime files(pluginUnderTestMetadata)
+}

@@ -1,0 +1,3 @@
+include ':plugin'
+
+rootProject.name = 'gradle-diff-task-dependencies'

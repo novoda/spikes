@@ -1,0 +1,51 @@
+@import "./../team-contributor/team-contributor.dimen";
+
+:host {
+  display: flex;
+  flex-direction: row;
+
+  @media screen and (max-width: 600px) {
+    --team-contributor-qty: 1;
+  }
+
+  @media screen and (min-width: 600px) and (max-width: 900px) {
+    --team-contributor-qty: 2;
+  }
+
+  @media screen and (min-width: 900px) and (max-width: 1200px) {
+    --team-contributor-qty: 3;
+  }
+
+  @media screen and (min-width: 1200px) and (max-width: 1500px) {
+    --team-contributor-qty: 4;
+  }
+
+  @media screen and (min-width: 1500px) {
+    --team-contributor-qty: 5;
+  }
+
+  // the 4 margins are: peeks for previous and next boxes, margins between previous and next boxes
+  --team-contributor-size: calc((100% / var(--team-contributor-qty)) - #{$team-contributor-margin} - (#{$team-contributor-margin} * 3 / var(--team-contributor-qty)));
+  --team-contributor-position: 1;
+
+  position: relative;
+  left: calc(#{$team-contributor-margin} - (var(--team-contributor-position) - 1) * (#{$team-contributor-margin} + var(--team-contributor-size)));
+  transition-property: left;
+  transition-timing-function: ease-in-out;
+  transition-duration: 0.3s;
+
+  .no-team-contributors {
+    flex: 1;
+    color: white;
+    text-align: center;
+    display: block;
+
+    .title {
+      margin-bottom: 0;
+    }
+
+    .url {
+      margin-top: 5px;
+    }
+  }
+}

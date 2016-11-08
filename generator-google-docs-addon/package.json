@@ -1,0 +1,49 @@
+{
+  "name": "generator-google-docs-addon",
+  "version": "0.0.0",
+  "description": "Generate structured and testable Google Docs Add-ons",
+  "homepage": "https://github.com/novoda/generator-google-docs-addon",
+  "author": {
+    "name": "Francesco Pontillo",
+    "email": "francesco@novoda.com"
+  },
+  "files": [
+    "generators"
+  ],
+  "main": "generators/index.js",
+  "keywords": [
+    "yeoman-generator",
+    "google docs",
+    "google sheets",
+    "google drive",
+    "plugin",
+    "addon",
+    "add-on"
+  ],
+  "dependencies": {
+    "chalk": "~1.0.0",
+    "node-google-apps-script": "~1.1.5",
+    "q-io": "^1.13.2",
+    "yeoman-generator": "~0.24.1",
+    "yosay": "~1.2.0"
+  },
+  "devDependencies": {
+    "eslint": "~3.4.0",
+    "gulp": "~3.9.1",
+    "gulp-coveralls": "^0.1.4",
+    "gulp-eslint": "~3.0.1",
+    "gulp-exclude-gitignore": "~1.0.0",
+    "gulp-istanbul": "~1.1.1",
+    "gulp-line-ending-corrector": "~1.0.1",
+    "gulp-mocha": "~2.2.0",
+    "gulp-nsp": "~2.4.2",
+    "gulp-plumber": "~1.1.0",
+    "yeoman-assert": "~2.2.1",
+    "yeoman-test": "~1.4.0"
+  },
+  "repository": "novoda/generator-google-docs-addon",
+  "scripts": {
+    "prepublish": "gulp prepublish",
+    "test": "gulp"
+  }
+}

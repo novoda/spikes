@@ -1,0 +1,15 @@
+{
+  "name": "mergable",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@slack/client": "^3.6.0",
+    "github-api": "^2.3.0"
+  }
+}

@@ -10,6 +10,8 @@
     <attr name="copyTextSize" format="dimension" />
     <attr name="copyTextColor" format="color" />
     <attr name="copyFontPath" format="string" />
+
+    <attr name="android:text" />
   </declare-styleable>
 
 </resources>

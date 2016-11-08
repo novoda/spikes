@@ -17,7 +17,7 @@ This plugin aims to provide a simple way to:
 The plugin is deployed to Bintray's JCenter. Ensure it's correctly defined
 as dependency for your build script:
 
-```
+```gradle
 buildscript {
   repositories {
     jcenter()
@@ -28,12 +28,12 @@ buildscript {
 }
 ```
 Then apply the plugin in your buildscript **after the android plugin** via:  
-```
+```gradle
 apply plugin: 'com.novoda.build-properties'
 ```
 Add a `buildProperties` configuration to your android buildscript listing
 all the properties files you intend to reference in your `android` configuration:
-```
+```gradle
 buildProperties {
     secrets {
         file project.file('secrets.properties')
@@ -52,7 +52,7 @@ in the buildscript as `buildProperties.secrets`.
 #### 1. Store a property value into your `BuildConfig`
 In any product flavor configuration (or `defaultConfig`) you can use
 `buildConfigProperty` as follows:
-```
+```gradle
     defaultConfig {
         ...
         buildConfigProperty 'API_KEY', buildProperties.secrets['apiKey']
@@ -64,7 +64,7 @@ In any product flavor configuration (or `defaultConfig`) you can use
 In any product flavor configuration (or `defaultConfig`) you can use
 `resValueProperty` as follows:
 
-```
+```gradle
     defaultConfig {
         ...
         resValueProperty 'api_key', buildProperties.secrets['apiKey']
@@ -75,7 +75,7 @@ In any product flavor configuration (or `defaultConfig`) you can use
 #### 3. Load signing configuration from properties
 Instead of inline your passwords and other details in your build script
 you can fill the signing configuration using a properties file.
-```
+```gradle
 signingConfigs {
   release {
     signingConfigProperties buildProperties.releaseSigning
@@ -91,11 +91,11 @@ to the path of the specified properties file.
 #### Typed `buildConfigField` / `resValue`
 The plugin enhances the `buildConfigField` and `resValue` facilities to
 enforce types. To generate a string field in your `BuildConfig` you used to write:
-```
+```gradle
 buildConfigField 'String', 'LOL', '\"sometimes the picture take\"'
 ```
 but now you can instead write:
-```
+```gradle
 buildConfigString 'LOL', 'sometimes the picture take'
 ```
 The full list of new typed facilities is as follows:
@@ -124,7 +124,7 @@ value for a given `Entry` via the `or()` operator, defined as:
 If the whole fallback chain evaluation fails a `CompositeException` is thrown listing all
 the causes in the chain, eg:
 
-```java
+```
 A problem occurred while evaluating entry:
 - exception message 1
 - exception message 2
@@ -158,7 +158,9 @@ You can specify a custom error message to provide the user with more information
 
 Given a `BuildProperties` instance one of its entries can be retrieved using the `getAt` operator:
 
-`Entry entry = buildProperties.secrets['aProperty']`
+```gradle
+Entry entry = buildProperties.secrets['aProperty']
+```
 
 The value of an entry can be retrieved via one of the following typed accessors:
 

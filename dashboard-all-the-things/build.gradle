@@ -1,0 +1,15 @@
+plugins {
+    id 'com.moowork.node' version '0.13'
+}
+
+node {
+    version = '6.1.0'
+    download = true
+}
+
+task test
+npm_test.dependsOn 'npmInstall'
+test.dependsOn 'npm_test'
+
+task build
+build.dependsOn 'test'
