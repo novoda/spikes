@@ -8,14 +8,14 @@ function thanks(dataStore, messages) {
     return Promise.reject('no thanks message found');
   } else {
     var latestThanksMessage = thankYouMessages[0];
-    return Promise.resolve(createPayload(latestThanksMessage));
+    return Promise.resolve(createPayload(dataStore, latestThanksMessage));
   }
 }
 
 function findThanksMessages(dataStore, messages) {
-  var channel = dataStore.getChannelByName('thanks');
+  var channel = dataStore.getChannelByName('test-channel');
   return messages.filter(each => {
-    return (each.channel == channel.id) && (each.text.indexOf('thank') != -1);
+    return (each.channel == channel.id);
   });
 }
 
