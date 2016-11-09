@@ -1,4 +1,4 @@
-package com.novoda.staticanalysis.findbugs
+package com.novoda.staticanalysis.internal.findbugs
 
 import com.novoda.test.Fixtures
 import org.junit.Before

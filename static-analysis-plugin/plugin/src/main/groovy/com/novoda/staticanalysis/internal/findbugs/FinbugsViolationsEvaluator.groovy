@@ -1,4 +1,4 @@
-package com.novoda.staticanalysis.findbugs
+package com.novoda.staticanalysis.internal.findbugs
 
 import groovy.util.slurpersupport.GPathResult
 

@@ -1,7 +1,7 @@
-package com.novoda.staticanalysis.findbugs
+package com.novoda.staticanalysis.internal.findbugs
 
 import com.novoda.staticanalysis.StaticAnalysisExtension
-import com.novoda.staticanalysis.Violations
+import com.novoda.staticanalysis.internal.Violations
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.plugins.quality.FindBugs

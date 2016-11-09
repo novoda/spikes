@@ -1,4 +1,4 @@
-package com.novoda.staticanalysis
+package com.novoda.staticanalysis.internal.checkstyle
 
 import com.novoda.test.Fixtures
 import com.novoda.test.TestProject

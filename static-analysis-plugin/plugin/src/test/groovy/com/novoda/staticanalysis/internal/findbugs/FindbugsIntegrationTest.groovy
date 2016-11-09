@@ -1,4 +1,4 @@
-package com.novoda.staticanalysis
+package com.novoda.staticanalysis.internal.findbugs
 
 import com.novoda.test.TestProject
 import com.novoda.test.TestProjectRule
