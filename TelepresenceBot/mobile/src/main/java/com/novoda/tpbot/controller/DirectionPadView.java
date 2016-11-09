@@ -66,7 +66,7 @@ public class DirectionPadView extends RelativeLayout {
                 case R.id.controller_right_button:
                     return Direction.STEER_RIGHT;
                 default:
-                    throw new IllegalStateException("Could not map view to Direction " + view);
+                    throw new IllegalArgumentException("View did not include any of the controller buttons");
             }
         }
     };
