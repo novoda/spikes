@@ -45,7 +45,7 @@ public class DirectionPadView extends RelativeLayout {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             int action = motionEvent.getAction();
-            BotDirection direction = directionOf(view);
+            Direction direction = directionOf(view);
             if (action == MotionEvent.ACTION_DOWN) {
                 onDirectionPressedListener.onDirectionPressed(direction);
             } else if (action == MotionEvent.ACTION_UP) {
@@ -54,17 +54,17 @@ public class DirectionPadView extends RelativeLayout {
             return false;
         }
 
-        private BotDirection directionOf(View view) {
+        private Direction directionOf(View view) {
             int viewId = view.getId();
             switch (viewId) {
                 case R.id.controller_up_button:
-                    return BotDirection.FORWARD;
+                    return Direction.FORWARD;
                 case R.id.controller_down_button:
-                    return BotDirection.BACKWARD;
+                    return Direction.BACKWARD;
                 case R.id.controller_left_button:
-                    return BotDirection.STEER_LEFT;
+                    return Direction.STEER_LEFT;
                 case R.id.controller_right_button:
-                    return BotDirection.STEER_RIGHT;
+                    return Direction.STEER_RIGHT;
                 default:
                     throw new IllegalStateException("Could not map view to Direction " + view);
             }

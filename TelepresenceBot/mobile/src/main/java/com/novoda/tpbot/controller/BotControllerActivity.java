@@ -16,12 +16,12 @@ public class BotControllerActivity extends AppCompatActivity {
         DirectionPadView padView = Views.findById(this, R.id.bot_controller_direction_view);
         padView.setOnDirectionPressedListener(new OnDirectionPressedListener() {
             @Override
-            public void onDirectionPressed(BotDirection direction) {
+            public void onDirectionPressed(Direction direction) {
                 Log.d("onDirectionPressed: " + direction);
             }
 
             @Override
-            public void onDirectionReleased(BotDirection direction) {
+            public void onDirectionReleased(Direction direction) {
                 Log.d("onDirectionReleased: " + direction);
             }
 
