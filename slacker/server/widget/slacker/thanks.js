@@ -13,9 +13,9 @@ function thanks(dataStore, messages) {
 }
 
 function findThanksMessages(dataStore, messages) {
-  var channel = dataStore.getChannelByName('test-channel');
+  var channel = dataStore.getChannelByName('thanks');
   return messages.filter(each => {
-    return (each.channel == channel.id);
+    return (each.channel == channel.id) && (each.text.indexOf('thank') != -1);
   });
 }
 
