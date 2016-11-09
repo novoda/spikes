@@ -1,11 +1,19 @@
-const Moment = require('moment');
+const moment = require('moment');
 
 function XmasCountdown() {}
 
 XmasCountdown.prototype.rank = 1;
 
 XmasCountdown.prototype.rule = function() {
-  return Promise.resolve({});
+  const now = moment();
+  const christmas = moment([2016, 11, 25]);
+  const daysUntilChristmas = christmas.diff(now, 'days');
+  return Promise.resolve({
+    widgetKey: 'xmas-countdown',
+    payload: {
+      daysUntilChristmas: daysUntilChristmas
+    }
+  });
 }
 
 module.exports = XmasCountdown;
