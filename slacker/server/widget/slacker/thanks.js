@@ -8,7 +8,7 @@ function thanks(dataStore, messages) {
     return Promise.reject('no thanks message found');
   } else {
     var latestThanksMessage = thankYouMessages[0];
-    return Promise.resolve(createPayload(latestThanksMessage));
+    return Promise.resolve(createPayload(dataStore, latestThanksMessage));
   }
 }
 

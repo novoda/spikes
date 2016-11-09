@@ -6,9 +6,9 @@ var helper = require('./message-helper.js');
 
 function mostActiveChannel(dataStore, messages) {
   if (!messages || messages.length === 0) {
-    return Promise.resolve(createPayload(dataStore, messages));
-  } else {
     return Promise.reject('most active channel skipped, no messages');
+  } else {
+    return Promise.resolve(createPayload(dataStore, messages));
   }
 }
 

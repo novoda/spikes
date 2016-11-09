@@ -1,3 +1,4 @@
+import { BiggestSlackerComponent } from "../dashboards/slack/biggest-slacker/biggest-slacker.component";
 import { ExternalUrlComponent } from '../dashboards/external-url/external-url.component';
 import { ReviewComponent } from '../dashboards/review';
 import { SonarCoverageComponent } from '../dashboards/sonar-coverage';
@@ -8,12 +9,19 @@ import { SocketService } from './socket.service';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ConnectableObservable, Subscription, Subscriber } from 'rxjs';
 import { ConfigService } from '../config.service';
+import { GalleryComponent } from '../dashboards/slack/gallery/gallery.component'
+import { ThanksComponent } from '../dashboards/slack/thanks/thanks.component'
+import { MostActiveChannelComponent } from '../dashboards/slack/most-active-channel/most-active-channel.component'
 
 const COMPONENTS = {
   coverage: SonarCoverageComponent,
   ciWall: ExternalUrlComponent,
   reviews: ReviewComponent,
-  stackoverflow: StackOverflowComponent
+  stackoverflow: StackOverflowComponent,
+  biggestSlacker: BiggestSlackerComponent,
+  gallery: GalleryComponent,
+  thanks: ThanksComponent,
+  mostActiveChannel: MostActiveChannelComponent
 };
 
 const distinct = (elem, index, arr) => arr.indexOf(elem) === index;

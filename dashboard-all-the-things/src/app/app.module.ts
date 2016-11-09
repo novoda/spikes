@@ -1,3 +1,4 @@
+import { BiggestSlackerComponent } from "./dashboards/slack/biggest-slacker/biggest-slacker.component";
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -26,6 +27,9 @@ import { SafePipe } from './dashboards/external-url/safe.pipe';
 import { ReviewComponent } from './dashboards/review/review.component';
 import { StackOverflowComponent } from './dashboards/stackoverflow/stackoverflow.component';
 import { DynamicComponent } from './dashboard-carousel/dynamic.component';
+import { GalleryComponent } from './dashboards/slack/gallery/gallery.component'
+import { ThanksComponent } from './dashboards/slack/thanks/thanks.component'
+import { MostActiveChannelComponent } from './dashboards/slack/most-active-channel/most-active-channel.component'
 
 @NgModule({
   imports: [
@@ -50,7 +54,11 @@ import { DynamicComponent } from './dashboard-carousel/dynamic.component';
     SafePipe,
     ReviewComponent,
     StackOverflowComponent,
-    DynamicComponent
+    DynamicComponent,
+    BiggestSlackerComponent,
+    GalleryComponent,
+    ThanksComponent,
+    MostActiveChannelComponent
   ],
   providers: [
     SystemClock,
