@@ -10,6 +10,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ConnectableObservable, Subscription, Subscriber } from 'rxjs';
 import { ConfigService } from '../config.service';
 import { GalleryComponent } from '../dashboards/slack/gallery/gallery.component'
+import { ThanksComponent } from '../dashboards/slack/thanks/thanks.component'
 
 const COMPONENTS = {
   coverage: SonarCoverageComponent,
@@ -17,7 +18,8 @@ const COMPONENTS = {
   reviews: ReviewComponent,
   stackoverflow: StackOverflowComponent,
   biggestSlacker: BiggestSlackerComponent,
-  gallery: GalleryComponent
+  gallery: GalleryComponent,
+  thanks: ThanksComponent
 };
 
 const distinct = (elem, index, arr) => arr.indexOf(elem) === index;

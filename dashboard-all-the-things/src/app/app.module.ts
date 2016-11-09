@@ -28,6 +28,7 @@ import { ReviewComponent } from './dashboards/review/review.component';
 import { StackOverflowComponent } from './dashboards/stackoverflow/stackoverflow.component';
 import { DynamicComponent } from './dashboard-carousel/dynamic.component';
 import { GalleryComponent } from './dashboards/slack/gallery/gallery.component'
+import { ThanksComponent } from './dashboards/slack/thanks/thanks.component'
 
 @NgModule({
   imports: [
@@ -54,7 +55,8 @@ import { GalleryComponent } from './dashboards/slack/gallery/gallery.component'
     StackOverflowComponent,
     DynamicComponent,
     BiggestSlackerComponent,
-    GalleryComponent
+    GalleryComponent,
+    ThanksComponent
   ],
   providers: [
     SystemClock,
