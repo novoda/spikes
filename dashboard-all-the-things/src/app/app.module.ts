@@ -29,6 +29,7 @@ import { StackOverflowComponent } from './dashboards/stackoverflow/stackoverflow
 import { DynamicComponent } from './dashboard-carousel/dynamic.component';
 import { GalleryComponent } from './dashboards/slack/gallery/gallery.component'
 import { ThanksComponent } from './dashboards/slack/thanks/thanks.component'
+import { MostActiveChannelComponent } from './dashboards/slack/most-active-channel/most-active-channel.component'
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import { ThanksComponent } from './dashboards/slack/thanks/thanks.component'
     DynamicComponent,
     BiggestSlackerComponent,
     GalleryComponent,
-    ThanksComponent
+    ThanksComponent,
+    MostActiveChannelComponent
   ],
   providers: [
     SystemClock,

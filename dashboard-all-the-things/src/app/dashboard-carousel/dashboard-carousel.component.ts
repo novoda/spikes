@@ -11,6 +11,7 @@ import { ConnectableObservable, Subscription, Subscriber } from 'rxjs';
 import { ConfigService } from '../config.service';
 import { GalleryComponent } from '../dashboards/slack/gallery/gallery.component'
 import { ThanksComponent } from '../dashboards/slack/thanks/thanks.component'
+import { MostActiveChannelComponent } from '../dashboards/slack/most-active-channel/most-active-channel.component'
 
 const COMPONENTS = {
   coverage: SonarCoverageComponent,
@@ -19,7 +20,8 @@ const COMPONENTS = {
   stackoverflow: StackOverflowComponent,
   biggestSlacker: BiggestSlackerComponent,
   gallery: GalleryComponent,
-  thanks: ThanksComponent
+  thanks: ThanksComponent,
+  mostActiveChannel: MostActiveChannelComponent
 };
 
 const distinct = (elem, index, arr) => arr.indexOf(elem) === index;
