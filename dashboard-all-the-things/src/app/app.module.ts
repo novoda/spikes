@@ -27,6 +27,7 @@ import { SafePipe } from './dashboards/external-url/safe.pipe';
 import { ReviewComponent } from './dashboards/review/review.component';
 import { StackOverflowComponent } from './dashboards/stackoverflow/stackoverflow.component';
 import { DynamicComponent } from './dashboard-carousel/dynamic.component';
+import { GalleryComponent } from './dashboards/slack/gallery/gallery.component'
 
 @NgModule({
   imports: [
@@ -52,7 +53,8 @@ import { DynamicComponent } from './dashboard-carousel/dynamic.component';
     ReviewComponent,
     StackOverflowComponent,
     DynamicComponent,
-    BiggestSlackerComponent
+    BiggestSlackerComponent,
+    GalleryComponent
   ],
   providers: [
     SystemClock,

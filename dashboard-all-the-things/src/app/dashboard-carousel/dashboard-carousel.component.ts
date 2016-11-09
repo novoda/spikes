@@ -9,13 +9,15 @@ import { SocketService } from './socket.service';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ConnectableObservable, Subscription, Subscriber } from 'rxjs';
 import { ConfigService } from '../config.service';
+import { GalleryComponent } from '../dashboards/slack/gallery/gallery.component'
 
 const COMPONENTS = {
   coverage: SonarCoverageComponent,
   ciWall: ExternalUrlComponent,
   reviews: ReviewComponent,
   stackoverflow: StackOverflowComponent,
-  biggestSlacker: BiggestSlackerComponent
+  biggestSlacker: BiggestSlackerComponent,
+  gallery: GalleryComponent
 };
 
 const distinct = (elem, index, arr) => arr.indexOf(elem) === index;
