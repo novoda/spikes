@@ -3,6 +3,9 @@ subprojects {
         repositories {
             jcenter()
         }
+        dependencies {
+            classpath 'com.novoda:bintray-release:0.4.0'
+        }
     }
 
     repositories {
