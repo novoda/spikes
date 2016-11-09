@@ -13,8 +13,7 @@ export class BiggestSlackerComponent implements DashboardComponent {
   private user: SlackUser;
 
   public update(event: WidgetEvent) {
-    console.log(event);
-    this.user = new SlackUser(event.payload.user.name, event.payload.user.profile.image_512);
+    this.user = new SlackUser(event.payload.user);
   }
 
 }

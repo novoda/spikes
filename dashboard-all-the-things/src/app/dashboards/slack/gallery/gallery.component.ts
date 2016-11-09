@@ -14,7 +14,7 @@ export class GalleryComponent implements DashboardComponent {
   private imageUrl: string;
 
   public update(event: WidgetEvent) {
-    this.user = new SlackUser(event.payload.user.name, event.payload.user.profile.image_512);
+    this.user = new SlackUser(event.payload.user);
     this.imageUrl = event.payload.gallery.url;
   }
 
