@@ -1,3 +1,4 @@
+import { BiggestSlackerComponent } from "./dashboards/slack/biggest-slacker/biggest-slacker.component";
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -50,7 +51,8 @@ import { DynamicComponent } from './dashboard-carousel/dynamic.component';
     SafePipe,
     ReviewComponent,
     StackOverflowComponent,
-    DynamicComponent
+    DynamicComponent,
+    BiggestSlackerComponent
   ],
   providers: [
     SystemClock,

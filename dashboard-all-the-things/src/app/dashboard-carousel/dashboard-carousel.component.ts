@@ -1,3 +1,4 @@
+import { BiggestSlackerComponent } from "../dashboards/slack/biggest-slacker/biggest-slacker.component";
 import { ExternalUrlComponent } from '../dashboards/external-url/external-url.component';
 import { ReviewComponent } from '../dashboards/review';
 import { SonarCoverageComponent } from '../dashboards/sonar-coverage';
@@ -13,7 +14,8 @@ const COMPONENTS = {
   coverage: SonarCoverageComponent,
   ciWall: ExternalUrlComponent,
   reviews: ReviewComponent,
-  stackoverflow: StackOverflowComponent
+  stackoverflow: StackOverflowComponent,
+  biggestSlacker: BiggestSlackerComponent
 };
 
 const distinct = (elem, index, arr) => arr.indexOf(elem) === index;
