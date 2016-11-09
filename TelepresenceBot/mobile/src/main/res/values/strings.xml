@@ -1,3 +1,4 @@
 <resources>
-  <string name="app_name">TpBot</string>
+  <string name="app_name">TeleBot</string>
+  <string name="Bot_Controller">Bot Controller</string>
 </resources>
