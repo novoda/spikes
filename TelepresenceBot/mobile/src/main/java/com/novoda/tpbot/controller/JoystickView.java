@@ -10,18 +10,18 @@ import android.widget.RelativeLayout;
 import com.novoda.notils.caster.Views;
 import com.novoda.tpbot.R;
 
-public class DirectionPadView extends RelativeLayout {
+public class JoystickView extends RelativeLayout {
 
-    private OnDirectionPressedListener onDirectionPressedListener = OnDirectionPressedListener.NO_OP;
+    private JoystickListener joystickListener = JoystickListener.NO_OP;
 
-    public DirectionPadView(Context context, AttributeSet attrs) {
+    public JoystickView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        LayoutInflater.from(getContext()).inflate(R.layout.merge_bot_controller, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.merge_joystick_view, this, true);
 
         View up = Views.findById(this, R.id.controller_up_button);
         up.setOnTouchListener(onButtonTouchListener);
@@ -36,7 +36,7 @@ public class DirectionPadView extends RelativeLayout {
         fire.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                onDirectionPressedListener.onLazersPressed();
+                joystickListener.onLazersPressed();
             }
         });
     }
@@ -47,9 +47,9 @@ public class DirectionPadView extends RelativeLayout {
             int action = motionEvent.getAction();
             Direction direction = directionOf(view);
             if (action == MotionEvent.ACTION_DOWN) {
-                onDirectionPressedListener.onDirectionPressed(direction);
+                joystickListener.onDirectionPressed(direction);
             } else if (action == MotionEvent.ACTION_UP) {
-                onDirectionPressedListener.onDirectionReleased(direction);
+                joystickListener.onDirectionReleased(direction);
             }
             return false;
         }
@@ -71,7 +71,7 @@ public class DirectionPadView extends RelativeLayout {
         }
     };
 
-    public void setOnDirectionPressedListener(OnDirectionPressedListener l) {
-        this.onDirectionPressedListener = l;
+    public void setJoystickListener(JoystickListener l) {
+        this.joystickListener = l;
     }
 }

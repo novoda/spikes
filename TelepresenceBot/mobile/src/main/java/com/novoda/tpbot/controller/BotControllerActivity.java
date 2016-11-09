@@ -13,8 +13,8 @@ public class BotControllerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bot_controller);
-        DirectionPadView padView = Views.findById(this, R.id.bot_controller_direction_view);
-        padView.setOnDirectionPressedListener(new OnDirectionPressedListener() {
+        JoystickView padView = Views.findById(this, R.id.bot_controller_direction_view);
+        padView.setJoystickListener(new JoystickListener() {
             @Override
             public void onDirectionPressed(Direction direction) {
                 Log.d("onDirectionPressed: " + direction);

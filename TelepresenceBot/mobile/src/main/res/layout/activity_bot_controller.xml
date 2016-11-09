@@ -5,7 +5,7 @@
   android:layout_height="match_parent"
   tools:context="com.novoda.tpbot.controller.BotControllerActivity">
 
-  <com.novoda.tpbot.controller.DirectionPadView
+  <com.novoda.tpbot.controller.JoystickView
     android:id="@+id/bot_controller_direction_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />

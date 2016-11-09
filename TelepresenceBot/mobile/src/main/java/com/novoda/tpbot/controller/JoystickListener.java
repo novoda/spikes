@@ -2,8 +2,8 @@ package com.novoda.tpbot.controller;
 
 import com.novoda.notils.logger.simple.Log;
 
-interface OnDirectionPressedListener {
-    OnDirectionPressedListener NO_OP = new OnDirectionPressedListener() {
+interface JoystickListener {
+    JoystickListener NO_OP = new JoystickListener() {
         @Override
         public void onDirectionPressed(Direction direction) {
             Log.w("onDirectionPressed() but no listener was set");
