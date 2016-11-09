@@ -7,7 +7,7 @@ var rules = [
   require('./biggest-slacker.js'),
   require('./most-active-channel.js'),
   require('./thanks.js'),
-  require('./gallery')
+  require('./gallery.js')
 ]
 
 var Slacker = function(config) {
