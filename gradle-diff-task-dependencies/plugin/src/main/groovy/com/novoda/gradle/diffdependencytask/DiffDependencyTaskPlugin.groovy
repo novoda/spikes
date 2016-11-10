@@ -13,6 +13,12 @@ class DiffDependencyTaskPlugin implements Plugin<Project> {
 
         project.extensions.add(Constants.TASK_CONFIG_PROPERTY_NAME, new DiffDependencyTaskConfig())
 
+        project.extensions.add('registerConditionalDependency', { ConditionalDependency conditionalDependency ->
+            def config = project.extensions.getByName(Constants.TASK_CONFIG_PROPERTY_NAME) as DiffDependencyTaskConfig
+            config.conditionalDependencyRepository.add(conditionalDependency)
+            project
+        })
+
         project.afterEvaluate {
             def config = project.extensions.getByName(Constants.TASK_CONFIG_PROPERTY_NAME) as DiffDependencyTaskConfig
             def evaluator = new ConditionalDependencyEvaluator(
