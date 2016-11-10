@@ -18,7 +18,8 @@
     android:layout_height="@dimen/button_size"
     android:layout_centerVertical="true"
     android:layout_toLeftOf="@id/controller_lazers_button"
-    android:src="@drawable/ic_arrow_left" />
+    android:rotation="-90"
+    android:src="@drawable/ic_arrow_upward" />
 
   <ImageButton
     android:id="@+id/controller_right_button"
@@ -26,7 +27,8 @@
     android:layout_height="@dimen/button_size"
     android:layout_centerVertical="true"
     android:layout_toRightOf="@id/controller_lazers_button"
-    android:src="@drawable/ic_arrow_right" />
+    android:rotation="90"
+    android:src="@drawable/ic_arrow_upward" />
 
   <ImageButton
     android:id="@+id/controller_up_button"
@@ -42,6 +44,7 @@
     android:layout_height="@dimen/button_size"
     android:layout_below="@id/controller_lazers_button"
     android:layout_centerHorizontal="true"
-    android:src="@drawable/ic_arrow_downward" />
+    android:rotation="180"
+    android:src="@drawable/ic_arrow_upward" />
 
 </merge>
