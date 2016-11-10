@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
+  tools:ignore="RtlHardcoded"
   tools:layout_height="match_parent"
   tools:layout_width="match_parent"
   tools:parentTag="RelativeLayout">
+  <!-- It is okay not to consider Right-to-Left devices as we are handling physical orientation -->
 
   <ImageButton
     android:id="@+id/controller_lazers_button"
