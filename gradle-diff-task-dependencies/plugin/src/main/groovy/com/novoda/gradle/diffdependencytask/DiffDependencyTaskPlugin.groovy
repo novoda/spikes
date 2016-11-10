@@ -1,8 +1,9 @@
 package com.novoda.gradle.diffdependencytask
 
-import com.novoda.gradle.diffdependencytask.ext.ExtensionRegister
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+
+import java.util.regex.Pattern
 
 class DiffDependencyTaskPlugin implements Plugin<Project> {
 
@@ -11,8 +12,6 @@ class DiffDependencyTaskPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
 
-        ExtensionRegister.INSTANCE.run()
-
         project.extensions.add(TASK_CONFIG_PROPERTY_NAME, new DiffDependencyTaskConfig())
 
         project.extensions.add('registerConditionalDependency', { ConditionalDependency conditionalDependency ->
@@ -20,6 +19,12 @@ class DiffDependencyTaskPlugin implements Plugin<Project> {
             config.conditionalDependencyRepository.add(conditionalDependency)
             project
         })
+
+        project.tasks.all {
+            it.extensions.add('ifDiffMatches', { Pattern[] patterns ->
+                new ConditionalDependency(it, patterns)
+            })
+        }
 
         project.afterEvaluate {
             def config = project.extensions.getByName(TASK_CONFIG_PROPERTY_NAME) as DiffDependencyTaskConfig
