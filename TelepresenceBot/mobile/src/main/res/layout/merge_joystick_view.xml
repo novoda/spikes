@@ -7,15 +7,15 @@
 
   <ImageButton
     android:id="@+id/controller_lazers_button"
-    android:layout_width="@dimen/button_size"
-    android:layout_height="@dimen/button_size"
+    android:layout_width="@dimen/controller_button_width"
+    android:layout_height="@dimen/controller_button_height"
     android:layout_centerInParent="true"
     android:src="@drawable/ic_circle" />
 
   <ImageButton
     android:id="@+id/controller_left_button"
-    android:layout_width="@dimen/button_size"
-    android:layout_height="@dimen/button_size"
+    android:layout_width="@dimen/controller_button_width"
+    android:layout_height="@dimen/controller_button_height"
     android:layout_centerVertical="true"
     android:layout_toLeftOf="@id/controller_lazers_button"
     android:rotation="-90"
@@ -23,8 +23,8 @@
 
   <ImageButton
     android:id="@+id/controller_right_button"
-    android:layout_width="@dimen/button_size"
-    android:layout_height="@dimen/button_size"
+    android:layout_width="@dimen/controller_button_width"
+    android:layout_height="@dimen/controller_button_height"
     android:layout_centerVertical="true"
     android:layout_toRightOf="@id/controller_lazers_button"
     android:rotation="90"
@@ -32,16 +32,16 @@
 
   <ImageButton
     android:id="@+id/controller_up_button"
-    android:layout_width="@dimen/button_size"
-    android:layout_height="@dimen/button_size"
+    android:layout_width="@dimen/controller_button_width"
+    android:layout_height="@dimen/controller_button_height"
     android:layout_above="@id/controller_lazers_button"
     android:layout_centerHorizontal="true"
     android:src="@drawable/ic_arrow_upward" />
 
   <ImageButton
     android:id="@+id/controller_down_button"
-    android:layout_width="@dimen/button_size"
-    android:layout_height="@dimen/button_size"
+    android:layout_width="@dimen/controller_button_width"
+    android:layout_height="@dimen/controller_button_height"
     android:layout_below="@id/controller_lazers_button"
     android:layout_centerHorizontal="true"
     android:rotation="180"

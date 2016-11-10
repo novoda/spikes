@@ -1,3 +1,4 @@
 <resources>
-  <dimen name="button_size">56dp</dimen>
+  <dimen name="controller_button_width">56dp</dimen>
+  <dimen name="controller_button_height">@dimen/controller_button_width</dimen>
 </resources>
