@@ -11,17 +11,30 @@ diffDependency {
 }
 
 task('testAndroid') << {
-    println 'This is an android test task.'
+    println 'Testing Android...'
+    println 'Tested Android.'
 }
 
 task('testApple') << {
-    println 'This is an apple test task.'
+    println 'Testing Apple...'
+    println 'Tested Apple.'
+}
+
+task('sync') << {
+    println 'Syncing stuff...'
+    println 'Synced stuff.'
+}
+
+task('emailDevOps') << {
+    println "You shouldn't have touched build files... Emailing dev ops..."
+    println "Email sent."
 }
 
 task('selectiveTest') << {
-    println 'This will run after 0 or more between "testAndroid" and "testApple".'
+    println 'This will run after 0 or more tasks will be conditionally executed.'
 }
 
 tasks.getByName('selectiveTest')
-        .ifDiffMatches(~'android/.*').dependsOn('testAndroid')
-        .ifDiffMatches(~'apple/.*').dependsOn('testApple')
+        .onDiffDependsOn(~'android/.*', 'testAndroid')
+        .onDiffDependsOn(~'apple/.*', 'testApple')
+        .onDiffDependsOn([~'apple/fastlane', ~'android/build.gradle'], 'sync', 'emailDevOps')

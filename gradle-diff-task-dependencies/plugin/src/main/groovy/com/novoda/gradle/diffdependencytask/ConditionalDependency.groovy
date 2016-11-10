@@ -6,19 +6,14 @@ import java.util.regex.Pattern
 
 public class ConditionalDependency {
 
-    final Pattern[] patterns
+    final List<Pattern> patterns
     final Task task
     Object[] dependentTasks
 
-    ConditionalDependency(Task task, Pattern[] patterns) {
+    ConditionalDependency(Task task, List<Pattern> patterns, Object... tasks) {
         this.task = task
         this.patterns = patterns
-    }
-
-    public Task dependsOn(Object... args) {
-        this.dependentTasks = args
-        task.project.registerConditionalDependency(this)
-        task
+        this.dependentTasks = tasks
     }
 
 }

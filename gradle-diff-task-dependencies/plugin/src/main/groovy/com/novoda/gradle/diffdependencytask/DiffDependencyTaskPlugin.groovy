@@ -14,16 +14,21 @@ class DiffDependencyTaskPlugin implements Plugin<Project> {
 
         project.extensions.add(TASK_CONFIG_PROPERTY_NAME, new DiffDependencyTaskConfig())
 
-        project.extensions.add('registerConditionalDependency', { ConditionalDependency conditionalDependency ->
+        project.ext.registerConditionalDependency = { ConditionalDependency conditionalDependency ->
             def config = project.extensions.getByName(TASK_CONFIG_PROPERTY_NAME) as DiffDependencyTaskConfig
             config.conditionalDependencyRepository.add(conditionalDependency)
             project
-        })
+        }
 
-        project.tasks.all {
-            it.extensions.add('ifDiffMatches', { Pattern[] patterns ->
-                new ConditionalDependency(it, patterns)
-            })
+        project.tasks.all { task ->
+            task.ext.onDiffDependsOn = { def patterns, Object... tasks ->
+                if (patterns instanceof Pattern) {
+                     patterns = [patterns]
+                }
+                def conditionalDependency = new ConditionalDependency(task, patterns, tasks)
+                project.registerConditionalDependency(conditionalDependency)
+                task
+            }
         }
 
         project.afterEvaluate {

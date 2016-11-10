@@ -5,9 +5,9 @@ _Gradle plugin to apply conditional task dependency according to `git diff` file
 
 ## How to use
 
-The Gradle plugin extends the `Task` Gradle API with one extra method: `ifDiffMatches`.
-This method accepts a list of `Pattern`s that, if matched by any of the changed files in Git Diff, sets the task 
-dependency.
+The Gradle plugin extends the `Task` Gradle API with one extra method: `onMatchDependsOn`.
+This method accepts a list of `Pattern`s that, if matched by any of the changed files in Git Diff, sets the task(s) 
+dependency(ies).
 
 For example:
 
@@ -15,9 +15,10 @@ For example:
 apply plugin: DiffDependencyTaskPlugin
 
 task('testAll')
-    .dependsOn('prepareTest') // regular dependency                       
-    .ifDiffMatches(~'android/.*').dependsOn('testAndroid') // conditional dependency
-    .ifDiffMatches(~'apple/.*').dependsOn('testApple') // conditional dependency
+    .dependsOn('prepareTest') // regular dependency   
+    .onDiffDependsOn(~'android/.*', 'testAndroid')
+    .onDiffDependsOn(~'apple/.*', 'testApple')
+    .onDiffDependsOn([~'apple/fastlane', ~'android/build.gradle'], 'sync', 'emailDevOps')
 ```
 
 ## Configuration
