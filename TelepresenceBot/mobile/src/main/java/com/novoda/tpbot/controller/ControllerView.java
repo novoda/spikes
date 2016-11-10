@@ -10,18 +10,18 @@ import android.widget.RelativeLayout;
 import com.novoda.notils.caster.Views;
 import com.novoda.tpbot.R;
 
-public class JoystickView extends RelativeLayout {
+public class ControllerView extends RelativeLayout {
 
-    private JoystickListener joystickListener = JoystickListener.NO_OP;
+    private ControllerListener controllerListener = ControllerListener.NO_OP;
 
-    public JoystickView(Context context, AttributeSet attrs) {
+    public ControllerView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        LayoutInflater.from(getContext()).inflate(R.layout.merge_joystick_view, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.merge_controller_view, this, true);
 
         View up = Views.findById(this, R.id.controller_up_button);
         up.setOnTouchListener(onButtonTouchListener);
@@ -36,7 +36,7 @@ public class JoystickView extends RelativeLayout {
         fire.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                joystickListener.onLazersPressed();
+                controllerListener.onLazersPressed();
             }
         });
     }
@@ -47,9 +47,9 @@ public class JoystickView extends RelativeLayout {
             int action = motionEvent.getAction();
             Direction direction = directionOf(view);
             if (action == MotionEvent.ACTION_DOWN) {
-                joystickListener.onDirectionPressed(direction);
+                controllerListener.onDirectionPressed(direction);
             } else if (action == MotionEvent.ACTION_UP) {
-                joystickListener.onDirectionReleased(direction);
+                controllerListener.onDirectionReleased(direction);
             }
             return false;
         }
@@ -71,7 +71,7 @@ public class JoystickView extends RelativeLayout {
         }
     };
 
-    public void setJoystickListener(JoystickListener l) {
-        this.joystickListener = l;
+    public void setControllerListener(ControllerListener l) {
+        this.controllerListener = l;
     }
 }
