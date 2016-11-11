@@ -3,7 +3,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'com.novoda:bintray-release:0.3.4'
+    classpath 'com.novoda:bintray-release:0.4.0'
   }
 }
 
@@ -22,8 +22,8 @@ dependencies {
 
   testCompile gradleTestKit()
   testCompile 'com.google.guava:guava:19.0'
-  testCompile 'com.google.truth:truth:0.28'
-  testCompile 'com.android.tools.build:gradle:2.1.2'
+  testCompile 'com.google.truth:truth:0.30'
+  testCompile 'com.android.tools.build:gradle:2.2.0'
   testCompile 'com.google.code.findbugs:jsr305:3.0.0'
   testCompile 'com.github.stefanbirkner:system-rules:1.16.0'
 
