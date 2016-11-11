@@ -27,28 +27,12 @@ public class BotControllerActivity extends AppCompatActivity {
 
             @Override
             public void onDirectionPressed(Direction direction) {
-                String arrowCharacter = arrowOf(direction);
-                debugView.showPermanently(arrowCharacter);
+                debugView.showPermanently(direction.getRepresentation());
             }
 
             @Override
             public void onDirectionReleased(Direction direction) {
-                String arrowCharacter = arrowOf(direction);
-                debugView.showTimed(arrowCharacter + " released", DURATION_DIRECTIONS);
-            }
-
-            private String arrowOf(Direction direction) {
-                switch (direction) {
-                    case FORWARD:
-                        return "↑";
-                    case BACKWARD:
-                        return "↓";
-                    case STEER_LEFT:
-                        return "←";
-                    case STEER_RIGHT:
-                        return "→";
-                }
-                throw new IllegalArgumentException("Invalid direction " + direction);
+                debugView.showTimed(direction.getRepresentation() + " released", DURATION_DIRECTIONS);
             }
 
             @Override
