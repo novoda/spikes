@@ -1,8 +1,8 @@
 apply plugin: 'com.novoda.bintray-release'
 publish {
   userOrg = 'novoda'
-  groupId = pluginGroup
-  artifactId = pluginId
-  publishVersion = pluginVersion
-  website = 'https://github.com/novoda/spikes/tree/master/BuildPropertiesPlugin'
+  groupId = 'com.novoda'
+  artifactId = 'gradle-build-properties-plugin'
+  publishVersion = '0.1'
+  website = 'https://github.com/novoda/gradle-build-properties-plugin'
 }
