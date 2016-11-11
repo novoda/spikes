@@ -1,4 +1,4 @@
 <resources>
-  <dimen name="activity_horizontal_margin">16dp</dimen>
-  <dimen name="activity_vertical_margin">16dp</dimen>
+  <dimen name="controller_button_width">56dp</dimen>
+  <dimen name="controller_button_height">@dimen/controller_button_width</dimen>
 </resources>

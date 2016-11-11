@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:ignore="RtlHardcoded"
+  tools:layout_height="match_parent"
+  tools:layout_width="match_parent"
+  tools:parentTag="RelativeLayout">
+  <!-- It is okay not to consider Right-to-Left devices as we are handling physical orientation -->
+
+  <ImageButton
+    android:id="@+id/controller_lazers_button"
+    android:layout_width="@dimen/controller_button_width"
+    android:layout_height="@dimen/controller_button_height"
+    android:layout_centerInParent="true"
+    android:src="@drawable/ic_circle" />
+
+  <ImageButton
+    android:id="@+id/controller_left_button"
+    android:layout_width="@dimen/controller_button_width"
+    android:layout_height="@dimen/controller_button_height"
+    android:layout_centerVertical="true"
+    android:layout_toLeftOf="@id/controller_lazers_button"
+    android:rotation="-90"
+    android:src="@drawable/ic_arrow_upward" />
+
+  <ImageButton
+    android:id="@+id/controller_right_button"
+    android:layout_width="@dimen/controller_button_width"
+    android:layout_height="@dimen/controller_button_height"
+    android:layout_centerVertical="true"
+    android:layout_toRightOf="@id/controller_lazers_button"
+    android:rotation="90"
+    android:src="@drawable/ic_arrow_upward" />
+
+  <ImageButton
+    android:id="@+id/controller_up_button"
+    android:layout_width="@dimen/controller_button_width"
+    android:layout_height="@dimen/controller_button_height"
+    android:layout_above="@id/controller_lazers_button"
+    android:layout_centerHorizontal="true"
+    android:src="@drawable/ic_arrow_upward" />
+
+  <ImageButton
+    android:id="@+id/controller_down_button"
+    android:layout_width="@dimen/controller_button_width"
+    android:layout_height="@dimen/controller_button_height"
+    android:layout_below="@id/controller_lazers_button"
+    android:layout_centerHorizontal="true"
+    android:rotation="180"
+    android:src="@drawable/ic_arrow_upward" />
+
+</merge>
