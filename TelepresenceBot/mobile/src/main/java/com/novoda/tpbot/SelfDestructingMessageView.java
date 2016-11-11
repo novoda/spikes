@@ -14,18 +14,18 @@ public class SelfDestructingMessageView extends TextView {
     }
 
     public void showPermanently(String arrowCharacter) {
-        super.setText(arrowCharacter);
+        setText(arrowCharacter);
         getHandler().removeCallbacks(clearTextRunnable);
     }
 
     public void showTimed(String string, long timeInMillis) {
-        super.setText(string);
+        setText(string);
         getHandler().removeCallbacks(clearTextRunnable);
         getHandler().postDelayed(clearTextRunnable, timeInMillis);
     }
 
     public void clearMessage() {
-        super.setText(null);
+        setText(null);
         getHandler().removeCallbacks(clearTextRunnable);
     }
 
