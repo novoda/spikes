@@ -9,16 +9,12 @@ class DiffDependencyTaskPlugin implements Plugin<Project> {
 
     private static String TASK_CONFIG_PROPERTY_NAME = 'diffDependency'
 
+    private final config = new DiffDependencyTaskConfig()
+
     @Override
     void apply(Project project) {
 
-        project.extensions.add(TASK_CONFIG_PROPERTY_NAME, new DiffDependencyTaskConfig())
-
-        project.ext.registerConditionalDependency = { ConditionalDependency conditionalDependency ->
-            def config = project.extensions.getByName(TASK_CONFIG_PROPERTY_NAME) as DiffDependencyTaskConfig
-            config.conditionalDependencyRepository.add(conditionalDependency)
-            project
-        }
+        project.extensions.add(TASK_CONFIG_PROPERTY_NAME, config)
 
         project.tasks.all { task ->
             task.ext.onDiffDependsOn = { def patterns, Object... tasks ->
@@ -26,13 +22,12 @@ class DiffDependencyTaskPlugin implements Plugin<Project> {
                      patterns = [patterns]
                 }
                 def conditionalDependency = new ConditionalDependency(task, patterns, tasks)
-                project.registerConditionalDependency(conditionalDependency)
+                config.conditionalDependencyRepository.add(conditionalDependency)
                 task
             }
         }
 
         project.afterEvaluate {
-            def config = project.extensions.getByName(TASK_CONFIG_PROPERTY_NAME) as DiffDependencyTaskConfig
             def evaluator = new ConditionalDependencyEvaluator(
                     config.changedFilesProvider,
                     config.conditionalDependencyRepository
