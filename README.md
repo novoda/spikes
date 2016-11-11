@@ -1,4 +1,9 @@
 # gradle-build-properties-plugin
+[![](https://ci.novoda.com/buildStatus/icon?job=gradle-build-properties-plugin)](https://ci.novoda.com/job/gradle-build-properties-plugin/lastSuccessfulBuild/console) [![](https://raw.githubusercontent.com/novoda/novoda/master/assets/btn_apache_lisence.png)](LICENSE.txt) [![Bintray](https://api.bintray.com/packages/novoda/maven/gradle-build-properties-plugin/images/download.svg) ](https://bintray.com/novoda/maven/gradle-build-properties-plugin/_latestVersion)
+
+External properties files support for your build scripts.
+ 
+## Description
 
 Sometimes it's necessary to retrieve some information from a properties 
 file that is not checked in as part of your repo for security reasons 
@@ -12,7 +17,7 @@ This plugin aims to provide a simple way to:
 - load signing configurations from a properties file
 
 
-## How To Use
+## Adding to your project
 
 The plugin is deployed to Bintray's JCenter. Ensure it's correctly defined
 as dependency for your build script:
@@ -31,6 +36,8 @@ Then apply the plugin in your buildscript **after the android plugin** via:
 ```gradle
 apply plugin: 'com.novoda.build-properties'
 ```
+
+## Simple usage
 Add a `buildProperties` configuration to your android buildscript listing
 all the properties files you intend to reference in your `android` configuration:
 ```gradle
