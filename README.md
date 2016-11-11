@@ -1,4 +1,4 @@
-# Android build properties plugin
+# gradle-build-properties-plugin
 
 Sometimes it's necessary to retrieve some information from a properties 
 file that is not checked in as part of your repo for security reasons 
@@ -23,7 +23,7 @@ buildscript {
     jcenter()
    }
   dependencies {
-    classpath 'com.novoda:build-properties-plugin:1.2.1'
+    classpath 'com.novoda:gradle-build-properties-plugin:0.1'
   }
 }
 ```

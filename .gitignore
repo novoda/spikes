@@ -1,1 +1,22 @@
-/build
+# IntelliJ/Android Studio
+.idea
+*.iml
+
+# MacOS
+.DS_Store
+
+# Build output
+build
+out
+
+# Gradle files
+.gradle/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Log Files
+*.log
+
+# Generated files
+gen/
