@@ -18,7 +18,7 @@ class ChangedFilesProvider implements GroovyCallable<List<String>> {
         this.getTargetBranch = targetBranchProvider
     }
 
-    private synchronized List<String> getChangedFiles() {
+    private List<String> getChangedFiles() {
         def currentBranch = getCurrentBranch()
         def targetBranch = getTargetBranch()
         def process = "git diff --name-only $currentBranch $targetBranch".execute()
@@ -26,7 +26,7 @@ class ChangedFilesProvider implements GroovyCallable<List<String>> {
     }
 
     @Override
-    synchronized List<String> call() throws Exception {
+    List<String> call() throws Exception {
         if (changedFiles == null) {
             try {
                 changedFiles = getChangedFiles()
