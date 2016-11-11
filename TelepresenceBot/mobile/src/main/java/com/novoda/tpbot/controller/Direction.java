@@ -1,6 +1,6 @@
 package com.novoda.tpbot.controller;
 
-public enum BotDirection {
+enum Direction {
     FORWARD,
     BACKWARD,
     STEER_RIGHT,

@@ -14,7 +14,7 @@
     android:layout_weight="50"
     tools:text="This is some text yo" />
 
-  <com.novoda.tpbot.controller.DirectionPadView
+  <com.novoda.tpbot.controller.ControllerView
     android:id="@+id/bot_controller_direction_view"
     android:layout_width="match_parent"
     android:layout_height="0dp"

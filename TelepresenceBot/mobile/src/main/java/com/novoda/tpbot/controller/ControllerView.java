@@ -10,18 +10,18 @@ import android.widget.RelativeLayout;
 import com.novoda.notils.caster.Views;
 import com.novoda.tpbot.R;
 
-public class DirectionPadView extends RelativeLayout {
+public class ControllerView extends RelativeLayout {
 
-    private OnDirectionPressedListener onDirectionPressedListener = OnDirectionPressedListener.NO_OP;
+    private ControllerListener controllerListener = ControllerListener.NO_OP;
 
-    public DirectionPadView(Context context, AttributeSet attrs) {
+    public ControllerView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        LayoutInflater.from(getContext()).inflate(R.layout.merge_bot_controller, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.merge_controller_view, this, true);
 
         View up = Views.findById(this, R.id.controller_up_button);
         up.setOnTouchListener(onButtonTouchListener);
@@ -35,9 +35,12 @@ public class DirectionPadView extends RelativeLayout {
         View fire = Views.findById(this, R.id.controller_lazers_button);
         fire.setOnTouchListener(new OnTouchListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    onDirectionPressedListener.onLazersFired();
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    controllerListener.onLazersFired();
+                } else if (action == MotionEvent.ACTION_UP) {
+                    controllerListener.onLazersReleased();
                 }
                 return false;
             }
@@ -48,33 +51,33 @@ public class DirectionPadView extends RelativeLayout {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             int action = motionEvent.getAction();
-            BotDirection direction = directionOf(view);
+            Direction direction = directionOf(view);
             if (action == MotionEvent.ACTION_DOWN) {
-                onDirectionPressedListener.onDirectionPressed(direction);
+                controllerListener.onDirectionPressed(direction);
             } else if (action == MotionEvent.ACTION_UP) {
-                onDirectionPressedListener.onDirectionReleased(direction);
+                controllerListener.onDirectionReleased(direction);
             }
             return false;
         }
 
-        private BotDirection directionOf(View view) {
+        private Direction directionOf(View view) {
             int viewId = view.getId();
             switch (viewId) {
                 case R.id.controller_up_button:
-                    return BotDirection.FORWARD;
+                    return Direction.FORWARD;
                 case R.id.controller_down_button:
-                    return BotDirection.BACKWARD;
+                    return Direction.BACKWARD;
                 case R.id.controller_left_button:
-                    return BotDirection.STEER_LEFT;
+                    return Direction.STEER_LEFT;
                 case R.id.controller_right_button:
-                    return BotDirection.STEER_RIGHT;
+                    return Direction.STEER_RIGHT;
                 default:
-                    throw new IllegalStateException("Could not map view to Direction " + view);
+                    throw new IllegalArgumentException("View did not include any of the controller buttons");
             }
         }
     };
 
-    public void setOnDirectionPressedListener(OnDirectionPressedListener l) {
-        this.onDirectionPressedListener = l;
+    public void setControllerListener(ControllerListener l) {
+        this.controllerListener = l;
     }
 }

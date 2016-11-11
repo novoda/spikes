@@ -22,22 +22,22 @@ public class BotControllerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bot_controller);
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
 
-        DirectionPadView padView = Views.findById(this, R.id.bot_controller_direction_view);
-        padView.setOnDirectionPressedListener(new OnDirectionPressedListener() {
+        ControllerView padView = Views.findById(this, R.id.bot_controller_direction_view);
+        padView.setControllerListener(new ControllerListener() {
 
             @Override
-            public void onDirectionPressed(BotDirection direction) {
+            public void onDirectionPressed(Direction direction) {
                 String arrowCharacter = arrowOf(direction);
                 debugView.showPermanently(arrowCharacter);
             }
 
             @Override
-            public void onDirectionReleased(BotDirection direction) {
+            public void onDirectionReleased(Direction direction) {
                 String arrowCharacter = arrowOf(direction);
                 debugView.showTimed(arrowCharacter + " released", DURATION_DIRECTIONS);
             }
 
-            private String arrowOf(BotDirection direction) {
+            private String arrowOf(Direction direction) {
                 switch (direction) {
                     case FORWARD:
                         return "↑";

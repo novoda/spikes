@@ -25,6 +25,7 @@ public class SelfDestructingMessageView extends TextView {
     }
 
     public void clearMessage() {
+        super.setText(null);
         getHandler().removeCallbacks(clearTextRunnable);
     }
 
