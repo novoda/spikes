@@ -22,8 +22,8 @@ public class BotControllerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bot_controller);
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
 
-        ControllerView padView = Views.findById(this, R.id.bot_controller_direction_view);
-        padView.setControllerListener(new ControllerListener() {
+        ControllerView controllerView = Views.findById(this, R.id.bot_controller_direction_view);
+        controllerView.setControllerListener(new ControllerListener() {
 
             @Override
             public void onDirectionPressed(Direction direction) {
