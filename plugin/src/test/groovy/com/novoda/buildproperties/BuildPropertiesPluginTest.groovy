@@ -11,7 +11,7 @@ import org.junit.rules.TemporaryFolder
 import static com.google.common.truth.Truth.assertThat
 import static org.junit.Assert.fail
 
-public class BuildScriptTest {
+public class BuildPropertiesPluginTest {
 
   @Rule
   public final TemporaryFolder temp = new TemporaryFolder()

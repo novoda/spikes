@@ -13,7 +13,7 @@ import org.junit.runners.model.Statement
 
 import static com.google.common.truth.Truth.assertThat
 
-public class SampleProjectTest {
+public class AndroidProjectIntegrationTest {
 
   public static final ProjectRule PROJECT = new ProjectRule()
   public static final EnvironmentVariables ENV = new EnvironmentVariables()
