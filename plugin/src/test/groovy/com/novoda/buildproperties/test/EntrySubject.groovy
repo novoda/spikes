@@ -49,7 +49,7 @@ public final class EntrySubject extends Subject<EntrySubject, Entry> {
     }
 
     public void hasValue(def expected) {
-        check.that(entryValue).isEqualTo(expected)
+        check().that(entryValue).isEqualTo(expected)
     }
 
 }
