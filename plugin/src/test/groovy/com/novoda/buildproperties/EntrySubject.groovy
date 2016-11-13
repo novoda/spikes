@@ -26,24 +26,28 @@ final class EntrySubject extends Subject<EntrySubject, Entry> {
 
     public void willThrow(Class<? extends Throwable> throwableClass) {
         try {
-            subject.value
+            entryValue
             fail('throws', throwableClass)
         } catch (Throwable throwable) {
-            Truth.assertThat(throwable).isInstanceOf(throwableClass)
+            check().that(throwable).isInstanceOf(throwableClass)
         }
+    }
+
+    private Object getEntryValue() {
+        actual().value
     }
 
     public void willThrow(CompositeException compositeException) {
         try {
-            subject.value
+            entryValue
             fail('throws', compositeException)
         } catch (CompositeException thrown) {
-            Truth.assertThat(thrown.message).isEqualTo(compositeException.message)
+            check().that(thrown.message).isEqualTo(compositeException.message)
         }
     }
 
     public void hasValue(def expected) {
-        Truth.assertThat(subject.value).isEqualTo(expected)
+        check.that(entryValue).isEqualTo(expected)
     }
 
 }
