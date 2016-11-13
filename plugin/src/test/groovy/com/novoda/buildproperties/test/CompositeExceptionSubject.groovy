@@ -1,13 +1,14 @@
-package com.novoda.buildproperties
+package com.novoda.buildproperties.test
 
 import com.google.common.truth.FailureStrategy
 import com.google.common.truth.Subject
 import com.google.common.truth.SubjectFactory
 import com.google.common.truth.Truth
+import com.novoda.buildproperties.CompositeException
 
 import javax.annotation.Nullable
 
-final class CompositeExceptionSubject extends Subject<CompositeExceptionSubject, CompositeException> {
+public final class CompositeExceptionSubject extends Subject<CompositeExceptionSubject, CompositeException> {
 
     private static final SubjectFactory<CompositeExceptionSubject, CompositeException> FACTORY =
             new SubjectFactory<CompositeExceptionSubject, CompositeException>() {

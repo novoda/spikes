@@ -1,6 +1,7 @@
 package com.novoda.buildproperties
 
 import com.google.common.io.Resources
+import com.novoda.buildproperties.test.EntrySubject
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.internal.DefaultGradleRunner
 import org.junit.ClassRule

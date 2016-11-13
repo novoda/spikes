@@ -2,7 +2,7 @@ package com.novoda.buildproperties
 
 import org.junit.Test
 
-import static com.novoda.buildproperties.EntrySubject.assertThat
+import static com.novoda.buildproperties.test.EntrySubject.assertThat
 
 class EntryTest {
 

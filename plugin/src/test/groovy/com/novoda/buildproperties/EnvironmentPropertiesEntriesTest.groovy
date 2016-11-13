@@ -1,5 +1,6 @@
 package com.novoda.buildproperties
 
+import com.novoda.buildproperties.test.EntrySubject
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Before

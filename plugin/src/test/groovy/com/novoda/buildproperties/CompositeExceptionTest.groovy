@@ -3,7 +3,7 @@ package com.novoda.buildproperties
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
-import static com.novoda.buildproperties.CompositeExceptionSubject.assertThat
+import static com.novoda.buildproperties.test.CompositeExceptionSubject.assertThat
 
 class CompositeExceptionTest {
 

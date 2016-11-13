@@ -1,13 +1,15 @@
-package com.novoda.buildproperties
+package com.novoda.buildproperties.test
 
 import com.google.common.truth.FailureStrategy
 import com.google.common.truth.Subject
 import com.google.common.truth.SubjectFactory
 import com.google.common.truth.Truth
+import com.novoda.buildproperties.CompositeException
+import com.novoda.buildproperties.Entry
 
 import javax.annotation.Nullable
 
-final class EntrySubject extends Subject<EntrySubject, Entry> {
+public final class EntrySubject extends Subject<EntrySubject, Entry> {
 
     private static final SubjectFactory<EntrySubject, Entry> FACTORY = new SubjectFactory<EntrySubject, Entry>() {
         @Override
