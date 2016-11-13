@@ -1,10 +1,10 @@
 subprojects {
-  buildscript {
-    repositories {
-      jcenter()
+    buildscript {
+        repositories {
+            jcenter()
+        }
     }
-  }
-  repositories {
-    jcenter()
-  }
+    repositories {
+        jcenter()
+    }
 }

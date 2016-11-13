@@ -1,15 +1,15 @@
 repositories {
-  jcenter()
+    jcenter()
 }
 
 apply plugin: 'groovy'
 
 dependencies {
-  compile gradleApi()
+    compile gradleApi()
 }
 
 sourceSets {
-  main {
-    groovy { srcDir '../../plugin/src/main/groovy' }
-  }
+    main {
+        groovy { srcDir '../../plugin/src/main/groovy' }
+    }
 }
