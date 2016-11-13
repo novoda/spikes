@@ -1,5 +1,5 @@
 # gradle-build-properties-plugin
-[![](https://ci.novoda.com/buildStatus/icon?job=gradle-build-properties-plugin)](https://ci.novoda.com/job/gradle-build-properties-plugin/lastSuccessfulBuild/console) [![](https://raw.githubusercontent.com/novoda/novoda/master/assets/btn_apache_lisence.png)](LICENSE.txt) [![Bintray](https://api.bintray.com/packages/novoda/maven/gradle-build-properties-plugin/images/download.svg) ](https://bintray.com/novoda/maven/gradle-build-properties-plugin/_latestVersion)
+[![](https://ci.novoda.com/buildStatus/icon?job=gradle-build-properties-plugin)](https://ci.novoda.com/job/gradle-build-properties-plugin/lastSuccessfulBuild/console) [![](https://img.shields.io/badge/License-Apache%202.0-lightgrey.svg)](LICENSE.txt) [![Bintray](https://api.bintray.com/packages/novoda/maven/gradle-build-properties-plugin/images/download.svg) ](https://bintray.com/novoda/maven/gradle-build-properties-plugin/_latestVersion)
 
 External properties files support for your build scripts.
  
