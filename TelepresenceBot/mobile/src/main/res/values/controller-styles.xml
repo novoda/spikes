@@ -9,4 +9,5 @@
     <item name="android:gravity">center</item>
     <item name="android:textColor">@color/retro_font_green</item>
   </style>
+
 </resources>
