@@ -1,6 +1,5 @@
 package com.novoda.buildproperties
 
-import org.gradle.api.GradleException
 import org.gradle.api.NamedDomainObjectFactory
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -9,13 +8,6 @@ class BuildPropertiesPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        boolean isAndroidApp = project.plugins.hasPlugin('com.android.application')
-        boolean isAndroidLib = project.plugins.hasPlugin('com.android.library')
-
-        if (!isAndroidApp && !isAndroidLib) {
-            throw new GradleException('The build-properties plugin can be applied only after the Android plugin')
-        }
-
         def container = project.container(BuildProperties, new NamedDomainObjectFactory<BuildProperties>() {
             @Override
             BuildProperties create(String name) {
@@ -25,6 +17,15 @@ class BuildPropertiesPlugin implements Plugin<Project> {
         container.create('env').entries(new EnvironmentPropertiesEntries(project))
         project.extensions.add('buildProperties', container)
 
+        project.plugins.withId('com.android.application') {
+            amendAndroidExtension(project)
+        }
+        project.plugins.withId('com.android.library') {
+            amendAndroidExtension(project)
+        }
+    }
+
+    private static void amendAndroidExtension(Project project) {
         def android = project.extensions.findByName("android")
         android.defaultConfig.with {
             addBuildConfigSupportTo(it, project)
@@ -42,11 +43,11 @@ class BuildPropertiesPlugin implements Plugin<Project> {
         }
 
         android.signingConfigs.all {
-            addSigningConfigSupportTo(it, project)
+            addSigningConfigSupportTo(it)
         }
     }
 
-    private void addBuildConfigSupportTo(target, Project project) {
+    private static void addBuildConfigSupportTo(target, Project project) {
         def buildConfigField = { String type, String name, Closure<String> value ->
             target.buildConfigField type, name, value()
         }
@@ -73,7 +74,7 @@ class BuildPropertiesPlugin implements Plugin<Project> {
         }
     }
 
-    private void addResValueSupportTo(target, Project project) {
+    private static void addResValueSupportTo(target, Project project) {
         def resValue = { String type, String name, Closure<String> value ->
             target.resValue type, name, value()
         }
@@ -93,7 +94,7 @@ class BuildPropertiesPlugin implements Plugin<Project> {
         }
     }
 
-    private void addSigningConfigSupportTo(target, Project project) {
+    private static void addSigningConfigSupportTo(target) {
         target.ext.signingConfigProperties = { BuildProperties buildProperties ->
             target.storeFile new File(buildProperties.parentFile, buildProperties['storeFile'].string)
             target.storePassword buildProperties['storePassword'].string

@@ -30,7 +30,7 @@ class Entry {
         getValue() as String
     }
 
-    Object getValue() {
+    private Object getValue() {
         value.call()
     }
 

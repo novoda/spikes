@@ -26,36 +26,7 @@ public class BuildPropertiesPluginTest {
     }
 
     @Test
-    public void shouldNotApplyPluginWhenAndroidPluginNotApplied() {
-        try {
-            project.apply plugin: BuildPropertiesPlugin
-            fail('Gradle exception not thrown')
-        } catch (GradleException e) {
-            assertThat(e.getCause().getMessage()).isEqualTo('The build-properties plugin can be applied only after the Android plugin')
-        }
-    }
-
-    @Test
-    public void shouldApplyPluginWhenAndroidApplicationPluginApplied() {
-        project.apply plugin: 'com.android.application'
-
-        project.apply plugin: BuildPropertiesPlugin
-
-        assertThat(project.plugins.hasPlugin(BuildPropertiesPlugin)).isTrue()
-    }
-
-    @Test
-    public void shouldApplyPluginWhenAndroidLibraryPluginApplied() {
-        project.apply plugin: 'com.android.library'
-
-        project.apply plugin: BuildPropertiesPlugin
-
-        assertThat(project.plugins.hasPlugin(BuildPropertiesPlugin)).isTrue()
-    }
-
-    @Test
     public void shouldNotFailBuildWhenDefiningPropertiesFromNonExistentFile() {
-        project.apply plugin: 'com.android.library'
         project.apply plugin: BuildPropertiesPlugin
         project.buildProperties {
             foo {
@@ -66,7 +37,6 @@ public class BuildPropertiesPluginTest {
 
     @Test
     public void shouldFailBuildWhenAccessingPropertyFromNonExistentFile() {
-        project.apply plugin: 'com.android.library'
         project.apply plugin: BuildPropertiesPlugin
         project.buildProperties {
             foo {
@@ -75,7 +45,7 @@ public class BuildPropertiesPluginTest {
         }
 
         try {
-            project.buildProperties.foo['any'].value
+            project.buildProperties.foo['any'].string
             fail('Gradle exception not thrown')
         } catch (GradleException e) {
             assertThat(e.getMessage()).endsWith('foo.properties does not exist.')
@@ -84,7 +54,6 @@ public class BuildPropertiesPluginTest {
 
     @Test
     public void shouldProvideSpecifiedErrorMessageWhenAccessingPropertyFromNonExistentFile() {
-        project.apply plugin: 'com.android.library'
         project.apply plugin: BuildPropertiesPlugin
 
         def errorMessage = 'This file should contain the following properties:\n- foo\n- bar'
@@ -94,7 +63,7 @@ public class BuildPropertiesPluginTest {
                     file project.file('foo.properties'), errorMessage
                 }
             }
-            project.buildProperties.foo['any'].value
+            project.buildProperties.foo['any'].string
             fail('Gradle exception not thrown')
         } catch (GradleException e) {
             String message = e.getMessage()
