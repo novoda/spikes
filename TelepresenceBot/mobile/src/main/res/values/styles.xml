@@ -7,11 +7,4 @@
     <item name="colorAccent">@color/colorAccent</item>
   </style>
 
-  <style name="Controller.DebugText">
-    <item name="android:background">@color/terminal_dark_blue</item>
-    <item name="android:fontFamily">monospace</item>
-    <item name="android:gravity">center</item>
-    <item name="android:textColor">@color/retro_font_green</item>
-  </style>
-
 </resources>

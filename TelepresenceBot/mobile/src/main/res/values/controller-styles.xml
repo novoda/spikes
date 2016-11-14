@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <style name="Controller"></style>
+  <style name="Controller" />
+
+  <style name="Controller.DebugText">
+    <item name="android:background">@color/terminal_dark_blue</item>
+    <item name="android:fontFamily">monospace</item>
+    <item name="android:gravity">center</item>
+    <item name="android:textColor">@color/retro_font_green</item>
+  </style>
 </resources>
