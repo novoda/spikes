@@ -3,6 +3,6 @@ publish {
     userOrg = 'novoda'
     groupId = 'com.novoda'
     artifactId = 'gradle-build-properties-plugin'
-    publishVersion = '0.1'
+    publishVersion = '0.2'
     website = 'https://github.com/novoda/gradle-build-properties-plugin'
 }
