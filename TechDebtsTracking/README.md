@@ -1,6 +1,6 @@
-This is a project to introducte @TechDebt annotations into our source code.
+This is a project to introducte `@TechDebt` annotations into our source code.
 
-@TechDebt is an annotation which defines 3 concepts we considered worth to take into account when creating a `TechDebt`:
+`@TechDebt` is an annotation which defines 3 concepts we considered worth to take into account when creating a `TechDebt`:
 * `Description`: A short description of the issue.
 * `Size`: One of `XSMALL`, `SMALL`, `MEDIUM`, `LARGE`, `XLARGE`.
 * `link`: Where to find more info about the issue. Can be either a link to `JIRA` or `Github Issues`. 
