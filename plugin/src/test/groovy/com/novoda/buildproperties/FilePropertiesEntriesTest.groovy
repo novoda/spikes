@@ -35,7 +35,7 @@ public class FilePropertiesEntriesTest {
 
     @Test
     public void shouldRetrieveValueWhenPropertyDefined() {
-        def value = entries['aProperty'].value
+        def value = entries['aProperty'].string
 
         assertThat(value).isEqualTo('qwerty')
     }
@@ -43,7 +43,7 @@ public class FilePropertiesEntriesTest {
     @Test
     public void shouldThrowIllegalArgumentExceptionWhenTryingToAccessValueOfUndefinedProperty() {
         try {
-            entries['notThere'].value
+            entries['notThere'].string
             fail('IllegalArgumentException expected')
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage()).startsWith("No value defined for property 'notThere'")
@@ -103,11 +103,11 @@ public class FilePropertiesEntriesTest {
         def includingEntries = FilePropertiesEntries.create(new File(Resources.getResource('including.properties').toURI()))
 
         entries.keys.each { String key ->
-            assertThat(moreEntries[key].value).isEqualTo(entries[key].value)
+            assertThat(moreEntries[key].string).isEqualTo(entries[key].string)
         }
-        assertThat(moreEntries['foo'].value).isEqualTo(includingEntries['foo'].value)
-        assertThat(moreEntries['a'].value).isEqualTo('android')
-        assertThat(includingEntries['a'].value).isEqualTo('apple')
+        assertThat(moreEntries['foo'].string).isEqualTo(includingEntries['foo'].string)
+        assertThat(moreEntries['a'].string).isEqualTo('android')
+        assertThat(includingEntries['a'].string).isEqualTo('apple')
     }
 
 }

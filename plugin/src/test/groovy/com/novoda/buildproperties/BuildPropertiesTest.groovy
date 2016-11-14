@@ -30,9 +30,9 @@ class BuildPropertiesTest {
 
     @Test
     public void shouldReturnSamePropertyValueInEntries() {
-        def value = buildProperties['a'].value
+        def value = buildProperties['a'].string
 
-        assertThat(value).isEqualTo(entries['a'].value)
+        assertThat(value).isEqualTo(entries['a'].string)
     }
 
     @Test
@@ -44,12 +44,12 @@ class BuildPropertiesTest {
 
     @Test
     public void shouldReturnDifferentValueFromEntriesWhenPropertyValueOverriddenInProject() {
-        project.ext.a = 1
+        project.ext.a = 'x'
 
-        def value = buildProperties['a'].value
+        def value = buildProperties['a'].string
 
-        assertThat(value).isNotEqualTo(entries['a'].value)
-        assertThat(value).isEqualTo(1)
+        assertThat(value).isNotEqualTo(entries['a'].string)
+        assertThat(value).isEqualTo('x')
     }
 
     static class TestEntries extends Entries {

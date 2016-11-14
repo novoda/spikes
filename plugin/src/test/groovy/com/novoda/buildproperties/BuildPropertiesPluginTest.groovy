@@ -45,7 +45,7 @@ public class BuildPropertiesPluginTest {
         }
 
         try {
-            project.buildProperties.foo['any'].value
+            project.buildProperties.foo['any'].string
             fail('Gradle exception not thrown')
         } catch (GradleException e) {
             assertThat(e.getMessage()).endsWith('foo.properties does not exist.')
@@ -63,7 +63,7 @@ public class BuildPropertiesPluginTest {
                     file project.file('foo.properties'), errorMessage
                 }
             }
-            project.buildProperties.foo['any'].value
+            project.buildProperties.foo['any'].string
             fail('Gradle exception not thrown')
         } catch (GradleException e) {
             String message = e.getMessage()

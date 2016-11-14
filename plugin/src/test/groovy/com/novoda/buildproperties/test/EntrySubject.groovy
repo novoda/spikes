@@ -35,8 +35,8 @@ public final class EntrySubject extends Subject<EntrySubject, Entry> {
         }
     }
 
-    private Object getEntryValue() {
-        actual().value
+    private String getEntryValue() {
+        actual().string
     }
 
     public void willThrow(CompositeException compositeException) {
