@@ -14,13 +14,17 @@ This is the last modification and we want to have that as separate entry
 # four
 
 
+# fix
 
+# size
+
+#six
 
 
 
 ### shouldn't conflict
 
-THIS IS A HOTFIX
+THIS HOTFIX HAS BEEN FIXED
 even more hotfixing
 
 
