@@ -33,10 +33,16 @@ public class ControllerView extends RelativeLayout {
         right.setOnTouchListener(onButtonTouchListener);
 
         View fire = Views.findById(this, R.id.controller_lazers_button);
-        fire.setOnClickListener(new OnClickListener() {
+        fire.setOnTouchListener(new OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                controllerListener.onLazersPressed();
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    controllerListener.onLazersFired();
+                } else if (action == MotionEvent.ACTION_UP) {
+                    controllerListener.onLazersReleased();
+                }
+                return false;
             }
         });
     }

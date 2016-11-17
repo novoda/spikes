@@ -15,8 +15,13 @@ interface ControllerListener {
         }
 
         @Override
-        public void onLazersPressed() {
-            Log.w("onLazersPressed() but no listener was set");
+        public void onLazersFired() {
+            Log.w("onLazersFired() but no listener was set");
+        }
+
+        @Override
+        public void onLazersReleased() {
+            Log.w("onLazersReleased() but no listener was set");
         }
     };
 
@@ -24,5 +29,7 @@ interface ControllerListener {
 
     void onDirectionReleased(Direction direction);
 
-    void onLazersPressed();
+    void onLazersFired();
+
+    void onLazersReleased();
 }

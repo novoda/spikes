@@ -4,32 +4,46 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.novoda.notils.caster.Views;
-import com.novoda.notils.logger.simple.Log;
 import com.novoda.tpbot.R;
+import com.novoda.tpbot.SelfDestructingMessageView;
 
 public class BotControllerActivity extends AppCompatActivity {
+
+    private static final String LAZERS = String.valueOf(Character.toChars(0x1F4A5));
+
+    private static final long DURATION_DIRECTIONS = 1500L;
+    private static final long DURATION_LAZERS = 150L;
+
+    private SelfDestructingMessageView debugView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bot_controller);
-        ControllerView padView = Views.findById(this, R.id.bot_controller_direction_view);
-        padView.setControllerListener(new ControllerListener() {
+        debugView = Views.findById(this, R.id.bot_controller_debug_view);
+
+        ControllerView controllerView = Views.findById(this, R.id.bot_controller_direction_view);
+        controllerView.setControllerListener(new ControllerListener() {
+
             @Override
             public void onDirectionPressed(Direction direction) {
-                Log.d("onDirectionPressed: " + direction);
+                debugView.showPermanently(direction.getRepresentation());
             }
 
             @Override
             public void onDirectionReleased(Direction direction) {
-                Log.d("onDirectionReleased: " + direction);
+                debugView.showTimed(direction.getRepresentation() + " released", DURATION_DIRECTIONS);
             }
 
             @Override
-            public void onLazersPressed() {
-                Log.d("Pew!");
+            public void onLazersFired() {
+                debugView.showTimed(LAZERS, DURATION_LAZERS);
+            }
+
+            @Override
+            public void onLazersReleased() {
+                debugView.clearMessage();
             }
         });
     }
-
 }
