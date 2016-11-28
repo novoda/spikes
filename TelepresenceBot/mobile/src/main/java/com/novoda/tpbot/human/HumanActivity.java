@@ -28,12 +28,12 @@ public class HumanActivity extends AppCompatActivity {
 
             @Override
             public void onDirectionPressed(Direction direction) {
-                debugView.showPermanently(direction.getRepresentation());
+                debugView.showPermanently(direction.visualRepresentation());
             }
 
             @Override
             public void onDirectionReleased(Direction direction) {
-                debugView.showTimed(direction.getRepresentation() + " released", DURATION_DIRECTIONS);
+                debugView.showTimed(direction.visualRepresentation() + " released", DURATION_DIRECTIONS);
             }
 
             @Override

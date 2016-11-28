@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 
 import com.novoda.notils.caster.Views;
+import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
 
 import java.util.Collections;
@@ -17,15 +18,15 @@ public class BotActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bot);
-        RecyclerView moves = Views.findById(this, R.id.bot_moves);
+        RecyclerView directions = Views.findById(this, R.id.bot_directions);
 
-        moves.setHasFixedSize(true);
+        directions.setHasFixedSize(true);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        moves.setLayoutManager(layoutManager);
+        directions.setLayoutManager(layoutManager);
 
-        RecyclerView.Adapter adapter = new MoveAdapter(LayoutInflater.from(this), Collections.<String>emptyList());
-        moves.setAdapter(adapter);
+        RecyclerView.Adapter adapter = new DirectionAdapter(LayoutInflater.from(this), Collections.<Direction>emptyList());
+        directions.setAdapter(adapter);
     }
 
 }

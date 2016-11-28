@@ -12,7 +12,7 @@ public enum Direction {
         this.representation = representation;
     }
 
-    public String getRepresentation() {
+    public String visualRepresentation() {
         return representation;
     }
 }
