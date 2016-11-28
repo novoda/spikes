@@ -20,7 +20,7 @@ public class HumanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bot_controller);
+        setContentView(R.layout.activity_human);
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
 
         ControllerView controllerView = Views.findById(this, R.id.bot_controller_direction_view);
