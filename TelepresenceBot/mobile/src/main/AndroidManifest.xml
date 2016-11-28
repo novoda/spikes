@@ -12,7 +12,9 @@
     android:theme="@style/AppTheme"
     tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
-    <activity android:name="com.novoda.tpbot.landing.LandingActivity">
+    <activity
+      android:name="com.novoda.tpbot.landing.LandingActivity"
+      android:icon="@mipmap/ic_launcher">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
@@ -23,7 +25,12 @@
     <activity
       android:name="com.novoda.tpbot.human.HumanActivity"
       android:icon="@mipmap/ic_bot_controller_launcher"
-      android:label="@string/Bot_Controller" />
+      android:label="@string/human" />
+
+    <activity
+      android:name="com.novoda.tpbot.bot.BotActivity"
+      android:icon="@mipmap/ic_launcher"
+      android:label="@string/bot" />
 
   </application>
 
