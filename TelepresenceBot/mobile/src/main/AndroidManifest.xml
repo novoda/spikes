@@ -21,7 +21,7 @@
     </activity>
 
     <activity
-      android:name="com.novoda.tpbot.controller.BotControllerActivity"
+      android:name="com.novoda.tpbot.human.HumanActivity"
       android:icon="@mipmap/ic_bot_controller_launcher"
       android:label="@string/Bot_Controller" />
 

@@ -1,4 +1,4 @@
-package com.novoda.tpbot.controller;
+package com.novoda.tpbot.human;
 
 enum Direction {
     FORWARD("↑"),

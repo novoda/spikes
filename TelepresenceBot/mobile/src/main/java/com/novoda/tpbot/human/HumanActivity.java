@@ -1,4 +1,4 @@
-package com.novoda.tpbot.controller;
+package com.novoda.tpbot.human;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +7,7 @@ import com.novoda.notils.caster.Views;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.SelfDestructingMessageView;
 
-public class BotControllerActivity extends AppCompatActivity {
+public class HumanActivity extends AppCompatActivity {
 
     private static final String LAZERS = String.valueOf(Character.toChars(0x1F4A5));
 

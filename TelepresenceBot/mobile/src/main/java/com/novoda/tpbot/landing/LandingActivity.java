@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.novoda.tpbot.R;
-import com.novoda.tpbot.controller.BotControllerActivity;
+import com.novoda.tpbot.human.HumanActivity;
 
 public class LandingActivity extends AppCompatActivity {
 
@@ -21,7 +21,7 @@ public class LandingActivity extends AppCompatActivity {
         humanSelection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LandingActivity.this, BotControllerActivity.class);
+                Intent intent = new Intent(LandingActivity.this, HumanActivity.class);
                 startActivity(intent);
             }
         });
@@ -29,7 +29,7 @@ public class LandingActivity extends AppCompatActivity {
         botSelection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(LandingActivity.this, BotControllerActivity.class);
+//                Intent intent = new Intent(LandingActivity.this, HumanActivity.class);
 //                startActivity(intent);
             }
         });
