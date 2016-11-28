@@ -1,6 +1,6 @@
-package com.novoda.tpbot.human;
+package com.novoda.tpbot;
 
-enum Direction {
+public enum Direction {
     FORWARD("↑"),
     BACKWARD("↓"),
     STEER_RIGHT("→"),
