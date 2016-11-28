@@ -2,11 +2,14 @@ package com.novoda.tpbot.bot;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 
 import com.novoda.notils.caster.Views;
 import com.novoda.tpbot.R;
-import com.novoda.tpbot.human.ControllerView;
+
+import java.util.Collections;
 
 public class BotActivity extends AppCompatActivity {
 
@@ -14,8 +17,15 @@ public class BotActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bot);
-        View debugView = Views.findById(this, R.id.bot_controller_debug_view);
+        RecyclerView moves = Views.findById(this, R.id.bot_moves);
 
-        ControllerView controllerView = Views.findById(this, R.id.bot_controller_direction_view);
+        moves.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        moves.setLayoutManager(layoutManager);
+
+        RecyclerView.Adapter adapter = new MoveAdapter(LayoutInflater.from(this), Collections.<String>emptyList());
+        moves.setAdapter(adapter);
     }
+
 }

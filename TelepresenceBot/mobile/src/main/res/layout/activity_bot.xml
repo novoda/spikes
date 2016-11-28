@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.novoda.tpbot.SelfDestructingMessageView xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/bot_controller_debug_view"
-  style="@style/Controller.DebugText"
+<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/bot_moves"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:text="This is some text yo" />
+  android:scrollbars="vertical" />
