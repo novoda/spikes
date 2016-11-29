@@ -5,4 +5,9 @@
   <color name="colorAccent">#FF4081</color>
   <color name="retro_font_green">#7CB342</color>
   <color name="terminal_dark_blue">#263238</color>
+
+  <color name="transparent">#00000000</color>
+  <color name="black_10">#1A000000</color>
+  <color name="black_12">#1F000000</color>
+
 </resources>
