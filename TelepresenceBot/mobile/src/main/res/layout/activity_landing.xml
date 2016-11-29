@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/activity_tp_bot"
   android:layout_width="match_parent"
@@ -7,24 +8,24 @@
   tools:context="com.novoda.tpbot.landing.LandingActivity"
   android:orientation="vertical">
 
-  <TextView
+  <com.novoda.tpbot.support.TextViewWithForeground
     android:id="@+id/bot_selection"
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:layout_weight="100"
     android:background="@android:color/holo_green_light"
-    android:foreground="@drawable/landing_option_foreground"
+    app:foreground="@drawable/landing_option_foreground"
     android:text="@string/bot"
     android:gravity="center"
     android:textSize="24sp" />
 
-  <TextView
+  <com.novoda.tpbot.support.TextViewWithForeground
     android:id="@+id/human_selection"
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:layout_weight="100"
     android:background="@android:color/holo_blue_light"
-    android:foreground="@drawable/landing_option_foreground"
+    app:foreground="@drawable/landing_option_foreground"
     android:text="@string/human"
     android:gravity="center"
     android:textSize="24sp" />

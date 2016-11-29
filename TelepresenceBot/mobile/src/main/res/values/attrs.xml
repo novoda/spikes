@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <attr name="foreground" format="reference" />
+
+  <declare-styleable name="TextViewWithForeground">
+    <attr name="foreground" />
+  </declare-styleable>
+
+</resources>
