@@ -1,4 +1,4 @@
-package com.novoda.tpbot.controller;
+package com.novoda.tpbot.human;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.novoda.notils.caster.Views;
+import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
 
 public class ControllerView extends RelativeLayout {
@@ -25,10 +26,13 @@ public class ControllerView extends RelativeLayout {
 
         View up = Views.findById(this, R.id.controller_up_button);
         up.setOnTouchListener(onButtonTouchListener);
+
         View down = Views.findById(this, R.id.controller_down_button);
         down.setOnTouchListener(onButtonTouchListener);
+
         View left = Views.findById(this, R.id.controller_left_button);
         left.setOnTouchListener(onButtonTouchListener);
+
         View right = Views.findById(this, R.id.controller_right_button);
         right.setOnTouchListener(onButtonTouchListener);
 

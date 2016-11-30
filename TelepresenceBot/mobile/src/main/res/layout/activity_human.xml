@@ -4,7 +4,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical"
-  tools:context="com.novoda.tpbot.controller.BotControllerActivity">
+  tools:context="com.novoda.tpbot.human.HumanActivity">
 
   <com.novoda.tpbot.SelfDestructingMessageView
     android:id="@+id/bot_controller_debug_view"
@@ -14,7 +14,7 @@
     android:layout_weight="50"
     tools:text="This is some text yo" />
 
-  <com.novoda.tpbot.controller.ControllerView
+  <com.novoda.tpbot.human.ControllerView
     android:id="@+id/bot_controller_direction_view"
     android:layout_width="match_parent"
     android:layout_height="0dp"

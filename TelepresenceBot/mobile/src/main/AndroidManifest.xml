@@ -4,23 +4,34 @@
   package="com.novoda.tpbot">
 
   <application
-    android:name=".TelebotApplication"
+    android:name="com.novoda.tpbot.TelebotApplication"
     android:allowBackup="true"
     android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
     tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+
     <activity
-      android:name=".controller.BotControllerActivity"
-      android:icon="@mipmap/ic_bot_controller_launcher"
-      android:label="@string/Bot_Controller">
+      android:name="com.novoda.tpbot.landing.LandingActivity"
+      android:icon="@mipmap/ic_launcher">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
+
+    <activity
+      android:name="com.novoda.tpbot.human.HumanActivity"
+      android:icon="@mipmap/ic_bot_controller_launcher"
+      android:label="@string/human" />
+
+    <activity
+      android:name="com.novoda.tpbot.bot.BotActivity"
+      android:icon="@mipmap/ic_launcher"
+      android:label="@string/bot" />
+
   </application>
 
 </manifest>

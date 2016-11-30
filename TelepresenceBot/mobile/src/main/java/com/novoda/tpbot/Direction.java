@@ -1,6 +1,6 @@
-package com.novoda.tpbot.controller;
+package com.novoda.tpbot;
 
-enum Direction {
+public enum Direction {
     FORWARD("↑"),
     BACKWARD("↓"),
     STEER_RIGHT("→"),
@@ -12,7 +12,7 @@ enum Direction {
         this.representation = representation;
     }
 
-    public String getRepresentation() {
+    public String visualRepresentation() {
         return representation;
     }
 }
