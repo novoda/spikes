@@ -20,9 +20,41 @@ jwtClient.authorize(function (err, tokens) {
 
 });
 
-
 function updatePair(pair) {
-  getPairingGrid().then(console.log).catch(console.log);
+  getPairingGrid().then(grid => {
+    if (gridContainsPair(grid, pair)) {
+      return withPair(pair)(grid);
+    } else {
+      return addPairToGrid()
+      .then(getPairingGrid)
+      .then(withPair(pair));
+    }
+  }).then(updateGridPositions());
+  .catch(console.log);
+}
+
+function withPair(pair) {
+  return function(grid) {
+    return Promise.resolve( {
+      grid: grid,
+      pair: pair
+    } );
+  };
+}
+
+function updateGridPositions(pair, grid) {
+
+}
+
+function addPairToGrid() {
+  // todo
+}
+
+function gridContainsPair(grid, pair) {
+  return grid.columns.contains(pair.first) &&
+    grid.columns.contains(pair.second) &&
+    grid.rows.contains(pair.first) &&
+    grid.rows.contains(pair.second);
 }
 
 function getPairingGrid() {
