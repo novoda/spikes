@@ -7,24 +7,18 @@
   tools:context="com.novoda.tpbot.landing.LandingActivity"
   android:orientation="vertical">
 
-  <TextView
+  <com.novoda.tpbot.support.TextView
     android:id="@+id/bot_selection"
+    style="@style/Landing.Bot"
     android:layout_width="match_parent"
     android:layout_height="0dp"
-    android:layout_weight="100"
-    android:background="@android:color/holo_green_light"
-    android:text="@string/bot"
-    android:gravity="center"
-    android:textSize="24sp" />
+    android:layout_weight="100" />
 
-  <TextView
+  <com.novoda.tpbot.support.TextView
     android:id="@+id/human_selection"
+    style="@style/Landing.Human"
     android:layout_width="match_parent"
     android:layout_height="0dp"
-    android:layout_weight="100"
-    android:background="@android:color/holo_blue_light"
-    android:text="@string/human"
-    android:gravity="center"
-    android:textSize="24sp" />
+    android:layout_weight="100" />
 
 </LinearLayout>
