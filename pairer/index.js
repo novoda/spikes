@@ -1,8 +1,9 @@
 const config = require('./config.json');
 const Pairer = require('./pairer');
 
+const PR_NUMBER = process.env.ghprbPullId
+const REPO_NAME = process.env.repoName
+
 const pairer = new Pairer(config.gitHub);
 
-const PR_NUMBER = process.env.ghprbPullId
-
-pairer.getPairs(PR_NUMBER).then(console.log);
+pairer.getPairs(REPO_NAME, PR_NUMBER).then(console.log);

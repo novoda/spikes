@@ -1,16 +1,14 @@
 const GitHub = require('github-api');
 
-const OPEN_PRS = { state: 'open' }
-
 function Pairer(config, prNumber) {
   this.config = config;
   this.gitHub = new GitHub(config.credentials);
 }
 
-Pairer.prototype.getPairs = function(prNumber) {
+Pairer.prototype.getPairs = function(repoName, prNumber) {
   const repo = this.gitHub.getRepo(
     this.config.repoOwner,
-    this.config.repoName
+    repoName
   );
   return repo.getPullRequest(prNumber)
     .then(result => result.data)
