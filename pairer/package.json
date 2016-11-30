@@ -4,7 +4,8 @@
   "description": "Spikes ======",
   "main": "index.js",
   "dependencies": {
-    "github-api": "^2.3.0"
+    "github-api": "^2.3.0",
+    "googleapis": "^14.2.0"
   },
   "devDependencies": {},
   "scripts": {
