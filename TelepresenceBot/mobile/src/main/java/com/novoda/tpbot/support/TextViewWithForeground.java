@@ -39,16 +39,19 @@ public class TextViewWithForeground extends TextView {
             if (resourceId == INVALID_RESOURCE_ID) {
                 return;
             }
-            final Drawable drawable = getDrawable(resourceId);
+            final Drawable drawable = getDrawableFor(resourceId);
             updateForegroundWith(drawable);
-            createHotspotTouchListener();
+
+            if (isLollipopOrAfter()) {
+                createHotspotTouchListener();
+            }
 
         } finally {
             styledAttributes.recycle();
         }
     }
 
-    private Drawable getDrawable(int resourceId) {
+    private Drawable getDrawableFor(int resourceId) {
         if (isLollipopOrAfter()) {
             return getDrawableLollipop(getResources(), resourceId);
         } else {
