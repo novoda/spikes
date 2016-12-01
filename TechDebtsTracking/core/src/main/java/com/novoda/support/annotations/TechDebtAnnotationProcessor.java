@@ -33,7 +33,7 @@ public class TechDebtAnnotationProcessor extends AbstractProcessor {
 
     private void printWarning(Element annotatedElement) {
         TechDebt techDebt = annotatedElement.getAnnotation(TechDebt.class);
-        String message = String.format(Locale.UK, WARNING_TEMPLATE, techDebt.problem(), techDebt.size(), techDebt.link());
+        String message = String.format(Locale.UK, WARNING_TEMPLATE, techDebt.description(), techDebt.size(), techDebt.link());
         processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, message, annotatedElement);
     }
 }

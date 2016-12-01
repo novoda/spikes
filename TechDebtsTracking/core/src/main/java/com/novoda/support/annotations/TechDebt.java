@@ -26,7 +26,7 @@ public @interface TechDebt {
 
     Size size();
 
-    String problem();
+    String description();
 
     String link();
 }
