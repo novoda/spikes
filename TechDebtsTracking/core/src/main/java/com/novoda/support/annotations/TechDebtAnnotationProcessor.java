@@ -21,8 +21,8 @@ public class TechDebtAnnotationProcessor extends AbstractProcessor {
             + "\nLink: %s";
 
     @Override
-    public boolean process(Set<? extends TypeElement> annotationelements, RoundEnvironment roundEnv) {
-        for (TypeElement annotationElement : annotationelements) {
+    public boolean process(Set<? extends TypeElement> annotationElements, RoundEnvironment roundEnv) {
+        for (TypeElement annotationElement : annotationElements) {
             final Set<? extends Element> annotatedElements = roundEnv.getElementsAnnotatedWith(annotationElement);
             for (Element annotadedElement : annotatedElements) {
                 printWarning(annotadedElement);
