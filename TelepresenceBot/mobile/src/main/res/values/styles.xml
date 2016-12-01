@@ -10,6 +10,7 @@
   <style name="Landing">
     <item name="android:textSize">24sp</item>
     <item name="android:gravity">center</item>
+    <item name="foreground">@drawable/landing_option_foreground</item>
   </style>
 
   <style name="Landing.Human">
