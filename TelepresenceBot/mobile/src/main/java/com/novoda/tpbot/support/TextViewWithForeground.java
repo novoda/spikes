@@ -1,11 +1,17 @@
 package com.novoda.tpbot.support;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.TextView;
 
 import com.novoda.tpbot.R;
@@ -33,12 +39,46 @@ public class TextViewWithForeground extends TextView {
             if (resourceId == INVALID_RESOURCE_ID) {
                 return;
             }
-            Drawable drawable = getResources().getDrawable(resourceId);
+            final Drawable drawable = getDrawable(resourceId);
             updateForegroundWith(drawable);
+            createHotspotTouchListener();
 
         } finally {
             styledAttributes.recycle();
         }
+    }
+
+    private Drawable getDrawable(int resourceId) {
+        if (isLollipopOrAfter()) {
+            return getDrawableLollipop(getResources(), resourceId);
+        } else {
+            return getDrawablePreLollipop(getResources(), resourceId);
+        }
+    }
+
+    private static boolean isLollipopOrAfter() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private static Drawable getDrawableLollipop(Resources resources, @DrawableRes int resId) {
+        return resources.getDrawable(resId, null);
+    }
+
+    private static Drawable getDrawablePreLollipop(Resources resources, @DrawableRes int resId) {
+        return resources.getDrawable(resId);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void createHotspotTouchListener() {
+        setOnTouchListener(new OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                foreground.setHotspot(event.getX(), event.getY());
+                return false;
+            }
+        });
     }
 
     private void updateForegroundWith(Drawable foreground) {

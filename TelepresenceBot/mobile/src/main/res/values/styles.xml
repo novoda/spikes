@@ -7,4 +7,21 @@
     <item name="colorAccent">@color/colorAccent</item>
   </style>
 
+  <style name="Landing">
+    <item name="android:textSize">24sp</item>
+    <item name="android:gravity">center</item>
+  </style>
+
+  <style name="Landing.Human">
+    <item name="android:background">@android:color/holo_blue_light</item>
+    <item name="foreground">@drawable/landing_option_foreground</item>
+    <item name="android:text">@string/human</item>
+  </style>
+
+  <style name="Landing.Bot">
+    <item name="android:background">@android:color/holo_green_light</item>
+    <item name="foreground">@drawable/landing_option_foreground</item>
+    <item name="android:text">@string/bot</item>
+  </style>
+
 </resources>
