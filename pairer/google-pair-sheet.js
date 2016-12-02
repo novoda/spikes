@@ -4,6 +4,10 @@ const COLUMNS =["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P",
 const TEMPLATE_OFFSET = 1;
 const ONE_INDEXED = 1;
 
+const sheetname = 'automatic';
+const nameRow = "A2:A";
+const nameColumn = "B1:1";
+
 function Spreadsheet(config) {
   this.googleSheets = new GoogleSheets(config);
   this.spreadsheet = config.spreadsheet;
@@ -21,7 +25,7 @@ function getPairingGrid(self) {
   return function() {
     return self.googleSheets.get({
       spreadsheetId: self.spreadsheet,
-      ranges: ['automatic!A2:A','automatic!B1:1']
+      ranges: [`${sheetname}!${nameRow}`,`${sheetname}!${nameColumn}`]
     }).then(parseGrid);
   };
 }
@@ -149,7 +153,7 @@ function update(self, data) {
 
 function toData(request) {
   return {
-    range: `automatic!${request.cell}:${request.cell}`,
+    range: `${sheetname}!${request.cell}:${request.cell}`,
     majorDimension: 'ROWS',
     values: [[request.value]]
   };
