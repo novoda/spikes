@@ -13,10 +13,7 @@ Pairer.prototype.updatePairs = function(repoName, prNumber) {
 }
 
 function toPair(gitHubPair) {
-  return {
-    first: gitHubPair.author,
-    second: gitHubPair.pairedWith
-  };
+  return [ gitHubPair.author, gitHubPair.pairedWith ];
 }
 
 module.exports = Pairer;

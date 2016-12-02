@@ -33,28 +33,24 @@ function getPairingGrid(self) {
 
 function addPairNamesToGridIfNeeded(self, pair) {
   return function(grid) {
-    if (gridContainsPair(grid, pair)) {
-      return Promise.resolve(grid);
-    } else {
-      return addPairToGrid(self, grid, pair)
-        .then(getPairingGrid(self));
+    return addPairToGrid(self, grid, pair)
+      .then(getPairingGrid(self));
     }
-  };
 }
 
 function addPairToGrid(self, grid, pair) {
   const endRowIndex = indexToRow(grid.rows.length);
-  const first = toPersonCells(indexToColumn(grid.columns.length), endRowIndex);
-  const second = toPersonCells(indexToColumn(grid.columns.length + 1), endRowIndex + 1);
-
-  console.log(first);
-  console.log(second);
-  const requests = [
-    toAddPersonRequest(pair.first, first[0]),
-    toAddPersonRequest(pair.first, first[1]),
-    toAddPersonRequest(pair.second, second[0]),
-    toAddPersonRequest(pair.second, second[1]),
-  ];
+  const requests = pair.filter((person => !grid.columns.includes(person)))
+                       .map((person, index) => {
+                         return toPersonCells(
+                           toAddPersonRequest(
+                             person,
+                             indexToColumn(grid.columns.length + index),
+                             endRowIndex + index
+                           )
+                         );
+                       }
+                     ).map(flatten);
   return update(self, requests);
 }
 
@@ -82,16 +78,9 @@ function addPeeps(self, pair) {
 }
 
 function asIndexes(grid, pair) {
-  return {
-    first: {
-      name: pair.first,
-      indexes: findPersonIndex(grid, pair.first)
-    },
-    second: {
-      name: pair.second,
-      indexes: findPersonIndex(grid, pair.second)
-    }
-  };
+  return pair.map((person) => {
+    return findPersonIndex(grid, person);
+  });
 }
 
 function findPersonIndex(grid, person) {
@@ -101,17 +90,31 @@ function findPersonIndex(grid, person) {
   };
 }
 
-function updateGrid(self, indexes) {
+function updateGrid(self) {
   return function(indexes) {
-    const cell1 = findCrossoverCell(indexes.first, indexes.second);
-    const cell2 = findCrossoverCell(indexes.second, indexes.first);
-    return markPaired(self, [cell1, cell2]);
+    const cells = indexes.map(function(index) {
+      return indexes.filter(filterSelf(index))
+                    .map(toPairCell(index);
+    }).map(flatten);
+    return markPaired(self, cells);
+  };
+}
+
+function filterSelf(self) {
+  return function(other) {
+    return self !=== other;
+  }
+}
+
+function toPairCell(index) {
+  return function(thatIndex) {
+    return findCrossoverCell(index, thatIndex));
   };
 }
 
 function findCrossoverCell(first, second) {
-  const row = indexToRow(first.indexes.rowIndex);
-  const column = indexToColumn(second.indexes.columnIndex);
+  const row = indexToRow(first.rowIndex);
+  const column = indexToColumn(second.columnIndex);
   return column + row;
 }
 
@@ -160,10 +163,9 @@ function toData(request) {
 }
 
 function gridContainsPair(grid, pair) {
-  return grid.columns.includes(pair.first) &&
-    grid.columns.includes(pair.second) &&
-    grid.rows.includes(pair.first) &&
-    grid.rows.includes(pair.second);
+  return pair.map(person => grid.columns.includes(person)
+                  && grid.rows.includes(person))
+                  .reduce((acc, el) => acc && el, true)
 }
 
 function parseGrid(data) {
