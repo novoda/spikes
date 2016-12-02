@@ -1,44 +1,25 @@
-const google = require('googleapis');
-const sheets = google.sheets('v4');
+const GoogleSheets = require('./google-sheets');
+
 const ALPHA =['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 const TEMPLATE_OFFSET = 1;
 const ONE_INDEXED = 1;
 
 function Spreadsheet(config) {
-  this.jwtClient = new google.auth.JWT(
-    config.client_email,
-    null,
-    config.private_key,
-    ['https://www.googleapis.com/auth/spreadsheets'],
-    null
-  );
+  this.googleSheets = new GoogleSheets(config);
   this.spreadsheet = config.spreadsheet;
 }
 
 Spreadsheet.prototype.update = function(pair) {
   const self = this;
-  return authenticate(self)
+  return self.googleSheets.authenticate()
   .then(getPairingGrid(self))
   .then(addPairNamesToGridIfNeeded(self, pair))
   .then(addPeeps(self, pair));
 }
 
-function authenticate(self) {
-  return new Promise(function(resolve, reject) {
-    self.jwtClient.authorize(function (err, tokens) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
-    });
-  });
-}
-
 function getPairingGrid(self) {
   return function() {
-    return get({
-      auth: self.jwtClient,
+    return self.googleSheets.get({
       spreadsheetId: self.spreadsheet,
       ranges: ['automatic!A2:A','automatic!B1:1']
     }).then(parseGrid);
@@ -160,13 +141,11 @@ function update(self, data) {
     valueInputOption: 'USER_ENTERED',
     data: data.map(toData)
   };
-  return put({
-    auth: self.jwtClient,
+  return self.googleSheets.put({
     spreadsheetId: self.spreadsheet,
     resource: resource
   });
 }
-
 
 function toData(request) {
   return {
@@ -189,30 +168,6 @@ function parseGrid(data) {
     columns: flatten(ranges[0].values),
     rows: flatten(ranges[1].values)
   } );
-}
-
-function get(options) {
-  return new Promise(function(resolve, reject) {
-    sheets.spreadsheets.values.batchGet(options, function(err, response) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(response);
-      }
-    });
-  });
-}
-
-function put(options) {
-  return new Promise(function(resolve, reject) {
-    sheets.spreadsheets.values.batchUpdate(options, function(err, response) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(response);
-      }
-    });
-  });
 }
 
 function flatten(array) {

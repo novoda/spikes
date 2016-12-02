@@ -14,7 +14,7 @@ GithubPair.prototype.getPairs = function(repoName, prNumber) {
   );
   return repo.getPullRequest(prNumber)
     .then(result => result.data)
-    .then(findPair)
+    .then(findPairFromPr)
 }
 
 function findPairFromPr(pr) {
@@ -29,7 +29,7 @@ function findPairFromPr(pr) {
 function asPair(pr) {
   return {
     author: pr.user.login,
-    pairedWith: findPair(pr.body)
+    pairedWith: findPairFromBody(pr.body)
   };
 }
 
