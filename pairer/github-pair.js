@@ -1,4 +1,6 @@
 const GitHub = require('github-api');
+const PAIRED_WITH_TEMPLATE = '### Paired with'
+
 
 function GithubPair(config) {
   this.config = config;
@@ -16,8 +18,8 @@ GithubPair.prototype.getPairs = function(repoName, prNumber) {
 }
 
 function doWork(pr) {
-  if (pr.body.includes('###### Paired with') &&
-  pr.body.substring(pr.body.indexOf('###### Paired with')).includes('@')) {
+  if (pr.body.includes(PAIRED_WITH_TEMPLATE) &&
+  pr.body.substring(pr.body.indexOf(PAIRED_WITH_TEMPLATE)).includes('@')) {
     return Promise.resolve(asPair(pr));
   } else {
     return Promise.reject('no pair');
