@@ -14,12 +14,12 @@ GithubPair.prototype.getPairs = function(repoName, prNumber) {
   );
   return repo.getPullRequest(prNumber)
     .then(result => result.data)
-    .then(doWork)
+    .then(findPair)
 }
 
-function doWork(pr) {
+function findPairFromPr(pr) {
   if (pr.body.includes(PAIRED_WITH_TEMPLATE) &&
-  pr.body.substring(pr.body.indexOf(PAIRED_WITH_TEMPLATE)).includes('@')) {
+    pr.body.substring(pr.body.indexOf(PAIRED_WITH_TEMPLATE)).includes('@')) {
     return Promise.resolve(asPair(pr));
   } else {
     return Promise.reject('no pair');
@@ -33,7 +33,7 @@ function asPair(pr) {
   };
 }
 
-function findPair(body) {
+function findPairFromBody(body) {
   return body.match(/@[a-z]+/i)[0].replace('@', '');
 }
 
