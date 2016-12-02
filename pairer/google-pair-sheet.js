@@ -1,6 +1,6 @@
 const GoogleSheets = require('./google-sheets');
 
-const ALPHA =["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+const COLUMNS =["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
 const TEMPLATE_OFFSET = 1;
 const ONE_INDEXED = 1;
 
@@ -63,7 +63,7 @@ function toAddPersonRequest(name, cell) {
 }
 
 function toPersonCells(column, row) {
-  return [ column + TEMPLATE_OFFSET, ALPHA[0] + row ];
+  return [ column + TEMPLATE_OFFSET, COLUMNS[0] + row ];
 }
 
 function addPeeps(self, pair) {
@@ -116,7 +116,7 @@ function indexToRow(index) {
 }
 
 function indexToColumn(index) {
-  return ALPHA[index + TEMPLATE_OFFSET];
+  return COLUMNS[index + TEMPLATE_OFFSET];
 }
 
 function withPair(pair) {
