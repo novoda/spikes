@@ -32,7 +32,7 @@ function asPair(pr) {
 }
 
 function findPair(body) {
-  return body.match(/@[a-z]+/i) + '';
+  return body.match(/@[a-z]+/i)[0].replace('@', '');
 }
 
 module.exports = GithubPair;
