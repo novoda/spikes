@@ -63,5 +63,5 @@ This will provide to Jenkins all the info it needs in order to keep the `Tech De
 
 **Finally** make sure in your project configuration you have added a `Post Build Action` of the type `scan for compiler warnings` where you select your previously created parser. 
 
-
+Once everything is done you should be able to see something like this: https://ci.novoda.com/job/tech-debt-tracking/20/ <- Sample project.
 
