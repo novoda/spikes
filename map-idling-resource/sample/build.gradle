@@ -1,0 +1,41 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.novoda.build-properties'
+
+buildProperties {
+    secrets {
+        file project.file('secrets.properties')
+    }
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
+    defaultConfig {
+        applicationId 'com.novoda.espresso.map'
+        minSdkVersion 21
+        targetSdkVersion 25
+        versionCode 1
+        versionName '1.0'
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+
+        resValueProperty 'google_maps_key', buildProperties.secrets['api_key']
+    }
+
+    lintOptions {
+        fatal 'UnusedResources'
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'com.android.support:support-annotations:25.1.0'
+    }
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.google.android.gms:play-services-maps:10.0.1'
+
+    androidTestCompile project(':library')
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+}
