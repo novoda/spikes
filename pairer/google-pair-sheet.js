@@ -102,13 +102,13 @@ function updateGrid(self) {
 
 function filterSelf(self) {
   return function(other) {
-    return self !=== other;
-  }
+    return self !== other;
+  };
 }
 
 function toPairCell(index) {
   return function(thatIndex) {
-    return findCrossoverCell(index, thatIndex));
+    return findCrossoverCell(index, thatIndex);
   };
 }
 
