@@ -94,7 +94,7 @@ function updateGrid(self) {
   return function(indexes) {
     const cells = indexes.map(function(index) {
       return indexes.filter(filterSelf(index))
-                    .map(toPairCell(index);
+                    .map(toPairCell(index));
     }).map(flatten);
     return markPaired(self, cells);
   };
