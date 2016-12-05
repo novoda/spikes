@@ -6,6 +6,6 @@ const REPO_NAME = process.env.repoName;
 
 const pairer = new Pairer(config);
 
-pairer.updatePairs('all-4', 4820)
+pairer.updatePairs(REPO_NAME, PR_NUMBER)
   .then(console.log)
   .catch(console.log);
