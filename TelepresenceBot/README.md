@@ -11,5 +11,13 @@ The project includes the following units:
 2. Install the official library for the Adafruit Motor shield V1 https://github.com/adafruit/Adafruit-Motor-Shield-library
 3. Load the sketch in `movement-unit`, compile and upload!
 
-## Schematics
-In order to view and edit the schematics you need Fritzing (http://fritzing.org/) with the Adafruit Fritzing Library (https://github.com/adafruit/Fritzing-Library)
+## Hardware
+Both the Arduino and the motors are powered via USB from an external battery pack:
+* a USB `Type-A` to `Type-B` cable connects the battery pack to the Arduino
+* the motors use external power provided through a custom cable from USB `Type-A` to the 2 power wires. This connects the battery pack to the External Power input connector of the Motor Shield.
+
+**Important:** remove the VIM jumper in the Motor Shield to use the external power instead of the one coming from Arduino.
+
+
+![](https://github.com/novoda/spikes/raw/tpbot-feature-branch/TelepresenceBot/schematics/schematic.png)
+In order to edit the schematics you need Fritzing (http://fritzing.org/) with the Adafruit Fritzing Library (https://github.com/adafruit/Fritzing-Library).
