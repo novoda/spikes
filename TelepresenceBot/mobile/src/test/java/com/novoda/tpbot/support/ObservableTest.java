@@ -36,7 +36,7 @@ public class ObservableTest {
     public void givenAnObservable_withMultipleObservers_whenDetachingAllObservers_thenObserversAreNotNotifiedOfEmissions() {
         Observable<Result> observable = givenObservableWithMultipleObservers();
 
-        observable.deleteObservers();
+        observable.detachObservers();
         observable.start();
 
         verifyZeroInteractions(observer);

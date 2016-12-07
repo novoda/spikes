@@ -45,7 +45,7 @@ public abstract class Observable<T> {
         }
     }
 
-    protected synchronized void deleteObservers() {
+    protected synchronized void detachObservers() {
         observers.clear();
     }
 
