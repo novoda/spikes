@@ -15,7 +15,7 @@ public abstract class Observable<T> {
 
     public synchronized Observable<T> attach(Observer<T> observer) {
         if (observer == null) {
-            throw new DeveloperError("Did you forget to add an observer for this Observable?");
+            throw new DeveloperError("You cannot attach a null observer");
         }
         if (!observers.contains(observer)) {
             observers.add(observer);
