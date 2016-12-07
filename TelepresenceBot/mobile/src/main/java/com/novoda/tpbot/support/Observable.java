@@ -9,7 +9,7 @@ public abstract class Observable<T> {
     private boolean changed = false;
     private final ArrayList<Observer<T>> observers;
 
-    public Observable() {
+    protected Observable() {
         observers = new ArrayList<>();
     }
 
@@ -20,7 +20,7 @@ public abstract class Observable<T> {
         if (!observers.contains(observer)) {
             observers.add(observer);
         }
-        start();
+
         return this;
     }
 
@@ -28,7 +28,7 @@ public abstract class Observable<T> {
         observers.remove(observer);
     }
 
-    public void notify(T arg) {
+    protected void notify(T arg) {
         Observer<T>[] observersCopy;
 
         synchronized (this) {
@@ -45,15 +45,11 @@ public abstract class Observable<T> {
         }
     }
 
-    public synchronized boolean hasChanged() {
-        return changed;
-    }
-
-    public synchronized void deleteObservers() {
+    protected synchronized void deleteObservers() {
         observers.clear();
     }
 
-    private synchronized void setChanged() {
+    protected synchronized void setChanged() {
         changed = true;
     }
 
@@ -65,10 +61,6 @@ public abstract class Observable<T> {
         return !changed;
     }
 
-    public synchronized int countObservers() {
-        return observers.size();
-    }
-
-    public abstract void start();
+    public abstract Observable<T> start();
 
 }
