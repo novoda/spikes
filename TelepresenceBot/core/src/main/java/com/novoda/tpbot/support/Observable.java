@@ -1,24 +1,29 @@
 package com.novoda.tpbot.support;
 
+import com.novoda.notils.exception.DeveloperError;
+
 import java.util.ArrayList;
 
 public abstract class Observable<T> {
 
-    private boolean changed = false;
+    private boolean hasChanged = false;
     private final ArrayList<Observer<T>> observers;
 
-    public Observable() {
+    protected Observable() {
         observers = new ArrayList<>();
     }
 
     public synchronized Observable<T> attach(Observer<T> observer) {
         if (observer == null) {
-            throw new IllegalArgumentException("Did you forget to add an observer for this Observable?");
+            throw new DeveloperError("You cannot attach a null observer");
         }
-        if (!observers.contains(observer)) {
-            observers.add(observer);
+
+        if (observers.contains(observer)) {
+            return this;
         }
-        start();
+
+        observers.add(observer);
+
         return this;
     }
 
@@ -26,7 +31,7 @@ public abstract class Observable<T> {
         observers.remove(observer);
     }
 
-    public void notify(T arg) {
+    protected void notifyOf(T newValue) {
         Observer<T>[] observersCopy;
 
         synchronized (this) {
@@ -39,34 +44,26 @@ public abstract class Observable<T> {
         }
 
         for (int i = observersCopy.length - 1; i >= 0; i--) {
-            observersCopy[i].update(arg);
+            observersCopy[i].update(newValue);
         }
     }
 
-    public synchronized boolean hasChanged() {
-        return changed;
-    }
-
-    public synchronized void deleteObservers() {
+    protected synchronized void detachObservers() {
         observers.clear();
     }
 
-    private synchronized void setChanged() {
-        changed = true;
+    protected synchronized void setChanged() {
+        hasChanged = true;
     }
 
     private synchronized void clearChanged() {
-        changed = false;
+        hasChanged = false;
     }
 
     private synchronized boolean hasNotChanged() {
-        return !changed;
+        return !hasChanged;
     }
 
-    public synchronized int countObservers() {
-        return observers.size();
-    }
-
-    public abstract void start();
+    public abstract Observable<T> start();
 
 }
