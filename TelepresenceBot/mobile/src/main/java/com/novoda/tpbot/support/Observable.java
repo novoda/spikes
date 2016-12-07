@@ -17,9 +17,12 @@ public abstract class Observable<T> {
         if (observer == null) {
             throw new DeveloperError("You cannot attach a null observer");
         }
-        if (!observers.contains(observer)) {
-            observers.add(observer);
+
+        if (observers.contains(observer)) {
+            return this;
         }
+
+        observers.add(observer);
 
         return this;
     }
