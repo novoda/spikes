@@ -28,7 +28,7 @@ public abstract class Observable<T> {
         observers.remove(observer);
     }
 
-    protected void notify(T arg) {
+    protected void notifyOf(T newValue) {
         Observer<T>[] observersCopy;
 
         synchronized (this) {
@@ -41,7 +41,7 @@ public abstract class Observable<T> {
         }
 
         for (int i = observersCopy.length - 1; i >= 0; i--) {
-            observersCopy[i].update(arg);
+            observersCopy[i].update(newValue);
         }
     }
 

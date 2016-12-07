@@ -65,7 +65,7 @@ public class ObservableTest {
         @Override
         public Observable<Result> start() {
             setChanged();
-            notify(EXPECTED_RESULT);
+            notifyOf(EXPECTED_RESULT);
             return this;
         }
 
