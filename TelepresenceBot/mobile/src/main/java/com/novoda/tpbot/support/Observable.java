@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public abstract class Observable<T> {
 
-    private boolean changed = false;
+    private boolean hasChanged = false;
     private final ArrayList<Observer<T>> observers;
 
     protected Observable() {
@@ -50,15 +50,15 @@ public abstract class Observable<T> {
     }
 
     protected synchronized void setChanged() {
-        changed = true;
+        hasChanged = true;
     }
 
     private synchronized void clearChanged() {
-        changed = false;
+        hasChanged = false;
     }
 
     private synchronized boolean hasNotChanged() {
-        return !changed;
+        return !hasChanged;
     }
 
     public abstract Observable<T> start();
