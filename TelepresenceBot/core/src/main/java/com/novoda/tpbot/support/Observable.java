@@ -1,7 +1,5 @@
 package com.novoda.tpbot.support;
 
-import com.novoda.notils.exception.DeveloperError;
-
 import java.util.ArrayList;
 
 public abstract class Observable<T> {
@@ -15,7 +13,7 @@ public abstract class Observable<T> {
 
     public synchronized Observable<T> addObserver(Observer<T> o) {
         if (o == null) {
-            throw new DeveloperError("Did you forget to add an observer for this observable?");
+            throw new IllegalArgumentException("Did you forget to add an observer for this observable?");
         }
         if (!observers.contains(o)) {
             observers.add(o);
@@ -53,6 +51,10 @@ public abstract class Observable<T> {
         observers.clear();
     }
 
+    public synchronized int countObservers() {
+        return observers.size();
+    }
+
     private synchronized void setChanged() {
         changed = true;
     }
@@ -63,10 +65,6 @@ public abstract class Observable<T> {
 
     private synchronized boolean hasNotChanged() {
         return !changed;
-    }
-
-    public synchronized int countObservers() {
-        return observers.size();
     }
 
     public abstract void start();
