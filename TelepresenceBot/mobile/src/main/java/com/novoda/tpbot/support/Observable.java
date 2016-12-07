@@ -13,22 +13,22 @@ public abstract class Observable<T> {
         observers = new ArrayList<>();
     }
 
-    public synchronized Observable<T> addObserver(Observer<T> o) {
-        if (o == null) {
-            throw new DeveloperError("Did you forget to add an observer for this observable?");
+    public synchronized Observable<T> attach(Observer<T> observer) {
+        if (observer == null) {
+            throw new DeveloperError("Did you forget to add an observer for this Observable?");
         }
-        if (!observers.contains(o)) {
-            observers.add(o);
+        if (!observers.contains(observer)) {
+            observers.add(observer);
         }
         start();
         return this;
     }
 
-    public synchronized void deleteObserver(Observer o) {
-        observers.remove(o);
+    public synchronized void detach(Observer observer) {
+        observers.remove(observer);
     }
 
-    public void notifyObservers(T arg) {
+    public void notify(T arg) {
         Observer<T>[] observersCopy;
 
         synchronized (this) {
