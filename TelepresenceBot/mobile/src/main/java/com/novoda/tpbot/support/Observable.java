@@ -29,20 +29,9 @@ public abstract class Observable<T> {
         observers.remove(observer);
     }
 
-    protected void notifyOf(T newValue) {
-        Observer<T>[] observersCopy;
-
-        synchronized (this) {
-            if (hasNotChanged()) {
-                return;
-            }
-
-            observersCopy = observers.toArray(new Observer[observers.size()]);
-            clearChanged();
-        }
-
-        for (int i = observersCopy.length - 1; i >= 0; i--) {
-            observersCopy[i].update(newValue);
+    protected synchronized void notifyOf(T newValue) {
+        for (int i = observers.size() - 1; i >= 0; i--) {
+            observers.get(i).update(newValue);
         }
     }
 
