@@ -1,7 +1,5 @@
 package com.novoda.tpbot.support;
 
-import com.novoda.notils.exception.DeveloperError;
-
 import java.util.ArrayList;
 
 public abstract class Observable<T> {
@@ -15,14 +13,12 @@ public abstract class Observable<T> {
 
     public synchronized Observable<T> attach(Observer<T> observer) {
         if (observer == null) {
-            throw new DeveloperError("You cannot attach a null observer");
+            throw new IllegalArgumentException("You cannot attach a null observer");
         }
 
-        if (observers.contains(observer)) {
-            return this;
+        if (!observers.contains(observer)) {
+            observers.add(observer);
         }
-
-        observers.add(observer);
 
         return this;
     }
@@ -31,20 +27,9 @@ public abstract class Observable<T> {
         observers.remove(observer);
     }
 
-    protected void notifyOf(T newValue) {
-        Observer<T>[] observersCopy;
-
-        synchronized (this) {
-            if (hasNotChanged()) {
-                return;
-            }
-
-            observersCopy = observers.toArray(new Observer[observers.size()]);
-            clearChanged();
-        }
-
-        for (int i = observersCopy.length - 1; i >= 0; i--) {
-            observersCopy[i].update(newValue);
+    protected synchronized void notifyOf(T newValue) {
+        for (int i = observers.size() - 1; i >= 0; i--) {
+            observers.get(i).update(newValue);
         }
     }
 
