@@ -3,6 +3,7 @@ package com.novoda.tpbot.bot;
 import com.novoda.tpbot.Result;
 import com.novoda.tpbot.support.Observable;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -25,12 +26,17 @@ public class BotPresenterTest {
 
     @Mock
     BotView botView;
+    private BotPresenter presenter;
+
+    @Before
+    public void setUp() throws Exception {
+        presenter = new BotPresenter(tpService, botView);
+    }
 
     @Test
     public void givenSuccessfulConnection_whenStartPresenting_thenBotViewOnConnectIsCalled() {
         when(tpService.connect()).thenReturn(Observable.just(SUCCESS_RESULT));
 
-        BotPresenter presenter = new BotPresenter(tpService, botView);
         presenter.startPresenting();
 
         verify(botView).onConnect(SUCCESS_RESULT.message().get());
@@ -40,7 +46,6 @@ public class BotPresenterTest {
     public void givenUnsuccessfulConnection_whenStartPresenting_thenBotViewOnErrorIsCalled() {
         when(tpService.connect()).thenReturn(Observable.just(FAILURE_RESULT));
 
-        BotPresenter presenter = new BotPresenter(tpService, botView);
         presenter.startPresenting();
 
         verify(botView).onError(FAILURE_RESULT.exception().get().getMessage());
