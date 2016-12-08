@@ -13,7 +13,7 @@ public abstract class Observable<T> {
 
     public synchronized Observable<T> attach(Observer<T> observer) {
         if (observer == null) {
-            throw new IllegalArgumentException("You cannot attach a null observer");
+            throw new NullPointerException("You cannot attach a null observer");
         }
 
         if (!observers.contains(observer)) {
