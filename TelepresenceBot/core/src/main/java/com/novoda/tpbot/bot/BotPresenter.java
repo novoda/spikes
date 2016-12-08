@@ -20,16 +20,17 @@ class BotPresenter {
 
     void startPresenting() {
         connectionObservable = tpService.connect()
-                .addObserver(new ConnectionObserver());
+                .attach(new ConnectionObserver())
+                .start();
     }
 
     void stopPresenting() {
         if (connectionObservable != null) {
-            connectionObservable.deleteObservers();
+            connectionObservable.detachObservers();
         }
 
         if (directionObservable != null) {
-            directionObservable.deleteObservers();
+            directionObservable.detachObservers();
         }
 
         tpService.disconnect();
@@ -37,7 +38,8 @@ class BotPresenter {
 
     void startListeningForDirection() {
         directionObservable = tpService.listen()
-                .addObserver(new DirectionObserver());
+                .attach(new DirectionObserver())
+                .start();
     }
 
     private class ConnectionObserver implements Observer<Result> {

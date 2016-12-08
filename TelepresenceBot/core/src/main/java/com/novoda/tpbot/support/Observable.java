@@ -4,69 +4,51 @@ import java.util.ArrayList;
 
 public abstract class Observable<T> {
 
-    private boolean changed = false;
+    private boolean hasChanged = false;
     private final ArrayList<Observer<T>> observers;
 
-    public Observable() {
+    protected Observable() {
         observers = new ArrayList<>();
     }
 
-    public synchronized Observable<T> addObserver(Observer<T> o) {
-        if (o == null) {
-            throw new IllegalArgumentException("Did you forget to add an observer for this observable?");
+    public synchronized Observable<T> attach(Observer<T> observer) {
+        if (observer == null) {
+            throw new NullPointerException("You cannot attach a null observer");
         }
-        if (!observers.contains(o)) {
-            observers.add(o);
+
+        if (!observers.contains(observer)) {
+            observers.add(observer);
         }
-        start();
+
         return this;
     }
 
-    public synchronized void deleteObserver(Observer o) {
-        observers.remove(o);
+    public synchronized void detach(Observer observer) {
+        observers.remove(observer);
     }
 
-    public void notifyObservers(T arg) {
-        Observer<T>[] observersCopy;
-
-        synchronized (this) {
-            if (hasNotChanged()) {
-                return;
-            }
-
-            observersCopy = observers.toArray(new Observer[observers.size()]);
-            clearChanged();
-        }
-
-        for (int i = observersCopy.length - 1; i >= 0; i--) {
-            observersCopy[i].update(arg);
+    protected synchronized void notifyOf(T newValue) {
+        for (int i = observers.size() - 1; i >= 0; i--) {
+            observers.get(i).update(newValue);
         }
     }
 
-    public synchronized boolean hasChanged() {
-        return changed;
-    }
-
-    public synchronized void deleteObservers() {
+    public synchronized void detachObservers() {
         observers.clear();
     }
 
-    public synchronized int countObservers() {
-        return observers.size();
-    }
-
-    private synchronized void setChanged() {
-        changed = true;
+    protected synchronized void setChanged() {
+        hasChanged = true;
     }
 
     private synchronized void clearChanged() {
-        changed = false;
+        hasChanged = false;
     }
 
     private synchronized boolean hasNotChanged() {
-        return !changed;
+        return !hasChanged;
     }
 
-    public abstract void start();
+    public abstract Observable<T> start();
 
 }
