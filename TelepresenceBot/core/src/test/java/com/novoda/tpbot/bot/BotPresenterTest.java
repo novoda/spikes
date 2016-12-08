@@ -48,4 +48,23 @@ public class BotPresenterTest {
         verify(botView).onError(FAILURE_RESULT.exception().get().getMessage());
     }
 
+    @Test
+    public void givenAlreadyPresenting_whenStopPresentingIsCalled_thenTpServiceDisconnectIsCalled() {
+        BotPresenter presenter = givenAlreadyPresenting();
+
+        presenter.stopPresenting();
+
+        verify(tpService).disconnect();
+    }
+
+    private BotPresenter givenAlreadyPresenting() {
+        TestableObservable<Result> testObservable = TestableObservable.just(SUCCESS_RESULT);
+        when(tpService.connect()).thenReturn(testObservable);
+
+        BotPresenter presenter = new BotPresenter(tpService, botView);
+        presenter.startPresenting();
+
+        return presenter;
+    }
+
 }
