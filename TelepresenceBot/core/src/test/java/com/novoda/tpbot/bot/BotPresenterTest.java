@@ -1,0 +1,37 @@
+package com.novoda.tpbot.bot;
+
+import com.novoda.tpbot.Result;
+import com.novoda.tpbot.support.TestableObservable;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+public class BotPresenterTest {
+
+    @Rule
+    public MockitoRule mockitoRule = MockitoJUnit.rule();
+
+    @Mock
+    BotTpService tpService;
+
+    @Mock
+    BotView botView;
+
+    @Test
+    public void name() {
+        TestableObservable<Result> testObservable = TestableObservable.just(Result.from("Something"));
+        when(tpService.connect()).thenReturn(testObservable);
+
+        BotPresenter presenter = new BotPresenter(tpService, botView);
+        presenter.startPresenting();
+
+        verify(botView).onConnect("Something");
+    }
+
+}
