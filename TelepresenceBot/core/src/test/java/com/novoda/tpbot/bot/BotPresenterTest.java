@@ -14,6 +14,8 @@ import static org.mockito.Mockito.when;
 
 public class BotPresenterTest {
 
+    private static final Result SUCCESS_RESULT = Result.from("Connection Successful!");
+
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
@@ -24,14 +26,14 @@ public class BotPresenterTest {
     BotView botView;
 
     @Test
-    public void name() {
-        TestableObservable<Result> testObservable = TestableObservable.just(Result.from("Something"));
+    public void givenSuccessfulConnection_whenStartPresenting_thenBotViewOnConnectIsCalled() {
+        TestableObservable<Result> testObservable = TestableObservable.just(SUCCESS_RESULT);
         when(tpService.connect()).thenReturn(testObservable);
 
         BotPresenter presenter = new BotPresenter(tpService, botView);
         presenter.startPresenting();
 
-        verify(botView).onConnect("Something");
+        verify(botView).onConnect(SUCCESS_RESULT.message().get());
     }
 
 }
