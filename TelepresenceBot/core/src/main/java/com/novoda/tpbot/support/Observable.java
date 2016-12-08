@@ -7,6 +7,10 @@ public abstract class Observable<T> {
     private boolean hasChanged = false;
     private final ArrayList<Observer<T>> observers;
 
+    public static <T> SingleEmissionObservable<T> just(T toEmit) {
+        return new SingleEmissionObservable<>(toEmit);
+    }
+
     protected Observable() {
         observers = new ArrayList<>();
     }
@@ -50,5 +54,21 @@ public abstract class Observable<T> {
     }
 
     public abstract Observable<T> start();
+
+    public static class SingleEmissionObservable<T> extends Observable<T> {
+
+        private final T toEmit;
+
+        SingleEmissionObservable(T toEmit) {
+            this.toEmit = toEmit;
+        }
+
+        @Override
+        public Observable<T> start() {
+            notifyOf(toEmit);
+            return this;
+        }
+
+    }
 
 }

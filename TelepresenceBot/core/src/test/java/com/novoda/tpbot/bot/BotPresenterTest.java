@@ -1,7 +1,7 @@
 package com.novoda.tpbot.bot;
 
 import com.novoda.tpbot.Result;
-import com.novoda.tpbot.support.TestableObservable;
+import com.novoda.tpbot.support.Observable;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class BotPresenterTest {
 
     @Test
     public void givenSuccessfulConnection_whenStartPresenting_thenBotViewOnConnectIsCalled() {
-        when(tpService.connect()).thenReturn(TestableObservable.just(SUCCESS_RESULT));
+        when(tpService.connect()).thenReturn(Observable.just(SUCCESS_RESULT));
 
         BotPresenter presenter = new BotPresenter(tpService, botView);
         presenter.startPresenting();
@@ -38,7 +38,7 @@ public class BotPresenterTest {
 
     @Test
     public void givenUnsuccessfulConnection_whenStartPresenting_thenBotViewOnErrorIsCalled() {
-        when(tpService.connect()).thenReturn(TestableObservable.just(FAILURE_RESULT));
+        when(tpService.connect()).thenReturn(Observable.just(FAILURE_RESULT));
 
         BotPresenter presenter = new BotPresenter(tpService, botView);
         presenter.startPresenting();
@@ -56,7 +56,7 @@ public class BotPresenterTest {
     }
 
     private BotPresenter givenAlreadyPresenting() {
-        when(tpService.connect()).thenReturn(TestableObservable.just(SUCCESS_RESULT));
+        when(tpService.connect()).thenReturn(Observable.just(SUCCESS_RESULT));
 
         BotPresenter presenter = new BotPresenter(tpService, botView);
         presenter.startPresenting();
