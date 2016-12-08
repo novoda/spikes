@@ -28,8 +28,7 @@ public class BotPresenterTest {
 
     @Test
     public void givenSuccessfulConnection_whenStartPresenting_thenBotViewOnConnectIsCalled() {
-        TestableObservable<Result> testObservable = TestableObservable.just(SUCCESS_RESULT);
-        when(tpService.connect()).thenReturn(testObservable);
+        when(tpService.connect()).thenReturn(TestableObservable.just(SUCCESS_RESULT));
 
         BotPresenter presenter = new BotPresenter(tpService, botView);
         presenter.startPresenting();
@@ -39,8 +38,7 @@ public class BotPresenterTest {
 
     @Test
     public void givenUnsuccessfulConnection_whenStartPresenting_thenBotViewOnErrorIsCalled() {
-        TestableObservable<Result> testObservable = TestableObservable.just(FAILURE_RESULT);
-        when(tpService.connect()).thenReturn(testObservable);
+        when(tpService.connect()).thenReturn(TestableObservable.just(FAILURE_RESULT));
 
         BotPresenter presenter = new BotPresenter(tpService, botView);
         presenter.startPresenting();
@@ -58,8 +56,7 @@ public class BotPresenterTest {
     }
 
     private BotPresenter givenAlreadyPresenting() {
-        TestableObservable<Result> testObservable = TestableObservable.just(SUCCESS_RESULT);
-        when(tpService.connect()).thenReturn(testObservable);
+        when(tpService.connect()).thenReturn(TestableObservable.just(SUCCESS_RESULT));
 
         BotPresenter presenter = new BotPresenter(tpService, botView);
         presenter.startPresenting();
