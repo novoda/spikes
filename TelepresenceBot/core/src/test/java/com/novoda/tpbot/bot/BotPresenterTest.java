@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 public class BotPresenterTest {
 
     private static final Result SUCCESS_RESULT = Result.from("Connection Successful!");
+    private static final Result FAILURE_RESULT = Result.from(new Exception("Connection Unsuccessful"));
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -34,6 +35,17 @@ public class BotPresenterTest {
         presenter.startPresenting();
 
         verify(botView).onConnect(SUCCESS_RESULT.message().get());
+    }
+
+    @Test
+    public void givenUnsuccessfulConnection_whenStartPresenting_thenBotViewOnErrorIsCalled() {
+        TestableObservable<Result> testObservable = TestableObservable.just(FAILURE_RESULT);
+        when(tpService.connect()).thenReturn(testObservable);
+
+        BotPresenter presenter = new BotPresenter(tpService, botView);
+        presenter.startPresenting();
+
+        verify(botView).onError(FAILURE_RESULT.exception().get().getMessage());
     }
 
 }
