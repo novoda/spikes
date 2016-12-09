@@ -2,6 +2,7 @@ package com.novoda.tpbot.human;
 
 import com.novoda.tpbot.Result;
 import com.novoda.tpbot.support.Observable;
+import com.novoda.tpbot.support.Observer;
 
 public class HumanPresenter {
 
@@ -17,7 +18,8 @@ public class HumanPresenter {
 
     public void startPresenting() {
         observable = humanTpService.connect()
-                .attach(new ConnectionObserver());
+                .attach(new ConnectionObserver())
+                .start();
     }
 
     public void stopPresenting() {
@@ -25,7 +27,7 @@ public class HumanPresenter {
         humanTpService.disconnect();
     }
 
-    private class ConnectionObserver implements com.novoda.tpbot.support.Observer<Result> {
+    private class ConnectionObserver implements Observer<Result> {
 
         @Override
         public void update(Result result) {
