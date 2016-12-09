@@ -2,7 +2,7 @@ package com.novoda.tpbot.human;
 
 interface HumanView {
 
-    void onConnection(String message);
+    void onConnect(String message);
 
     void onDisconnect();
 
