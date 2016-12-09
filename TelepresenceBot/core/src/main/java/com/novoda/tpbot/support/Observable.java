@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public abstract class Observable<T> {
 
-    private boolean hasChanged = false;
     private final ArrayList<Observer<T>> observers;
 
     public static <T> SingleEmissionObservable<T> just(T toEmit) {
@@ -39,18 +38,6 @@ public abstract class Observable<T> {
 
     public synchronized void detachObservers() {
         observers.clear();
-    }
-
-    protected synchronized void setChanged() {
-        hasChanged = true;
-    }
-
-    private synchronized void clearChanged() {
-        hasChanged = false;
-    }
-
-    private synchronized boolean hasNotChanged() {
-        return !hasChanged;
     }
 
     public abstract Observable<T> start();
