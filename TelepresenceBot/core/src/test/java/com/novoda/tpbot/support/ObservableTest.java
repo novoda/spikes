@@ -25,7 +25,7 @@ public class ObservableTest {
 
     @Test
     public void givenAnObservable_whenAttachingAnObserver_thenObserverIsNotifiedOfEmissions() {
-        new TestObservable()
+        Observable.just(EXPECTED_RESULT)
                 .attach(observer)
                 .start();
 
@@ -55,19 +55,9 @@ public class ObservableTest {
     }
 
     private Observable<Result> givenObservableWithMultipleObservers() {
-        return new TestObservable()
+        return Observable.just(EXPECTED_RESULT)
                 .attach(observer)
                 .attach(additionalObserver);
     }
 
-    private class TestObservable extends Observable<Result> {
-
-        @Override
-        public Observable<Result> start() {
-            setChanged();
-            notifyOf(EXPECTED_RESULT);
-            return this;
-        }
-
-    }
 }
