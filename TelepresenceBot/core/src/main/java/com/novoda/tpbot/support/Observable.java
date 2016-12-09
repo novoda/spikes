@@ -46,7 +46,7 @@ public abstract class Observable<T> {
 
         private final T toEmit;
 
-        SingleEmissionObservable(T toEmit) {
+        private SingleEmissionObservable(T toEmit) {
             this.toEmit = toEmit;
         }
 
