@@ -10,7 +10,7 @@ public abstract class Observable<T> {
         return new SingleEmissionObservable<>(toEmit);
     }
 
-    protected Observable() {
+    private Observable() {
         observers = new ArrayList<>();
     }
 
@@ -42,11 +42,11 @@ public abstract class Observable<T> {
 
     public abstract Observable<T> start();
 
-    public static class SingleEmissionObservable<T> extends Observable<T> {
+    private static class SingleEmissionObservable<T> extends Observable<T> {
 
         private final T toEmit;
 
-        SingleEmissionObservable(T toEmit) {
+        private SingleEmissionObservable(T toEmit) {
             this.toEmit = toEmit;
         }
 
