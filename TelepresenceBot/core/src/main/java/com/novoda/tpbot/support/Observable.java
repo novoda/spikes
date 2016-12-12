@@ -1,7 +1,5 @@
 package com.novoda.tpbot.support;
 
-import com.novoda.notils.exception.DeveloperError;
-
 import java.util.ArrayList;
 
 public abstract class Observable<T> {
@@ -15,7 +13,7 @@ public abstract class Observable<T> {
 
     public synchronized Observable<T> attach(Observer<T> observer) {
         if (observer == null) {
-            throw new DeveloperError("You cannot attach a null observer");
+            throw new NullPointerException("You cannot attach a null observer");
         }
 
         if (!observers.contains(observer)) {

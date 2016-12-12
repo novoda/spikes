@@ -44,7 +44,7 @@ public class ObservableTest {
     }
 
     @Test
-    public void givenAnObservable_withMultipleObservers_whenDetachingAnObserver_thenRemainingObserverAreNotifiedOfEmissions() throws Exception {
+    public void givenAnObservable_withMultipleObservers_whenDetachingAnObserver_thenRemainingObserverAreNotifiedOfEmissions() {
         Observable<Result> observable = givenObservableWithMultipleObservers();
 
         observable.detach(additionalObserver);
