@@ -12,7 +12,7 @@ Finally over
 
 some work
 
-This is better
+This is better with conflicts
 
 # two
 
