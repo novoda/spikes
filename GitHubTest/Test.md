@@ -1,6 +1,20 @@
 ## Test the git squash behaviour
 
+This is one
+
+More stuff
+
+Even more things
+
+Finally over
+
 # one
+
+probably done now
+
+some work
+
+This is better with conflicts
 
 # two
 
@@ -34,3 +48,11 @@ even more hotfixing
 
 
 ### more changes
+
+This is one
+
+This is 2
+
+New stuff
+
+Even better
