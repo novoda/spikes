@@ -1,17 +1,18 @@
 package com.novoda.tpbot.support;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class Observable<T> {
 
-    private final ArrayList<Observer<T>> observers;
+    private final Set<Observer<T>> observers;
 
-    public static <T> SingleEmissionObservable<T> just(T toEmit) {
+    public static <T> Observable<T> just(T toEmit) {
         return new SingleEmissionObservable<>(toEmit);
     }
 
     private Observable() {
-        observers = new ArrayList<>();
+        observers = new HashSet<>();
     }
 
     public abstract Observable<T> start();
@@ -33,8 +34,8 @@ public abstract class Observable<T> {
     }
 
     protected synchronized void notifyOf(T newValue) {
-        for (int i = observers.size() - 1; i >= 0; i--) {
-            observers.get(i).update(newValue);
+        for (Observer<T> observer : observers) {
+            observer.update(newValue);
         }
     }
 
