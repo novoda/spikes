@@ -14,6 +14,8 @@ public abstract class Observable<T> {
         observers = new ArrayList<>();
     }
 
+    public abstract Observable<T> start();
+
     public synchronized Observable<T> attach(Observer<T> observer) {
         if (observer == null) {
             throw new NullPointerException("You cannot attach a null observer");
@@ -39,8 +41,6 @@ public abstract class Observable<T> {
     public synchronized void detachObservers() {
         observers.clear();
     }
-
-    public abstract Observable<T> start();
 
     private static class SingleEmissionObservable<T> extends Observable<T> {
 
