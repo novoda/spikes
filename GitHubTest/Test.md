@@ -10,9 +10,11 @@ Finally over
 
 # one
 
+probably done now
+
 some work
 
-This is better
+This is better with conflicts
 
 # two
 
