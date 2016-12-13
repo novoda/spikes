@@ -1,5 +1,7 @@
 ## Test the git squash behaviour
 
+This is one
+
 # one
 
 # two
