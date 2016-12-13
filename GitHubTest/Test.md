@@ -1,5 +1,13 @@
 ## Test the git squash behaviour
 
+This is one
+
+More stuff
+
+Even more things
+
+Finally over
+
 # one
 
 # two
