@@ -1,15 +1,21 @@
 package com.novoda.tpbot.support;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class Observable<T> {
 
-    private boolean hasChanged = false;
-    private final ArrayList<Observer<T>> observers;
+    private final Set<Observer<T>> observers;
 
-    protected Observable() {
-        observers = new ArrayList<>();
+    public static <T> Observable<T> just(T toEmit) {
+        return new SingleEmissionObservable<>(toEmit);
     }
+
+    private Observable() {
+        observers = new HashSet<>();
+    }
+
+    public abstract Observable<T> start();
 
     public synchronized Observable<T> attach(Observer<T> observer) {
         if (observer == null) {
@@ -28,27 +34,29 @@ public abstract class Observable<T> {
     }
 
     protected synchronized void notifyOf(T newValue) {
-        for (int i = observers.size() - 1; i >= 0; i--) {
-            observers.get(i).update(newValue);
+        for (Observer<T> observer : observers) {
+            observer.update(newValue);
         }
     }
 
-    protected synchronized void detachObservers() {
+    public synchronized void detachObservers() {
         observers.clear();
     }
 
-    protected synchronized void setChanged() {
-        hasChanged = true;
-    }
+    private static class SingleEmissionObservable<T> extends Observable<T> {
 
-    private synchronized void clearChanged() {
-        hasChanged = false;
-    }
+        private final T toEmit;
 
-    private synchronized boolean hasNotChanged() {
-        return !hasChanged;
-    }
+        private SingleEmissionObservable(T toEmit) {
+            this.toEmit = toEmit;
+        }
 
-    public abstract Observable<T> start();
+        @Override
+        public Observable<T> start() {
+            notifyOf(toEmit);
+            return this;
+        }
+
+    }
 
 }
