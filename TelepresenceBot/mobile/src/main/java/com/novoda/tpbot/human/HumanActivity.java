@@ -1,6 +1,7 @@
 package com.novoda.tpbot.human;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import com.novoda.notils.caster.Views;
@@ -8,14 +9,18 @@ import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.SelfDestructingMessageView;
 
+import java.util.concurrent.TimeUnit;
+
 public class HumanActivity extends AppCompatActivity {
 
     private static final String LAZERS = String.valueOf(Character.toChars(0x1F4A5));
 
-    private static final long DURATION_DIRECTIONS = 1500L;
-    private static final long DURATION_LAZERS = 150L;
+    private static final long COMMAND_REPEAT_DELAY = TimeUnit.MILLISECONDS.toMillis(100);
 
+    private Handler handler;
     private SelfDestructingMessageView debugView;
+
+    String currentCommand;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,28 +28,57 @@ public class HumanActivity extends AppCompatActivity {
         setContentView(R.layout.activity_human);
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
 
+        handler = new Handler();
+
         ControllerView controllerView = Views.findById(this, R.id.bot_controller_direction_view);
         controllerView.setControllerListener(new ControllerListener() {
 
             @Override
             public void onDirectionPressed(Direction direction) {
-                debugView.showPermanently(direction.visualRepresentation());
+                startRepeatingCommand(direction.visualRepresentation());
             }
 
             @Override
             public void onDirectionReleased(Direction direction) {
-                debugView.showTimed(direction.visualRepresentation() + " released", DURATION_DIRECTIONS);
+                stopRepeatingCommand(direction.visualRepresentation());
             }
 
             @Override
             public void onLazersFired() {
-                debugView.showTimed(LAZERS, DURATION_LAZERS);
+                startRepeatingCommand(LAZERS);
             }
 
             @Override
             public void onLazersReleased() {
-                debugView.clearMessage();
+                stopRepeatingCommand(LAZERS);
             }
         });
+    }
+
+    private void startRepeatingCommand(String command) {
+        currentCommand = command;
+        debugView.showTimed(currentCommand, COMMAND_REPEAT_DELAY);
+        handler.postDelayed(repeatCommand, COMMAND_REPEAT_DELAY);
+    }
+
+    private void stopRepeatingCommand(String command) {
+        if (currentCommand != null && currentCommand.equals(command)) {
+            handler.removeCallbacks(repeatCommand);
+            currentCommand = null;
+        }
+    }
+
+    private Runnable repeatCommand = new Runnable() {
+        @Override
+        public void run() {
+            debugView.showTimed(currentCommand, COMMAND_REPEAT_DELAY);
+            handler.postDelayed(repeatCommand, COMMAND_REPEAT_DELAY);
+        }
+    };
+
+    @Override
+    protected void onPause() {
+        stopRepeatingCommand(currentCommand);
+        super.onPause();
     }
 }
