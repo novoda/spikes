@@ -9,11 +9,13 @@ AF_DCMotor motorLeft2(1);
 const char COMMAND_FORWARD = 'w';
 const char COMMAND_BACKWARD = 's';
 const char COMMAND_TEST = 't';
+const unsigned long COMMAND_TIMEOUT = 100;
 const int MAX_SPEED = 255;
 const int DELTA_SPEED = 50;
 
 int currentDirection = RELEASE;
 int currentSpeed = 0;
+unsigned long lastCommand;
 
 void setup() {
   Serial.begin(9600);           
@@ -22,9 +24,13 @@ void setup() {
 
 void loop() {
   if (Serial.available() == 0) {
+    if (millis() - lastCommand > COMMAND_TIMEOUT) {
+      stopMotors();
+    }
     return;
   }
-  
+
+  lastCommand = millis();
   char inChar = Serial.read();
 
   switch(inChar) {
@@ -40,6 +46,14 @@ void loop() {
     default:
        Serial.println("Unknown command " + inChar);
   }
+}
+
+void stopMotors() {
+  setRightSpeed(0);  
+  setLeftSpeed(0);
+  currentDirection = RELEASE;
+  setRightDirection(RELEASE);
+  setLeftDirection(RELEASE);
 }
 
 void testMotors() {
