@@ -69,7 +69,7 @@ public class BotActivity extends AppCompatActivity {
                                   device.getVendorId(),
                                   device.getProductId()
                         )
-                );
+                ).append("\n");
             }
         }
         Toaster.newInstance(this).popBurntToast(builder.toString());
