@@ -1,13 +1,19 @@
 package com.novoda.tpbot.human;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 
 import com.novoda.notils.caster.Views;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.SelfDestructingMessageView;
+import com.novoda.tpbot.bot.MovementService;
 
 import java.util.concurrent.TimeUnit;
 
@@ -19,6 +25,8 @@ public class HumanActivity extends AppCompatActivity {
 
     private Handler handler;
     private SelfDestructingMessageView debugView;
+    private MovementService movementService;
+    private boolean bound;
 
     String currentCommand;
 
@@ -57,7 +65,7 @@ public class HumanActivity extends AppCompatActivity {
 
     private void startRepeatingCommand(String command) {
         currentCommand = command;
-        debugView.showTimed(currentCommand, COMMAND_REPEAT_DELAY);
+        sendCommand(currentCommand);
         handler.postDelayed(repeatCommand, COMMAND_REPEAT_DELAY);
     }
 
@@ -71,14 +79,53 @@ public class HumanActivity extends AppCompatActivity {
     private Runnable repeatCommand = new Runnable() {
         @Override
         public void run() {
-            debugView.showTimed(currentCommand, COMMAND_REPEAT_DELAY);
+            sendCommand(HumanActivity.this.currentCommand);
             handler.postDelayed(repeatCommand, COMMAND_REPEAT_DELAY);
         }
     };
+
+    private void sendCommand(String command) {
+        debugView.showTimed(command, COMMAND_REPEAT_DELAY);
+        if (bound) {
+            movementService.sendCommand(command);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this, MovementService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
 
     @Override
     protected void onPause() {
         stopRepeatingCommand(currentCommand);
         super.onPause();
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (bound) {
+            unbindService(mConnection);
+            bound = false;
+        }
+    }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder iBinder) {
+            MovementService.Binder binder = (MovementService.Binder) iBinder;
+            movementService = binder.getService();
+            bound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            bound = false;
+        }
+    };
 }
