@@ -5,9 +5,15 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import com.novoda.notils.logger.simple.Log;
+import com.novoda.notils.logger.toast.Toaster;
 
 public class MovementService extends Service {
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Toaster.newInstance(this).popToast(MovementService.class.getSimpleName() + " started");
+        return START_STICKY;
+    }
 
     @Nullable
     @Override
@@ -16,7 +22,7 @@ public class MovementService extends Service {
     }
 
     public void sendCommand(String command) {
-        Log.d("xxx", command);
+        Toaster.newInstance(this).popToast("command " + command);
     }
 
     public static class Binder extends android.os.Binder {
