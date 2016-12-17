@@ -32,6 +32,10 @@
       android:icon="@mipmap/ic_launcher"
       android:label="@string/bot" />
 
+    <service
+      android:name="com.novoda.tpbot.bot.MovementService"
+      android:exported="false" />
+
   </application>
 
 </manifest>
