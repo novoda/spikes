@@ -8,6 +8,8 @@ AF_DCMotor motorLeft2(1);
 
 const char COMMAND_FORWARD = 'w';
 const char COMMAND_BACKWARD = 's';
+const char COMMAND_LEFT = 'a';
+const char COMMAND_RIGHT = 'd';
 const char COMMAND_TEST = 't';
 const unsigned long COMMAND_TIMEOUT = 100;
 const int MAX_SPEED = 255;
@@ -44,6 +46,20 @@ void loop() {
     case (COMMAND_BACKWARD):
       setRightDirection(BACKWARD);
       setLeftDirection(BACKWARD);
+    
+      setRightSpeed(MAX_SPEED);  
+      setLeftSpeed(MAX_SPEED);
+      break;   
+   case (COMMAND_LEFT):
+      setRightDirection(FORWARD);
+      setLeftDirection(BACKWARD);
+    
+      setRightSpeed(MAX_SPEED);  
+      setLeftSpeed(MAX_SPEED);
+      break;
+    case (COMMAND_RIGHT):
+      setRightDirection(BACKWARD);
+      setLeftDirection(FORWARD);
     
       setRightSpeed(MAX_SPEED);  
       setLeftSpeed(MAX_SPEED);
