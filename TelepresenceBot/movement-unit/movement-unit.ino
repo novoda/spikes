@@ -35,10 +35,18 @@ void loop() {
 
   switch(inChar) {
     case (COMMAND_FORWARD):
-      increaseForward();
+      setRightDirection(FORWARD);
+      setLeftDirection(FORWARD);
+    
+      setRightSpeed(MAX_SPEED);  
+      setLeftSpeed(MAX_SPEED);
       break;
     case (COMMAND_BACKWARD):
-      increaseBackward();
+      setRightDirection(BACKWARD);
+      setLeftDirection(BACKWARD);
+    
+      setRightSpeed(MAX_SPEED);  
+      setLeftSpeed(MAX_SPEED);
       break;
     case (COMMAND_TEST):
       testMotors();
@@ -90,47 +98,6 @@ void testMotors() {
     setRightSpeed(i);  
     setLeftSpeed(i);  
     delay(3);
-  }
-}
-
-void increaseForward() {
-  if (currentSpeed == 0) {
-    currentDirection = FORWARD;
-    setRightDirection(FORWARD);
-    setLeftDirection(FORWARD);
-  }
-  if (currentDirection == FORWARD) {
-    currentSpeed = currentSpeed + DELTA_SPEED;
-  } else {
-    currentSpeed = currentSpeed - DELTA_SPEED;
-  }
-  enforceSpeedWithinLimits();
-  setRightSpeed(currentSpeed);  
-  setLeftSpeed(currentSpeed);
-}
-
-void increaseBackward() {
-  if (currentSpeed == 0) {
-    currentDirection = BACKWARD;
-    setRightDirection(BACKWARD);
-    setLeftDirection(BACKWARD);
-  }
-  if (currentDirection == BACKWARD) {
-    currentSpeed = currentSpeed + DELTA_SPEED;
-  } else {
-    currentSpeed = currentSpeed - DELTA_SPEED;
-  }
-  enforceSpeedWithinLimits();
-  setRightSpeed(currentSpeed);  
-  setLeftSpeed(currentSpeed);
-}
-
-void enforceSpeedWithinLimits() {
-  if (currentSpeed > MAX_SPEED) {
-    currentSpeed = MAX_SPEED;
-  }
-  if (currentSpeed < 0) {
-    currentSpeed = 0;
   }
 }
 
