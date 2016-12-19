@@ -13,10 +13,7 @@ const char COMMAND_RIGHT = 'd';
 const char COMMAND_TEST = 't';
 const unsigned long COMMAND_TIMEOUT = 100;
 const int MAX_SPEED = 255;
-const int DELTA_SPEED = 50;
 
-int currentDirection = RELEASE;
-int currentSpeed = 0;
 unsigned long lastCommand;
 
 void setup() {
@@ -66,7 +63,6 @@ void loop() {
 
 void stopMotors() {
   setAllMotorsSpeed(0);
-  currentDirection = RELEASE;
   setRightDirection(RELEASE);
   setLeftDirection(RELEASE);
 }
