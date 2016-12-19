@@ -8,13 +8,12 @@ AF_DCMotor motorLeft2(1);
 
 const char COMMAND_FORWARD = 'w';
 const char COMMAND_BACKWARD = 's';
+const char COMMAND_LEFT = 'a';
+const char COMMAND_RIGHT = 'd';
 const char COMMAND_TEST = 't';
 const unsigned long COMMAND_TIMEOUT = 100;
 const int MAX_SPEED = 255;
-const int DELTA_SPEED = 50;
 
-int currentDirection = RELEASE;
-int currentSpeed = 0;
 unsigned long lastCommand;
 
 void setup() {
@@ -35,10 +34,24 @@ void loop() {
 
   switch(inChar) {
     case (COMMAND_FORWARD):
-      increaseForward();
+      setRightDirection(FORWARD);
+      setLeftDirection(FORWARD);
+      setAllMotorsSpeed(MAX_SPEED);
       break;
     case (COMMAND_BACKWARD):
-      increaseBackward();
+      setRightDirection(BACKWARD);
+      setLeftDirection(BACKWARD);
+      setAllMotorsSpeed(MAX_SPEED);
+      break;   
+   case (COMMAND_LEFT):
+      setRightDirection(FORWARD);
+      setLeftDirection(BACKWARD);
+      setAllMotorsSpeed(MAX_SPEED);
+      break;
+    case (COMMAND_RIGHT):
+      setRightDirection(BACKWARD);
+      setLeftDirection(FORWARD);
+      setAllMotorsSpeed(MAX_SPEED);
       break;
     case (COMMAND_TEST):
       testMotors();
@@ -49,9 +62,7 @@ void loop() {
 }
 
 void stopMotors() {
-  setRightSpeed(0);  
-  setLeftSpeed(0);
-  currentDirection = RELEASE;
+  setAllMotorsSpeed(0);
   setRightDirection(RELEASE);
   setLeftDirection(RELEASE);
 }
@@ -93,47 +104,6 @@ void testMotors() {
   }
 }
 
-void increaseForward() {
-  if (currentSpeed == 0) {
-    currentDirection = FORWARD;
-    setRightDirection(FORWARD);
-    setLeftDirection(FORWARD);
-  }
-  if (currentDirection == FORWARD) {
-    currentSpeed = currentSpeed + DELTA_SPEED;
-  } else {
-    currentSpeed = currentSpeed - DELTA_SPEED;
-  }
-  enforceSpeedWithinLimits();
-  setRightSpeed(currentSpeed);  
-  setLeftSpeed(currentSpeed);
-}
-
-void increaseBackward() {
-  if (currentSpeed == 0) {
-    currentDirection = BACKWARD;
-    setRightDirection(BACKWARD);
-    setLeftDirection(BACKWARD);
-  }
-  if (currentDirection == BACKWARD) {
-    currentSpeed = currentSpeed + DELTA_SPEED;
-  } else {
-    currentSpeed = currentSpeed - DELTA_SPEED;
-  }
-  enforceSpeedWithinLimits();
-  setRightSpeed(currentSpeed);  
-  setLeftSpeed(currentSpeed);
-}
-
-void enforceSpeedWithinLimits() {
-  if (currentSpeed > MAX_SPEED) {
-    currentSpeed = MAX_SPEED;
-  }
-  if (currentSpeed < 0) {
-    currentSpeed = 0;
-  }
-}
-
 void setRightDirection(int direction) {
   motorRight1.run(direction);
   motorRight2.run(direction);
@@ -142,6 +112,11 @@ void setRightDirection(int direction) {
 void setLeftDirection(int direction) {
   motorLeft1.run(direction);
   motorLeft2.run(direction);
+}
+
+void setAllMotorsSpeed(int speed) {
+  setRightSpeed(speed);  
+  setLeftSpeed(speed);
 }
 
 void setRightSpeed(int speed) {
