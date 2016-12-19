@@ -39,30 +39,22 @@ void loop() {
     case (COMMAND_FORWARD):
       setRightDirection(FORWARD);
       setLeftDirection(FORWARD);
-    
-      setRightSpeed(MAX_SPEED);  
-      setLeftSpeed(MAX_SPEED);
+      setAllMotorsSpeed(MAX_SPEED);
       break;
     case (COMMAND_BACKWARD):
       setRightDirection(BACKWARD);
       setLeftDirection(BACKWARD);
-    
-      setRightSpeed(MAX_SPEED);  
-      setLeftSpeed(MAX_SPEED);
+      setAllMotorsSpeed(MAX_SPEED);
       break;   
    case (COMMAND_LEFT):
       setRightDirection(FORWARD);
       setLeftDirection(BACKWARD);
-    
-      setRightSpeed(MAX_SPEED);  
-      setLeftSpeed(MAX_SPEED);
+      setAllMotorsSpeed(MAX_SPEED);
       break;
     case (COMMAND_RIGHT):
       setRightDirection(BACKWARD);
       setLeftDirection(FORWARD);
-    
-      setRightSpeed(MAX_SPEED);  
-      setLeftSpeed(MAX_SPEED);
+      setAllMotorsSpeed(MAX_SPEED);
       break;
     case (COMMAND_TEST):
       testMotors();
@@ -73,8 +65,7 @@ void loop() {
 }
 
 void stopMotors() {
-  setRightSpeed(0);  
-  setLeftSpeed(0);
+  setAllMotorsSpeed(0);
   currentDirection = RELEASE;
   setRightDirection(RELEASE);
   setLeftDirection(RELEASE);
@@ -125,6 +116,11 @@ void setRightDirection(int direction) {
 void setLeftDirection(int direction) {
   motorLeft1.run(direction);
   motorLeft2.run(direction);
+}
+
+void setAllMotorsSpeed(int speed) {
+  setRightSpeed(speed);  
+  setLeftSpeed(speed);
 }
 
 void setRightSpeed(int speed) {
