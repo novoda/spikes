@@ -2,22 +2,35 @@ module.exports = {
   generateHtml: generateHtml
 };
 
-var moment = require('moment');
+const moment = require('moment');
 
 function generateHtml(eNews) {
-  var formattedTodaysDate = moment().format('YYYY-MM-DD');
-  var html = '<h1 style="font-family:serif">#enews ' + formattedTodaysDate + '</h1>'
-  html += '<p style="font-family:Comic Sans MS"><i>External news from the past 7 days!</i></p>';
-  html += '<br><table style="width:100%" cellspacing="20">';
-  eNews.forEach(function(each) {
-    if (each.imageUrl) {
-      html += createImageItem(each);
-    } else {
-      html += createTextItem(each);
-    }
-  });
- return html + '</table><br><br><br>sik news bro';
+  const html = [];
+  html.push(title());
+  html.push('<br>');
+  html.push(items(eNews));
+  return html.join('');
 };
+
+function title() {
+  const formattedTodaysDate = moment().format('YYYY-MM-DD');
+  return '<h1 style="font-family:serif">#enews ' + formattedTodaysDate + '</h1>' +
+    '<p style="font-family:Comic Sans MS"><i>External news from the past 7 days!</i></p>';
+}
+
+function items(eNews) {
+  return '<table style="width:100%" cellspacing="20">' +
+    eNews.map(asItem).join('') +
+  '</table>';
+}
+
+function asItem(eNews) {
+  if (eNews.imageUrl) {
+    return createImageItem(eNews);
+  } else {
+    return createTextItem(eNews);
+  }
+}
 
 function createImageItem(each) {
   return '<tr>' +
