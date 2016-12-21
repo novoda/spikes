@@ -3,47 +3,29 @@ module.exports = {
 };
 
 const moment = require('moment');
+const Mustache = require('mustache');
+const fs = require('fs');
 
 function generateHtml(eNews) {
-  const html = [];
-  html.push(title());
-  html.push('<br>');
-  html.push(items(eNews));
-  return html.join('');
-};
+  const title = fs.readFileSync('view/partial/title.mst', 'utf-8');
+  const textItem = fs.readFileSync('view/partial/text-item.mst', 'utf-8');
+  const imageItem = fs.readFileSync('view/partial/image-item.mst', 'utf-8');
+  const item = fs.readFileSync('view/partial/item.mst', 'utf-8');
 
-function title() {
+  const template = fs.readFileSync('view/enews.mst', 'utf-8');
   const formattedTodaysDate = moment().format('YYYY-MM-DD');
-  return '<h1 style="font-family:serif">#enews ' + formattedTodaysDate + '</h1>' +
-    '<p style="font-family:Comic Sans MS"><i>External news from the past 7 days!</i></p>';
-}
 
-function items(eNews) {
-  return '<table style="width:100%" cellspacing="20">' +
-    eNews.map(asItem).join('') +
-  '</table>';
-}
+  const model = {
+    formattedTodaysDate: formattedTodaysDate,
+    eNews: eNews
+  };
 
-function asItem(eNews) {
-  if (eNews.imageUrl) {
-    return createImageItem(eNews);
-  } else {
-    return createTextItem(eNews);
+  const partials = {
+    title: title,
+    textItem: textItem,
+    imageItem: imageItem,
+    item: item
   }
-}
 
-function createImageItem(each) {
-  return '<tr>' +
-  `<td><a href="${each.link}"><img src=${each.imageUrl} height="150" width="150" alt="${each.title}"/></td><a/>` +
-  `<td><p style="font-family:Comic Sans MS"><i>${each.originalMessage}</i><br>${each.title}</p>` +
-  `<br><p style="font-family:Comic Sans MS">${each.poster}</p></td>` +
-  '</tr>';
-}
-
-function createTextItem(each) {
-  return '<tr><td colspan="2">' +
-  `<p style="font-family:Comic Sans MS"><i>${each.originalMessage}</i><br>${each.title}</p>` +
-  `<br><a style="font-family:Comic Sans MS" href="${each.link}">${each.link}</a>` +
-  `<br><p style="font-family:Comic Sans MS">${each.poster}</p>` +
-  '</td></tr>';
-}
+  return Mustache.render(template, model, partials);
+};
