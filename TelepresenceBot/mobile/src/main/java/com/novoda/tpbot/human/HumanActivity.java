@@ -54,7 +54,6 @@ public class HumanActivity extends AppCompatActivity {
 
         @Override
         public void onLazersFired() {
-            switchableView.showNext();
             startRepeatingCommand(LAZERS);
         }
 
