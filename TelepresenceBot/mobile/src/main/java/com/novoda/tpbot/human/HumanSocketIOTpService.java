@@ -2,6 +2,7 @@ package com.novoda.tpbot.human;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.Result;
@@ -12,6 +13,10 @@ import java.net.URI;
 import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import io.socket.client.SocketIOException;
+import io.socket.emitter.Emitter;
+
+import static io.socket.client.Socket.*;
 
 public class HumanSocketIOTpService implements HumanTpService {
 
@@ -41,7 +46,6 @@ public class HumanSocketIOTpService implements HumanTpService {
                 return this;
             }
 
-            socket.connect();
             socket.emit("join_as_human", "", new Ack() {
                 @Override
                 public void call(final Object... args) {
@@ -56,9 +60,32 @@ public class HumanSocketIOTpService implements HumanTpService {
                     });
                 }
             });
+
+            socket.on(EVENT_CONNECT, genericEmitterListener)
+                    .on(EVENT_CONNECTING, genericEmitterListener)
+                    .on(EVENT_CONNECT_ERROR, new Listener() {
+                        @Override
+                        public void call(Object... args) {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    notifyOf(Result.from(new SocketIOException("connection timeout")));
+                                }
+                            });
+                        }
+                    });
+
+            socket.connect();
             return this;
         }
     }
+
+    private final Emitter.Listener genericEmitterListener = new Listener() {
+        @Override
+        public void call(Object... args) {
+            Log.d(HumanSocketIOTpService.class.getSimpleName(), " logging");
+        }
+    };
 
     @Override
     public void moveIn(Direction direction) {
