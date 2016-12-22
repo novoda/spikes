@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <EditText
+    android:id="@+id/bot_server_declaration"
+    style="@style/Human.Server"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="75" />
+
+  <com.novoda.tpbot.support.TextViewWithForeground
+    android:id="@+id/human_selection"
+    style="@style/Human.Connect"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="25"
+    android:gravity="center" />
+
+</merge>
