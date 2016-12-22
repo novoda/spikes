@@ -21,7 +21,7 @@
     android:layout_height="0dp"
     android:layout_weight="50"
     android:background="?colorPrimary"
-    app:base_layout="@layout/switchable_controller"
-    app:layout_to_switch_with="@layout/switchable_server_declaration" />
+    app:base_layout="@layout/switchable_server_declaration"
+    app:layout_to_switch_with="@layout/switchable_controller" />
 
 </LinearLayout>

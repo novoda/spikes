@@ -15,50 +15,51 @@ import java.util.concurrent.TimeUnit;
 public class HumanActivity extends AppCompatActivity {
 
     private static final String LAZERS = String.valueOf(Character.toChars(0x1F4A5));
-
     private static final long COMMAND_REPEAT_DELAY = TimeUnit.MILLISECONDS.toMillis(100);
 
-    private Handler handler;
     private SelfDestructingMessageView debugView;
-
-    String currentCommand;
     private SwitchableView switchableView;
+
+    private Handler handler;
+    private String currentCommand;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_human);
+
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
+        switchableView = Views.findById(this, R.id.bot_switchable_view);
 
         handler = new Handler();
 
-        switchableView = Views.findById(this, R.id.bot_switchable_view);
-
         ControllerView controllerView = Views.findById(this, R.id.bot_controller_direction_view);
-        controllerView.setControllerListener(new ControllerListener() {
-
-            @Override
-            public void onDirectionPressed(Direction direction) {
-                startRepeatingCommand(direction.visualRepresentation());
-            }
-
-            @Override
-            public void onDirectionReleased(Direction direction) {
-                stopRepeatingCommand(direction.visualRepresentation());
-            }
-
-            @Override
-            public void onLazersFired() {
-                switchableView.showNext();
-                startRepeatingCommand(LAZERS);
-            }
-
-            @Override
-            public void onLazersReleased() {
-                stopRepeatingCommand(LAZERS);
-            }
-        });
+        controllerView.setControllerListener(controllerListener);
     }
+
+    private final ControllerListener controllerListener = new ControllerListener() {
+
+        @Override
+        public void onDirectionPressed(Direction direction) {
+            startRepeatingCommand(direction.visualRepresentation());
+        }
+
+        @Override
+        public void onDirectionReleased(Direction direction) {
+            stopRepeatingCommand(direction.visualRepresentation());
+        }
+
+        @Override
+        public void onLazersFired() {
+            switchableView.showNext();
+            startRepeatingCommand(LAZERS);
+        }
+
+        @Override
+        public void onLazersReleased() {
+            stopRepeatingCommand(LAZERS);
+        }
+    };
 
     private void startRepeatingCommand(String command) {
         currentCommand = command;
