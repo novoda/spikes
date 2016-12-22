@@ -11,11 +11,13 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class HumanPresenterTest {
 
+    private static final String SERVER_ADDRESS = "http://192.168.0.1:3000";
     private static final Result SUCCESS_RESULT = Result.from("Connection Successful!");
     private static final Result FAILURE_RESULT = Result.from(new Exception("Connection Unsuccessful"));
 
@@ -37,26 +39,26 @@ public class HumanPresenterTest {
 
     @Test
     public void givenSuccessfulConnection_whenStartPresenting_thenHumanViewOnConnectIsCalled() {
-        when(tpService.connectTo(serverAddress)).thenReturn(Observable.just(SUCCESS_RESULT));
+        when(tpService.connectTo(anyString())).thenReturn(Observable.just(SUCCESS_RESULT));
 
-        presenter.startPresenting();
+        presenter.startPresenting(SERVER_ADDRESS);
 
         verify(humanView).onConnect(SUCCESS_RESULT.message().get());
     }
 
     @Test
     public void givenUnsuccessfulConnection_whenStartPresenting_thenHumanViewOnErrorIsCalled() {
-        when(tpService.connectTo(serverAddress)).thenReturn(Observable.just(FAILURE_RESULT));
+        when(tpService.connectTo(anyString())).thenReturn(Observable.just(FAILURE_RESULT));
 
-        presenter.startPresenting();
+        presenter.startPresenting(SERVER_ADDRESS);
 
         verify(humanView).onError(FAILURE_RESULT.exception().get().getMessage());
     }
 
     @Test
     public void givenAlreadyPresenting_whenStopPresentingIsCalled_thenTpServiceDisconnectIsCalled() {
-        when(tpService.connectTo(serverAddress)).thenReturn(Observable.just(SUCCESS_RESULT));
-        presenter.startPresenting();
+        when(tpService.connectTo(anyString())).thenReturn(Observable.just(SUCCESS_RESULT));
+        presenter.startPresenting(SERVER_ADDRESS);
 
         presenter.stopPresenting();
 
@@ -67,8 +69,8 @@ public class HumanPresenterTest {
     public void givenAlreadyPresenting_whenStopPresentingIsCalled_thenConnectionObservableObserversAreDetached() {
         Observable<Result> observable = Observable.just(SUCCESS_RESULT);
         Observable<Result> spyObservable = Mockito.spy(observable);
-        when(tpService.connectTo(serverAddress)).thenReturn(spyObservable);
-        presenter.startPresenting();
+        when(tpService.connectTo(anyString())).thenReturn(spyObservable);
+        presenter.startPresenting(SERVER_ADDRESS);
 
         presenter.stopPresenting();
 
