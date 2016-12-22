@@ -1,0 +1,34 @@
+{
+  "extends": "eslint:recommended",
+  "plugins": [
+    "standard",
+    "promise",
+    "jasmine",
+    "json"
+  ],
+  "env": {
+    "es6": true,
+    "node": true,
+    "jasmine": true
+  },
+  "rules": {
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": "error",
+    "keyword-spacing": "error",
+    "brace-style": "error",
+    "prefer-const": "error",
+    "indent": [
+      "error",
+      4,
+      {
+        "ObjectExpression": "first",
+        "ArrayExpression": "first",
+        "SwitchCase": 1
+      }
+    ],
+    "eqeqeq": "error"
+  }
+}
