@@ -8,6 +8,7 @@ import com.novoda.notils.caster.Views;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.SelfDestructingMessageView;
+import com.novoda.tpbot.support.SwitchableView;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +22,7 @@ public class HumanActivity extends AppCompatActivity {
     private SelfDestructingMessageView debugView;
 
     String currentCommand;
+    private SwitchableView switchableView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,8 @@ public class HumanActivity extends AppCompatActivity {
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
 
         handler = new Handler();
+
+        switchableView = Views.findById(this, R.id.bot_switchable_view);
 
         ControllerView controllerView = Views.findById(this, R.id.bot_controller_direction_view);
         controllerView.setControllerListener(new ControllerListener() {
@@ -45,6 +49,7 @@ public class HumanActivity extends AppCompatActivity {
 
             @Override
             public void onLazersFired() {
+                switchableView.showNext();
                 startRepeatingCommand(LAZERS);
             }
 
