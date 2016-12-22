@@ -97,12 +97,14 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
     private final ServerDeclarationListener serverDeclarationListener = new ServerDeclarationListener() {
         @Override
         public void onConnect(String serverAddress) {
+            debugView.showPermanently(getResources().getString(R.string.connecting_ellipsis));
             presenter.startPresenting(serverAddress);
         }
     };
 
     @Override
     public void onConnect(String message) {
+        debugView.showPermanently(getResources().getString(R.string.connected));
         switchableView.showNext();
     }
 
@@ -113,7 +115,7 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
 
     @Override
     public void onError(String message) {
-
+        debugView.showPermanently(message);
     }
 
 }
