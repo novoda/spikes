@@ -16,8 +16,8 @@ public class HumanPresenter {
         this.humanView = humanView;
     }
 
-    public void startPresenting() {
-        observable = humanTpService.connect()
+    public void startPresenting(String serverAddress) {
+        observable = humanTpService.connectTo(serverAddress)
                 .attach(new ConnectionObserver())
                 .start();
     }

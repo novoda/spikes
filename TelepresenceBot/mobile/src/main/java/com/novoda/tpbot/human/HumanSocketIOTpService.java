@@ -15,7 +15,7 @@ import io.socket.client.Socket;
 
 public class HumanSocketIOTpService implements HumanTpService {
 
-    private final Socket socket;
+    private Socket socket;
     private final Handler handler;
 
     public static HumanSocketIOTpService getInstance() {
@@ -23,12 +23,12 @@ public class HumanSocketIOTpService implements HumanTpService {
     }
 
     private HumanSocketIOTpService() {
-        this.socket = IO.socket(URI.create("http://192.168.86.158:3000"));
         this.handler = new Handler(Looper.getMainLooper());
     }
 
     @Override
-    public Observable<Result> connect() {
+    public Observable<Result> connectTo(String serverAddress) {
+        socket = IO.socket(URI.create(serverAddress));
         return new SocketConnectionObservable();
     }
 

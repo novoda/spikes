@@ -37,7 +37,7 @@ public class HumanPresenterTest {
 
     @Test
     public void givenSuccessfulConnection_whenStartPresenting_thenHumanViewOnConnectIsCalled() {
-        when(tpService.connect()).thenReturn(Observable.just(SUCCESS_RESULT));
+        when(tpService.connectTo(serverAddress)).thenReturn(Observable.just(SUCCESS_RESULT));
 
         presenter.startPresenting();
 
@@ -46,7 +46,7 @@ public class HumanPresenterTest {
 
     @Test
     public void givenUnsuccessfulConnection_whenStartPresenting_thenHumanViewOnErrorIsCalled() {
-        when(tpService.connect()).thenReturn(Observable.just(FAILURE_RESULT));
+        when(tpService.connectTo(serverAddress)).thenReturn(Observable.just(FAILURE_RESULT));
 
         presenter.startPresenting();
 
@@ -55,7 +55,7 @@ public class HumanPresenterTest {
 
     @Test
     public void givenAlreadyPresenting_whenStopPresentingIsCalled_thenTpServiceDisconnectIsCalled() {
-        when(tpService.connect()).thenReturn(Observable.just(SUCCESS_RESULT));
+        when(tpService.connectTo(serverAddress)).thenReturn(Observable.just(SUCCESS_RESULT));
         presenter.startPresenting();
 
         presenter.stopPresenting();
@@ -67,7 +67,7 @@ public class HumanPresenterTest {
     public void givenAlreadyPresenting_whenStopPresentingIsCalled_thenConnectionObservableObserversAreDetached() {
         Observable<Result> observable = Observable.just(SUCCESS_RESULT);
         Observable<Result> spyObservable = Mockito.spy(observable);
-        when(tpService.connect()).thenReturn(spyObservable);
+        when(tpService.connectTo(serverAddress)).thenReturn(spyObservable);
         presenter.startPresenting();
 
         presenter.stopPresenting();

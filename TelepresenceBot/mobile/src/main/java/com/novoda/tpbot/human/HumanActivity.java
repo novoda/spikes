@@ -12,7 +12,7 @@ import com.novoda.tpbot.support.SwitchableView;
 
 import java.util.concurrent.TimeUnit;
 
-public class HumanActivity extends AppCompatActivity {
+public class HumanActivity extends AppCompatActivity implements HumanView {
 
     private static final String LAZERS = String.valueOf(Character.toChars(0x1F4A5));
     private static final long COMMAND_REPEAT_DELAY = TimeUnit.MILLISECONDS.toMillis(100);
@@ -23,10 +23,14 @@ public class HumanActivity extends AppCompatActivity {
     private Handler handler;
     private String currentCommand;
 
+    private HumanPresenter presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_human);
+
+        presenter = new HumanPresenter(HumanSocketIOTpService.getInstance(), this);
 
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
         switchableView = Views.findById(this, R.id.bot_switchable_view);
@@ -93,7 +97,23 @@ public class HumanActivity extends AppCompatActivity {
     private final ServerDeclarationListener serverDeclarationListener = new ServerDeclarationListener() {
         @Override
         public void onConnect(String serverAddress) {
-            debugView.showTimed(serverAddress, COMMAND_REPEAT_DELAY);
+            presenter.startPresenting(serverAddress);
         }
     };
+
+    @Override
+    public void onConnect(String message) {
+        switchableView.showNext();
+    }
+
+    @Override
+    public void onDisconnect() {
+        switchableView.showNext();
+    }
+
+    @Override
+    public void onError(String message) {
+
+    }
+
 }
