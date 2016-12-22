@@ -33,8 +33,11 @@ public class HumanActivity extends AppCompatActivity {
 
         handler = new Handler();
 
-        ControllerView controllerView = Views.findById(this, R.id.bot_controller_direction_view);
+        ControllerView controllerView = Views.findById(switchableView, R.id.bot_controller_direction_view);
         controllerView.setControllerListener(controllerListener);
+
+        ServerDeclarationView serverDeclarationView = Views.findById(switchableView, R.id.bot_server_declaration_view);
+        serverDeclarationView.setServerDeclarationListener(serverDeclarationListener);
     }
 
     private final ControllerListener controllerListener = new ControllerListener() {
@@ -87,4 +90,11 @@ public class HumanActivity extends AppCompatActivity {
         stopRepeatingCommand(currentCommand);
         super.onPause();
     }
+
+    private final ServerDeclarationListener serverDeclarationListener = new ServerDeclarationListener() {
+        @Override
+        public void onConnect(String serverAddress) {
+            debugView.showTimed(serverAddress, COMMAND_REPEAT_DELAY);
+        }
+    };
 }

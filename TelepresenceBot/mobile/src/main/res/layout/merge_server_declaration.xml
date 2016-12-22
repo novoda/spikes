@@ -9,7 +9,7 @@
     android:layout_weight="75" />
 
   <com.novoda.tpbot.support.TextViewWithForeground
-    android:id="@+id/human_selection"
+    android:id="@+id/bot_server_connect"
     style="@style/Human.Connect"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
