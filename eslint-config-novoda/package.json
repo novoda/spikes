@@ -13,10 +13,10 @@
     "name": "Francesco Pontillo",
     "email": "francesco@novoda.com"
   }],
-  "homepage": "https://github.com/novoda/eslint-config-novoda",
+  "homepage": "https://github.com/novoda/spikes/tree/eslint-config-novoda",
   "repository": {
     "type": "git",
-    "url": "https://github.com/novoda/eslint-config-novoda.git"
+    "url": "https://github.com/novoda/spikes.git"
   },
   "license": "Apache-2.0",
   "peerDependencies": {
