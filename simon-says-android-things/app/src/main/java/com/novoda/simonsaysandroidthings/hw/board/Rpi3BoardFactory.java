@@ -49,7 +49,7 @@ class Rpi3BoardFactory extends BoardFactory {
 
     @Override
     public String getToggleGpio() {
-        throw new RuntimeException("Not implemented yet");
+        return "BCM25";
     }
 
 }
