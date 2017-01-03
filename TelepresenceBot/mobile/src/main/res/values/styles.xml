@@ -36,6 +36,7 @@
   <style name="Human.Connect">
     <item name="foreground">@drawable/clickable_item_foreground</item>
     <item name="android:text">@string/connect</item>
+    <item name="android:padding">@dimen/server_declaration_connect_padding</item>
   </style>
 
 </resources>

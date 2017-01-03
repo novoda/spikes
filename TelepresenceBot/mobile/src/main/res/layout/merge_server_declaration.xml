@@ -18,7 +18,6 @@
     android:layout_height="wrap_content"
     android:layout_weight="25"
     android:gravity="center"
-    android:padding="@dimen/server_declaration_connect_padding"
     android:layout_marginRight="@dimen/server_declaration_connect_margin_right" />
 
 </merge>
