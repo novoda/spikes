@@ -105,17 +105,18 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
     @Override
     public void onConnect(String message) {
         debugView.showPermanently(getResources().getString(R.string.connected));
-        switchableView.showNext();
+        switchableView.setDisplayedChild(1);
     }
 
     @Override
     public void onDisconnect() {
-        switchableView.showNext();
+        switchableView.setDisplayedChild(0);
     }
 
     @Override
     public void onError(String message) {
         debugView.showPermanently(message);
+        switchableView.setDisplayedChild(0);
     }
 
 }
