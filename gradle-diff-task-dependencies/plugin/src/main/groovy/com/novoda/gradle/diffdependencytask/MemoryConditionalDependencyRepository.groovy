@@ -9,16 +9,16 @@ class MemoryConditionalDependencyRepository implements ConditionalDependencyRepo
         }
     }
 
-    private Map<String, List<ConditionalDependency>> conditionalDependencies = new LinkedHashMap<>()
+    private Map<String, List<ConditionalDependency>> conditionalDependenciesMap = new LinkedHashMap<>()
 
     public void add(ConditionalDependency conditionalDependency) {
         conditionalDependency.patterns.toList().forEach {
-            conditionalDependencies.multiPut(it, conditionalDependency)
+            conditionalDependenciesMap.multiPut(it, conditionalDependency)
         }
     }
 
     @Override
     Map<String, List<ConditionalDependency>> getConditionalDependencies() {
-        conditionalDependencies
+        conditionalDependenciesMap
     }
 }

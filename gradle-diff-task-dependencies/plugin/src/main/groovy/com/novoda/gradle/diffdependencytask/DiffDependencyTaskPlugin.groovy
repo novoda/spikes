@@ -17,7 +17,7 @@ class DiffDependencyTaskPlugin implements Plugin<Project> {
         project.extensions.add(TASK_CONFIG_PROPERTY_NAME, config)
 
         project.tasks.all { task ->
-            task.ext.onDiffDependsOn = { def patterns, Object... tasks ->
+            task.ext.onDiffDependsOn = { patterns, Object... tasks ->
                 if (patterns instanceof Pattern) {
                      patterns = [patterns]
                 }
@@ -33,7 +33,11 @@ class DiffDependencyTaskPlugin implements Plugin<Project> {
                     config.conditionalDependencyRepository
             )
 
-            evaluator()
+            def matchedDependencies = evaluator()
+
+            matchedDependencies.forEach {
+                it.task.dependsOn(it.dependentTasks)
+            }
         }
 
     }

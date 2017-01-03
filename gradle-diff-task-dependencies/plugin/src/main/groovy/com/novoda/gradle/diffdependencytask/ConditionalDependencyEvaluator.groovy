@@ -2,7 +2,7 @@ package com.novoda.gradle.diffdependencytask
 
 import java.util.regex.Pattern
 
-class ConditionalDependencyEvaluator implements GroovyCallable<Void> {
+class ConditionalDependencyEvaluator implements GroovyCallable<Set<ConditionalDependency>> {
 
     private final GroovyCallable<List<String>> changedFilesProvider
     private final ConditionalDependencyRepository repository
@@ -15,20 +15,18 @@ class ConditionalDependencyEvaluator implements GroovyCallable<Void> {
     }
 
     @Override
-    Void call() throws Exception {
+    Set<ConditionalDependency> call() throws Exception {
         def changedFiles = changedFilesProvider()
-        def dependencyMap = repository.conditionalDependencies
+        def dependencyMap = repository.getConditionalDependencies()
         def matchedDependencies = new HashSet<ConditionalDependency>()
 
-        dependencyMap.keySet().forEach {
+        dependencyMap.keySet().each {
             if (changedFilesContainPattern(changedFiles, it)) {
                 matchedDependencies.addAll(dependencyMap[it])
             }
         }
 
-        matchedDependencies.forEach {
-            it.task.dependsOn(it.dependentTasks)
-        }
+        return matchedDependencies
     }
 
     private static boolean changedFilesContainPattern(List<String> changedFiles, Pattern pattern) {
