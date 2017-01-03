@@ -28,7 +28,7 @@ public class ServerDeclarationView extends LinearLayout {
         connectToServer.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                String serverAddress = String.valueOf(serverAddressDeclaration.getText());
+                String serverAddress = serverAddressDeclaration.getText().toString();
                 serverDeclarationListener.onConnect(serverAddress);
             }
         });

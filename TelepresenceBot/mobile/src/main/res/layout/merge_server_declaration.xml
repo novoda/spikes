@@ -7,7 +7,9 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_weight="75"
-    android:gravity="center_vertical" />
+    android:gravity="center_vertical"
+    android:layout_marginLeft="@dimen/server_declaration_address_margin"
+    android:layout_marginRight="@dimen/server_declaration_address_margin" />
 
   <com.novoda.tpbot.support.TextViewWithForeground
     android:id="@+id/bot_server_connect"
@@ -15,6 +17,7 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_weight="25"
-    android:gravity="center" />
+    android:gravity="center"
+    android:layout_marginRight="@dimen/server_declaration_connect_margin_right" />
 
 </merge>
