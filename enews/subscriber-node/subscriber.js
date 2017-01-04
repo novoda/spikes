@@ -23,14 +23,7 @@ Subscriber.prototype.add = function(email) {
 }
 
 function addToSheet(self, email) {
-  return self.googleSheets.authenticate()
-    .then(() => {
-      const options = {
-        spreadsheetId: self.spreadsheet,
-        ranges: [`${sheetname}!${nameRow}`]
-      }
-      return self.googleSheets.get(options);
-    }).then(toSubscribers).then(subscribers => {
+  return self.getAll().then(subscribers => {
       if (subscribers.length > 0) {
         if (subscribers.includes(email)) {
           return resolveResult(RESULT_ALREADY_SUBSCRIBED)
@@ -40,15 +33,6 @@ function addToSheet(self, email) {
         return resolveResult(RESULT_ADDED_SUCCESSFULLY);
       });
     });
-}
-
-function toSubscribers(result) {
-  const values = result.valueRanges[0].values;
-  if (values) {
-      return Promise.resolve(flatten(values));
-  } else {
-    return Promise.resolve([]);
-  }
 }
 
 function addEmailToList(self, lastPosition, email) {
@@ -77,6 +61,27 @@ function flatten(array) {
 
 function resolveResult(result) {
   return Promise.resolve(result);
+}
+
+Subscriber.prototype.getAll = function() {
+  const self = this;
+  return self.googleSheets.authenticate()
+    .then(() => {
+      const options = {
+        spreadsheetId: self.spreadsheet,
+        ranges: [`${sheetname}!${nameRow}`]
+      }
+      return self.googleSheets.get(options);
+    }).then(toSubscribers);
+}
+
+function toSubscribers(result) {
+  const values = result.valueRanges[0].values;
+  if (values) {
+      return Promise.resolve(flatten(values));
+  } else {
+    return Promise.resolve([]);
+  }
 }
 
 module.exports = Subscriber;
