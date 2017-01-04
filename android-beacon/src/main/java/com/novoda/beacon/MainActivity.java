@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final int RESOLVE_PERMISSIONS = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -13,4 +15,12 @@ public class MainActivity extends AppCompatActivity {
         startService(new Intent(MainActivity.this, MessageService.class));
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RESOLVE_PERMISSIONS && resultCode == RESULT_OK) {
+            startService(new Intent(MainActivity.this, MessageService.class));
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 }

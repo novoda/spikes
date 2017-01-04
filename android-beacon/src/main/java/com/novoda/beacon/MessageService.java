@@ -1,20 +1,17 @@
 package com.novoda.beacon;
 
-import android.app.Notification;
-import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.nearby.Nearby;
-import com.google.android.gms.nearby.messages.Message;
-import com.google.android.gms.nearby.messages.MessageListener;
 import com.google.android.gms.nearby.messages.Strategy;
 import com.google.android.gms.nearby.messages.SubscribeOptions;
 
@@ -23,7 +20,6 @@ public class MessageService extends Service {
     private static final String TAG = "!!!";
 
     private GoogleApiClient googleApiClient;
-    private NotificationManager notificationManager;
 
     @Nullable
     @Override
@@ -33,13 +29,27 @@ public class MessageService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Nearby.MESSAGES_API)
                 .addConnectionCallbacks(connectionCallbacks)
-                .build();
+                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                        Log.d(TAG, "onConnectionFailed");
+                        attemptToResolve(connectionResult);
+                    }
+
+                    private void attemptToResolve(@NonNull ConnectionResult connectionResult) {
+                        try {
+                            connectionResult.getResolution().send(MessageService.this, MainActivity.RESOLVE_PERMISSIONS, null);
+                        } catch (PendingIntent.CanceledException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).build();
+
         googleApiClient.connect();
-        return super.onStartCommand(intent, flags, startId);
+        return Service.START_NOT_STICKY;
     }
 
     private final GoogleApiClient.ConnectionCallbacks connectionCallbacks = new GoogleApiClient.ConnectionCallbacks() {
@@ -54,31 +64,13 @@ public class MessageService extends Service {
             SubscribeOptions options = new SubscribeOptions.Builder()
                     .setStrategy(Strategy.BLE_ONLY)
                     .build();
-            Nearby.Messages.subscribe(mGoogleApiClient, messageListener, options);
+            Nearby.Messages.subscribe(mGoogleApiClient, createPendingIntent(), options);
         }
 
-        private final MessageListener messageListener = new MessageListener() {
-            @Override
-            public void onFound(Message message) {
-                String content = new String(message.getContent());
-                Notification notification = createNotification(content);
-                notificationManager.notify(content.hashCode(), notification);
-                Log.i(TAG, "Found message: " + content);
-            }
-
-            private Notification createNotification(String content) {
-                return new NotificationCompat.Builder(MessageService.this)
-                        .setContentTitle(content)
-                        .setSmallIcon(android.R.drawable.stat_notify_chat)
-                        .setCategory(Notification.CATEGORY_PROMO)
-                        .build();
-            }
-
-            @Override
-            public void onLost(Message message) {
-                Log.i(TAG, "Lost message: " + message);
-            }
-        };
+        private PendingIntent createPendingIntent() {
+            Intent receiver = new Intent(MessageService.this, MessageReceiver.class);
+            return PendingIntent.getBroadcast(MessageService.this, 0, receiver, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
 
         @Override
         public void onConnectionSuspended(int i) {

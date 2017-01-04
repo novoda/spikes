@@ -31,7 +31,6 @@ android {
         manifestPlaceholders += [
                 nearbyApiKey: buildProperties.secrets['googleNearbyApiKey'].string
         ]
-
     }
 }
 
