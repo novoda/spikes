@@ -1,0 +1,7 @@
+{{> title}}
+
+<table style="width:100%" cellspacing="20">
+{{#eNews}}
+  {{> item}}
+{{/eNews}}
+</table>

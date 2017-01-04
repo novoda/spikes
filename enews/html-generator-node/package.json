@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "enews-fetcher": "file:../enews-node",
-    "moment": "^2.13.0"
+    "moment": "^2.13.0",
+    "mustache": "^2.3.0"
   }
 }

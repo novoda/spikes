@@ -1,0 +1,6 @@
+{{#imageUrl}}
+  {{> imageItem}}
+{{/imageUrl}}
+{{^imageUrl}}
+  {{> textItem}}
+{{/imageUrl}}
