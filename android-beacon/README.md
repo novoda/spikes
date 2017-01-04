@@ -20,4 +20,4 @@ https://developers.google.com/nearby/notifications/attachment_data_format#free-f
 
 ## Configure secrets file
 
-In order to be able to use the project, copy the `secrets.properties.example` file to `secret.properties` and fill in the Google Nearby API key.
+In order to be able to use the project, copy the `secrets.properties.example` file to `secrets.properties` and fill in the Google Nearby API key.
