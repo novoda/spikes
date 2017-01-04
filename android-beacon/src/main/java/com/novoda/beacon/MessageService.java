@@ -46,12 +46,12 @@ public class MessageService extends Service {
             subscribe(googleApiClient);
         }
 
-        private void subscribe(GoogleApiClient mGoogleApiClient) {
+        private void subscribe(GoogleApiClient googleApiClient) {
             Log.i(TAG, "Subscribing.");
             SubscribeOptions options = new SubscribeOptions.Builder()
                     .setStrategy(Strategy.BLE_ONLY)
                     .build();
-            Nearby.Messages.subscribe(mGoogleApiClient, createPendingIntent(), options);
+            Nearby.Messages.subscribe(googleApiClient, createPendingIntent(), options);
         }
 
         private PendingIntent createPendingIntent() {
