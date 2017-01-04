@@ -32,21 +32,8 @@ public class MessageService extends Service {
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Nearby.MESSAGES_API)
                 .addConnectionCallbacks(connectionCallbacks)
-                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        Log.d(TAG, "onConnectionFailed");
-                        attemptToResolve(connectionResult);
-                    }
-
-                    private void attemptToResolve(@NonNull ConnectionResult connectionResult) {
-                        try {
-                            connectionResult.getResolution().send(MessageService.this, MainActivity.RESOLVE_PERMISSIONS, null);
-                        } catch (PendingIntent.CanceledException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).build();
+                .addOnConnectionFailedListener(onConnectionFailedListener)
+                .build();
 
         googleApiClient.connect();
         return Service.START_NOT_STICKY;
@@ -78,9 +65,26 @@ public class MessageService extends Service {
         }
     };
 
+    private final GoogleApiClient.OnConnectionFailedListener onConnectionFailedListener = new GoogleApiClient.OnConnectionFailedListener() {
+        @Override
+        public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+            Log.d(TAG, "onConnectionFailed");
+            attemptToResolve(connectionResult);
+        }
+
+        private void attemptToResolve(@NonNull ConnectionResult connectionResult) {
+            try {
+                connectionResult.getResolution().send(MessageService.this, MainActivity.RESOLVE_PERMISSIONS, null);
+            } catch (PendingIntent.CanceledException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
     @Override
     public void onDestroy() {
         Log.d(TAG, "onServiceDestroy");
         super.onDestroy();
     }
+
 }
