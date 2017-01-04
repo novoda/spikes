@@ -8,7 +8,9 @@ import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.Result;
 import com.novoda.tpbot.support.Observable;
 
-import java.net.URI;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import io.socket.client.Ack;
 import io.socket.client.IO;
@@ -33,7 +35,12 @@ public class HumanSocketIOTpService implements HumanTpService {
 
     @Override
     public Observable<Result> connectTo(String serverAddress) {
-        socket = IO.socket(URI.create(serverAddress));
+        try {
+            URL url = new URL(serverAddress);
+            socket = IO.socket(url.toExternalForm());
+        } catch (MalformedURLException | URISyntaxException exception) {
+            return Observable.just(Result.from(exception));
+        }
         return new SocketConnectionObservable();
     }
 
