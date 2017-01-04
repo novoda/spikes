@@ -50,6 +50,19 @@ GoogleSheets.prototype.put = function(options) {
   });
 }
 
+GoogleSheets.prototype.removeRow = function(options) {
+  const self = this;
+  return new Promise(function(resolve, reject) {
+    sheets.spreadsheets.values.batchUpdate(injectAuth(self, options), function(err, response) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(response);
+      }
+    });
+  });
+}
+
 function injectAuth(self, options) {
   options.auth = self.jwtClient;
   return options;
