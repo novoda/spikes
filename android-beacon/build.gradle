@@ -1,0 +1,41 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.novoda:build-properties-plugin:1.1.0'
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: "com.novoda.build-properties"
+
+buildProperties {
+    secrets {
+        file project.file('secrets.properties')
+    }
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.1"
+    defaultConfig {
+        applicationId "com.novoda.beacon"
+        minSdkVersion 23
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+        manifestPlaceholders += [
+                nearbyApiKey: buildProperties.secrets['googleNearbyApiKey'].string
+        ]
+
+    }
+}
+
+dependencies {
+    compile 'com.google.android.gms:play-services-nearby:10.0.1'
+    compile 'com.android.support:appcompat-v7:25.1.0'
+}
