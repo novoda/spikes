@@ -33,7 +33,6 @@ class HumanPresenter {
         public void update(Result result) {
             if (result.isError()) {
                 humanView.onError(result.exception().get().getMessage());
-                humanView.onDisconnect();
             } else {
                 humanView.onConnect(result.message().get());
             }
