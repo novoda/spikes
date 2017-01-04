@@ -12,15 +12,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        startService(new Intent(MainActivity.this, MessageService.class));
+        startMessageService();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RESOLVE_PERMISSIONS && resultCode == RESULT_OK) {
-            startService(new Intent(MainActivity.this, MessageService.class));
+            startMessageService();
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    private void startMessageService() {
+        startService(new Intent(MainActivity.this, MessageService.class));
     }
 }
