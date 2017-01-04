@@ -1,0 +1,15 @@
+{
+  "name": "subscriber-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "googleapis": "^16.0.0",
+    "validator": "^6.2.0"
+  }
+}
