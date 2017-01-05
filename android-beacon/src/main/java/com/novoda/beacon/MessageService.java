@@ -21,22 +21,14 @@ public class MessageService extends Service {
 
     private GoogleApiClient googleApiClient;
 
-    @Nullable
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public void onCreate() {
+        super.onCreate();
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Nearby.MESSAGES_API)
                 .addConnectionCallbacks(connectionCallbacks)
                 .addOnConnectionFailedListener(onConnectionFailedListener)
                 .build();
-
-        googleApiClient.connect();
-        return Service.START_NOT_STICKY;
     }
 
     private final GoogleApiClient.ConnectionCallbacks connectionCallbacks = new GoogleApiClient.ConnectionCallbacks() {
@@ -85,6 +77,18 @@ public class MessageService extends Service {
             }
         }
     };
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        googleApiClient.connect();
+        return Service.START_NOT_STICKY;
+    }
 
     @Override
     public void onDestroy() {
