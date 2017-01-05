@@ -93,7 +93,7 @@ public class BotActivity extends AppCompatActivity {
         }
     }
 
-    private Runnable repeatCommand = new Runnable() {
+    private final Runnable repeatCommand = new Runnable() {
         @Override
         public void run() {
             sendCommand(BotActivity.this.currentCommand);
@@ -162,7 +162,7 @@ public class BotActivity extends AppCompatActivity {
         }
     }
 
-    private ServiceConnection serviceConnection = new ServiceConnection() {
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName className,

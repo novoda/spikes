@@ -76,7 +76,7 @@ public class HumanActivity extends AppCompatActivity {
         }
     }
 
-    private Runnable repeatCommand = new Runnable() {
+    private final Runnable repeatCommand = new Runnable() {
         @Override
         public void run() {
             sendCommand(HumanActivity.this.currentCommand);
