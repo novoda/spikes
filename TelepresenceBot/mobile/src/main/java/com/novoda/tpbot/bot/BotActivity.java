@@ -21,21 +21,18 @@ import com.novoda.notils.caster.Views;
 import com.novoda.notils.logger.toast.Toaster;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
+import com.novoda.tpbot.human.CommandRepeater;
 import com.novoda.tpbot.human.ControllerListener;
 import com.novoda.tpbot.human.ControllerView;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 public class BotActivity extends AppCompatActivity {
 
-    private static final long COMMAND_REPEAT_DELAY = TimeUnit.MILLISECONDS.toMillis(100);
-
     private MovementService movementService;
     private boolean bound;
-    private Handler handler;
-    private String currentCommand;
+    private CommandRepeater commandRepeater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,19 +51,20 @@ public class BotActivity extends AppCompatActivity {
         ControllerView controllerView = Views.findById(this, R.id.bot_debug_controls);
         controllerView.setControllerListener(controllerListener);
 
-        handler = new Handler();
+        Handler handler = new Handler();
+        commandRepeater = new CommandRepeater(commandRepeatedListener, handler);
     }
 
     private final ControllerListener controllerListener = new ControllerListener() {
 
         @Override
         public void onDirectionPressed(Direction direction) {
-            startRepeatingCommand(direction.rawCommand());
+            commandRepeater.startRepeatingCommand(direction.rawCommand());
         }
 
         @Override
         public void onDirectionReleased(Direction direction) {
-            stopRepeatingCommand(direction.rawCommand());
+            commandRepeater.stopRepeatingCommand(direction.rawCommand());
         }
 
         @Override
@@ -80,32 +78,14 @@ public class BotActivity extends AppCompatActivity {
         }
     };
 
-    private void startRepeatingCommand(String command) {
-        currentCommand = command;
-        sendCommand(currentCommand);
-        handler.postDelayed(repeatCommand, COMMAND_REPEAT_DELAY);
-    }
-
-    private void stopRepeatingCommand(String command) {
-        if (currentCommand != null && currentCommand.equals(command)) {
-            handler.removeCallbacks(repeatCommand);
-            currentCommand = null;
-        }
-    }
-
-    private final Runnable repeatCommand = new Runnable() {
+    private CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
         @Override
-        public void run() {
-            sendCommand(BotActivity.this.currentCommand);
-            handler.postDelayed(repeatCommand, COMMAND_REPEAT_DELAY);
+        public void onCommandRepeated(String command) {
+            if (bound) {
+                movementService.sendCommand(command);
+            }
         }
     };
-
-    private void sendCommand(String command) {
-        if (bound) {
-            movementService.sendCommand(command);
-        }
-    }
 
     @Override
     protected void onStart() {
@@ -151,6 +131,12 @@ public class BotActivity extends AppCompatActivity {
             }
         }
         Toaster.newInstance(this).popBurntToast(builder.toString());
+    }
+
+    @Override
+    protected void onPause() {
+        commandRepeater.stopCurrentRepeatingCommand();
+        super.onPause();
     }
 
     @Override
