@@ -7,4 +7,9 @@
     <attr name="foreground" />
   </declare-styleable>
 
+  <declare-styleable name="SwitchableView">
+    <attr name="base_layout" format="reference" />
+    <attr name="layout_to_switch_with" format="reference" />
+  </declare-styleable>
+
 </resources>

@@ -1,4 +1,7 @@
 <resources>
   <dimen name="controller_button_width">56dp</dimen>
   <dimen name="controller_button_height">@dimen/controller_button_width</dimen>
+  <dimen name="server_declaration_address_margin">10dp</dimen>
+  <dimen name="server_declaration_connect_margin_right">10dp</dimen>
+  <dimen name="server_declaration_connect_padding">5dp</dimen>
 </resources>

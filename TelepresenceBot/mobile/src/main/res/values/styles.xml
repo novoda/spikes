@@ -10,7 +10,7 @@
   <style name="Landing">
     <item name="android:textSize">24sp</item>
     <item name="android:gravity">center</item>
-    <item name="foreground">@drawable/landing_option_foreground</item>
+    <item name="foreground">@drawable/clickable_item_foreground</item>
   </style>
 
   <style name="Landing.Human">
@@ -21,6 +21,22 @@
   <style name="Landing.Bot">
     <item name="android:background">@android:color/holo_green_light</item>
     <item name="android:text">@string/bot</item>
+  </style>
+
+  <style name="Human">
+    <item name="android:textColor">@color/white</item>
+    <item name="android:textSize">20sp</item>
+  </style>
+
+  <style name="Human.Server">
+    <item name="android:hint">@string/enter_server_address</item>
+    <item name="android:textColorHint">@color/white_50</item>
+  </style>
+
+  <style name="Human.Connect">
+    <item name="foreground">@drawable/clickable_item_foreground</item>
+    <item name="android:text">@string/connect</item>
+    <item name="android:padding">@dimen/server_declaration_connect_padding</item>
   </style>
 
 </resources>
