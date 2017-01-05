@@ -54,27 +54,28 @@ public class MovementService extends Service {
     }
 
     public void startConnection() {
+        if (isSerialStarted) {
+            return;
+        }
 
-        if (!isSerialStarted) {
-            usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
+        usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
 
-            HashMap<String, UsbDevice> usbDevices = usbManager.getDeviceList();
-            if (!usbDevices.isEmpty()) {
-                boolean keep = true;
-                for (Map.Entry<String, UsbDevice> entry : usbDevices.entrySet()) {
-                    device = entry.getValue();
-                    int deviceVID = device.getVendorId();
+        HashMap<String, UsbDevice> usbDevices = usbManager.getDeviceList();
+        if (!usbDevices.isEmpty()) {
+            boolean keep = true;
+            for (Map.Entry<String, UsbDevice> entry : usbDevices.entrySet()) {
+                device = entry.getValue();
+                int deviceVID = device.getVendorId();
 
-                    if (isSupportedDeviceID(deviceVID)) {
-                        usbManager.requestPermission(device, pendingIntent);
-                        keep = false;
-                    } else {
-                        connection = null;
-                        device = null;
-                    }
-                    if (!keep) {
-                        break;
-                    }
+                if (isSupportedDeviceID(deviceVID)) {
+                    usbManager.requestPermission(device, pendingIntent);
+                    keep = false;
+                } else {
+                    connection = null;
+                    device = null;
+                }
+                if (!keep) {
+                    break;
                 }
             }
         }
