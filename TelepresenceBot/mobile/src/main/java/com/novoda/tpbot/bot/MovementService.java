@@ -149,8 +149,11 @@ public class MovementService extends Service {
     public void sendCommand(String command) {
         if (serialPort != null) {
             serialPort.write(command.getBytes());
+        } else {
+            Log.d("SERIAL", "Serial not connected for command " + command);
+            toaster.popToast("Serial not connected for command " + command);
+            // TODO forward to the human part
         }
-        // TODO notify serial not connected
     }
 
     @Override

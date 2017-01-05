@@ -3,7 +3,7 @@ package com.novoda.tpbot.human;
 import com.novoda.notils.logger.simple.Log;
 import com.novoda.tpbot.Direction;
 
-interface ControllerListener {
+public interface ControllerListener {
 
     ControllerListener NO_OP = new ControllerListener() {
 

@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,14 +21,21 @@ import com.novoda.notils.caster.Views;
 import com.novoda.notils.logger.toast.Toaster;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
+import com.novoda.tpbot.human.ControllerListener;
+import com.novoda.tpbot.human.ControllerView;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class BotActivity extends AppCompatActivity {
 
+    private static final long COMMAND_REPEAT_DELAY = TimeUnit.MILLISECONDS.toMillis(100);
+
     private MovementService movementService;
     private boolean bound;
+    private Handler handler;
+    private String currentCommand;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +50,61 @@ public class BotActivity extends AppCompatActivity {
 
         RecyclerView.Adapter adapter = new DirectionAdapter(LayoutInflater.from(this), Collections.<Direction>emptyList());
         directions.setAdapter(adapter);
+
+        ControllerView controllerView = Views.findById(this, R.id.bot_debug_controls);
+        controllerView.setControllerListener(controllerListener);
+
+        handler = new Handler();
+    }
+
+    private final ControllerListener controllerListener = new ControllerListener() {
+
+        @Override
+        public void onDirectionPressed(Direction direction) {
+            startRepeatingCommand(direction.rawCommand());
+        }
+
+        @Override
+        public void onDirectionReleased(Direction direction) {
+            stopRepeatingCommand(direction.rawCommand());
+        }
+
+        @Override
+        public void onLazersFired() {
+            // no-op for debug
+        }
+
+        @Override
+        public void onLazersReleased() {
+            // no-op for debug
+        }
+    };
+
+    private void startRepeatingCommand(String command) {
+        currentCommand = command;
+        sendCommand(currentCommand);
+        handler.postDelayed(repeatCommand, COMMAND_REPEAT_DELAY);
+    }
+
+    private void stopRepeatingCommand(String command) {
+        if (currentCommand != null && currentCommand.equals(command)) {
+            handler.removeCallbacks(repeatCommand);
+            currentCommand = null;
+        }
+    }
+
+    private Runnable repeatCommand = new Runnable() {
+        @Override
+        public void run() {
+            sendCommand(BotActivity.this.currentCommand);
+            handler.postDelayed(repeatCommand, COMMAND_REPEAT_DELAY);
+        }
+    };
+
+    private void sendCommand(String command) {
+        if (bound) {
+            movementService.sendCommand(command);
+        }
     }
 
     @Override
@@ -78,10 +141,11 @@ public class BotActivity extends AppCompatActivity {
         } else {
             for (UsbDevice device : devices.values()) {
                 builder.append(
-                        getString(R.string.usb_device_name_vendor_product,
-                                  device.getDeviceName(),
-                                  device.getVendorId(),
-                                  device.getProductId()
+                        getString(
+                                R.string.usb_device_name_vendor_product,
+                                device.getDeviceName(),
+                                device.getVendorId(),
+                                device.getProductId()
                         )
                 ).append("\n");
             }
