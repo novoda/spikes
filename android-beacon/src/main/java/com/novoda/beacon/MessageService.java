@@ -73,10 +73,15 @@ public class MessageService extends Service {
         }
 
         private void attemptToResolve(@NonNull ConnectionResult connectionResult) {
-            try {
-                connectionResult.getResolution().send(MessageService.this, MainActivity.RESOLVE_PERMISSIONS, null);
-            } catch (PendingIntent.CanceledException e) {
-                e.printStackTrace();
+            PendingIntent resolution = connectionResult.getResolution();
+            if (resolution == null) {
+                Log.e(TAG, "Error occurred without providing resolution: " + connectionResult.getErrorMessage());
+            } else {
+                try {
+                    resolution.send(MessageService.this, MainActivity.RESOLVE_PERMISSIONS, null);
+                } catch (PendingIntent.CanceledException e) {
+                    Log.e(TAG, "Failed to resolve error: " + connectionResult.getErrorMessage(), e);
+                }
             }
         }
     };
