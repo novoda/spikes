@@ -43,12 +43,12 @@ public class HumanActivity extends AppCompatActivity {
 
             @Override
             public void onDirectionPressed(Direction direction) {
-                startRepeatingCommand(direction.visualRepresentation());
+                startRepeatingCommand(direction.rawCommand());
             }
 
             @Override
             public void onDirectionReleased(Direction direction) {
-                stopRepeatingCommand(direction.visualRepresentation());
+                stopRepeatingCommand(direction.rawCommand());
             }
 
             @Override
