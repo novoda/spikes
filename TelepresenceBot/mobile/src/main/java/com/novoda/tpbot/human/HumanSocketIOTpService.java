@@ -39,7 +39,8 @@ class HumanSocketIOTpService implements HumanTpService {
             URL url = new URL(serverAddress);
             socket = IO.socket(url.toExternalForm());
         } catch (MalformedURLException | URISyntaxException exception) {
-            return Observable.just(Result.from("Address should be in the format `http://[ip_address]:[port_number]`"));
+            HumanSocketIOConnectionException exceptionWithUserFacingMessage = new HumanSocketIOConnectionException("Address should be in the format `http://[ip_address]:[port_number]`", exception);
+            return Observable.just(Result.from(exceptionWithUserFacingMessage));
         }
         return new SocketConnectionObservable();
     }
@@ -103,4 +104,13 @@ class HumanSocketIOTpService implements HumanTpService {
     private static class LazySingleton {
         private static final HumanSocketIOTpService INSTANCE = new HumanSocketIOTpService();
     }
+
+    public class HumanSocketIOConnectionException extends RuntimeException {
+
+        public HumanSocketIOConnectionException(String message, Throwable throwable) {
+            super(message, throwable);
+        }
+
+    }
+
 }
