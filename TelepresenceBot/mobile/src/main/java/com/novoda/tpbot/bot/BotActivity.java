@@ -31,7 +31,7 @@ import java.util.HashMap;
 public class BotActivity extends AppCompatActivity {
 
     private MovementService movementService;
-    private boolean bound;
+    private boolean boundToMovementService;
     private CommandRepeater commandRepeater;
 
     @Override
@@ -81,7 +81,7 @@ public class BotActivity extends AppCompatActivity {
     private CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
         @Override
         public void onCommandRepeated(String command) {
-            if (bound) {
+            if (boundToMovementService) {
                 movementService.sendCommand(command);
             }
         }
@@ -142,25 +142,24 @@ public class BotActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (bound) {
+        if (boundToMovementService) {
             unbindService(serviceConnection);
-            bound = false;
+            boundToMovementService = false;
         }
     }
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
 
         @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder iBinder) {
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             MovementService.Binder binder = (MovementService.Binder) iBinder;
             movementService = binder.getService();
-            bound = true;
+            boundToMovementService = true;
         }
 
         @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            bound = false;
+        public void onServiceDisconnected(ComponentName componentName) {
+            boundToMovementService = false;
         }
     };
 }
