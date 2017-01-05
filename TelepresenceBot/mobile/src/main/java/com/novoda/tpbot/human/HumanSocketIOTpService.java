@@ -20,12 +20,12 @@ import io.socket.emitter.Emitter;
 
 import static io.socket.client.Socket.*;
 
-public class HumanSocketIOTpService implements HumanTpService {
+class HumanSocketIOTpService implements HumanTpService {
 
     private Socket socket;
     private final Handler handler;
 
-    public static HumanSocketIOTpService getInstance() {
+    static HumanSocketIOTpService getInstance() {
         return LazySingleton.INSTANCE;
     }
 
