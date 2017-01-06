@@ -11,6 +11,8 @@ $ adb shell pm grant com.novoda.toggletalkback android.permission.WRITE_SECURE_S
 DONE:
 - create debug app to toggle TalkBack with buttons in-app
 - test behaviour on non-rooted physical device (works!)
+- check behaviour on device without TalkBack, install TalkBack, see if wizard can be skipped if enabled programmatically.
+No luck, it opens the TalkBack tutorial but you can send the back key event via adb (`adb shell input keyevent 4`)
 
 TODO:
 - create espresso actions to simulate TalkBack gestures
@@ -18,5 +20,4 @@ TODO:
 - add script to install app, enable TalkBack, run tests, then disable TalkBack
 - modify script to revert TalkBack state to whatever it was before
 - modify settings edit so that only TalkBack is affected (other accessibility services do not change state)
-- check behaviour on device without TalkBack, install TalkBack, see if wizard can be skipped if enabled programmatically
 - modify script to install TalkBack apk if not present
