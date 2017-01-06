@@ -10,6 +10,7 @@
         android:theme="@style/AppTheme">
 
         <activity android:name="com.novoda.toggletalkback.MyActivity" />
+        <activity android:name="com.novoda.toggletalkback.TalkBackStateSettingActivity" />
 
         <activity-alias
             android:name="activity.primary_launcher"
