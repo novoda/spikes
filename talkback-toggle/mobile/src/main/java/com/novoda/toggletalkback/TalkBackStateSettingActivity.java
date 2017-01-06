@@ -8,19 +8,29 @@ import android.support.v7.app.AppCompatActivity;
 
 public class TalkBackStateSettingActivity extends AppCompatActivity {
 
+    static final String ACTION_ENABLE_TALKBACK = "com.novoda.toggletalkback.ENABLE_TALKBACK";
+    static final String ACTION_DISABLE_TALKBACK = "com.novoda.toggletalkback.DISABLE_TALKBACK";
+
     private static final String TALKBACK_SERVICE_NAME = "com.google.android.marvin.talkback/.TalkBackService";
     private static final String VALUE_DISABLED = "0";
     private static final String VALUE_ENABLED = "1";
-
-    public static final String EXTRA_ENABLE_TALKBACK = "enable_talkback";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra(EXTRA_ENABLE_TALKBACK)) {
-            updateTalkBackState(intent.getBooleanExtra(EXTRA_ENABLE_TALKBACK, false));
+
+        if (intent == null) {
+            finish();
+            return;
         }
+
+        if (ACTION_ENABLE_TALKBACK.equals(intent.getAction())) {
+            updateTalkBackState(true);
+        } else if (ACTION_DISABLE_TALKBACK.equals(intent.getAction())) {
+            updateTalkBackState(false);
+        }
+
         finish();
     }
 

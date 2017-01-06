@@ -10,7 +10,16 @@
         android:theme="@style/AppTheme">
 
         <activity android:name="com.novoda.toggletalkback.MyActivity" />
-        <activity android:name="com.novoda.toggletalkback.TalkBackStateSettingActivity" />
+        <activity android:name="com.novoda.toggletalkback.TalkBackStateSettingActivity">
+            <intent-filter>
+                <action android:name="com.novoda.toggletalkback.ENABLE_TALKBACK" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.novoda.toggletalkback.DISABLE_TALKBACK" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <activity-alias
             android:name="activity.primary_launcher"

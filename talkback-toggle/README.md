@@ -8,11 +8,19 @@ You need to install the app, then enable the permission to write secure settings
 $ adb shell pm grant com.novoda.toggletalkback android.permission.WRITE_SECURE_SETTINGS
 ```
 
+Then you can enable and disable TalkBack with the following actions:
+
+```bash
+$ adb shell am start -a "com.novoda.toggletalkback.ENABLE_TALKBACK"
+$ adb shell am start -a "com.novoda.toggletalkback.DISABLE_TALKBACK"
+```
+
 DONE:
 - create debug app to toggle TalkBack with buttons in-app
 - test behaviour on non-rooted physical device (works!)
 - check behaviour on device without TalkBack, install TalkBack, see if wizard can be skipped if enabled programmatically.
 No luck, it opens the TalkBack tutorial but you can send the back key event via adb (`adb shell input keyevent 4`)
+- add adb actions to enable/disable TalkBack
 
 TODO:
 - create espresso actions to simulate TalkBack gestures

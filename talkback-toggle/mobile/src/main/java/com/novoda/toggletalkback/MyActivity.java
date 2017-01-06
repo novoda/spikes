@@ -11,6 +11,9 @@ import com.novoda.accessibility.AccessibilityServices;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.novoda.toggletalkback.TalkBackStateSettingActivity.ACTION_DISABLE_TALKBACK;
+import static com.novoda.toggletalkback.TalkBackStateSettingActivity.ACTION_ENABLE_TALKBACK;
+
 public class MyActivity extends AppCompatActivity {
 
     private AccessibilityServices accessibilityServices;
@@ -34,31 +37,26 @@ public class MyActivity extends AppCompatActivity {
     }
 
     private void updateTalkBackStatusTextView() {
-        talkbackStatusTextView.setText("checking status");
+        talkbackStatusTextView.setText("Checking TalkBack status");
+
         talkbackStatusTextView.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (accessibilityServices.isSpokenFeedbackEnabled()) {
-                    talkbackStatusTextView.setText("talkback enabled");
+                    talkbackStatusTextView.setText("TalkBack enabled");
                 } else {
-                    talkbackStatusTextView.setText("talkback disabled");
+                    talkbackStatusTextView.setText("TalkBack disabled");
                 }
             }
         }, 1500);
     }
 
     public void enableTalkBack(View view) {
-        setTalkBackEnabled(true);
+        startActivity(new Intent(ACTION_ENABLE_TALKBACK));
     }
 
     public void disableTalkBack(View view) {
-        setTalkBackEnabled(false);
-    }
-
-    private void setTalkBackEnabled(boolean value) {
-        Intent intent = new Intent(this, TalkBackStateSettingActivity.class);
-        intent.putExtra(TalkBackStateSettingActivity.EXTRA_ENABLE_TALKBACK, value);
-        startActivity(intent);
+        startActivity(new Intent(ACTION_DISABLE_TALKBACK));
     }
 
 }
