@@ -2,7 +2,6 @@ package com.novoda.gradle.diffdependencytask
 
 import org.junit.Before
 import org.junit.Test
-import org.mockito.InjectMocks
 import org.mockito.Mock
 
 import static com.google.common.truth.Truth.assertThat
@@ -12,10 +11,10 @@ import static org.mockito.MockitoAnnotations.initMocks
 class ConditionalDependencyEvaluatorTest {
 
     @Mock
-    private ConditionalDependencyRepository dependenciesRepository
-    @Mock
     private GroovyCallable<List<String>> changedFilesProvider
-    @InjectMocks
+    @Mock
+    private ConditionalDependencyRepository dependenciesRepository
+
     private ConditionalDependencyEvaluator evaluator
 
     public static final ANY_TASK = null
@@ -29,6 +28,7 @@ class ConditionalDependencyEvaluatorTest {
     @Before
     void setUp() {
         initMocks(this)
+        evaluator = new ConditionalDependencyEvaluator(changedFilesProvider, dependenciesRepository)
     }
 
     @Test
