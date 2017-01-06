@@ -1,5 +1,3 @@
-talkback-toggle
+android-skeleton
 =============
-We want to be able to turn TalkBack on and off programmatically so we can run connected android tests on them without leaving devices in an inconsistent state.
-
-
+Can be used as a skeleton for new spikes. Don't modify this project except to update dependencies, copy it.
