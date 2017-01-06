@@ -1,4 +1,4 @@
-package com.novoda.androidskeleton;
+package com.novoda.toggletalkback;
 
 import org.junit.Before;
 import org.junit.Test;

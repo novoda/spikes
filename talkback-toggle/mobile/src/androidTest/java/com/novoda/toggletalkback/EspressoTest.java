@@ -1,11 +1,8 @@
-package com.novoda.androidskeleton;
+package com.novoda.toggletalkback;
 
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-
-import com.novoda.androidskeleton.MyActivity;
-import com.novoda.androidskeleton.R;
 
 import org.junit.Rule;
 import org.junit.Test;

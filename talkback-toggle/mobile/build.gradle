@@ -6,7 +6,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.novoda.androidskeleton"
+        applicationId "com.novoda.toggletalkback"
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
@@ -30,6 +30,8 @@ dependencies {
     compile "com.android.support:support-v13:${supportVersion}"
     compile "com.android.support:recyclerview-v7:${supportVersion}"
     compile "com.android.support:design:${supportVersion}"
+
+    compile 'com.novoda:accessibilitools:1.4.0'
 
     compile 'com.jakewharton:butterknife:8.0.1'
     apt 'com.jakewharton:butterknife-compiler:8.0.1'

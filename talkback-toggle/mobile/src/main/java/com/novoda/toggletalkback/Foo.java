@@ -1,4 +1,4 @@
-package com.novoda.androidskeleton;
+package com.novoda.toggletalkback;
 
 public class Foo {
 
