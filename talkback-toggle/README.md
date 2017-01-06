@@ -8,8 +8,11 @@ You need to install the app, then enable the permission to write secure settings
 $ adb shell pm grant com.novoda.toggletalkback android.permission.WRITE_SECURE_SETTINGS
 ```
 
+DONE:
+- create debug app to toggle TalkBack with buttons in-app
+- test behaviour on non-rooted physical device (works!)
+
 TODO:
-- test behaviour on non-rooted physical device
 - create espresso actions to simulate TalkBack gestures
 - create dummy espresso test showcasing TalkBack test
 - add script to install app, enable TalkBack, run tests, then disable TalkBack
