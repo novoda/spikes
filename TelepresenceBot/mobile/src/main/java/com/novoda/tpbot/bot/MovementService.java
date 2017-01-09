@@ -66,17 +66,20 @@ public class MovementService extends Service {
             return;
         }
 
+        boolean supportedDeviceFound = false;
         for (Map.Entry<String, UsbDevice> entry : usbDevices.entrySet()) {
             device = entry.getValue();
             int deviceVID = device.getVendorId();
 
             if (isSupportedDeviceID(deviceVID)) {
                 usbManager.requestPermission(device, pendingIntent);
+                supportedDeviceFound = true;
                 break;
-            } else {
-                connection = null;
-                device = null;
             }
+        }
+        if (!supportedDeviceFound) {
+            connection = null;
+            device = null;
         }
     }
 
