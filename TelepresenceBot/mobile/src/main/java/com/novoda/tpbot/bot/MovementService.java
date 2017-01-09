@@ -25,6 +25,8 @@ import java.util.Map;
 
 public class MovementService extends Service {
 
+    private static final String SERIAL_TAG = "SERIAL";
+
     private static final String ACTION_USB_PERMISSION = "com.novoda.tpbot.USB_PERMISSION";
     private static final List<Integer> SUPPORTED_VENDOR_IDS = Arrays.asList(9025, 10755, 4292); // TODO: read from devices_filter.xml
 
@@ -102,22 +104,22 @@ public class MovementService extends Service {
                             isSerialStarted = true;
                             toaster.popToast("Serial connection open");
                         } else {
-                            Log.d("SERIAL", "Port is not open");
+                            Log.d(SERIAL_TAG, "Port is not open");
                             toaster.popToast("Port is not open");
                         }
                     } else {
-                        Log.d("SERIAL", "Port is null");
+                        Log.d(SERIAL_TAG, "Port is null");
                         toaster.popToast("Port is null");
                     }
                 } else {
-                    Log.d("SERIAL", "Permission not granted");
+                    Log.d(SERIAL_TAG, "Permission not granted");
                     toaster.popToast("Permission not granted");
                 }
             } else if (intent.getAction().equals(UsbManager.ACTION_USB_DEVICE_ATTACHED)) {
                 toaster.popToast("Device connected");
                 startConnection();
             } else if (intent.getAction().equals(UsbManager.ACTION_USB_DEVICE_DETACHED)) {
-                Log.d("SERIAL", "USB device detached");
+                Log.d(SERIAL_TAG, "USB device detached");
                 toaster.popToast("USB device detached");
                 closeConnection();
             }
@@ -130,7 +132,7 @@ public class MovementService extends Service {
             String data = null;
             try {
                 data = new String(arg0, "UTF-8");
-                Log.d("SERIAL", "Received from USB serial " + data);
+                Log.d(SERIAL_TAG, "Received from USB serial " + data);
                 // TODO forward to the UI
             } catch (UnsupportedEncodingException e) {
                 Log.e(e, "Error receiving data from USB serial");
@@ -148,7 +150,7 @@ public class MovementService extends Service {
         if (serialPort != null) {
             serialPort.write(command.getBytes());
         } else {
-            Log.d("SERIAL", "Serial not connected for command " + command);
+            Log.d(SERIAL_TAG, "Serial not connected for command " + command);
             toaster.popToast("Serial not connected for command " + command);
             // TODO forward to the human part
         }
