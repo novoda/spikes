@@ -98,7 +98,7 @@ public class MovementService extends Service {
                             serialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
                             serialPort.setParity(UsbSerialInterface.PARITY_NONE);
                             serialPort.setFlowControl(UsbSerialInterface.FLOW_CONTROL_OFF);
-                            serialPort.read(mCallback);
+                            serialPort.read(onDataReceievedListener);
                             isSerialStarted = true;
                             toaster.popToast("Serial connection open");
                         } else {
@@ -124,7 +124,7 @@ public class MovementService extends Service {
         }
     };
 
-    private UsbSerialInterface.UsbReadCallback mCallback = new UsbSerialInterface.UsbReadCallback() {
+    private UsbSerialInterface.UsbReadCallback onDataReceievedListener = new UsbSerialInterface.UsbReadCallback() {
         @Override
         public void onReceivedData(byte[] arg0) {
             String data = null;
