@@ -21,6 +21,8 @@ android {
 
 repositories {
     jcenter()
+    maven { url "https://jitpack.io" }
+
 }
 
 dependencies {
@@ -33,5 +35,6 @@ dependencies {
     compile 'com.novoda:notils-android:3.0.2'
     compile 'com.android.support:recyclerview-v7:25.0.1'
     compile 'com.android.support:support-annotations:25.0.1'
+    compile 'com.github.felHR85:UsbSerial:4.3'
     compile project(path: ':core')
 }

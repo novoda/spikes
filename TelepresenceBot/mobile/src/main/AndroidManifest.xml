@@ -3,6 +3,8 @@
   xmlns:tools="http://schemas.android.com/tools"
   package="com.novoda.tpbot">
 
+  <uses-feature android:name="android.hardware.usb.host" />
+
   <application
     android:name="com.novoda.tpbot.TelebotApplication"
     android:allowBackup="true"
@@ -17,7 +19,6 @@
       android:icon="@mipmap/ic_launcher">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
-
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
@@ -31,6 +32,20 @@
       android:name="com.novoda.tpbot.bot.BotActivity"
       android:icon="@mipmap/ic_launcher"
       android:label="@string/bot" />
+
+    <receiver android:name="com.novoda.tpbot.bot.UsbReceiver">
+      <meta-data
+        android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+        android:resource="@xml/devices_filter" />
+      <intent-filter>
+        <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+        <action android:name="android.hardware.usb.action.USB_DEVICE_DETACHED" />
+      </intent-filter>
+    </receiver>
+
+    <service
+      android:name="com.novoda.tpbot.bot.MovementService"
+      android:exported="false" />
 
   </application>
 
