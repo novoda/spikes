@@ -10,12 +10,9 @@ import com.novoda.tpbot.R;
 import com.novoda.tpbot.support.SelfDestructingMessageView;
 import com.novoda.tpbot.support.SwitchableView;
 
-import java.util.concurrent.TimeUnit;
-
 public class HumanActivity extends AppCompatActivity {
 
     private static final String LAZERS = String.valueOf(Character.toChars(0x1F4A5));
-    private static final long COMMAND_FADING_DELAY = TimeUnit.MILLISECONDS.toMillis(100);
 
     private SelfDestructingMessageView debugView;
     private SwitchableView switchableView;
@@ -65,7 +62,7 @@ public class HumanActivity extends AppCompatActivity {
     private CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
         @Override
         public void onCommandRepeated(String command) {
-            debugView.showTimed(command, COMMAND_FADING_DELAY);
+            debugView.showTimed(command);
             // TODO: send command to the receiver (bot) part
         }
     };
@@ -79,7 +76,7 @@ public class HumanActivity extends AppCompatActivity {
     private final ServerDeclarationListener serverDeclarationListener = new ServerDeclarationListener() {
         @Override
         public void onConnect(String serverAddress) {
-            debugView.showTimed(serverAddress, COMMAND_FADING_DELAY);
+            debugView.showTimed(serverAddress);
         }
     };
 }
