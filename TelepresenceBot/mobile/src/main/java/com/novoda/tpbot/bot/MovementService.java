@@ -88,29 +88,9 @@ public class MovementService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(ACTION_USB_PERMISSION)) {
-                boolean granted = intent.getExtras().getBoolean(UsbManager.EXTRA_PERMISSION_GRANTED);
-                if (granted) {
-                    connection = usbManager.openDevice(device);
-                    serialPort = UsbSerialDevice.createUsbSerialDevice(device, connection);
-                    if (serialPort != null) {
-                        if (serialPort.open()) {
-                            toaster.popToast("Opening serial connection");
-                            serialPort.setBaudRate(9600);
-                            serialPort.setDataBits(UsbSerialInterface.DATA_BITS_8);
-                            serialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
-                            serialPort.setParity(UsbSerialInterface.PARITY_NONE);
-                            serialPort.setFlowControl(UsbSerialInterface.FLOW_CONTROL_OFF);
-                            serialPort.read(onDataReceievedListener);
-                            isSerialStarted = true;
-                            toaster.popToast("Serial connection open");
-                        } else {
-                            Log.d(SERIAL_TAG, "Port is not open");
-                            toaster.popToast("Port is not open");
-                        }
-                    } else {
-                        Log.d(SERIAL_TAG, "Port is null");
-                        toaster.popToast("Port is null");
-                    }
+                boolean permissionGranted = intent.getExtras().getBoolean(UsbManager.EXTRA_PERMISSION_GRANTED);
+                if (permissionGranted) {
+                    setupSerialPort();
                 } else {
                     Log.d(SERIAL_TAG, "Permission not granted");
                     toaster.popToast("Permission not granted");
@@ -125,6 +105,31 @@ public class MovementService extends Service {
             }
         }
     };
+
+    private void setupSerialPort() {
+        connection = usbManager.openDevice(device);
+        serialPort = UsbSerialDevice.createUsbSerialDevice(device, connection);
+        if (serialPort == null) {
+            Log.d(SERIAL_TAG, "Port is null");
+            toaster.popToast("Port is null");
+            return;
+        }
+
+        if (serialPort.open()) {
+            toaster.popToast("Opening serial connection");
+            serialPort.setBaudRate(9600);
+            serialPort.setDataBits(UsbSerialInterface.DATA_BITS_8);
+            serialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
+            serialPort.setParity(UsbSerialInterface.PARITY_NONE);
+            serialPort.setFlowControl(UsbSerialInterface.FLOW_CONTROL_OFF);
+            serialPort.read(onDataReceievedListener);
+            isSerialStarted = true;
+            toaster.popToast("Serial connection open");
+        } else {
+            Log.d(SERIAL_TAG, "Port is not open");
+            toaster.popToast("Port is not open");
+        }
+    }
 
     private UsbSerialInterface.UsbReadCallback onDataReceievedListener = new UsbSerialInterface.UsbReadCallback() {
         @Override
