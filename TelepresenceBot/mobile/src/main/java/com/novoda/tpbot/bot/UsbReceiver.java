@@ -11,7 +11,7 @@ public class UsbReceiver extends BroadcastReceiver {
         Intent movementService = new Intent(context.getApplicationContext(), MovementService.class);
         if (usbConnected(intent)) {
             context.startService(movementService);
-        } else if(usbDisconnected(intent)) {
+        } else if (usbDisconnected(intent)) {
             context.stopService(movementService);
         }
     }
