@@ -14,15 +14,18 @@ import com.google.android.gms.maps.SupportMapFragment;
 import java.util.List;
 
 /**
- * An IdlingResource that finds the {@link SupportMapFragment} in given {@link FragmentActivity}
+ * An IdlingResource that finds the first {@link SupportMapFragment} in given {@link FragmentActivity}
  * and hook itself to map's async ready callback.
+ *
+ * It will simply traverse the tree of {@link Fragment}s found in {@link FragmentActivity} and all child
+ * {@link Fragment}s and return the first {@link Fragment} found.
  */
 public class MapIdlingResource implements IdlingResource, OnMapReadyCallback {
 
     private ResourceCallback callback;
     private boolean isMapReady = false;
 
-    public static IdlingResource from(final FragmentActivity activity) {
+    public static IdlingResource from(FragmentActivity activity) {
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         SupportMapFragment mapFragment = findSupportMapFragment(fragmentManager);
 
@@ -32,8 +35,8 @@ public class MapIdlingResource implements IdlingResource, OnMapReadyCallback {
     }
 
     @Nullable
-    private static SupportMapFragment findSupportMapFragment(FragmentManager supportFragmentManager) {
-        List<Fragment> fragments = supportFragmentManager.getFragments();
+    private static SupportMapFragment findSupportMapFragment(FragmentManager fragmentManager) {
+        List<Fragment> fragments = fragmentManager.getFragments();
         for (Fragment fragment : fragments) {
             if (fragment instanceof SupportMapFragment) {
                 return (SupportMapFragment) fragment;
