@@ -21,9 +21,9 @@ import com.novoda.notils.caster.Views;
 import com.novoda.notils.logger.toast.Toaster;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
-import com.novoda.tpbot.human.CommandRepeater;
-import com.novoda.tpbot.human.ControllerListener;
-import com.novoda.tpbot.human.ControllerView;
+import com.novoda.tpbot.controls.CommandRepeater;
+import com.novoda.tpbot.controls.ControllerListener;
+import com.novoda.tpbot.controls.ControllerView;
 
 import java.util.Collections;
 import java.util.HashMap;

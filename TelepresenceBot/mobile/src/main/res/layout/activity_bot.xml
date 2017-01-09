@@ -13,7 +13,7 @@
     android:layout_weight="50"
     android:scrollbars="vertical" />
 
-  <com.novoda.tpbot.human.ControllerView
+  <com.novoda.tpbot.controls.ControllerView
     android:id="@+id/bot_debug_controls"
     android:layout_width="match_parent"
     android:layout_height="0dp"

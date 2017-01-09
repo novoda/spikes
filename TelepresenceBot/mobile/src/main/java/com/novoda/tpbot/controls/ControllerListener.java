@@ -1,4 +1,4 @@
-package com.novoda.tpbot.human;
+package com.novoda.tpbot.controls;
 
 import com.novoda.notils.logger.simple.Log;
 import com.novoda.tpbot.Direction;

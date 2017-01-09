@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import com.novoda.notils.caster.Views;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
+import com.novoda.tpbot.controls.CommandRepeater;
+import com.novoda.tpbot.controls.ControllerListener;
+import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.tpbot.support.SelfDestructingMessageView;
 import com.novoda.tpbot.support.SwitchableView;
 
