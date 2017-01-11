@@ -6,7 +6,7 @@ var token = process.env.token;
 var enewsFetcher = new EnewsFetcher(token);
 
 enewsFetcher.getLastSevenDays().then(function(eNews) {
-  var html = htmlGenerator(eNews);
+  var html = htmlGenerator(eNews, 'http://1234.com/unsubscribe');
   writeToFile(html);
 });
 

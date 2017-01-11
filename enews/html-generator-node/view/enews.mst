@@ -5,3 +5,5 @@
   {{> item}}
 {{/eNews}}
 </table>
+
+{{> footer}}

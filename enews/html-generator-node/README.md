@@ -22,7 +22,7 @@ var token = process.env.token; // or any other way you would like to provide the
 var enewsFetcher = new EnewsFetcher(token);
 
 enewsFetcher.getLastSevenDays(function(eNews) {
-  var html = generateHtml(eNews);
+  var html = generateHtml(eNews, 'http://myunsubscribelink.com');
   console.log(html);
 });
 ```
