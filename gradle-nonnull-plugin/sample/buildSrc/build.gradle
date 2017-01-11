@@ -1,0 +1,21 @@
+repositories {
+    jcenter()
+}
+
+apply plugin: 'groovy'
+
+dependencies {
+    compile gradleApi()
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDir '../../plugin/src/main/groovy'
+        }
+
+        resources {
+            srcDir '../../plugin/src/main/resources'
+        }
+    }
+}
