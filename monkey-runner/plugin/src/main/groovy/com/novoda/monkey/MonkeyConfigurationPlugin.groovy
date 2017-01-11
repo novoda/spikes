@@ -33,7 +33,7 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
     private void configureTask(Project project, MonkeyRunnerExtension extension) {
         def runMonkeyAllTask = project.task(TASK_NAME)
 
-        def android = project.extensions.findByName("android")
+        def android = project.android
         android.command.devices().eachWithIndex { device, index ->
 
             def monkeyTask = project.task("runMonkeyDevice${index}", type: TargetedMonkey) {
