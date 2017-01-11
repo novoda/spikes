@@ -38,25 +38,28 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
 
             def monkeyTask = project.task("runMonkeyDevice${index}", type: TargetedMonkey) {
                 packageName = extension.packageNameFilter
-                events = extension.eventsCount
+                adb = android.command.adb
                 deviceId = device.id
                 logFileName = extension.logFileName
-                categories = extension.categories
+                monkey = [events: extension.eventsCount, categories: extension.categories]
             }
 
             def uninstallApp = project.task("uninstallMonkeyDevice${index}", type: TargetedUninstall) {
                 packageName = extension.packageNameFilter
+                adb = android.command.adb
                 deviceId = device.id
             }
 
             if (extension.useMonkeyTrap) {
                 def showOverlayTask = project.task("showOverlayDevice${index}", type: NotificationBarOverlay) {
                     show = true
+                    adb = android.command.adb
                     deviceId = device.id
                 }
 
                 def hideOverlay = project.task("hideOverlayDevice${index}", type: NotificationBarOverlay) {
                     show = false
+                    adb = android.command.adb
                     deviceId = device.id
                 }
 
