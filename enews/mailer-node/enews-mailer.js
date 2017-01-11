@@ -1,8 +1,8 @@
-var nodemailer = require('nodemailer');
-var EnewsFetcher = require('enews-fetcher');
-var generateHtml = require('html-generator').generateHtml;
-var enewsFetcher = new EnewsFetcher(process.env.token);
-var moment = require('moment');
+const nodemailer = require('nodemailer');
+const EnewsFetcher = require('enews-fetcher');
+const generateHtml = require('html-generator').generateHtml;
+const enewsFetcher = new EnewsFetcher(process.env.token);
+const moment = require('moment');
 
 const SMTP_USER = process.env.SMTP_USER;
 const SMTP_PASSWORD = process.env.SMTP_PASSWORD;
@@ -15,14 +15,14 @@ createEnewsHtml(function(html, plainText) {
 
 function createEnewsHtml(callback) {
   enewsFetcher.getLastSevenDays().then(function(eNews) {
-    var html = generateHtml(eNews);
-    var plainText = generatePlainText(eNews);
+    const html = generateHtml(eNews);
+    const plainText = generatePlainText(eNews);
     callback(html, plainText);
   });
 }
 
 function generatePlainText(eNews) {
-  var plainText = '';
+  const plainText = '';
   eNews.forEach(each => {
     plainText += '** ' + each.title + '\n';
     plainText += each.link + '\n'
@@ -32,7 +32,7 @@ function generatePlainText(eNews) {
 }
 
 function sendMail(contentHtml, plainText) {
-  var smtpConfig = {
+  const smtpConfig = {
     host: SMTP_HOST,
     port: 465,
     secure: true,
@@ -42,8 +42,8 @@ function sendMail(contentHtml, plainText) {
     }
   };
 
-  var transporter = nodemailer.createTransport(smtpConfig);
-  var mailOptions = {
+  const transporter = nodemailer.createTransport(smtpConfig);
+  const mailOptions = {
     from: '"enewsletter" <' + SMTP_USER + '>',
     to: RECIPIENTS,
     subject: '#enews ' + moment().format('YYYY-MM-DD') + ' ✔',
