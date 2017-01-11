@@ -1,0 +1,22 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+apply plugin: 'groovy'
+
+sourceCompatibility = JavaVersion.VERSION_1_6
+targetCompatibility = JavaVersion.VERSION_1_6
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile gradleApi()
+    testCompile 'junit:junit:4.12'
+}
+
+group = 'com.novoda'
+version = '0.1'
