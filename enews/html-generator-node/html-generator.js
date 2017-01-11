@@ -7,7 +7,7 @@ const Mustache = require('mustache');
 const fs = require('fs');
 
 function generateHtml(eNews) {
-  const template = fs.readFileSync('view/enews.mst', 'utf-8');
+  const template = fs.readFileSync(`${__dirname}/view/enews.mst`, 'utf-8');
   const partials = loadPartials();
   const model = createModel(eNews);
   return Mustache.render(template, model, partials);
@@ -23,7 +23,7 @@ function loadPartials() {
 }
 
 function readPartial(name) {
-  return fs.readFileSync(`view/partial/${name}` , 'utf-8');
+  return fs.readFileSync(`${__dirname}/view/partial/${name}` , 'utf-8');
 }
 
 function createModel(eNews) {
