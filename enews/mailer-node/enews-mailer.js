@@ -22,13 +22,9 @@ function createEnewsHtml(callback) {
 }
 
 function generatePlainText(eNews) {
-  const plainText = '';
-  eNews.forEach(each => {
-    plainText += '** ' + each.title + '\n';
-    plainText += each.link + '\n'
-    plainText += '------------------------------\n'
-  });
-  return plainText;
+  return eNews.map(each => {
+    return `** ${each.title} \n${each.link} \n------------------------------`;
+  }).join('\n');
 }
 
 function sendMail(contentHtml, plainText) {
