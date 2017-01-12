@@ -4,17 +4,17 @@ class Rpi3BoardFactory extends BoardFactory {
 
     @Override
     public String getGreenLedGpio() {
-        throw new RuntimeException("Not implemented yet");
+        return "BCM5";
     }
 
     @Override
     public String getRedLedGpio() {
-        throw new RuntimeException("Not implemented yet");
+        return "BCM6";
     }
 
     @Override
     public String getBlueLedGpio() {
-        throw new RuntimeException("Not implemented yet");
+        return "BCM19";
     }
 
     @Override
@@ -24,17 +24,17 @@ class Rpi3BoardFactory extends BoardFactory {
 
     @Override
     public String getGreenButtonGpio() {
-        throw new RuntimeException("Not implemented yet");
+        return "BCM12";
     }
 
     @Override
     public String getRedButtonGpio() {
-        throw new RuntimeException("Not implemented yet");
+        return "BCM16";
     }
 
     @Override
     public String getBlueButtonGpio() {
-        throw new RuntimeException("Not implemented yet");
+        return "BCM20";
     }
 
     @Override

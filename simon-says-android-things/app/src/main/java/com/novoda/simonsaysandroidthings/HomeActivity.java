@@ -14,7 +14,7 @@ import com.novoda.simonsaysandroidthings.hw.io.Group;
 import com.novoda.simonsaysandroidthings.hw.io.Led;
 import com.novoda.simonsaysandroidthings.hw.io.PwmBuzzer;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 public class HomeActivity extends Activity {
 
@@ -27,13 +27,14 @@ public class HomeActivity extends Activity {
 
         BoardFactory boardFactory = BoardFactory.getBoardFactory();
         PeripheralManagerService service = new PeripheralManagerService();
-        Button yellowButton = GpioButton.create(boardFactory.getYellowButtonGpio(), service);
-        Led yellowLed = GpioLed.create(boardFactory.getYellowLedGpio(), service);
         Buzzer buzzer = PwmBuzzer.create(boardFactory.getBuzzerPwm(), service);
 
-        Group yellow = new Group(yellowLed, yellowButton, buzzer, 1000);
+        Group green = createGroup(service, boardFactory.getGreenButtonGpio(), boardFactory.getGreenLedGpio(), buzzer, 500);
+        Group red = createGroup(service, boardFactory.getRedButtonGpio(), boardFactory.getRedLedGpio(), buzzer, 1000);
+        Group blue = createGroup(service, boardFactory.getBlueButtonGpio(), boardFactory.getBlueLedGpio(), buzzer, 1500);
+        Group yellow = createGroup(service, boardFactory.getYellowButtonGpio(), boardFactory.getYellowLedGpio(), buzzer, 2000);
 
-        game = new SimonSays(Collections.singletonList(yellow), new SharedPrefsHighscore(this), buzzer);
+        game = new SimonSays(Arrays.asList(green, red, blue, yellow), new SharedPrefsHighscore(this), buzzer);
         game.start();
 
         toggleButton = GpioButton.create(boardFactory.getToggleGpio(), service);
@@ -48,6 +49,12 @@ public class HomeActivity extends Activity {
                 game.toggle();
             }
         });
+    }
+
+    private Group createGroup(PeripheralManagerService service, String buttonPinName, String ledPinName, Buzzer buzzer, int frequency) {
+        Button button = GpioButton.create(buttonPinName, service);
+        Led led = GpioLed.create(ledPinName, service);
+        return new Group(led, button, buzzer, frequency);
     }
 
     @Override
