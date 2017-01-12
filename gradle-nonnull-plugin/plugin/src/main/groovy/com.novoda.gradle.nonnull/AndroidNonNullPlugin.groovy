@@ -53,7 +53,7 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
     }
 
     static def getFileContentPackage(String path) {
-        def packageName = path.replaceAll("/", ".").replaceFirst("\\.","")
+        def packageName = path.replaceAll("/", ".").replaceFirst("\\.", "")
 
         return "package $packageName;\n"
     }
@@ -63,22 +63,19 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
                 " *\n" +
                 " * Make all method parameters @NonNull by default.\n" +
                 " *\n" +
-                " * We assume that all method parameters and return types are NON-NULL by default.\n" +
+                " * We assume that all method parameters are NON-NULL by default.\n" +
                 " *\n" +
                 " * e.g.\n" +
                 " *\n" +
-                " * String trimExampleMethod(String value) {\n" +
-                " *     return value.trim();\n" +
+                " * void setValue(String value) {\n" +
+                " *     this.value = value;\n" +
                 " * }\n" +
                 " *\n" +
                 " * is equal to:\n" +
                 " *\n" +
-                " * @NonNull\n" +
-                " * String trimExampleMethod(@NonNull String value) {\n" +
-                " *     return value.trim();\n" +
+                " * void setValue(@NonNull String value) {\n" +
+                " *     this.value = value;\n" +
                 " * }\n" +
-                " *\n" +
-                " * reverse this behaviour with: @Nullable annotation.\n" +
                 " *\n" +
                 " */\n" +
                 "@ParametersAreNonnullByDefault\n"
