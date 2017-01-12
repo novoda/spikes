@@ -8,35 +8,37 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
 
     def outputDir
 
+    def variant
+
     @TaskAction
     void generatePackageAnnotations() {
         group = "Copying"
         description = "Generate package-info.java classes"
 
-        def java = project.android.sourceSets.main.java
-
         Set<String> packages = []
 
-        java.sourceFiles.visit { FileVisitDetails details ->
-            if (details.file.file) {
-                //TODO respect multiple sourceDirs
-                def packagePath = details.file.parent.replace((java.srcDirs as List)[0].absolutePath, '')
-                packages << packagePath
-            }
-        }
+        variant.sourceSets.any {
+            def java = it.java
 
-        println(packages)
-
-        packages.any { packagePath ->
-            def dir = new File(outputDir, packagePath)
-            dir.mkdirs()
-
-            def file = new File(dir, "package-info.java")
-            if (file.createNewFile()) {
-                file.write(getFileContent(packagePath))
+            java.sourceFiles.visit { FileVisitDetails details ->
+                if (details.file.file) {
+                    //TODO respect multiple sourceDirs
+                    def packagePath = details.file.parent.replace((java.srcDirs as List)[0].absolutePath, '')
+                    packages << packagePath
+                }
             }
 
-            println(file.path)
+            packages.any { packagePath ->
+                def dir = new File(outputDir, packagePath)
+                dir.mkdirs()
+
+                def file = new File(dir, "package-info.java")
+                if (file.createNewFile()) {
+                    file.write(getFileContent(packagePath))
+                }
+
+                println(file.path)
+            }
         }
 
         println "[SUCCESS] NonNull generator: package-info.java files checked"
