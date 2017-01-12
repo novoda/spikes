@@ -2,6 +2,7 @@ package com.novoda.gradle.nonnull
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.FileVisitDetails
 import org.gradle.api.tasks.StopExecutionException
 
 public class AndroidNonNullPlugin implements Plugin<Project> {
@@ -15,74 +16,46 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
             group = "Copying"
             description = "Generate package-info.java classes"
 
-            def mainSrcPhrase = "src" + File.separatorChar + "main" + File.separatorChar + "java" + File.separatorChar
+            def outputDir = project.file("${project.buildDir}/generated/source/nonNull/main")
 
-            def mainTestSrcPhrase = "src" + File.separatorChar + "test" + File.separatorChar +
-                    "java" + File.separatorChar
 
-            def mainAndroidTestSrcPhrase = "src" + File.separatorChar + "androidTest" + File.separatorChar +
-                    "java" + File.separatorChar
+            def java = project.android.sourceSets.main.java
 
-            def sourceDirPath = "${project.projectDir}" + File.separatorChar + "src" + File.separatorChar +
-                    "main" + File.separatorChar + "java" + File.separatorChar +
-                    "com" + File.separatorChar + "novoda" + File.separatorChar + "gradle" + File.separatorChar + "nonnull"
 
-            def sourceDir = project.file(sourceDirPath)
+            Set<String> packages = []
 
-            def testSourceDir = project.file("${project.projectDir}" + File.separatorChar + "src" + File.separatorChar +
-                    "test" + File.separatorChar + "java" + File.separatorChar +
-                    "com" + File.separatorChar + "novoda" + File.separatorChar + "gradle" + File.separatorChar + "nonnull")
-
-            def androidTestSourceDir = project.file("${project.projectDir}" + File.separatorChar + "src" + File.separatorChar +
-                    "androidTest" + File.separatorChar + "java" + File.separatorChar +
-                    "com" + File.separatorChar + "novoda" + File.separatorChar + "gradle" + File.separatorChar + "nonnull")
-
-            generateInfoFiles(sourceDir, mainSrcPhrase, project);
-            sourceDir.eachDirRecurse { dir ->
-                generateInfoFiles(dir, mainSrcPhrase, project)
-            }
-            if (project.file(testSourceDir).exists()) {
-                generateInfoFiles(testSourceDir, mainTestSrcPhrase, project);
-                testSourceDir.eachDirRecurse { dir ->
-                    generateInfoFiles(dir, mainTestSrcPhrase, project)
+            java.sourceFiles.visit { FileVisitDetails details ->
+                if (details.file.file) {
+                    //TODO respect multiple sourceDirs
+                    def packagePath = details.file.parent.replace((java.srcDirs as List)[0].absolutePath, '')
+                    packages << packagePath
                 }
             }
-            if (project.file(androidTestSourceDir).exists()) {
-                generateInfoFiles(androidTestSourceDir, mainAndroidTestSrcPhrase, project);
-                androidTestSourceDir.eachDirRecurse { dir ->
-                    generateInfoFiles(dir, mainAndroidTestSrcPhrase, project)
+
+            println(packages)
+
+            packages.any { packagePath ->
+                def dir = new File(outputDir, packagePath)
+                dir.mkdirs()
+
+                def file = new File(dir, "package-info.java")
+                if (file.createNewFile()) {
+                    file.append(getFileContentHeader())
+                    file.append(getFileContentPackage(packagePath))
+                    file.append(getFileContentFooter())
                 }
+
+                println(file.path)
             }
+
             println "[SUCCESS] NonNull generator: package-info.java files checked"
         }
     }
 
-    private static void generateInfoFiles(File dir, String mainSrcPhrase, project) {
-        def infoFileContentHeader = getFileContentHeader();
-        def infoFileContentFooter = getFileContentFooter();
-        def infoFilePath = dir.getAbsolutePath() + File.separatorChar + "package-info.java"
+    static def getFileContentPackage(String path) {
+        def packageName = path.replaceAll("/", ".").replaceFirst("\\.","")
 
-        //project.file(infoFilePath).delete(); //do not use in production code
-        if (!project.file(infoFilePath).exists()) {
-            def infoFileContentPackage = getFileContentPackage(dir.getAbsolutePath(), mainSrcPhrase);
-            new File(infoFilePath).write(infoFileContentHeader +
-                    infoFileContentPackage + infoFileContentFooter)
-            println "[dir] " + infoFilePath + "  created";
-        }
-    }
-
-    static def getFileContentPackage(String path, String mainSrcPhrase) {
-        def mainSrcPhraseIndex = path.indexOf(mainSrcPhrase)
-        def output = path.substring(mainSrcPhraseIndex)
-
-        // Win hotfix
-        if (System.properties['os.name'].toLowerCase().contains('windows')) {
-            output = output.replace("\\", "/")
-            mainSrcPhrase = mainSrcPhrase.replace("\\", "/")
-        }
-
-        return "package " + output.replaceAll(mainSrcPhrase, "").replaceAll(
-                "/", ".") + ";\n"
+        return "package $packageName;\n"
     }
 
     static def getFileContentHeader() {

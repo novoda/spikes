@@ -16,6 +16,8 @@ repositories {
 dependencies {
     compile gradleApi()
     testCompile 'junit:junit:4.12'
+    testCompile gradleTestKit()
+    testCompile 'com.google.truth:truth:0.30'
 }
 
 group = 'com.novoda'
