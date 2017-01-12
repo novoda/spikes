@@ -34,9 +34,11 @@ public class AndroidProjectIntegrationTest {
 
         @Override
         Statement apply(Statement base, Description description) {
-
-
             projectDir = new File('../sample')
+            generatedSrcDir = new File(projectDir, 'app/build/generated/source/nonNull/main/com/novoda/gradle/nonnull')
+
+            generatedSrcDir.deleteDir()
+
             buildResult = DefaultGradleRunner.create()
                     .withProjectDir(projectDir)
                     .withDebug(true)
@@ -44,7 +46,7 @@ public class AndroidProjectIntegrationTest {
                     .withArguments('assembleDebug')
                     .build()
 
-            generatedSrcDir = new File(projectDir, 'app/build/generated/source/nonNull/main/com/novoda/gradle/nonnull')
+
             return base;
         }
     }
