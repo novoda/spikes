@@ -17,20 +17,20 @@ public class AndroidProjectIntegrationTest {
 
     @Test
     public void shouldGeneratePackageAnnotation() {
-        def fileExists = new File(PROJECT.mainSrcDir, "package-info.java").isFile()
+        def fileExists = new File(PROJECT.generatedSrcDir, "package-info.java").isFile()
         assertThat(fileExists).isTrue()
     }
 
     @Test
     public void shouldHaveAnnotationDefined() {
-        def file = new File(PROJECT.mainSrcDir, "package-info.java")
+        def file = new File(PROJECT.generatedSrcDir, "package-info.java")
         assertThat(file.text).contains("@ParametersAreNonnullByDefault")
     }
 
     static class ProjectRule implements TestRule {
         File projectDir
         BuildResult buildResult
-        File mainSrcDir
+        File generatedSrcDir
 
         @Override
         Statement apply(Statement base, Description description) {
@@ -44,7 +44,7 @@ public class AndroidProjectIntegrationTest {
                     .withArguments('assembleDebug')
                     .build()
 
-            mainSrcDir = new File(projectDir, 'app/build/generated/source/nonNull/main/com/novoda/gradle/nonnull')
+            generatedSrcDir = new File(projectDir, 'app/build/generated/source/nonNull/main/com/novoda/gradle/nonnull')
             return base;
         }
     }
