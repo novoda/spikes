@@ -2,14 +2,16 @@ apply plugin: 'com.android.application'
 
 android {
   compileSdkVersion 25
-  buildToolsVersion "23.0.3"
+  buildToolsVersion '25.0.2'
+
   defaultConfig {
-    applicationId "com.novoda.monkeytrap"
+    applicationId 'com.novoda.monkeytrap'
     minSdkVersion 16
     targetSdkVersion 25
     versionCode 1
-    versionName "1.0"
+    versionName '1.0'
   }
+
   buildTypes {
     release {
       minifyEnabled false
