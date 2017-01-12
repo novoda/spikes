@@ -33,9 +33,7 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
 
             def file = new File(dir, "package-info.java")
             if (file.createNewFile()) {
-                file.append(getFileContentHeader())
-                file.append(getFileContentPackage(packagePath))
-                file.append(getFileContentFooter())
+                file.write(getFileContent(packagePath))
             }
 
             println(file.path)
@@ -44,14 +42,9 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
         println "[SUCCESS] NonNull generator: package-info.java files checked"
     }
 
-    static def getFileContentPackage(String path) {
+    static def getFileContent(String path) {
         def packageName = path.replaceAll("/", ".").replaceFirst("\\.", "")
-
-        return "package $packageName;\n"
-    }
-
-    static def getFileContentHeader() {
-        return '''  |/**
+        return """  |/**
                     | *
                     | * Make all method parameters @NonNull by default.
                     | *
@@ -71,12 +64,9 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
                     | *
                     | */
                     |@ParametersAreNonnullByDefault
-                    |'''.stripMargin('|')
+                    |package $packageName;
+                    |
+                    |import javax.annotation.ParametersAreNonnullByDefault;
+                    |""".stripMargin('|')
     }
-
-    static def getFileContentFooter() {
-        return "\n" +
-                "import javax.annotation.ParametersAreNonnullByDefault;\n"
-    }
-
 }
