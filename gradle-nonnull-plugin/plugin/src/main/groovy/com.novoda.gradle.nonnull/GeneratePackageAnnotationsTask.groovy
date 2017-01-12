@@ -12,19 +12,19 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
 
     @TaskAction
     void generatePackageAnnotations() {
-        group = "Copying"
         description = "Generate package-info.java classes"
 
-        Set<String> packages = []
-
         variant.sourceSets.any {
-            def java = it.java
+            Set<String> packages = []
 
-            java.sourceFiles.visit { FileVisitDetails details ->
-                if (details.file.file) {
-                    //TODO respect multiple sourceDirs
-                    def packagePath = details.file.parent.replace((java.srcDirs as List)[0].absolutePath, '')
-                    packages << packagePath
+            it.java.srcDirs.findAll {
+                it.exists()
+            }.any { srcDir ->
+                project.fileTree(srcDir).visit { FileVisitDetails details ->
+                    if (details.file.file) {
+                        def packagePath = details.file.parent.replace(srcDir.absolutePath, '')
+                        packages << packagePath
+                    }
                 }
             }
 
