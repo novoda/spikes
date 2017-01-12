@@ -12,11 +12,10 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
         }
 
         def task = project.task("generateNonNullAnnotations", type: GeneratePackageAnnotationsTask)
+        task.outputDir = project.file("${project.buildDir}/generated/source/nonNull/main")
 
-        project.afterEvaluate {
-            project.tasks["assembleDebug"].dependsOn task
+        project.android.applicationVariants.all { variant ->
+            variant.registerJavaGeneratingTask(task, task.outputDir)
         }
     }
-
-
 }

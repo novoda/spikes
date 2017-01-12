@@ -6,16 +6,14 @@ import org.gradle.api.tasks.TaskAction
 
 class GeneratePackageAnnotationsTask extends DefaultTask {
 
+    def outputDir
+
     @TaskAction
     void generatePackageAnnotations() {
         group = "Copying"
         description = "Generate package-info.java classes"
 
-        def outputDir = project.file("${project.buildDir}/generated/source/nonNull/main")
-
-
         def java = project.android.sourceSets.main.java
-
 
         Set<String> packages = []
 
