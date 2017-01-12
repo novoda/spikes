@@ -51,26 +51,27 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
     }
 
     static def getFileContentHeader() {
-        return "/**\n" +
-                " *\n" +
-                " * Make all method parameters @NonNull by default.\n" +
-                " *\n" +
-                " * We assume that all method parameters are NON-NULL by default.\n" +
-                " *\n" +
-                " * e.g.\n" +
-                " *\n" +
-                " * void setValue(String value) {\n" +
-                " *     this.value = value;\n" +
-                " * }\n" +
-                " *\n" +
-                " * is equal to:\n" +
-                " *\n" +
-                " * void setValue(@NonNull String value) {\n" +
-                " *     this.value = value;\n" +
-                " * }\n" +
-                " *\n" +
-                " */\n" +
-                "@ParametersAreNonnullByDefault\n"
+        return '''  |/**
+                    | *
+                    | * Make all method parameters @NonNull by default.
+                    | *
+                    | * We assume that all method parameters are NON-NULL by default.
+                    | *
+                    | * e.g.
+                    | *
+                    | * void setValue(String value) {
+                    | *     this.value = value;
+                    | * }
+                    | *
+                    | * is equal to:
+                    | *
+                    | * void setValue(@NonNull String value) {
+                    | *     this.value = value;
+                    | * }
+                    | *
+                    | */
+                    |@ParametersAreNonnullByDefault
+                    |'''.stripMargin('|')
     }
 
     static def getFileContentFooter() {
