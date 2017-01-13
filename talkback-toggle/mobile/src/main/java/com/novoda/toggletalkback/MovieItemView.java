@@ -53,12 +53,13 @@ public class MovieItemView extends RelativeLayout {
         this.listener = null;
     }
 
-    public void bind(final Movie movie) {
+    public void bind(Movie movie) {
         final Action actionClick = createActionClick(movie);
         final Action actionClickPlay = createActionClickPlay(movie);
         final Action actionClickFavorite = createActionClickFavorite(movie);
 
         nameTextView.setText(movie.name);
+
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
