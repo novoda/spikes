@@ -6,10 +6,11 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
 
         <activity android:name="com.novoda.toggletalkback.MyActivity" />
         <activity android:name="com.novoda.toggletalkback.MovieItemViewActivity" android:label="movie view">
