@@ -8,14 +8,22 @@ import butterknife.ButterKnife;
 
 public class MovieItemViewActivity extends AppCompatActivity {
 
+    private MovieItemView movieItemView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_item_view);
-        MovieItemView movieItemView = ButterKnife.findById(this, R.id.movie_item_view);
+        movieItemView = ButterKnife.findById(this, R.id.movie_item_view);
+
+        movieItemView.attachListener(createMovieListener());
+        movieItemView.bind(new Movie("Edward Scissorhands"));
+    }
+
+    private MovieItemView.Listener createMovieListener() {
         final TextView reactionTextView = ButterKnife.findById(this, R.id.reaction_text_view);
 
-        movieItemView.attachListener(new MovieItemView.Listener() {
+        return new MovieItemView.Listener() {
             @Override
             public void onClick(Movie movie) {
                 reactionTextView.setText("onClick " + movie.name);
@@ -30,9 +38,12 @@ public class MovieItemViewActivity extends AppCompatActivity {
             public void onClickFavorite(Movie movie) {
                 reactionTextView.setText("onClickFavorite " + movie.name);
             }
-        });
-
-        movieItemView.bind(new Movie("Edward Scissorhands"));
+        };
     }
 
+    @Override
+    protected void onDestroy() {
+        movieItemView.detachListeners();
+        super.onDestroy();
+    }
 }
