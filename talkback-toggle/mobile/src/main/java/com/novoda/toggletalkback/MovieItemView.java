@@ -6,10 +6,15 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.novoda.accessibility.AccessibilityServices;
+import com.novoda.accessibility.Action;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MovieItemView extends RelativeLayout {
+
+    private final AccessibilityServices a11yServices;
 
     @BindView(R.id.movie_item_button_play)
     View playButtonView;
@@ -24,6 +29,7 @@ public class MovieItemView extends RelativeLayout {
 
     public MovieItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        a11yServices = AccessibilityServices.newInstance(context);
     }
 
     @Override
@@ -42,11 +48,18 @@ public class MovieItemView extends RelativeLayout {
     }
 
     public void bind(final Movie movie) {
+        final Action movieClickAction = new Action(R.id.action_click_movie, R.string.action_click_movie, new Runnable() {
+            @Override
+            public void run() {
+                listener.onClick(movie);
+            }
+        });
+
         nameTextView.setText(movie.name);
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onClick(movie);
+                movieClickAction.run();
             }
         });
 
