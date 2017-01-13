@@ -23,8 +23,6 @@ android {
 }
 
 dependencies {
-    compile project(":core")
-
     def supportVersion = '25.1.0'
     compile "com.android.support:appcompat-v7:${supportVersion}"
     compile "com.android.support:support-v13:${supportVersion}"
