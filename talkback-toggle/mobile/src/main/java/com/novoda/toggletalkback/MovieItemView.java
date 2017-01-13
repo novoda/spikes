@@ -1,6 +1,7 @@
 package com.novoda.toggletalkback;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -8,6 +9,9 @@ import android.widget.TextView;
 
 import com.novoda.accessibility.AccessibilityServices;
 import com.novoda.accessibility.Action;
+import com.novoda.accessibility.Actions;
+
+import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,46 +52,58 @@ public class MovieItemView extends RelativeLayout {
     }
 
     public void bind(final Movie movie) {
-        final Action movieClickAction = new Action(R.id.action_click_movie, R.string.action_click_movie, new Runnable() {
-            @Override
-            public void run() {
-                listener.onClick(movie);
-            }
-        });
+        final Action actionClick = createActionClick(movie);
+        final Action actionClickPlay = createActionClickPlay(movie);
+        final Action actionClickFavorite = createActionClickFavorite(movie);
 
-        final Action movieClickPlayAction = new Action(R.id.action_click_play_movie, R.string.action_click_play_movie, new Runnable() {
-            @Override
-            public void run() {
-                listener.onClickPlay(movie);
-            }
-        });
-
-        final Action movieClickFavoriteAction = new Action(R.id.action_click_favorite_movie, R.string.action_click_favorite_movie, new Runnable() {
-            @Override
-            public void run() {
-                listener.onClickFavorite(movie);
-            }
-        });
+        Actions allActions = new Actions(Arrays.asList(actionClick, actionClickPlay, actionClickFavorite));
 
         nameTextView.setText(movie.name);
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                movieClickAction.run();
+                actionClick.run();
             }
         });
 
         playButtonView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                movieClickPlayAction.run();
+                actionClickPlay.run();
             }
         });
 
         favoriteButtonView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                movieClickFavoriteAction.run();
+                actionClickFavorite.run();
+            }
+        });
+    }
+
+    private Action createActionClickFavorite(final Movie movie) {
+        return new Action(R.id.action_click_favorite_movie, R.string.action_click_favorite_movie, new Runnable() {
+            @Override
+            public void run() {
+                listener.onClickFavorite(movie);
+            }
+        });
+    }
+
+    private Action createActionClickPlay(final Movie movie) {
+        return new Action(R.id.action_click_play_movie, R.string.action_click_play_movie, new Runnable() {
+            @Override
+            public void run() {
+                listener.onClickPlay(movie);
+            }
+        });
+    }
+
+    private Action createActionClick(final Movie movie) {
+        return new Action(R.id.action_click_movie, R.string.action_click_movie, new Runnable() {
+            @Override
+            public void run() {
+                listener.onClick(movie);
             }
         });
     }
