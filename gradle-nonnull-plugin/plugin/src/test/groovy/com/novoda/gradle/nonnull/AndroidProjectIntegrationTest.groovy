@@ -17,34 +17,43 @@ public class AndroidProjectIntegrationTest {
 
     @Test
     public void shouldGeneratePackageAnnotation() {
-        def fileExists = new File(PROJECT.generatedSrcDir, 'package-info.java').isFile()
-        assertThat(fileExists).isTrue()
+        PROJECT.generatedSrcDirs.each {
+            def file = new File(it, 'package-info.java')
+            assertThat(file.isFile()).isTrue()
+        }
     }
 
     @Test
     public void shouldHaveAnnotationDefined() {
-        def file = new File(PROJECT.generatedSrcDir, 'package-info.java')
-        assertThat(file.text).contains('@ParametersAreNonnullByDefault')
+        PROJECT.generatedSrcDirs.each {
+            def file = new File(it, 'package-info.java')
+            assertThat(file.text).contains('@ParametersAreNonnullByDefault')
+        }
     }
 
     static class ProjectRule implements TestRule {
         File projectDir
         BuildResult buildResult
-        File generatedSrcDir
+        Set<File> generatedSrcDirs
 
         @Override
         Statement apply(Statement base, Description description) {
             projectDir = new File('../sample')
-            generatedSrcDir = new File(projectDir, 'app/build/generated/source/nonNull/custom/debug/com/novoda/gradle/nonnull')
-
-            generatedSrcDir.deleteDir()
 
             buildResult = DefaultGradleRunner.create()
                     .withProjectDir(projectDir)
                     .withDebug(true)
                     .forwardStdOutput(new OutputStreamWriter(System.out))
-                    .withArguments('assembleCustomDebug')
+                    .withArguments('clean', 'assembleCustomDebug')
                     .build()
+
+            File generatedRoot = new File(projectDir, 'app/build/generated/source/nonNull/custom/debug')
+
+            generatedSrcDirs = [
+                    new File(generatedRoot, 'com/novoda/gradle/nonnull'),
+                    new File(generatedRoot, 'com/novoda/gradle/nonnull/custom'),
+                    new File(generatedRoot, 'com/novoda/gradle/common')
+            ]
 
             return base;
         }
