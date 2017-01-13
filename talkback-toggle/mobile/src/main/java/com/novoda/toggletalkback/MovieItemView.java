@@ -1,8 +1,8 @@
 package com.novoda.toggletalkback;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -12,6 +12,7 @@ import com.novoda.accessibility.AccessibilityServices;
 import com.novoda.accessibility.Action;
 import com.novoda.accessibility.Actions;
 import com.novoda.accessibility.ActionsAccessibilityDelegate;
+import com.novoda.accessibility.ActionsAlertDialogCreator;
 
 import java.util.Arrays;
 
@@ -21,6 +22,7 @@ import butterknife.ButterKnife;
 public class MovieItemView extends RelativeLayout {
 
     private final AccessibilityServices a11yServices;
+    private final ActionsAlertDialogCreator dialogCreator;
 
     @BindView(R.id.movie_item_button_play)
     View playButtonView;
@@ -36,6 +38,7 @@ public class MovieItemView extends RelativeLayout {
     public MovieItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
         a11yServices = AccessibilityServices.newInstance(context);
+        dialogCreator = new ActionsAlertDialogCreator(getContext());
     }
 
     @Override
@@ -60,13 +63,6 @@ public class MovieItemView extends RelativeLayout {
 
         nameTextView.setText(movie.name);
 
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                actionClick.run();
-            }
-        });
-
         playButtonView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,9 +77,21 @@ public class MovieItemView extends RelativeLayout {
             }
         });
 
-        Actions allActions = collateActions(actionClick, actionClickPlay, actionClickFavorite);
+        final Actions allActions = collateActions(actionClick, actionClickPlay, actionClickFavorite);
         ActionsAccessibilityDelegate accessibilityDelegate = new ActionsAccessibilityDelegate(getResources(), allActions);
         ViewCompat.setAccessibilityDelegate(this, accessibilityDelegate);
+
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (a11yServices.isSpokenFeedbackEnabled()) {
+                    AlertDialog alertDialog = dialogCreator.create(allActions);
+                    alertDialog.show();
+                } else {
+                    actionClick.run();
+                }
+            }
+        });
     }
 
     private Actions collateActions(Action... action) {
