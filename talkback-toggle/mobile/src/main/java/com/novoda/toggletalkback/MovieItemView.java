@@ -90,6 +90,7 @@ public class MovieItemView extends RelativeLayout {
 
         final Actions allActions = collateActions(actionClick, actionClickPlay, actionClickFavorite);
         ActionsAccessibilityDelegate accessibilityDelegate = new ActionsAccessibilityDelegate(getResources(), allActions);
+        accessibilityDelegate.setClickLabel("see actions");
         ViewCompat.setAccessibilityDelegate(this, accessibilityDelegate);
 
         setOnClickListener(new OnClickListener() {
