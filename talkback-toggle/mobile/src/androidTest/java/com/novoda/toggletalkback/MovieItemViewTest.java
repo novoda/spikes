@@ -16,7 +16,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class EspressoTest {
+public class MovieItemViewTest {
 
     @Rule
     public ActivityTestRule<MovieItemViewActivity> activityRule = new ActivityTestRule<>(MovieItemViewActivity.class);
