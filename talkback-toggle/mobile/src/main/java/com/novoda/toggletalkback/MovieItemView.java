@@ -56,7 +56,7 @@ public class MovieItemView extends RelativeLayout {
         final Action actionClickPlay = createActionClickPlay(movie);
         final Action actionClickFavorite = createActionClickFavorite(movie);
 
-        Actions allActions = new Actions(Arrays.asList(actionClick, actionClickPlay, actionClickFavorite));
+        Actions allActions = collateActions(actionClick, actionClickPlay, actionClickFavorite);
 
         nameTextView.setText(movie.name);
         setOnClickListener(new OnClickListener() {
@@ -79,6 +79,10 @@ public class MovieItemView extends RelativeLayout {
                 actionClickFavorite.run();
             }
         });
+    }
+
+    private Actions collateActions(Action... action) {
+        return new Actions(Arrays.asList(action));
     }
 
     private Action createActionClickFavorite(final Movie movie) {
