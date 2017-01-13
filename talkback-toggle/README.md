@@ -1,58 +1,68 @@
-talkback-toggle
-=============
+# talkback-toggle
+
 We want to be able to turn TalkBack on and off programmatically so we can run connected android tests on them without leaving devices in an inconsistent state.
 
-Try it out:
+Run the demo test suite on your device (or emulator) with these commands (TalkBack must be installed on the device first):
 
 ```bash
 ./gradlew assembleDebug; adb install mobile/build/outputs/apk/mobile-debug.apk; adb shell pm grant com.novoda.toggletalkback android.permission.WRITE_SECURE_SETTINGS; adb shell am start -a "com.novoda.toggletalkback.DISABLE_TALKBACK"; ./gradlew connectedDebugAndroidTest
 ```
 
-Compile the APK:
+## Individual steps
+
+### Compile APK
 
 ```bash
 ./gradlew assembleDebug;
 ```
 
-Install the APK:
+### Install APK
 
 ```bash
 adb install mobile/build/outputs/apk/mobile-debug.apk;
 ```
 
-Re-set the permission to allow the app to enable/disable TalkBack by writing to the secure settings:
+### Set permission
+
+After the app is installed, we need to set the permission to allow the app to write to secure settings. This is because accessibility services are turned on/off with flags in the secure settings.
 
 ```bash
 adb shell pm grant com.novoda.toggletalkback android.permission.WRITE_SECURE_SETTINGS;
 ```
 
-Disable TalkBack before we begin, in case we have tests for non-TalkBack stories in our suite. The TalkBackActivityTestRule ought to turn the service on/off for each test.
+### Disable TalkBack
+
+Although we'll be using the `TalkBackActivityTestRule` for test suites that require TalkBack enabled, we may have other tests (using `ActivityTestRule`) that relies on TalkBack _not_ being enabled. Since it makes more sense to use the default `ActivityTestRule` rather than creating `NoTalkBackActivityTestRule` for tests that don't include TalkBack, we will also disable TalkBack from adb before we begin the tests:
 
 ```bash
 adb shell am start -a "com.novoda.toggletalkback.DISABLE_TALKBACK"
 ```
 
-Run the connected tests:
+### Run the connected tests
 
 ```bash
 ./gradlew connectedDebugAndroidTest
 ```
 
-Disable TalkBack at the end, in case the tests crash, we don't want to leave TalkBack on for a test device
+### Disable TalkBack (again)
+
+Although our `TalkBackActivityTestRule` will disable TalkBack, the tests could crash, leaving TalkBack on. We should manually disable it in case it messes up test runs for other test suites running on the same device. The test rule is still useful so we can toggle it on and off between tests in our own test suite.
+
+
 ```bash
 adb shell am start -a "com.novoda.toggletalkback.DISABLE_TALKBACK"
 ```
 
 ---
 
-You can enable and disable TalkBack with the following actions:
+As you've read above, you can enable/disable TalkBack via adb with the following actions:
 
 ```bash
 $ adb shell am start -a "com.novoda.toggletalkback.ENABLE_TALKBACK"
 $ adb shell am start -a "com.novoda.toggletalkback.DISABLE_TALKBACK"
 ```
 
-or with an Intent, as is done in the `TalkBackActivityTestRule`:
+You can also do the same with an Intent, as is done in the `TalkBackActivityTestRule`:
 
 ```java
 Intent intent = new Intent("com.novoda.toggletalkback.ENABLE_TALKBACK")
