@@ -1,6 +1,7 @@
 package com.novoda.toggletalkback;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.AttributeSet;
@@ -63,19 +64,29 @@ public class MovieItemView extends RelativeLayout {
 
         nameTextView.setText(movie.name);
 
-        playButtonView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                actionClickPlay.run();
-            }
-        });
+        if (a11yServices.isSpokenFeedbackEnabled()) {
+            playButtonView.setOnClickListener(null);
+            playButtonView.setClickable(false);
+        } else {
+            playButtonView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    actionClickPlay.run();
+                }
+            });
+        }
 
-        favoriteButtonView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                actionClickFavorite.run();
-            }
-        });
+        if (a11yServices.isSpokenFeedbackEnabled()) {
+            favoriteButtonView.setOnClickListener(null);
+            favoriteButtonView.setClickable(false);
+        } else {
+            favoriteButtonView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    actionClickFavorite.run();
+                }
+            });
+        }
 
         final Actions allActions = collateActions(actionClick, actionClickPlay, actionClickFavorite);
         ActionsAccessibilityDelegate accessibilityDelegate = new ActionsAccessibilityDelegate(getResources(), allActions);
