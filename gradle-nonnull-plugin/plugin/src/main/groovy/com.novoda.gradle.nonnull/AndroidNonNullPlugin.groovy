@@ -25,7 +25,7 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
         variants.all { variant ->
 
             def task = project.task("generate${variant.name.capitalize()}NonNullAnnotations", type: GeneratePackageAnnotationsTask)
-            task.outputDir = project.file("${project.buildDir}/generated/source/nonNull/main")
+            task.outputDir = project.file("${project.buildDir}/generated/source/nonNull/${variant.dirName}")
             task.variant = variant
             variant.registerJavaGeneratingTask(task, task.outputDir)
         }

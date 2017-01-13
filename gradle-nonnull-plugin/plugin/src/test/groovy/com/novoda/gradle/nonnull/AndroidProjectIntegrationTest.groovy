@@ -17,14 +17,14 @@ public class AndroidProjectIntegrationTest {
 
     @Test
     public void shouldGeneratePackageAnnotation() {
-        def fileExists = new File(PROJECT.generatedSrcDir, "package-info.java").isFile()
+        def fileExists = new File(PROJECT.generatedSrcDir, 'package-info.java').isFile()
         assertThat(fileExists).isTrue()
     }
 
     @Test
     public void shouldHaveAnnotationDefined() {
-        def file = new File(PROJECT.generatedSrcDir, "package-info.java")
-        assertThat(file.text).contains("@ParametersAreNonnullByDefault")
+        def file = new File(PROJECT.generatedSrcDir, 'package-info.java')
+        assertThat(file.text).contains('@ParametersAreNonnullByDefault')
     }
 
     static class ProjectRule implements TestRule {
@@ -35,7 +35,7 @@ public class AndroidProjectIntegrationTest {
         @Override
         Statement apply(Statement base, Description description) {
             projectDir = new File('../sample')
-            generatedSrcDir = new File(projectDir, 'app/build/generated/source/nonNull/main/com/novoda/gradle/nonnull')
+            generatedSrcDir = new File(projectDir, 'app/build/generated/source/nonNull/custom/debug/com/novoda/gradle/nonnull')
 
             generatedSrcDir.deleteDir()
 
@@ -43,9 +43,8 @@ public class AndroidProjectIntegrationTest {
                     .withProjectDir(projectDir)
                     .withDebug(true)
                     .forwardStdOutput(new OutputStreamWriter(System.out))
-                    .withArguments('assembleDebug')
+                    .withArguments('assembleCustomDebug')
                     .build()
-
 
             return base;
         }

@@ -14,12 +14,13 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
     void generatePackageAnnotations() {
         description = "Generate package-info.java classes"
 
-        variant.sourceSets.any {
+        variant.sourceSets.each {
             Set<String> packages = []
 
             it.java.srcDirs.findAll {
                 it.exists()
-            }.any { srcDir ->
+            }.each { srcDir ->
+
                 project.fileTree(srcDir).visit { FileVisitDetails details ->
                     if (details.file.file) {
                         def packagePath = details.file.parent.replace(srcDir.absolutePath, '')
@@ -28,24 +29,20 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
                 }
             }
 
-            packages.any { packagePath ->
+            packages.each { packagePath ->
                 def dir = new File(outputDir, packagePath)
                 dir.mkdirs()
 
-                def file = new File(dir, "package-info.java")
+                def file = new File(dir, 'package-info.java')
                 if (file.createNewFile()) {
                     file.write(getFileContent(packagePath))
                 }
-
-                println(file.path)
             }
         }
-
-        println "[SUCCESS] NonNull generator: package-info.java files checked"
     }
 
     static def getFileContent(String path) {
-        def packageName = path.replaceAll("/", ".").replaceFirst("\\.", "")
+        def packageName = path.replaceFirst('/', '').replaceAll('/', '.')
         return """  |/**
                     | *
                     | * Make all method parameters @NonNull by default.
