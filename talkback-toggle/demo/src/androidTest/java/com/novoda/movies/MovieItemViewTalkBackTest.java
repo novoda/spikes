@@ -1,4 +1,4 @@
-package com.novoda.toggletalkback;
+package com.novoda.movies;
 
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;

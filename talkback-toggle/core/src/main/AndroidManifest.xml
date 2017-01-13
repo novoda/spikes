@@ -12,34 +12,26 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name="com.novoda.toggletalkback.MyActivity" />
-        <activity android:name="com.novoda.toggletalkback.MovieItemViewActivity" android:label="movie view">
+        <activity android:name="com.novoda.toggletalkback.MyActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity>>
+
         <activity android:name="com.novoda.toggletalkback.TalkBackStateSettingActivity">
+
             <intent-filter>
                 <action android:name="com.novoda.toggletalkback.ENABLE_TALKBACK" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
             <intent-filter>
                 <action android:name="com.novoda.toggletalkback.DISABLE_TALKBACK" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
         </activity>
-
-        <activity-alias
-            android:name="activity.primary_launcher"
-            android:targetActivity="com.novoda.toggletalkback.MyActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity-alias>
 
     </application>
 

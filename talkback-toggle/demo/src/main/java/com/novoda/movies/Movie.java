@@ -1,4 +1,4 @@
-package com.novoda.toggletalkback;
+package com.novoda.movies;
 
 public class Movie {
 

@@ -1,4 +1,4 @@
-package com.novoda.toggletalkback;
+package com.novoda.movies;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

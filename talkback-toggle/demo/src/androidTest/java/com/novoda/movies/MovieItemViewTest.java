@@ -1,4 +1,4 @@
-package com.novoda.toggletalkback;
+package com.novoda.movies;
 
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
@@ -16,34 +16,28 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class MovieItemViewTalkBackTest {
+public class MovieItemViewTest {
 
     @Rule
-    public ActivityTestRule<MovieItemViewActivity> activityRule = new TalkBackActivityTestRule<>(MovieItemViewActivity.class);
+    public ActivityTestRule<MovieItemViewActivity> activityRule = new ActivityTestRule<>(MovieItemViewActivity.class);
 
     @Test
-    public void clickMovieItemViewDialog_openDetails() {
+    public void clickMovieItemView() {
         onView(withId(R.id.movie_item_view)).perform(click());
-
-        onView(withText("Open details")).perform(click());
 
         checkReactionMatches("onClick Edward Scissorhands");
     }
 
     @Test
-    public void clickMovieItemViewDialog_favorite() {
-        onView(withId(R.id.movie_item_view)).perform(click());
-
-        onView(withText("Favorite")).perform(click());
+    public void clickMovieFavoriteView() {
+        onView(withId(R.id.movie_item_button_favorite)).perform(click());
 
         checkReactionMatches("onClickFavorite Edward Scissorhands");
     }
 
     @Test
-    public void clickMovieItemViewDialog_play() {
-        onView(withId(R.id.movie_item_view)).perform(click());
-
-        onView(withText("Play")).perform(click());
+    public void clickMoviePlayView() {
+        onView(withId(R.id.movie_item_button_play)).perform(click());
 
         checkReactionMatches("onClickPlay Edward Scissorhands");
     }
