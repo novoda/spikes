@@ -55,6 +55,13 @@ public class MovieItemView extends RelativeLayout {
             }
         });
 
+        final Action movieClickPlayAction = new Action(R.id.action_click_play_movie, R.string.action_click_play_movie, new Runnable() {
+            @Override
+            public void run() {
+                listener.onClickPlay(movie);
+            }
+        });
+
         nameTextView.setText(movie.name);
         setOnClickListener(new OnClickListener() {
             @Override
@@ -66,7 +73,7 @@ public class MovieItemView extends RelativeLayout {
         playButtonView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onClickPlay(movie);
+                movieClickPlayAction.run();
             }
         });
 

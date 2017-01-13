@@ -1,4 +1,5 @@
 <resources>
   <string name="app_name">TalkBack Toggle</string>
   <string name="action_click_movie">Open details</string>
+  <string name="action_click_play_movie">Play</string>
 </resources>
