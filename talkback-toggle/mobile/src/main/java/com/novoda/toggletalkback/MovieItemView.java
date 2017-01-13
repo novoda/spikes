@@ -2,6 +2,7 @@ package com.novoda.toggletalkback;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.novoda.accessibility.AccessibilityServices;
 import com.novoda.accessibility.Action;
 import com.novoda.accessibility.Actions;
+import com.novoda.accessibility.ActionsAccessibilityDelegate;
 
 import java.util.Arrays;
 
@@ -56,8 +58,6 @@ public class MovieItemView extends RelativeLayout {
         final Action actionClickPlay = createActionClickPlay(movie);
         final Action actionClickFavorite = createActionClickFavorite(movie);
 
-        Actions allActions = collateActions(actionClick, actionClickPlay, actionClickFavorite);
-
         nameTextView.setText(movie.name);
         setOnClickListener(new OnClickListener() {
             @Override
@@ -79,6 +79,10 @@ public class MovieItemView extends RelativeLayout {
                 actionClickFavorite.run();
             }
         });
+
+        Actions allActions = collateActions(actionClick, actionClickPlay, actionClickFavorite);
+        ActionsAccessibilityDelegate accessibilityDelegate = new ActionsAccessibilityDelegate(getResources(), allActions);
+        ViewCompat.setAccessibilityDelegate(this, accessibilityDelegate);
     }
 
     private Actions collateActions(Action... action) {
