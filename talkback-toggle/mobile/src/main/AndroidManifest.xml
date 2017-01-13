@@ -10,6 +10,12 @@
         android:theme="@style/AppTheme">
 
         <activity android:name="com.novoda.toggletalkback.MyActivity" />
+        <activity android:name="com.novoda.toggletalkback.MovieItemViewActivity" android:label="movie view">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name="com.novoda.toggletalkback.TalkBackStateSettingActivity">
             <intent-filter>
                 <action android:name="com.novoda.toggletalkback.ENABLE_TALKBACK" />

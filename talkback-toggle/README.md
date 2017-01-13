@@ -2,30 +2,59 @@ talkback-toggle
 =============
 We want to be able to turn TalkBack on and off programmatically so we can run connected android tests on them without leaving devices in an inconsistent state.
 
-You need to install the app, then enable the permission to write secure settings:
+Try it out:
 
 ```bash
-$ adb shell pm grant com.novoda.toggletalkback android.permission.WRITE_SECURE_SETTINGS
+./gradlew assembleDebug; adb install mobile/build/outputs/apk/mobile-debug.apk; adb shell pm grant com.novoda.toggletalkback android.permission.WRITE_SECURE_SETTINGS; adb shell am start -a "com.novoda.toggletalkback.DISABLE_TALKBACK"; ./gradlew connectedDebugAndroidTest
 ```
 
-Then you can enable and disable TalkBack with the following actions:
+Compile the APK:
+
+```bash
+./gradlew assembleDebug;
+```
+
+Install the APK:
+
+```bash
+adb install mobile/build/outputs/apk/mobile-debug.apk;
+```
+
+Re-set the permission to allow the app to enable/disable TalkBack by writing to the secure settings:
+
+```bash
+adb shell pm grant com.novoda.toggletalkback android.permission.WRITE_SECURE_SETTINGS;
+```
+
+Disable TalkBack before we begin, in case we have tests for non-TalkBack stories in our suite. The TalkBackActivityTestRule ought to turn the service on/off for each test.
+
+```bash
+adb shell am start -a "com.novoda.toggletalkback.DISABLE_TALKBACK"
+```
+
+Run the connected tests:
+
+```bash
+./gradlew connectedDebugAndroidTest
+```
+
+Disable TalkBack at the end, in case the tests crash, we don't want to leave TalkBack on for a test device
+```bash
+adb shell am start -a "com.novoda.toggletalkback.DISABLE_TALKBACK"
+```
+
+---
+
+You can enable and disable TalkBack with the following actions:
 
 ```bash
 $ adb shell am start -a "com.novoda.toggletalkback.ENABLE_TALKBACK"
 $ adb shell am start -a "com.novoda.toggletalkback.DISABLE_TALKBACK"
 ```
 
-DONE:
-- create debug app to toggle TalkBack with buttons in-app
-- test behaviour on non-rooted physical device (works!)
-- check behaviour on device without TalkBack, install TalkBack, see if wizard can be skipped if enabled programmatically.
-No luck, it opens the TalkBack tutorial but you can send the back key event via adb (`adb shell input keyevent 4`)
-- add adb actions to enable/disable TalkBack
+or with an Intent, as is done in the `TalkBackActivityTestRule`:
 
-TODO:
-- create espresso actions to simulate TalkBack gestures
-- create dummy espresso test showcasing TalkBack test
-- add script to install app, enable TalkBack, run tests, then disable TalkBack
-- modify script to revert TalkBack state to whatever it was before
-- modify settings edit so that only TalkBack is affected (other accessibility services do not change state)
-- modify script to install TalkBack apk if not present
+```java
+Intent intent = new Intent("com.novoda.toggletalkback.ENABLE_TALKBACK")
+context.startActivity(intent);
+```
