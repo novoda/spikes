@@ -1,5 +1,9 @@
 # talkback-toggle
 
+// these instructions are a little out of date..
+// basically, the espresso test demos are in the demo module, and everything else in core.
+// build core, install apk to device, set the permission, then run the espresso tests from demo
+
 We want to be able to turn TalkBack on and off programmatically so we can run connected android tests on them without leaving devices in an inconsistent state.
 
 Run the demo test suite on your device (or emulator) with these commands (TalkBack must be installed on the device first):
