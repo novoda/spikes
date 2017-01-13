@@ -15,6 +15,7 @@ import com.novoda.accessibility.ActionsAccessibilityDelegate;
 import com.novoda.accessibility.ActionsAlertDialogCreator;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -91,7 +92,21 @@ public class MovieItemView extends RelativeLayout {
         final Actions allActions = collateActions(actionClick, actionClickPlay, actionClickFavorite);
         ActionsAccessibilityDelegate accessibilityDelegate = new ActionsAccessibilityDelegate(getResources(), allActions);
         accessibilityDelegate.setClickLabel("see actions");
+        accessibilityDelegate.setLongClickLabel(getResources().getString(actionClick.getLabel()).toLowerCase(Locale.UK));
         ViewCompat.setAccessibilityDelegate(this, accessibilityDelegate);
+
+        if (a11yServices.isSpokenFeedbackEnabled()) {
+            setOnLongClickListener(new OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    actionClick.run();
+                    return true;
+                }
+            });
+        } else {
+            setOnClickListener(null);
+            setLongClickable(false);
+        }
 
         setOnClickListener(new OnClickListener() {
             @Override
