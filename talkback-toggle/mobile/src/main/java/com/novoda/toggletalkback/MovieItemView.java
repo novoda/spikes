@@ -62,6 +62,13 @@ public class MovieItemView extends RelativeLayout {
             }
         });
 
+        final Action movieClickFavoriteAction = new Action(R.id.action_click_favorite_movie, R.string.action_click_favorite_movie, new Runnable() {
+            @Override
+            public void run() {
+                listener.onClickFavorite(movie);
+            }
+        });
+
         nameTextView.setText(movie.name);
         setOnClickListener(new OnClickListener() {
             @Override
@@ -80,7 +87,7 @@ public class MovieItemView extends RelativeLayout {
         favoriteButtonView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onClickFavorite(movie);
+                movieClickFavoriteAction.run();
             }
         });
     }
