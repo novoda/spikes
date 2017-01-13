@@ -9,5 +9,12 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:background="@android:color/holo_purple" />
-    
+
+    <TextView
+        android:id="@+id/reaction_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:padding="16dp" />
+
 </merge>
