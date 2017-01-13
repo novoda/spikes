@@ -44,15 +44,17 @@ public class AndroidProjectIntegrationTest {
                     .withProjectDir(projectDir)
                     .withDebug(true)
                     .forwardStdOutput(new OutputStreamWriter(System.out))
-                    .withArguments('clean', 'assembleCustomDebug')
+                    .withArguments('clean', 'assembleCustomDebug', 'core:assemble')
                     .build()
 
-            File generatedRoot = new File(projectDir, 'app/build/generated/source/nonNull/custom/debug')
+            File generatedAppRoot = new File(projectDir, 'app/build/generated/source/nonNull/custom/debug')
+            File generatedCoreRoot = new File(projectDir, 'core/build/generated/source/nonNull/main')
 
             generatedSrcDirs = [
-                    new File(generatedRoot, 'com/novoda/gradle/nonnull'),
-                    new File(generatedRoot, 'com/novoda/gradle/nonnull/custom'),
-                    new File(generatedRoot, 'com/novoda/gradle/common')
+                    new File(generatedAppRoot, 'com/novoda/gradle/nonnull'),
+                    new File(generatedAppRoot, 'com/novoda/gradle/nonnull/custom'),
+                    new File(generatedAppRoot, 'com/novoda/gradle/common'),
+                    new File(generatedCoreRoot, 'com/novoda/gradle/nonnull')
             ]
 
             return base;
