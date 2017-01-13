@@ -9,5 +9,12 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // this should result in a warning in the IDEA
+        setValue(null);
+    }
+
+    private void setValue(Object value){
+        // no-op
     }
 }
