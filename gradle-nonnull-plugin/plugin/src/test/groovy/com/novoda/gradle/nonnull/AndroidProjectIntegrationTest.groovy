@@ -42,10 +42,10 @@ public class AndroidProjectIntegrationTest {
                 .forProjectDirectory(PROJECT.projectDir)
                 .connect()
 
-        def ideaModule = connection.getModel(IdeaProject).modules[1]
+        def coreModule = connection.getModel(IdeaProject).modules[1]
 
-        assertThat(generatedSourceDirectories(ideaModule)).contains(projectFilePath('core/build/generated/source/nonNull/main'))
-        assertThat(excludedDirectories(ideaModule)).doesNotContain(projectFilePath('core/build'))
+        assertThat(generatedSourceDirectories(coreModule)).contains(projectFilePath('core/build/generated/source/nonNull/main'))
+        assertThat(excludedDirectories(coreModule)).doesNotContain(projectFilePath('core/build'))
     }
 
     private static String projectFilePath(String path) {
