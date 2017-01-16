@@ -49,6 +49,11 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
     }
 
     private static void applyJava(project) {
+        configureTask(project)
+        configureIdeaModule(project)
+    }
+
+    private static void configureTask(project) {
         project.sourceSets.all { sourceSet ->
             String sourceSetName = (String) sourceSet.name
             String taskName = "main".equals(sourceSetName) ? '' : sourceSetName
@@ -65,9 +70,9 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
             compileTask.dependsOn(task)
 
         }
-        configureIdeaModule(project)
     }
 
+    // inspired by https://github.com/tbroyer/gradle-apt-plugin/blob/master/src/main/groovy/net/ltgt/gradle/apt/AptPlugin.groovy#L171-L213
     private static void configureIdeaModule(Project project) {
         // so the user does not need to apply it when using the plugin
         project.apply plugin: 'idea'
@@ -77,12 +82,9 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
             project.plugins.withType(IdeaPlugin) {
                 project.afterEvaluate {
                     project.idea.module {
-                        def excl = []
-                        for (File f = generatedSourcesDir; f != null && f != project.projectDir; f = f.parentFile) {
-                            excl.add(f)
-                        }
+                        def ancestors = getAncestors(generatedSourcesDir, project.projectDir)
 
-                        if (excl.contains(project.buildDir) && excludeDirs.contains(project.buildDir)) {
+                        if (ancestors.contains(project.buildDir) && excludeDirs.contains(project.buildDir)) {
                             excludeDirs -= project.buildDir
                             // Race condition: many of these will actually be created afterwards…
                             def subdirs = project.buildDir.listFiles({ f -> f.directory } as FileFilter)
@@ -90,7 +92,7 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
                                 excludeDirs += subdirs as List
                             }
                         }
-                        excludeDirs -= excl
+                        excludeDirs -= ancestors
 
                         sourceDirs += generatedSourcesDir
                         generatedSourceDirs += generatedSourcesDir
@@ -99,5 +101,13 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
             }
         }
 
+    }
+
+    private static List getAncestors(dir, rootDir) {
+        def ancestors = []
+        for (File f = dir; f != null && f != rootDir; f = f.parentFile) {
+            ancestors.add(f)
+        }
+        ancestors
     }
 }
