@@ -4,6 +4,7 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.internal.DefaultGradleRunner
 import org.gradle.tooling.ProjectConnection
 import org.gradle.tooling.GradleConnector
+import org.gradle.tooling.model.idea.IdeaModule
 import org.gradle.tooling.model.idea.IdeaProject
 import org.junit.ClassRule
 import org.junit.Test
@@ -43,10 +44,20 @@ public class AndroidProjectIntegrationTest {
 
         def ideaModule = connection.getModel(IdeaProject).modules[1]
 
-        assertThat(ideaModule.contentRoots*.generatedSourceDirectories*.directory.canonicalPath.flatten())
-                .contains(new File(PROJECT.projectDir, 'core/build/generated/source/nonNull/main').canonicalPath)
-        assertThat(ideaModule.contentRoots*.excludeDirectories*.canonicalPath.flatten())
-                .doesNotContain(new File(PROJECT.projectDir, 'core/build').canonicalPath)
+        assertThat(generatedSourceDirectories(ideaModule)).contains(projectFilePath('core/build/generated/source/nonNull/main'))
+        assertThat(excludedDirectories(ideaModule)).doesNotContain(projectFilePath('core/build'))
+    }
+
+    private static String projectFilePath(String path) {
+        new File(PROJECT.projectDir, path).canonicalPath
+    }
+
+    private static Set<?> generatedSourceDirectories(IdeaModule ideaModule) {
+        ideaModule.contentRoots*.generatedSourceDirectories*.directory.canonicalPath.flatten()
+    }
+
+    private static Set<?> excludedDirectories(IdeaModule ideaModule) {
+        ideaModule.contentRoots*.excludeDirectories*.canonicalPath.flatten()
     }
 
     static class ProjectRule implements TestRule {
