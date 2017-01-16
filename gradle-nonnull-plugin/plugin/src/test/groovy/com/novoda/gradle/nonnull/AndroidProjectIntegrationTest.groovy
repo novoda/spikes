@@ -2,11 +2,15 @@ package com.novoda.gradle.nonnull
 
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.internal.DefaultGradleRunner
+import org.gradle.tooling.ProjectConnection
+import org.gradle.tooling.GradleConnector
+import org.gradle.tooling.model.idea.IdeaProject
 import org.junit.ClassRule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
+
 
 import static com.google.common.truth.Truth.assertThat
 
@@ -31,6 +35,20 @@ public class AndroidProjectIntegrationTest {
         }
     }
 
+    @Test
+    public void shouldConfigureIdeaModuleToMarkGeneratedFolderAsSource() {
+        ProjectConnection connection = GradleConnector.newConnector()
+                .forProjectDirectory(PROJECT.projectDir)
+                .connect()
+
+        def ideaModule = connection.getModel(IdeaProject).modules[1]
+
+        assertThat(ideaModule.contentRoots*.generatedSourceDirectories*.directory.canonicalPath.flatten())
+                .contains(new File(PROJECT.projectDir, 'core/build/generated/source/nonNull/main').canonicalPath)
+        assertThat(ideaModule.contentRoots*.excludeDirectories*.canonicalPath.flatten())
+                .doesNotContain(new File(PROJECT.projectDir, 'build').canonicalPath)
+    }
+
     static class ProjectRule implements TestRule {
         File projectDir
         BuildResult buildResult
@@ -44,7 +62,7 @@ public class AndroidProjectIntegrationTest {
                     .withProjectDir(projectDir)
                     .withDebug(true)
                     .forwardStdOutput(new OutputStreamWriter(System.out))
-                    .withArguments('clean', 'assembleCustomDebug', 'core:assemble')
+                    .withArguments('clean', 'assembleCustomDebug', 'core:assemble', '-s')
                     .build()
 
             File generatedAppRoot = new File(projectDir, 'app/build/generated/source/nonNull/custom/debug')
@@ -54,7 +72,7 @@ public class AndroidProjectIntegrationTest {
                     new File(generatedAppRoot, 'com/novoda/gradle/nonnull'),
                     new File(generatedAppRoot, 'com/novoda/gradle/nonnull/custom'),
                     new File(generatedAppRoot, 'com/novoda/gradle/common'),
-                    new File(generatedCoreRoot, 'com/novoda/gradle/nonnull')
+                    new File(generatedCoreRoot, 'com/novoda/gradle/nonnull/core')
             ]
 
             return base;
