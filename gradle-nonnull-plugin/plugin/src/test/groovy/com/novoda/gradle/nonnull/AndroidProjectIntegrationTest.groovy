@@ -46,7 +46,7 @@ public class AndroidProjectIntegrationTest {
         assertThat(ideaModule.contentRoots*.generatedSourceDirectories*.directory.canonicalPath.flatten())
                 .contains(new File(PROJECT.projectDir, 'core/build/generated/source/nonNull/main').canonicalPath)
         assertThat(ideaModule.contentRoots*.excludeDirectories*.canonicalPath.flatten())
-                .doesNotContain(new File(PROJECT.projectDir, 'build').canonicalPath)
+                .doesNotContain(new File(PROJECT.projectDir, 'core/build').canonicalPath)
     }
 
     static class ProjectRule implements TestRule {
