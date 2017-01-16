@@ -1,3 +1,5 @@
+Mirror of https://github.com/xrigau/androidthings-ws2801-driver
+
 androidthings-ws2801-driver
 ---------------------------
 
