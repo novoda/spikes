@@ -64,34 +64,40 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
             compileTask.source += project.fileTree(task.outputDir)
             compileTask.dependsOn(task)
 
-            configureIdeaModule(project, generatedSourcesDir)
         }
+        configureIdeaModule(project)
     }
 
-    private static void configureIdeaModule(Project project, generatedSourcesDirPath) {
-        def generatedSourcesDir = new File(generatedSourcesDirPath)
-        project.plugins.withType(IdeaPlugin) {
-            project.afterEvaluate {
-                project.idea.module {
-                    def excl = []
-                    for (File f = generatedSourcesDir; f != null && f != project.projectDir; f = f.parentFile) {
-                        excl.add(f)
-                    }
+    private static void configureIdeaModule(Project project) {
+        // so the user does not need to apply it when using the plugin
+        project.apply plugin: 'idea'
 
-                    if (excl.contains(project.buildDir) && excludeDirs.contains(project.buildDir)) {
-                        excludeDirs -= project.buildDir
-                        // Race condition: many of these will actually be created afterwards…
-                        def subdirs = project.buildDir.listFiles({ f -> f.directory } as FileFilter)
-                        if (subdirs != null) {
-                            excludeDirs += subdirs as List
+        project.sourceSets.all { sourceSet ->
+            def generatedSourcesDir = new File("${project.buildDir}/generated/source/nonNull/${sourceSet.name}")
+            project.plugins.withType(IdeaPlugin) {
+                project.afterEvaluate {
+                    project.idea.module {
+                        def excl = []
+                        for (File f = generatedSourcesDir; f != null && f != project.projectDir; f = f.parentFile) {
+                            excl.add(f)
                         }
-                    }
-                    excludeDirs -= excl
 
-                    sourceDirs += generatedSourcesDir
-                    generatedSourceDirs += generatedSourcesDir
+                        if (excl.contains(project.buildDir) && excludeDirs.contains(project.buildDir)) {
+                            excludeDirs -= project.buildDir
+                            // Race condition: many of these will actually be created afterwards…
+                            def subdirs = project.buildDir.listFiles({ f -> f.directory } as FileFilter)
+                            if (subdirs != null) {
+                                excludeDirs += subdirs as List
+                            }
+                        }
+                        excludeDirs -= excl
+
+                        sourceDirs += generatedSourcesDir
+                        generatedSourceDirs += generatedSourcesDir
+                    }
                 }
             }
         }
+
     }
 }
