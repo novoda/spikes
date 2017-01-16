@@ -1,0 +1,25 @@
+apply plugin: 'com.android.application'
+
+android {
+  compileSdkVersion 24
+  buildToolsVersion "24.0.3"
+
+  defaultConfig {
+    applicationId "com.xavirigau.ledcontroller"
+    minSdkVersion 24
+    targetSdkVersion 24
+    versionCode 1
+    versionName "1.0"
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+}
+
+dependencies {
+  provided 'com.google.android.things:androidthings:0.1-devpreview'
+  compile project(':ws2801-driver')
+}
