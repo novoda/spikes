@@ -12,7 +12,7 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
 
     @TaskAction
     void generatePackageAnnotations() {
-        description = "Generate package-info.java classes"
+        description = "Annotates the source packages with @ParametersAreNonnullByDefault"
 
         variant.sourceSets.each {
             Set<String> packages = []
