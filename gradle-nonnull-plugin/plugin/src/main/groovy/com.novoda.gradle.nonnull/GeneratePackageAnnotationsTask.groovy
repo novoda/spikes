@@ -35,37 +35,37 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
 
                 def file = new File(dir, 'package-info.java')
                 if (file.createNewFile()) {
-                    file.write(getFileContent(packagePath))
+                    def packageName = packagePath.replaceFirst('/', '').replaceAll('/', '.')
+                    file.write(createAnnotationDefinition(packageName))
                 }
             }
         }
     }
 
-    static def getFileContent(String path) {
-        def packageName = path.replaceFirst('/', '').replaceAll('/', '.')
-        return """  |/**
-                    | *
-                    | * Make all method parameters @NonNull by default.
-                    | *
-                    | * We assume that all method parameters are NON-NULL by default.
-                    | *
-                    | * e.g.
-                    | *
-                    | * void setValue(String value) {
-                    | *     this.value = value;
-                    | * }
-                    | *
-                    | * is equal to:
-                    | *
-                    | * void setValue(@NonNull String value) {
-                    | *     this.value = value;
-                    | * }
-                    | *
-                    | */
-                    |@ParametersAreNonnullByDefault
-                    |package $packageName;
-                    |
-                    |import javax.annotation.ParametersAreNonnullByDefault;
-                    |""".stripMargin('|')
+    static def createAnnotationDefinition(packageName) {
+        """ |/**
+            | *
+            | * Make all method parameters @NonNull by default.
+            | *
+            | * We assume that all method parameters are NON-NULL by default.
+            | *
+            | * e.g.
+            | *
+            | * void setValue(String value) {
+            | *     this.value = value;
+            | * }
+            | *
+            | * is equal to:
+            | *
+            | * void setValue(@NonNull String value) {
+            | *     this.value = value;
+            | * }
+            | *
+            | */
+            |@ParametersAreNonnullByDefault
+            |package ${packageName};
+            |
+            |import javax.annotation.ParametersAreNonnullByDefault;
+            |""".stripMargin('|')
     }
 }
