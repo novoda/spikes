@@ -6,7 +6,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.novoda.toggletalkback"
+        applicationId "com.novoda.movies"
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
