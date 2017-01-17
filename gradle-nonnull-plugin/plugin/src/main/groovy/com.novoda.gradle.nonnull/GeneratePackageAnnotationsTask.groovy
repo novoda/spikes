@@ -28,7 +28,7 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
 
             def file = new File(dir, 'package-info.java')
             if (file.createNewFile()) {
-                def packageName = packagePath.replaceFirst('/', '').replaceAll('/', '.')
+                def packageName = packagePath.replaceAll('/', '.')
                 file.write(createAnnotationDefinition(packageName))
             }
         }
@@ -41,11 +41,11 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
         sourceSets.each { sourceSet ->
             sourceSet.java.srcDirs.findAll {
                 it.exists()
-            }.each { srcDir ->
+            }.each { File srcDir ->
 
                 project.fileTree(srcDir).visit { FileVisitDetails details ->
                     if (details.file.file) {
-                        def packagePath = details.file.parent.replace(srcDir.absolutePath, '')
+                        def packagePath = srcDir.toPath().relativize(details.file.parentFile.toPath()).toString()
                         packages << packagePath
                     }
                 }
