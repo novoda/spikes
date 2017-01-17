@@ -13,10 +13,24 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
     void generatePackageAnnotations() {
         description = "Annotates the source packages with @ParametersAreNonnullByDefault"
 
-        sourceSets.each {
-            Set<String> packages = []
+        Set<String> packages = packages()
+        packages.each { packagePath ->
+            def dir = new File(outputDir, packagePath)
+            dir.mkdirs()
 
-            it.java.srcDirs.findAll {
+            def file = new File(dir, 'package-info.java')
+            if (file.createNewFile()) {
+                def packageName = packagePath.replaceFirst('/', '').replaceAll('/', '.')
+                file.write(createAnnotationDefinition(packageName))
+            }
+        }
+    }
+
+    Set<String> packages() {
+        Set<String> packages = []
+
+        sourceSets.each { sourceSet ->
+            sourceSet.java.srcDirs.findAll {
                 it.exists()
             }.each { srcDir ->
 
@@ -27,18 +41,8 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
                     }
                 }
             }
-
-            packages.each { packagePath ->
-                def dir = new File(outputDir, packagePath)
-                dir.mkdirs()
-
-                def file = new File(dir, 'package-info.java')
-                if (file.createNewFile()) {
-                    def packageName = packagePath.replaceFirst('/', '').replaceAll('/', '.')
-                    file.write(createAnnotationDefinition(packageName))
-                }
-            }
         }
+        packages
     }
 
     static def createAnnotationDefinition(packageName) {
