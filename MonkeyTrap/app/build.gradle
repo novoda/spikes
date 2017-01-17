@@ -7,15 +7,8 @@ android {
   defaultConfig {
     applicationId 'com.novoda.monkeytrap'
     minSdkVersion 16
-    targetSdkVersion 25
+    targetSdkVersion 22 // Keep as is so that we don't have permission problems
     versionCode 1
     versionName '1.0'
-  }
-
-  buildTypes {
-    release {
-      minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-    }
   }
 }
