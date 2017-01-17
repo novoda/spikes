@@ -10,15 +10,11 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
 
         if (project.plugins.hasPlugin("com.android.application")) {
             applyAndroid(project, project.android.applicationVariants)
-            return
-        }
-
-        if (project.plugins.hasPlugin("com.android.library")) {
+        } else if (project.plugins.hasPlugin("com.android.library")) {
             applyAndroid(project, project.android.libraryVariants)
-            return
+        } else {
+            throw new StopExecutionException("The 'android' plugin is required.")
         }
-
-        throw new StopExecutionException("The 'android' plugin is required.")
     }
 
     private static void applyAndroid(project, variants) {
