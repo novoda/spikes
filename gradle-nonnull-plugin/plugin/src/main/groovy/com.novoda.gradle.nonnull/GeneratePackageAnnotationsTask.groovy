@@ -3,39 +3,44 @@ package com.novoda.gradle.nonnull
 import groovy.transform.Memoized
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileVisitDetails
-import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.incremental.IncrementalTaskInputs
 
 class GeneratePackageAnnotationsTask extends DefaultTask {
 
-    @Input
-    Set<String> packages;
+    @InputFiles
+    Set<File> packages;
 
     @OutputDirectory
-    def outputDir
+    File outputDir
 
     def sourceSets
 
     @TaskAction
-    void generatePackageAnnotations() {
+    void generatePackageAnnotations(IncrementalTaskInputs inputs) {
         description = "Annotates the source packages with @ParametersAreNonnullByDefault"
 
-        Set<String> packages = getPackages()
-        packages.each { packagePath ->
-            def dir = new File(outputDir, packagePath)
-            dir.mkdirs()
+        inputs.outOfDate { change ->
+            def dir = change.file
+            if (!dir.exists() || dir.directory) {
+                dir.mkdirs()
 
-            def file = new File(dir, 'package-info.java')
-            if (file.createNewFile()) {
-                def packageName = packagePath.replaceFirst('/', '').replaceAll('/', '.')
+                def file = new File(dir, 'package-info.java')
+                def packagePath = outputDir.toPath().relativize(dir.toPath()).toString()
+                def packageName = packagePath.replaceAll('/', '.')
                 file.write(createAnnotationDefinition(packageName))
             }
+        }
+
+        inputs.removed { change ->
+            project.delete(change.file)
         }
     }
 
     @Memoized
-    Set<String> getPackages() {
+    Set<File> getPackages() {
         Set<String> packages = []
 
         sourceSets.each { sourceSet ->
@@ -46,7 +51,7 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
                 project.fileTree(srcDir).visit { FileVisitDetails details ->
                     if (details.file.file) {
                         def packagePath = details.file.parent.replace(srcDir.absolutePath, '')
-                        packages << packagePath
+                        packages << new File(outputDir, packagePath)
                     }
                 }
             }
