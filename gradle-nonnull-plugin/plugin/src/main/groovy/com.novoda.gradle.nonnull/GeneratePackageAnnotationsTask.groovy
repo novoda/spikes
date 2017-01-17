@@ -1,19 +1,27 @@
 package com.novoda.gradle.nonnull
 
+import groovy.transform.Memoized
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileVisitDetails
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 
 class GeneratePackageAnnotationsTask extends DefaultTask {
 
+    @Input
+    Set<String> packages;
+
+    @OutputDirectory
     def outputDir
+
     def sourceSets
 
     @TaskAction
     void generatePackageAnnotations() {
         description = "Annotates the source packages with @ParametersAreNonnullByDefault"
 
-        Set<String> packages = packages()
+        Set<String> packages = getPackages()
         packages.each { packagePath ->
             def dir = new File(outputDir, packagePath)
             dir.mkdirs()
@@ -26,7 +34,8 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
         }
     }
 
-    Set<String> packages() {
+    @Memoized
+    Set<String> getPackages() {
         Set<String> packages = []
 
         sourceSets.each { sourceSet ->

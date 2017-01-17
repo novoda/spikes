@@ -1,9 +1,10 @@
 package com.novoda.gradle.nonnull
 
-import org.gradle.testkit.runner.BuildResult
+import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.testkit.runner.internal.DefaultGradleRunner
-import org.gradle.tooling.ProjectConnection
 import org.gradle.tooling.GradleConnector
+import org.gradle.tooling.ProjectConnection
 import org.gradle.tooling.model.idea.IdeaModule
 import org.gradle.tooling.model.idea.IdeaProject
 import org.junit.ClassRule
@@ -11,7 +12,6 @@ import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
-
 
 import static com.google.common.truth.Truth.assertThat
 
@@ -48,6 +48,14 @@ public class AndroidProjectIntegrationTest {
         assertThat(excludedDirectories(coreModule)).doesNotContain(projectFilePath('core/build'))
     }
 
+    @Test
+    public void shouldNotRunTaskWhenInputHasNotChanged() {
+        def buildResult = PROJECT.runner.withArguments('core:assemble').build()
+        def task = buildResult.task(':core:generateNonNullAnnotations')
+
+        assertThat(task.outcome).isEqualTo(TaskOutcome.UP_TO_DATE)
+    }
+
     private static String projectFilePath(String path) {
         new File(PROJECT.projectDir, path).canonicalPath
     }
@@ -62,19 +70,19 @@ public class AndroidProjectIntegrationTest {
 
     static class ProjectRule implements TestRule {
         File projectDir
-        BuildResult buildResult
         Set<File> generatedSrcDirs
+        GradleRunner runner
 
         @Override
         Statement apply(Statement base, Description description) {
             projectDir = new File('../sample')
 
-            buildResult = DefaultGradleRunner.create()
+            runner = DefaultGradleRunner.create()
                     .withProjectDir(projectDir)
                     .withDebug(true)
                     .forwardStdOutput(new OutputStreamWriter(System.out))
                     .withArguments('clean', 'assembleCustomDebug', 'core:assemble', '-s')
-                    .build()
+            runner.build()
 
             File generatedAppRoot = new File(projectDir, 'app/build/generated/source/nonNull/custom/debug')
             File generatedCoreRoot = new File(projectDir, 'core/build/generated/source/nonNull/main')
