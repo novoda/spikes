@@ -75,9 +75,9 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
                         if (ancestors.contains(project.buildDir) && excludeDirs.contains(project.buildDir)) {
                             excludeDirs -= project.buildDir
                             // Race condition: many of these will actually be created afterwards…
-                            def subdirs = project.buildDir.listFiles({ f -> f.directory } as FileFilter)
-                            if (subdirs != null) {
-                                excludeDirs += subdirs as List
+                            def subDirs = project.buildDir.listFiles({ f -> f.directory } as FileFilter)
+                            if (subDirs != null) {
+                                excludeDirs += subDirs as List
                             }
                         }
                         excludeDirs -= ancestors
