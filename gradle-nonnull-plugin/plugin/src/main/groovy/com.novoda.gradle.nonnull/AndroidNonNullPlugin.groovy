@@ -56,8 +56,7 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
             Task classesTask = project.tasks.getByName(taskName.isEmpty() ? "classes" : "${taskName}Classes")
             classesTask.mustRunAfter task
 
-            JavaCompile compileTask =
-                    (JavaCompile) project.tasks.getByName("compile${taskName.capitalize()}Java")
+            JavaCompile compileTask = (JavaCompile) project.tasks.getByName("compile${taskName.capitalize()}Java")
             compileTask.source += project.fileTree(task.outputDir)
             compileTask.dependsOn(task)
 
