@@ -5,6 +5,7 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.tasks.StopExecutionException
 import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.plugins.ide.idea.IdeaPlugin
 
 public class AndroidNonNullPlugin implements Plugin<Project> {
 
@@ -63,28 +64,27 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
 
     // inspired by https://github.com/tbroyer/gradle-apt-plugin/blob/master/src/main/groovy/net/ltgt/gradle/apt/AptPlugin.groovy#L171-L213
     private static void configureIdeaModule(Project project) {
-        // so the user does not need to apply it when using the plugin
-        project.apply plugin: 'idea'
-
         project.sourceSets.all { sourceSet ->
             def generatedSourcesDir = new File("${project.buildDir}/generated/source/nonNull/${sourceSet.name}")
 
-            project.afterEvaluate {
-                project.idea.module {
-                    def ancestors = getAncestors(generatedSourcesDir, project.projectDir)
+            project.plugins.withType(IdeaPlugin) {
+                project.afterEvaluate {
+                    project.idea.module {
+                        def ancestors = getAncestors(generatedSourcesDir, project.projectDir)
 
-                    if (ancestors.contains(project.buildDir) && excludeDirs.contains(project.buildDir)) {
-                        excludeDirs -= project.buildDir
-                        // Race condition: many of these will actually be created afterwards…
-                        def subdirs = project.buildDir.listFiles({ f -> f.directory } as FileFilter)
-                        if (subdirs != null) {
-                            excludeDirs += subdirs as List
+                        if (ancestors.contains(project.buildDir) && excludeDirs.contains(project.buildDir)) {
+                            excludeDirs -= project.buildDir
+                            // Race condition: many of these will actually be created afterwards…
+                            def subdirs = project.buildDir.listFiles({ f -> f.directory } as FileFilter)
+                            if (subdirs != null) {
+                                excludeDirs += subdirs as List
+                            }
                         }
-                    }
-                    excludeDirs -= ancestors
+                        excludeDirs -= ancestors
 
-                    sourceDirs += generatedSourcesDir
-                    generatedSourceDirs += generatedSourcesDir
+                        sourceDirs += generatedSourcesDir
+                        generatedSourceDirs += generatedSourcesDir
+                    }
                 }
             }
         }
