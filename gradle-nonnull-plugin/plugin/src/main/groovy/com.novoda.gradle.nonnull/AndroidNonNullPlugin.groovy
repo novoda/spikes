@@ -32,9 +32,9 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
     }
 
     private static createTask(project, taskName, outputPath, sourceSets) {
-        project.task("generate${taskName.capitalize()}NonNullAnnotations", type: GeneratePackageAnnotationsTask) {
-            outputDir = project.file(outputPath)
-            sourceSets = owner.sourceSets
+        project.task("generate${taskName.capitalize()}NonNullAnnotations", type: GeneratePackageAnnotationsTask) { task ->
+            task.outputDir = project.file(outputPath)
+            task.sourceSets = sourceSets
         }
     }
 
