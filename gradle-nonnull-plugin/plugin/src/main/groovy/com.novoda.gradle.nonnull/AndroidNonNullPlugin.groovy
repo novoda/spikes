@@ -12,12 +12,12 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
 
         if (project.plugins.hasPlugin('com.android.application')) {
             applyAndroid(project, project.android.applicationVariants)
-        } else if (project.plugins.hasPlugin("com.android.library")) {
+        } else if (project.plugins.hasPlugin('com.android.library')) {
             applyAndroid(project, project.android.libraryVariants)
         } else if (project.plugins.hasPlugin('java')) {
             applyJava(project)
         } else {
-            throw new StopExecutionException("The 'android' plugin is required.")
+            throw new StopExecutionException('The Android or Java plugin is required.')
         }
     }
 
@@ -25,19 +25,17 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
         variants.all { variant ->
 
             def outputPath = "${project.buildDir}/generated/source/nonNull/${variant.dirName}"
-            def sourceSets = variant.sourceSets
-
-            def task = createTask(project, variant.name, outputPath, sourceSets)
+            Task task = createTask(project, variant.name, outputPath, variant.sourceSets)
 
             variant.registerJavaGeneratingTask(task, task.outputDir)
         }
     }
 
     private static createTask(project, taskName, outputPath, sourceSets) {
-        def task = project.task("generate${taskName.capitalize()}NonNullAnnotations", type: GeneratePackageAnnotationsTask)
-        task.outputDir = project.file(outputPath)
-        task.sourceSets = sourceSets
-        task
+        project.task("generate${taskName.capitalize()}NonNullAnnotations", type: GeneratePackageAnnotationsTask) {
+            outputDir = project.file(outputPath)
+            sourceSets = owner.sourceSets
+        }
     }
 
     private static void applyJava(project) {
@@ -45,13 +43,13 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
         configureIdeaModule(project)
     }
 
-    private static void configureTask(project) {
+    private static void configureTask(Project project) {
         project.sourceSets.all { sourceSet ->
             String sourceSetName = (String) sourceSet.name
             String taskName = "main".equals(sourceSetName) ? '' : sourceSetName
 
             def generatedSourcesDir = "${project.buildDir}/generated/source/nonNull/${sourceSet.name}"
-            GeneratePackageAnnotationsTask task = createTask(project, taskName, generatedSourcesDir, [sourceSet])
+            Task task = createTask(project, taskName, generatedSourcesDir, [sourceSet])
 
             Task classesTask = project.tasks.getByName(taskName.isEmpty() ? "classes" : "${taskName}Classes")
             classesTask.mustRunAfter task
