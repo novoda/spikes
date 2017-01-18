@@ -14,3 +14,4 @@ TODO
 
 The plugin is **under early development** and to be considered in pre-alpha stage.
 
+The implementation of the java-only module support is inspired by https://github.com/tbroyer/gradle-apt-plugin

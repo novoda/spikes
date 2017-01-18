@@ -7,14 +7,13 @@ import org.gradle.api.tasks.TaskAction
 class GeneratePackageAnnotationsTask extends DefaultTask {
 
     def outputDir
-
-    def variant
+    def sourceSets
 
     @TaskAction
     void generatePackageAnnotations() {
         description = "Annotates the source packages with @ParametersAreNonnullByDefault"
 
-        variant.sourceSets.each {
+        sourceSets.each {
             Set<String> packages = []
 
             it.java.srcDirs.findAll {
