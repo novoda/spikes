@@ -3,6 +3,7 @@ package com.novoda.gradle.nonnull
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.StopExecutionException
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.plugins.ide.idea.IdeaPlugin
@@ -46,8 +47,7 @@ public class AndroidNonNullPlugin implements Plugin<Project> {
 
     private static void configureTask(Project project) {
         project.sourceSets.all { sourceSet ->
-            String sourceSetName = (String) sourceSet.name
-            String taskName = "main".equals(sourceSetName) ? '' : sourceSetName
+            String taskName = SourceSet.MAIN_SOURCE_SET_NAME == sourceSet.name ? '' : sourceSet.name
 
             def generatedSourcesDir = "${project.buildDir}/generated/source/nonNull/${sourceSet.name}"
             Task task = createTask(project, taskName, generatedSourcesDir, [sourceSet])
