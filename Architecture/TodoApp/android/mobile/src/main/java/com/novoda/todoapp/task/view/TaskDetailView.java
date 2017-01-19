@@ -2,6 +2,7 @@ package com.novoda.todoapp.task.view;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.CheckBox;
@@ -13,6 +14,7 @@ import com.novoda.todoapp.R;
 import com.novoda.todoapp.task.data.model.Task;
 import com.novoda.todoapp.task.displayer.TaskActionListener;
 import com.novoda.todoapp.task.displayer.TaskDisplayer;
+import com.novoda.todoapp.views.TodoAppBar;
 
 public class TaskDetailView extends CoordinatorLayout implements TaskDisplayer {
 
@@ -35,6 +37,9 @@ public class TaskDetailView extends CoordinatorLayout implements TaskDisplayer {
         descriptionView = Views.findById(this, R.id.task_detail_description);
         completeCheckBox = Views.findById(this, R.id.task_detail_complete);
         editActionButton = Views.findById(this, R.id.fab_edit_task);
+        TodoAppBar todoAppBar = Views.findById(this, R.id.app_bar);
+        Toolbar toolbar = todoAppBar.getToolbar();
+        toolbar.setTitle(R.string.to_do_novoda);
     }
 
     @Override

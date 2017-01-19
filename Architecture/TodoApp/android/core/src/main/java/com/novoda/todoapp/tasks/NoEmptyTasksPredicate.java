@@ -1,9 +1,9 @@
-package com.novoda.todoapp.tasks.service;
+package com.novoda.todoapp.tasks;
 
 import com.google.common.base.Predicate;
 import com.novoda.todoapp.tasks.data.model.Tasks;
 
-class NoEmptyTasksPredicate implements Predicate<Tasks> {
+public class NoEmptyTasksPredicate implements Predicate<Tasks> {
 
     @Override
     public boolean apply(Tasks input) {

@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import rx.Notification;
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func0;
-import rx.schedulers.Schedulers;
 
 public final class InMemoryRemoteTaskDataSource implements RemoteTasksDataSource {
 
@@ -68,17 +68,17 @@ public final class InMemoryRemoteTaskDataSource implements RemoteTasksDataSource
                     return Observable.just(tasks);
                 }
             }
-        }).delay(remoteDelay, remoteDelayUnit, Schedulers.immediate());
+        }).compose(this.<List<Task>>delay());
     }
 
     @Override
     public Observable<Task> getTask(Id taskId) {
         if (dataSourceTasks.containsKey(taskId)) {
             return Observable.just(dataSourceTasks.get(taskId))
-                    .delay(remoteDelay, remoteDelayUnit, Schedulers.immediate());
+                    .compose(this.<Task>delay());
         } else {
             return Observable.<Task>empty()
-                    .delay(remoteDelay, remoteDelayUnit, Schedulers.immediate());
+                    .compose(this.<Task>delay());
         }
     }
 
@@ -110,7 +110,7 @@ public final class InMemoryRemoteTaskDataSource implements RemoteTasksDataSource
                         dataSourceTasks.put(task.id(), task);
                     }
                 })
-                .delay(remoteDelay, remoteDelayUnit, Schedulers.immediate());
+                .compose(this.<Task>delay());
     }
 
     @Override
@@ -128,7 +128,7 @@ public final class InMemoryRemoteTaskDataSource implements RemoteTasksDataSource
                 List<Task> tasks = ImmutableList.copyOf(dataSourceTasks.values());
                 return Observable.just(tasks);
             }
-        }).delay(remoteDelay, remoteDelayUnit, Schedulers.immediate());
+        }).compose(this.<List<Task>>delay());
     }
 
     @Override
@@ -139,7 +139,7 @@ public final class InMemoryRemoteTaskDataSource implements RemoteTasksDataSource
                 dataSourceTasks.clear();
                 return Observable.empty();
             }
-        }).delay(remoteDelay, remoteDelayUnit, Schedulers.immediate());
+        }).compose(this.<Void>delay());
     }
 
     @Override
@@ -150,7 +150,25 @@ public final class InMemoryRemoteTaskDataSource implements RemoteTasksDataSource
                 dataSourceTasks.remove(taskId);
                 return Observable.empty();
             }
-        }).delay(remoteDelay, remoteDelayUnit, Schedulers.immediate());
+        }).compose(this.<Void>delay());
+    }
+
+    private <T> Observable.Transformer<T, T> delay() {
+        return new Observable.Transformer<T, T>() {
+            @Override
+            public Observable<T> call(Observable<T> observable) {
+                return observable.doOnEach(new Action1<Notification<? super T>>() {
+                    @Override
+                    public void call(Notification<? super T> t) {
+                        try {
+                            Thread.sleep(remoteDelayUnit.toMillis(remoteDelay));
+                        } catch (InterruptedException e) {
+                            this.call(t);
+                        }
+                    }
+                });
+            }
+        };
     }
 
 }
