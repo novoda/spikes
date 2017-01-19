@@ -42,10 +42,10 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
             sourceSet.java.srcDirs.findAll {
                 it.exists()
             }.each { File srcDir ->
-
                 project.fileTree(srcDir).visit { FileVisitDetails details ->
-                    if (details.file.file) {
-                        def packagePath = srcDir.toPath().relativize(details.file.parentFile.toPath()).toString()
+                    def file = details.file
+                    if (file.file) {
+                        def packagePath = srcDir.toPath().relativize(file.parentFile.toPath()).toString()
                         packages << packagePath
                     }
                 }
