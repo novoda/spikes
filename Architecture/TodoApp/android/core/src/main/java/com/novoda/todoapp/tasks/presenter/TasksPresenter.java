@@ -1,19 +1,27 @@
 package com.novoda.todoapp.tasks.presenter;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.novoda.data.SyncState;
+import com.novoda.data.SyncedData;
 import com.novoda.event.DataObserver;
 import com.novoda.event.Event;
 import com.novoda.event.EventObserver;
-import com.novoda.todoapp.tasks.loading.displayer.TasksLoadingDisplayer;
-import com.novoda.todoapp.tasks.loading.displayer.RetryActionListener;
 import com.novoda.todoapp.navigation.Navigator;
 import com.novoda.todoapp.task.data.model.Task;
 import com.novoda.todoapp.tasks.data.model.Tasks;
 import com.novoda.todoapp.tasks.displayer.TasksActionListener;
 import com.novoda.todoapp.tasks.displayer.TasksDisplayer;
+import com.novoda.todoapp.tasks.loading.displayer.RetryActionListener;
+import com.novoda.todoapp.tasks.loading.displayer.TasksLoadingDisplayer;
 import com.novoda.todoapp.tasks.service.TasksService;
 
 import rx.Observable;
+import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
+
+import static com.novoda.event.EventFunctions.asData;
 
 public class TasksPresenter {
 
@@ -32,7 +40,7 @@ public class TasksPresenter {
         this.navigator = navigator;
     }
 
-    public void setInitialFilterTo(TasksActionListener.Filter filter){
+    public void setInitialFilterTo(TasksActionListener.Filter filter) {
         currentFilter = filter;
     }
 
@@ -48,39 +56,53 @@ public class TasksPresenter {
 
     private void subscribeToSourcesFilteredWith(TasksActionListener.Filter filter) {
         subscriptions.add(
-                getTasksObservableFor(filter)
+                getValidatedTasksEventObservable(filter)
+                        .compose(asData(Tasks.class))
                         .subscribe(tasksObserver)
         );
         subscriptions.add(
-                getTasksEventObservableFor(filter)
+                getValidatedTasksEventObservable(filter)
                         .subscribe(tasksEventObserver)
         );
     }
 
-    private Observable<Tasks> getTasksObservableFor(TasksActionListener.Filter filter) {
-        switch (filter) {
-            case ACTIVE:
-                return tasksService.getActiveTasks();
-            case COMPLETED:
-                return tasksService.getCompletedTasks();
-            case ALL:
-                return tasksService.getTasks();
-            default:
-                throw new IllegalArgumentException("Unkown filter type " + filter);
-        }
+    private Observable<Event<Tasks>> getValidatedTasksEventObservable(TasksActionListener.Filter filter) {
+        return getTasksEventObservableFor(filter)
+                .map(new Func1<Event<Tasks>, Event<Tasks>>() {
+                    @Override
+                    public Event<Tasks> call(Event<Tasks> tasksEvent) {
+                        Iterable<SyncedData<Task>> nonDeletedTasks = Iterables.filter(
+                                tasksEvent
+                                        .data()
+                                        .or(Tasks.empty())
+                                        .all(),
+                                shouldDisplayTask()
+                        );
+                        return tasksEvent.updateData(Tasks.from(ImmutableList.copyOf(nonDeletedTasks)));
+                    }
+                });
     }
 
     private Observable<Event<Tasks>> getTasksEventObservableFor(TasksActionListener.Filter filter) {
         switch (filter) {
             case ACTIVE:
-                return tasksService.getActiveTasksEvents();
+                return tasksService.getActiveTasksEvent();
             case COMPLETED:
-                return tasksService.getCompletedTasksEvents();
+                return tasksService.getCompletedTasksEvent();
             case ALL:
-                return tasksService.getTasksEvents();
+                return tasksService.getTasksEvent();
             default:
-                throw new IllegalArgumentException("Unkown filter type " + filter);
+                throw new IllegalArgumentException("Unknown filter type " + filter);
         }
+    }
+
+    private static Predicate<SyncedData<Task>> shouldDisplayTask() {
+        return new Predicate<SyncedData<Task>>() {
+            @Override
+            public boolean apply(SyncedData<Task> input) {
+                return input.syncState() != SyncState.DELETED_LOCALLY;
+            }
+        };
     }
 
     public void stopPresenting() {

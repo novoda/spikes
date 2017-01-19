@@ -13,16 +13,17 @@ import com.novoda.data.SyncedData;
 import com.novoda.notils.caster.Views;
 import com.novoda.todoapp.R;
 import com.novoda.todoapp.task.data.model.Task;
-import com.novoda.todoapp.task.edit.displayer.TaskEditActionListener;
-import com.novoda.todoapp.task.edit.displayer.TaskEditDisplayer;
+import com.novoda.todoapp.task.edit.displayer.EditTaskDisplayer;
+import com.novoda.todoapp.task.newtask.displayer.TaskActionListener;
+import com.novoda.todoapp.views.TodoAppBar;
 
-public class TaskEditView extends CoordinatorLayout implements TaskEditDisplayer {
+public class EditTaskView extends CoordinatorLayout implements EditTaskDisplayer {
 
     private TextView titleView;
     private TextView descriptionView;
     private FloatingActionButton editActionButton;
 
-    public TaskEditView(Context context, AttributeSet attrs) {
+    public EditTaskView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -30,13 +31,15 @@ public class TaskEditView extends CoordinatorLayout implements TaskEditDisplayer
     protected void onFinishInflate() {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_task_edit_view, this);
-        titleView = Views.findById(this, R.id.edit_task_title);
-        descriptionView = Views.findById(this, R.id.edit_task_description);
-        editActionButton = Views.findById(this, R.id.fab_edit_task_done);
+        titleView = Views.findById(this, R.id.task_title);
+        descriptionView = Views.findById(this, R.id.task_description);
+        editActionButton = Views.findById(this, R.id.fab_task_done);
+        TodoAppBar todoAppBar = Views.findById(this, R.id.app_bar);
+        todoAppBar.getToolbar().setTitle(R.string.edit_to_do);
     }
 
     @Override
-    public void attach(final TaskEditActionListener taskActionListener) {
+    public void attach(final TaskActionListener taskActionListener) {
         editActionButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,7 +49,7 @@ public class TaskEditView extends CoordinatorLayout implements TaskEditDisplayer
     }
 
     @Override
-    public void detach(TaskEditActionListener taskActionListener) {
+    public void detach(TaskActionListener taskActionListener) {
         editActionButton.setOnClickListener(null);
     }
 
@@ -55,7 +58,6 @@ public class TaskEditView extends CoordinatorLayout implements TaskEditDisplayer
         final Task task = syncedData.data();
         titleView.setText(task.title().orNull());
         descriptionView.setText(task.description().orNull());
-        editActionButton.setImageResource(R.drawable.ic_done);
     }
 
     private Optional<String> getTitle() {
@@ -78,5 +80,4 @@ public class TaskEditView extends CoordinatorLayout implements TaskEditDisplayer
     public void showEmptyTaskError() {
         Snackbar.make(this, R.string.empty_task_message, Snackbar.LENGTH_LONG).show(); //TODO maybe this should be extracted
     }
-
 }

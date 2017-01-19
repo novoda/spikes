@@ -5,7 +5,8 @@ import android.content.Intent;
 
 import com.novoda.todoapp.task.TaskDetailActivity;
 import com.novoda.todoapp.task.data.model.Task;
-import com.novoda.todoapp.task.edit.TaskEditActivity;
+import com.novoda.todoapp.task.edit.EditTaskActivity;
+import com.novoda.todoapp.task.newtask.NewTaskActivity;
 
 public class AndroidNavigator implements Navigator {
 
@@ -25,8 +26,8 @@ public class AndroidNavigator implements Navigator {
     }
 
     @Override
-    public void toTaskEdit(Task task) {
-        Intent intent = new Intent(activity, TaskEditActivity.class);
+    public void toEditTask(Task task) {
+        Intent intent = new Intent(activity, EditTaskActivity.class);
         intent.putExtra(EXTRA_TASK_ID, task.id().value());
         activity.startActivity(intent);
     }
@@ -38,7 +39,7 @@ public class AndroidNavigator implements Navigator {
 
     @Override
     public void toAddTask() {
-        Intent intent = new Intent(activity, TaskEditActivity.class);
+        Intent intent = new Intent(activity, NewTaskActivity.class);
         activity.startActivity(intent);
     }
 

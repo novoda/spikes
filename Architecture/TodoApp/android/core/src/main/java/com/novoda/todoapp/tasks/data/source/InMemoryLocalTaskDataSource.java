@@ -8,10 +8,11 @@ import com.novoda.todoapp.tasks.data.model.Tasks;
 
 import java.util.concurrent.TimeUnit;
 
+import rx.Notification;
 import rx.Observable;
 import rx.Subscriber;
+import rx.functions.Action1;
 import rx.functions.Func0;
-import rx.schedulers.Schedulers;
 
 public final class InMemoryLocalTaskDataSource implements LocalTasksDataSource {
 
@@ -54,7 +55,7 @@ public final class InMemoryLocalTaskDataSource implements LocalTasksDataSource {
                     return Observable.just(localTasks);
                 }
             }
-        }).delay(localDelay, localDelayUnit, Schedulers.immediate());
+        }).compose(this.<Tasks>delay());
     }
 
     @Override
@@ -66,7 +67,7 @@ public final class InMemoryLocalTaskDataSource implements LocalTasksDataSource {
                 subscriber.onNext(localTasks);
                 subscriber.onCompleted();
             }
-        }).delay(localDelay, localDelayUnit, Schedulers.immediate());
+        }).compose(this.<Tasks>delay());
     }
 
     @Override
@@ -78,7 +79,7 @@ public final class InMemoryLocalTaskDataSource implements LocalTasksDataSource {
                 subscriber.onNext(taskSyncedData);
                 subscriber.onCompleted();
             }
-        }).delay(localDelay, localDelayUnit, Schedulers.immediate());
+        }).compose(this.<SyncedData<Task>>delay());
     }
 
     @Override
@@ -89,6 +90,24 @@ public final class InMemoryLocalTaskDataSource implements LocalTasksDataSource {
                 localTasks = Tasks.empty();
                 subscriber.onCompleted();
             }
-        }).delay(localDelay, localDelayUnit, Schedulers.immediate());
+        }).compose(this.<Void>delay());
+    }
+
+    private <T> Observable.Transformer<T, T> delay() {
+        return new Observable.Transformer<T, T>() {
+            @Override
+            public Observable<T> call(Observable<T> observable) {
+                return observable.doOnEach(new Action1<Notification<? super T>>() {
+                    @Override
+                    public void call(Notification<? super T> t) {
+                        try {
+                            Thread.sleep(localDelayUnit.toMillis(localDelay));
+                        } catch (InterruptedException e) {
+                            this.call(t);
+                        }
+                    }
+                });
+            }
+        };
     }
 }

@@ -126,7 +126,7 @@ class TaskPresenterTest {
 
         presenter.taskActionListener.onEditSelected(simpleTask)
 
-        Mockito.verify(navigator).toTaskEdit(simpleTask)
+        Mockito.verify(navigator).toEditTask(simpleTask)
     }
 
     private fun givenThePresenterIsPresenting() {
