@@ -1,7 +1,7 @@
 ext {
     gradlePlugins = [
             gradle                    : 'com.android.tools.build:gradle:2.1.3',
-            gradleAndroidCommandPlugin: 'com.novoda:gradle-android-command-plugin:1.6.2',
+            gradleAndroidCommandPlugin: 'com.novoda:gradle-android-command-plugin:1.7.0',
             bintrayRelease            : 'com.novoda:bintray-release:0.3.4'
     ]
 
