@@ -11,6 +11,8 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
     @Override
     public void apply(Project project) {
         ensureAndroidPluginAppliedTo(project)
+        ensureCommandPluginAppliedTo(project)
+
         MonkeyRunnerExtension extension = project.extensions.create(MonkeyRunnerExtension.NAME, MonkeyRunnerExtension)
         extension.setDefaultsForOptionalProperties()
 
@@ -24,9 +26,18 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
     }
 
     private static void ensureAndroidPluginAppliedTo(Project project) {
-        boolean missingAndroidPlugin = !project.plugins.hasPlugin('com.android.application')
-        if (missingAndroidPlugin) {
-            throw new GradleException('monkey runner plugin can only be applied after the Android plugin')
+        ensurePluginIsApplied('com.android.application', project)
+    }
+
+    private static void ensureCommandPluginAppliedTo(Project project) {
+        ensurePluginIsApplied('android-command', project)
+    }
+
+    private static void ensurePluginIsApplied(String plugin, Project project) {
+        boolean isMissingPlugin = !project.plugins.hasPlugin(plugin)
+        if (isMissingPlugin) {
+            throw new GradleException("monkey runner plugin can only be applied after the ${plugin} plugin.\n" +
+                    "In your build.gradle: apply plugin: '${plugin}'")
         }
     }
 
