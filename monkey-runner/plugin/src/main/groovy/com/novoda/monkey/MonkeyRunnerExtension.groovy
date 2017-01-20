@@ -1,6 +1,6 @@
 package com.novoda.monkey
 
-public class MonkeyRunnerExtension {
+class MonkeyRunnerExtension {
 
     public static final String NAME = 'monkeyRunner'
 

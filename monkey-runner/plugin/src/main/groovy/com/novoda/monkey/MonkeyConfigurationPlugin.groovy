@@ -4,14 +4,17 @@ import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-public class MonkeyConfigurationPlugin implements Plugin<Project> {
+class MonkeyConfigurationPlugin implements Plugin<Project> {
 
     private static final String TASK_NAME = 'runMonkeyAll'
 
     @Override
-    public void apply(Project project) {
+    void apply(Project project) {
         ensureAndroidPluginAppliedTo(project)
         ensureCommandPluginAppliedTo(project)
+
+        //Plugin<Project> commandPlugin = new AndroidCommandPlugin();
+        //commandPlugin.apply(project)
 
         MonkeyRunnerExtension extension = project.extensions.create(MonkeyRunnerExtension.NAME, MonkeyRunnerExtension)
         extension.setDefaultsForOptionalProperties()
