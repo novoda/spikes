@@ -13,18 +13,30 @@ class MonkeyConfigurationPluginTest {
     @Before
     void setUp() {
         project = ProjectBuilder.builder().build()
-        project.apply plugin: 'com.android.application'
     }
 
     @Test(expected = GradleException.class)
     void givenAndroidPluginNotApplied_whenApplyingMonkey_thenItThrowsException() {
-        project = ProjectBuilder.builder().build()
+        project.apply plugin: 'android-command'
 
         project.apply plugin: MonkeyConfigurationPlugin
+
+    }
+
+    @Test(expected = GradleException.class)
+    void givenCommandPluginNotApplied_whenApplyingMonkey_thenItThrowsException() {
+        project.apply plugin: 'com.android.application'
+
+        project.apply plugin: MonkeyConfigurationPlugin
+
     }
 
     @Test
-    void givenAndroidPluginApplied_whenApplyingMonkey_thenItDoesNotThrowException() {
+    void givenPluginsApplied_whenApplyingMonkey_thenItDoesNotThrowException() {
+        project.apply plugin: 'com.android.application'
+        project.apply plugin: 'android-command'
+
         project.apply plugin: MonkeyConfigurationPlugin
+
     }
 }
