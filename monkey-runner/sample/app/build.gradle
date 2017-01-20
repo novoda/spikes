@@ -4,13 +4,13 @@ apply plugin: 'android-command'
 apply plugin: com.novoda.monkey.MonkeyConfigurationPlugin
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion versions.androidBuildTools
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
         applicationId "com.novoda.monkey"
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
     }
@@ -20,8 +20,7 @@ android {
     }
 
     dependencies {
-        compile libraries.appCompat
-        compile libraries.androidV13Support
+        compile 'com.android.support:appcompat-v7:25.1.0'
     }
 
 }
