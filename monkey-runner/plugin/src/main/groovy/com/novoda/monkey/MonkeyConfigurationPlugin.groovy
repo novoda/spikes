@@ -13,9 +13,6 @@ class MonkeyConfigurationPlugin implements Plugin<Project> {
         ensureAndroidPluginAppliedTo(project)
         ensureCommandPluginAppliedTo(project)
 
-        //Plugin<Project> commandPlugin = new AndroidCommandPlugin();
-        //commandPlugin.apply(project)
-
         MonkeyRunnerExtension extension = project.extensions.create(MonkeyRunnerExtension.NAME, MonkeyRunnerExtension)
         extension.setDefaultsForOptionalProperties()
 
