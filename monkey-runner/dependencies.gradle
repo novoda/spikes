@@ -6,8 +6,8 @@ ext {
     ]
 
     versions = [
-            androidBuildTools : '24.0.1',
-            androidSupportLibs: '24.1.1'
+            androidBuildTools : '25.0.2',
+            androidSupportLibs: '25.1.0'
     ]
 
     libraries = [
