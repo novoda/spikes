@@ -11,7 +11,11 @@ class MonkeyConfigurationPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
         ensureAndroidPluginAppliedTo(project)
-        ensureCommandPluginAppliedTo(project)
+
+        project.configure(project) {
+            //noinspection GroovyAssignabilityCheck
+            apply plugin: 'com.novoda.android-command'
+        }
 
         MonkeyRunnerExtension extension = project.extensions.create(MonkeyRunnerExtension.NAME, MonkeyRunnerExtension)
         extension.setDefaultsForOptionalProperties()
