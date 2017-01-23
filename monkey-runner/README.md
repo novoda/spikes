@@ -24,8 +24,7 @@ rm app-debug.apk
 
 You can run this as part of your CI job before starting the monkey runner.
 
-In your Android module's `build.gradle`, add this plugin as a dependency, apply it and configure it. Be sure you also apply
- the `android-command` plugin (which `monkey-runner` depends on):
+In your Android module's `build.gradle`, add this plugin as a dependency, apply it and configure it:
 
 ```groovy
 buildscript {
@@ -44,7 +43,6 @@ buildscript {
 
 ...
 
-apply plugin: 'com.novoda.android-command'
 apply plugin: 'com.novoda.monkey-runner'
 
 ...
