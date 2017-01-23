@@ -75,6 +75,18 @@ Run the following to start the monkey on all connected devices:
 ./gradlew runMonkeyAll
 ```
 
+## Changelog
+
+### 0.0.1
+
+- initial release
+
+### 1.0.0
+
+- Make categories optional & introduce `useMonkeyTrap` property in order to control whether the session should use the trap or not (https://github.com/novoda/spikes/pull/155)
+- Update command plugin (https://github.com/novoda/spikes/pull/251)
+- Ensure command plugin applied (https://github.com/novoda/spikes/pull/260)
+
 ## Links
 
 Here are a list of useful links:
