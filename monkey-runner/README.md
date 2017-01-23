@@ -83,7 +83,7 @@ Run the following to start the monkey on all connected devices:
 
 ### 1.0.0
 
-- Make categories optional & introduce `useMonkeyTrap` property in order to control whether the session should use the trap or not ([#55](https://github.com/novoda/spikes/pull/155))
+- Make categories optional & introduce `useMonkeyTrap` property in order to control whether the session should use the trap or not ([#155](https://github.com/novoda/spikes/pull/155))
 - Update command plugin ([#251](https://github.com/novoda/spikes/pull/251))
 - Ensure command plugin applied ([#260](https://github.com/novoda/spikes/pull/260))
 
