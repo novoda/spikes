@@ -1,44 +1,57 @@
 package com.novoda.gradle.nonnull
 
+import groovy.transform.Memoized
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileVisitDetails
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 
 class GeneratePackageAnnotationsTask extends DefaultTask {
 
+    @Input
+    Set<String> packages;
+
+    @OutputDirectory
     def outputDir
+
     def sourceSets
 
     @TaskAction
     void generatePackageAnnotations() {
         description = "Annotates the source packages with @ParametersAreNonnullByDefault"
 
-        sourceSets.each {
-            Set<String> packages = []
+        Set<String> packages = getPackages()
+        packages.each { packagePath ->
+            def dir = new File(outputDir, packagePath)
+            dir.mkdirs()
 
-            it.java.srcDirs.findAll {
+            def file = new File(dir, 'package-info.java')
+            if (file.createNewFile()) {
+                def packageName = packagePath.replaceAll('/', '.')
+                file.write(createAnnotationDefinition(packageName))
+            }
+        }
+    }
+
+    @Memoized
+    Set<String> getPackages() {
+        Set<String> packages = []
+
+        sourceSets.each { sourceSet ->
+            sourceSet.java.srcDirs.findAll {
                 it.exists()
-            }.each { srcDir ->
-
+            }.each { File srcDir ->
                 project.fileTree(srcDir).visit { FileVisitDetails details ->
-                    if (details.file.file) {
-                        def packagePath = details.file.parent.replace(srcDir.absolutePath, '')
+                    def file = details.file
+                    if (file.file) {
+                        def packagePath = srcDir.toPath().relativize(file.parentFile.toPath()).toString()
                         packages << packagePath
                     }
                 }
             }
-
-            packages.each { packagePath ->
-                def dir = new File(outputDir, packagePath)
-                dir.mkdirs()
-
-                def file = new File(dir, 'package-info.java')
-                if (file.createNewFile()) {
-                    def packageName = packagePath.replaceFirst('/', '').replaceAll('/', '.')
-                    file.write(createAnnotationDefinition(packageName))
-                }
-            }
         }
+        packages
     }
 
     static def createAnnotationDefinition(packageName) {
