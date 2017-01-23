@@ -34,7 +34,7 @@ class MonkeyConfigurationPluginTest {
     @Test
     void givenPluginsApplied_whenApplyingMonkey_thenItDoesNotThrowException() {
         project.apply plugin: 'com.android.application'
-        project.apply plugin: 'android-command'
+        project.apply plugin: 'com.novoda.android-command'
 
         project.apply plugin: MonkeyConfigurationPlugin
 
