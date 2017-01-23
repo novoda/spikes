@@ -1,14 +1,16 @@
 package com.novoda.tpbot;
 
 public enum Direction {
-    FORWARD("↑"),
-    BACKWARD("↓"),
-    STEER_RIGHT("→"),
-    STEER_LEFT("←");
+    FORWARD("↑", "w"),
+    BACKWARD("↓", "s"),
+    STEER_RIGHT("→", "d"),
+    STEER_LEFT("←", "a");
 
+    private final String representation;
     private final String rawDirection;
 
-    Direction(String rawDirection) {
+    Direction(String representation, String rawDirection) {
+        this.representation = representation;
         this.rawDirection = rawDirection;
     }
 
@@ -23,5 +25,9 @@ public enum Direction {
             }
         }
         throw new IllegalArgumentException("No matching direction for: " + rawDirection);
+    }
+
+    public String rawDirection() {
+        return rawDirection;
     }
 }
