@@ -33,10 +33,6 @@ class MonkeyConfigurationPlugin implements Plugin<Project> {
         ensurePluginIsApplied('com.android.application', project)
     }
 
-    private static void ensureCommandPluginAppliedTo(Project project) {
-        ensurePluginIsApplied('android-command', project)
-    }
-
     private static void ensurePluginIsApplied(String plugin, Project project) {
         boolean isMissingPlugin = !project.plugins.hasPlugin(plugin)
         if (isMissingPlugin) {
