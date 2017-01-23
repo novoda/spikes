@@ -40,10 +40,14 @@ public class MovementService extends Service {
     private Toaster toaster;
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public void onCreate() {
+        super.onCreate();
         toaster = Toaster.newInstance(MovementService.this);
         toaster.popToast(MovementService.class.getSimpleName() + " started");
+    }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
         pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
