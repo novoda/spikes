@@ -23,6 +23,7 @@ import static io.socket.emitter.Emitter.Listener;
 class SocketIOTpService implements HumanTpService {
 
     private static final String EVENT_CONNECT = "join_as_human";
+    private static final String EVENT_MOVE = "move_in";
 
     private Socket socket;
     private final Handler handler;
@@ -93,7 +94,7 @@ class SocketIOTpService implements HumanTpService {
 
     @Override
     public void moveIn(Direction direction) {
-        socket.emit("move_in", direction);
+        socket.emit(EVENT_MOVE, direction);
     }
 
     @Override
