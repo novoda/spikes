@@ -7,6 +7,7 @@ import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.Result;
 import com.novoda.tpbot.support.Observable;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -109,7 +110,7 @@ class SocketIOTpService implements HumanTpService {
         private static final SocketIOTpService INSTANCE = new SocketIOTpService();
     }
 
-    private class HumanSocketIOConnectionException extends IllegalArgumentException {
+    private class HumanSocketIOConnectionException extends IOException {
 
         private HumanSocketIOConnectionException(String message, Throwable throwable) {
             super(message, throwable);
