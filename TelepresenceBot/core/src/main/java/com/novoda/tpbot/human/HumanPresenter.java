@@ -23,8 +23,13 @@ class HumanPresenter {
     }
 
     void stopPresenting() {
-        observable.detachObservers();
-        humanTpService.disconnect();
+        if (observable != null) {
+            observable.detachObservers();
+        }
+
+        if (humanTpService != null) {
+            humanTpService.disconnect();
+        }
     }
 
     private class ConnectionObserver implements Observer<Result> {
