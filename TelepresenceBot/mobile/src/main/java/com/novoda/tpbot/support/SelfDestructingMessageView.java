@@ -18,19 +18,21 @@ public class SelfDestructingMessageView extends TextView {
     }
 
     public void showPermanently(String arrowCharacter) {
+        clearMessage();
         setText(arrowCharacter);
-        getHandler().removeCallbacks(clearTextRunnable);
     }
 
     public void showTimed(String string) {
+        clearMessage();
         setText(string);
-        getHandler().removeCallbacks(clearTextRunnable);
         getHandler().postDelayed(clearTextRunnable, COMMAND_FADING_DELAY);
     }
 
-    public void clearMessage() {
+    private void clearMessage() {
         setText(null);
-        getHandler().removeCallbacks(clearTextRunnable);
+        if (getHandler() != null) {
+            getHandler().removeCallbacks(clearTextRunnable);
+        }
     }
 
     private final Runnable clearTextRunnable = new Runnable() {
