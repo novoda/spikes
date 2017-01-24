@@ -22,6 +22,8 @@ import static io.socket.emitter.Emitter.Listener;
 
 class SocketIOTpService implements HumanTpService {
 
+    private static final String EVENT_CONNECT = "join_as_human";
+
     private Socket socket;
     private final Handler handler;
 
@@ -55,7 +57,7 @@ class SocketIOTpService implements HumanTpService {
                 return this;
             }
 
-            socket.emit("join_as_human", "", joinSuccessAcknowledgementListener);
+            socket.emit(EVENT_CONNECT, "", joinSuccessAcknowledgementListener);
             socket.on(EVENT_CONNECT_ERROR, connectionTimeoutListener);
             socket.connect();
             return this;
