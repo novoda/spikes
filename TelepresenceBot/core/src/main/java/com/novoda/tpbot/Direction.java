@@ -7,18 +7,27 @@ public enum Direction {
     STEER_LEFT("←", "a");
 
     private final String representation;
-    private final String rawCommand;
+    private final String rawDirection;
 
-    Direction(String representation, String rawCommand) {
+    Direction(String representation, String rawDirection) {
         this.representation = representation;
-        this.rawCommand = rawCommand;
+        this.rawDirection = rawDirection;
     }
 
     public String visualRepresentation() {
-        return representation;
+        return rawDirection;
     }
 
-    public String rawCommand() {
-        return rawCommand;
+    public static Direction from(String rawDirection) {
+        for (Direction direction : values()) {
+            if (direction.rawDirection.equalsIgnoreCase(rawDirection)) {
+                return direction;
+            }
+        }
+        throw new IllegalArgumentException("No matching direction for: " + rawDirection);
+    }
+
+    public String rawDirection() {
+        return rawDirection;
     }
 }

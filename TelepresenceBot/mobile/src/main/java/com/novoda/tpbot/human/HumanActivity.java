@@ -13,7 +13,7 @@ import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.tpbot.support.SelfDestructingMessageView;
 import com.novoda.tpbot.support.SwitchableView;
 
-public class HumanActivity extends AppCompatActivity {
+public class HumanActivity extends AppCompatActivity implements HumanView {
 
     private static final String LAZERS = String.valueOf(Character.toChars(0x1F4A5));
 
@@ -21,10 +21,14 @@ public class HumanActivity extends AppCompatActivity {
     private SwitchableView switchableView;
     private CommandRepeater commandRepeater;
 
+    private HumanPresenter presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_human);
+
+        presenter = new HumanPresenter(SocketIOTpService.getInstance(), this);
 
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
         switchableView = Views.findById(this, R.id.bot_switchable_view);
@@ -43,12 +47,12 @@ public class HumanActivity extends AppCompatActivity {
 
         @Override
         public void onDirectionPressed(Direction direction) {
-            commandRepeater.startRepeatingCommand(direction.rawCommand());
+            commandRepeater.startRepeatingCommand(direction.rawDirection());
         }
 
         @Override
         public void onDirectionReleased(Direction direction) {
-            commandRepeater.stopRepeatingCommand(direction.rawCommand());
+            commandRepeater.stopRepeatingCommand(direction.rawDirection());
         }
 
         @Override
@@ -76,10 +80,35 @@ public class HumanActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    @Override
+    protected void onStop() {
+        presenter.stopPresenting();
+        super.onStop();
+    }
+
     private final ServerDeclarationListener serverDeclarationListener = new ServerDeclarationListener() {
         @Override
         public void onConnect(String serverAddress) {
-            debugView.showTimed(serverAddress);
+            debugView.showPermanently(getResources().getString(R.string.connecting_ellipsis));
+            presenter.startPresenting(serverAddress);
         }
     };
+
+    @Override
+    public void onConnect(String message) {
+        debugView.showPermanently(getResources().getString(R.string.connected));
+        switchableView.setDisplayedChild(1);
+    }
+
+    @Override
+    public void onDisconnect() {
+        switchableView.setDisplayedChild(0);
+    }
+
+    @Override
+    public void onError(String message) {
+        debugView.showPermanently(message);
+        switchableView.setDisplayedChild(0);
+    }
+
 }

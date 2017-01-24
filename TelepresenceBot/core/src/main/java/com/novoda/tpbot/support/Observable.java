@@ -11,7 +11,7 @@ public abstract class Observable<T> {
         return new SingleEmissionObservable<>(toEmit);
     }
 
-    private Observable() {
+    protected Observable() {
         observers = new HashSet<>();
     }
 

@@ -59,12 +59,12 @@ public class BotActivity extends AppCompatActivity {
 
         @Override
         public void onDirectionPressed(Direction direction) {
-            commandRepeater.startRepeatingCommand(direction.rawCommand());
+            commandRepeater.startRepeatingCommand(direction.rawDirection());
         }
 
         @Override
         public void onDirectionReleased(Direction direction) {
-            commandRepeater.stopRepeatingCommand(direction.rawCommand());
+            commandRepeater.stopRepeatingCommand(direction.rawDirection());
         }
 
         @Override

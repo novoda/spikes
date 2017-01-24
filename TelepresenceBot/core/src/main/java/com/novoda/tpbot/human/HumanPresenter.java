@@ -4,25 +4,25 @@ import com.novoda.tpbot.Result;
 import com.novoda.tpbot.support.Observable;
 import com.novoda.tpbot.support.Observer;
 
-public class HumanPresenter {
+class HumanPresenter {
 
     private final HumanTpService humanTpService;
     private final HumanView humanView;
 
     private Observable<Result> observable;
 
-    public HumanPresenter(HumanTpService humanTpService, HumanView humanView) {
+    HumanPresenter(HumanTpService humanTpService, HumanView humanView) {
         this.humanTpService = humanTpService;
         this.humanView = humanView;
     }
 
-    public void startPresenting() {
-        observable = humanTpService.connect()
+    void startPresenting(String serverAddress) {
+        observable = humanTpService.connectTo(serverAddress)
                 .attach(new ConnectionObserver())
                 .start();
     }
 
-    public void stopPresenting() {
+    void stopPresenting() {
         observable.detachObservers();
         humanTpService.disconnect();
     }

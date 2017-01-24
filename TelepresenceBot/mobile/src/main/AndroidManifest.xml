@@ -3,6 +3,8 @@
   xmlns:tools="http://schemas.android.com/tools"
   package="com.novoda.tpbot">
 
+  <uses-permission android:name="android.permission.INTERNET" />
+
   <uses-feature android:name="android.hardware.usb.host" />
 
   <application
@@ -19,6 +21,7 @@
       android:icon="@mipmap/ic_launcher">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
+
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>

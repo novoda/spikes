@@ -6,7 +6,7 @@ import com.novoda.tpbot.support.Observable;
 
 interface HumanTpService {
 
-    Observable<Result> connect();
+    Observable<Result> connectTo(String serverAddress);
 
     void moveIn(Direction direction);
 
