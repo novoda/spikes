@@ -19,21 +19,24 @@ public class LandingActivity extends AppCompatActivity {
         View humanSelection = findViewById(R.id.human_selection);
         View botSelection = findViewById(R.id.bot_selection);
 
-        humanSelection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LandingActivity.this, HumanActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        botSelection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LandingActivity.this, BotActivity.class);
-                startActivity(intent);
-            }
-        });
+        humanSelection.setOnClickListener(onHumanSelectionListener);
+        botSelection.setOnClickListener(onBotSelectionListener);
     }
+
+    private final View.OnClickListener onHumanSelectionListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(getApplicationContext(), HumanActivity.class);
+            startActivity(intent);
+        }
+    };
+
+    private final View.OnClickListener onBotSelectionListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(getApplicationContext(), BotActivity.class);
+            startActivity(intent);
+        }
+    };
 
 }
