@@ -70,9 +70,9 @@ class SocketIOTpService implements HumanTpService {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (args[0] != null) {
-                            Object object = args[0];
-                            notifyOf(Result.from(object.toString()));
+                        if (args[0] != null && args[0] instanceof String) {
+                            String acknowledgment = (String) args[0];
+                            notifyOf(Result.from(acknowledgment));
                         }
                     }
                 });
