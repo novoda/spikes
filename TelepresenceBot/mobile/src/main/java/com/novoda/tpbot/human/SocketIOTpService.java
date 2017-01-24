@@ -106,7 +106,7 @@ class SocketIOTpService implements HumanTpService {
         private static final SocketIOTpService INSTANCE = new SocketIOTpService();
     }
 
-    private class HumanSocketIOConnectionException extends RuntimeException {
+    private class HumanSocketIOConnectionException extends IllegalArgumentException {
 
         private HumanSocketIOConnectionException(String message, Throwable throwable) {
             super(message, throwable);
