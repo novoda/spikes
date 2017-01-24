@@ -18,18 +18,18 @@ import io.socket.client.SocketIOException;
 import io.socket.emitter.Emitter;
 
 import static io.socket.client.Socket.EVENT_CONNECT_ERROR;
-import static io.socket.client.Socket.Listener;
+import static io.socket.emitter.Emitter.Listener;
 
-class HumanSocketIOTpService implements HumanTpService {
+class SocketIOTpService implements HumanTpService {
 
     private Socket socket;
     private final Handler handler;
 
-    static HumanSocketIOTpService getInstance() {
+    static SocketIOTpService getInstance() {
         return LazySingleton.INSTANCE;
     }
 
-    private HumanSocketIOTpService() {
+    private SocketIOTpService() {
         this.handler = new Handler(Looper.getMainLooper());
     }
 
@@ -103,12 +103,12 @@ class HumanSocketIOTpService implements HumanTpService {
     }
 
     private static class LazySingleton {
-        private static final HumanSocketIOTpService INSTANCE = new HumanSocketIOTpService();
+        private static final SocketIOTpService INSTANCE = new SocketIOTpService();
     }
 
-    public class HumanSocketIOConnectionException extends RuntimeException {
+    private class HumanSocketIOConnectionException extends RuntimeException {
 
-        public HumanSocketIOConnectionException(String message, Throwable throwable) {
+        private HumanSocketIOConnectionException(String message, Throwable throwable) {
             super(message, throwable);
         }
 

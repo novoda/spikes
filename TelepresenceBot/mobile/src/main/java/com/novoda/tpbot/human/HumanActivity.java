@@ -28,7 +28,7 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_human);
 
-        presenter = new HumanPresenter(HumanSocketIOTpService.getInstance(), this);
+        presenter = new HumanPresenter(SocketIOTpService.getInstance(), this);
 
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
         switchableView = Views.findById(this, R.id.bot_switchable_view);
