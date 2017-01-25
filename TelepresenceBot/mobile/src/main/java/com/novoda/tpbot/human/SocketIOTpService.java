@@ -44,7 +44,7 @@ class SocketIOTpService implements HumanTpService {
             socket = IO.socket(url.toExternalForm());
         } catch (MalformedURLException | URISyntaxException exception) {
             String message = "Address should be in the format `http://[ip_address]:[port_number]`";
-            HumanSocketIOConnectionException exceptionWithUserFacingMessage = new HumanSocketIOConnectionException(message, exception);
+            ConnectionException exceptionWithUserFacingMessage = new ConnectionException(message, exception);
             return Observable.just(Result.from(exceptionWithUserFacingMessage));
         }
         return new SocketConnectionObservable();
@@ -110,9 +110,9 @@ class SocketIOTpService implements HumanTpService {
         private static final SocketIOTpService INSTANCE = new SocketIOTpService();
     }
 
-    private class HumanSocketIOConnectionException extends IOException {
+    private class ConnectionException extends IOException {
 
-        private HumanSocketIOConnectionException(String message, Throwable throwable) {
+        private ConnectionException(String message, Throwable throwable) {
             super(message, throwable);
         }
 
