@@ -10,9 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,11 +21,17 @@ import com.novoda.tpbot.R;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
+import com.novoda.tpbot.human.ServerDeclarationView;
+import com.novoda.tpbot.support.SelfDestructingMessageView;
+import com.novoda.tpbot.support.ServerDeclarationListener;
+import com.novoda.tpbot.support.SwitchableView;
 
-import java.util.Collections;
 import java.util.HashMap;
 
-public class BotActivity extends AppCompatActivity {
+public class BotActivity extends AppCompatActivity implements BotView {
+
+    private SelfDestructingMessageView debugView;
+    private SwitchableView switchableView;
 
     private MovementService movementService;
     private boolean boundToMovementService;
@@ -38,18 +41,15 @@ public class BotActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bot);
-        RecyclerView directions = Views.findById(this, R.id.bot_directions);
 
-        directions.setHasFixedSize(true);
+        debugView = Views.findById(this, R.id.bot_controller_debug_view);
+        switchableView = Views.findById(this, R.id.bot_switchable_view);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        directions.setLayoutManager(layoutManager);
-
-        RecyclerView.Adapter adapter = new DirectionAdapter(LayoutInflater.from(this), Collections.<Direction>emptyList());
-        directions.setAdapter(adapter);
-
-        ControllerView controllerView = Views.findById(this, R.id.bot_debug_controls);
+        ControllerView controllerView = Views.findById(this, R.id.bot_controller_direction_view);
         controllerView.setControllerListener(controllerListener);
+
+        ServerDeclarationView serverDeclarationView = Views.findById(switchableView, R.id.bot_server_declaration_view);
+        serverDeclarationView.setServerDeclarationListener(serverDeclarationListener);
 
         Handler handler = new Handler();
         commandRepeater = new CommandRepeater(commandRepeatedListener, handler);
@@ -75,6 +75,13 @@ public class BotActivity extends AppCompatActivity {
         @Override
         public void onLazersReleased() {
             // no-op for debug
+        }
+    };
+
+    private final ServerDeclarationListener serverDeclarationListener = new ServerDeclarationListener() {
+        @Override
+        public void onConnect(String serverAddress) {
+            debugView.showPermanently(getResources().getString(R.string.connecting_ellipsis));
         }
     };
 
@@ -162,4 +169,22 @@ public class BotActivity extends AppCompatActivity {
             boundToMovementService = false;
         }
     };
+
+    @Override
+    public void onConnect(String message) {
+        debugView.showPermanently(getResources().getString(R.string.connected));
+        switchableView.setDisplayedChild(1);
+    }
+
+    @Override
+    public void onError(String message) {
+        debugView.showPermanently(message);
+        switchableView.setDisplayedChild(0);
+    }
+
+    @Override
+    public void moveIn(Direction direction) {
+        debugView.showPermanently(direction.visualRepresentation());
+    }
+
 }
