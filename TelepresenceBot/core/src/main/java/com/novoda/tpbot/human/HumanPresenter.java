@@ -27,9 +27,7 @@ class HumanPresenter {
             observable.detachObservers();
         }
 
-        if (humanTpService != null) {
-            humanTpService.disconnect();
-        }
+        humanTpService.disconnect();
     }
 
     private class ConnectionObserver implements Observer<Result> {
