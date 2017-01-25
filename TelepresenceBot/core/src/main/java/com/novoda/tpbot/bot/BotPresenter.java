@@ -20,8 +20,8 @@ class BotPresenter {
         this.botView = botView;
     }
 
-    void startPresenting() {
-        connectionObservable = tpService.connect()
+    void startPresenting(String serverAddress) {
+        connectionObservable = tpService.connectTo(serverAddress)
                 .attach(new ConnectionObserver())
                 .start();
     }
