@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 
 import com.novoda.notils.caster.Views;
 import com.novoda.tpbot.R;
+import com.novoda.tpbot.support.ServerDeclarationListener;
 
 public class ServerDeclarationView extends LinearLayout {
 
