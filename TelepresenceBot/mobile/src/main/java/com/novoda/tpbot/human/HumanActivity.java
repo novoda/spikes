@@ -31,6 +31,8 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
         switchableView = Views.findById(this, R.id.bot_switchable_view);
 
+        presenter = new HumanPresenter(SocketIOTpService.getInstance(), this);
+
         Handler handler = new Handler();
         commandRepeater = new CommandRepeater(commandRepeatedListener, handler);
 
@@ -81,12 +83,6 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
     };
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        presenter = new HumanPresenter(SocketIOTpService.getInstance(), this);
-    }
-
-    @Override
     public void onConnect(String message) {
         debugView.showPermanently(getResources().getString(R.string.connected));
         switchableView.setDisplayedChild(1);
@@ -112,7 +108,6 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
     @Override
     protected void onStop() {
         presenter.stopPresenting();
-        presenter = null;
         super.onStop();
     }
 
