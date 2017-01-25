@@ -28,10 +28,10 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_human);
 
-        presenter = new HumanPresenter(SocketIOTpService.getInstance(), this);
-
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
         switchableView = Views.findById(this, R.id.bot_switchable_view);
+
+        presenter = new HumanPresenter(SocketIOTpService.getInstance(), this);
 
         Handler handler = new Handler();
         commandRepeater = new CommandRepeater(commandRepeatedListener, handler);
@@ -42,6 +42,14 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         ServerDeclarationView serverDeclarationView = Views.findById(switchableView, R.id.bot_server_declaration_view);
         serverDeclarationView.setServerDeclarationListener(serverDeclarationListener);
     }
+
+    private final CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
+        @Override
+        public void onCommandRepeated(String command) {
+            debugView.showTimed(command);
+            // TODO: send command to the receiver (bot) part
+        }
+    };
 
     private final ControllerListener controllerListener = new ControllerListener() {
 
@@ -66,26 +74,6 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         }
     };
 
-    private CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
-        @Override
-        public void onCommandRepeated(String command) {
-            debugView.showTimed(command);
-            // TODO: send command to the receiver (bot) part
-        }
-    };
-
-    @Override
-    protected void onPause() {
-        commandRepeater.stopCurrentRepeatingCommand();
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        presenter.stopPresenting();
-        super.onStop();
-    }
-
     private final ServerDeclarationListener serverDeclarationListener = new ServerDeclarationListener() {
         @Override
         public void onConnect(String serverAddress) {
@@ -109,6 +97,18 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
     public void onError(String message) {
         debugView.showPermanently(message);
         switchableView.setDisplayedChild(0);
+    }
+
+    @Override
+    protected void onPause() {
+        commandRepeater.stopCurrentRepeatingCommand();
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        presenter.stopPresenting();
+        super.onStop();
     }
 
 }

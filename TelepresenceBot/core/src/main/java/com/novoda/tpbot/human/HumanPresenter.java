@@ -4,6 +4,8 @@ import com.novoda.tpbot.Result;
 import com.novoda.tpbot.support.Observable;
 import com.novoda.tpbot.support.Observer;
 
+import static com.novoda.tpbot.support.Observable.unsubscribe;
+
 class HumanPresenter {
 
     private final HumanTpService humanTpService;
@@ -23,7 +25,7 @@ class HumanPresenter {
     }
 
     void stopPresenting() {
-        observable.detachObservers();
+        unsubscribe(observable);
         humanTpService.disconnect();
     }
 
