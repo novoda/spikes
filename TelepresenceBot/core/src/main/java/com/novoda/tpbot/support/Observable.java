@@ -29,7 +29,7 @@ public abstract class Observable<T> {
         return this;
     }
 
-    public synchronized void detach(Observer observer) {
+    synchronized void detach(Observer observer) {
         observers.remove(observer);
     }
 
@@ -41,6 +41,12 @@ public abstract class Observable<T> {
 
     public synchronized void detachObservers() {
         observers.clear();
+    }
+
+    public static void unsubscribe(Observable observable) {
+        if (observable != null) {
+            observable.detachObservers();
+        }
     }
 
     private static class SingleEmissionObservable<T> extends Observable<T> {
