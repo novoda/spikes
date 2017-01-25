@@ -41,7 +41,7 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         serverDeclarationView.setServerDeclarationListener(serverDeclarationListener);
     }
 
-    private CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
+    private final CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
         @Override
         public void onCommandRepeated(String command) {
             debugView.showTimed(command);
