@@ -80,6 +80,12 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         super.onPause();
     }
 
+    @Override
+    protected void onStop() {
+        presenter.stopPresenting();
+        super.onStop();
+    }
+
     private final ServerDeclarationListener serverDeclarationListener = new ServerDeclarationListener() {
         @Override
         public void onConnect(String serverAddress) {
