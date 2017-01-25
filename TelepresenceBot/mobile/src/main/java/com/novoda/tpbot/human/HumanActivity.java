@@ -43,6 +43,14 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         serverDeclarationView.setServerDeclarationListener(serverDeclarationListener);
     }
 
+    private CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
+        @Override
+        public void onCommandRepeated(String command) {
+            debugView.showTimed(command);
+            // TODO: send command to the receiver (bot) part
+        }
+    };
+
     private final ControllerListener controllerListener = new ControllerListener() {
 
         @Override
@@ -65,26 +73,6 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
             commandRepeater.stopRepeatingCommand(LAZERS);
         }
     };
-
-    private CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
-        @Override
-        public void onCommandRepeated(String command) {
-            debugView.showTimed(command);
-            // TODO: send command to the receiver (bot) part
-        }
-    };
-
-    @Override
-    protected void onPause() {
-        commandRepeater.stopCurrentRepeatingCommand();
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        presenter.stopPresenting();
-        super.onStop();
-    }
 
     private final ServerDeclarationListener serverDeclarationListener = new ServerDeclarationListener() {
         @Override
@@ -109,6 +97,18 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
     public void onError(String message) {
         debugView.showPermanently(message);
         switchableView.setDisplayedChild(0);
+    }
+
+    @Override
+    protected void onPause() {
+        commandRepeater.stopCurrentRepeatingCommand();
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        presenter.stopPresenting();
+        super.onStop();
     }
 
 }
