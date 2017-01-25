@@ -36,6 +36,7 @@ public class BotActivity extends AppCompatActivity implements BotView {
     private MovementService movementService;
     private boolean boundToMovementService;
     private CommandRepeater commandRepeater;
+    private BotPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,8 @@ public class BotActivity extends AppCompatActivity implements BotView {
 
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
         switchableView = Views.findById(this, R.id.bot_switchable_view);
+
+        presenter = new BotPresenter(SocketIOTpService.getInstance(), this);
 
         ControllerView controllerView = Views.findById(this, R.id.bot_controller_direction_view);
         controllerView.setControllerListener(controllerListener);
@@ -82,6 +85,7 @@ public class BotActivity extends AppCompatActivity implements BotView {
         @Override
         public void onConnect(String serverAddress) {
             debugView.showPermanently(getResources().getString(R.string.connecting_ellipsis));
+            presenter.startPresenting(serverAddress);
         }
     };
 
@@ -148,11 +152,12 @@ public class BotActivity extends AppCompatActivity implements BotView {
 
     @Override
     protected void onStop() {
-        super.onStop();
         if (boundToMovementService) {
             unbindService(serviceConnection);
             boundToMovementService = false;
         }
+        presenter.stopPresenting();
+        super.onStop();
     }
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
