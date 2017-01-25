@@ -4,7 +4,8 @@ public enum Event {
 
     JOIN_HUMAN("join_as_human"),
     JOIN_BOT("join_as_bot"),
-    MOVE_IN("move_in");
+    MOVE_IN("move_in"),
+    DIRECTION("direction");
 
     private final String rawEvent;
 
