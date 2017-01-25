@@ -5,9 +5,9 @@ import android.os.Looper;
 
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.Result;
+import com.novoda.tpbot.support.MalformedServerAddressException;
 import com.novoda.tpbot.support.Observable;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -43,8 +43,7 @@ class SocketIOTpService implements HumanTpService {
             URL url = new URL(serverAddress);
             socket = IO.socket(url.toExternalForm());
         } catch (MalformedURLException | URISyntaxException exception) {
-            String message = "Address should be in the format `http://[ip_address]:[port_number]`";
-            ConnectionException exceptionWithUserFacingMessage = new ConnectionException(message, exception);
+            MalformedServerAddressException exceptionWithUserFacingMessage = new MalformedServerAddressException(exception);
             return Observable.just(Result.from(exceptionWithUserFacingMessage));
         }
         return new SocketConnectionObservable();
@@ -108,14 +107,6 @@ class SocketIOTpService implements HumanTpService {
 
     private static class LazySingleton {
         private static final SocketIOTpService INSTANCE = new SocketIOTpService();
-    }
-
-    private class ConnectionException extends IOException {
-
-        private ConnectionException(String message, Throwable throwable) {
-            super(message, throwable);
-        }
-
     }
 
 }
