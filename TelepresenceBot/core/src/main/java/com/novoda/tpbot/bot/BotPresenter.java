@@ -5,6 +5,8 @@ import com.novoda.tpbot.Result;
 import com.novoda.tpbot.support.Observable;
 import com.novoda.tpbot.support.Observer;
 
+import static com.novoda.tpbot.support.Observable.unsubscribe;
+
 class BotPresenter {
 
     private final BotTpService tpService;
@@ -25,14 +27,8 @@ class BotPresenter {
     }
 
     void stopPresenting() {
-        if (connectionObservable != null) {
-            connectionObservable.detachObservers();
-        }
-
-        if (directionObservable != null) {
-            directionObservable.detachObservers();
-        }
-
+        unsubscribe(connectionObservable);
+        unsubscribe(directionObservable);
         tpService.disconnect();
     }
 
