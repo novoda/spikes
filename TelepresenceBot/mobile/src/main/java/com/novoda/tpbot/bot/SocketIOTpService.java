@@ -1,4 +1,4 @@
-package com.novoda.tpbot.human;
+package com.novoda.tpbot.bot;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -16,8 +16,9 @@ import java.net.URL;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
-class SocketIOTpService implements HumanTpService {
+class SocketIOTpService implements BotTpService {
 
     private Socket socket;
     private final Handler handler;
@@ -39,12 +40,40 @@ class SocketIOTpService implements HumanTpService {
             MalformedServerAddressException exceptionWithUserFacingMessage = new MalformedServerAddressException(exception);
             return Observable.just(Result.from(exceptionWithUserFacingMessage));
         }
-        return new SocketConnectionObservable(socket, handler, Event.JOIN_HUMAN);
+        return new SocketConnectionObservable(socket, handler, Event.JOIN_BOT);
     }
 
     @Override
-    public void moveIn(Direction direction) {
-        socket.emit(Event.MOVE_IN.rawEvent(), direction);
+    public Observable<Direction> listen() {
+        return new DirectionObservable();
+    }
+
+    private class DirectionObservable extends Observable<Direction> {
+
+        @Override
+        public Observable<Direction> start() {
+            if (!socket.connected()) {
+                return this;
+            }
+
+            socket.on(Event.DIRECTION.rawEvent(), directionListener);
+            return this;
+        }
+
+        private final Emitter.Listener directionListener = new Emitter.Listener() {
+            @Override
+            public void call(final Object... args) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (args[0] != null && args[0] instanceof String) {
+                            String rawDirection = (String) args[0];
+                            notifyOf(Direction.from(rawDirection));
+                        }
+                    }
+                });
+            }
+        };
     }
 
     @Override

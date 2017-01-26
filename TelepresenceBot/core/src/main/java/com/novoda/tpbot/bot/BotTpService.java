@@ -6,7 +6,7 @@ import com.novoda.tpbot.support.Observable;
 
 interface BotTpService {
 
-    Observable<Result> connect();
+    Observable<Result> connectTo(String serverAddress);
 
     Observable<Direction> listen();
 
