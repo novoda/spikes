@@ -1,8 +1,8 @@
-package com.novoda.tpbot.human;
+package com.novoda.tpbot.support;
 
 import com.novoda.notils.logger.simple.Log;
 
-interface ServerDeclarationListener {
+public interface ServerDeclarationListener {
 
     ServerDeclarationListener NO_OP = new ServerDeclarationListener() {
         @Override
