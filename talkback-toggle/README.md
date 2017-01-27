@@ -19,7 +19,7 @@ repositories {
 }
 
 android {
-    testBuildType "espresso" // you'll need a build type for your connected android tests
+    testBuildType 'espresso' // you'll need a build type for your connected android tests
 }
 
 dependencies {
