@@ -19,7 +19,7 @@ repositories {
 }
 
 android {
-    testBuildType 'espresso' // you'll need a build type for your connected android tests
+    testBuildType 'espresso'
 }
 
 dependencies {
@@ -27,6 +27,10 @@ dependencies {
     androidTestCompile 'com.novoda:talkback-toggle-espresso:<latest-version>' // if you need the TalkBackActivityTestRule
 }
 ```
+
+You'll need to be using a specific build type for your connected tests, like `espresso` above. This is because the library must be included in the main sourceset of the application to respond to intents and without a specific variant, your production APK will be requesting a system permission (write secure settings).
+
+If working on the tests from the IDE, it's necessary to select this build type from the build variants menu.
 
 ## Simple usage
 
