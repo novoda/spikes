@@ -14,3 +14,8 @@ dependencies {
     compile group: 'com.amazonaws', name: 'aws-java-sdk-dynamodb', version:'1.9.12'
     providedCompile group: 'javax.servlet', name: 'servlet-api', version:'2.3'
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
+}
+
