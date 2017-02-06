@@ -1,0 +1,16 @@
+apply plugin: 'war'
+
+group = 'com.amazonaws.cognito'
+version = '1.0'
+
+description = "Cognito Developer Identity Management"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'com.amazonaws', name: 'aws-java-sdk-cognitoidentity', version:'1.9.12'
+    compile group: 'com.amazonaws', name: 'aws-java-sdk-dynamodb', version:'1.9.12'
+    providedCompile group: 'javax.servlet', name: 'servlet-api', version:'2.3'
+}
