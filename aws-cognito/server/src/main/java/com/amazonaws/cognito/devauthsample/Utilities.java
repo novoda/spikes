@@ -13,35 +13,34 @@
  * permissions and limitations under the License.
  */
 
-package main.java.com.amazonaws.cognito.devauthsample;
+package com.amazonaws.cognito.devauthsample;
 
+import com.amazonaws.services.cognitoidentity.model.GetOpenIdTokenForDeveloperIdentityResult;
+import com.amazonaws.util.DateUtils;
+import com.amazonaws.util.HttpUtils;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.Hex;
-
-import com.amazonaws.services.cognitoidentity.model.GetOpenIdTokenForDeveloperIdentityResult;
-import com.amazonaws.util.DateUtils;
-import com.amazonaws.util.HttpUtils;
-
 public class Utilities {
 
     protected static final Logger log = AWSCognitoDeveloperAuthenticationSampleLogger.getLogger();
     private static SecureRandom RANDOM = new SecureRandom();
+
     static {
         RANDOM.generateSeed(16);
     }
 
     public static String prepareJsonResponseForTokens(GetOpenIdTokenForDeveloperIdentityResult result, String key) {
-    	
+
         StringBuilder responseBody = new StringBuilder();
         responseBody.append("{");
         responseBody.append("\t\"identityPoolId\": \"").append(Configuration.IDENTITY_POOL_ID).append("\",");
@@ -89,8 +88,7 @@ public class Utilities {
     public static String getEndPoint(HttpServletRequest request) {
         if (null == request) {
             return null;
-        }
-        else {
+        } else {
             String endpoint = request.getServerName().toLowerCase();
             log.info("Endpoint : " + encode(endpoint));
             return endpoint;
@@ -110,7 +108,7 @@ public class Utilities {
         }
 
         timestampLong = DateUtils.parseISO8601Date(timestamp).getTime();
-        
+
         Long now = new Date().getTime();
 
         long before15Mins = new Date(now - window).getTime();
@@ -181,11 +179,9 @@ public class Utilities {
 
     /**
      * Extract element from a JSON string
-     * 
-     * @param json
-     *            A string of JSON blob
-     * @param element
-     *            JSON key
+     *
+     * @param json    A string of JSON blob
+     * @param element JSON key
      * @return the corresponding string value of the element
      */
     public static String extractElement(String json, String element) {

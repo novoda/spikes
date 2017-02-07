@@ -13,20 +13,20 @@
  * permissions and limitations under the License.
  */
 
-package main.java.com.amazonaws.cognito.devauthsample.identity;
+package com.amazonaws.cognito.devauthsample.identity;
 
-import java.util.logging.Logger;
-import java.util.Map;
-
-import main.java.com.amazonaws.cognito.CognitoDeveloperIdentityManagement;
-import main.java.com.amazonaws.cognito.devauthsample.AWSCognitoDeveloperAuthenticationSampleLogger;
-import main.java.com.amazonaws.cognito.devauthsample.Configuration;
-import main.java.com.amazonaws.cognito.devauthsample.Utilities;
-import main.java.com.amazonaws.cognito.devauthsample.exception.DataAccessException;
-import main.java.com.amazonaws.cognito.devauthsample.exception.UnauthorizedException;
-import main.java.com.amazonaws.cognito.devauthsample.identity.DeviceAuthentication.DeviceInfo;
-import main.java.com.amazonaws.cognito.devauthsample.identity.UserAuthentication.UserInfo;
+import com.amazonaws.cognito.CognitoDeveloperIdentityManagement;
+import com.amazonaws.cognito.devauthsample.AWSCognitoDeveloperAuthenticationSampleLogger;
+import com.amazonaws.cognito.devauthsample.Configuration;
+import com.amazonaws.cognito.devauthsample.Utilities;
+import com.amazonaws.cognito.devauthsample.exception.DataAccessException;
+import com.amazonaws.cognito.devauthsample.exception.UnauthorizedException;
+import com.amazonaws.cognito.devauthsample.identity.DeviceAuthentication.DeviceInfo;
+import com.amazonaws.cognito.devauthsample.identity.UserAuthentication.UserInfo;
 import com.amazonaws.services.cognitoidentity.model.GetOpenIdTokenForDeveloperIdentityResult;
+
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * This class allows new users to register by providing username and password combination.
@@ -50,16 +50,13 @@ public class AWSCognitoDeveloperAuthenticationSample {
 
     /**
      * Verify if the given signature is valid.
-     * 
-     * @param stringToSign
-     *            The string to sign
-     * @param key
-     *            The key used in the signature process
-     * @param signature
-     *            Base64 encoded HMAC-SHA256 signature derived from key and
-     *            string
+     *
+     * @param stringToSign    The string to sign
+     * @param key             The key used in the signature process
+     * @param targetSignature Base64 encoded HMAC-SHA256 signature derived from key and
+     *                        string
      * @return true if computed signature matches with the given signature,
-     *         false otherwise
+     * false otherwise
      */
     public boolean validateSignature(String stringToSign, String key, String targetSignature) {
         String computedSignature = Utilities.sign(stringToSign, key);
@@ -69,15 +66,12 @@ public class AWSCognitoDeveloperAuthenticationSample {
     /**
      * Allows users to register with AWSCognitoDeveloperAuthenticationSample. This function
      * is useful in Identity mode
-     * 
-     * @param username
-     *            Unique alphanumeric string of length between 3 to 128
-     *            characters with special characters limited to underscore (_),
-     *            period (.) and (@).
-     * @param password
-     *            String of length between 6 to 128 characters
-     * @param endpoint
-     *            DNS name of host machine
+     *
+     * @param username Unique alphanumeric string of length between 3 to 128
+     *                 characters with special characters limited to underscore (_),
+     *                 period (.) and (@).
+     * @param password String of length between 6 to 128 characters
+     * @param endpoint DNS name of host machine
      * @return boolean indicating if the registration was successful or not
      * @throws DataAccessException
      */
@@ -90,19 +84,16 @@ public class AWSCognitoDeveloperAuthenticationSample {
      * is checked to see it falls within the valid timestamp window. The
      * signature is computed and matched against the given signature. Useful in
      * Anonymous and Identity modes
-     * 
-     * @param uid
-     *            Unique device identifier
-     * @param signature
-     *            Base64 encoded HMAC-SHA256 signature derived from key and
-     *            timestamp
-     * @param timestamp
-     *            Timestamp of the request in ISO8601 format
+     *
+     * @param uid       Unique device identifier
+     * @param signature Base64 encoded HMAC-SHA256 signature derived from key and
+     *                  timestamp
+     * @param timestamp Timestamp of the request in ISO8601 format
      * @throws DataAccessException
      * @throws UnauthorizedException
      */
-    public void validateTokenRequest(String uid, String signature, String timestamp, 
-            String stringToSign) throws DataAccessException, UnauthorizedException {
+    public void validateTokenRequest(String uid, String signature, String timestamp,
+                                     String stringToSign) throws DataAccessException, UnauthorizedException {
         if (!Utilities.isTimestampValid(timestamp)) {
             throw new UnauthorizedException("Invalid timestamp: " + timestamp);
         }
@@ -124,14 +115,13 @@ public class AWSCognitoDeveloperAuthenticationSample {
      * Generate tokens for given UID. The tokens are encrypted using the key
      * corresponding to UID. Encrypted tokens are then wrapped in JSON object
      * before returning it. Useful in Anonymous and Identity modes
-     * 
-     * @param uid
-     *            Unique device identifier
+     *
+     * @param uid Unique device identifier
      * @return encrypted tokens as JSON object
-     * @throws Exception 
+     * @throws Exception
      */
-    public String getToken(String uid, Map<String,String> logins, String identityId) 
-        throws Exception {
+    public String getToken(String uid, Map<String, String> logins, String identityId)
+            throws Exception {
 
         DeviceInfo device = deviceAuthenticator.getDeviceInfo(uid);
         if (device == null) {
@@ -142,7 +132,7 @@ public class AWSCognitoDeveloperAuthenticationSample {
         if (user == null) {
             throw new UnauthorizedException("Couldn't find user: " + device.getUsername());
         }
-        
+
         if (user != null && !user.getUsername().equals(logins.get(Configuration.DEVELOPER_PROVIDER_NAME))) {
             throw new UnauthorizedException("User mismatch for device and logins map");
         }
@@ -160,16 +150,12 @@ public class AWSCognitoDeveloperAuthenticationSample {
      * window. The signature is computed and matched against the given
      * signature. Also its checked to see if the UID belongs to the username.
      * This function is useful in Identity mode
-     * 
-     * @param username
-     *            Unique user identifier
-     * @param uid
-     *            Unique device identifier
-     * @param signature
-     *            Base64 encoded HMAC-SHA256 signature derived from hash of
-     *            salted-password and timestamp
-     * @param timestamp
-     *            Timestamp of the request in ISO8601 format
+     *
+     * @param username  Unique user identifier
+     * @param uid       Unique device identifier
+     * @param signature Base64 encoded HMAC-SHA256 signature derived from hash of
+     *                  salted-password and timestamp
+     * @param timestamp Timestamp of the request in ISO8601 format
      * @return status code indicating if login request is valid or not
      * @throws DataAccessException
      * @throws UnauthorizedException
@@ -209,11 +195,9 @@ public class AWSCognitoDeveloperAuthenticationSample {
      * Generate key for device UID. The key is encrypted by hash of salted
      * password of the user. Encrypted key is then wrapped in JSON object before
      * returning it. This function is useful in Identity mode
-     * 
-     * @param username
-     *            Unique user identifier
-     * @param uid
-     *            Unique device identifier
+     *
+     * @param username Unique user identifier
+     * @param uid      Unique device identifier
      * @return encrypted key as JSON object
      * @throws DataAccessException
      * @throws UnauthorizedException
@@ -237,11 +221,9 @@ public class AWSCognitoDeveloperAuthenticationSample {
      * This method regenerates the key each time. It lookups up device details
      * of a registered device. Also registers device if it is not already
      * registered.
-     * 
-     * @param uid
-     *            Unique device identifier
-     * @param username
-     *            Userid of the current user
+     *
+     * @param uid      Unique device identifier
+     * @param username Userid of the current user
      * @return device info i.e. key and userid
      * @throws DataAccessException
      */
@@ -259,11 +241,9 @@ public class AWSCognitoDeveloperAuthenticationSample {
 
     /**
      * Checks of the device UID belongs to the given user
-     * 
-     * @param useridFromUser
-     *            Userid of the current user
-     * @param useridFromDevice
-     *            Userid associated with the given UID
+     *
+     * @param useridFromUser   Userid of the current user
+     * @param useridFromDevice Userid associated with the given UID
      * @return true if device UID belongs to current user, false otherwise
      */
     private boolean deviceBelongsToUser(String useridFromUser, String useridFromDevice) {

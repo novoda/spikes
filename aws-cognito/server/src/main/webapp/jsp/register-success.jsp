@@ -14,7 +14,7 @@
 -->
 
 <%@page
-	import="main.java.com.amazonaws.cognito.devauthsample.Configuration"%>
+	import="com.amazonaws.cognito.devauthsample.Configuration"%>
 <%@ page session="true"%>
 
 <html>

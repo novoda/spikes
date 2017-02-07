@@ -9,13 +9,19 @@ repositories {
     mavenCentral()
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+ext {
+    versions = [ amazon_sdk: '1.9.12' ]
+}
+
 dependencies {
-    compile group: 'com.amazonaws', name: 'aws-java-sdk-cognitoidentity', version:'1.9.12'
-    compile group: 'com.amazonaws', name: 'aws-java-sdk-dynamodb', version:'1.9.12'
-    providedCompile group: 'javax.servlet', name: 'servlet-api', version:'2.3'
+    compile "com.amazonaws:aws-java-sdk-cognitoidentity:$versions.amazon_sdk"
+    compile "com.amazonaws:aws-java-sdk-dynamodb:$versions.amazon_sdk"
+    providedCompile 'javax.servlet:servlet-api:2.3'
 }
 
 task wrapper(type: Wrapper) {
     gradleVersion = '3.3'
 }
-

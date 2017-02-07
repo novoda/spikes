@@ -13,35 +13,21 @@
  * permissions and limitations under the License.
  */
 
-package main.java.com.amazonaws.cognito.devauthsample.identity;
+package com.amazonaws.cognito.devauthsample.identity;
+
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.cognito.devauthsample.Configuration;
+import com.amazonaws.cognito.devauthsample.Utilities;
+import com.amazonaws.cognito.devauthsample.exception.DataAccessException;
+import com.amazonaws.regions.RegionUtils;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import main.java.com.amazonaws.cognito.devauthsample.Configuration;
-import main.java.com.amazonaws.cognito.devauthsample.Utilities;
-import main.java.com.amazonaws.cognito.devauthsample.exception.DataAccessException;
-
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.regions.RegionUtils;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
-import com.amazonaws.services.dynamodbv2.model.DeleteItemRequest;
-import com.amazonaws.services.dynamodbv2.model.DescribeTableRequest;
-import com.amazonaws.services.dynamodbv2.model.DescribeTableResult;
-import com.amazonaws.services.dynamodbv2.model.GetItemRequest;
-import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
-import com.amazonaws.services.dynamodbv2.model.KeyType;
-import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
-import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
-import com.amazonaws.services.dynamodbv2.model.ResourceNotFoundException;
-import com.amazonaws.services.dynamodbv2.model.ScanRequest;
-import com.amazonaws.services.dynamodbv2.model.ScanResult;
 
 /**
  * This class is used store and authenticate users. All users and there
@@ -89,7 +75,7 @@ public class UserAuthentication {
 
     /**
      * Returns the list of usernames stored in the identity table.
-     * 
+     *
      * @return list of existing usernames in DynamoDB table
      */
     public List<String> listUsers() {
@@ -113,13 +99,10 @@ public class UserAuthentication {
     /**
      * Attempts to register the username, password combination. Checks if
      * username not already exist. Returns true if successful, false otherwise.
-     * 
-     * @param username
-     *            Unique user identifier
-     * @param password
-     *            user password
-     * @param uri
-     *            endpoint URI
+     *
+     * @param username Unique user identifier
+     * @param password user password
+     * @param uri      endpoint URI
      * @return true if successful, false otherwise.
      * @throws DataAccessException
      */
@@ -133,9 +116,8 @@ public class UserAuthentication {
 
     /**
      * Deletes the specified username from the identity table.
-     * 
-     * @param username
-     *            Unique user identifier
+     *
+     * @param username Unique user identifier
      * @throws DataAccessException
      */
     public void deleteUser(String username) throws DataAccessException {
@@ -156,13 +138,10 @@ public class UserAuthentication {
     /**
      * Authenticates the given username, password combination. Hash of password
      * is matched against the hash value stored for password field
-     * 
-     * @param username
-     *            Unique user identifier
-     * @param password
-     *            user password
-     * @param uri
-     *            endpoint URI
+     *
+     * @param username Unique user identifier
+     * @param password user password
+     * @param uri      endpoint URI
      * @return true if authentication was successful, false otherwise
      * @throws DataAccessException
      */
@@ -183,13 +162,10 @@ public class UserAuthentication {
      * Authenticates the given username, signature combination. A signature is
      * generated and matched against the given signature. If they match then
      * returns true.
-     * 
-     * @param username
-     *            Unique user identifier
-     * @param timestamp
-     *            Timestamp of the request
-     * @param signature
-     *            Signature of the request
+     *
+     * @param username  Unique user identifier
+     * @param timestamp Timestamp of the request
+     * @param signature Signature of the request
      * @return true if authentication was successful, false otherwise
      * @throws DataAccessException
      */
@@ -208,13 +184,10 @@ public class UserAuthentication {
      * Store the username, password combination in the Identity table. The
      * username will represent the item name and the item will contain a
      * attributes password and userid.
-     * 
-     * @param username
-     *            Unique user identifier
-     * @param password
-     *            user password
-     * @param uri
-     *            endpoint URI
+     *
+     * @param username Unique user identifier
+     * @param password user password
+     * @param uri      endpoint URI
      */
     protected void storeUser(String username, String password, String uri) throws DataAccessException {
         if (null == username || null == password) {
@@ -269,9 +242,8 @@ public class UserAuthentication {
 
     /**
      * Checks to see if given tableName exist
-     * 
-     * @param tableName
-     *            The table name to check
+     *
+     * @param tableName The table name to check
      * @return true if tableName exist, false otherwise
      */
     protected boolean doesTableExist(String tableName) throws DataAccessException {
@@ -288,9 +260,8 @@ public class UserAuthentication {
 
     /**
      * Get user info for the username
-     * 
-     * @param username
-     *            Unique user identifier
+     *
+     * @param username Unique user identifier
      * @return UserInfo for the user, null otherwise
      */
     public UserInfo getUserInfo(String username) throws DataAccessException {
@@ -310,9 +281,8 @@ public class UserAuthentication {
 
     /**
      * Checks to see if the username already exist in the user table
-     * 
-     * @param username
-     *            Unique user identifier
+     *
+     * @param username Unique user identifier
      * @return true if username already exist, false otherwise
      * @throws DataAccessException
      */

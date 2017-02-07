@@ -13,18 +13,17 @@
  * permissions and limitations under the License.
  */
 
-package main.java.com.amazonaws.cognito.devauthsample.servlet;
+package com.amazonaws.cognito.devauthsample.servlet;
 
-import java.io.IOException;
-import java.util.logging.Level;
+import com.amazonaws.cognito.devauthsample.Utilities;
+import com.amazonaws.cognito.devauthsample.exception.DataAccessException;
+import com.amazonaws.cognito.devauthsample.exception.MissingParameterException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import main.java.com.amazonaws.cognito.devauthsample.Utilities;
-import main.java.com.amazonaws.cognito.devauthsample.exception.DataAccessException;
-import main.java.com.amazonaws.cognito.devauthsample.exception.MissingParameterException;
+import java.io.IOException;
+import java.util.logging.Level;
 
 /**
  * Servlet implementation class UserRegisterServlet

@@ -13,18 +13,18 @@
  * permissions and limitations under the License.
  */
 
-package main.java.com.amazonaws.cognito;
+package com.amazonaws.cognito;
 
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import main.java.com.amazonaws.cognito.devauthsample.Configuration;
-import main.java.com.amazonaws.cognito.devauthsample.AWSCognitoDeveloperAuthenticationSampleLogger;
+import com.amazonaws.cognito.devauthsample.AWSCognitoDeveloperAuthenticationSampleLogger;
+import com.amazonaws.cognito.devauthsample.Configuration;
 import com.amazonaws.regions.RegionUtils;
 import com.amazonaws.services.cognitoidentity.AmazonCognitoIdentityClient;
 import com.amazonaws.services.cognitoidentity.model.GetOpenIdTokenForDeveloperIdentityRequest;
 import com.amazonaws.services.cognitoidentity.model.GetOpenIdTokenForDeveloperIdentityResult;
+
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CognitoDeveloperIdentityManagement {
 	protected static final Logger log = AWSCognitoDeveloperAuthenticationSampleLogger.getLogger();

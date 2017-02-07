@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package main.java.com.amazonaws.cognito.devauthsample;
+package com.amazonaws.cognito.devauthsample;
 
 /**
  * This interface exposes key functions performed by AWSCognitoDeveloperAuthenticationSample.
@@ -25,15 +25,12 @@ public interface AWSCognitoDeveloperAuthenticationSample {
 
     /**
      * Allows users to register with AWSCognitoDeveloperAuthenticationSample.
-     * 
-     * @param username
-     *            Unique alphanumeric string of length between 3 to 128
-     *            characters with special characters limited to underscore (_)
-     *            and period (.)
-     * @param password
-     *            String of length between 6 to 128 characters
-     * @param endpoint
-     *            DNS name of host machine
+     *
+     * @param username Unique alphanumeric string of length between 3 to 128
+     *                 characters with special characters limited to underscore (_)
+     *                 and period (.)
+     * @param password String of length between 6 to 128 characters
+     * @param endpoint DNS name of host machine
      * @return status code indicating if the registration was successful or not
      * @throws Exception
      */
@@ -43,14 +40,11 @@ public interface AWSCognitoDeveloperAuthenticationSample {
      * Verify if the token request is valid. UID is authenticated. The timestamp
      * is checked to see it falls within the valid timestamp window. The
      * signature is computed and matched against the given signature.
-     * 
-     * @param uid
-     *            Unique device identifier
-     * @param signature
-     *            Base64 encoded HMAC-SHA256 signature derived from key and
-     *            timestamp
-     * @param timestamp
-     *            Timestamp of the request in ISO8601 format
+     *
+     * @param uid       Unique device identifier
+     * @param signature Base64 encoded HMAC-SHA256 signature derived from key and
+     *                  timestamp
+     * @param timestamp Timestamp of the request in ISO8601 format
      * @return status code indicating if token request is valid or not
      * @throws Exception
      */
@@ -60,9 +54,8 @@ public interface AWSCognitoDeveloperAuthenticationSample {
      * Generate tokens for given UID. The tokens are encrypted using the key
      * corresponding to UID. Encrypted tokens are then wrapped in JSON object
      * before returning it.
-     * 
-     * @param uid
-     *            Unique device identifier
+     *
+     * @param uid Unique device identifier
      * @return encrypted tokens as JSON object
      * @throws Exception
      */
@@ -73,16 +66,12 @@ public interface AWSCognitoDeveloperAuthenticationSample {
      * The timestamp is checked to see it falls within the valid timestamp
      * window. The signature is computed and matched against the given
      * signature. Also its checked to see if the UID belongs to the username.
-     * 
-     * @param username
-     *            Unique user identifier
-     * @param uid
-     *            Unique device identifier
-     * @param signature
-     *            Base64 encoded HMAC-SHA256 signature derived from hash of
-     *            salted-password and timestamp
-     * @param timestamp
-     *            Timestamp of the request in ISO8601 format
+     *
+     * @param username  Unique user identifier
+     * @param uid       Unique device identifier
+     * @param signature Base64 encoded HMAC-SHA256 signature derived from hash of
+     *                  salted-password and timestamp
+     * @param timestamp Timestamp of the request in ISO8601 format
      * @return status code indicating if login request is valid or not
      * @throws Exception
      */
@@ -92,11 +81,9 @@ public interface AWSCognitoDeveloperAuthenticationSample {
      * Generate key for device UID. The key is encrypted by hash of salted
      * password of the user. Encrypted key is then wrapped in JSON object before
      * returning it.
-     * 
-     * @param username
-     *            Unique user identifier
-     * @param uid
-     *            Unique device identifier
+     *
+     * @param username Unique user identifier
+     * @param uid      Unique device identifier
      * @return encrypted key as JSON object
      * @throws Exception
      */

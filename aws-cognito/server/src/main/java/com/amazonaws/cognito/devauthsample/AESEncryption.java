@@ -13,19 +13,18 @@
  * permissions and limitations under the License.
  */
 
-package main.java.com.amazonaws.cognito.devauthsample;
-
-import java.security.AlgorithmParameters;
-import java.security.GeneralSecurityException;
-import java.security.SecureRandom;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
+package com.amazonaws.cognito.devauthsample;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.AlgorithmParameters;
+import java.security.GeneralSecurityException;
+import java.security.SecureRandom;
 
 /**
  * A utility class to encrypt and decrypt strings.
@@ -39,11 +38,9 @@ public class AESEncryption {
 
     /**
      * Encrypt a string with a given key.
-     * 
-     * @param clearText
-     *            string to be encrypted
-     * @param key
-     *            encryption key
+     *
+     * @param clearText string to be encrypted
+     * @param key       encryption key
      * @return encrypted string
      */
     public static String wrap(String clearText, String key) {
@@ -59,11 +56,9 @@ public class AESEncryption {
 
     /**
      * Decrypt a string with given key.
-     * 
-     * @param cipherText
-     *            encrypted string
-     * @param key
-     *            the key used in decryption
+     *
+     * @param cipherText encrypted string
+     * @param key        the key used in decryption
      * @return a decrypted string
      */
     public static String unwrap(String cipherText, String key) {

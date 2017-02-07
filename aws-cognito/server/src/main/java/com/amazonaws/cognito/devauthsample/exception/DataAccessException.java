@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package main.java.com.amazonaws.cognito.devauthsample.exception;
+package com.amazonaws.cognito.devauthsample.exception;
 
 /**
  * This is the exception thrown when AWSCognitoDeveloperAuthenticationSample fails to retrieve data from AWS

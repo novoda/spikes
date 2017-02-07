@@ -13,25 +13,23 @@
  * permissions and limitations under the License.
  */
 
-package main.java.com.amazonaws.cognito.devauthsample.servlet;
+package com.amazonaws.cognito.devauthsample.servlet;
 
-import java.io.IOException;
-import java.util.logging.Level;
+import com.amazonaws.cognito.devauthsample.Utilities;
+import com.amazonaws.cognito.devauthsample.exception.DataAccessException;
+import com.amazonaws.cognito.devauthsample.exception.MissingParameterException;
+import com.amazonaws.cognito.devauthsample.exception.UnauthorizedException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import main.java.com.amazonaws.cognito.devauthsample.Utilities;
-import main.java.com.amazonaws.cognito.devauthsample.exception.DataAccessException;
-import main.java.com.amazonaws.cognito.devauthsample.exception.MissingParameterException;
-import main.java.com.amazonaws.cognito.devauthsample.exception.UnauthorizedException;
+import java.io.IOException;
+import java.util.logging.Level;
 
 /**
  * This class is used to generate encryption key and send
  * back to user. This key is used to encrypt data in further communication. A
  * key is generated if the user supplied credentials are valid
- * 
  */
 public class LoginServlet extends RootServlet {
     private static final long serialVersionUID = 1L;

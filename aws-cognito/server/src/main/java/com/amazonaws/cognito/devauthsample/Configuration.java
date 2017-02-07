@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package main.java.com.amazonaws.cognito.devauthsample;
+package com.amazonaws.cognito.devauthsample;
 
 import java.util.logging.Logger;
 

@@ -1,3 +1,13 @@
+This is an adjusted sample to showcase a server using Cognito Developer Authentication.
+
+#### Changes from the original
+
+- use Gradle to build
+- adjust package structure (remove `main.java` prefix)
+- organized imports
+
+______________________________
+
 # AWSCognitoSampleDeveloperAuthenticationSample
 
 **Overview**

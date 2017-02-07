@@ -13,19 +13,18 @@
  * permissions and limitations under the License.
  */
 
-package main.java.com.amazonaws.cognito.devauthsample.servlet;
+package com.amazonaws.cognito.devauthsample.servlet;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.logging.Level;
+import com.amazonaws.cognito.devauthsample.exception.DataAccessException;
+import com.amazonaws.cognito.devauthsample.exception.MissingParameterException;
+import com.amazonaws.cognito.devauthsample.exception.UnauthorizedException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import main.java.com.amazonaws.cognito.devauthsample.exception.DataAccessException;
-import main.java.com.amazonaws.cognito.devauthsample.exception.MissingParameterException;
-import main.java.com.amazonaws.cognito.devauthsample.exception.UnauthorizedException;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.logging.Level;
 
 /**
  * Servlet implementation class GetTokenServlet
@@ -43,7 +42,7 @@ public class GetTokenServlet extends RootServlet {
             String signature = getRequiredParameter(request, "signature");
             String timestamp = getRequiredParameter(request, "timestamp");
             String identityId = getParameter(request, "identityId");
-            HashMap<String,String> logins = new HashMap<String,String>();
+            HashMap<String, String> logins = new HashMap<String, String>();
 
             // build the string to sign
             StringBuilder stringToSign = new StringBuilder();
@@ -65,7 +64,7 @@ public class GetTokenServlet extends RootServlet {
                 }
             }
 
-            if(identityId != null){
+            if (identityId != null) {
                 stringToSign.append(identityId);
             }
             log.info(String.format("Get token with uid [%s] timestamp [%s]", uid, timestamp));

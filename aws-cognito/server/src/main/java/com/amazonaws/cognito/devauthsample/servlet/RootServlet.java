@@ -13,10 +13,12 @@
  * permissions and limitations under the License.
  */
 
-package main.java.com.amazonaws.cognito.devauthsample.servlet;
+package com.amazonaws.cognito.devauthsample.servlet;
 
-import java.io.IOException;
-import java.util.logging.Logger;
+import com.amazonaws.cognito.devauthsample.AWSCognitoDeveloperAuthenticationSampleLogger;
+import com.amazonaws.cognito.devauthsample.Constants;
+import com.amazonaws.cognito.devauthsample.exception.MissingParameterException;
+import com.amazonaws.cognito.devauthsample.identity.AWSCognitoDeveloperAuthenticationSample;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -24,11 +26,8 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import main.java.com.amazonaws.cognito.devauthsample.Constants;
-import main.java.com.amazonaws.cognito.devauthsample.AWSCognitoDeveloperAuthenticationSampleLogger;
-import main.java.com.amazonaws.cognito.devauthsample.exception.MissingParameterException;
-import main.java.com.amazonaws.cognito.devauthsample.identity.AWSCognitoDeveloperAuthenticationSample;
+import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * An abstract class for AWSCognitoDeveloperAuthenticationSample servlets.
@@ -74,12 +73,11 @@ public abstract class RootServlet extends HttpServlet {
         value = value.trim();
         if (value.length() == 0) {
             throw new MissingParameterException(parameterName);
-        }
-        else {
+        } else {
             return value;
         }
     }
-    
+
     protected String getParameter(HttpServletRequest request, String parameterName) {
         return request.getParameter(parameterName);
     }

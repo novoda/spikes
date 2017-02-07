@@ -13,12 +13,11 @@
  * permissions and limitations under the License.
  */
 
-package main.java.com.amazonaws.cognito.devauthsample;
-
-import java.util.HashMap;
-import java.util.Map;
+package com.amazonaws.cognito.devauthsample;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Constants {
 

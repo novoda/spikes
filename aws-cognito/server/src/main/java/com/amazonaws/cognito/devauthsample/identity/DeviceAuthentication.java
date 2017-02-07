@@ -13,34 +13,20 @@
  * permissions and limitations under the License.
  */
 
-package main.java.com.amazonaws.cognito.devauthsample.identity;
+package com.amazonaws.cognito.devauthsample.identity;
+
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.cognito.devauthsample.Configuration;
+import com.amazonaws.cognito.devauthsample.exception.DataAccessException;
+import com.amazonaws.regions.RegionUtils;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import main.java.com.amazonaws.cognito.devauthsample.Configuration;
-import main.java.com.amazonaws.cognito.devauthsample.exception.DataAccessException;
-
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
-import com.amazonaws.services.dynamodbv2.model.DeleteItemRequest;
-import com.amazonaws.services.dynamodbv2.model.DescribeTableRequest;
-import com.amazonaws.services.dynamodbv2.model.DescribeTableResult;
-import com.amazonaws.services.dynamodbv2.model.GetItemRequest;
-import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
-import com.amazonaws.services.dynamodbv2.model.KeyType;
-import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
-import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
-import com.amazonaws.services.dynamodbv2.model.ResourceNotFoundException;
-import com.amazonaws.services.dynamodbv2.model.ScanRequest;
-import com.amazonaws.services.dynamodbv2.model.ScanResult;
-import com.amazonaws.regions.RegionUtils;
 
 /**
  * This class is used to store and authenticate devices. All devices and their
@@ -76,7 +62,7 @@ public class DeviceAuthentication {
     public DeviceAuthentication() {
         ddb = new AmazonDynamoDBClient();
         ddb.setRegion(RegionUtils.getRegion(Configuration.REGION));
-        
+
         try {
             if (!doesTableExist(DEVICE_TABLE)) {
                 createDeviceTable();
@@ -109,9 +95,8 @@ public class DeviceAuthentication {
 
     /**
      * Returns device info for given device ID (UID)
-     * 
-     * @param uid
-     *            Unique device identifier
+     *
+     * @param uid Unique device identifier
      * @return device info for the given uid
      */
     public DeviceInfo getDeviceInfo(String uid) throws DataAccessException {
@@ -132,13 +117,10 @@ public class DeviceAuthentication {
     /**
      * Attempts to register the UID, Key and username combination. Returns true
      * if successful, false otherwise.
-     * 
-     * @param uid
-     *            Unique device identifier
-     * @param key
-     *            encryption key associated with UID
-     * @param username
-     *            Unique user identifier
+     *
+     * @param uid      Unique device identifier
+     * @param key      encryption key associated with UID
+     * @param username Unique user identifier
      * @return true if device registration was successful, false otherwise
      * @throws DataAccessException
      */
@@ -153,9 +135,8 @@ public class DeviceAuthentication {
 
     /**
      * Deletes the specified UID from the identity table.
-     * 
-     * @param uid
-     *            Unique device identifier
+     *
+     * @param uid Unique device identifier
      */
     public void deleteDevice(String uid) throws DataAccessException {
         HashMap<String, AttributeValue> key = new HashMap<String, AttributeValue>();
@@ -176,11 +157,9 @@ public class DeviceAuthentication {
      * Authenticates the given UID, Key combination. If the password in the item
      * identified by the item name 'UID' matches the Key given then true is
      * returned, false otherwise.
-     * 
-     * @param uid
-     *            Unique device identifier
-     * @param key
-     *            encryption key associated with UID
+     *
+     * @param uid Unique device identifier
+     * @param key encryption key associated with UID
      * @return true if authentication was successful, false otherwise
      * @throws DataAccessException
      */
@@ -193,13 +172,10 @@ public class DeviceAuthentication {
      * Store the UID, Key, username combination in the Identity table. The UID
      * will represent the item name and the item will contain attributes key and
      * username.
-     * 
-     * @param uid
-     *            Unique device identifier
-     * @param key
-     *            encryption key associated with UID
-     * @param username
-     *            Unique user identifier
+     *
+     * @param uid      Unique device identifier
+     * @param key      encryption key associated with UID
+     * @param username Unique user identifier
      */
     protected void storeDevice(String uid, String key, String username) throws DataAccessException {
         Map<String, AttributeValue> item = new HashMap<String, AttributeValue>();
@@ -250,9 +226,8 @@ public class DeviceAuthentication {
 
     /**
      * Checks to see if given tableName exist
-     * 
-     * @param tableName
-     *            The table name to check
+     *
+     * @param tableName The table name to check
      * @return true if tableName exist, false otherwise
      */
     protected boolean doesTableExist(String tableName) throws DataAccessException {
@@ -269,9 +244,8 @@ public class DeviceAuthentication {
 
     /**
      * Checks to see if the device id (UID) already exist in the device table
-     * 
-     * @param uid
-     *            Unique device identifier
+     *
+     * @param uid Unique device identifier
      * @return true if the given UID already exist, false otherwise
      * @throws DataAccessException
      */

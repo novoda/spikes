@@ -13,8 +13,8 @@
  * permissions and limitations under the License.
 -->
 
-<%@page import="main.java.com.amazonaws.cognito.devauthsample.Utilities"%>
-<%@page import="main.java.com.amazonaws.cognito.devauthsample.Configuration"%>
+<%@page import="com.amazonaws.cognito.devauthsample.Utilities"%>
+<%@page import="com.amazonaws.cognito.devauthsample.Configuration"%>
 <%@ page session="true" %>
 
 <script type="text/javascript">
