@@ -1,5 +1,5 @@
 <!--
- * Copyright 2010-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2010-2015 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@
 
 <html>
 	<head>
-		<title>Amazon Cognito Developer Authentication Sample - Error</title>
+		<title>Amazon Cognito Developer Authentication Sample - Validation Error</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/jsp/css/styles.css" type="text/css" media="screen" charset="utf-8">
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/jsp/css/styles-mobile.css" type="text/css" media="screen" charset="utf-8">
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/jsp/css/styles-tablet.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<link rel="stylesheet" href="${pageContext['request'].contextPath}/jsp/css/styles.css" type="text/css" media="screen" charset="utf-8">
+		<link rel="stylesheet" href="${pageContext['request'].contextPath}/jsp/css/styles-mobile.css" type="text/css" media="screen" charset="utf-8">
+		<link rel="stylesheet" href="${pageContext['request'].contextPath}/jsp/css/styles-tablet.css" type="text/css" media="screen" title="no title" charset="utf-8">
 	</head>
 
     <body>
@@ -34,7 +34,7 @@
 		<div id="body">
 			<fieldset>
 				<legend>Error!</legend>
-				<p class="message">The page you are looking for does not exist.</p>
+				<p class="message"><b>Username</b> and/or <b>password</b> supplied is not valid</p>
 			</fieldset>
 		</div>
 

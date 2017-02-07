@@ -20,6 +20,7 @@ import com.amazonaws.cognito.devauthsample.exception.MissingParameterException;
 import com.amazonaws.cognito.devauthsample.exception.UnauthorizedException;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,6 +30,7 @@ import java.util.logging.Level;
 /**
  * Servlet implementation class GetTokenServlet
  */
+@WebServlet(urlPatterns = "/gettoken/*")
 public class GetTokenServlet extends RootServlet {
     private static final long serialVersionUID = 1L;
 

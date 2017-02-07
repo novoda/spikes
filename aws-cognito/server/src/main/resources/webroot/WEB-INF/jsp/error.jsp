@@ -18,12 +18,12 @@
 
 <html>
 	<head>
-		<title>Amazon Cognito Developer Authentication Sample - Missing Information</title>
+		<title>Amazon Cognito Developer Authentication Sample - Error</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/jsp/css/styles.css" type="text/css" media="screen" charset="utf-8">
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/jsp/css/styles-mobile.css" type="text/css" media="screen" charset="utf-8">
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/jsp/css/styles-tablet.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<link rel="stylesheet" href="${pageContext['request'].contextPath}/jsp/css/styles.css" type="text/css" media="screen" charset="utf-8">
+		<link rel="stylesheet" href="${pageContext['request'].contextPath}/jsp/css/styles-mobile.css" type="text/css" media="screen" charset="utf-8">
+		<link rel="stylesheet" href="${pageContext['request'].contextPath}/jsp/css/styles-tablet.css" type="text/css" media="screen" title="no title" charset="utf-8">
 	</head>
 
     <body>
@@ -34,7 +34,7 @@
 		<div id="body">
 			<fieldset>
 				<legend>Error!</legend>
-				<p class="message">When attempting to login or register be sure to provide both the <b>username</b> and <b>password</b>.</p>
+				<p class="message">This site experienced an unexpected error.  Please try your request again later.</p>
 			</fieldset>
 		</div>
 

@@ -20,6 +20,7 @@ import com.amazonaws.cognito.devauthsample.exception.DataAccessException;
 import com.amazonaws.cognito.devauthsample.exception.MissingParameterException;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -28,6 +29,7 @@ import java.util.logging.Level;
 /**
  * Servlet implementation class UserRegisterServlet
  */
+@WebServlet(urlPatterns = "/registeruser/*")
 public class RegisterUserServlet extends RootServlet {
     private static final long serialVersionUID = 1L;
 

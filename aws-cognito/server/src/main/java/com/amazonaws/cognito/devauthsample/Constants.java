@@ -44,7 +44,8 @@ public class Constants {
     }
 
     public static String getMsg(int errorCode) {
-        return messages.get(errorCode);
+        String msg = messages.get(errorCode);
+        return msg == null ? "Errorcode: " + String.valueOf(errorCode) : msg;
     }
 
 }

@@ -93,8 +93,7 @@ public abstract class RootServlet extends HttpServlet {
         response.setContentType("text/plain; charset=UTF-8");
         response.setDateHeader("Expires", System.currentTimeMillis());
 
-        ServletOutputStream out = response.getOutputStream();
-        out.println(Constants.getMsg(httpResponseCode));
+        response.sendError(httpResponseCode, Constants.getMsg(httpResponseCode));
     }
 
     public void sendOKResponse(HttpServletResponse response, String data) throws IOException {

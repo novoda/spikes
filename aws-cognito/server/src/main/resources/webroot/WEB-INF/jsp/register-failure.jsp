@@ -18,15 +18,15 @@
 
 <html>
 	<head>
-		<title>Amazon Cognito Developer Authentication Sample - Validation Error</title>
+		<title>Amazon Cognito Developer Authentication Sample - Error</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/jsp/css/styles.css" type="text/css" media="screen" charset="utf-8">
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/jsp/css/styles-mobile.css" type="text/css" media="screen" charset="utf-8">
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/jsp/css/styles-tablet.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<link rel="stylesheet" href="${pageContext['request'].contextPath}/jsp/css/styles.css" type="text/css" media="screen" charset="utf-8">
+		<link rel="stylesheet" href="${pageContext['request'].contextPath}/jsp/css/styles-mobile.css" type="text/css" media="screen" charset="utf-8">
+		<link rel="stylesheet" href="${pageContext['request'].contextPath}/jsp/css/styles-tablet.css" type="text/css" media="screen" title="no title" charset="utf-8">
 	</head>
+	<body class="failure">
 
-    <body>
 		<div id="header">
 			<h1>Amazon Cognito Developer Authentication Sample</h1>
 		</div>
@@ -34,12 +34,13 @@
 		<div id="body">
 			<fieldset>
 				<legend>Error!</legend>
-				<p class="message"><b>Username</b> and/or <b>password</b> supplied is not valid</p>
+				<p class="message">There was an error with your Username/Password combination. Please try again.</p>
 			</fieldset>
 		</div>
 
 		<div id="footer">
 			<p class="footnote"><%=Configuration.APP_NAME %> - Cognito Developer Authentication Sample</p>
 		</div>
-    </body>
+
+	</body>
 </html>
