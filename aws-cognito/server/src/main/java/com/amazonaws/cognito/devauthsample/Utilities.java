@@ -17,7 +17,6 @@ package com.amazonaws.cognito.devauthsample;
 
 import com.amazonaws.services.cognitoidentity.model.GetOpenIdTokenForDeveloperIdentityResult;
 import com.amazonaws.util.DateUtils;
-import com.amazonaws.util.HttpUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 
@@ -25,6 +24,8 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.logging.Level;
@@ -155,7 +156,11 @@ public class Utilities {
     public static String encode(String s) {
         if (null == s)
             return s;
-        return HttpUtils.urlEncode(s, false);
+        try {
+            return URLEncoder.encode(s, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

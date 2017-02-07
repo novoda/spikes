@@ -13,7 +13,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 ext {
-    versions = [ amazon_sdk: '1.9.12' ]
+    versions = [ amazon_sdk: '1.11.86' ]
 }
 
 dependencies {
