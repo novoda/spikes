@@ -44,7 +44,7 @@
 	<servlet>
 		<display-name>GetTokenServlet</display-name>
 		<servlet-name>GetTokenServlet</servlet-name>
-		<servlet-class>main.java.com.amazonaws.cognito.devauthsample.servlet.GetTokenServlet</servlet-class>
+		<servlet-class>com.amazonaws.cognito.devauthsample.servlet.GetTokenServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>GetTokenServlet</servlet-name>
@@ -57,7 +57,7 @@
     <!-- ========================================================================================================== -->		
 	<servlet>
 		<servlet-name>RegisterUserServlet</servlet-name>
-		<servlet-class>main.java.com.amazonaws.cognito.devauthsample.servlet.RegisterUserServlet</servlet-class>
+		<servlet-class>com.amazonaws.cognito.devauthsample.servlet.RegisterUserServlet</servlet-class>
 		<init-param>
             <param-name>success</param-name>
             <param-value>/jsp/register-success.jsp</param-value>
@@ -78,7 +78,7 @@
     <!-- ========================================================================================================== -->	
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>main.java.com.amazonaws.cognito.devauthsample.servlet.LoginServlet</servlet-class>
+        <servlet-class>com.amazonaws.cognito.devauthsample.servlet.LoginServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
