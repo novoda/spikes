@@ -38,6 +38,7 @@ import com.amazon.identity.auth.device.authorization.api.AuthorizationListener;
 import com.amazon.identity.auth.device.authorization.api.AuthzConstants;
 import com.amazon.identity.auth.device.shared.APIListener;
 import com.amazonaws.cognito.sync.devauth.client.AmazonSharedPreferencesWrapper;
+import com.amazonaws.cognito.sync.devauth.client.LambdaClient;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -48,10 +49,10 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
+import java.util.Arrays;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Arrays;
 
 import oauth.signpost.OAuthProvider;
 import oauth.signpost.basic.DefaultOAuthConsumer;
@@ -245,8 +246,10 @@ public class MainActivity extends Activity {
                     @Override
                     public void onClick(View v) {
                         // Validate the username and password
-                        if (txtUsername.getText().toString().isEmpty()
-                                || txtPassword.getText().toString().isEmpty()) {
+                        String username = txtUsername.getText().toString();
+                        String password = txtPassword.getText().toString();
+                        if (username.isEmpty()
+                                || password.isEmpty()) {
                             new AlertDialog.Builder(MainActivity.this)
                                     .setTitle("Login error")
                                     .setMessage(
@@ -259,11 +262,12 @@ public class MainActivity extends Activity {
                             // Initiate user authentication against the
                             // developer backend in this case the sample Cognito
                             // developer authentication application.
-                            ((DeveloperAuthenticationProvider) CognitoSyncClientManager.credentialsProvider
-                                    .getIdentityProvider()).login(
-                                    txtUsername.getText().toString(),
-                                    txtPassword.getText().toString(),
-                                    MainActivity.this);
+//                            ((DeveloperAuthenticationProvider) CognitoSyncClientManager.credentialsProvider
+//                                    .getIdentityProvider()).login(
+//                                    username,
+//                                    password,
+//                                    MainActivity.this);
+                            new LambdaClient().login(MainActivity.this, username, password);
                         }
                         login.dismiss();
                     }
