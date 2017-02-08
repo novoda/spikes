@@ -1,9 +1,11 @@
 buildscript {
+    ext { springBootVersion = '1.5.1.RELEASE' }
+
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.1.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
 }
 
@@ -31,7 +33,10 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 ext {
-    versions = [amazon_sdk: '1.11.86']
+    versions = [
+            amazon_sdk: '1.11.86',
+            jetty_jsp:  '9.4.1.v20170120'
+    ]
 }
 
 tasks.withType(JavaCompile) {
@@ -41,13 +46,14 @@ tasks.withType(JavaCompile) {
 dependencies {
     compile "com.amazonaws:aws-java-sdk-cognitoidentity:$versions.amazon_sdk"
     compile "com.amazonaws:aws-java-sdk-dynamodb:$versions.amazon_sdk"
-    compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:'1.5.1.RELEASE') {
+    compile('org.springframework.boot:spring-boot-starter-web') {
         exclude(module: 'spring-boot-starter-tomcat')
     }
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty', version:'1.5.1.RELEASE'
-    compile group: 'org.eclipse.jetty', name: 'apache-jsp', version:'9.4.1.v20170120'
-    compile group: 'org.eclipse.jetty', name: 'apache-jstl', version:'9.4.1.v20170120'
-    testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version:'1.5.1.RELEASE') {
+    compile 'org.springframework.boot:spring-boot-starter-jetty'
+    compile "org.eclipse.jetty:apache-jsp:$versions.jetty_jsp"
+    compile "org.eclipse.jetty:apache-jstl:$versions.jetty_jsp"
+
+    testCompile('org.springframework.boot:spring-boot-starter-test') {
         exclude(module: 'commons-logging')
     }
 }
