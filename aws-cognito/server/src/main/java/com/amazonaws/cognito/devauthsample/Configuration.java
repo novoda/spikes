@@ -30,18 +30,19 @@ public class Configuration {
      * The identity pool to use
      */
     public static final String IDENTITY_POOL_ID = ((System
-            .getProperty("IDENTITY_POOL_ID") == null) || System.getProperty(
-            "IDENTITY_POOL_ID").isEmpty()) ? System.getProperty("PARAM1")
-            : System.getProperty("IDENTITY_POOL_ID");
+            .getenv("IDENTITY_POOL_ID") == null) || System
+            .getenv("IDENTITY_POOL_ID").isEmpty()) ? System
+            .getenv("PARAM1") : System
+            .getenv("IDENTITY_POOL_ID");
 
     /**
      * The developer provider name to use
      */
     public static final String DEVELOPER_PROVIDER_NAME = ((System
-            .getProperty("DEVELOPER_PROVIDER_NAME") == null) || System
-            .getProperty("DEVELOPER_PROVIDER_NAME").isEmpty()) ? System
-            .getProperty("PARAM2") : System
-            .getProperty("DEVELOPER_PROVIDER_NAME");
+            .getenv("DEVELOPER_PROVIDER_NAME") == null) || System
+            .getenv("DEVELOPER_PROVIDER_NAME").isEmpty()) ? System
+            .getenv("PARAM2") : System
+            .getenv("DEVELOPER_PROVIDER_NAME");
 
     /**
      * The application name
@@ -85,7 +86,7 @@ public class Configuration {
     }
 
     private static String getRegion() {
-        return System.getProperty("REGION", "us-east-1");
+        return System.getenv("REGION");
     }
 
 }

@@ -26,13 +26,13 @@
 <meta name="viewport"
 	content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
 <link rel="stylesheet"
-	href="${pageContext['request'].contextPath}/jsp/css/styles.css"
+	href="${pageContext['request'].contextPath}/css/styles.css"
 	type="text/css" media="screen" charset="utf-8">
 <link rel="stylesheet"
-	href="${pageContext['request'].contextPath}/jsp/css/styles-mobile.css"
+	href="${pageContext['request'].contextPath}/css/styles-mobile.css"
 	type="text/css" media="screen" charset="utf-8">
 <link rel="stylesheet"
-	href="${pageContext['request'].contextPath}/jsp/css/styles-tablet.css"
+	href="${pageContext['request'].contextPath}/css/styles-tablet.css"
 	type="text/css" media="screen" title="no title" charset="utf-8">
 </head>
 

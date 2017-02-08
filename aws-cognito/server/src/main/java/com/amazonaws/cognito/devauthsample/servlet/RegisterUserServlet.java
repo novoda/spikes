@@ -47,7 +47,7 @@ public class RegisterUserServlet extends RootServlet {
             log.warning("Missing parameter: " + e.getMessage() + ". Setting Http status code "
                     + HttpServletResponse.SC_BAD_REQUEST);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            forward(request, response, "/jsp/mpe.jsp");
+            forward(request, response, "/jsp/mpe");
             return;
         }
 
@@ -58,7 +58,7 @@ public class RegisterUserServlet extends RootServlet {
         if (!Utilities.isValidUsername(username) || !Utilities.isValidPassword(password)) {
             log.warning(String.format("Invalid parameters: username [%s] or password", username));
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            forward(request, response, "/jsp/mpe.jsp");
+            forward(request, response, "/jsp/mpe");
             return;
         }
 
@@ -68,19 +68,19 @@ public class RegisterUserServlet extends RootServlet {
             if (!result) {
                 log.warning(String.format("Duplicate registration [%s]", username));
                 response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
-                forward(request, response, getServletParameter(this, "error"));
+                forward(request, response, "/jsp/register-error");
                 return;
             }
         } catch (DataAccessException e) {
             log.log(Level.SEVERE, String.format("Failed to register user [%s]", username), e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            forward(request, response, getServletParameter(this, "error"));
+            forward(request, response, "/jsp/register-error");
             return;
         }
 
         response.setStatus(HttpServletResponse.SC_OK);
         log.info(String.format("User [%s] registered successfully", username));
-        forward(request, response, getServletParameter(this, "success"));
+        forward(request, response, "/jsp/register-success");
         return;
     }
 }
