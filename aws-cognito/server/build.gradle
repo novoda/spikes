@@ -19,9 +19,20 @@ ext {
 dependencies {
     compile "com.amazonaws:aws-java-sdk-cognitoidentity:$versions.amazon_sdk"
     compile "com.amazonaws:aws-java-sdk-dynamodb:$versions.amazon_sdk"
+    compile "com.amazonaws:aws-lambda-java-core:1.1.0"
     providedCompile 'javax.servlet:servlet-api:2.3'
 }
 
 task wrapper(type: Wrapper) {
     gradleVersion = '3.3'
 }
+
+task buildZip(type: Zip) {
+    from compileJava
+    from processResources
+    into('lib') {
+        from configurations.runtime
+    }
+}
+
+build.dependsOn buildZip
