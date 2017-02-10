@@ -41,7 +41,7 @@ public class CognitoSyncClientManager {
     private static final Regions REGION = Regions.fromName(BuildConfig.REGION);
 
     private static CognitoSyncManager syncClient;
-    protected static CognitoCachingCredentialsProvider credentialsProvider = null;
+    public static CognitoCachingCredentialsProvider credentialsProvider = null;
     protected static AWSAbstractCognitoIdentityProvider developerIdentityProvider;
 
     /**

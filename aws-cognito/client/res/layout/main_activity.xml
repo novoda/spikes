@@ -39,11 +39,18 @@
         android:text="Login with Amazon" />
 
     <Button
-        android:id="@+id/btnLoginDevAuth"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:text="Developer Authenticated Login" />
+      android:id="@+id/btnLoginDevAuth"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="18dp"
+      android:text="Developer Authenticated Login" />
+
+    <Button
+      android:id="@+id/btnResource"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="18dp"
+      android:text="Access restricted resource" />
 
     <Button
         android:id="@+id/btnListDatasets"
