@@ -24,7 +24,11 @@ import com.amazonaws.cognito.devauthsample.exception.UnauthorizedException;
 import com.amazonaws.cognito.devauthsample.identity.DeviceAuthentication.DeviceInfo;
 import com.amazonaws.cognito.devauthsample.identity.UserAuthentication.UserInfo;
 import com.amazonaws.services.cognitoidentity.model.GetOpenIdTokenForDeveloperIdentityResult;
+import com.amazonaws.util.DateUtils;
+import org.apache.commons.codec.binary.Hex;
 
+import java.security.SecureRandom;
+import java.util.Date;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -37,6 +41,10 @@ import java.util.logging.Logger;
 public class AWSCognitoDeveloperAuthenticationSample {
 
     private static final Logger log = AWSCognitoDeveloperAuthenticationSampleLogger.getLogger();
+    private static SecureRandom RANDOM = new SecureRandom();
+    static {
+        RANDOM.generateSeed(16);
+    }
 
     private final DeviceAuthentication deviceAuthenticator;
     private final UserAuthentication userAuthenticator;
@@ -46,6 +54,35 @@ public class AWSCognitoDeveloperAuthenticationSample {
         deviceAuthenticator = new DeviceAuthentication();
         userAuthenticator = new UserAuthentication();
         byoiManagement = new CognitoDeveloperIdentityManagement();
+    }
+
+    /**
+     * Checks to see if the request has valid timestamp. If given timestamp
+     * falls in 30 mins window from current server timestamp
+     */
+    private static boolean isTimestampValid(String timestamp) {
+        long timestampLong = 0L;
+        final long window = 15 * 60 * 1000L;
+
+        if (null == timestamp) {
+            return false;
+        }
+
+        timestampLong = DateUtils.parseISO8601Date(timestamp).getTime();
+
+        Long now = new Date().getTime();
+
+        long before15Mins = new Date(now - window).getTime();
+        long after15Mins = new Date(now + window).getTime();
+
+        return (timestampLong >= before15Mins && timestampLong <= after15Mins);
+    }
+
+    private static String generateRandomString() {
+        byte[] randomBytes = new byte[16];
+        RANDOM.nextBytes(randomBytes);
+        String randomString = new String(Hex.encodeHex(randomBytes));
+        return randomString;
     }
 
     /**
@@ -94,7 +131,7 @@ public class AWSCognitoDeveloperAuthenticationSample {
      */
     public void validateTokenRequest(String uid, String signature, String timestamp,
                                      String stringToSign) throws DataAccessException, UnauthorizedException {
-        if (!Utilities.isTimestampValid(timestamp)) {
+        if (!isTimestampValid(timestamp)) {
             throw new UnauthorizedException("Invalid timestamp: " + timestamp);
         }
         log.info(String.format("Timestamp [ %s ] is valid", timestamp));
@@ -162,7 +199,7 @@ public class AWSCognitoDeveloperAuthenticationSample {
      */
     public void validateLoginRequest(String username, String uid, String signature, String timestamp)
             throws DataAccessException, UnauthorizedException {
-        if (!Utilities.isTimestampValid(timestamp)) {
+        if (!isTimestampValid(timestamp)) {
             throw new UnauthorizedException("Invalid timestamp: " + timestamp);
         }
 
@@ -230,7 +267,7 @@ public class AWSCognitoDeveloperAuthenticationSample {
     private DeviceInfo regenerateKey(String uid, String username)
             throws DataAccessException {
         log.info("Generating encryption key");
-        String encryptionKey = Utilities.generateRandomString();
+        String encryptionKey = generateRandomString();
 
         if (deviceAuthenticator.registerDevice(uid, encryptionKey, username)) {
             return deviceAuthenticator.getDeviceInfo(uid);

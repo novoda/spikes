@@ -15,21 +15,14 @@
 
 package com.amazonaws.cognito.devauthsample;
 
+import org.apache.commons.codec.CharEncoding;
+import org.apache.commons.codec.Charsets;
+
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Constants {
-
-    /**
-     * Encoding format
-     */
-    public static final String ENCODING_FORMAT = "UTF8";
-
-    /**
-     * Signature method
-     */
-    public static final String SIGNATURE_METHOD = "HmacSHA256";
 
     /**
      * Mapping of error code and message

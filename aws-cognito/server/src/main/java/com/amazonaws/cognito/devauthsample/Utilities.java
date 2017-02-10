@@ -15,9 +15,9 @@
 
 package com.amazonaws.cognito.devauthsample;
 
+import com.amazonaws.cognito.devauthsample.identity.AWSCognitoDeveloperAuthenticationSample;
 import com.amazonaws.services.cognitoidentity.model.GetOpenIdTokenForDeveloperIdentityResult;
-import com.amazonaws.util.DateUtils;
-import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.codec.binary.Hex;
 
 import javax.crypto.Mac;
@@ -26,19 +26,14 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Utilities {
 
+    private static final String ENCODING_FORMAT = CharEncoding.UTF_8;
+    private static final String SIGNATURE_METHOD = "HmacSHA256";
     private static final Logger log = AWSCognitoDeveloperAuthenticationSampleLogger.getLogger();
-    private static SecureRandom RANDOM = new SecureRandom();
-
-    static {
-        RANDOM.generateSeed(16);
-    }
 
     public static String prepareJsonResponseForTokens(GetOpenIdTokenForDeveloperIdentityResult result, String key) {
 
@@ -66,9 +61,9 @@ public class Utilities {
 
     public static String sign(String content, String key) {
         try {
-            byte[] data = content.getBytes(Constants.ENCODING_FORMAT);
-            Mac mac = Mac.getInstance(Constants.SIGNATURE_METHOD);
-            mac.init(new SecretKeySpec(key.getBytes(Constants.ENCODING_FORMAT), Constants.SIGNATURE_METHOD));
+            byte[] data = content.getBytes(ENCODING_FORMAT);
+            Mac mac = Mac.getInstance(SIGNATURE_METHOD);
+            mac.init(new SecretKeySpec(key.getBytes(ENCODING_FORMAT), SIGNATURE_METHOD));
             char[] signature = Hex.encodeHex(mac.doFinal(data));
             return new String(signature);
         } catch (Exception e) {
@@ -81,11 +76,6 @@ public class Utilities {
         return sign((username + Configuration.APP_NAME + endPointUri.toLowerCase()), password);
     }
 
-    public static String base64(String data) throws UnsupportedEncodingException {
-        byte[] signature = Base64.encodeBase64(data.getBytes(Constants.ENCODING_FORMAT));
-        return new String(signature, Constants.ENCODING_FORMAT);
-    }
-
     public static String getEndPoint(HttpServletRequest request) {
         if (null == request) {
             return null;
@@ -94,35 +84,6 @@ public class Utilities {
             log.info("Endpoint : " + encode(endpoint));
             return endpoint;
         }
-    }
-
-    /**
-     * Checks to see if the request has valid timestamp. If given timestamp
-     * falls in 30 mins window from current server timestamp
-     */
-    public static boolean isTimestampValid(String timestamp) {
-        long timestampLong = 0L;
-        final long window = 15 * 60 * 1000L;
-
-        if (null == timestamp) {
-            return false;
-        }
-
-        timestampLong = DateUtils.parseISO8601Date(timestamp).getTime();
-
-        Long now = new Date().getTime();
-
-        long before15Mins = new Date(now - window).getTime();
-        long after15Mins = new Date(now + window).getTime();
-
-        return (timestampLong >= before15Mins && timestampLong <= after15Mins);
-    }
-
-    public static String generateRandomString() {
-        byte[] randomBytes = new byte[16];
-        RANDOM.nextBytes(randomBytes);
-        String randomString = new String(Hex.encodeHex(randomBytes));
-        return randomString;
     }
 
     public static boolean isValidUsername(String username) {
