@@ -46,7 +46,6 @@ tasks.withType(JavaCompile) {
 dependencies {
     compile "com.amazonaws:aws-java-sdk-cognitoidentity:$versions.amazon_sdk"
     compile "com.amazonaws:aws-java-sdk-dynamodb:$versions.amazon_sdk"
-    compile "com.amazonaws:aws-lambda-java-core:1.1.0"
     compile('org.springframework.boot:spring-boot-starter-web') {
         exclude(module: 'spring-boot-starter-tomcat')
     }

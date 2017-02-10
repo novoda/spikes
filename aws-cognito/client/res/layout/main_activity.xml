@@ -18,27 +18,6 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
-        android:id="@+id/btnLoginFacebook"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:text="Login with Facebook" />
-
-    <Button
-        android:id="@+id/btnLoginTwitter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:text="Login with Twitter" />
-
-    <Button
-        android:id="@+id/btnLoginLWA"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:text="Login with Amazon" />
-
-    <Button
       android:id="@+id/btnLoginDevAuth"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -51,13 +30,6 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="18dp"
       android:text="Access restricted resource" />
-
-    <Button
-        android:id="@+id/btnListDatasets"
-        android:layout_width="match_parent"
-        android:layout_marginTop="18dp"
-        android:layout_height="wrap_content"
-        android:text="Browse data" />
 
     <Button
         android:id="@+id/btnWipedata"

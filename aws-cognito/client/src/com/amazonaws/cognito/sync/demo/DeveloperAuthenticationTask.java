@@ -68,7 +68,7 @@ public class DeveloperAuthenticationTask extends
     protected void onPostExecute(Void result) {
         if (!isSuccessful) {
             new AlertDialog.Builder(context).setTitle("Login error")
-                    .setMessage("Username or password do not match!!").show();
+                    .setMessage("Configuration error or username and password do not match!!").show();
         } else {
             Toast.makeText(context, "Logged in!", Toast.LENGTH_SHORT).show();
         }

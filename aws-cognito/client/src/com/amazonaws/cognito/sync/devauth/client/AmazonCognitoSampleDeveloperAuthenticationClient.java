@@ -83,22 +83,18 @@ public class AmazonCognitoSampleDeveloperAuthenticationClient {
      * the user's account.
      */
     public Response login(String username, String password) {
-        Response response = Response.SUCCESSFUL;
-        if (AmazonSharedPreferencesWrapper
-                .getUidForDevice(this.sharedPreferences) == null) {
-            String uid = AmazonCognitoSampleDeveloperAuthenticationClient
-                    .generateRandomString();
-            LoginRequest loginRequest = new LoginRequest(this.endpoint,
-                    this.appName, uid, username, password);
-            ResponseHandler handler = new LoginResponseHandler(
-                    loginRequest.getDecryptionKey());
+        String uid = AmazonCognitoSampleDeveloperAuthenticationClient
+                .generateRandomString();
+        LoginRequest loginRequest = new LoginRequest(this.endpoint,
+                this.appName, uid, username, password);
+        ResponseHandler handler = new LoginResponseHandler(
+                loginRequest.getDecryptionKey());
 
-            response = this.processRequest(loginRequest, handler);
-            if (response.requestWasSuccessful()) {
-                AmazonSharedPreferencesWrapper.registerDeviceId(
-                        this.sharedPreferences, uid,
-                        ((LoginResponse) response).getKey());
-            }
+        Response response = this.processRequest(loginRequest, handler);
+        if (response.requestWasSuccessful()) {
+            AmazonSharedPreferencesWrapper.registerDeviceId(
+                    this.sharedPreferences, uid,
+                    ((LoginResponse) response).getKey());
         }
 
         return response;
