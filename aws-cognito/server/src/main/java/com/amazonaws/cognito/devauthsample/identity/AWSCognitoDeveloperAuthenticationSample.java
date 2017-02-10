@@ -16,7 +16,7 @@
 package com.amazonaws.cognito.devauthsample.identity;
 
 import com.amazonaws.cognito.CognitoDeveloperIdentityManagement;
-import com.amazonaws.cognito.devauthsample.AWSCognitoDeveloperAuthenticationSampleLogger;
+import com.amazonaws.cognito.devauthsample.SampleLogger;
 import com.amazonaws.cognito.devauthsample.Configuration;
 import com.amazonaws.cognito.devauthsample.Utilities;
 import com.amazonaws.cognito.devauthsample.exception.DataAccessException;
@@ -40,7 +40,7 @@ import java.util.logging.Logger;
 
 public class AWSCognitoDeveloperAuthenticationSample {
 
-    private static final Logger log = AWSCognitoDeveloperAuthenticationSampleLogger.getLogger();
+    private static final Logger log = SampleLogger.getLogger();
     private static SecureRandom RANDOM = new SecureRandom();
     static {
         RANDOM.generateSeed(16);
@@ -170,12 +170,12 @@ public class AWSCognitoDeveloperAuthenticationSample {
             throw new UnauthorizedException("Couldn't find user: " + device.getUsername());
         }
 
-        if (user != null && !user.getUsername().equals(logins.get(Configuration.DEVELOPER_PROVIDER_NAME))) {
+        if (!user.getUsername().equals(logins.get(Configuration.DEVELOPER_PROVIDER_NAME))) {
             throw new UnauthorizedException("User mismatch for device and logins map");
         }
 
         log.info("Creating temporary credentials");
-        GetOpenIdTokenForDeveloperIdentityResult result = byoiManagement.getOpenIdTokenFromCognito(user.getUsername(), logins, identityId);
+        GetOpenIdTokenForDeveloperIdentityResult result = byoiManagement.getTokenFromCognito(user.getUsername(), logins, identityId);
 
         log.info("Generating session tokens for UID : " + uid);
         return Utilities.prepareJsonResponseForTokens(result, device.getKey());

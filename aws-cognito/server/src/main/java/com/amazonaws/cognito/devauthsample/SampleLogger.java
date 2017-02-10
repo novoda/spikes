@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  * Utility used to enable logging for applications launched in AWS Elastic
  * BeanStalk.
  */
-public class AWSCognitoDeveloperAuthenticationSampleLogger {
+public class SampleLogger {
 
     private static Logger logger;
 
@@ -59,7 +59,7 @@ public class AWSCognitoDeveloperAuthenticationSampleLogger {
         return logger;
     }
 
-    private AWSCognitoDeveloperAuthenticationSampleLogger() {
+    private SampleLogger() {
     }
 
 }

@@ -15,7 +15,7 @@
 
 package com.amazonaws.cognito.devauthsample.servlet;
 
-import com.amazonaws.cognito.devauthsample.AWSCognitoDeveloperAuthenticationSampleLogger;
+import com.amazonaws.cognito.devauthsample.SampleLogger;
 import com.amazonaws.cognito.devauthsample.Constants;
 import com.amazonaws.cognito.devauthsample.exception.MissingParameterException;
 import com.amazonaws.cognito.devauthsample.identity.AWSCognitoDeveloperAuthenticationSample;
@@ -36,7 +36,7 @@ public abstract class RootServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    protected static final Logger log = AWSCognitoDeveloperAuthenticationSampleLogger.getLogger();
+    protected static final Logger log = SampleLogger.getLogger();
 
     /**
      * A AWSCognitoDeveloperAuthenticationSample instance.

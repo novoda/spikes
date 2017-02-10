@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  */
 public class Configuration {
 
-    protected static final Logger log = AWSCognitoDeveloperAuthenticationSampleLogger
+    protected static final Logger log = SampleLogger
             .getLogger();
 
     /**

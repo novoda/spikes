@@ -15,7 +15,7 @@
 
 package com.amazonaws.cognito;
 
-import com.amazonaws.cognito.devauthsample.AWSCognitoDeveloperAuthenticationSampleLogger;
+import com.amazonaws.cognito.devauthsample.SampleLogger;
 import com.amazonaws.cognito.devauthsample.Configuration;
 import com.amazonaws.regions.RegionUtils;
 import com.amazonaws.services.cognitoidentity.AmazonCognitoIdentityClient;
@@ -27,7 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CognitoDeveloperIdentityManagement {
-	protected static final Logger log = AWSCognitoDeveloperAuthenticationSampleLogger.getLogger();
+	private static final Logger log = SampleLogger.getLogger();
     
 	AmazonCognitoIdentityClient cib;
 	
@@ -36,8 +36,7 @@ public class CognitoDeveloperIdentityManagement {
 		cib.setRegion(RegionUtils.getRegion(Configuration.REGION));
 	}
 	
-    public GetOpenIdTokenForDeveloperIdentityResult getOpenIdTokenFromCognito( 
-            String username, Map<String,String> logins, String identityId) throws Exception{
+    public GetOpenIdTokenForDeveloperIdentityResult getTokenFromCognito(String username, Map<String,String> logins, String identityId) throws Exception {
     	if ( ( Configuration.IDENTITY_POOL_ID == null ) || username == null ) {
 			return null;
 		}

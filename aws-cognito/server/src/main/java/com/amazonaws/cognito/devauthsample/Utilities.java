@@ -15,7 +15,6 @@
 
 package com.amazonaws.cognito.devauthsample;
 
-import com.amazonaws.cognito.devauthsample.identity.AWSCognitoDeveloperAuthenticationSample;
 import com.amazonaws.services.cognitoidentity.model.GetOpenIdTokenForDeveloperIdentityResult;
 import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.codec.binary.Hex;
@@ -33,7 +32,7 @@ public class Utilities {
 
     private static final String ENCODING_FORMAT = CharEncoding.UTF_8;
     private static final String SIGNATURE_METHOD = "HmacSHA256";
-    private static final Logger log = AWSCognitoDeveloperAuthenticationSampleLogger.getLogger();
+    private static final Logger log = SampleLogger.getLogger();
 
     public static String prepareJsonResponseForTokens(GetOpenIdTokenForDeveloperIdentityResult result, String key) {
 
