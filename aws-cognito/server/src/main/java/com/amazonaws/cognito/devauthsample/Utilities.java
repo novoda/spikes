@@ -33,7 +33,7 @@ import java.util.logging.Logger;
 
 public class Utilities {
 
-    protected static final Logger log = AWSCognitoDeveloperAuthenticationSampleLogger.getLogger();
+    private static final Logger log = AWSCognitoDeveloperAuthenticationSampleLogger.getLogger();
     private static SecureRandom RANDOM = new SecureRandom();
 
     static {
