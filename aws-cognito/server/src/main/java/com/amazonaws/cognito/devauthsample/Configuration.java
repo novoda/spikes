@@ -29,30 +29,22 @@ public class Configuration {
     /**
      * The identity pool to use
      */
-    public static final String IDENTITY_POOL_ID = ((System
-            .getenv("IDENTITY_POOL_ID") == null) || System
-            .getenv("IDENTITY_POOL_ID").isEmpty()) ? System
-            .getenv("PARAM1") : System
-            .getenv("IDENTITY_POOL_ID");
+    public static final String IDENTITY_POOL_ID = readProperty("IDENTITY_POOL_ID");
 
     /**
      * The developer provider name to use
      */
-    public static final String DEVELOPER_PROVIDER_NAME = ((System
-            .getenv("DEVELOPER_PROVIDER_NAME") == null) || System
-            .getenv("DEVELOPER_PROVIDER_NAME").isEmpty()) ? System
-            .getenv("PARAM2") : System
-            .getenv("DEVELOPER_PROVIDER_NAME");
+    public static final String DEVELOPER_PROVIDER_NAME = readProperty("DEVELOPER_PROVIDER_NAME");
 
     /**
      * The application name
      */
-    public static final String APP_NAME = getAppName();
+    public static final String APP_NAME = "AWSCognitoDeveloperAuthenticationSample".toLowerCase();
 
     /**
      * The region to run against
      */
-    public static final String REGION = getRegion();
+    public static final String REGION = readProperty("REGION");
 
     /**
      * The duration for which the open id token will be valid
@@ -71,22 +63,18 @@ public class Configuration {
      */
     public static final String DEVICE_TABLE = getDeviceTable();
 
-    private static String getAppName() {
-        return System.getProperty("APP_NAME",
-                "AWSCognitoDeveloperAuthenticationSample").toLowerCase();
-    }
-
     private static String getUsersTable() {
         return "AWSCognitoDeveloperAuthenticationSample_" + APP_NAME + "_USERS";
     }
 
     private static String getDeviceTable() {
-        return "AWSCognitoDeveloperAuthenticationSample_" + APP_NAME
-                + "_DEVICES";
+        return "AWSCognitoDeveloperAuthenticationSample_" + APP_NAME + "_DEVICES";
     }
 
-    private static String getRegion() {
-        return System.getenv("REGION");
+    private static String readProperty(String key) {
+        String value = System.getenv(key);
+        if (value == null)
+            throw new RuntimeException("Property " + key + " is not set!");
+        return value;
     }
-
 }
