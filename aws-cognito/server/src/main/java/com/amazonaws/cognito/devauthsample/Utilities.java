@@ -37,26 +37,24 @@ public class Utilities {
 
     public static String prepareJsonResponseForTokens(GetOpenIdTokenForDeveloperIdentityResult result, String key) {
 
-        StringBuilder responseBody = new StringBuilder();
-        responseBody.append("{");
-        responseBody.append("\t\"identityPoolId\": \"").append(Configuration.IDENTITY_POOL_ID).append("\",");
-        responseBody.append("\t\"identityId\": \"").append(result.getIdentityId()).append("\",");
-        responseBody.append("\t\"token\": \"").append(result.getToken()).append("\",");
-        responseBody.append("}");
+        String body = "{" +
+                "\t\"identityPoolId\": \"" + Configuration.IDENTITY_POOL_ID + "\"," +
+                "\t\"identityId\": \"" + result.getIdentityId() + "\"," +
+                "\t\"token\": \"" + result.getToken() + "\"," +
+                "}";
 
         // Encrypting the response
-        return AESEncryption.wrap(responseBody.toString(), key);
+        return AESEncryption.wrap(body, key);
     }
 
     public static String prepareJsonResponseForKey(String data, String key) {
 
-        StringBuilder responseBody = new StringBuilder();
-        responseBody.append("{");
-        responseBody.append("\t\"key\": \"").append(data).append("\"");
-        responseBody.append("}");
+        String body = "{" +
+                "\t\"key\": \"" + data + "\"" +
+                "}";
 
         // Encrypting the response
-        return AESEncryption.wrap(responseBody.toString(), key.substring(0, 32));
+        return AESEncryption.wrap(body, key.substring(0, 32));
     }
 
     public static String sign(String content, String key) {
@@ -73,7 +71,7 @@ public class Utilities {
     }
 
     public static String getSaltedPassword(String username, String endPointUri, String password) {
-        return sign((username + Configuration.APP_NAME + endPointUri.toLowerCase()), password);
+        return sign(username + Configuration.APP_NAME + endPointUri.toLowerCase(), password);
     }
 
     public static String getEndPoint(HttpServletRequest request) {
@@ -109,12 +107,10 @@ public class Utilities {
     }
 
     public static boolean isEmpty(String str) {
-        if (null == str || str.trim().length() == 0)
-            return true;
-        return false;
+        return null == str || str.trim().length() == 0;
     }
 
-    public static String encode(String s) {
+    private static String encode(String s) {
         if (null == s)
             return s;
         try {
@@ -151,8 +147,7 @@ public class Utilities {
      * @return the corresponding string value of the element
      */
     public static String extractElement(String json, String element) {
-        boolean hasElement = (json.indexOf(element) != -1);
-        if (hasElement) {
+        if ((json.contains(element))) {
             int elementIndex = json.indexOf(element) + element.length() + 1;
             int startIndex = json.indexOf("\"", elementIndex);
             int endIndex = json.indexOf("\"", startIndex + 1);
