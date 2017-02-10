@@ -11,4 +11,7 @@ public interface LambdaInterface {
     @LambdaFunction
     LambdaClient.Response LoginLambda(LambdaClient.Request request);
 
+    @LambdaFunction
+    String CognitoAuthTest();
+
 }

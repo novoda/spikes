@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -38,7 +39,7 @@ import com.amazon.identity.auth.device.authorization.api.AuthorizationListener;
 import com.amazon.identity.auth.device.authorization.api.AuthzConstants;
 import com.amazon.identity.auth.device.shared.APIListener;
 import com.amazonaws.cognito.sync.devauth.client.AmazonSharedPreferencesWrapper;
-import com.amazonaws.cognito.sync.devauth.client.LambdaClient;
+import com.amazonaws.cognito.sync.devauth.client.lambda.LambdaClient;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -204,9 +205,20 @@ public class MainActivity extends Activity {
                 new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(MainActivity.this,
-                                ListDatasetsActivity.class);
+                        Intent intent = new Intent(
+                                MainActivity.this,
+                                ListDatasetsActivity.class
+                        );
                         startActivity(intent);
+                    }
+                });
+
+        findViewById(R.id.btnResource).setOnClickListener(
+                new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Context context = v.getContext();
+                        new LambdaClient().testAuth(context);
                     }
                 });
 
@@ -262,12 +274,12 @@ public class MainActivity extends Activity {
                             // Initiate user authentication against the
                             // developer backend in this case the sample Cognito
                             // developer authentication application.
-//                            ((DeveloperAuthenticationProvider) CognitoSyncClientManager.credentialsProvider
-//                                    .getIdentityProvider()).login(
-//                                    username,
-//                                    password,
-//                                    MainActivity.this);
-                            new LambdaClient().login(MainActivity.this, username, password);
+                            ((DeveloperAuthenticationProvider) CognitoSyncClientManager.credentialsProvider
+                                    .getIdentityProvider()).login(
+                                    username,
+                                    password,
+                                    MainActivity.this);
+//                            new LambdaClient(MainActivity.this).login(MainActivity.this, username, password);
                         }
                         login.dismiss();
                     }

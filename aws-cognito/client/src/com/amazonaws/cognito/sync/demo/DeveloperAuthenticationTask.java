@@ -18,6 +18,7 @@ package com.amazonaws.cognito.sync.demo;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.amazonaws.cognito.sync.devauth.client.Response;
 
@@ -68,6 +69,8 @@ public class DeveloperAuthenticationTask extends
         if (!isSuccessful) {
             new AlertDialog.Builder(context).setTitle("Login error")
                     .setMessage("Username or password do not match!!").show();
+        } else {
+            Toast.makeText(context, "Logged in!", Toast.LENGTH_SHORT).show();
         }
     }
 }

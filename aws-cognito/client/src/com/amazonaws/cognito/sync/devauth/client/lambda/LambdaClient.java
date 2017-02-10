@@ -7,8 +7,11 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.cognito.sync.demo.BuildConfig;
+import com.amazonaws.cognito.sync.demo.CognitoSyncClientManager;
+import com.amazonaws.cognito.sync.demo.DeveloperAuthenticationProvider;
 import com.amazonaws.cognito.sync.devauth.client.AmazonCognitoSampleDeveloperAuthenticationClient;
 import com.amazonaws.cognito.sync.devauth.client.AmazonSharedPreferencesWrapper;
 import com.amazonaws.cognito.sync.devauth.client.Utilities;
@@ -21,8 +24,41 @@ import java.net.URL;
 
 public class LambdaClient {
 
-    public void login(final Context context, String username, String password) {
+    public void testAuth(final Context context) {
+        DeveloperAuthenticationProvider identityProvider = (DeveloperAuthenticationProvider) CognitoSyncClientManager.credentialsProvider.getIdentityProvider();
+        // Create an instance of CognitoCachingCredentialsProvider
+        CognitoCachingCredentialsProvider cognitoProvider = new CognitoCachingCredentialsProvider(context, identityProvider, Regions.EU_WEST_1);
 
+        // Create LambdaInvokerFactory, to be used to instantiate the Lambda proxy.
+        LambdaInvokerFactory factory = new LambdaInvokerFactory(context, Regions.EU_WEST_1, cognitoProvider);
+
+        // Create the Lambda proxy object with a default Json data binder.
+        // You can provide your own data binder by implementing
+        // LambdaDataBinder.
+        final LambdaInterface lambdaInterface = factory.build(LambdaInterface.class);
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                try {
+                    return lambdaInterface.CognitoAuthTest();
+                } catch (AmazonServiceException lfe) {
+                    Log.e("Tag", "Failed to invoke", lfe);
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                if (result == null) {
+                    Toast.makeText(context, "Failed to invoke lambda :( Are you sure you are logged in? ", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+                }
+            }
+        }.execute();
+    }
+
+    public void login(final Context context, String username, String password) {
         // Create an instance of CognitoCachingCredentialsProvider
         CognitoCachingCredentialsProvider cognitoProvider = new CognitoCachingCredentialsProvider(context, BuildConfig.IDENTITY_POOL, Regions.EU_WEST_1);
 
