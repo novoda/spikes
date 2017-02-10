@@ -5,7 +5,15 @@ This is an adjusted sample to showcase a server using Cognito Developer Authenti
 - use Gradle to build
 - adjust package structure (remove `main.java` prefix)
 - organized imports
+- convert into Spring Boot Application that can deployed into AWS JavaSE environment (instead of Tomcat environment)
+-- added classes: Application, RegisterController
+-- move webroot under src/main/resources
+-- adjusted jsp mapping and resolutions
 
+##### Installation
+
+- deploy into ElasticBeanstalk JavaSE environment
+- set Environment Properties (IDENTITY_POOL_ID, DEVELOPER_PROVIDER_NAME, REGION) via webconsole (under Configuration)
 ______________________________
 
 # AWSCognitoSampleDeveloperAuthenticationSample
