@@ -18,6 +18,13 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
+      android:id="@+id/btnLoginServer"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="18dp"
+      android:text="Cognito Login" />
+
+    <Button
       android:id="@+id/btnLoginCognito"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

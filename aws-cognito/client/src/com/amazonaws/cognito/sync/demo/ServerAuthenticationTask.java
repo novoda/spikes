@@ -27,7 +27,7 @@ import com.amazonaws.cognito.sync.devauth.client.Response;
  * validates a set of username and possword against the sample Cognito developer
  * authentication application
  */
-public class DeveloperAuthenticationTask extends
+public class ServerAuthenticationTask extends
         AsyncTask<LoginCredentials, Void, Void> {
 
     // The user name or the developer user identifier you will pass to the
@@ -38,14 +38,14 @@ public class DeveloperAuthenticationTask extends
 
     private final Context context;
 
-    public DeveloperAuthenticationTask(Context context) {
+    public ServerAuthenticationTask(Context context) {
         this.context = context;
     }
 
     @Override
     protected Void doInBackground(LoginCredentials... params) {
 
-        Response response = DeveloperAuthenticationProvider
+        Response response = CognitoAuthenticationProvider
                 .getDevAuthClientInstance()
                 .login(params[0].getUsername(), params[0].getPassword());
         isSuccessful = response.requestWasSuccessful();
@@ -54,11 +54,11 @@ public class DeveloperAuthenticationTask extends
         if (isSuccessful) {
             CognitoSyncClientManager
                     .addLogins(
-                            ((DeveloperAuthenticationProvider) CognitoSyncClientManager.credentialsProvider
+                            ((CognitoAuthenticationProvider) CognitoSyncClientManager.credentialsProvider
                                     .getIdentityProvider()).getProviderName(),
                             userName);
             // Always remember to call refresh after updating the logins map
-            ((DeveloperAuthenticationProvider) CognitoSyncClientManager.credentialsProvider
+            ((CognitoAuthenticationProvider) CognitoSyncClientManager.credentialsProvider
                     .getIdentityProvider()).refresh();
         }
         return null;

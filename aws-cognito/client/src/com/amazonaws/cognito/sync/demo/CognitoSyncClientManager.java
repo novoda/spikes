@@ -22,7 +22,6 @@ import com.amazonaws.auth.AWSAbstractCognitoIdentityProvider;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.auth.CognitoCredentialsProvider;
 import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
-import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 
 import java.util.HashMap;
@@ -46,7 +45,7 @@ public class CognitoSyncClientManager {
 
     /**
      * Set this flag to true for using developer authenticated identities
-     * Make sure you configured it in DeveloperAuthenticationProvider.java.
+     * Make sure you configured it in CognitoAuthenticationProvider.java.
      */
     private static boolean useDeveloperAuthenticatedIdentities = true;
 
@@ -61,7 +60,7 @@ public class CognitoSyncClientManager {
         if (syncClient != null) return;
 
         if (useDeveloperAuthenticatedIdentities) {
-            developerIdentityProvider = new DeveloperAuthenticationProvider(
+            developerIdentityProvider = new CognitoAuthenticationProvider(
                     null, IDENTITY_POOL_ID, context, REGION);
             credentialsProvider = new CognitoCachingCredentialsProvider(context, developerIdentityProvider,
                     REGION);

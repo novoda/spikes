@@ -49,7 +49,7 @@ public class FirebaseAuthenticationTask extends
     @Override
     protected String doInBackground(String... params) {
 
-        Response response = DeveloperAuthenticationProvider
+        Response response = CognitoAuthenticationProvider
                 .getDevAuthClientInstance()
                 .getFirebaseToken(params[0]);
         isSuccessful = response.requestWasSuccessful();

@@ -32,7 +32,7 @@ import java.net.URL;
  * is meant to communicate with the Cognito Developer Authentication sample
  * service: https://github.com/awslabs/amazon-cognito-developer-authentication-sample
  */
-public class DeveloperAuthenticationProvider extends
+public class CognitoAuthenticationProvider extends
         AWSAbstractCognitoDeveloperIdentityProvider {
 
     private static AmazonCognitoSampleDeveloperAuthenticationClient devAuthClient;
@@ -41,8 +41,8 @@ public class DeveloperAuthenticationProvider extends
     private static final String cognitoSampleDeveloperAuthenticationAppEndpoint = BuildConfig.AUTHENTICATION_ENDPOINT;
     private static final String cognitoSampleDeveloperAuthenticationAppName = "AWSCognitoDeveloperAuthenticationSample";
 
-    public DeveloperAuthenticationProvider(String accountId,
-            String identityPoolId, Context context, Regions region) {
+    public CognitoAuthenticationProvider(String accountId,
+                                         String identityPoolId, Context context, Regions region) {
         super(accountId, identityPoolId, region);
 
         if (developerProvider == null || developerProvider.isEmpty()) {
@@ -165,7 +165,7 @@ public class DeveloperAuthenticationProvider extends
      * @param password
      */
     public void login(String userName, String password, Context context) {
-        new DeveloperAuthenticationTask(context).execute(new LoginCredentials(
+        new ServerAuthenticationTask(context).execute(new LoginCredentials(
                 userName, password));
     }
 

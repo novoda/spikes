@@ -102,7 +102,7 @@ public class MainActivity extends Activity {
                 });
 
         btnLoginCognito = (Button) findViewById(R.id.btnLoginCognito);
-        if ((CognitoSyncClientManager.credentialsProvider.getIdentityProvider()) instanceof DeveloperAuthenticationProvider) {
+        if ((CognitoSyncClientManager.credentialsProvider.getIdentityProvider()) instanceof CognitoAuthenticationProvider) {
             btnLoginCognito.setEnabled(true);
             Log.w(TAG, "Developer authentication feature configured correctly. ");
         } else {
@@ -153,7 +153,7 @@ public class MainActivity extends Activity {
                             // Initiate user authentication against the
                             // developer backend in this case the sample Cognito
                             // developer authentication application.
-                            ((DeveloperAuthenticationProvider) CognitoSyncClientManager.credentialsProvider
+                            ((CognitoAuthenticationProvider) CognitoSyncClientManager.credentialsProvider
                                     .getIdentityProvider()).login(
                                     username,
                                     password,
