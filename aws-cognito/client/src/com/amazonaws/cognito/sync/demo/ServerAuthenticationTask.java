@@ -45,20 +45,20 @@ public class ServerAuthenticationTask extends
     @Override
     protected Void doInBackground(LoginCredentials... params) {
 
-        Response response = CognitoAuthenticationProvider
-                .getDevAuthClientInstance()
+        Response response = ServerCognitoIdentityProvider
+                .getServerApiClient()
                 .login(params[0].getUsername(), params[0].getPassword());
         isSuccessful = response.requestWasSuccessful();
         userName = params[0].getUsername();
 
         if (isSuccessful) {
-            CognitoSyncClientManager
+            Cognito
                     .addLogins(
-                            ((CognitoAuthenticationProvider) CognitoSyncClientManager.credentialsProvider
+                            ((ServerCognitoIdentityProvider) Cognito.getCredentialsProvider()
                                     .getIdentityProvider()).getProviderName(),
                             userName);
             // Always remember to call refresh after updating the logins map
-            CognitoSyncClientManager.credentialsProvider.getIdentityProvider().refresh();
+            Cognito.getCredentialsProvider().getIdentityProvider().refresh();
         }
         return null;
     }

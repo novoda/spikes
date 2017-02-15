@@ -17,17 +17,14 @@ package com.amazonaws.cognito.sync.demo;
 
 import android.content.Context;
 import android.util.Log;
-
 import com.amazonaws.auth.AWSAbstractCognitoIdentityProvider;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
-import com.amazonaws.auth.CognitoCredentialsProvider;
 import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
 import com.amazonaws.regions.Regions;
-
 import java.util.HashMap;
 import java.util.Map;
 
-public class CognitoSyncClientManager {
+public class Cognito {
 
     private static final String TAG = "CognitoSyncClient";
 
@@ -39,8 +36,8 @@ public class CognitoSyncClientManager {
     private static final String IDENTITY_POOL_ID = BuildConfig.IDENTITY_POOL;
     private static final Regions REGION = Regions.fromName(BuildConfig.REGION);
 
-    private static CognitoSyncManager syncClient;
-    public static CognitoCachingCredentialsProvider credentialsProvider = null;
+    private static CognitoSyncManager syncManager;
+    private static CognitoCachingCredentialsProvider credentialsProvider = null;
 
     /**
      * Initializes the Cognito Identity and Sync clients. This must be called before getInstance().
@@ -48,15 +45,17 @@ public class CognitoSyncClientManager {
      * @param context a context of the app
      */
     public static void init(Context context) {
+        if (syncManager != null) return;
+        syncManager = createSyncManager(context);
+    }
 
-        if (syncClient != null) return;
-
-        AWSAbstractCognitoIdentityProvider identityProvider = new CognitoAuthenticationProvider(
+    private static CognitoSyncManager createSyncManager(Context context) {
+        AWSAbstractCognitoIdentityProvider identityProvider = new ServerCognitoIdentityProvider(
                 null, IDENTITY_POOL_ID, context, REGION);
         credentialsProvider = new CognitoCachingCredentialsProvider(context, identityProvider, REGION);
         Log.i(TAG, "Using developer authenticated identities");
 
-        syncClient = new CognitoSyncManager(context, REGION, credentialsProvider);
+        return new CognitoSyncManager(context, REGION, credentialsProvider);
     }
 
     /**
@@ -67,13 +66,13 @@ public class CognitoSyncClientManager {
      * @param token openId token
      */
     public static void addLogins(String providerName, String token) {
-        if (syncClient == null) {
+        if (syncManager == null) {
             throw new IllegalStateException("CognitoSyncClientManager not initialized yet");
         }
 
         Map<String, String> logins = credentialsProvider.getLogins();
         if (logins == null) {
-            logins = new HashMap<String, String>();
+            logins = new HashMap<>();
         }
         logins.put(providerName, token);
         credentialsProvider.setLogins(logins);
@@ -85,19 +84,14 @@ public class CognitoSyncClientManager {
      * 
      * @return an instance of CognitoClient
      */
-    public static CognitoSyncManager getInstance() {
-        if (syncClient == null) {
+    public static CognitoSyncManager getSyncManager() {
+        if (syncManager == null) {
             throw new IllegalStateException("CognitoSyncClientManager not initialized yet");
         }
-        return syncClient;
+        return syncManager;
     }
 
-    /**
-     * Returns a credentials provider object
-     * 
-     * @return
-     */
-    public CognitoCredentialsProvider getCredentialsProvider() {
+    public static CognitoCachingCredentialsProvider getCredentialsProvider() {
         return credentialsProvider;
     }
 }

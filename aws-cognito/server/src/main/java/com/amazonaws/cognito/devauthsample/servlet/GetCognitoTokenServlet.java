@@ -31,7 +31,7 @@ import java.util.logging.Level;
  * Servlet implementation class GetTokenServlet
  */
 @WebServlet(urlPatterns = "/gettoken/*")
-public class GetTokenServlet extends RootServlet {
+public class GetCognitoTokenServlet extends RootServlet {
     private static final long serialVersionUID = 1L;
 
     @Override

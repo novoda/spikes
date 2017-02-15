@@ -7,15 +7,15 @@ import android.widget.Toast;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
-import com.amazonaws.cognito.sync.demo.CognitoAuthenticationProvider;
-import com.amazonaws.cognito.sync.demo.CognitoSyncClientManager;
+import com.amazonaws.cognito.sync.demo.ServerCognitoIdentityProvider;
+import com.amazonaws.cognito.sync.demo.Cognito;
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaInvokerFactory;
 import com.amazonaws.regions.Regions;
 
 public class LambdaClient {
 
     public void testAuth(final Context context) {
-        CognitoAuthenticationProvider identityProvider = (CognitoAuthenticationProvider) CognitoSyncClientManager.credentialsProvider.getIdentityProvider();
+        ServerCognitoIdentityProvider identityProvider = (ServerCognitoIdentityProvider) Cognito.getCredentialsProvider().getIdentityProvider();
         // Create an instance of CognitoCachingCredentialsProvider
         CognitoCachingCredentialsProvider cognitoProvider = new CognitoCachingCredentialsProvider(context, identityProvider, Regions.EU_WEST_1);
 

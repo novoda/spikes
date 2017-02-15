@@ -30,16 +30,16 @@ import java.net.URL;
  * is meant to communicate with the Cognito Developer Authentication sample
  * service: https://github.com/awslabs/amazon-cognito-developer-authentication-sample
  */
-public class CognitoAuthenticationProvider extends
+public class ServerCognitoIdentityProvider extends
     AWSAbstractCognitoDeveloperIdentityProvider {
 
-  private static ServerApiClient devAuthClient;
+  private static ServerApiClient serverApiClient;
 
   private static final String developerProvider = BuildConfig.DEVELOPER_PROVIDER;
   private static final String serverEndpoint = BuildConfig.AUTHENTICATION_ENDPOINT;
   private static final String appName = "AWSCognitoDeveloperAuthenticationSample";
 
-  public CognitoAuthenticationProvider(String accountId,
+  public ServerCognitoIdentityProvider(String accountId,
       String identityPoolId, Context context, Regions region) {
     super(accountId, identityPoolId, region);
 
@@ -56,7 +56,7 @@ public class CognitoAuthenticationProvider extends
          * communicates with sample Cognito developer authentication
          * application.
          */
-      devAuthClient = new ServerApiClient(
+      serverApiClient = new ServerApiClient(
           PreferenceManager.getDefaultSharedPreferences(context),
           host, appName);
 
@@ -101,7 +101,7 @@ public class CognitoAuthenticationProvider extends
   }
 
   private GetTokenResponse updateCognitoToken() {
-    GetTokenResponse response = devAuthClient.getCognitoToken(this.loginsMap, identityId);
+    GetTokenResponse response = serverApiClient.getCognitoToken(this.loginsMap, identityId);
     update(response.getIdentityId(), response.getToken());
     return response;
   }
@@ -120,7 +120,7 @@ public class CognitoAuthenticationProvider extends
      */
   @Override
   public String getIdentityId() {
-    identityId = CognitoSyncClientManager.credentialsProvider.getCachedIdentityId();
+    identityId = Cognito.getCredentialsProvider().getCachedIdentityId();
     if (identityId != null) {
       return identityId;
     }
@@ -140,10 +140,10 @@ public class CognitoAuthenticationProvider extends
     return developerProvider;
   }
 
-  public static ServerApiClient getDevAuthClientInstance() {
-    if (devAuthClient == null) {
+  public static ServerApiClient getServerApiClient() {
+    if (serverApiClient == null) {
       throw new IllegalStateException("Dev Auth Client not initialized yet");
     }
-    return devAuthClient;
+    return serverApiClient;
   }
 }

@@ -51,7 +51,7 @@ public class MainActivity extends Activity {
         /**
          * Initializes the sync client. This must be call before you can use it.
          */
-        CognitoSyncClientManager.init(getApplicationContext());
+        Cognito.init(getApplicationContext());
 
         Button btnWipedata = (Button) findViewById(R.id.btnWipedata);
         btnWipedata.setOnClickListener(new OnClickListener() {
@@ -69,7 +69,7 @@ public class MainActivity extends Activity {
                                     public void onClick(DialogInterface dialog,
                                                         int which) {
                                         // wipe data
-                                        CognitoSyncClientManager.getInstance()
+                                        Cognito.getSyncManager()
                                                 .wipeData();
 
                                         // Wipe shared preferences
@@ -102,7 +102,7 @@ public class MainActivity extends Activity {
                 });
 
         btnLoginCognito = (Button) findViewById(R.id.btnLoginCognito);
-        if ((CognitoSyncClientManager.credentialsProvider.getIdentityProvider()) instanceof CognitoAuthenticationProvider) {
+        if ((Cognito.getCredentialsProvider().getIdentityProvider()) instanceof ServerCognitoIdentityProvider) {
             btnLoginCognito.setEnabled(true);
             Log.w(TAG, "Developer authentication feature configured correctly. ");
         } else {
@@ -148,13 +148,12 @@ public class MainActivity extends Activity {
                                     .show();
                         } else {
                             // Clear the existing credentials
-                            CognitoSyncClientManager.credentialsProvider
+                            Cognito.getCredentialsProvider()
                                     .clearCredentials();
                             // Initiate user authentication against the
                             // developer backend in this case the sample Cognito
                             // developer authentication application.
-                          new ServerAuthenticationTask(MainActivity.this).execute(new LoginCredentials(
-                              username, password));
+                          new ServerAuthenticationTask(MainActivity.this).execute(new LoginCredentials(username, password));
                         }
                         login.dismiss();
                     }

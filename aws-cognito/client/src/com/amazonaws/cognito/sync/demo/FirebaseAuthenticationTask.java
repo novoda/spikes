@@ -49,8 +49,8 @@ public class FirebaseAuthenticationTask extends
     @Override
     protected String doInBackground(String... params) {
 
-        Response response = CognitoAuthenticationProvider
-                .getDevAuthClientInstance()
+        Response response = ServerCognitoIdentityProvider
+                .getServerApiClient()
                 .getFirebaseToken(params[0]);
         isSuccessful = response.requestWasSuccessful();
         return response.getResponseMessage();

@@ -44,7 +44,7 @@
 	<servlet>
 		<display-name>GetTokenServlet</display-name>
 		<servlet-name>GetTokenServlet</servlet-name>
-		<servlet-class>com.amazonaws.cognito.devauthsample.servlet.GetTokenServlet</servlet-class>
+		<servlet-class>com.amazonaws.cognito.devauthsample.servlet.GetCognitoTokenServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>GetTokenServlet</servlet-name>
