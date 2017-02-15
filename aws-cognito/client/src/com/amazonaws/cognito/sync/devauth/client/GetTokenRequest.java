@@ -26,15 +26,17 @@ import java.util.Map;
  */
 public class GetTokenRequest extends Request {
 
-    private final URL endpoint;
+    private final URL host;
+    private final String endpoint;
     private final String uid;
     private final String key;
     private final Map<String, String> logins;
     private final String identityId;
 
 
-    public GetTokenRequest(final URL endpoint, final String uid, final String key,
+    public GetTokenRequest(final URL host, final String endpoint, final String uid, final String key,
                            Map<String, String> logins, String identityId) {
+        this.host = host;
         this.endpoint = endpoint;
         this.uid = uid;
         this.key = key;
@@ -51,7 +53,7 @@ public class GetTokenRequest extends Request {
      */
     @Override
     public String buildRequestUrl() {
-        String url = this.endpoint.toString();
+        String url = this.host.toString();
 
         StringBuilder builder = new StringBuilder(url);
         if (!url.endsWith("/")) {
@@ -60,7 +62,7 @@ public class GetTokenRequest extends Request {
 
         String timestamp = Utilities.getTimestamp();
 
-        builder.append("gettoken");
+        builder.append(endpoint);
         builder.append("?uid=" + HttpUtils.urlEncode(this.uid, false));
         builder.append("&timestamp=" + HttpUtils.urlEncode(timestamp, false));
 

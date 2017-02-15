@@ -15,14 +15,16 @@
 
 package com.amazonaws.cognito.sync.devauth.client;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import org.apache.commons.codec.binary.Hex;
-
 import java.net.URL;
 import java.security.SecureRandom;
+import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.codec.binary.Hex;
 
 /**
  * This class is used to communicate with the sample Cognito developer
@@ -32,9 +34,9 @@ public class AmazonCognitoSampleDeveloperAuthenticationClient {
     private static final String LOG_TAG = "AmazonCognitoSampleDeveloperAuthenticationClient";
 
     /**
-     * The endpoint for the sample Cognito developer authentication application.
+     * The host for the sample Cognito developer authentication application.
      */
-    private final URL endpoint;
+    private final URL host;
 
     /**
      * The appName declared by the sample Cognito developer authentication
@@ -48,9 +50,9 @@ public class AmazonCognitoSampleDeveloperAuthenticationClient {
     private final SharedPreferences sharedPreferences;
 
     public AmazonCognitoSampleDeveloperAuthenticationClient(
-            SharedPreferences sharedPreferences, URL endpoint,
+            SharedPreferences sharedPreferences, URL host,
             String appName) {
-        this.endpoint = endpoint;
+        this.host = host;
         this.appName = appName.toLowerCase();
         this.sharedPreferences = sharedPreferences;
     }
@@ -59,23 +61,29 @@ public class AmazonCognitoSampleDeveloperAuthenticationClient {
      * Gets a token from the sample Cognito developer authentication
      * application. The registered key is used to secure the communication.
      */
-    public Response getToken(Map<String, String> logins, String identityId) {
-        String uid = AmazonSharedPreferencesWrapper
-                .getUidForDevice(this.sharedPreferences);
-        String key = AmazonSharedPreferencesWrapper
-                .getKeyForDevice(this.sharedPreferences);
+    private Response getToken(Map<String, String> logins, String identityId, String path, ResponseHandler responseHandler) {
+        String uid = AmazonSharedPreferencesWrapper.getUidForDevice(this.sharedPreferences);
+        String key = AmazonSharedPreferencesWrapper.getKeyForDevice(this.sharedPreferences);
 
-        Request getTokenRequest = new GetTokenRequest(this.endpoint,
-                uid, key, logins, identityId);
-        ResponseHandler handler = new GetTokenResponseHandler(key);
-
-        GetTokenResponse getTokenResponse = (GetTokenResponse) this
-                .processRequest(getTokenRequest, handler);
+        Request getTokenRequest = new GetTokenRequest(this.host, path, uid, key, logins, identityId);
 
         // TODO: You can cache the open id token as you will have the control
         // over the duration of the token when it is issued. Caching can reduce
         // the communication required between the app and your backend
-        return getTokenResponse;
+        return processRequest(getTokenRequest, responseHandler);
+    }
+
+    /**
+     * Gets a token from the sample Cognito developer authentication
+     * application. The registered key is used to secure the communication.
+     */
+    public Response getCognitoToken(Map<String, String> logins, String identityId) {
+        String key = AmazonSharedPreferencesWrapper.getKeyForDevice(this.sharedPreferences);
+        return getToken(logins, identityId, "gettoken", new GetTokenResponseHandler(key));
+    }
+
+    public Response getFirebaseToken(String identityId) {
+        return getToken(new HashMap<String, String>(), identityId, "getfirebasetoken", new ResponseHandler());
     }
 
     /**
@@ -85,7 +93,7 @@ public class AmazonCognitoSampleDeveloperAuthenticationClient {
     public Response login(String username, String password) {
         String uid = AmazonCognitoSampleDeveloperAuthenticationClient
                 .generateRandomString();
-        LoginRequest loginRequest = new LoginRequest(this.endpoint,
+        LoginRequest loginRequest = new LoginRequest(this.host,
                 this.appName, uid, username, password);
         ResponseHandler handler = new LoginResponseHandler(
                 loginRequest.getDecryptionKey());
@@ -103,6 +111,7 @@ public class AmazonCognitoSampleDeveloperAuthenticationClient {
     /**
      * Process Request
      */
+    @SuppressLint("LongLogTag")
     protected Response processRequest(Request request, ResponseHandler handler) {
         Response response = null;
         int retries = 2;

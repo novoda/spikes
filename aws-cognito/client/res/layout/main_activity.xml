@@ -18,18 +18,32 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
-      android:id="@+id/btnLoginDevAuth"
+      android:id="@+id/btnLoginCognito"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="18dp"
-      android:text="Developer Authenticated Login" />
+      android:text="Cognito Login" />
 
     <Button
-      android:id="@+id/btnResource"
+      android:id="@+id/btnResourceCognito"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="18dp"
-      android:text="Access restricted resource" />
+      android:text="Access Cognito restricted resource" />
+
+    <Button
+      android:id="@+id/btnLoginFirebase"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="18dp"
+      android:text="Firebase Login" />
+
+    <Button
+      android:id="@+id/btnResourceFirebase"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="18dp"
+      android:text="Access Firebase restricted resource" />
 
     <Button
         android:id="@+id/btnWipedata"

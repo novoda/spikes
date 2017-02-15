@@ -33,3 +33,4 @@ local.properties
 *.DS_Store
 
 secrets.properties
+google-services.json

@@ -5,6 +5,7 @@ buildscript {
   dependencies {
     classpath 'com.android.tools.build:gradle:2.2.1'
     classpath 'com.novoda:gradle-build-properties-plugin:0.2'
+    classpath 'com.google.gms:google-services:3.0.0'
   }
 }
 
@@ -53,9 +54,13 @@ dependencies {
   repositories {
     mavenCentral()
   }
-  compile 'com.google.android.gms:play-services:6.1.+'
+  compile 'com.google.firebase:firebase-core:10.0.1'
+  compile 'com.google.firebase:firebase-auth:10.0.1'
+  compile 'com.google.firebase:firebase-database:10.0.1'
   compile 'com.amazonaws:aws-android-sdk-core:2.2.+'
   compile 'com.amazonaws:aws-android-sdk-cognito:2.2.+'
   compile 'com.amazonaws:aws-android-sdk-lambda:2.2.+'
   compile fileTree(include: '*.jar', dir: 'libs')
 }
+
+apply plugin: 'com.google.gms.google-services'

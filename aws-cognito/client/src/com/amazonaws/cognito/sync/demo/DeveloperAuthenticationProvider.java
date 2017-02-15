@@ -50,12 +50,12 @@ public class DeveloperAuthenticationProvider extends
             throw new RuntimeException("DeveloperAuthenticatedApp not configured.");
         }
 
-        URL endpoint;
+        URL host;
         try {
             if (cognitoSampleDeveloperAuthenticationAppEndpoint.contains("://")) {
-                endpoint = new URL(cognitoSampleDeveloperAuthenticationAppEndpoint);
+                host = new URL(cognitoSampleDeveloperAuthenticationAppEndpoint);
             } else {
-                endpoint = new URL("http://"+cognitoSampleDeveloperAuthenticationAppEndpoint);
+                host = new URL("http://"+cognitoSampleDeveloperAuthenticationAppEndpoint);
             }
         } catch (MalformedURLException e) {
             Log.e("DeveloperAuthentication", "Developer Authentication Endpoint is not a valid URL!", e);
@@ -70,7 +70,7 @@ public class DeveloperAuthenticationProvider extends
          */
         devAuthClient = new AmazonCognitoSampleDeveloperAuthenticationClient(
                 PreferenceManager.getDefaultSharedPreferences(context),
-                endpoint, cognitoSampleDeveloperAuthenticationAppName);
+                host, cognitoSampleDeveloperAuthenticationAppName);
 
     }
 
@@ -100,7 +100,7 @@ public class DeveloperAuthenticationProvider extends
         // means the app user has used developer credentials
         if (getProviderName() != null && !this.loginsMap.isEmpty()
                 && this.loginsMap.containsKey(getProviderName())) {
-            GetTokenResponse getTokenResponse = (GetTokenResponse) devAuthClient.getToken(
+            GetTokenResponse getTokenResponse = (GetTokenResponse) devAuthClient.getCognitoToken(
                     this.loginsMap,
                     identityId);
             update(getTokenResponse.getIdentityId(),
@@ -130,7 +130,7 @@ public class DeveloperAuthenticationProvider extends
       if (identityId == null) {
             if (getProviderName() != null && !this.loginsMap.isEmpty()
                     && this.loginsMap.containsKey(getProviderName())) {
-                GetTokenResponse getTokenResponse = (GetTokenResponse) devAuthClient.getToken(
+                GetTokenResponse getTokenResponse = (GetTokenResponse) devAuthClient.getCognitoToken(
                         this.loginsMap, identityId);
                 update(getTokenResponse.getIdentityId(),
                         getTokenResponse.getToken());

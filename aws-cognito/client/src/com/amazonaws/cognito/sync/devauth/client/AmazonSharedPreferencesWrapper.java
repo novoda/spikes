@@ -17,6 +17,8 @@ package com.amazonaws.cognito.sync.devauth.client;
 
 import android.content.SharedPreferences;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 /**
  * This utility class is used to store content in Android's Shared Preferences.
  * For maximum security the preferences should be private.
@@ -25,6 +27,7 @@ public class AmazonSharedPreferencesWrapper {
 
     private static final String AWS_DEVICE_UID = "AWS_DEVICE_UID";
     private static final String AWS_DEVICE_KEY = "AWS_DEVICE_KEY";
+    private static final String FIREBASE_TOKEN = "FIREBASE_TOKEN";
 
     /**
      * Set all of the Shared Preferences used by the sample Cognito developer
@@ -36,6 +39,9 @@ public class AmazonSharedPreferencesWrapper {
                 sharedPreferences, AWS_DEVICE_UID, null);
         AmazonSharedPreferencesWrapper.storeValueInSharedPreferences(
                 sharedPreferences, AWS_DEVICE_KEY, null);
+        AmazonSharedPreferencesWrapper.storeValueInSharedPreferences(
+                sharedPreferences, FIREBASE_TOKEN, null);
+        FirebaseAuth.getInstance().signOut();
     }
 
     /**
@@ -44,11 +50,21 @@ public class AmazonSharedPreferencesWrapper {
      * from the sample Cognito developer authentication application.
      */
     public static void registerDeviceId(SharedPreferences sharedPreferences,
-            String uid, String key) {
+                                        String uid, String key) {
         AmazonSharedPreferencesWrapper.storeValueInSharedPreferences(
                 sharedPreferences, AWS_DEVICE_UID, uid);
         AmazonSharedPreferencesWrapper.storeValueInSharedPreferences(
                 sharedPreferences, AWS_DEVICE_KEY, key);
+    }
+
+    public static void registerFirebaseToken(SharedPreferences sharedPreferences, String token) {
+        AmazonSharedPreferencesWrapper.storeValueInSharedPreferences(
+                sharedPreferences, FIREBASE_TOKEN, token);
+    }
+
+    public static String getFirebaseTokenForDevice(SharedPreferences sharedPreferences) {
+        return AmazonSharedPreferencesWrapper.getValueFromSharedPreferences(
+                sharedPreferences, FIREBASE_TOKEN);
     }
 
     /**

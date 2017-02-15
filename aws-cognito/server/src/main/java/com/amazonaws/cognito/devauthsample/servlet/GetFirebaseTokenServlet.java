@@ -109,7 +109,6 @@ public class GetFirebaseTokenServlet extends RootServlet {
             sendErrorResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response);
         }
 
-        //TODO: Catch Cognito Exceptions
         log.info("leaving get token request");
     }
 }
