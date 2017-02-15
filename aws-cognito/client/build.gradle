@@ -4,6 +4,7 @@ buildscript {
   }
   dependencies {
     classpath 'com.android.tools.build:gradle:2.2.1'
+    classpath 'com.novoda:gradle-android-command-plugin:1.7.1'
     classpath 'com.novoda:gradle-build-properties-plugin:0.2'
     classpath 'com.google.gms:google-services:3.0.0'
   }
@@ -13,6 +14,7 @@ repositories {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.novoda.android-command'
 apply plugin: 'com.novoda.build-properties'
 
 buildProperties {
@@ -51,13 +53,20 @@ android {
   }
 }
 
+ext {
+  versions = [
+      firebase: '10.0.1',
+      aws     : '2.2.22'
+  ]
+}
+
 dependencies {
-  compile 'com.google.firebase:firebase-core:10.0.1'
-  compile 'com.google.firebase:firebase-auth:10.0.1'
-  compile 'com.google.firebase:firebase-database:10.0.1'
-  compile 'com.amazonaws:aws-android-sdk-core:2.2.+'
-  compile 'com.amazonaws:aws-android-sdk-cognito:2.2.+'
-  compile 'com.amazonaws:aws-android-sdk-lambda:2.2.+'
+  compile "com.google.firebase:firebase-core:${versions.firebase}"
+  compile "com.google.firebase:firebase-auth:${versions.firebase}"
+  compile "com.google.firebase:firebase-database:${versions.firebase}"
+  compile "com.amazonaws:aws-android-sdk-core:${versions.aws}"
+  compile "com.amazonaws:aws-android-sdk-cognito:${versions.aws}"
+  compile "com.amazonaws:aws-android-sdk-lambda:${versions.aws}"
   compile 'commons-codec:commons-codec:1.10'
 }
 
