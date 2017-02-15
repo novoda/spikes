@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.amazonaws.cognito.sync.devauth.client.AmazonSharedPreferencesWrapper;
 import com.amazonaws.cognito.sync.devauth.client.Response;
+import com.amazonaws.cognito.sync.devauth.client.ServerApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -41,17 +42,16 @@ public class FirebaseAuthenticationTask extends
     private boolean isSuccessful;
 
     private final Context context;
+    private final ServerApiClient apiClient;
 
-    public FirebaseAuthenticationTask(Context context) {
+    public FirebaseAuthenticationTask(Context context, ServerApiClient apiClient) {
         this.context = context;
+        this.apiClient = apiClient;
     }
 
     @Override
     protected String doInBackground(String... params) {
-
-        Response response = ServerCognitoIdentityProvider
-                .getServerApiClient()
-                .getFirebaseToken(params[0]);
+        Response response = apiClient.getFirebaseToken(params[0]);
         isSuccessful = response.requestWasSuccessful();
         return response.getResponseMessage();
     }

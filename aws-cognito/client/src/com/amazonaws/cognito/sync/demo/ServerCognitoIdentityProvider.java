@@ -16,14 +16,11 @@
 package com.amazonaws.cognito.sync.demo;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import com.amazonaws.auth.AWSAbstractCognitoDeveloperIdentityProvider;
 import com.amazonaws.cognito.sync.devauth.client.GetTokenResponse;
 import com.amazonaws.cognito.sync.devauth.client.ServerApiClient;
 import com.amazonaws.regions.Regions;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * A class used for communicating with developer backend. This implementation
@@ -33,13 +30,11 @@ import java.net.URL;
 public class ServerCognitoIdentityProvider extends
     AWSAbstractCognitoDeveloperIdentityProvider {
 
-  private static ServerApiClient serverApiClient;
+  private ServerApiClient serverApiClient;
 
   private static final String developerProvider = BuildConfig.DEVELOPER_PROVIDER;
-  private static final String serverEndpoint = BuildConfig.AUTHENTICATION_ENDPOINT;
-  private static final String appName = "AWSCognitoDeveloperAuthenticationSample";
 
-  public ServerCognitoIdentityProvider(String accountId,
+  public ServerCognitoIdentityProvider(ServerApiClient apiClient, String accountId,
       String identityPoolId, Context context, Regions region) {
     super(accountId, identityPoolId, region);
 
@@ -47,25 +42,8 @@ public class ServerCognitoIdentityProvider extends
       Log.e("DeveloperAuthentication", "Error: developerProvider name not set!");
       throw new RuntimeException("DeveloperAuthenticatedApp not configured.");
     }
-    try {
-      URL host = new URL(serverEndpoint);
-
-        /*
-         * Initialize the client using which you will communicate with your
-         * backend for user authentication. Here we initialize a client which
-         * communicates with sample Cognito developer authentication
-         * application.
-         */
-      serverApiClient = new ServerApiClient(
-          PreferenceManager.getDefaultSharedPreferences(context),
-          host, appName);
-
-    } catch (MalformedURLException e) {
-      Log.e("DeveloperAuthentication", "Developer Authentication Endpoint is not a valid URL!", e);
-      throw new RuntimeException(e);
-    }
+    serverApiClient = apiClient;
   }
-
   /*
    * (non-Javadoc)
    * @see com.amazonaws.auth.AWSCognitoIdentityProvider#refresh() In refresh
@@ -140,10 +118,4 @@ public class ServerCognitoIdentityProvider extends
     return developerProvider;
   }
 
-  public static ServerApiClient getServerApiClient() {
-    if (serverApiClient == null) {
-      throw new IllegalStateException("Dev Auth Client not initialized yet");
-    }
-    return serverApiClient;
-  }
 }

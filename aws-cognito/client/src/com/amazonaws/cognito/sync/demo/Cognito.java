@@ -16,11 +16,15 @@
 package com.amazonaws.cognito.sync.demo;
 
 import android.content.Context;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import com.amazonaws.auth.AWSAbstractCognitoIdentityProvider;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.cognito.sync.devauth.client.ServerApiClient;
 import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
 import com.amazonaws.regions.Regions;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +42,7 @@ public class Cognito {
 
     private static CognitoSyncManager syncManager;
     private static CognitoCachingCredentialsProvider credentialsProvider = null;
+    private static ServerApiClient serverApiClient;
 
     /**
      * Initializes the Cognito Identity and Sync clients. This must be called before getInstance().
@@ -46,16 +51,37 @@ public class Cognito {
      */
     public static void init(Context context) {
         if (syncManager != null) return;
-        syncManager = createSyncManager(context);
+        serverApiClient = createServerApiClient(context);
+        syncManager = createSyncManager(context, serverApiClient);
     }
 
-    private static CognitoSyncManager createSyncManager(Context context) {
-        AWSAbstractCognitoIdentityProvider identityProvider = new ServerCognitoIdentityProvider(
+    private static CognitoSyncManager createSyncManager(Context context, ServerApiClient serverApiClient) {
+        AWSAbstractCognitoIdentityProvider identityProvider = new ServerCognitoIdentityProvider(serverApiClient,
                 null, IDENTITY_POOL_ID, context, REGION);
         credentialsProvider = new CognitoCachingCredentialsProvider(context, identityProvider, REGION);
         Log.i(TAG, "Using developer authenticated identities");
 
         return new CognitoSyncManager(context, REGION, credentialsProvider);
+    }
+
+    private static ServerApiClient createServerApiClient(Context context) {
+        try {
+            URL host = new URL(BuildConfig.AUTHENTICATION_ENDPOINT);
+
+        /*
+         * Initialize the client using which you will communicate with your
+         * backend for user authentication. Here we initialize a client which
+         * communicates with sample Cognito developer authentication
+         * application.
+         */
+            return new ServerApiClient(
+                PreferenceManager.getDefaultSharedPreferences(context),
+                host, "AWSCognitoDeveloperAuthenticationSample");
+
+        } catch (MalformedURLException e) {
+            Log.e("DeveloperAuthentication", "Developer Authentication Endpoint is not a valid URL!", e);
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -93,5 +119,9 @@ public class Cognito {
 
     public static CognitoCachingCredentialsProvider getCredentialsProvider() {
         return credentialsProvider;
+    }
+
+    public static ServerApiClient getServerApiClient() {
+        return serverApiClient;
     }
 }

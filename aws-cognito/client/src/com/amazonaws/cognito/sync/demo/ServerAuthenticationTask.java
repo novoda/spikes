@@ -21,6 +21,7 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.amazonaws.cognito.sync.devauth.client.Response;
+import com.amazonaws.cognito.sync.devauth.client.ServerApiClient;
 
 /**
  * A class which performs the task of authentication the user. For the sample it
@@ -37,24 +38,23 @@ public class ServerAuthenticationTask extends
     private boolean isSuccessful;
 
     private final Context context;
+    private final ServerApiClient apiClient;
 
-    public ServerAuthenticationTask(Context context) {
+    public ServerAuthenticationTask(Context context, ServerApiClient apiClient) {
         this.context = context;
+        this.apiClient = apiClient;
     }
 
     @Override
     protected Void doInBackground(LoginCredentials... params) {
 
-        Response response = ServerCognitoIdentityProvider
-                .getServerApiClient()
-                .login(params[0].getUsername(), params[0].getPassword());
+        Response response = apiClient.login(params[0].getUsername(), params[0].getPassword());
         isSuccessful = response.requestWasSuccessful();
         userName = params[0].getUsername();
 
         if (isSuccessful) {
-            Cognito
-                    .addLogins(
-                            ((ServerCognitoIdentityProvider) Cognito.getCredentialsProvider()
+            Cognito.addLogins(
+                ((ServerCognitoIdentityProvider) Cognito.getCredentialsProvider()
                                     .getIdentityProvider()).getProviderName(),
                             userName);
             // Always remember to call refresh after updating the logins map

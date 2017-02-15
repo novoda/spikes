@@ -153,7 +153,7 @@ public class MainActivity extends Activity {
                             // Initiate user authentication against the
                             // developer backend in this case the sample Cognito
                             // developer authentication application.
-                          new ServerAuthenticationTask(MainActivity.this).execute(new LoginCredentials(username, password));
+                          new ServerAuthenticationTask(MainActivity.this, Cognito.getServerApiClient()).execute(new LoginCredentials(username, password));
                         }
                         login.dismiss();
                     }
@@ -171,7 +171,7 @@ public class MainActivity extends Activity {
                         if (uid == null) {
                             Toast.makeText(context, "You need to login with Cognito before", Toast.LENGTH_SHORT).show();
                         } else {
-                            new FirebaseAuthenticationTask(context).execute(uid);
+                            new FirebaseAuthenticationTask(context, Cognito.getServerApiClient()).execute(uid);
                         }
                     }
                 });
