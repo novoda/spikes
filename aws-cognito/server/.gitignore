@@ -12,3 +12,6 @@ hs_err_pid*
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# Firebase Files
+firebase.json

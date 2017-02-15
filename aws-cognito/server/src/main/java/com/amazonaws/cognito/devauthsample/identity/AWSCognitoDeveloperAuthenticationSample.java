@@ -136,10 +136,7 @@ public class AWSCognitoDeveloperAuthenticationSample {
         }
         log.info(String.format("Timestamp [ %s ] is valid", timestamp));
 
-        DeviceInfo device = deviceAuthenticator.getDeviceInfo(uid);
-        if (device == null) {
-            throw new UnauthorizedException("Couldn't find device: " + uid);
-        }
+        DeviceInfo device = ensureKnownDevice(uid);
 
         if (!validateSignature(stringToSign, device.getKey(), signature)) {
             log.info("String to sign: " + stringToSign);
@@ -160,15 +157,8 @@ public class AWSCognitoDeveloperAuthenticationSample {
     public String getToken(String uid, Map<String, String> logins, String identityId)
             throws Exception {
 
-        DeviceInfo device = deviceAuthenticator.getDeviceInfo(uid);
-        if (device == null) {
-            throw new UnauthorizedException("Couldn't find device: " + uid);
-        }
-
-        UserInfo user = userAuthenticator.getUserInfo(device.getUsername());
-        if (user == null) {
-            throw new UnauthorizedException("Couldn't find user: " + device.getUsername());
-        }
+        DeviceInfo device = ensureKnownDevice(uid);
+        UserInfo user = ensureKnownUser(device.getUsername());
 
         if (!user.getUsername().equals(logins.get(Configuration.DEVELOPER_PROVIDER_NAME))) {
             throw new UnauthorizedException("User mismatch for device and logins map");
@@ -179,6 +169,22 @@ public class AWSCognitoDeveloperAuthenticationSample {
 
         log.info("Generating session tokens for UID : " + uid);
         return Utilities.prepareJsonResponseForTokens(result, device.getKey());
+    }
+
+    public UserInfo ensureKnownUser(String username) throws DataAccessException, UnauthorizedException {
+        UserInfo user = userAuthenticator.getUserInfo(username);
+        if (user == null) {
+            throw new UnauthorizedException("Couldn't find user: " + username);
+        }
+        return user;
+    }
+
+    public DeviceInfo ensureKnownDevice(String uid) throws DataAccessException, UnauthorizedException {
+        DeviceInfo device = deviceAuthenticator.getDeviceInfo(uid);
+        if (device == null) {
+            throw new UnauthorizedException("Couldn't find device: " + uid);
+        }
+        return device;
     }
 
     /**
@@ -207,10 +213,7 @@ public class AWSCognitoDeveloperAuthenticationSample {
 
         // Validate signature
         log.info("Validate signature: " + signature);
-        UserInfo user = userAuthenticator.getUserInfo(username);
-        if (user == null) {
-            throw new UnauthorizedException("Couldn't find user: " + username);
-        }
+        UserInfo user = ensureKnownUser(username);
 
         if (!validateSignature(timestamp, user.getHashedPassword(), signature)) {
             throw new UnauthorizedException("Invalid signature: " + signature);
@@ -240,15 +243,8 @@ public class AWSCognitoDeveloperAuthenticationSample {
      * @throws UnauthorizedException
      */
     public String getKey(String username, String uid) throws DataAccessException, UnauthorizedException {
-        DeviceInfo device = deviceAuthenticator.getDeviceInfo(uid);
-        if (device == null) {
-            throw new UnauthorizedException("Couldn't find device: " + uid);
-        }
-
-        UserInfo user = userAuthenticator.getUserInfo(username);
-        if (user == null) {
-            throw new UnauthorizedException("Couldn't find user: " + username);
-        }
+        DeviceInfo device = ensureKnownDevice(uid);
+        UserInfo user = ensureKnownUser(username);
 
         log.info("Responding with encrypted key for UID : " + uid);
         return Utilities.prepareJsonResponseForKey(device.getKey(), user.getHashedPassword());

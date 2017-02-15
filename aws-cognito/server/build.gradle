@@ -46,6 +46,7 @@ tasks.withType(JavaCompile) {
 dependencies {
     compile "com.amazonaws:aws-java-sdk-cognitoidentity:$versions.amazon_sdk"
     compile "com.amazonaws:aws-java-sdk-dynamodb:$versions.amazon_sdk"
+    compile 'com.google.firebase:firebase-admin:4.1.1'
     compile('org.springframework.boot:spring-boot-starter-web') {
         exclude(module: 'spring-boot-starter-tomcat')
     }

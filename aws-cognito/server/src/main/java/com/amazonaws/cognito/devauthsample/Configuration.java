@@ -63,6 +63,11 @@ public class Configuration {
      */
     public static final String DEVICE_TABLE = getDeviceTable();
 
+    /**
+     * The identity pool to use
+     */
+    public static final String FIREBASE_DATABASE = readProperty("FIREBASE_DATABASE");
+
     private static String getUsersTable() {
         return "AWSCognitoDeveloperAuthenticationSample_" + APP_NAME + "_USERS";
     }
