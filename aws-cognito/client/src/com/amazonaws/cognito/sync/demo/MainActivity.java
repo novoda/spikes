@@ -51,7 +51,7 @@ public class MainActivity extends Activity {
         /**
          * Initializes the sync client. This must be call before you can use it.
          */
-        CognitoSyncClientManager.init(this);
+        CognitoSyncClientManager.init(getApplicationContext());
 
         Button btnWipedata = (Button) findViewById(R.id.btnWipedata);
         btnWipedata.setOnClickListener(new OnClickListener() {
@@ -153,12 +153,8 @@ public class MainActivity extends Activity {
                             // Initiate user authentication against the
                             // developer backend in this case the sample Cognito
                             // developer authentication application.
-                            ((CognitoAuthenticationProvider) CognitoSyncClientManager.credentialsProvider
-                                    .getIdentityProvider()).login(
-                                    username,
-                                    password,
-                                    MainActivity.this
-                            );
+                          new ServerAuthenticationTask(MainActivity.this).execute(new LoginCredentials(
+                              username, password));
                         }
                         login.dismiss();
                     }

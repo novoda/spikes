@@ -5,7 +5,7 @@
  * You may not use this file except in compliance with the License.
  * A copy of the License is located at
  *
- *  http://aws.amazon.com/apache2.0
+ * http://aws.amazon.com/apache2.0
  *
  * or in the "license" file accompanying this file. This file is distributed
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
@@ -18,12 +18,10 @@ package com.amazonaws.cognito.sync.demo;
 import android.content.Context;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
 import com.amazonaws.auth.AWSAbstractCognitoDeveloperIdentityProvider;
-import com.amazonaws.cognito.sync.devauth.client.AmazonCognitoSampleDeveloperAuthenticationClient;
 import com.amazonaws.cognito.sync.devauth.client.GetTokenResponse;
+import com.amazonaws.cognito.sync.devauth.client.ServerApiClient;
 import com.amazonaws.regions.Regions;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -33,34 +31,24 @@ import java.net.URL;
  * service: https://github.com/awslabs/amazon-cognito-developer-authentication-sample
  */
 public class CognitoAuthenticationProvider extends
-        AWSAbstractCognitoDeveloperIdentityProvider {
+    AWSAbstractCognitoDeveloperIdentityProvider {
 
-    private static AmazonCognitoSampleDeveloperAuthenticationClient devAuthClient;
+  private static ServerApiClient devAuthClient;
 
-    private static final String developerProvider = BuildConfig.DEVELOPER_PROVIDER;
-    private static final String cognitoSampleDeveloperAuthenticationAppEndpoint = BuildConfig.AUTHENTICATION_ENDPOINT;
-    private static final String cognitoSampleDeveloperAuthenticationAppName = "AWSCognitoDeveloperAuthenticationSample";
+  private static final String developerProvider = BuildConfig.DEVELOPER_PROVIDER;
+  private static final String serverEndpoint = BuildConfig.AUTHENTICATION_ENDPOINT;
+  private static final String appName = "AWSCognitoDeveloperAuthenticationSample";
 
-    public CognitoAuthenticationProvider(String accountId,
-                                         String identityPoolId, Context context, Regions region) {
-        super(accountId, identityPoolId, region);
+  public CognitoAuthenticationProvider(String accountId,
+      String identityPoolId, Context context, Regions region) {
+    super(accountId, identityPoolId, region);
 
-        if (developerProvider == null || developerProvider.isEmpty()) {
-            Log.e("DeveloperAuthentication", "Error: developerProvider name not set!");
-            throw new RuntimeException("DeveloperAuthenticatedApp not configured.");
-        }
-
-        URL host;
-        try {
-            if (cognitoSampleDeveloperAuthenticationAppEndpoint.contains("://")) {
-                host = new URL(cognitoSampleDeveloperAuthenticationAppEndpoint);
-            } else {
-                host = new URL("http://"+cognitoSampleDeveloperAuthenticationAppEndpoint);
-            }
-        } catch (MalformedURLException e) {
-            Log.e("DeveloperAuthentication", "Developer Authentication Endpoint is not a valid URL!", e);
-            throw new RuntimeException(e);
-        }
+    if (developerProvider == null || developerProvider.isEmpty()) {
+      Log.e("DeveloperAuthentication", "Error: developerProvider name not set!");
+      throw new RuntimeException("DeveloperAuthenticatedApp not configured.");
+    }
+    try {
+      URL host = new URL(serverEndpoint);
 
         /*
          * Initialize the client using which you will communicate with your
@@ -68,17 +56,21 @@ public class CognitoAuthenticationProvider extends
          * communicates with sample Cognito developer authentication
          * application.
          */
-        devAuthClient = new AmazonCognitoSampleDeveloperAuthenticationClient(
-                PreferenceManager.getDefaultSharedPreferences(context),
-                host, cognitoSampleDeveloperAuthenticationAppName);
+      devAuthClient = new ServerApiClient(
+          PreferenceManager.getDefaultSharedPreferences(context),
+          host, appName);
 
+    } catch (MalformedURLException e) {
+      Log.e("DeveloperAuthentication", "Developer Authentication Endpoint is not a valid URL!", e);
+      throw new RuntimeException(e);
     }
+  }
 
-    /*
-     * (non-Javadoc)
-     * @see com.amazonaws.auth.AWSCognitoIdentityProvider#refresh() In refresh
-     * method, you will have two flows:
-     */
+  /*
+   * (non-Javadoc)
+   * @see com.amazonaws.auth.AWSCognitoIdentityProvider#refresh() In refresh
+   * method, you will have two flows:
+   */
     /*
      * 1. When the app user uses developer authentication . In this case, make
      * the call to your developer backend, from where call the
@@ -93,29 +85,31 @@ public class CognitoAuthenticationProvider extends
      * class which actually calls GetId and GetOpenIDToken API of Amazon
      * Cognito.
      */
-    @Override
-    public String refresh() {
-        setToken(null);
-        // If there is a key with developer provider name in the logins map, it
-        // means the app user has used developer credentials
-        if (getProviderName() != null && !this.loginsMap.isEmpty()
-                && this.loginsMap.containsKey(getProviderName())) {
-            GetTokenResponse getTokenResponse = (GetTokenResponse) devAuthClient.getCognitoToken(
-                    this.loginsMap,
-                    identityId);
-            update(getTokenResponse.getIdentityId(),
-                    getTokenResponse.getToken());
-            return getTokenResponse.getToken();
-        } else {
-            this.getIdentityId();
-            return null;
-        }
-    }
+  @Override
+  public String refresh() {
+    setToken(null);
+    // If there is a key with developer provider name in the logins map, it
+    // means the app user has used developer credentials
+    ensureLoginData();
+    return updateCognitoToken().getToken();
+  }
 
-    /*
-     * (non-Javadoc)
-     * @see com.amazonaws.auth.AWSBasicCognitoIdentityProvider#getIdentityId()
-     */
+  private void ensureLoginData() {
+    if (getProviderName() == null || this.loginsMap.isEmpty() || !this.loginsMap.containsKey(getProviderName())) {
+      throw new RuntimeException("invalid login data!");
+    }
+  }
+
+  private GetTokenResponse updateCognitoToken() {
+    GetTokenResponse response = devAuthClient.getCognitoToken(this.loginsMap, identityId);
+    update(response.getIdentityId(), response.getToken());
+    return response;
+  }
+
+  /*
+   * (non-Javadoc)
+   * @see com.amazonaws.auth.AWSBasicCognitoIdentityProvider#getIdentityId()
+   */
     /*
      * This method again has two flows as mentioned above depending on whether
      * the app user is using developer authentication or not. When using
@@ -124,56 +118,32 @@ public class CognitoAuthenticationProvider extends
      * using the getIdentityId() method which in turn calls Cognito GetId and
      * GetOpenIdToken APIs.
      */
-    @Override
-    public String getIdentityId() {
-        identityId = CognitoSyncClientManager.credentialsProvider.getCachedIdentityId();
-      if (identityId == null) {
-            if (getProviderName() != null && !this.loginsMap.isEmpty()
-                    && this.loginsMap.containsKey(getProviderName())) {
-                GetTokenResponse getTokenResponse = (GetTokenResponse) devAuthClient.getCognitoToken(
-                        this.loginsMap, identityId);
-                update(getTokenResponse.getIdentityId(),
-                        getTokenResponse.getToken());
-                return getTokenResponse.getIdentityId();
-            } else {
-                return super.getIdentityId();
-            }
-        } else {
-            return identityId;
-        }
+  @Override
+  public String getIdentityId() {
+    identityId = CognitoSyncClientManager.credentialsProvider.getCachedIdentityId();
+    if (identityId != null) {
+      return identityId;
     }
+    ensureLoginData();
+    return updateCognitoToken().getIdentityId();
+  }
 
-    /*
-     * (non-Javadoc)
-     * @see
-     * com.amazonaws.auth.AWSAbstractCognitoIdentityProvider#getProviderName()
-     * Return the developer provider name which you choose while setting up the
-     * identity pool in the Amazon Cognito Console
-     */
-    @Override
-    public String getProviderName() {
-        return developerProvider;
-    }
+  /*
+   * (non-Javadoc)
+   * @see
+   * com.amazonaws.auth.AWSAbstractCognitoIdentityProvider#getProviderName()
+   * Return the developer provider name which you choose while setting up the
+   * identity pool in the Amazon Cognito Console
+   */
+  @Override
+  public String getProviderName() {
+    return developerProvider;
+  }
 
-    /**
-     * This function validates the user credentials against the sample Cognito
-     * developer authentication application. After that it stores the key and
-     * token received from sample Cognito developer authentication application
-     * for all further communication with the application.
-     * 
-     * @param userName
-     * @param password
-     */
-    public void login(String userName, String password, Context context) {
-        new ServerAuthenticationTask(context).execute(new LoginCredentials(
-                userName, password));
+  public static ServerApiClient getDevAuthClientInstance() {
+    if (devAuthClient == null) {
+      throw new IllegalStateException("Dev Auth Client not initialized yet");
     }
-
-    public static AmazonCognitoSampleDeveloperAuthenticationClient getDevAuthClientInstance() {
-        if (devAuthClient == null) {
-            throw new IllegalStateException(
-                    "Dev Auth Client not initialized yet");
-        }
-        return devAuthClient;
-    }
+    return devAuthClient;
+  }
 }

@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class CognitoSyncClientManager {
 
-    private static final String TAG = "CognitoSyncClientManager";
+    private static final String TAG = "CognitoSyncClient";
 
     /**
      * Enter here the Identity Pool associated with your app and the AWS
@@ -41,14 +41,6 @@ public class CognitoSyncClientManager {
 
     private static CognitoSyncManager syncClient;
     public static CognitoCachingCredentialsProvider credentialsProvider = null;
-    protected static AWSAbstractCognitoIdentityProvider developerIdentityProvider;
-
-    /**
-     * Set this flag to true for using developer authenticated identities
-     * Make sure you configured it in CognitoAuthenticationProvider.java.
-     */
-    private static boolean useDeveloperAuthenticatedIdentities = true;
-
 
     /**
      * Initializes the Cognito Identity and Sync clients. This must be called before getInstance().
@@ -59,17 +51,10 @@ public class CognitoSyncClientManager {
 
         if (syncClient != null) return;
 
-        if (useDeveloperAuthenticatedIdentities) {
-            developerIdentityProvider = new CognitoAuthenticationProvider(
-                    null, IDENTITY_POOL_ID, context, REGION);
-            credentialsProvider = new CognitoCachingCredentialsProvider(context, developerIdentityProvider,
-                    REGION);
-            Log.i(TAG, "Using developer authenticated identities");
-        } else {
-            credentialsProvider = new CognitoCachingCredentialsProvider(context, IDENTITY_POOL_ID,
-                    REGION);
-            Log.i(TAG, "Developer authenticated identities is not configured");
-        }
+        AWSAbstractCognitoIdentityProvider identityProvider = new CognitoAuthenticationProvider(
+                null, IDENTITY_POOL_ID, context, REGION);
+        credentialsProvider = new CognitoCachingCredentialsProvider(context, identityProvider, REGION);
+        Log.i(TAG, "Using developer authenticated identities");
 
         syncClient = new CognitoSyncManager(context, REGION, credentialsProvider);
     }

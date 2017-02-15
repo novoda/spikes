@@ -30,7 +30,7 @@ import org.apache.commons.codec.binary.Hex;
  * This class is used to communicate with the sample Cognito developer
  * authentication application sample.
  */
-public class AmazonCognitoSampleDeveloperAuthenticationClient {
+public class ServerApiClient {
     private static final String LOG_TAG = "AmazonCognitoSampleDeveloperAuthenticationClient";
 
     /**
@@ -49,7 +49,7 @@ public class AmazonCognitoSampleDeveloperAuthenticationClient {
      */
     private final SharedPreferences sharedPreferences;
 
-    public AmazonCognitoSampleDeveloperAuthenticationClient(
+    public ServerApiClient(
             SharedPreferences sharedPreferences, URL host,
             String appName) {
         this.host = host;
@@ -61,11 +61,11 @@ public class AmazonCognitoSampleDeveloperAuthenticationClient {
      * Gets a token from the sample Cognito developer authentication
      * application. The registered key is used to secure the communication.
      */
-    private Response getToken(Map<String, String> logins, String identityId, String path, ResponseHandler responseHandler) {
+    private Response getToken(Map<String, String> logins, String identityId, String endpoint, ResponseHandler responseHandler) {
         String uid = AmazonSharedPreferencesWrapper.getUidForDevice(this.sharedPreferences);
         String key = AmazonSharedPreferencesWrapper.getKeyForDevice(this.sharedPreferences);
 
-        Request getTokenRequest = new GetTokenRequest(this.host, path, uid, key, logins, identityId);
+        Request getTokenRequest = new GetTokenRequest(this.host, endpoint, uid, key, logins, identityId);
 
         // TODO: You can cache the open id token as you will have the control
         // over the duration of the token when it is issued. Caching can reduce
@@ -77,9 +77,9 @@ public class AmazonCognitoSampleDeveloperAuthenticationClient {
      * Gets a token from the sample Cognito developer authentication
      * application. The registered key is used to secure the communication.
      */
-    public Response getCognitoToken(Map<String, String> logins, String identityId) {
+    public GetTokenResponse getCognitoToken(Map<String, String> logins, String identityId) {
         String key = AmazonSharedPreferencesWrapper.getKeyForDevice(this.sharedPreferences);
-        return getToken(logins, identityId, "gettoken", new GetTokenResponseHandler(key));
+        return (GetTokenResponse) getToken(logins, identityId, "gettoken", new GetTokenResponseHandler(key));
     }
 
     public Response getFirebaseToken(String identityId) {
@@ -91,12 +91,9 @@ public class AmazonCognitoSampleDeveloperAuthenticationClient {
      * the user's account.
      */
     public Response login(String username, String password) {
-        String uid = AmazonCognitoSampleDeveloperAuthenticationClient
-                .generateRandomString();
-        LoginRequest loginRequest = new LoginRequest(this.host,
-                this.appName, uid, username, password);
-        ResponseHandler handler = new LoginResponseHandler(
-                loginRequest.getDecryptionKey());
+        String uid = ServerApiClient.generateRandomString();
+        LoginRequest loginRequest = new LoginRequest(this.host, this.appName, uid, username, password);
+        ResponseHandler handler = new LoginResponseHandler(loginRequest.getDecryptionKey());
 
         Response response = this.processRequest(loginRequest, handler);
         if (response.requestWasSuccessful()) {
@@ -112,7 +109,7 @@ public class AmazonCognitoSampleDeveloperAuthenticationClient {
      * Process Request
      */
     @SuppressLint("LongLogTag")
-    protected Response processRequest(Request request, ResponseHandler handler) {
+    private Response processRequest(Request request, ResponseHandler handler) {
         Response response = null;
         int retries = 2;
         do {
@@ -134,11 +131,9 @@ public class AmazonCognitoSampleDeveloperAuthenticationClient {
     /**
      * Creates a 128 bit random string..
      */
-    public static String generateRandomString() {
-        SecureRandom random = new SecureRandom();
-        byte[] randomBytes = random.generateSeed(16);
-        String randomString = new String(Hex.encodeHex(randomBytes));
-        return randomString;
+    private static String generateRandomString() {
+        byte[] randomBytes = new SecureRandom().generateSeed(16);
+        return new String(Hex.encodeHex(randomBytes));
     }
 
 }

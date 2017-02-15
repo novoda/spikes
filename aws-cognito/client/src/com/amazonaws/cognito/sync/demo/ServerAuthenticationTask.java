@@ -58,8 +58,7 @@ public class ServerAuthenticationTask extends
                                     .getIdentityProvider()).getProviderName(),
                             userName);
             // Always remember to call refresh after updating the logins map
-            ((CognitoAuthenticationProvider) CognitoSyncClientManager.credentialsProvider
-                    .getIdentityProvider()).refresh();
+            CognitoSyncClientManager.credentialsProvider.getIdentityProvider().refresh();
         }
         return null;
     }
