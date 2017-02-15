@@ -8,6 +8,9 @@ buildscript {
     classpath 'com.google.gms:google-services:3.0.0'
   }
 }
+repositories {
+  mavenCentral()
+}
 
 apply plugin: 'com.android.application'
 apply plugin: 'com.novoda.build-properties'
@@ -48,19 +51,14 @@ android {
   }
 }
 
-
-
 dependencies {
-  repositories {
-    mavenCentral()
-  }
   compile 'com.google.firebase:firebase-core:10.0.1'
   compile 'com.google.firebase:firebase-auth:10.0.1'
   compile 'com.google.firebase:firebase-database:10.0.1'
   compile 'com.amazonaws:aws-android-sdk-core:2.2.+'
   compile 'com.amazonaws:aws-android-sdk-cognito:2.2.+'
   compile 'com.amazonaws:aws-android-sdk-lambda:2.2.+'
-  compile fileTree(include: '*.jar', dir: 'libs')
+  compile 'commons-codec:commons-codec:1.10'
 }
 
 apply plugin: 'com.google.gms.google-services'
