@@ -29,7 +29,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amazonaws.cognito.sync.devauth.client.AmazonSharedPreferencesWrapper;
+import com.amazonaws.cognito.sync.devauth.client.SharedPreferencesWrapper;
 import com.amazonaws.cognito.sync.devauth.client.lambda.LambdaClient;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -73,7 +73,7 @@ public class MainActivity extends Activity {
                                                 .wipeData();
 
                                         // Wipe shared preferences
-                                        AmazonSharedPreferencesWrapper.wipe(PreferenceManager
+                                        SharedPreferencesWrapper.wipe(PreferenceManager
                                                                                     .getDefaultSharedPreferences(MainActivity.this));
                                     }
 
@@ -167,7 +167,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void onClick(View v) {
                         Context context = v.getContext();
-                        String uid = AmazonSharedPreferencesWrapper.getUidForDevice(PreferenceManager.getDefaultSharedPreferences(context));
+                        String uid = SharedPreferencesWrapper.getUidForDevice(PreferenceManager.getDefaultSharedPreferences(context));
                         if (uid == null) {
                             Toast.makeText(context, "You need to login with Cognito before", Toast.LENGTH_SHORT).show();
                         } else {

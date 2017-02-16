@@ -23,7 +23,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.amazonaws.cognito.sync.devauth.client.AmazonSharedPreferencesWrapper;
+import com.amazonaws.cognito.sync.devauth.client.SharedPreferencesWrapper;
 import com.amazonaws.cognito.sync.devauth.client.Response;
 import com.amazonaws.cognito.sync.devauth.client.ServerApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,6 +39,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class FirebaseAuthenticationTask extends
         AsyncTask<String, Void, String> {
 
+    public static final String TAG = "FirebaseAuthentication";
     private boolean isSuccessful;
 
     private final Context context;
@@ -51,7 +52,7 @@ public class FirebaseAuthenticationTask extends
 
     @Override
     protected String doInBackground(String... params) {
-        Response response = apiClient.getFirebaseToken(params[0]);
+        Response response = apiClient.getFirebaseToken(null);
         isSuccessful = response.requestWasSuccessful();
         return response.getResponseMessage();
     }
@@ -62,15 +63,16 @@ public class FirebaseAuthenticationTask extends
             new AlertDialog.Builder(context).setTitle("Login error")
                     .setMessage("Error trying to login to Firebase").show();
         } else {
-            FirebaseAuth.getInstance().signInWithCustomToken(result)
+            Log.i(TAG, "requesting sign-in for token: "+ result + " *");
+            FirebaseAuth.getInstance().signInWithCustomToken(result.trim())
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (!task.isSuccessful()) {
-                                Log.w("FirebaseAuthentication", "signInWithCustomToken", task.getException());
+                                Log.w(TAG, "signInWithCustomToken failed!", task.getException());
                                 Toast.makeText(context, "Failed!", Toast.LENGTH_SHORT).show();
                             } else {
-                                AmazonSharedPreferencesWrapper.registerFirebaseToken(PreferenceManager.getDefaultSharedPreferences(context), result);
+                                SharedPreferencesWrapper.registerFirebaseToken(PreferenceManager.getDefaultSharedPreferences(context), result);
                                 Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
                             }
                         }

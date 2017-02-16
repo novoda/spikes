@@ -1,12 +1,12 @@
 /**
  * Copyright 2010-2014 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
  * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
+ * <p>
+ * http://aws.amazon.com/apache2.0
+ * <p>
  * or in the "license" file accompanying this file. This file is distributed
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
@@ -19,19 +19,21 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.codec.binary.Hex;
 
 /**
  * This class is used to communicate with the sample Cognito developer
  * authentication application sample.
  */
 public class ServerApiClient {
-    private static final String LOG_TAG = "AmazonCognitoSampleDeveloperAuthenticationClient";
+
+    private static final String LOG_TAG = "ServerApiClient";
 
     /**
      * The host for the sample Cognito developer authentication application.
@@ -58,12 +60,93 @@ public class ServerApiClient {
     }
 
     /**
+     * A function to send request to the sample Cognito developer authentication
+     * application
+     *
+     * @param request
+     * @param reponseHandler
+     * @return
+     */
+    public static Response sendRequest(Request request,
+                                       ResponseHandler reponseHandler) {
+        int responseCode = 0;
+        String responseBody = null;
+        String requestUrl = null;
+        try {
+            requestUrl = request.buildRequestUrl();
+
+            Log.i(LOG_TAG, "Sending Request : [" + requestUrl + "]");
+
+            URL url = new URL(requestUrl);
+            HttpURLConnection connection = (HttpURLConnection) url
+                    .openConnection();
+
+            responseCode = connection.getResponseCode();
+            responseBody = getResponse(connection);
+            Log.i(LOG_TAG, "Response : [" + responseBody + "]");
+
+            return reponseHandler.handleResponse(responseCode, responseBody);
+        } catch (IOException exception) {
+            Log.w(LOG_TAG, exception);
+            if (exception.getMessage().equals(
+                    "Received authentication challenge is null")) {
+                return reponseHandler.handleResponse(401,
+                        "Unauthorized token request");
+            } else {
+                return reponseHandler.handleResponse(404,
+                        "Unable to reach resource at [" + requestUrl + "]");
+            }
+        } catch (Exception exception) {
+            Log.w(LOG_TAG, exception);
+            return reponseHandler.handleResponse(responseCode, responseBody);
+        }
+    }
+
+    /**
+     * Function to get the response from sample Cognito developer authentication
+     * application.
+     *
+     * @param connection
+     * @return
+     */
+    private static String getResponse(HttpURLConnection connection) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
+        InputStream inputStream = null;
+        try {
+            baos = new ByteArrayOutputStream(1024);
+            int length = 0;
+            byte[] buffer = new byte[1024];
+
+            if (connection.getResponseCode() == 200) {
+                inputStream = connection.getInputStream();
+            } else {
+                inputStream = connection.getErrorStream();
+            }
+
+            while ((length = inputStream.read(buffer)) != -1) {
+                baos.write(buffer, 0, length);
+            }
+
+            return baos.toString();
+        } catch (Exception exception) {
+            Log.w(LOG_TAG, exception);
+            return "Internal Server Error";
+        } finally {
+            try {
+                baos.close();
+            } catch (Exception exception) {
+                Log.w(LOG_TAG, exception);
+            }
+        }
+    }
+
+    /**
      * Gets a token from the sample Cognito developer authentication
      * application. The registered key is used to secure the communication.
      */
     private Response getToken(Map<String, String> logins, String identityId, String endpoint, ResponseHandler responseHandler) {
-        String uid = AmazonSharedPreferencesWrapper.getUidForDevice(this.sharedPreferences);
-        String key = AmazonSharedPreferencesWrapper.getKeyForDevice(this.sharedPreferences);
+        String uid = SharedPreferencesWrapper.getUidForDevice(this.sharedPreferences);
+        String key = SharedPreferencesWrapper.getKeyForDevice(this.sharedPreferences);
 
         Request getTokenRequest = new GetTokenRequest(this.host, endpoint, uid, key, logins, identityId);
 
@@ -78,7 +161,7 @@ public class ServerApiClient {
      * application. The registered key is used to secure the communication.
      */
     public GetTokenResponse getCognitoToken(Map<String, String> logins, String identityId) {
-        String key = AmazonSharedPreferencesWrapper.getKeyForDevice(this.sharedPreferences);
+        String key = SharedPreferencesWrapper.getKeyForDevice(this.sharedPreferences);
         return (GetTokenResponse) getToken(logins, identityId, "gettoken", new GetTokenResponseHandler(key));
     }
 
@@ -91,15 +174,14 @@ public class ServerApiClient {
      * the user's account.
      */
     public Response login(String username, String password) {
-        String uid = ServerApiClient.generateRandomString();
+        String uid = SharedPreferencesWrapper.getUidForDevice(sharedPreferences);
         LoginRequest loginRequest = new LoginRequest(this.host, this.appName, uid, username, password);
         ResponseHandler handler = new LoginResponseHandler(loginRequest.getDecryptionKey());
 
         Response response = this.processRequest(loginRequest, handler);
         if (response.requestWasSuccessful()) {
-            AmazonSharedPreferencesWrapper.registerDeviceId(
-                    this.sharedPreferences, uid,
-                    ((LoginResponse) response).getKey());
+            SharedPreferencesWrapper.registerDeviceKey(
+                    this.sharedPreferences, ((LoginResponse) response).getKey());
         }
 
         return response;
@@ -113,7 +195,7 @@ public class ServerApiClient {
         Response response = null;
         int retries = 2;
         do {
-            response = CognitoSampleDeveloperAuthenticationService.sendRequest(
+            response = sendRequest(
                     request, handler);
             if (response.requestWasSuccessful()) {
                 return response;
@@ -126,14 +208,6 @@ public class ServerApiClient {
         } while (retries-- > 0);
 
         return response;
-    }
-
-    /**
-     * Creates a 128 bit random string..
-     */
-    private static String generateRandomString() {
-        byte[] randomBytes = new SecureRandom().generateSeed(16);
-        return new String(Hex.encodeHex(randomBytes));
     }
 
 }

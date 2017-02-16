@@ -23,7 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
  * This utility class is used to store content in Android's Shared Preferences.
  * For maximum security the preferences should be private.
  */
-public class AmazonSharedPreferencesWrapper {
+public class SharedPreferencesWrapper {
 
     private static final String AWS_DEVICE_UID = "AWS_DEVICE_UID";
     private static final String AWS_DEVICE_KEY = "AWS_DEVICE_KEY";
@@ -35,11 +35,11 @@ public class AmazonSharedPreferencesWrapper {
      * needs/wants to log out to clear any user specific information.
      */
     public static void wipe(SharedPreferences sharedPreferences) {
-        AmazonSharedPreferencesWrapper.storeValueInSharedPreferences(
+        SharedPreferencesWrapper.storeValueInSharedPreferences(
                 sharedPreferences, AWS_DEVICE_UID, null);
-        AmazonSharedPreferencesWrapper.storeValueInSharedPreferences(
+        SharedPreferencesWrapper.storeValueInSharedPreferences(
                 sharedPreferences, AWS_DEVICE_KEY, null);
-        AmazonSharedPreferencesWrapper.storeValueInSharedPreferences(
+        SharedPreferencesWrapper.storeValueInSharedPreferences(
                 sharedPreferences, FIREBASE_TOKEN, null);
         FirebaseAuth.getInstance().signOut();
     }
@@ -49,21 +49,23 @@ public class AmazonSharedPreferencesWrapper {
      * The UID and Key and used to encrypt/decrypt the Token that is returned
      * from the sample Cognito developer authentication application.
      */
-    public static void registerDeviceId(SharedPreferences sharedPreferences,
-                                        String uid, String key) {
-        AmazonSharedPreferencesWrapper.storeValueInSharedPreferences(
-                sharedPreferences, AWS_DEVICE_UID, uid);
-        AmazonSharedPreferencesWrapper.storeValueInSharedPreferences(
+    public static void registerDeviceKey(SharedPreferences sharedPreferences, String key) {
+        SharedPreferencesWrapper.storeValueInSharedPreferences(
                 sharedPreferences, AWS_DEVICE_KEY, key);
     }
 
+    public static void registerDevice(SharedPreferences preferences, String uid) {
+        SharedPreferencesWrapper.storeValueInSharedPreferences(
+            preferences, AWS_DEVICE_UID, uid);
+    }
+
     public static void registerFirebaseToken(SharedPreferences sharedPreferences, String token) {
-        AmazonSharedPreferencesWrapper.storeValueInSharedPreferences(
+        SharedPreferencesWrapper.storeValueInSharedPreferences(
                 sharedPreferences, FIREBASE_TOKEN, token);
     }
 
     public static String getFirebaseTokenForDevice(SharedPreferences sharedPreferences) {
-        return AmazonSharedPreferencesWrapper.getValueFromSharedPreferences(
+        return SharedPreferencesWrapper.getValueFromSharedPreferences(
                 sharedPreferences, FIREBASE_TOKEN);
     }
 
@@ -71,7 +73,7 @@ public class AmazonSharedPreferencesWrapper {
      * Returns the current UID stored in Shared Preferences.
      */
     public static String getUidForDevice(SharedPreferences sharedPreferences) {
-        return AmazonSharedPreferencesWrapper.getValueFromSharedPreferences(
+        return SharedPreferencesWrapper.getValueFromSharedPreferences(
                 sharedPreferences, AWS_DEVICE_UID);
     }
 
@@ -79,7 +81,7 @@ public class AmazonSharedPreferencesWrapper {
      * Returns the current Key stored in Shared Preferences.
      */
     public static String getKeyForDevice(SharedPreferences sharedPreferences) {
-        return AmazonSharedPreferencesWrapper.getValueFromSharedPreferences(
+        return SharedPreferencesWrapper.getValueFromSharedPreferences(
                 sharedPreferences, AWS_DEVICE_KEY);
     }
 
