@@ -17,6 +17,7 @@ package com.amazonaws.cognito.sync.devauth.client;
 
 import android.content.SharedPreferences;
 
+import com.amazonaws.cognito.sync.demo.Cognito;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
@@ -28,72 +29,55 @@ public class SharedPreferencesWrapper {
     private static final String AWS_DEVICE_UID = "AWS_DEVICE_UID";
     private static final String AWS_DEVICE_KEY = "AWS_DEVICE_KEY";
     private static final String FIREBASE_TOKEN = "FIREBASE_TOKEN";
+    private static final String USER_NAME      = "USER_NAME";
 
-    /**
-     * Set all of the Shared Preferences used by the sample Cognito developer
-     * authentication application to null. This function is useful if the user
-     * needs/wants to log out to clear any user specific information.
-     */
-    public static void wipe(SharedPreferences sharedPreferences) {
-        SharedPreferencesWrapper.storeValueInSharedPreferences(
-                sharedPreferences, AWS_DEVICE_UID, null);
-        SharedPreferencesWrapper.storeValueInSharedPreferences(
-                sharedPreferences, AWS_DEVICE_KEY, null);
-        SharedPreferencesWrapper.storeValueInSharedPreferences(
-                sharedPreferences, FIREBASE_TOKEN, null);
+    public static void wipe(SharedPreferences preferences) {
+        storeValue(preferences, AWS_DEVICE_KEY, null);
+        storeValue(preferences, FIREBASE_TOKEN, null);
+
+        Cognito.getCredentialsProvider().clearCredentials();
         FirebaseAuth.getInstance().signOut();
     }
 
-    /**
-     * Stores the UID and Key that were registered in the Shared Preferences.
-     * The UID and Key and used to encrypt/decrypt the Token that is returned
-     * from the sample Cognito developer authentication application.
-     */
-    public static void registerDeviceKey(SharedPreferences sharedPreferences, String key) {
-        SharedPreferencesWrapper.storeValueInSharedPreferences(
-                sharedPreferences, AWS_DEVICE_KEY, key);
+    public static void registerDeviceKey(SharedPreferences preferences, String key) {
+        storeValue(preferences, AWS_DEVICE_KEY, key);
     }
 
     public static void registerDevice(SharedPreferences preferences, String uid) {
-        SharedPreferencesWrapper.storeValueInSharedPreferences(
-            preferences, AWS_DEVICE_UID, uid);
+        storeValue(preferences, AWS_DEVICE_UID, uid);
     }
 
-    public static void registerFirebaseToken(SharedPreferences sharedPreferences, String token) {
-        SharedPreferencesWrapper.storeValueInSharedPreferences(
-                sharedPreferences, FIREBASE_TOKEN, token);
+    public static void registerFirebaseToken(SharedPreferences preferences, String token) {
+        storeValue(preferences, FIREBASE_TOKEN, token);
     }
 
-    public static String getFirebaseTokenForDevice(SharedPreferences sharedPreferences) {
-        return SharedPreferencesWrapper.getValueFromSharedPreferences(
-                sharedPreferences, FIREBASE_TOKEN);
+    public static String getFirebaseTokenForDevice(SharedPreferences preferences) {
+        return getValue(preferences, FIREBASE_TOKEN);
     }
 
-    /**
-     * Returns the current UID stored in Shared Preferences.
-     */
-    public static String getUidForDevice(SharedPreferences sharedPreferences) {
-        return SharedPreferencesWrapper.getValueFromSharedPreferences(
-                sharedPreferences, AWS_DEVICE_UID);
+    public static String getUidForDevice(SharedPreferences preferences) {
+        return getValue(preferences, AWS_DEVICE_UID);
     }
 
-    /**
-     * Returns the current Key stored in Shared Preferences.
-     */
-    public static String getKeyForDevice(SharedPreferences sharedPreferences) {
-        return SharedPreferencesWrapper.getValueFromSharedPreferences(
-                sharedPreferences, AWS_DEVICE_KEY);
+    public static String getKeyForDevice(SharedPreferences preferences) {
+        return getValue(preferences, AWS_DEVICE_KEY);
     }
 
-    protected static void storeValueInSharedPreferences(
-            SharedPreferences sharedPreferences, String key, String value) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+    private static void storeValue(SharedPreferences preferences, String key, String value) {
+        SharedPreferences.Editor editor = preferences.edit();
         editor.putString(key, value);
-        editor.commit();
+        editor.apply();
     }
 
-    protected static String getValueFromSharedPreferences(
-            SharedPreferences sharedPreferences, String key) {
-        return sharedPreferences.getString(key, null);
+    private static String getValue(SharedPreferences preferences, String key) {
+        return preferences.getString(key, null);
+    }
+
+    public static void registerUser(final SharedPreferences preferences, final String userName) {
+        storeValue(preferences, USER_NAME, userName);
+    }
+
+    public static String getUserName(final SharedPreferences preferences) {
+        return getValue(preferences, USER_NAME);
     }
 }

@@ -5,10 +5,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
-import com.amazonaws.cognito.sync.demo.ServerCognitoIdentityProvider;
 import com.amazonaws.cognito.sync.demo.Cognito;
+import com.amazonaws.cognito.sync.demo.ServerCognitoIdentityProvider;
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaInvokerFactory;
 import com.amazonaws.regions.Regions;
 
@@ -31,7 +30,7 @@ public class LambdaClient {
             protected String doInBackground(Void... params) {
                 try {
                     return lambdaInterface.CognitoAuthTest();
-                } catch (AmazonServiceException lfe) {
+                } catch (Exception lfe) {
                     Log.e("Tag", "Failed to invoke", lfe);
                     return null;
                 }

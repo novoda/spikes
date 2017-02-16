@@ -179,10 +179,6 @@ public class ServerApiClient {
         ResponseHandler handler = new LoginResponseHandler(loginRequest.getDecryptionKey());
 
         Response response = this.processRequest(loginRequest, handler);
-        if (response.requestWasSuccessful()) {
-            SharedPreferencesWrapper.registerDeviceKey(
-                    this.sharedPreferences, ((LoginResponse) response).getKey());
-        }
 
         return response;
     }

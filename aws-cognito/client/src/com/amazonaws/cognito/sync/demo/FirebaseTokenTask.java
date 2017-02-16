@@ -36,7 +36,7 @@ import com.google.firebase.auth.FirebaseAuth;
  * validates a set of username and possword against the sample Cognito developer
  * authentication application
  */
-public class FirebaseAuthenticationTask extends
+public class FirebaseTokenTask extends
         AsyncTask<String, Void, String> {
 
     public static final String TAG = "FirebaseAuthentication";
@@ -45,7 +45,7 @@ public class FirebaseAuthenticationTask extends
     private final Context context;
     private final ServerApiClient apiClient;
 
-    public FirebaseAuthenticationTask(Context context, ServerApiClient apiClient) {
+    public FirebaseTokenTask(Context context, ServerApiClient apiClient) {
         this.context = context;
         this.apiClient = apiClient;
     }

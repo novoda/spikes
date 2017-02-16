@@ -20,6 +20,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -41,11 +42,14 @@ public class MainActivity extends Activity {
 
     private static final String TAG = "MainActivity";
 
-    private Button btnLoginCognito;
+    private Button btnLogin;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         setContentView(R.layout.main_activity);
 
         /**
@@ -53,64 +57,16 @@ public class MainActivity extends Activity {
          */
         Cognito.init(getApplicationContext());
 
-        Button btnWipedata = (Button) findViewById(R.id.btnWipedata);
-        btnWipedata.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("Wipe data?")
-                        .setMessage(
-                                "This will log off your current session and wipe all user data. "
-                                        + "Any data not synchronized will be lost.")
-                        .setPositiveButton(
-                                "Yes",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog,
-                                                        int which) {
-                                        // wipe data
-                                        Cognito.getSyncManager()
-                                                .wipeData();
-
-                                        // Wipe shared preferences
-                                        SharedPreferencesWrapper.wipe(PreferenceManager
-                                                                                    .getDefaultSharedPreferences(MainActivity.this));
-                                    }
-
-                                }
-                        )
-                        .setNegativeButton(
-                                "No",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog,
-                                                        int which) {
-                                        dialog.cancel();
-                                    }
-                                }
-                        ).show();
-            }
-        });
-
-        findViewById(R.id.btnResourceCognito).setOnClickListener(
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Context context = v.getContext();
-                        new LambdaClient().testAuth(context);
-                    }
-                });
-
-        btnLoginCognito = (Button) findViewById(R.id.btnLoginCognito);
+        btnLogin = (Button) findViewById(R.id.btnLogin);
         if ((Cognito.getCredentialsProvider().getIdentityProvider()) instanceof ServerCognitoIdentityProvider) {
-            btnLoginCognito.setEnabled(true);
+            btnLogin.setEnabled(true);
             Log.w(TAG, "Developer authentication feature configured correctly. ");
         } else {
-            btnLoginCognito.setEnabled(false);
+            btnLogin.setEnabled(false);
             Log.w(TAG, "Developer authentication feature configured incorrectly. "
                     + "Thus it's disabled in this demo.");
         }
-        btnLoginCognito.setOnClickListener(new OnClickListener() {
+        btnLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 // username and password dialog
@@ -123,7 +79,7 @@ public class MainActivity extends Activity {
                 final TextView txtPassword = (TextView) login
                         .findViewById(R.id.txtPassword);
                 txtPassword.setHint("Password");
-                Button btnLogin = (Button) login.findViewById(R.id.btnLogin);
+                Button btnOk = (Button) login.findViewById(R.id.btnLogin);
                 Button btnCancel = (Button) login.findViewById(R.id.btnCancel);
 
                 btnCancel.setOnClickListener(new OnClickListener() {
@@ -133,7 +89,7 @@ public class MainActivity extends Activity {
                     }
                 });
 
-                btnLogin.setOnClickListener(new OnClickListener() {
+                btnOk.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // Validate the username and password
@@ -147,13 +103,7 @@ public class MainActivity extends Activity {
                                             "Username or password cannot be empty!!")
                                     .show();
                         } else {
-                            // Clear the existing credentials
-                            Cognito.getCredentialsProvider()
-                                    .clearCredentials();
-                            // Initiate user authentication against the
-                            // developer backend in this case the sample Cognito
-                            // developer authentication application.
-                          new ServerAuthenticationTask(MainActivity.this, Cognito.getServerApiClient()).execute(new LoginCredentials(username, password));
+                            login(username, password);
                         }
                         login.dismiss();
                     }
@@ -162,40 +112,119 @@ public class MainActivity extends Activity {
             }
         });
 
-        findViewById(R.id.btnLoginFirebase).setOnClickListener(
+        findViewById(R.id.btnFirebaseToken).setOnClickListener(
                 new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Context context = v.getContext();
-                        String uid = SharedPreferencesWrapper.getUidForDevice(PreferenceManager.getDefaultSharedPreferences(context));
-                        if (uid == null) {
-                            Toast.makeText(context, "You need to login with Cognito before", Toast.LENGTH_SHORT).show();
-                        } else {
-                            new FirebaseAuthenticationTask(context, Cognito.getServerApiClient()).execute(uid);
+                        fetchFirebaseToken(v.getContext());
+                    }
+                });
+
+        findViewById(R.id.btnAccessFirebaseResource).setOnClickListener(
+                new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        accessFirebaseResource();
+                    }
+                });
+
+        findViewById(R.id.btnCognitoToken).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                fetchCognitoToken();
+            }
+        });
+
+        findViewById(R.id.btnResourceCognito).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                accessCognitoResource(v.getContext());
+            }
+        });
+
+        Button btnWipedata = (Button) findViewById(R.id.btnWipedata);
+        btnWipedata.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wipeData();
+            }
+        });
+    }
+
+    private void fetchCognitoToken() {
+        new CognitoTokenTask().execute(SharedPreferencesWrapper.getUserName(preferences));
+    }
+
+    private void accessFirebaseResource() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("test_reading");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Toast.makeText(MainActivity.this, "Accessed a restricted resource that says: " + dataSnapshot.getValue(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, databaseError.getMessage());
+                Toast.makeText(MainActivity.this, "Can't read resource", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void fetchFirebaseToken(final Context context) {
+        String uid = SharedPreferencesWrapper.getUidForDevice(preferences);
+        new FirebaseTokenTask(context, Cognito.getServerApiClient()).execute(uid);
+    }
+
+    private void login(final String username, final String password) {
+        // Clear the existing credentials
+        Cognito.getCredentialsProvider()
+                .clearCredentials();
+        // Initiate user authentication against the
+        // developer backend in this case the sample Cognito
+        // developer authentication application.
+        new ServerLoginTask(MainActivity.this, Cognito.getServerApiClient(), preferences)
+                .execute(new LoginCredentials(username, password));
+    }
+
+    private void accessCognitoResource(Context context) {
+        new LambdaClient().testAuth(context);
+    }
+
+    private void wipeData() {
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Wipe data?")
+                .setMessage(
+                        "This will log off your current session and wipe all user data. "
+                                + "Any data not synchronized will be lost.")
+                .setPositiveButton(
+                        "Yes",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                // wipe data
+                                Cognito.getSyncManager()
+                                        .wipeData();
+
+                                // Wipe shared preferences
+                                SharedPreferencesWrapper.wipe(PreferenceManager
+                                                                            .getDefaultSharedPreferences(MainActivity.this));
+                            }
+
                         }
-                    }
-                });
-
-        findViewById(R.id.btnResourceFirebase).setOnClickListener(
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        DatabaseReference myRef = database.getReference("test_reading");
-                        myRef.addValueEventListener(new ValueEventListener() {
+                )
+                .setNegativeButton(
+                        "No",
+                        new DialogInterface.OnClickListener() {
                             @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                Toast.makeText(MainActivity.this, "Accessed a restricted resource that says: " + dataSnapshot.getValue(), Toast.LENGTH_SHORT).show();
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                dialog.cancel();
                             }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                Log.e(TAG, databaseError.getMessage());
-                                Toast.makeText(MainActivity.this, "Can't read resource", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                });
+                        }
+                ).show();
     }
 
 }
