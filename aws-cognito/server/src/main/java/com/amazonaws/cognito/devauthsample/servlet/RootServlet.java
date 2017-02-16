@@ -104,6 +104,7 @@ public abstract class RootServlet extends HttpServlet {
         if (null != data) {
             ServletOutputStream out = response.getOutputStream();
             out.println(data);
+            out.close();
         }
     }
 

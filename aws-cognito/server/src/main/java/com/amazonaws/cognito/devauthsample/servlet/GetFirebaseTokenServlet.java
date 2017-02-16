@@ -90,7 +90,7 @@ public class GetFirebaseTokenServlet extends RootServlet {
                     .addOnSuccessListener(customToken -> {
                         // Send token back to client
                         token[0] = customToken;
-                        log.info("received token: " + customToken);
+                        log.info("received token: " + customToken + " *");
                         countDownLatch.countDown();
                     });
             countDownLatch.await(10, TimeUnit.SECONDS);
