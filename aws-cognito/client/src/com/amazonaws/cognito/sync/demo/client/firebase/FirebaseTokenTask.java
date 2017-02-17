@@ -22,7 +22,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.amazonaws.cognito.sync.demo.Cognito;
+import com.amazonaws.cognito.sync.demo.Identifiers;
 import com.amazonaws.cognito.sync.demo.client.ResponseData;
 import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,10 +43,12 @@ public class FirebaseTokenTask extends
 
     private final Context context;
     private final ServerApiClient apiClient;
+    private final Identifiers identifiers;
 
-    public FirebaseTokenTask(Context context, ServerApiClient apiClient) {
+    public FirebaseTokenTask(Context context, ServerApiClient apiClient, Identifiers identifiers) {
         this.context = context;
         this.apiClient = apiClient;
+        this.identifiers = identifiers;
     }
 
     @Override
@@ -71,7 +73,7 @@ public class FirebaseTokenTask extends
                                 Log.w(TAG, "signInWithCustomToken failed!", task.getException());
                                 Toast.makeText(context, "Failed!", Toast.LENGTH_SHORT).show();
                             } else {
-                                Cognito.INSTANCE.getIdentifiers().registerFirebaseToken(result);
+                                identifiers.registerFirebaseToken(result);
                                 Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
                             }
                         }

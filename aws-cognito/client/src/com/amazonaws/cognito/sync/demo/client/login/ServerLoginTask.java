@@ -17,11 +17,10 @@ package com.amazonaws.cognito.sync.demo.client.login;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-import com.amazonaws.cognito.sync.demo.Cognito;
+import com.amazonaws.cognito.sync.demo.Identifiers;
 import com.amazonaws.cognito.sync.demo.client.ResponseData;
 import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
 
@@ -34,10 +33,12 @@ public class ServerLoginTask extends AsyncTask<LoginCredentials, Void, Boolean> 
 
     private final Context context;
     private final ServerApiClient apiClient;
+    private final Identifiers identifiers;
 
-    public ServerLoginTask(Context context, ServerApiClient apiClient, SharedPreferences preferences) {
+    public ServerLoginTask(Context context, ServerApiClient apiClient, Identifiers identifiers) {
         this.context = context;
         this.apiClient = apiClient;
+        this.identifiers = identifiers;
     }
 
     @Override
@@ -46,7 +47,7 @@ public class ServerLoginTask extends AsyncTask<LoginCredentials, Void, Boolean> 
         ResponseData responseData = apiClient.login(userName, params[0].getPassword());
         if (responseData.requestWasSuccessful()) {
             String deviceKey = ((LoginResponseData) responseData).getKey();
-            Cognito.INSTANCE.getIdentifiers().registerUser(userName, deviceKey);
+            identifiers.registerUser(userName, deviceKey);
         }
         return responseData.requestWasSuccessful();
     }

@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
 import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenTask;
 import com.amazonaws.cognito.sync.demo.client.cognito.lambda.AccessLambdaTask;
 import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseTokenTask;
@@ -45,11 +46,15 @@ public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
 
     private SharedPreferences preferences;
+    private ServerApiClient apiClient;
+    private Identifiers identifiers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+        apiClient = ((AuthApplication) getApplication()).getApiClient();
+        identifiers = ((AuthApplication) getApplication()).getIdentifiers();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -133,7 +138,7 @@ public class MainActivity extends Activity {
     }
 
     private void fetchCognitoToken() {
-        new CognitoTokenTask(Cognito.INSTANCE.credentialsProvider()).execute(Cognito.INSTANCE.getIdentifiers().getUserName());
+        new CognitoTokenTask(Cognito.INSTANCE.credentialsProvider()).execute(identifiers.getUserName());
     }
 
     private void accessFirebaseResource() {
@@ -154,14 +159,14 @@ public class MainActivity extends Activity {
     }
 
     private void fetchFirebaseToken() {
-        String uid = Cognito.INSTANCE.getIdentifiers().getUidForDevice();
-        new FirebaseTokenTask(this, Cognito.INSTANCE.serverApiClient()).execute(uid);
+        String uid = identifiers.getUidForDevice();
+        new FirebaseTokenTask(this, apiClient, identifiers).execute(uid);
     }
 
     private void login(String username, String password) {
         Cognito.INSTANCE.credentialsProvider().clearCredentials();
         LoginCredentials loginCredentials = new LoginCredentials(username, password);
-        new ServerLoginTask(this, Cognito.INSTANCE.serverApiClient(), preferences).execute(loginCredentials);
+        new ServerLoginTask(this, apiClient, identifiers).execute(loginCredentials);
     }
 
     private void accessCognitoResource() {
@@ -191,7 +196,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Cognito.INSTANCE.syncManager().wipeData();
-                Cognito.INSTANCE.getIdentifiers().wipe();
+                identifiers.wipe();
             }
 
         };

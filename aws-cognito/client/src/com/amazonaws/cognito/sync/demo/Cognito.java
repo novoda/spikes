@@ -16,7 +16,6 @@
 package com.amazonaws.cognito.sync.demo;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
 
 import com.amazonaws.auth.AWSAbstractCognitoIdentityProvider;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
@@ -33,28 +32,16 @@ public enum Cognito {
 
     private CognitoSyncManager syncManager;
     private CognitoCachingCredentialsProvider credentialsProvider = null;
-    private ServerApiClient serverApiClient;
-    private Identifiers identifiers;
 
-    public void init(Context context) {
-        identifiers = new Identifiers(PreferenceManager.getDefaultSharedPreferences(context));
-        serverApiClient = createServerApiClient(context);
-        syncManager = createSyncManager(context, serverApiClient);
+    public void init(Context context, ServerApiClient apiClient) {
+        syncManager = createSyncManager(context, apiClient);
     }
 
-    public Identifiers getIdentifiers() {
-        return identifiers;
-    }
 
     private CognitoSyncManager createSyncManager(Context context, ServerApiClient serverApiClient) {
         AWSAbstractCognitoIdentityProvider identityProvider = new ServerCognitoIdentityProvider(serverApiClient, null, IDENTITY_POOL_ID, context, REGION);
         credentialsProvider = new CognitoCachingCredentialsProvider(context, identityProvider, REGION);
         return new CognitoSyncManager(context, REGION, credentialsProvider);
-    }
-
-    private ServerApiClient createServerApiClient(Context context) {
-        String host = BuildConfig.AUTHENTICATION_ENDPOINT;
-        return new ServerApiClient(host, "AWSCognitoDeveloperAuthenticationSample", identifiers);
     }
 
     public CognitoSyncManager syncManager() {
@@ -63,9 +50,5 @@ public enum Cognito {
 
     public CognitoCachingCredentialsProvider credentialsProvider() {
         return credentialsProvider;
-    }
-
-    public ServerApiClient serverApiClient() {
-        return serverApiClient;
     }
 }
