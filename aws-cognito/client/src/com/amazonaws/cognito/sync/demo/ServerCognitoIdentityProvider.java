@@ -18,7 +18,7 @@ package com.amazonaws.cognito.sync.demo;
 import android.content.Context;
 import android.util.Log;
 import com.amazonaws.auth.AWSAbstractCognitoDeveloperIdentityProvider;
-import com.amazonaws.cognito.sync.devauth.client.GetTokenResponse;
+import com.amazonaws.cognito.sync.devauth.client.GetTokenResponseData;
 import com.amazonaws.cognito.sync.devauth.client.ServerApiClient;
 import com.amazonaws.regions.Regions;
 
@@ -78,8 +78,8 @@ public class ServerCognitoIdentityProvider extends
     }
   }
 
-  private GetTokenResponse updateCognitoToken() {
-    GetTokenResponse response = serverApiClient.getCognitoToken(this.loginsMap, identityId);
+  private GetTokenResponseData updateCognitoToken() {
+    GetTokenResponseData response = serverApiClient.getCognitoToken(this.loginsMap, identityId);
     update(response.getIdentityId(), response.getToken());
     return response;
   }

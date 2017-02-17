@@ -21,8 +21,8 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-import com.amazonaws.cognito.sync.devauth.client.LoginResponse;
-import com.amazonaws.cognito.sync.devauth.client.Response;
+import com.amazonaws.cognito.sync.devauth.client.LoginResponseData;
+import com.amazonaws.cognito.sync.devauth.client.ResponseData;
 import com.amazonaws.cognito.sync.devauth.client.ServerApiClient;
 
 /**
@@ -43,12 +43,12 @@ public class ServerLoginTask extends AsyncTask<LoginCredentials, Void, Boolean> 
     @Override
     protected Boolean doInBackground(LoginCredentials... params) {
         String userName = params[0].getUsername();
-        Response response = apiClient.login(userName, params[0].getPassword());
-        if (response.requestWasSuccessful()) {
-            String deviceKey = ((LoginResponse) response).getKey();
+        ResponseData responseData = apiClient.login(userName, params[0].getPassword());
+        if (responseData.requestWasSuccessful()) {
+            String deviceKey = ((LoginResponseData) responseData).getKey();
             Cognito.INSTANCE.getIdentifiers().registerUser(userName, deviceKey);
         }
-        return response.requestWasSuccessful();
+        return responseData.requestWasSuccessful();
     }
 
     @Override

@@ -19,13 +19,13 @@ package com.amazonaws.cognito.sync.devauth.client;
  * A class for storing the response from sample Cognito developer
  * authentication.
  */
-public class Response {
-    public static final Response SUCCESSFUL = new Response(200, "OK");
+public class ResponseData {
+    public static final ResponseData SUCCESSFUL = new ResponseData(200, "OK");
 
     private final int responseCode;
     private final String responseMessage;
 
-    public Response(final int responseCode, final String responseMessage) {
+    public ResponseData(final int responseCode, final String responseMessage) {
         this.responseCode = responseCode;
         this.responseMessage = responseMessage;
     }

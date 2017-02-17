@@ -19,15 +19,15 @@ package com.amazonaws.cognito.sync.devauth.client;
  * This class is used to store the response of the Login call of sample Cognito
  * developer authentication.
  */
-public class LoginResponse extends Response {
+public class LoginResponseData extends ResponseData {
     private final String key;
 
-    public LoginResponse(final int responseCode, final String responseMessage) {
+    public LoginResponseData(final int responseCode, final String responseMessage) {
         super(responseCode, responseMessage);
         this.key = null;
     }
 
-    public LoginResponse(final String key) {
+    public LoginResponseData(final String key) {
         super(200, null);
         this.key = key;
     }

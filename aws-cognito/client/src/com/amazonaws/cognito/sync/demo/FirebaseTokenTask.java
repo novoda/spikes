@@ -22,7 +22,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.amazonaws.cognito.sync.devauth.client.Response;
+import com.amazonaws.cognito.sync.devauth.client.ResponseData;
 import com.amazonaws.cognito.sync.devauth.client.ServerApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -50,9 +50,9 @@ public class FirebaseTokenTask extends
 
     @Override
     protected String doInBackground(String... params) {
-        Response response = apiClient.getFirebaseToken(null);
-        isSuccessful = response.requestWasSuccessful();
-        return response.getResponseMessage();
+        ResponseData responseData = apiClient.getFirebaseToken(null);
+        isSuccessful = responseData.requestWasSuccessful();
+        return responseData.getResponseMessage();
     }
 
     @Override

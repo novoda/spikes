@@ -26,17 +26,17 @@ public class LoginResponseHandler extends ResponseHandler {
         this.decryptionKey = decryptionKey;
     }
 
-    public Response handleResponse(int responseCode, String responseBody) {
+    public ResponseData handleResponse(int responseCode, String responseBody) {
         if (responseCode == 200) {
             try {
                 String json = AESEncryption.unwrap(responseBody,
                         this.decryptionKey.substring(0, 32));
-                return new LoginResponse(Utilities.extractElement(json, "key"));
+                return new LoginResponseData(Utilities.extractElement(json, "key"));
             } catch (Exception exception) {
-                return new LoginResponse(500, exception.getMessage());
+                return new LoginResponseData(500, exception.getMessage());
             }
         } else {
-            return new LoginResponse(responseCode, responseBody);
+            return new LoginResponseData(responseCode, responseBody);
         }
     }
 }

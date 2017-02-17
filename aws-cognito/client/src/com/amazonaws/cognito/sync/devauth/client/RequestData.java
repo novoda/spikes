@@ -19,7 +19,7 @@ package com.amazonaws.cognito.sync.devauth.client;
  * An abstract class for all the request classes used to communicate with sample
  * Cognito developer authentication
  */
-public abstract class Request {
+public abstract class RequestData {
 
     /**
      * Builds and returns the request url

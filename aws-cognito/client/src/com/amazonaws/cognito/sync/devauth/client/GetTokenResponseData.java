@@ -19,20 +19,20 @@ package com.amazonaws.cognito.sync.devauth.client;
  * This class is used to store the response of the GetToken call of the sample
  * Cognito developer authentication.
  */
-public class GetTokenResponse extends Response {
+public class GetTokenResponseData extends ResponseData {
     private final String identityId;
     private final String identityPoolId;
     private final String token;
 
-    public GetTokenResponse(final int responseCode, final String responseMessage) {
+    public GetTokenResponseData(final int responseCode, final String responseMessage) {
         super(responseCode, responseMessage);
         this.identityId = null;
         this.identityPoolId = null;
         this.token = null;
     }
 
-    public GetTokenResponse(final String identityId,
-            final String identityPoolId, final String token) {
+    public GetTokenResponseData(final String identityId,
+                                final String identityPoolId, final String token) {
         super(200, null);
         this.identityId = identityId;
         this.identityPoolId = identityPoolId;

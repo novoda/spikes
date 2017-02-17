@@ -21,9 +21,9 @@ import okhttp3.HttpUrl;
  * This class is used to construct the Login request for communication with
  * sample Cognito developer authentication.
  */
-public class LoginRequest extends Request {
+public class LoginRequestData extends RequestData {
 
-    private final String endpoint;
+    private final String baseUrl;
     private final String uid;
     private final String username;
     private final String password;
@@ -31,15 +31,16 @@ public class LoginRequest extends Request {
 
     private final String decryptionKey;
 
-    public LoginRequest(final String endpoint, final String appName,
-                        final String uid, final String username, final String password) {
-        this.endpoint = endpoint;
+    public LoginRequestData(String baseUrl, String appName,
+                            String uid, String username, String password,
+                            String decryptionKey) {
+        this.baseUrl = baseUrl;
         this.appName = appName;
         this.uid = uid;
         this.username = username;
         this.password = password;
 
-        this.decryptionKey = computeDecryptionKey();
+        this.decryptionKey = decryptionKey;
     }
 
     public String getDecryptionKey() {
@@ -50,8 +51,7 @@ public class LoginRequest extends Request {
     public String buildRequestUrl() {
         String timestamp = Utilities.getTimestamp();
         String signature = Utilities.getSignature(timestamp, decryptionKey);
-
-        return HttpUrl.parse(endpoint)
+        return HttpUrl.parse(baseUrl)
                 .newBuilder()
                 .addPathSegment("login")
                 .addQueryParameter("uid", uid)
@@ -62,7 +62,7 @@ public class LoginRequest extends Request {
     }
 
     private String computeDecryptionKey() {
-        String salt = username + appName + HttpUrl.parse(endpoint).host();
+        String salt = username + appName + HttpUrl.parse(baseUrl).host();
         return Utilities.getSignature(salt, password);
     }
 }

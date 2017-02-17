@@ -17,8 +17,8 @@ package com.amazonaws.cognito.sync.devauth.client;
 
 public class ResponseHandler {
 
-    public Response handleResponse(int responseCode, String responseBody) {
-        return new Response(responseCode, responseBody);
+    public ResponseData handleResponse(int responseCode, String responseBody) {
+        return new ResponseData(responseCode, responseBody);
     }
 
 }
