@@ -61,7 +61,7 @@ public class ServerApiClient {
         String uid = identifiers.getUidForDevice();
         String key = identifiers.getKeyForDevice();
 
-        RequestData getTokenRequestData = new GetTokenRequestData(baseUrl, endpoint, uid, key, logins, identityId);
+        RequestData getTokenRequestData = new CognitoTokenRequestData(baseUrl, endpoint, uid, key, logins, identityId);
 
         // TODO: You can cache the open id token as you will have the control
         // over the duration of the token when it is issued. Caching can reduce
@@ -73,9 +73,9 @@ public class ServerApiClient {
      * Gets a token from the sample Cognito developer authentication
      * application. The registered key is used to secure the communication.
      */
-    public GetTokenResponseData getCognitoToken(Map<String, String> logins, String identityId) {
+    public CognitoTokenResponseData getCognitoToken(Map<String, String> logins, String identityId) {
         String key = identifiers.getKeyForDevice();
-        return (GetTokenResponseData) getToken(logins, identityId, "gettoken", new GetTokenResponseHandler(key));
+        return (CognitoTokenResponseData) getToken(logins, identityId, "gettoken", new CognitoTokenResponseHandler(key));
     }
 
     public ResponseData getFirebaseToken(String identityId) {

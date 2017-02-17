@@ -23,11 +23,11 @@ import okhttp3.Response;
  * This class is used to parse the response of the GetToken call of the sample
  * Cognito developer authentication and store it as a GetTokenResponse object.
  */
-public class GetTokenResponseHandler extends ResponseHandler {
+public class CognitoTokenResponseHandler extends ResponseHandler {
 
     private final String key;
 
-    public GetTokenResponseHandler(final String key) {
+    public CognitoTokenResponseHandler(final String key) {
         this.key = key;
     }
 
@@ -39,12 +39,12 @@ public class GetTokenResponseHandler extends ResponseHandler {
                 String identityId = Utilities.extractElement(json, "identityId");
                 String identityPoolId = Utilities.extractElement(json, "identityPoolId");
                 String token = Utilities.extractElement(json, "token");
-                return new GetTokenResponseData(identityId, identityPoolId, token);
+                return new CognitoTokenResponseData(identityId, identityPoolId, token);
             } catch (Exception exception) {
                 throw new IOException(exception);
             }
         } else {
-            return new GetTokenResponseData(response.code(), response.body().string());
+            return new CognitoTokenResponseData(response.code(), response.body().string());
         }
     }
 
