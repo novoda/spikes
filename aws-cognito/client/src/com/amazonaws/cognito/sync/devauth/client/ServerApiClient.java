@@ -60,8 +60,7 @@ public class ServerApiClient {
      * @param reponseHandler
      * @return
      */
-    public static Response sendRequest(Request request,
-                                       ResponseHandler reponseHandler) {
+    public static Response sendRequest(Request request, ResponseHandler reponseHandler) {
         int responseCode = 0;
         String responseBody = null;
         String requestUrl = null;

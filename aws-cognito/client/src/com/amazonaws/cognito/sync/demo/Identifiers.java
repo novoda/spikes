@@ -4,12 +4,22 @@ import android.content.SharedPreferences;
 
 import com.amazonaws.cognito.sync.devauth.client.SharedPreferencesWrapper;
 
+import java.security.SecureRandom;
+
+import org.apache.commons.codec.binary.Hex;
+
 public class Identifiers {
 
     private final SharedPreferences preferences;
 
     public Identifiers(SharedPreferences preferences) {
         this.preferences = preferences;
+        registerDevice(generateUniqueDeviceId());
+    }
+
+    private static String generateUniqueDeviceId() {
+        byte[] randomBytes = new SecureRandom().generateSeed(16);
+        return new String(Hex.encodeHex(randomBytes));
     }
 
     public void registerFirebaseToken(final String result) {
@@ -28,7 +38,7 @@ public class Identifiers {
         SharedPreferencesWrapper.registerUser(preferences, userName, deviceKey);
     }
 
-    public void registerDevice(final String uniqueDeviceId) {
+    private void registerDevice(final String uniqueDeviceId) {
         SharedPreferencesWrapper.registerDevice(preferences, uniqueDeviceId);
     }
 

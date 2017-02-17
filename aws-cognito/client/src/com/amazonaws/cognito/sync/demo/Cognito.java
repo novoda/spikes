@@ -27,9 +27,6 @@ import com.amazonaws.regions.Regions;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.SecureRandom;
-
-import org.apache.commons.codec.binary.Hex;
 
 public enum Cognito {
 
@@ -47,20 +44,12 @@ public enum Cognito {
         serverApiClient = createServerApiClient(context);
         syncManager = createSyncManager(context, serverApiClient);
         identifiers = new Identifiers(PreferenceManager.getDefaultSharedPreferences(context));
-        identifiers.registerDevice(generateUniqueDeviceId());
     }
 
     public Identifiers getIdentifiers() {
         return identifiers;
     }
 
-    /**
-     * Creates a 128 bit random string..
-     */
-    private static String generateUniqueDeviceId() {
-        byte[] randomBytes = new SecureRandom().generateSeed(16);
-        return new String(Hex.encodeHex(randomBytes));
-    }
 
     private CognitoSyncManager createSyncManager(Context context, ServerApiClient serverApiClient) {
         AWSAbstractCognitoIdentityProvider identityProvider = new ServerCognitoIdentityProvider(serverApiClient, null, IDENTITY_POOL_ID, context, REGION);
