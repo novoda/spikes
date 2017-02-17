@@ -30,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amazonaws.cognito.sync.devauth.client.SharedPreferencesWrapper;
-import com.amazonaws.cognito.sync.devauth.client.lambda.LambdaClient;
+import com.amazonaws.cognito.sync.devauth.client.lambda.AccessLambdaTask;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -162,7 +162,7 @@ public class MainActivity extends Activity {
     }
 
     private void accessCognitoResource() {
-        new LambdaClient().testAuth(this);
+        new AccessLambdaTask(this.getApplicationContext()).execute();
     }
 
     private void wipeData() {

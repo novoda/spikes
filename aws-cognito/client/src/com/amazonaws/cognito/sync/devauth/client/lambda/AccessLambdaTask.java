@@ -11,9 +11,17 @@ import com.amazonaws.cognito.sync.demo.ServerCognitoIdentityProvider;
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaInvokerFactory;
 import com.amazonaws.regions.Regions;
 
-public class LambdaClient {
+public class AccessLambdaTask extends AsyncTask<Void, Void, String> {
 
-    public void testAuth(final Context context) {
+    private final LambdaInterface lambdaAccess;
+    private final Context context;
+
+    public AccessLambdaTask(Context context) {
+        this.context = context;
+        lambdaAccess = createLambdaAccess(context);
+    }
+
+    private LambdaInterface createLambdaAccess(final Context context) {
         ServerCognitoIdentityProvider identityProvider = (ServerCognitoIdentityProvider) Cognito.INSTANCE.credentialsProvider().getIdentityProvider();
         // Create an instance of CognitoCachingCredentialsProvider
         CognitoCachingCredentialsProvider cognitoProvider = new CognitoCachingCredentialsProvider(context, identityProvider, Regions.EU_WEST_1);
@@ -24,27 +32,26 @@ public class LambdaClient {
         // Create the Lambda proxy object with a default Json data binder.
         // You can provide your own data binder by implementing
         // LambdaDataBinder.
-        final LambdaInterface lambdaInterface = factory.build(LambdaInterface.class);
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                try {
-                    return lambdaInterface.CognitoAuthTest();
-                } catch (Exception lfe) {
-                    Log.e("Tag", "Failed to invoke", lfe);
-                    return null;
-                }
-            }
+        return factory.build(LambdaInterface.class);
+    }
 
-            @Override
-            protected void onPostExecute(String result) {
-                if (result == null) {
-                    Toast.makeText(context, "Failed to invoke lambda :( Are you sure you are logged in? ", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(context, result, Toast.LENGTH_LONG).show();
-                }
-            }
-        }.execute();
+    @Override
+    protected String doInBackground(final Void... params) {
+        try {
+            return lambdaAccess.readHiddenText();
+        } catch (Exception lfe) {
+            Log.e("Tag", "Failed to invoke", lfe);
+            return null;
+        }
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+        if (result == null) {
+            Toast.makeText(context, "Failed to invoke lambda :( Are you sure you are logged in? ", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+        }
     }
 
 }

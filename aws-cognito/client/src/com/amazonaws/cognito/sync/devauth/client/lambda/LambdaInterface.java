@@ -4,7 +4,7 @@ import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunction;
 
 public interface LambdaInterface {
 
-    @LambdaFunction
-    String CognitoAuthTest();
+    @LambdaFunction(functionName = "CognitoAuthTest")
+    String readHiddenText();
 
 }
