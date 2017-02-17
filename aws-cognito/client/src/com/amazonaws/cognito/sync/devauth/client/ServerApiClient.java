@@ -16,8 +16,9 @@
 package com.amazonaws.cognito.sync.devauth.client;
 
 import android.annotation.SuppressLint;
-import android.content.SharedPreferences;
 import android.util.Log;
+
+import com.amazonaws.cognito.sync.demo.Cognito;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -46,17 +47,9 @@ public class ServerApiClient {
      */
     private final String appName;
 
-    /**
-     * The shared preferences where user key is stored.
-     */
-    private final SharedPreferences sharedPreferences;
-
-    public ServerApiClient(
-            SharedPreferences sharedPreferences, URL host,
-            String appName) {
+    public ServerApiClient(URL host, String appName) {
         this.host = host;
         this.appName = appName.toLowerCase();
-        this.sharedPreferences = sharedPreferences;
     }
 
     /**
@@ -145,8 +138,8 @@ public class ServerApiClient {
      * application. The registered key is used to secure the communication.
      */
     private Response getToken(Map<String, String> logins, String identityId, String endpoint, ResponseHandler responseHandler) {
-        String uid = SharedPreferencesWrapper.getUidForDevice(this.sharedPreferences);
-        String key = SharedPreferencesWrapper.getKeyForDevice(this.sharedPreferences);
+        String uid = Cognito.INSTANCE.getIdentifiers().getUidForDevice();
+        String key = Cognito.INSTANCE.getIdentifiers().getKeyForDevice();
 
         Request getTokenRequest = new GetTokenRequest(this.host, endpoint, uid, key, logins, identityId);
 
@@ -161,7 +154,7 @@ public class ServerApiClient {
      * application. The registered key is used to secure the communication.
      */
     public GetTokenResponse getCognitoToken(Map<String, String> logins, String identityId) {
-        String key = SharedPreferencesWrapper.getKeyForDevice(this.sharedPreferences);
+        String key = Cognito.INSTANCE.getIdentifiers().getKeyForDevice();
         return (GetTokenResponse) getToken(logins, identityId, "gettoken", new GetTokenResponseHandler(key));
     }
 
@@ -174,7 +167,7 @@ public class ServerApiClient {
      * the user's account.
      */
     public Response login(String username, String password) {
-        String uid = SharedPreferencesWrapper.getUidForDevice(sharedPreferences);
+        String uid = Cognito.INSTANCE.getIdentifiers().getUidForDevice();
         LoginRequest loginRequest = new LoginRequest(this.host, this.appName, uid, username, password);
         ResponseHandler handler = new LoginResponseHandler(loginRequest.getDecryptionKey());
 

@@ -15,10 +15,6 @@
 
 package com.amazonaws.cognito.sync.demo;
 
-/**
- * A class used to encapsulate user's credentials for showing the sample
- * developer authenticaeted feature of Amazon Cognito
- */
 public class LoginCredentials {
     private String username;
     private String password;
@@ -32,15 +28,7 @@ public class LoginCredentials {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

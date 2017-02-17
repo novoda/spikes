@@ -29,7 +29,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amazonaws.cognito.sync.devauth.client.SharedPreferencesWrapper;
 import com.amazonaws.cognito.sync.devauth.client.lambda.AccessLambdaTask;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -130,7 +129,7 @@ public class MainActivity extends Activity {
     }
 
     private void fetchCognitoToken() {
-        new CognitoTokenTask(Cognito.INSTANCE.credentialsProvider()).execute(SharedPreferencesWrapper.getUserName(preferences));
+        new CognitoTokenTask(Cognito.INSTANCE.credentialsProvider()).execute(Cognito.INSTANCE.getIdentifiers().getUserName());
     }
 
     private void accessFirebaseResource() {
@@ -151,7 +150,7 @@ public class MainActivity extends Activity {
     }
 
     private void fetchFirebaseToken() {
-        String uid = SharedPreferencesWrapper.getUidForDevice(preferences);
+        String uid = Cognito.INSTANCE.getIdentifiers().getUidForDevice();
         new FirebaseTokenTask(this, Cognito.INSTANCE.serverApiClient()).execute(uid);
     }
 
@@ -188,7 +187,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Cognito.INSTANCE.syncManager().wipeData();
-                SharedPreferencesWrapper.wipe(PreferenceManager.getDefaultSharedPreferences(MainActivity.this));
+                Cognito.INSTANCE.getIdentifiers().wipe();
             }
 
         };

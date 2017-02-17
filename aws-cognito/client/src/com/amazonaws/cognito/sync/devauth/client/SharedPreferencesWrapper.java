@@ -39,10 +39,6 @@ public class SharedPreferencesWrapper {
         FirebaseAuth.getInstance().signOut();
     }
 
-    public static void registerDeviceKey(SharedPreferences preferences, String key) {
-        storeValue(preferences, AWS_DEVICE_KEY, key);
-    }
-
     public static void registerDevice(SharedPreferences preferences, String uid) {
         storeValue(preferences, AWS_DEVICE_UID, uid);
     }
@@ -73,8 +69,9 @@ public class SharedPreferencesWrapper {
         return preferences.getString(key, null);
     }
 
-    public static void registerUser(final SharedPreferences preferences, final String userName) {
-        storeValue(preferences, USER_NAME, userName);
+    public static void registerUser(final SharedPreferences preferences, final String name, final String deviceKey) {
+        storeValue(preferences, USER_NAME, name);
+        storeValue(preferences, AWS_DEVICE_KEY, deviceKey);
     }
 
     public static String getUserName(final SharedPreferences preferences) {

@@ -27,6 +27,9 @@ import com.amazonaws.regions.Regions;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.SecureRandom;
+
+import org.apache.commons.codec.binary.Hex;
 
 public enum Cognito {
 
@@ -38,10 +41,25 @@ public enum Cognito {
     private CognitoSyncManager syncManager;
     private CognitoCachingCredentialsProvider credentialsProvider = null;
     private ServerApiClient serverApiClient;
+    private Identifiers identifiers;
 
     public void init(Context context) {
         serverApiClient = createServerApiClient(context);
         syncManager = createSyncManager(context, serverApiClient);
+        identifiers = new Identifiers(PreferenceManager.getDefaultSharedPreferences(context));
+        identifiers.registerDevice(generateUniqueDeviceId());
+    }
+
+    public Identifiers getIdentifiers() {
+        return identifiers;
+    }
+
+    /**
+     * Creates a 128 bit random string..
+     */
+    private static String generateUniqueDeviceId() {
+        byte[] randomBytes = new SecureRandom().generateSeed(16);
+        return new String(Hex.encodeHex(randomBytes));
     }
 
     private CognitoSyncManager createSyncManager(Context context, ServerApiClient serverApiClient) {
@@ -53,7 +71,7 @@ public enum Cognito {
     private ServerApiClient createServerApiClient(Context context) {
         try {
             URL host = new URL(BuildConfig.AUTHENTICATION_ENDPOINT);
-            return new ServerApiClient(PreferenceManager.getDefaultSharedPreferences(context), host, "AWSCognitoDeveloperAuthenticationSample");
+            return new ServerApiClient(host, "AWSCognitoDeveloperAuthenticationSample");
         } catch (MalformedURLException e) {
             Log.e("DeveloperAuthentication", "Developer Authentication Endpoint is not a valid URL!", e);
             throw new RuntimeException(e);

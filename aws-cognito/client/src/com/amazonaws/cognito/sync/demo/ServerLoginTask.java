@@ -24,7 +24,6 @@ import android.widget.Toast;
 import com.amazonaws.cognito.sync.devauth.client.LoginResponse;
 import com.amazonaws.cognito.sync.devauth.client.Response;
 import com.amazonaws.cognito.sync.devauth.client.ServerApiClient;
-import com.amazonaws.cognito.sync.devauth.client.SharedPreferencesWrapper;
 
 /**
  * A class which performs the task of authentication the user. For the sample it
@@ -35,12 +34,10 @@ public class ServerLoginTask extends AsyncTask<LoginCredentials, Void, Boolean> 
 
     private final Context context;
     private final ServerApiClient apiClient;
-    private final SharedPreferences preferences;
 
     public ServerLoginTask(Context context, ServerApiClient apiClient, SharedPreferences preferences) {
         this.context = context;
         this.apiClient = apiClient;
-        this.preferences = preferences;
     }
 
     @Override
@@ -48,9 +45,8 @@ public class ServerLoginTask extends AsyncTask<LoginCredentials, Void, Boolean> 
         String userName = params[0].getUsername();
         Response response = apiClient.login(userName, params[0].getPassword());
         if (response.requestWasSuccessful()) {
-            SharedPreferencesWrapper.registerDeviceKey(
-                preferences, ((LoginResponse) response).getKey());
-            SharedPreferencesWrapper.registerUser(preferences, userName);
+            String deviceKey = ((LoginResponse) response).getKey();
+            Cognito.INSTANCE.getIdentifiers().registerUser(userName, deviceKey);
         }
         return response.requestWasSuccessful();
     }

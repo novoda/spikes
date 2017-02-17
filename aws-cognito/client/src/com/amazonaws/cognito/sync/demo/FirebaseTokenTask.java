@@ -18,12 +18,10 @@ package com.amazonaws.cognito.sync.demo;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.amazonaws.cognito.sync.devauth.client.SharedPreferencesWrapper;
 import com.amazonaws.cognito.sync.devauth.client.Response;
 import com.amazonaws.cognito.sync.devauth.client.ServerApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -72,7 +70,7 @@ public class FirebaseTokenTask extends
                                 Log.w(TAG, "signInWithCustomToken failed!", task.getException());
                                 Toast.makeText(context, "Failed!", Toast.LENGTH_SHORT).show();
                             } else {
-                                SharedPreferencesWrapper.registerFirebaseToken(PreferenceManager.getDefaultSharedPreferences(context), result);
+                                Cognito.INSTANCE.getIdentifiers().registerFirebaseToken(result);
                                 Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
                             }
                         }
