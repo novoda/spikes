@@ -31,12 +31,9 @@ public class GetTokenResponseHandler extends ResponseHandler {
         if (responseCode == 200) {
             try {
                 String json = AESEncryption.unwrap(responseBody, this.key);
-                String identityId = Utilities
-                        .extractElement(json, "identityId");
-                String identityPoolId = Utilities.extractElement(json,
-                        "identityPoolId");
+                String identityId = Utilities.extractElement(json, "identityId");
+                String identityPoolId = Utilities.extractElement(json, "identityPoolId");
                 String token = Utilities.extractElement(json, "token");
-
                 return new GetTokenResponse(identityId, identityPoolId, token);
             } catch (Exception exception) {
                 return new GetTokenResponse(500, exception.getMessage());

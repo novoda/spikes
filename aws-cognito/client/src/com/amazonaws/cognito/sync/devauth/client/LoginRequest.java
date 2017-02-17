@@ -1,12 +1,12 @@
 /**
  * Copyright 2010-2014 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
  * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
+ * <p>
+ * http://aws.amazon.com/apache2.0
+ * <p>
  * or in the "license" file accompanying this file. This file is distributed
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
@@ -15,9 +15,7 @@
 
 package com.amazonaws.cognito.sync.devauth.client;
 
-import com.amazonaws.util.HttpUtils;
-
-import java.net.URL;
+import okhttp3.HttpUrl;
 
 /**
  * This class is used to construct the Login request for communication with
@@ -25,7 +23,7 @@ import java.net.URL;
  */
 public class LoginRequest extends Request {
 
-    private final URL endpoint;
+    private final String endpoint;
     private final String uid;
     private final String username;
     private final String password;
@@ -33,56 +31,38 @@ public class LoginRequest extends Request {
 
     private final String decryptionKey;
 
-    public LoginRequest(final URL endpoint, final String appName,
-            final String uid, final String username, final String password) {
+    public LoginRequest(final String endpoint, final String appName,
+                        final String uid, final String username, final String password) {
         this.endpoint = endpoint;
         this.appName = appName;
         this.uid = uid;
         this.username = username;
         this.password = password;
 
-        this.decryptionKey = this.computeDecryptionKey();
+        this.decryptionKey = computeDecryptionKey();
     }
 
     public String getDecryptionKey() {
-        return this.decryptionKey;
+        return decryptionKey;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.amazonaws.cognito.sync.devauth.client.Request#buildRequestUrl()
-     */
     @Override
     public String buildRequestUrl() {
-        String url = this.endpoint.toString();
-
-        StringBuilder builder = new StringBuilder(url);
-        if (!url.endsWith("/")) {
-            builder.append("/");
-        }
-
         String timestamp = Utilities.getTimestamp();
-        String signature = Utilities
-                .getSignature(timestamp, this.decryptionKey);
+        String signature = Utilities.getSignature(timestamp, decryptionKey);
 
-        builder.append("login");
-        builder.append("?uid=" + HttpUtils.urlEncode(this.uid, false));
-        builder.append("&username=" + HttpUtils.urlEncode(this.username, false));
-        builder.append("&timestamp=" + HttpUtils.urlEncode(timestamp, false));
-        builder.append("&signature=" + HttpUtils.urlEncode(signature, false));
-
-        return builder.toString();
+        return HttpUrl.parse(endpoint)
+                .newBuilder()
+                .addPathSegment("login")
+                .addQueryParameter("uid", uid)
+                .addQueryParameter("username", username)
+                .addQueryParameter("timestamp", timestamp)
+                .addQueryParameter("signature", signature)
+                .toString();
     }
 
-    /**
-     * This function computes the decryption key
-     */
-    protected String computeDecryptionKey() {
-        try {
-            String salt = this.username + this.appName + this.endpoint.getHost();
-            return Utilities.getSignature(salt, this.password);
-        } catch (Exception exception) {
-            return null;
-        }
+    private String computeDecryptionKey() {
+        String salt = username + appName + HttpUrl.parse(endpoint).host();
+        return Utilities.getSignature(salt, password);
     }
 }

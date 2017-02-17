@@ -61,8 +61,8 @@ public class FirebaseTokenTask extends
             new AlertDialog.Builder(context).setTitle("Login error")
                     .setMessage("Error trying to login to Firebase").show();
         } else {
-            Log.i(TAG, "requesting sign-in for token: "+ result + " *");
-            FirebaseAuth.getInstance().signInWithCustomToken(result.trim())
+            Log.i(TAG, "requesting sign-in for token: ["+ result + "]");
+            FirebaseAuth.getInstance().signInWithCustomToken(result)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {

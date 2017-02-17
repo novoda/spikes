@@ -17,16 +17,12 @@ package com.amazonaws.cognito.sync.demo;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.amazonaws.auth.AWSAbstractCognitoIdentityProvider;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.cognito.sync.devauth.client.ServerApiClient;
 import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
 import com.amazonaws.regions.Regions;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public enum Cognito {
 
@@ -50,7 +46,6 @@ public enum Cognito {
         return identifiers;
     }
 
-
     private CognitoSyncManager createSyncManager(Context context, ServerApiClient serverApiClient) {
         AWSAbstractCognitoIdentityProvider identityProvider = new ServerCognitoIdentityProvider(serverApiClient, null, IDENTITY_POOL_ID, context, REGION);
         credentialsProvider = new CognitoCachingCredentialsProvider(context, identityProvider, REGION);
@@ -58,13 +53,8 @@ public enum Cognito {
     }
 
     private ServerApiClient createServerApiClient(Context context) {
-        try {
-            URL host = new URL(BuildConfig.AUTHENTICATION_ENDPOINT);
-            return new ServerApiClient(host, "AWSCognitoDeveloperAuthenticationSample");
-        } catch (MalformedURLException e) {
-            Log.e("DeveloperAuthentication", "Developer Authentication Endpoint is not a valid URL!", e);
-            throw new RuntimeException(e);
-        }
+        String host = BuildConfig.AUTHENTICATION_ENDPOINT;
+        return new ServerApiClient(host, "AWSCognitoDeveloperAuthenticationSample");
     }
 
     public CognitoSyncManager syncManager() {

@@ -15,18 +15,15 @@
 
 package com.amazonaws.cognito.sync.devauth.client;
 
-import android.annotation.SuppressLint;
 import android.util.Log;
 
 import com.amazonaws.cognito.sync.demo.Cognito;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+import okhttp3.OkHttpClient;
 
 /**
  * This class is used to communicate with the sample Cognito developer
@@ -39,7 +36,7 @@ public class ServerApiClient {
     /**
      * The host for the sample Cognito developer authentication application.
      */
-    private final URL host;
+    private final String host;
 
     /**
      * The appName declared by the sample Cognito developer authentication
@@ -47,87 +44,29 @@ public class ServerApiClient {
      */
     private final String appName;
 
-    public ServerApiClient(URL host, String appName) {
+    public ServerApiClient(String host, String appName) {
         this.host = host;
         this.appName = appName.toLowerCase();
     }
 
-    /**
-     * A function to send request to the sample Cognito developer authentication
-     * application
-     *
-     * @param request
-     * @param reponseHandler
-     * @return
-     */
-    public static Response sendRequest(Request request, ResponseHandler reponseHandler) {
-        int responseCode = 0;
-        String responseBody = null;
-        String requestUrl = null;
+    private static Response sendRequest(String url, ResponseHandler reponseHandler) {
         try {
-            requestUrl = request.buildRequestUrl();
+            Log.i(LOG_TAG, "Sending Request : [" + url + "]");
 
-            Log.i(LOG_TAG, "Sending Request : [" + requestUrl + "]");
+            okhttp3.Request req = new okhttp3.Request.Builder().url(url).build();
+            okhttp3.Response response = new OkHttpClient().newCall(req).execute();
 
-            URL url = new URL(requestUrl);
-            HttpURLConnection connection = (HttpURLConnection) url
-                    .openConnection();
-
-            responseCode = connection.getResponseCode();
-            responseBody = getResponse(connection);
+            int responseCode = response.code();
+            String responseBody = response.body().string();
             Log.i(LOG_TAG, "Response : [" + responseBody + "]");
 
             return reponseHandler.handleResponse(responseCode, responseBody);
         } catch (IOException exception) {
             Log.w(LOG_TAG, exception);
-            if (exception.getMessage().equals(
-                    "Received authentication challenge is null")) {
-                return reponseHandler.handleResponse(401,
-                        "Unauthorized token request");
+            if (exception.getMessage().equals("Received authentication challenge is null")) {
+                return reponseHandler.handleResponse(401, "Unauthorized token request");
             } else {
-                return reponseHandler.handleResponse(404,
-                        "Unable to reach resource at [" + requestUrl + "]");
-            }
-        } catch (Exception exception) {
-            Log.w(LOG_TAG, exception);
-            return reponseHandler.handleResponse(responseCode, responseBody);
-        }
-    }
-
-    /**
-     * Function to get the response from sample Cognito developer authentication
-     * application.
-     *
-     * @param connection
-     * @return
-     */
-    private static String getResponse(HttpURLConnection connection) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
-        InputStream inputStream = null;
-        try {
-            baos = new ByteArrayOutputStream(1024);
-            int length = 0;
-            byte[] buffer = new byte[1024];
-
-            if (connection.getResponseCode() == 200) {
-                inputStream = connection.getInputStream();
-            } else {
-                inputStream = connection.getErrorStream();
-            }
-
-            while ((length = inputStream.read(buffer)) != -1) {
-                baos.write(buffer, 0, length);
-            }
-
-            return baos.toString();
-        } catch (Exception exception) {
-            Log.w(LOG_TAG, exception);
-            return "Internal Server Error";
-        } finally {
-            try {
-                baos.close();
-            } catch (Exception exception) {
-                Log.w(LOG_TAG, exception);
+                return reponseHandler.handleResponse(404, "Unable to reach resource at [" + url + "]");
             }
         }
     }
@@ -140,7 +79,7 @@ public class ServerApiClient {
         String uid = Cognito.INSTANCE.getIdentifiers().getUidForDevice();
         String key = Cognito.INSTANCE.getIdentifiers().getKeyForDevice();
 
-        Request getTokenRequest = new GetTokenRequest(this.host, endpoint, uid, key, logins, identityId);
+        Request getTokenRequest = new GetTokenRequest(host, endpoint, uid, key, logins, identityId);
 
         // TODO: You can cache the open id token as you will have the control
         // over the duration of the token when it is issued. Caching can reduce
@@ -167,24 +106,17 @@ public class ServerApiClient {
      */
     public Response login(String username, String password) {
         String uid = Cognito.INSTANCE.getIdentifiers().getUidForDevice();
-        LoginRequest loginRequest = new LoginRequest(this.host, this.appName, uid, username, password);
+        LoginRequest loginRequest = new LoginRequest(host, appName, uid, username, password);
         ResponseHandler handler = new LoginResponseHandler(loginRequest.getDecryptionKey());
 
-        Response response = this.processRequest(loginRequest, handler);
-
-        return response;
+        return processRequest(loginRequest, handler);
     }
 
-    /**
-     * Process Request
-     */
-    @SuppressLint("LongLogTag")
     private Response processRequest(Request request, ResponseHandler handler) {
-        Response response = null;
+        Response response;
         int retries = 2;
         do {
-            response = sendRequest(
-                    request, handler);
+            response = sendRequest(request.buildRequestUrl(), handler);
             if (response.requestWasSuccessful()) {
                 return response;
             } else {

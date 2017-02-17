@@ -68,6 +68,7 @@ dependencies {
   compile "com.amazonaws:aws-android-sdk-cognito:${versions.aws}"
   compile "com.amazonaws:aws-android-sdk-lambda:${versions.aws}"
   compile 'commons-codec:commons-codec:1.10'
+  compile 'com.squareup.okhttp3:okhttp:3.6.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
