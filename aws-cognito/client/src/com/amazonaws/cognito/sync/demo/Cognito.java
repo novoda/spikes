@@ -27,8 +27,6 @@ import com.amazonaws.regions.Regions;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 public enum Cognito {
 
@@ -60,22 +58,6 @@ public enum Cognito {
             Log.e("DeveloperAuthentication", "Developer Authentication Endpoint is not a valid URL!", e);
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Sets the login so that you can use authorized identity. This requires a
-     * network request, so you should call it in a background thread.
-     *
-     * @param providerName the name of the external identity provider
-     * @param token openId token
-     */
-    public void addLogins(String providerName, String token) {
-        Map<String, String> logins = credentialsProvider.getLogins();
-        if (logins == null) {
-            logins = new HashMap<>();
-        }
-        logins.put(providerName, token);
-        credentialsProvider.setLogins(logins);
     }
 
     public CognitoSyncManager syncManager() {

@@ -130,7 +130,7 @@ public class MainActivity extends Activity {
     }
 
     private void fetchCognitoToken() {
-        new CognitoTokenTask().execute(SharedPreferencesWrapper.getUserName(preferences));
+        new CognitoTokenTask(Cognito.INSTANCE.credentialsProvider()).execute(SharedPreferencesWrapper.getUserName(preferences));
     }
 
     private void accessFirebaseResource() {
