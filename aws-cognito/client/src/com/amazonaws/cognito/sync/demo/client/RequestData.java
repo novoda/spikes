@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package com.amazonaws.cognito.sync.devauth.client;
+package com.amazonaws.cognito.sync.demo.client;
 
 /**
  * An abstract class for all the request classes used to communicate with sample

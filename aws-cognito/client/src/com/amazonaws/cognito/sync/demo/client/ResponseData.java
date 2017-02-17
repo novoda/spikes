@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package com.amazonaws.cognito.sync.devauth.client;
+package com.amazonaws.cognito.sync.demo.client;
 
 /**
  * A class for storing the response from sample Cognito developer

@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package com.amazonaws.cognito.sync.devauth.client;
+package com.amazonaws.cognito.sync.demo.client;
 
 /**
  * This class is used to store the response of the GetToken call of the sample

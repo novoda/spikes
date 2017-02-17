@@ -29,7 +29,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amazonaws.cognito.sync.devauth.client.lambda.AccessLambdaTask;
+import com.amazonaws.cognito.sync.demo.client.lambda.AccessLambdaTask;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

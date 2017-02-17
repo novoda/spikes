@@ -18,8 +18,8 @@ package com.amazonaws.cognito.sync.demo;
 import android.content.Context;
 import android.util.Log;
 import com.amazonaws.auth.AWSAbstractCognitoDeveloperIdentityProvider;
-import com.amazonaws.cognito.sync.devauth.client.CognitoTokenResponseData;
-import com.amazonaws.cognito.sync.devauth.client.ServerApiClient;
+import com.amazonaws.cognito.sync.demo.client.CognitoTokenResponseData;
+import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
 import com.amazonaws.regions.Regions;
 
 /**

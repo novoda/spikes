@@ -1,4 +1,4 @@
-package com.amazonaws.cognito.sync;
+package com.amazonaws.cognito.sync.demo;
 
 import android.app.Application;
 

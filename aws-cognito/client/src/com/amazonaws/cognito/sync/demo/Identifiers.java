@@ -2,7 +2,7 @@ package com.amazonaws.cognito.sync.demo;
 
 import android.content.SharedPreferences;
 
-import com.amazonaws.cognito.sync.devauth.client.SharedPreferencesWrapper;
+import com.amazonaws.cognito.sync.demo.client.SharedPreferencesWrapper;
 
 import java.security.SecureRandom;
 

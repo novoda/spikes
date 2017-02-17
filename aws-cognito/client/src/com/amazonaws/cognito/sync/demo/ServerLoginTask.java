@@ -21,9 +21,9 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-import com.amazonaws.cognito.sync.devauth.client.LoginResponseData;
-import com.amazonaws.cognito.sync.devauth.client.ResponseData;
-import com.amazonaws.cognito.sync.devauth.client.ServerApiClient;
+import com.amazonaws.cognito.sync.demo.client.LoginResponseData;
+import com.amazonaws.cognito.sync.demo.client.ResponseData;
+import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
 
 /**
  * A class which performs the task of authentication the user. For the sample it
