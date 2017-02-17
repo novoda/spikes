@@ -1,4 +1,4 @@
-package com.amazonaws.cognito.sync.demo.client.lambda;
+package com.amazonaws.cognito.sync.demo.client.cognito.lambda;
 
 import android.content.Context;
 import android.os.AsyncTask;

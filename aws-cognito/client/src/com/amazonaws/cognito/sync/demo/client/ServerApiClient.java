@@ -18,6 +18,11 @@ package com.amazonaws.cognito.sync.demo.client;
 import android.util.Log;
 
 import com.amazonaws.cognito.sync.demo.Identifiers;
+import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenRequestData;
+import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenResponseData;
+import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenResponseHandler;
+import com.amazonaws.cognito.sync.demo.client.login.LoginRequestData;
+import com.amazonaws.cognito.sync.demo.client.login.LoginResponseHandler;
 
 import java.io.IOException;
 import java.util.HashMap;

@@ -1,8 +1,9 @@
-package com.amazonaws.cognito.sync.demo;
+package com.amazonaws.cognito.sync.demo.client.cognito;
 
 import android.os.AsyncTask;
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.cognito.sync.demo.ServerCognitoIdentityProvider;
 
 import java.util.HashMap;
 import java.util.Map;

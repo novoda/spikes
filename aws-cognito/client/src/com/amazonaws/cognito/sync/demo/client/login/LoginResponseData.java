@@ -13,7 +13,9 @@
  * permissions and limitations under the License.
  */
 
-package com.amazonaws.cognito.sync.demo.client;
+package com.amazonaws.cognito.sync.demo.client.login;
+
+import com.amazonaws.cognito.sync.demo.client.ResponseData;
 
 /**
  * This class is used to store the response of the Login call of sample Cognito

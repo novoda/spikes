@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package com.amazonaws.cognito.sync.demo;
+package com.amazonaws.cognito.sync.demo.client.login;
 
 public class LoginCredentials {
     private String username;

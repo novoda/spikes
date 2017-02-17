@@ -13,9 +13,12 @@
  * permissions and limitations under the License.
  */
 
-package com.amazonaws.cognito.sync.demo.client;
+package com.amazonaws.cognito.sync.demo.client.cognito;
 
 import android.support.annotation.NonNull;
+
+import com.amazonaws.cognito.sync.demo.client.RequestData;
+import com.amazonaws.cognito.sync.demo.client.Utilities;
 
 import java.util.Map;
 

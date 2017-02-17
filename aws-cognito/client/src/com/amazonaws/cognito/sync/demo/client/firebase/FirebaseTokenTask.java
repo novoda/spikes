@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package com.amazonaws.cognito.sync.demo;
+package com.amazonaws.cognito.sync.demo.client.firebase;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -22,6 +22,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.amazonaws.cognito.sync.demo.Cognito;
 import com.amazonaws.cognito.sync.demo.client.ResponseData;
 import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;

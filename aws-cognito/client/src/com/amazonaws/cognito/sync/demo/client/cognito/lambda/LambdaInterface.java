@@ -1,4 +1,4 @@
-package com.amazonaws.cognito.sync.demo.client.lambda;
+package com.amazonaws.cognito.sync.demo.client.cognito.lambda;
 
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunction;
 

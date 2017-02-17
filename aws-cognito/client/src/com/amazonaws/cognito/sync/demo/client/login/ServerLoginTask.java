@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package com.amazonaws.cognito.sync.demo;
+package com.amazonaws.cognito.sync.demo.client.login;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -21,7 +21,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-import com.amazonaws.cognito.sync.demo.client.LoginResponseData;
+import com.amazonaws.cognito.sync.demo.Cognito;
 import com.amazonaws.cognito.sync.demo.client.ResponseData;
 import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
 
