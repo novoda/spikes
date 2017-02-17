@@ -15,10 +15,13 @@
 
 package com.amazonaws.cognito.sync.devauth.client;
 
+import java.io.IOException;
+
+import okhttp3.Response;
+
 public class ResponseHandler {
 
-    public ResponseData handleResponse(int responseCode, String responseBody) {
-        return new ResponseData(responseCode, responseBody);
+    public ResponseData handleResponse(Response response) throws IOException {
+        return new ResponseData(response.code(), response.body().string());
     }
-
 }

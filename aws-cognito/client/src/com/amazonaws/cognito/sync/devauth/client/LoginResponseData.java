@@ -22,11 +22,6 @@ package com.amazonaws.cognito.sync.devauth.client;
 public class LoginResponseData extends ResponseData {
     private final String key;
 
-    public LoginResponseData(final int responseCode, final String responseMessage) {
-        super(responseCode, responseMessage);
-        this.key = null;
-    }
-
     public LoginResponseData(final String key) {
         super(200, null);
         this.key = key;

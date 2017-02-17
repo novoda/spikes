@@ -1,12 +1,12 @@
 /**
  * Copyright 2010-2014 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
  * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
+ * <p>
+ * http://aws.amazon.com/apache2.0
+ * <p>
  * or in the "license" file accompanying this file. This file is distributed
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
@@ -24,12 +24,11 @@ import com.amazonaws.auth.AWSSessionCredentials;
 import com.amazonaws.auth.AbstractAWSSigner;
 import com.amazonaws.util.DateUtils;
 
-import org.apache.commons.codec.binary.Hex;
-
-import java.util.Date;
-
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.util.Date;
+
+import org.apache.commons.codec.binary.Hex;
 
 /**
  * Utility class for communicating with sample Cognito developer authentication.
@@ -72,13 +71,11 @@ public class Utilities {
         }
 
         @Override
-        public void sign(Request<?> arg0, AWSCredentials arg1)
-                throws AmazonClientException {
+        public void sign(Request<?> arg0, AWSCredentials arg1) throws AmazonClientException {
         }
 
         @Override
-        protected void addSessionCredentials(Request<?> arg0,
-                AWSSessionCredentials arg1) {
+        protected void addSessionCredentials(Request<?> arg0, AWSSessionCredentials arg1) {
         }
     }
 

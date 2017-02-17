@@ -35,33 +35,22 @@ public class ServerApiClient {
     private final String baseUrl;
     private final String appName;
     private final Identifiers identifiers;
+    private final OkHttpClient client;
 
     public ServerApiClient(String baseUrl, String appName, Identifiers identifiers) {
         this.baseUrl = baseUrl;
         this.appName = appName.toLowerCase();
         this.identifiers = identifiers;
+        client = new OkHttpClient();
     }
 
-    private static ResponseData sendRequest(String url, ResponseHandler reponseHandler) {
-        try {
-            Log.i(LOG_TAG, "Sending Request : [" + url + "]");
+    private ResponseData sendRequest(String url, ResponseHandler reponseHandler) throws IOException {
+        Log.i(LOG_TAG, "Sending Request : [" + url + "]");
 
-            Request req = new Request.Builder().url(url).build();
-            Response response = new OkHttpClient().newCall(req).execute();
+        Request request = new Request.Builder().url(url).build();
+        Response response = client.newCall(request).execute();
 
-            int responseCode = response.code();
-            String responseBody = response.body().string();
-            Log.i(LOG_TAG, "Response : [" + responseBody + "]");
-
-            return reponseHandler.handleResponse(responseCode, responseBody);
-        } catch (IOException exception) {
-            Log.w(LOG_TAG, exception);
-            if (exception.getMessage().equals("Received authentication challenge is null")) {
-                return reponseHandler.handleResponse(401, "Unauthorized token request");
-            } else {
-                return reponseHandler.handleResponse(404, "Unable to reach resource at [" + url + "]");
-            }
-        }
+        return reponseHandler.handleResponse(response);
     }
 
     /**
@@ -100,7 +89,7 @@ public class ServerApiClient {
     public ResponseData login(String username, String password) {
         String uid = identifiers.getUidForDevice();
         String decryptionKey = computeDecryptionKey(username, password, baseUrl);
-        LoginRequestData loginRequest = new LoginRequestData(baseUrl, appName, uid, username, password, decryptionKey);
+        LoginRequestData loginRequest = new LoginRequestData(baseUrl, uid, username, decryptionKey);
         ResponseHandler handler = new LoginResponseHandler(decryptionKey);
 
         return processRequest(loginRequest, handler);
@@ -112,17 +101,21 @@ public class ServerApiClient {
     }
 
     private ResponseData processRequest(RequestData requestData, ResponseHandler handler) {
-        ResponseData responseData;
+        ResponseData responseData = null;
         int retries = 2;
         do {
-            responseData = sendRequest(requestData.buildRequestUrl(), handler);
-            if (responseData.requestWasSuccessful()) {
-                return responseData;
-            } else {
-                Log.w(LOG_TAG,
-                        "Request to Cognito Sample Developer Authentication Application failed with Code: ["
-                                + responseData.getResponseCode() + "] Message: ["
-                                + responseData.getResponseMessage() + "]");
+            try {
+                responseData = sendRequest(requestData.buildRequestUrl(), handler);
+                if (responseData.requestWasSuccessful()) {
+                    return responseData;
+                } else {
+                    Log.w(LOG_TAG,
+                            "Request to Cognito Sample Developer Authentication Application failed with Code: ["
+                                    + responseData.getResponseCode() + "] Message: ["
+                                    + responseData.getResponseMessage() + "]");
+                }
+            } catch (IOException e) {
+                Log.e(LOG_TAG, "while processing request", e);
             }
         } while (retries-- > 0);
 

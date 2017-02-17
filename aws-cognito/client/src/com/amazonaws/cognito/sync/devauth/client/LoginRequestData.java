@@ -17,34 +17,19 @@ package com.amazonaws.cognito.sync.devauth.client;
 
 import okhttp3.HttpUrl;
 
-/**
- * This class is used to construct the Login request for communication with
- * sample Cognito developer authentication.
- */
 public class LoginRequestData extends RequestData {
 
     private final String baseUrl;
     private final String uid;
     private final String username;
-    private final String password;
-    private final String appName;
 
     private final String decryptionKey;
 
-    public LoginRequestData(String baseUrl, String appName,
-                            String uid, String username, String password,
-                            String decryptionKey) {
+    public LoginRequestData(String baseUrl, String uid, String username, String decryptionKey) {
         this.baseUrl = baseUrl;
-        this.appName = appName;
         this.uid = uid;
         this.username = username;
-        this.password = password;
-
         this.decryptionKey = decryptionKey;
-    }
-
-    public String getDecryptionKey() {
-        return decryptionKey;
     }
 
     @Override
@@ -61,8 +46,4 @@ public class LoginRequestData extends RequestData {
                 .toString();
     }
 
-    private String computeDecryptionKey() {
-        String salt = username + appName + HttpUrl.parse(baseUrl).host();
-        return Utilities.getSignature(salt, password);
-    }
 }

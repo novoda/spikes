@@ -15,6 +15,10 @@
 
 package com.amazonaws.cognito.sync.devauth.client;
 
+import java.io.IOException;
+
+import okhttp3.Response;
+
 /**
  * This class is used to parse the response of the GetToken call of the sample
  * Cognito developer authentication and store it as a GetTokenResponse object.
@@ -27,19 +31,20 @@ public class GetTokenResponseHandler extends ResponseHandler {
         this.key = key;
     }
 
-    public ResponseData handleResponse(int responseCode, String responseBody) {
-        if (responseCode == 200) {
+    @Override
+    public ResponseData handleResponse(Response response) throws IOException {
+        if (response.isSuccessful()) {
             try {
-                String json = AESEncryption.unwrap(responseBody, this.key);
+                String json = AESEncryption.unwrap(response.body().string(), this.key);
                 String identityId = Utilities.extractElement(json, "identityId");
                 String identityPoolId = Utilities.extractElement(json, "identityPoolId");
                 String token = Utilities.extractElement(json, "token");
                 return new GetTokenResponseData(identityId, identityPoolId, token);
             } catch (Exception exception) {
-                return new GetTokenResponseData(500, exception.getMessage());
+                throw new IOException(exception);
             }
         } else {
-            return new GetTokenResponseData(responseCode, responseBody);
+            return new GetTokenResponseData(response.code(), response.body().string());
         }
     }
 

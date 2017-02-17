@@ -37,9 +37,9 @@ public enum Cognito {
     private Identifiers identifiers;
 
     public void init(Context context) {
+        identifiers = new Identifiers(PreferenceManager.getDefaultSharedPreferences(context));
         serverApiClient = createServerApiClient(context);
         syncManager = createSyncManager(context, serverApiClient);
-        identifiers = new Identifiers(PreferenceManager.getDefaultSharedPreferences(context));
     }
 
     public Identifiers getIdentifiers() {
@@ -54,7 +54,7 @@ public enum Cognito {
 
     private ServerApiClient createServerApiClient(Context context) {
         String host = BuildConfig.AUTHENTICATION_ENDPOINT;
-        return new ServerApiClient(host, "AWSCognitoDeveloperAuthenticationSample");
+        return new ServerApiClient(host, "AWSCognitoDeveloperAuthenticationSample", identifiers);
     }
 
     public CognitoSyncManager syncManager() {
