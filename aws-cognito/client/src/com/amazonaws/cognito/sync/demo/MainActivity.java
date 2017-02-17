@@ -19,9 +19,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,10 +30,11 @@ import android.widget.Toast;
 import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
 import com.amazonaws.cognito.sync.demo.client.cognito.Cognito;
 import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenTask;
-import com.amazonaws.cognito.sync.demo.client.cognito.lambda.AccessLambdaTask;
+import com.amazonaws.cognito.sync.demo.client.cognito.AccessLambdaTask;
 import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseTokenTask;
 import com.amazonaws.cognito.sync.demo.client.login.LoginCredentials;
 import com.amazonaws.cognito.sync.demo.client.login.ServerLoginTask;
+import com.amazonaws.regions.Regions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -47,7 +46,6 @@ public class MainActivity extends Activity {
 
     private static final String TAG = "MainActivity";
 
-    private SharedPreferences preferences;
     private ServerApiClient apiClient;
     private Identifiers identifiers;
 
@@ -57,8 +55,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.main_activity);
         apiClient = ((AuthApplication) getApplication()).getApiClient();
         identifiers = ((AuthApplication) getApplication()).getIdentifiers();
-
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         Button btnLogin = (Button) findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(new OnClickListener() {
@@ -172,7 +168,8 @@ public class MainActivity extends Activity {
     }
 
     private void accessCognitoResource() {
-        new AccessLambdaTask(this.getApplicationContext()).execute();
+        Regions region = Regions.fromName(BuildConfig.REGION);
+        new AccessLambdaTask(getApplicationContext(), Cognito.INSTANCE.credentialsProvider(), region).execute();
     }
 
     private void wipeData() {

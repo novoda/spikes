@@ -30,20 +30,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-/**
- * A class which performs the task of authentication the user. For the sample it
- * validates a set of username and possword against the sample Cognito developer
- * authentication application
- */
 public class FirebaseTokenTask extends
         AsyncTask<String, Void, String> {
 
-    public static final String TAG = "FirebaseAuthentication";
-    private boolean isSuccessful;
+    private static final String TAG = "FirebaseAuthentication";
 
     private final Context context;
     private final ServerApiClient apiClient;
     private final Identifiers identifiers;
+
+    private boolean isSuccessful;
 
     public FirebaseTokenTask(Context context, ServerApiClient apiClient, Identifiers identifiers) {
         this.context = context;
