@@ -13,12 +13,14 @@
  * permissions and limitations under the License.
  */
 
-package com.amazonaws.cognito.sync.demo;
+package com.amazonaws.cognito.sync.demo.client.cognito;
 
 import android.content.Context;
 import android.util.Log;
+
 import com.amazonaws.auth.AWSAbstractCognitoDeveloperIdentityProvider;
-import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenResponseData;
+import com.amazonaws.cognito.sync.demo.BuildConfig;
+import com.amazonaws.cognito.sync.demo.Cognito;
 import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
 import com.amazonaws.regions.Regions;
 

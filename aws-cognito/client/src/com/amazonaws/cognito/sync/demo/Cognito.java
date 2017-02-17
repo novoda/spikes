@@ -20,6 +20,7 @@ import android.content.Context;
 import com.amazonaws.auth.AWSAbstractCognitoIdentityProvider;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
+import com.amazonaws.cognito.sync.demo.client.cognito.ServerCognitoIdentityProvider;
 import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
 import com.amazonaws.regions.Regions;
 
