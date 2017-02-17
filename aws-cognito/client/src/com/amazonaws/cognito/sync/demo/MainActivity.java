@@ -18,7 +18,6 @@ package com.amazonaws.cognito.sync.demo;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -42,102 +41,94 @@ public class MainActivity extends Activity {
 
     private static final String TAG = "MainActivity";
 
-    private Button btnLogin;
     private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
         setContentView(R.layout.main_activity);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         /**
          * Initializes the sync client. This must be call before you can use it.
          */
         Cognito.init(getApplicationContext());
 
-        btnLogin = (Button) findViewById(R.id.btnLogin);
+        Button btnLogin = (Button) findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v) {
-                // username and password dialog
-                final Dialog login = new Dialog(MainActivity.this);
-                login.setContentView(R.layout.login_dialog);
-                login.setTitle("Sample developer login");
-                final TextView txtUsername = (TextView) login
-                        .findViewById(R.id.txtUsername);
+            public void onClick(View view) {
+                final Dialog dialog = new Dialog(MainActivity.this);
+                dialog.setContentView(R.layout.login_dialog);
+                dialog.setTitle("Sample developer dialog");
+                final TextView txtUsername = (TextView) dialog.findViewById(R.id.txtUsername);
                 txtUsername.setHint("Username");
-                final TextView txtPassword = (TextView) login
-                        .findViewById(R.id.txtPassword);
+                final TextView txtPassword = (TextView) dialog.findViewById(R.id.txtPassword);
                 txtPassword.setHint("Password");
-                Button btnOk = (Button) login.findViewById(R.id.btnLogin);
-                Button btnCancel = (Button) login.findViewById(R.id.btnCancel);
+                Button btnOk = (Button) dialog.findViewById(R.id.btnLogin);
+                Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
 
                 btnCancel.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        login.dismiss();
+                        dialog.dismiss();
                     }
                 });
 
                 btnOk.setOnClickListener(new OnClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        // Validate the username and password
+                    public void onClick(View view) {
                         String username = txtUsername.getText().toString();
                         String password = txtPassword.getText().toString();
-                        if (username.isEmpty()
-                                || password.isEmpty()) {
+                        if (username.isEmpty() || password.isEmpty()) {
                             new AlertDialog.Builder(MainActivity.this)
                                     .setTitle("Login error")
-                                    .setMessage(
-                                            "Username or password cannot be empty!!")
+                                    .setMessage("Username or password cannot be empty!!")
                                     .show();
                         } else {
                             login(username, password);
                         }
-                        login.dismiss();
+                        dialog.dismiss();
                     }
                 });
-                login.show();
+                dialog.show();
             }
         });
 
         findViewById(R.id.btnFirebaseToken).setOnClickListener(
                 new OnClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        fetchFirebaseToken(v.getContext());
+                    public void onClick(View view) {
+                        fetchFirebaseToken();
                     }
                 });
 
         findViewById(R.id.btnAccessFirebaseResource).setOnClickListener(
                 new OnClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View view) {
                         accessFirebaseResource();
                     }
                 });
 
         findViewById(R.id.btnCognitoToken).setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(final View v) {
+            public void onClick(View view) {
                 fetchCognitoToken();
             }
         });
 
         findViewById(R.id.btnResourceCognito).setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v) {
-                accessCognitoResource(v.getContext());
+            public void onClick(View view) {
+                accessCognitoResource();
             }
         });
 
-        Button btnWipedata = (Button) findViewById(R.id.btnWipedata);
-        btnWipedata.setOnClickListener(new OnClickListener() {
+        findViewById(R.id.btnWipedata).setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 wipeData();
             }
         });
@@ -164,59 +155,48 @@ public class MainActivity extends Activity {
         });
     }
 
-    private void fetchFirebaseToken(final Context context) {
+    private void fetchFirebaseToken() {
         String uid = SharedPreferencesWrapper.getUidForDevice(preferences);
-        new FirebaseTokenTask(context, Cognito.getServerApiClient()).execute(uid);
+        new FirebaseTokenTask(this, Cognito.getServerApiClient()).execute(uid);
     }
 
-    private void login(final String username, final String password) {
-        // Clear the existing credentials
-        Cognito.getCredentialsProvider()
-                .clearCredentials();
-        // Initiate user authentication against the
-        // developer backend in this case the sample Cognito
-        // developer authentication application.
-        new ServerLoginTask(MainActivity.this, Cognito.getServerApiClient(), preferences)
-                .execute(new LoginCredentials(username, password));
+    private void login(String username, String password) {
+        Cognito.getCredentialsProvider().clearCredentials();
+        LoginCredentials loginCredentials = new LoginCredentials(username, password);
+        new ServerLoginTask(this, Cognito.getServerApiClient(), preferences).execute(loginCredentials);
     }
 
-    private void accessCognitoResource(Context context) {
-        new LambdaClient().testAuth(context);
+    private void accessCognitoResource() {
+        new LambdaClient().testAuth(this);
     }
 
     private void wipeData() {
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Wipe data?")
-                .setMessage(
-                        "This will log off your current session and wipe all user data. "
-                                + "Any data not synchronized will be lost.")
-                .setPositiveButton(
-                        "Yes",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                // wipe data
-                                Cognito.getSyncManager()
-                                        .wipeData();
+                .setMessage("This will log off your current session and wipe all user data. Any data not synchronized will be lost.")
+                .setPositiveButton("Yes", wipeListener())
+                .setNegativeButton("No", cancelListener())
+                .show();
+    }
 
-                                // Wipe shared preferences
-                                SharedPreferencesWrapper.wipe(PreferenceManager
-                                                                            .getDefaultSharedPreferences(MainActivity.this));
-                            }
+    private DialogInterface.OnClickListener cancelListener() {
+        return new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        };
+    }
 
-                        }
-                )
-                .setNegativeButton(
-                        "No",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                dialog.cancel();
-                            }
-                        }
-                ).show();
+    private DialogInterface.OnClickListener wipeListener() {
+        return new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Cognito.getSyncManager().wipeData();
+                SharedPreferencesWrapper.wipe(PreferenceManager.getDefaultSharedPreferences(MainActivity.this));
+            }
+
+        };
     }
 
 }
