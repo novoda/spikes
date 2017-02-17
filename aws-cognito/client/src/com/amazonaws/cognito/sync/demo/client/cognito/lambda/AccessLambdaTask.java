@@ -6,7 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
-import com.amazonaws.cognito.sync.demo.Cognito;
+import com.amazonaws.cognito.sync.demo.client.cognito.Cognito;
 import com.amazonaws.cognito.sync.demo.client.cognito.ServerCognitoIdentityProvider;
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaInvokerFactory;
 import com.amazonaws.regions.Regions;

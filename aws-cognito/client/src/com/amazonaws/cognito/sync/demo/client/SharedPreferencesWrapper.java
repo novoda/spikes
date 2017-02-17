@@ -17,9 +17,6 @@ package com.amazonaws.cognito.sync.demo.client;
 
 import android.content.SharedPreferences;
 
-import com.amazonaws.cognito.sync.demo.Cognito;
-import com.google.firebase.auth.FirebaseAuth;
-
 /**
  * This utility class is used to store content in Android's Shared Preferences.
  * For maximum security the preferences should be private.
@@ -34,9 +31,6 @@ public class SharedPreferencesWrapper {
     public static void wipe(SharedPreferences preferences) {
         storeValue(preferences, AWS_DEVICE_KEY, null);
         storeValue(preferences, FIREBASE_TOKEN, null);
-
-        Cognito.INSTANCE.credentialsProvider().clearCredentials();
-        FirebaseAuth.getInstance().signOut();
     }
 
     public static void registerDevice(SharedPreferences preferences, String uid) {

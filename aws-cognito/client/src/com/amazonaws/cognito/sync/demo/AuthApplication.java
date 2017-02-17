@@ -4,6 +4,7 @@ import android.app.Application;
 import android.preference.PreferenceManager;
 
 import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
+import com.amazonaws.cognito.sync.demo.client.cognito.Cognito;
 import com.google.firebase.FirebaseApp;
 
 public class AuthApplication extends Application {

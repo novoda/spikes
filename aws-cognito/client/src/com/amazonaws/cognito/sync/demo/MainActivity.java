@@ -30,11 +30,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
+import com.amazonaws.cognito.sync.demo.client.cognito.Cognito;
 import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenTask;
 import com.amazonaws.cognito.sync.demo.client.cognito.lambda.AccessLambdaTask;
 import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseTokenTask;
 import com.amazonaws.cognito.sync.demo.client.login.LoginCredentials;
 import com.amazonaws.cognito.sync.demo.client.login.ServerLoginTask;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -196,6 +198,8 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Cognito.INSTANCE.syncManager().wipeData();
+                Cognito.INSTANCE.credentialsProvider().clearCredentials();
+                FirebaseAuth.getInstance().signOut();
                 identifiers.wipe();
             }
 
