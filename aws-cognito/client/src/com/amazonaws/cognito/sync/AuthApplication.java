@@ -2,6 +2,8 @@ package com.amazonaws.cognito.sync;
 
 import android.app.Application;
 import android.preference.PreferenceManager;
+
+import com.amazonaws.cognito.sync.demo.Cognito;
 import com.amazonaws.cognito.sync.devauth.client.SharedPreferencesWrapper;
 import com.google.firebase.FirebaseApp;
 import java.security.SecureRandom;
@@ -14,6 +16,7 @@ public class AuthApplication extends Application {
         super.onCreate();
         SharedPreferencesWrapper.registerDevice(PreferenceManager.getDefaultSharedPreferences(this), generateUniqueDeviceId());
         FirebaseApp.initializeApp(this);
+        Cognito.INSTANCE.init(getApplicationContext());
     }
 
     /**

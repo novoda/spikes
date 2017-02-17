@@ -6,11 +6,11 @@ public class CognitoTokenTask extends AsyncTask<String, Void, Void> {
     @Override
     protected Void doInBackground(final String... params) {
         String userName = params[0];
-        String providerName = ((ServerCognitoIdentityProvider) Cognito.getCredentialsProvider()
+        String providerName = ((ServerCognitoIdentityProvider) Cognito.INSTANCE.credentialsProvider()
                 .getIdentityProvider()).getProviderName();
-        Cognito.addLogins(providerName, userName);
+        Cognito.INSTANCE.addLogins(providerName, userName);
 
-        Cognito.getCredentialsProvider().getIdentityProvider().refresh();
+        Cognito.INSTANCE.credentialsProvider().getIdentityProvider().refresh();
         return null;
     }
 }

@@ -35,7 +35,7 @@ public class SharedPreferencesWrapper {
         storeValue(preferences, AWS_DEVICE_KEY, null);
         storeValue(preferences, FIREBASE_TOKEN, null);
 
-        Cognito.getCredentialsProvider().clearCredentials();
+        Cognito.INSTANCE.credentialsProvider().clearCredentials();
         FirebaseAuth.getInstance().signOut();
     }
 

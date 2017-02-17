@@ -50,11 +50,6 @@ public class MainActivity extends Activity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        /**
-         * Initializes the sync client. This must be call before you can use it.
-         */
-        Cognito.init(getApplicationContext());
-
         Button btnLogin = (Button) findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(new OnClickListener() {
             @Override
@@ -157,13 +152,13 @@ public class MainActivity extends Activity {
 
     private void fetchFirebaseToken() {
         String uid = SharedPreferencesWrapper.getUidForDevice(preferences);
-        new FirebaseTokenTask(this, Cognito.getServerApiClient()).execute(uid);
+        new FirebaseTokenTask(this, Cognito.INSTANCE.serverApiClient()).execute(uid);
     }
 
     private void login(String username, String password) {
-        Cognito.getCredentialsProvider().clearCredentials();
+        Cognito.INSTANCE.credentialsProvider().clearCredentials();
         LoginCredentials loginCredentials = new LoginCredentials(username, password);
-        new ServerLoginTask(this, Cognito.getServerApiClient(), preferences).execute(loginCredentials);
+        new ServerLoginTask(this, Cognito.INSTANCE.serverApiClient(), preferences).execute(loginCredentials);
     }
 
     private void accessCognitoResource() {
@@ -192,7 +187,7 @@ public class MainActivity extends Activity {
         return new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Cognito.getSyncManager().wipeData();
+                Cognito.INSTANCE.syncManager().wipeData();
                 SharedPreferencesWrapper.wipe(PreferenceManager.getDefaultSharedPreferences(MainActivity.this));
             }
 

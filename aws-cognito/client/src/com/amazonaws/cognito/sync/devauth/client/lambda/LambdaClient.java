@@ -14,7 +14,7 @@ import com.amazonaws.regions.Regions;
 public class LambdaClient {
 
     public void testAuth(final Context context) {
-        ServerCognitoIdentityProvider identityProvider = (ServerCognitoIdentityProvider) Cognito.getCredentialsProvider().getIdentityProvider();
+        ServerCognitoIdentityProvider identityProvider = (ServerCognitoIdentityProvider) Cognito.INSTANCE.credentialsProvider().getIdentityProvider();
         // Create an instance of CognitoCachingCredentialsProvider
         CognitoCachingCredentialsProvider cognitoProvider = new CognitoCachingCredentialsProvider(context, identityProvider, Regions.EU_WEST_1);
 

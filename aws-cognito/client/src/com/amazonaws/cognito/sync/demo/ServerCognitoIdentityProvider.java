@@ -98,7 +98,7 @@ public class ServerCognitoIdentityProvider extends
      */
   @Override
   public String getIdentityId() {
-    identityId = Cognito.getCredentialsProvider().getCachedIdentityId();
+    identityId = Cognito.INSTANCE.credentialsProvider().getCachedIdentityId();
     if (identityId != null) {
       return identityId;
     }
