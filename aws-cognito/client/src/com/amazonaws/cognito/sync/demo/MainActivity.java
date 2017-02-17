@@ -58,14 +58,6 @@ public class MainActivity extends Activity {
         Cognito.init(getApplicationContext());
 
         btnLogin = (Button) findViewById(R.id.btnLogin);
-        if ((Cognito.getCredentialsProvider().getIdentityProvider()) instanceof ServerCognitoIdentityProvider) {
-            btnLogin.setEnabled(true);
-            Log.w(TAG, "Developer authentication feature configured correctly. ");
-        } else {
-            btnLogin.setEnabled(false);
-            Log.w(TAG, "Developer authentication feature configured incorrectly. "
-                    + "Thus it's disabled in this demo.");
-        }
         btnLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
