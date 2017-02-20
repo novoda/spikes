@@ -15,7 +15,6 @@
 
 package com.amazonaws.cognito.sync.demo.client.cognito;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.amazonaws.auth.AWSAbstractCognitoDeveloperIdentityProvider;
@@ -28,15 +27,13 @@ import com.amazonaws.regions.Regions;
  * is meant to communicate with the Cognito Developer Authentication sample
  * service: https://github.com/awslabs/amazon-cognito-developer-authentication-sample
  */
-public class ServerCognitoIdentityProvider extends
-    AWSAbstractCognitoDeveloperIdentityProvider {
+public class ServerCognitoIdentityProvider extends AWSAbstractCognitoDeveloperIdentityProvider {
 
   private ServerApiClient serverApiClient;
 
   private static final String developerProvider = BuildConfig.DEVELOPER_PROVIDER;
 
-  public ServerCognitoIdentityProvider(ServerApiClient apiClient, String accountId,
-      String identityPoolId, Context context, Regions region) {
+  public ServerCognitoIdentityProvider(ServerApiClient apiClient, String accountId, String identityPoolId, Regions region) {
     super(accountId, identityPoolId, region);
 
     if (developerProvider == null || developerProvider.isEmpty()) {

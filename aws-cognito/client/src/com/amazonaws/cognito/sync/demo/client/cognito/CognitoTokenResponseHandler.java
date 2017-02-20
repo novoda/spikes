@@ -24,10 +24,6 @@ import java.io.IOException;
 
 import okhttp3.Response;
 
-/**
- * This class is used to parse the response of the GetToken call of the sample
- * Cognito developer authentication and store it as a GetTokenResponse object.
- */
 public class CognitoTokenResponseHandler extends ResponseHandler {
 
     private final String key;
@@ -42,9 +38,8 @@ public class CognitoTokenResponseHandler extends ResponseHandler {
             try {
                 String json = AESEncryption.unwrap(response.body().string(), this.key);
                 String identityId = Utilities.extractElement(json, "identityId");
-                String identityPoolId = Utilities.extractElement(json, "identityPoolId");
                 String token = Utilities.extractElement(json, "token");
-                return new CognitoTokenResponseData(identityId, identityPoolId, token);
+                return new CognitoTokenResponseData(identityId, token);
             } catch (Exception exception) {
                 throw new IOException(exception);
             }

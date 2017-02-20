@@ -15,12 +15,7 @@
 
 package com.amazonaws.cognito.sync.demo.client;
 
-/**
- * A class for storing the response from sample Cognito developer
- * authentication.
- */
 public class ResponseData {
-    public static final ResponseData SUCCESSFUL = new ResponseData(200, "OK");
 
     private final int responseCode;
     private final String responseMessage;

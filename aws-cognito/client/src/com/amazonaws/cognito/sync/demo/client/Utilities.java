@@ -15,8 +15,6 @@
 
 package com.amazonaws.cognito.sync.demo.client;
 
-import android.util.Log;
-
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.Request;
 import com.amazonaws.auth.AWSCredentials;
@@ -30,9 +28,6 @@ import java.util.Date;
 
 import org.apache.commons.codec.binary.Hex;
 
-/**
- * Utility class for communicating with sample Cognito developer authentication.
- */
 public class Utilities {
 
     public static String getTimestamp() {
@@ -40,13 +35,11 @@ public class Utilities {
     }
 
     public static String extractElement(String json, String element) {
-        boolean hasElement = (json.indexOf(element) != -1);
+        boolean hasElement = json.contains(element);
         if (hasElement) {
-            Log.i("help", json);
             int elementIndex = json.indexOf(element) + element.length() + 1;
             int startIndex = json.indexOf("\"", elementIndex);
             int endIndex = json.indexOf("\"", startIndex + 1);
-            Log.i("help", json.substring(startIndex + 1, endIndex));
             return json.substring(startIndex + 1, endIndex);
         }
 
@@ -57,7 +50,7 @@ public class Utilities {
         return new Signer().getSignature(dataToSign, key);
     }
 
-    static class Signer extends AbstractAWSSigner {
+    private static class Signer extends AbstractAWSSigner {
         public String getSignature(String dataToSign, String key) {
             try {
                 byte[] data = dataToSign.getBytes("UTF8");

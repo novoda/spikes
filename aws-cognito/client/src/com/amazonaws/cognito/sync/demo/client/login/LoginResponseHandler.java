@@ -24,10 +24,6 @@ import java.io.IOException;
 
 import okhttp3.Response;
 
-/**
- * This class is used to parse the response of the Login request of the sample
- * Cognito developer authentication and convert it into LoginResponse object
- */
 public class LoginResponseHandler extends ResponseHandler {
     private final String decryptionKey;
 

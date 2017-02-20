@@ -149,7 +149,7 @@ public class MainActivity extends Activity {
     }
 
     private Completable signInToFirebase(String token) {
-        return Completable.create(new FirebaseLogInTask(identifiers, token));
+        return Completable.create(new FirebaseLogInTask(token));
     }
 
     private Observable<String> accessFirebaseResource() {

@@ -9,14 +9,6 @@
     android:paddingBottom="16dip"
     >
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:text="Cognito Sync Demo"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
     <Button
       android:id="@+id/btnLogin"
       android:layout_width="match_parent"

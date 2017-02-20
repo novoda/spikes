@@ -17,10 +17,6 @@ package com.amazonaws.cognito.sync.demo.client.login;
 
 import com.amazonaws.cognito.sync.demo.client.ResponseData;
 
-/**
- * This class is used to store the response of the Login call of sample Cognito
- * developer authentication.
- */
 public class LoginResponseData extends ResponseData {
     private final String key;
 

@@ -38,9 +38,8 @@ public enum Cognito {
         syncManager = createSyncManager(context, apiClient);
     }
 
-
     private CognitoSyncManager createSyncManager(Context context, ServerApiClient serverApiClient) {
-        AWSAbstractCognitoIdentityProvider identityProvider = new ServerCognitoIdentityProvider(serverApiClient, null, IDENTITY_POOL_ID, context, REGION);
+        AWSAbstractCognitoIdentityProvider identityProvider = new ServerCognitoIdentityProvider(serverApiClient, null, IDENTITY_POOL_ID, REGION);
         credentialsProvider = new CognitoCachingCredentialsProvider(context, identityProvider, REGION);
         return new CognitoSyncManager(context, REGION, credentialsProvider);
     }

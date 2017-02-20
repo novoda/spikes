@@ -15,15 +15,8 @@
 
 package com.amazonaws.cognito.sync.demo.client;
 
-/**
- * An abstract class for all the request classes used to communicate with sample
- * Cognito developer authentication
- */
 public abstract class RequestData {
 
-    /**
-     * Builds and returns the request url
-     */
     public abstract String buildRequestUrl();
 
 }

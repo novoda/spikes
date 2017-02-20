@@ -18,7 +18,6 @@ package com.amazonaws.cognito.sync.demo.client.firebase;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.amazonaws.cognito.sync.demo.Identifiers;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -29,11 +28,9 @@ import io.reactivex.CompletableOnSubscribe;
 
 public class FirebaseLogInTask implements CompletableOnSubscribe {
 
-    private final Identifiers identifiers;
     private final String token;
 
-    public FirebaseLogInTask(Identifiers identifiers, String token) {
-        this.identifiers = identifiers;
+    public FirebaseLogInTask(String token) {
         this.token = token;
     }
 

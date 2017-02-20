@@ -24,10 +24,6 @@ import java.util.Map;
 
 import okhttp3.HttpUrl;
 
-/**
- * A class used to construct the GetToken request to the sample Cognito
- * developer authentication application.
- */
 public class CognitoTokenRequestData extends RequestData {
 
     private final String host;
@@ -37,8 +33,7 @@ public class CognitoTokenRequestData extends RequestData {
     private final Map<String, String> logins;
     private final String identityId;
 
-    public CognitoTokenRequestData(final String host, final String endpoint, final String uid, final String key,
-                                   Map<String, String> logins, String identityId) {
+    public CognitoTokenRequestData(String host, String endpoint, String uid, String key, Map<String, String> logins, String identityId) {
         this.host = host;
         this.endpoint = endpoint;
         this.uid = uid;

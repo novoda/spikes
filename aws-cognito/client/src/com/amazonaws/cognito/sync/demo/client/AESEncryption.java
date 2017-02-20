@@ -15,33 +15,18 @@
 
 package com.amazonaws.cognito.sync.demo.client;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.Hex;
-
-import java.security.AlgorithmParameters;
-
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.AlgorithmParameters;
 
-/**
- * This utility class provides a wrapper for the encryption used by the Cognito
- * Developer Sample Authentication sample
- */
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
+
 public class AESEncryption {
 
-    /**
-     * Encryption algorithm used
-     */
-    public static final String ENCRYPTION_ALGORITHM = "AES/CBC/PKCS5Padding";
+    private static final String ENCRYPTION_ALGORITHM = "AES/CBC/PKCS5Padding";
 
-    /**
-     * Decrypt a string with given key.
-     * 
-     * @param cipherText encrypted string
-     * @param key the key used in decryption
-     * @return a decrypted string
-     */
     public static String unwrap(String cipherText, String key) throws Exception {
         byte[] dataToDecrypt = Base64.decodeBase64(cipherText.getBytes());
         byte[] initializationVector = new byte[16];
@@ -54,16 +39,7 @@ public class AESEncryption {
         return new String(plainText);
     }
 
-    /**
-     * Decrypt a cipher in bytes using the specified key
-     * 
-     * @param cipherBytes encrypted bytes
-     * @param key the key used in decryption
-     * @param iv
-     * @return
-     * @throws Exception
-     */
-    public static byte[] decrypt(byte[] cipherBytes, String key, byte[] iv)
+    private static byte[] decrypt(byte[] cipherBytes, String key, byte[] iv)
             throws Exception {
         Cipher cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
         AlgorithmParameters params = AlgorithmParameters.getInstance("AES");

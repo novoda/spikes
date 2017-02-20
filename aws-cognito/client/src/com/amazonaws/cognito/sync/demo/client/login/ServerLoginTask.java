@@ -24,11 +24,6 @@ import com.amazonaws.cognito.sync.demo.Identifiers;
 import com.amazonaws.cognito.sync.demo.client.ResponseData;
 import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
 
-/**
- * A class which performs the task of authentication the user. For the sample it
- * validates a set of username and possword against the sample Cognito developer
- * authentication application
- */
 public class ServerLoginTask extends AsyncTask<LoginCredentials, Void, Boolean> {
 
     private final Context context;

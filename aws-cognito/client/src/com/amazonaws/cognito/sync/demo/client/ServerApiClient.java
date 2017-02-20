@@ -58,10 +58,6 @@ public class ServerApiClient {
         return reponseHandler.handleResponse(response);
     }
 
-    /**
-     * Gets a token from the sample Cognito developer authentication
-     * application. The registered key is used to secure the communication.
-     */
     private ResponseData getToken(Map<String, String> logins, String identityId, String endpoint, ResponseHandler responseHandler) {
         String uid = identifiers.getUidForDevice();
         String key = identifiers.getKeyForDevice();
@@ -74,10 +70,6 @@ public class ServerApiClient {
         return processRequest(getTokenRequestData, responseHandler);
     }
 
-    /**
-     * Gets a token from the sample Cognito developer authentication
-     * application. The registered key is used to secure the communication.
-     */
     public CognitoTokenResponseData getCognitoToken(Map<String, String> logins, String identityId) {
         String key = identifiers.getKeyForDevice();
         return (CognitoTokenResponseData) getToken(logins, identityId, "gettoken", new CognitoTokenResponseHandler(key));
@@ -87,10 +79,6 @@ public class ServerApiClient {
         return getToken(new HashMap<String, String>(), null, "getfirebasetoken", new ResponseHandler());
     }
 
-    /**
-     * Using the given username and password, securily communictes the Key for
-     * the user's account.
-     */
     public ResponseData login(String username, String password) {
         String uid = identifiers.getUidForDevice();
         String decryptionKey = computeDecryptionKey(username, password, baseUrl);
