@@ -25,6 +25,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.amazonaws.cognito.sync.demo.client.AndroidExecutionStrategy;
 import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
 import com.amazonaws.cognito.sync.demo.client.cognito.Cognito;
 import com.amazonaws.cognito.sync.demo.client.cognito.CognitoResourceAccessTask;
@@ -40,10 +41,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import io.reactivex.Completable;
 import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends Activity {
 
@@ -110,8 +109,7 @@ public class MainActivity extends Activity {
                                     }
                                 })
                                 .andThen(accessFirebaseResource())
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
+                                .compose(new AndroidExecutionStrategy<String>())
                                 .subscribe(new ToastObserver(MainActivity.this));
                     }
                 });
@@ -121,8 +119,7 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 fetchCognitoToken()
                         .andThen(accessCognitoResource())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
+                        .compose(new AndroidExecutionStrategy<String>())
                         .subscribe(new ToastObserver(MainActivity.this));
             }
         });
@@ -159,7 +156,9 @@ public class MainActivity extends Activity {
     private void login(String username, String password) {
         Cognito.INSTANCE.credentialsProvider().clearCredentials();
         LoginCredentials loginCredentials = new LoginCredentials(username, password);
-        new ServerLoginTask(this, apiClient, identifiers).execute(loginCredentials);
+        Observable.create(new ServerLoginTask(apiClient, identifiers, loginCredentials))
+                .compose(new AndroidExecutionStrategy<String>())
+                .subscribe();
     }
 
     private void wipeData() {

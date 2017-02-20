@@ -1,12 +1,12 @@
 /**
  * Copyright 2010-2014 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
  * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
+ * <p>
+ * http://aws.amazon.com/apache2.0
+ * <p>
  * or in the "license" file accompanying this file. This file is distributed
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
@@ -15,45 +15,39 @@
 
 package com.amazonaws.cognito.sync.demo.client.login;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.os.AsyncTask;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.amazonaws.cognito.sync.demo.Identifiers;
-import com.amazonaws.cognito.sync.demo.client.ResponseData;
 import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
 
-public class ServerLoginTask extends AsyncTask<LoginCredentials, Void, Boolean> {
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 
-    private final Context context;
+public class ServerLoginTask implements ObservableOnSubscribe<String> {
+
     private final ServerApiClient apiClient;
     private final Identifiers identifiers;
+    private final LoginCredentials loginCredentials;
 
-    public ServerLoginTask(Context context, ServerApiClient apiClient, Identifiers identifiers) {
-        this.context = context;
+    public ServerLoginTask(ServerApiClient apiClient, Identifiers identifiers, LoginCredentials loginCredentials) {
         this.apiClient = apiClient;
         this.identifiers = identifiers;
+        this.loginCredentials = loginCredentials;
     }
 
     @Override
-    protected Boolean doInBackground(LoginCredentials... params) {
-        String userName = params[0].getUsername();
-        ResponseData responseData = apiClient.login(userName, params[0].getPassword());
+    public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+        String username = loginCredentials.getUsername();
+        LoginResponseData responseData = apiClient.login(username, loginCredentials.getPassword());
         if (responseData.requestWasSuccessful()) {
-            String deviceKey = ((LoginResponseData) responseData).getKey();
-            identifiers.registerUser(userName, deviceKey);
+            String deviceKey = responseData.getKey();
+            identifiers.registerUser(username, deviceKey);
+            emitter.onNext("User \"" + username + "\" logged in!");
+            emitter.onComplete();
+        } else {
+            Log.e("ServerLogin", responseData.getResponseMessage());
+            emitter.onError(new RuntimeException("Can't log in to the server, is that the right username / password?"));
         }
-        return responseData.requestWasSuccessful();
     }
 
-    @Override
-    protected void onPostExecute(Boolean isSuccessful) {
-        if (isSuccessful) {
-            Toast.makeText(context, "Logged in!", Toast.LENGTH_SHORT).show();
-        } else {
-            new AlertDialog.Builder(context).setTitle("Login error")
-                    .setMessage("Failed to log in!").show();
-        }
-    }
 }

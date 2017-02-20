@@ -37,7 +37,7 @@ public class FirebaseResourceAccessTask implements ObservableOnSubscribe<String>
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 myRef.removeEventListener(this);
-                emitter.onNext("Accessed a restricted resource that says: " + dataSnapshot.getValue());
+                emitter.onNext(dataSnapshot.getValue().toString());
                 emitter.onComplete();
             }
 

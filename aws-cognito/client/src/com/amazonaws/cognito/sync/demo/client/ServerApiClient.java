@@ -22,6 +22,7 @@ import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenRequestData;
 import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenResponseData;
 import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenResponseHandler;
 import com.amazonaws.cognito.sync.demo.client.login.LoginRequestData;
+import com.amazonaws.cognito.sync.demo.client.login.LoginResponseData;
 import com.amazonaws.cognito.sync.demo.client.login.LoginResponseHandler;
 
 import java.io.IOException;
@@ -79,13 +80,12 @@ public class ServerApiClient {
         return getToken(new HashMap<String, String>(), null, "getfirebasetoken", new ResponseHandler());
     }
 
-    public ResponseData login(String username, String password) {
+    public LoginResponseData login(String username, String password) {
         String uid = identifiers.getUidForDevice();
         String decryptionKey = computeDecryptionKey(username, password, baseUrl);
         LoginRequestData loginRequest = new LoginRequestData(baseUrl, uid, username, decryptionKey);
         ResponseHandler handler = new LoginResponseHandler(decryptionKey);
-
-        return processRequest(loginRequest, handler);
+        return ((LoginResponseData) processRequest(loginRequest, handler));
     }
 
     private String computeDecryptionKey(String username, String password, String baseUrl) {
