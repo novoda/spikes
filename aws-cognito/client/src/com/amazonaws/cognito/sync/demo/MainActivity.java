@@ -20,31 +20,32 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
 import com.amazonaws.cognito.sync.demo.client.cognito.Cognito;
+import com.amazonaws.cognito.sync.demo.client.cognito.CognitoResourceAccessTask;
 import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenTask;
-import com.amazonaws.cognito.sync.demo.client.cognito.AccessLambdaTask;
+import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseLogInTask;
+import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseResourceAccessTask;
 import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseTokenTask;
 import com.amazonaws.cognito.sync.demo.client.login.LoginCredentials;
 import com.amazonaws.cognito.sync.demo.client.login.ServerLoginTask;
 import com.amazonaws.regions.Regions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+
+import io.reactivex.Completable;
+import io.reactivex.CompletableSource;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends Activity {
-
-    private static final String TAG = "MainActivity";
 
     private ServerApiClient apiClient;
     private Identifiers identifiers;
@@ -97,33 +98,32 @@ public class MainActivity extends Activity {
             }
         });
 
-        findViewById(R.id.btnFirebaseToken).setOnClickListener(
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        fetchFirebaseToken();
-                    }
-                });
-
         findViewById(R.id.btnAccessFirebaseResource).setOnClickListener(
                 new OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        accessFirebaseResource();
+                        fetchFirebaseToken()
+                                .flatMapCompletable(new Function<String, CompletableSource>() {
+                                    @Override
+                                    public CompletableSource apply(@NonNull String token) throws Exception {
+                                        return signInToFirebase(token);
+                                    }
+                                })
+                                .andThen(accessFirebaseResource())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new ToastObserver(MainActivity.this));
                     }
                 });
 
-        findViewById(R.id.btnCognitoToken).setOnClickListener(new OnClickListener() {
+        findViewById(R.id.btnAccessResourceCognito).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                fetchCognitoToken();
-            }
-        });
-
-        findViewById(R.id.btnResourceCognito).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                accessCognitoResource();
+                fetchCognitoToken()
+                        .andThen(accessCognitoResource())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new ToastObserver(MainActivity.this));
             }
         });
 
@@ -135,41 +135,31 @@ public class MainActivity extends Activity {
         });
     }
 
-    private void fetchCognitoToken() {
-        new CognitoTokenTask(Cognito.INSTANCE.credentialsProvider()).execute(identifiers.getUserName());
+    private Completable fetchCognitoToken() {
+        return Completable.create(new CognitoTokenTask(Cognito.INSTANCE.credentialsProvider(), identifiers.getUserName()));
     }
 
-    private void accessFirebaseResource() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("test_reading");
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Toast.makeText(MainActivity.this, "Accessed a restricted resource that says: " + dataSnapshot.getValue(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e(TAG, databaseError.getMessage());
-                Toast.makeText(MainActivity.this, "Can't read resource", Toast.LENGTH_SHORT).show();
-            }
-        });
+    private Observable<String> accessCognitoResource() {
+        Regions region = Regions.fromName(BuildConfig.REGION);
+        return Observable.create(new CognitoResourceAccessTask(getApplicationContext(), Cognito.INSTANCE.credentialsProvider(), region));
     }
 
-    private void fetchFirebaseToken() {
-        String uid = identifiers.getUidForDevice();
-        new FirebaseTokenTask(this, apiClient, identifiers).execute(uid);
+    private Observable<String> fetchFirebaseToken() {
+        return Observable.create(new FirebaseTokenTask(apiClient));
+    }
+
+    private Completable signInToFirebase(String token) {
+        return Completable.create(new FirebaseLogInTask(identifiers, token));
+    }
+
+    private Observable<String> accessFirebaseResource() {
+        return Observable.create(new FirebaseResourceAccessTask());
     }
 
     private void login(String username, String password) {
         Cognito.INSTANCE.credentialsProvider().clearCredentials();
         LoginCredentials loginCredentials = new LoginCredentials(username, password);
         new ServerLoginTask(this, apiClient, identifiers).execute(loginCredentials);
-    }
-
-    private void accessCognitoResource() {
-        Regions region = Regions.fromName(BuildConfig.REGION);
-        new AccessLambdaTask(getApplicationContext(), Cognito.INSTANCE.credentialsProvider(), region).execute();
     }
 
     private void wipeData() {

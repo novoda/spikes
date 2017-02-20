@@ -1,26 +1,32 @@
 package com.amazonaws.cognito.sync.demo.client.cognito;
 
-import android.os.AsyncTask;
-
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class CognitoTokenTask extends AsyncTask<String, Void, Void> {
+import io.reactivex.CompletableEmitter;
+import io.reactivex.CompletableOnSubscribe;
+
+public class CognitoTokenTask implements CompletableOnSubscribe {
 
     private final CognitoCachingCredentialsProvider credentialsProvider;
+    private final String username;
 
-    public CognitoTokenTask(CognitoCachingCredentialsProvider credentialsProvider) {
+    public CognitoTokenTask(CognitoCachingCredentialsProvider credentialsProvider, String username) {
         this.credentialsProvider = credentialsProvider;
+        this.username = username;
     }
 
     @Override
-    protected Void doInBackground(final String... params) {
-        String userName = params[0];
+    public void subscribe(CompletableEmitter e) throws Exception {
         ServerCognitoIdentityProvider identityProvider = (ServerCognitoIdentityProvider) credentialsProvider.getIdentityProvider();
-        addLogins(userName, identityProvider.getProviderName());
-        return null;
+        addLogins(username, identityProvider.getProviderName());
+        String token = credentialsProvider.getIdentityProvider().refresh();
+        if (token == null) {
+            e.onError(new RuntimeException("Can't fetch cognito token, did you log in to the custom server first?"));
+        }
+        e.onComplete();
     }
 
     private void addLogins(String userName, String providerName) {
@@ -30,7 +36,5 @@ public class CognitoTokenTask extends AsyncTask<String, Void, Void> {
         }
         logins.put(providerName, userName);
         credentialsProvider.setLogins(logins);
-        credentialsProvider.getIdentityProvider().refresh();
     }
-
 }

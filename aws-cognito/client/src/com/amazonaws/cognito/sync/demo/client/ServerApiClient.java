@@ -83,8 +83,8 @@ public class ServerApiClient {
         return (CognitoTokenResponseData) getToken(logins, identityId, "gettoken", new CognitoTokenResponseHandler(key));
     }
 
-    public ResponseData getFirebaseToken(String identityId) {
-        return getToken(new HashMap<String, String>(), identityId, "getfirebasetoken", new ResponseHandler());
+    public ResponseData getFirebaseToken() {
+        return getToken(new HashMap<String, String>(), null, "getfirebasetoken", new ResponseHandler());
     }
 
     /**

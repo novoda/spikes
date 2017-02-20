@@ -15,65 +15,32 @@
 
 package com.amazonaws.cognito.sync.demo.client.firebase;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.amazonaws.cognito.sync.demo.Identifiers;
 import com.amazonaws.cognito.sync.demo.client.ResponseData;
 import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 
-public class FirebaseTokenTask extends
-        AsyncTask<String, Void, String> {
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 
-    private static final String TAG = "FirebaseAuthentication";
+public class FirebaseTokenTask implements ObservableOnSubscribe<String> {
 
-    private final Context context;
     private final ServerApiClient apiClient;
-    private final Identifiers identifiers;
 
-    private boolean isSuccessful;
-
-    public FirebaseTokenTask(Context context, ServerApiClient apiClient, Identifiers identifiers) {
-        this.context = context;
+    public FirebaseTokenTask(ServerApiClient apiClient) {
         this.apiClient = apiClient;
-        this.identifiers = identifiers;
     }
 
     @Override
-    protected String doInBackground(String... params) {
-        ResponseData responseData = apiClient.getFirebaseToken(null);
-        isSuccessful = responseData.requestWasSuccessful();
-        return responseData.getResponseMessage();
-    }
-
-    @Override
-    protected void onPostExecute(final String result) {
-        if (!isSuccessful) {
-            new AlertDialog.Builder(context).setTitle("Login error")
-                    .setMessage("Error trying to login to Firebase").show();
+    public void subscribe(final ObservableEmitter<String> emitter) throws Exception {
+        ResponseData responseData = apiClient.getFirebaseToken();
+        if (responseData.requestWasSuccessful()) {
+            String token = responseData.getResponseMessage();
+            emitter.onNext(token);
+            emitter.onComplete();
         } else {
-            Log.i(TAG, "requesting sign-in for token: ["+ result + "]");
-            FirebaseAuth.getInstance().signInWithCustomToken(result)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (!task.isSuccessful()) {
-                                Log.w(TAG, "signInWithCustomToken failed!", task.getException());
-                                Toast.makeText(context, "Failed!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                identifiers.registerFirebaseToken(result);
-                                Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+            Log.e("FirebaseTokenTask", responseData.getResponseMessage());
+            emitter.onError(new RuntimeException("Can't fetch firebase token, did you log in to the custon server first?"));
         }
     }
 }
