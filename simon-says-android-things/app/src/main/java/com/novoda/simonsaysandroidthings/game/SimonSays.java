@@ -2,6 +2,8 @@ package com.novoda.simonsaysandroidthings.game;
 
 import android.util.Log;
 
+import com.novoda.simonsaysandroidthings.game.InputVerifier.InputVerificationListener;
+import com.novoda.simonsaysandroidthings.game.Sequencer.OnSequenceFinishedListener;
 import com.novoda.simonsaysandroidthings.hw.io.Buzzer;
 import com.novoda.simonsaysandroidthings.hw.io.Group;
 
@@ -17,12 +19,13 @@ public class SimonSays implements AutoCloseable {
     private static final int GROUP_ON_DURATION_MS = 500;
     private static final int GROUP_OFF_DURATION_MS = 200;
 
-    private enum State { IDLE, PLAYING;}
+    private enum State { IDLE, PLAYING}
 
     private final List<Group> groups;
     private final Highscore highscore;
     private final Buzzer buzzer;
     private final Sequencer sequencer;
+    private final InputVerifier inputVerifier;
     private final List<Group> sequence;
     private final Random random;
 
@@ -36,6 +39,7 @@ public class SimonSays implements AutoCloseable {
         sequence = new ArrayList<>();
         random = new Random();
         sequencer = new Sequencer();
+        inputVerifier = new InputVerifier(groups);
     }
 
     public void start() {
@@ -59,12 +63,30 @@ public class SimonSays implements AutoCloseable {
         sequencer.play(sequence, GROUP_ON_DURATION_MS, GROUP_OFF_DURATION_MS, onSequenceFinishedListener);
     }
 
-    private Sequencer.OnSequenceFinishedListener onSequenceFinishedListener = new Sequencer.OnSequenceFinishedListener() {
+    private OnSequenceFinishedListener onSequenceFinishedListener = new OnSequenceFinishedListener() {
         @Override
         public void onSequenceFinished() {
             Log.d(TAG, "onSequenceFinished() called");
-            // TODO listen for player input
+            inputVerifier.listenFor(sequence, inputVerificationListener);
+        }
+    };
+
+    private InputVerificationListener inputVerificationListener = new InputVerificationListener() {
+        @Override
+        public void onCorrectInput() {
+            Log.d(TAG, "onCorrectInput() called");
+            // TODO play success sequence and advance to next round
             nextRound();
+        }
+
+        @Override
+        public void onWrongInput() {
+            Log.d(TAG, "onWrongInput() called");
+            // TODO play failure sequence
+            if (round > highscore.current()) {
+                highscore.setNew(round);
+                // TODO: play highscore sequence
+            }
         }
     };
 
@@ -90,7 +112,7 @@ public class SimonSays implements AutoCloseable {
         for (Group group : groups) {
             group.stop();
         }
-        // TODO stop listening for player input ?
+        inputVerifier.stop();
     }
 
 }

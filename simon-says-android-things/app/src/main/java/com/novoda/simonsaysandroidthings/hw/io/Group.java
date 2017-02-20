@@ -29,4 +29,36 @@ public class Group implements AutoCloseable {
         button.close();
         led.close();
     }
+
+    public void setOnGroupButtonPressedListener(final OnGroupButtonPressedListener listener) {
+        button.setListener(new Button.Listener() {
+
+            private boolean wasPressed;
+
+            @Override
+            public void onButtonPressed(Button button) {
+                if (listener.isEnabled()) {
+                    play();
+                    wasPressed = true;
+                }
+            }
+
+            @Override
+            public void onButtonReleased(Button button) {
+                if (wasPressed) {
+                    stop();
+                    listener.onGroupButtonPressed(Group.this);
+                }
+            }
+
+        });
+    }
+
+    public interface OnGroupButtonPressedListener {
+
+        void onGroupButtonPressed(Group group);
+
+        boolean isEnabled();
+
+    }
 }
