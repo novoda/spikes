@@ -1,6 +1,7 @@
 package com.amazonaws.cognito.sync.demo.client.cognito;
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.cognito.sync.demo.Identifiers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,17 +13,20 @@ public class CognitoTokenTask implements CompletableOnSubscribe {
 
     private final CognitoCachingCredentialsProvider credentialsProvider;
     private final String username;
+    private final Identifiers identifiers;
 
-    public CognitoTokenTask(CognitoCachingCredentialsProvider credentialsProvider, String username) {
+    public CognitoTokenTask(CognitoCachingCredentialsProvider credentialsProvider, Identifiers identifiers) {
         this.credentialsProvider = credentialsProvider;
-        this.username = username;
+        this.username = identifiers.getUserName();
+        this.identifiers = identifiers;
     }
 
     @Override
     public void subscribe(CompletableEmitter e) throws Exception {
         ServerCognitoIdentityProvider identityProvider = (ServerCognitoIdentityProvider) credentialsProvider.getIdentityProvider();
         addLogins(username, identityProvider.getProviderName());
-        credentialsProvider.getIdentityProvider().refresh();
+        String token = credentialsProvider.getIdentityProvider().refresh();
+        identifiers.registerCognitoToken(token);
         e.onComplete();
     }
 

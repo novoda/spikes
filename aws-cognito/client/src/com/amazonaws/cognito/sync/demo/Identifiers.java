@@ -10,6 +10,7 @@ public class Identifiers {
 
     private static final String AWS_DEVICE_UID = "AWS_DEVICE_UID";
     private static final String AWS_DEVICE_KEY = "AWS_DEVICE_KEY";
+    private static final String COGNITO_TOKEN = "COGNITO_TOKEN";
     private static final String FIREBASE_TOKEN = "FIREBASE_TOKEN";
     private static final String USER_NAME = "USER_NAME";
 
@@ -43,9 +44,23 @@ public class Identifiers {
         return preferences.getString(USER_NAME, null);
     }
 
-    public void registerFirebaseToken(final String result) {
+    public String getCognitoToken() {
+        return preferences.getString(COGNITO_TOKEN, null);
+    }
+
+    public String getFirebaseToken() {
+        return preferences.getString(FIREBASE_TOKEN, null);
+    }
+
+    public void registerFirebaseToken(final String token) {
         preferences.edit()
-                .putString(FIREBASE_TOKEN, result)
+                .putString(FIREBASE_TOKEN, token)
+                .apply();
+    }
+
+    public void registerCognitoToken(final String token) {
+        preferences.edit()
+                .putString(COGNITO_TOKEN, token)
                 .apply();
     }
 
@@ -65,6 +80,8 @@ public class Identifiers {
     public void wipe() {
         preferences.edit()
                 .remove(AWS_DEVICE_KEY)
+                .remove(USER_NAME)
+                .remove(COGNITO_TOKEN)
                 .remove(FIREBASE_TOKEN)
                 .apply();
     }

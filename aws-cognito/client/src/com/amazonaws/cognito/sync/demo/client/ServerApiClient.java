@@ -56,11 +56,19 @@ public class ServerApiClient {
 
     public Observable<CognitoTokenResponseData> getCognitoToken(Map<String, String> logins, String identityId) {
         String key = identifiers.getKeyForDevice();
-        return getToken(logins, identityId, "gettoken", new CognitoTokenResponseHandler(key), "cognito");
+        String token = identifiers.getCognitoToken();
+        if (token == null) {
+            return getToken(logins, identityId, "gettoken", new CognitoTokenResponseHandler(key), "cognito");
+        }
+        return Observable.just(new CognitoTokenResponseData(identityId, token));
     }
 
     public Observable<FirebaseTokenResponseData> getFirebaseToken() {
-        return getToken(new HashMap<String, String>(), null, "getfirebasetoken", new FirebaseTokenResponseHandler(), "firebase");
+        String firebaseToken = identifiers.getFirebaseToken();
+        if (firebaseToken == null) {
+            return getToken(new HashMap<String, String>(), null, "getfirebasetoken", new FirebaseTokenResponseHandler(), "firebase");
+        }
+        return Observable.just(new FirebaseTokenResponseData(firebaseToken));
     }
 
     private <T> Observable<T> getToken(Map<String, String> logins, String identityId, String endpoint, ResponseHandler<T> responseHandler, String tokenType) {

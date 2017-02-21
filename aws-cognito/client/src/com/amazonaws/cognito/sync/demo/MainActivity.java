@@ -130,7 +130,7 @@ public class MainActivity extends Activity {
     }
 
     private Completable fetchCognitoToken() {
-        return Completable.create(new CognitoTokenTask(Cognito.INSTANCE.credentialsProvider(), identifiers.getUserName()));
+        return Completable.create(new CognitoTokenTask(Cognito.INSTANCE.credentialsProvider(), identifiers));
     }
 
     private Observable<String> accessCognitoResource() {
@@ -139,12 +139,15 @@ public class MainActivity extends Activity {
     }
 
     private Observable<String> fetchFirebaseToken() {
-        return apiClient.getFirebaseToken().map(new Function<FirebaseTokenResponseData, String>() {
-            @Override
-            public String apply(@NonNull FirebaseTokenResponseData response) throws Exception {
-                return response.getToken();
-            }
-        });
+        return apiClient.getFirebaseToken()
+                .map(new Function<FirebaseTokenResponseData, String>() {
+                    @Override
+                    public String apply(@NonNull FirebaseTokenResponseData response) throws Exception {
+                        String token = response.getToken();
+                        identifiers.registerFirebaseToken(token);
+                        return token;
+                    }
+                });
     }
 
     private Completable signInToFirebase(String token) {
