@@ -13,24 +13,13 @@
  * permissions and limitations under the License.
  */
 
-package com.amazonaws.cognito.sync.demo.client.cognito;
+package com.amazonaws.cognito.sync.demo.client.firebase;
 
-public class CognitoTokenResponseData {
-    private final String identityId;
+public class FirebaseTokenResponseData {
     private final String token;
 
-    public CognitoTokenResponseData() {
-        this.identityId = null;
-        this.token = null;
-    }
-
-    public CognitoTokenResponseData(final String identityId, final String token) {
-        this.identityId = identityId;
+    public FirebaseTokenResponseData(String token) {
         this.token = token;
-    }
-
-    public String getIdentityId() {
-        return this.identityId;
     }
 
     public String getToken() {

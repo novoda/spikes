@@ -32,9 +32,9 @@ import com.amazonaws.cognito.sync.demo.client.cognito.CognitoResourceAccessTask;
 import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenTask;
 import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseLogInTask;
 import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseResourceAccessTask;
-import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseTokenTask;
+import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseTokenResponseData;
 import com.amazonaws.cognito.sync.demo.client.login.LoginCredentials;
-import com.amazonaws.cognito.sync.demo.client.login.ServerLoginTask;
+import com.amazonaws.cognito.sync.demo.client.login.LoginResponseData;
 import com.amazonaws.regions.Regions;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -142,7 +142,12 @@ public class MainActivity extends Activity {
     }
 
     private Observable<String> fetchFirebaseToken() {
-        return Observable.create(new FirebaseTokenTask(apiClient));
+        return apiClient.getFirebaseToken().map(new Function<FirebaseTokenResponseData, String>() {
+            @Override
+            public String apply(@NonNull FirebaseTokenResponseData response) throws Exception {
+                return response.getToken();
+            }
+        });
     }
 
     private Completable signInToFirebase(String token) {
@@ -153,12 +158,19 @@ public class MainActivity extends Activity {
         return Observable.create(new FirebaseResourceAccessTask());
     }
 
-    private void login(String username, String password) {
+    private void login(final String username, String password) {
         Cognito.INSTANCE.credentialsProvider().clearCredentials();
         LoginCredentials loginCredentials = new LoginCredentials(username, password);
-        Observable.create(new ServerLoginTask(apiClient, identifiers, loginCredentials))
+        apiClient.login(username, loginCredentials.getPassword())
+                .map(new Function<LoginResponseData, String>() {
+                    @Override
+                    public String apply(@NonNull LoginResponseData login) throws Exception {
+                        identifiers.registerUser(username, login.getKey());
+                        return "User " + username + " logged in!";
+                    }
+                })
                 .compose(new AndroidExecutionStrategy<String>())
-                .subscribe();
+                .subscribe(new ToastObserver(this));
     }
 
     private void wipeData() {

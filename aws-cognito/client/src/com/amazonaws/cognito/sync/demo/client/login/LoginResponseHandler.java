@@ -16,7 +16,6 @@
 package com.amazonaws.cognito.sync.demo.client.login;
 
 import com.amazonaws.cognito.sync.demo.client.AESEncryption;
-import com.amazonaws.cognito.sync.demo.client.ResponseData;
 import com.amazonaws.cognito.sync.demo.client.ResponseHandler;
 import com.amazonaws.cognito.sync.demo.client.Utilities;
 
@@ -24,23 +23,19 @@ import java.io.IOException;
 
 import okhttp3.Response;
 
-public class LoginResponseHandler extends ResponseHandler {
+public class LoginResponseHandler implements ResponseHandler<LoginResponseData> {
     private final String decryptionKey;
 
     public LoginResponseHandler(final String decryptionKey) {
         this.decryptionKey = decryptionKey;
     }
 
-    public ResponseData handleResponse(Response response) throws IOException {
-        if (response.isSuccessful()) {
-            try {
-                String json = AESEncryption.unwrap(response.body().string(), this.decryptionKey.substring(0, 32));
-                return new LoginResponseData(Utilities.extractElement(json, "key"));
-            } catch (Exception e) {
-                throw new IOException(e);
-            }
-        } else {
-            return super.handleResponse(response);
+    public LoginResponseData handleResponse(Response response) throws IOException {
+        try {
+            String json = AESEncryption.unwrap(response.body().string(), this.decryptionKey.substring(0, 32));
+            return new LoginResponseData(Utilities.extractElement(json, "key"));
+        } catch (Exception e) {
+            throw new IOException(e);
         }
     }
 }

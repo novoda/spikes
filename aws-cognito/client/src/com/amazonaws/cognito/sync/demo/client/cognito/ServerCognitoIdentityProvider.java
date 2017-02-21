@@ -77,7 +77,7 @@ public class ServerCognitoIdentityProvider extends AWSAbstractCognitoDeveloperId
   }
 
   private CognitoTokenResponseData updateCognitoToken() {
-    CognitoTokenResponseData response = serverApiClient.getCognitoToken(this.loginsMap, identityId);
+    CognitoTokenResponseData response = serverApiClient.getCognitoToken(this.loginsMap, identityId).blockingFirst();
     update(response.getIdentityId(), response.getToken());
     return response;
   }

@@ -19,9 +19,8 @@ import java.io.IOException;
 
 import okhttp3.Response;
 
-public class ResponseHandler {
+public interface ResponseHandler<T> {
 
-    public ResponseData handleResponse(Response response) throws IOException {
-        return new ResponseData(response.code(), response.body().string());
-    }
+    T handleResponse(Response response) throws IOException;
+
 }

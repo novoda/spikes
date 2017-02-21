@@ -15,12 +15,12 @@
 
 package com.amazonaws.cognito.sync.demo.client;
 
-import android.util.Log;
-
 import com.amazonaws.cognito.sync.demo.Identifiers;
 import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenRequestData;
 import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenResponseData;
 import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenResponseHandler;
+import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseTokenResponseData;
+import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseTokenResponseHandler;
 import com.amazonaws.cognito.sync.demo.client.login.LoginRequestData;
 import com.amazonaws.cognito.sync.demo.client.login.LoginResponseData;
 import com.amazonaws.cognito.sync.demo.client.login.LoginResponseHandler;
@@ -29,14 +29,18 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.BiPredicate;
+import io.reactivex.functions.Function;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 public class ServerApiClient {
-
-    private static final String LOG_TAG = "ServerApiClient";
 
     private final String baseUrl;
     private final String appName;
@@ -50,42 +54,30 @@ public class ServerApiClient {
         client = new OkHttpClient();
     }
 
-    private ResponseData sendRequest(String url, ResponseHandler reponseHandler) throws IOException {
-        Log.i(LOG_TAG, "Sending Request : [" + url + "]");
-
-        Request request = new Request.Builder().url(url).build();
-        Response response = client.newCall(request).execute();
-
-        return reponseHandler.handleResponse(response);
+    public Observable<CognitoTokenResponseData> getCognitoToken(Map<String, String> logins, String identityId) {
+        String key = identifiers.getKeyForDevice();
+        return getToken(logins, identityId, "gettoken", new CognitoTokenResponseHandler(key), "cognito");
     }
 
-    private ResponseData getToken(Map<String, String> logins, String identityId, String endpoint, ResponseHandler responseHandler) {
+    public Observable<FirebaseTokenResponseData> getFirebaseToken() {
+        return getToken(new HashMap<String, String>(), null, "getfirebasetoken", new FirebaseTokenResponseHandler(), "firebase");
+    }
+
+    private <T> Observable<T> getToken(Map<String, String> logins, String identityId, String endpoint, ResponseHandler<T> responseHandler, String tokenType) {
         String uid = identifiers.getUidForDevice();
         String key = identifiers.getKeyForDevice();
-
         RequestData getTokenRequestData = new CognitoTokenRequestData(baseUrl, endpoint, uid, key, logins, identityId);
-
-        // TODO: You can cache the open id token as you will have the control
-        // over the duration of the token when it is issued. Caching can reduce
-        // the communication required between the app and your backend
-        return processRequest(getTokenRequestData, responseHandler);
+        ErrorToMessageConverter messageConverter = new ErrorToMessageConverter("Can't fetch " + tokenType + " token, did you log in to the server before?");
+        return execute(getTokenRequestData, responseHandler, new HttpErrorInterceptor(messageConverter));
     }
 
-    public CognitoTokenResponseData getCognitoToken(Map<String, String> logins, String identityId) {
-        String key = identifiers.getKeyForDevice();
-        return (CognitoTokenResponseData) getToken(logins, identityId, "gettoken", new CognitoTokenResponseHandler(key));
-    }
-
-    public ResponseData getFirebaseToken() {
-        return getToken(new HashMap<String, String>(), null, "getfirebasetoken", new ResponseHandler());
-    }
-
-    public LoginResponseData login(String username, String password) {
+    public Observable<LoginResponseData> login(String username, String password) {
         String uid = identifiers.getUidForDevice();
         String decryptionKey = computeDecryptionKey(username, password, baseUrl);
         LoginRequestData loginRequest = new LoginRequestData(baseUrl, uid, username, decryptionKey);
-        ResponseHandler handler = new LoginResponseHandler(decryptionKey);
-        return ((LoginResponseData) processRequest(loginRequest, handler));
+        ResponseHandler<LoginResponseData> handler = new LoginResponseHandler(decryptionKey);
+        ErrorToMessageConverter messageConverter = new ErrorToMessageConverter("Can't login user: " + username);
+        return execute(loginRequest, handler, new HttpErrorInterceptor(messageConverter));
     }
 
     private String computeDecryptionKey(String username, String password, String baseUrl) {
@@ -93,26 +85,41 @@ public class ServerApiClient {
         return Utilities.getSignature(salt, password);
     }
 
-    private ResponseData processRequest(RequestData requestData, ResponseHandler handler) {
-        ResponseData responseData = null;
-        int retries = 2;
-        do {
-            try {
-                responseData = sendRequest(requestData.buildRequestUrl(), handler);
-                if (responseData.requestWasSuccessful()) {
-                    return responseData;
-                } else {
-                    Log.w(LOG_TAG,
-                            "Request to Cognito Sample Developer Authentication Application failed with Code: ["
-                                    + responseData.getResponseCode() + "] Message: ["
-                                    + responseData.getResponseMessage() + "]");
-                }
-            } catch (IOException e) {
-                Log.e(LOG_TAG, "while processing request", e);
-            }
-        } while (retries-- > 0);
+    private <T> Observable<T> execute(RequestData requestData, ResponseHandler<T> handler, HttpErrorInterceptor errorInterceptor) {
+        return tryExecute(requestData, handler, errorInterceptor)
+                .retry(new BiPredicate<Integer, Throwable>() {
+                    @Override
+                    public boolean test(@NonNull Integer attempts, @NonNull Throwable throwable) throws Exception {
+                        return attempts < 2;
+                    }
+                });
+    }
 
-        return responseData;
+    private <T> Observable<T> tryExecute(RequestData requestData, final ResponseHandler<T> handler, HttpErrorInterceptor errorInterceptor) {
+        Request request = new Request.Builder().url(requestData.buildRequestUrl()).build();
+        return send(request)
+                .flatMap(errorInterceptor)
+                .map(new Function<Response, T>() {
+                    @Override
+                    public T apply(@NonNull Response response) throws Exception {
+                        return handler.handleResponse(response);
+                    }
+                });
+    }
+
+    private Observable<Response> send(final Request request) {
+        return Observable.create(new ObservableOnSubscribe<Response>() {
+            @Override
+            public void subscribe(ObservableEmitter<Response> emitter) throws Exception {
+                try {
+                    Response response = client.newCall(request).execute();
+                    emitter.onNext(response);
+                    emitter.onComplete();
+                } catch (IOException e) {
+                    emitter.onError(e);
+                }
+            }
+        });
     }
 
 }

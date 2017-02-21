@@ -16,7 +16,6 @@
 package com.amazonaws.cognito.sync.demo.client.cognito;
 
 import com.amazonaws.cognito.sync.demo.client.AESEncryption;
-import com.amazonaws.cognito.sync.demo.client.ResponseData;
 import com.amazonaws.cognito.sync.demo.client.ResponseHandler;
 import com.amazonaws.cognito.sync.demo.client.Utilities;
 
@@ -24,7 +23,7 @@ import java.io.IOException;
 
 import okhttp3.Response;
 
-public class CognitoTokenResponseHandler extends ResponseHandler {
+public class CognitoTokenResponseHandler implements ResponseHandler<CognitoTokenResponseData> {
 
     private final String key;
 
@@ -33,7 +32,7 @@ public class CognitoTokenResponseHandler extends ResponseHandler {
     }
 
     @Override
-    public ResponseData handleResponse(Response response) throws IOException {
+    public CognitoTokenResponseData handleResponse(Response response) throws IOException {
         if (response.isSuccessful()) {
             try {
                 String json = AESEncryption.unwrap(response.body().string(), this.key);
@@ -44,7 +43,7 @@ public class CognitoTokenResponseHandler extends ResponseHandler {
                 throw new IOException(exception);
             }
         } else {
-            return new CognitoTokenResponseData(response.code(), response.body().string());
+            return new CognitoTokenResponseData();
         }
     }
 

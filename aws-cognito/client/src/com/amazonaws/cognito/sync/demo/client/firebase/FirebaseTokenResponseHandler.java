@@ -13,27 +13,20 @@
  * permissions and limitations under the License.
  */
 
-package com.amazonaws.cognito.sync.demo.client.cognito;
+package com.amazonaws.cognito.sync.demo.client.firebase;
 
-public class CognitoTokenResponseData {
-    private final String identityId;
-    private final String token;
+import com.amazonaws.cognito.sync.demo.client.ResponseHandler;
 
-    public CognitoTokenResponseData() {
-        this.identityId = null;
-        this.token = null;
+import java.io.IOException;
+
+import okhttp3.Response;
+
+public class FirebaseTokenResponseHandler implements ResponseHandler<FirebaseTokenResponseData> {
+
+    @Override
+    public FirebaseTokenResponseData handleResponse(Response response) throws IOException {
+        String token = response.body().string();
+        return new FirebaseTokenResponseData(token);
     }
 
-    public CognitoTokenResponseData(final String identityId, final String token) {
-        this.identityId = identityId;
-        this.token = token;
-    }
-
-    public String getIdentityId() {
-        return this.identityId;
-    }
-
-    public String getToken() {
-        return this.token;
-    }
 }
