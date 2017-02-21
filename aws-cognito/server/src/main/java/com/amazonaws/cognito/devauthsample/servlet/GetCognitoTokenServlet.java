@@ -75,7 +75,7 @@ public class GetCognitoTokenServlet extends RootServlet {
             authSample.validateTokenRequest(uid, signature, timestamp, stringToSign.toString());
 
             log.info("get token for device: " + uid);
-            String data = authSample.getToken(uid, logins, identityId);
+            String data = authSample.getCognitoToken(uid, logins, identityId);
             sendOKResponse(response, data);
         } catch (MissingParameterException e) {
             log.warning("Missing parameter: " + e.getMessage() + ". Setting Http status code "

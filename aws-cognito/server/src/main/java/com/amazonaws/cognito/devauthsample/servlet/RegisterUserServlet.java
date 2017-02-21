@@ -81,6 +81,5 @@ public class RegisterUserServlet extends RootServlet {
         response.setStatus(HttpServletResponse.SC_OK);
         log.info(String.format("User [%s] registered successfully", username));
         forward(request, response, "/jsp/register-success");
-        return;
     }
 }

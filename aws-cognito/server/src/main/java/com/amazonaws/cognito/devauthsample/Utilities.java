@@ -34,12 +34,20 @@ public class Utilities {
     private static final String SIGNATURE_METHOD = "HmacSHA256";
     private static final Logger log = SampleLogger.getLogger();
 
-    public static String prepareJsonResponseForTokens(GetOpenIdTokenForDeveloperIdentityResult result, String key) {
-
+    public static String prepareCognitoJsonResponseForTokens(GetOpenIdTokenForDeveloperIdentityResult result, String key) {
         String body = "{" +
                 "\t\"identityPoolId\": \"" + Configuration.IDENTITY_POOL_ID + "\"," +
                 "\t\"identityId\": \"" + result.getIdentityId() + "\"," +
                 "\t\"token\": \"" + result.getToken() + "\"," +
+                "}";
+
+        // Encrypting the response
+        return AESEncryption.wrap(body, key);
+    }
+
+    public static String prepareFirebaseJsonResponseForToken(String token, String key) {
+        String body = "{" +
+                "\t\"token\": \"" + token + "\"" +
                 "}";
 
         // Encrypting the response

@@ -21,7 +21,6 @@ import com.amazonaws.cognito.devauthsample.exception.UnauthorizedException;
 import com.amazonaws.cognito.devauthsample.identity.DeviceAuthentication;
 import com.amazonaws.cognito.devauthsample.identity.UserAuthentication;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.tasks.OnSuccessListener;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -81,20 +80,9 @@ public class GetFirebaseTokenServlet extends RootServlet {
             authSample.validateTokenRequest(uid, signature, timestamp, stringToSign.toString());
 
             log.info("get token for device: " + uid);
-            DeviceAuthentication.DeviceInfo deviceInfo = authSample.ensureKnownDevice(uid);
-            UserAuthentication.UserInfo userInfo = authSample.ensureKnownUser(deviceInfo.getUsername());
 
-            CountDownLatch countDownLatch = new CountDownLatch(1);
-            final String[] token = new String[1];
-            FirebaseAuth.getInstance().createCustomToken(uid)
-                    .addOnSuccessListener(customToken -> {
-                        // Send token back to client
-                        token[0] = customToken;
-                        log.info("received token: " + customToken + " *");
-                        countDownLatch.countDown();
-                    });
-            countDownLatch.await(10, TimeUnit.SECONDS);
-            sendOKResponse(response, token[0]);
+            final String token = authSample.getFirebaseToken(uid);
+            sendOKResponse(response, token);
         } catch (MissingParameterException e) {
             log.warning("Missing parameter: " + e.getMessage() + ". Setting Http status code "
                     + HttpServletResponse.SC_BAD_REQUEST);
@@ -112,4 +100,5 @@ public class GetFirebaseTokenServlet extends RootServlet {
 
         log.info("leaving get token request");
     }
+
 }

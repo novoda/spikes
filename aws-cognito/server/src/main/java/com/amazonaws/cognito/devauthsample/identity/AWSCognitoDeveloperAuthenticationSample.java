@@ -25,11 +25,14 @@ import com.amazonaws.cognito.devauthsample.identity.DeviceAuthentication.DeviceI
 import com.amazonaws.cognito.devauthsample.identity.UserAuthentication.UserInfo;
 import com.amazonaws.services.cognitoidentity.model.GetOpenIdTokenForDeveloperIdentityResult;
 import com.amazonaws.util.DateUtils;
+import com.google.firebase.auth.FirebaseAuth;
 import org.apache.commons.codec.binary.Hex;
 
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 /**
@@ -154,7 +157,7 @@ public class AWSCognitoDeveloperAuthenticationSample {
      * @return encrypted tokens as JSON object
      * @throws Exception
      */
-    public String getToken(String uid, Map<String, String> logins, String identityId)
+    public String getCognitoToken(String uid, Map<String, String> logins, String identityId)
             throws Exception {
 
         DeviceInfo device = ensureKnownDevice(uid);
@@ -168,7 +171,24 @@ public class AWSCognitoDeveloperAuthenticationSample {
         GetOpenIdTokenForDeveloperIdentityResult result = byoiManagement.getTokenFromCognito(user.getUsername(), logins, identityId);
 
         log.info("Generating session tokens for UID : " + uid);
-        return Utilities.prepareJsonResponseForTokens(result, device.getKey());
+        return Utilities.prepareCognitoJsonResponseForTokens(result, device.getKey());
+    }
+
+    public String getFirebaseToken(String uid) throws DataAccessException, UnauthorizedException, InterruptedException {
+        DeviceAuthentication.DeviceInfo deviceInfo = ensureKnownDevice(uid);
+        UserAuthentication.UserInfo userInfo = ensureKnownUser(deviceInfo.getUsername());
+
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        final String[] token = new String[1];
+        FirebaseAuth.getInstance().createCustomToken(uid)
+                .addOnSuccessListener(customToken -> {
+                    // Send token back to client
+                    token[0] = customToken;
+                    log.info("received token: " + customToken + " *");
+                    countDownLatch.countDown();
+                });
+        countDownLatch.await(10, TimeUnit.SECONDS);
+        return Utilities.prepareFirebaseJsonResponseForToken(token[0], deviceInfo.getKey());
     }
 
     public UserInfo ensureKnownUser(String username) throws DataAccessException, UnauthorizedException {
