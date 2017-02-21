@@ -65,8 +65,9 @@ public class ServerApiClient {
 
     public Observable<FirebaseTokenResponseData> getFirebaseToken() {
         String firebaseToken = identifiers.getFirebaseToken();
+        String key = identifiers.getKeyForDevice();
         if (firebaseToken == null) {
-            return getToken(new HashMap<String, String>(), null, "getfirebasetoken", new FirebaseTokenResponseHandler(), "firebase");
+            return getToken(new HashMap<String, String>(), null, "getfirebasetoken", new FirebaseTokenResponseHandler(key), "firebase");
         }
         return Observable.just(new FirebaseTokenResponseData(firebaseToken));
     }

@@ -15,15 +15,29 @@
 
 package com.amazonaws.cognito.sync.demo.client.firebase;
 
+import com.amazonaws.cognito.sync.demo.client.AESEncryption;
 import com.amazonaws.cognito.sync.demo.client.ResponseHandler;
+import com.amazonaws.cognito.sync.demo.client.Utilities;
 
 import java.io.IOException;
 
 public class FirebaseTokenResponseHandler implements ResponseHandler<FirebaseTokenResponseData> {
 
+    private final String key;
+
+    public FirebaseTokenResponseHandler(String key) {
+        this.key = key;
+    }
+
     @Override
     public FirebaseTokenResponseData handleResponse(String response) throws IOException {
-        return new FirebaseTokenResponseData(response);
+        try {
+            String json = AESEncryption.unwrap(response, key);
+            String token = Utilities.extractElement(json, "token");
+            return new FirebaseTokenResponseData(token);
+        } catch (Exception exception) {
+            throw new IOException(exception);
+        }
     }
 
 }
