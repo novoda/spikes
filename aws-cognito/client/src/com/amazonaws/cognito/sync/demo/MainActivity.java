@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amazonaws.cognito.sync.demo.client.AndroidExecutionStrategy;
 import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
@@ -33,7 +34,6 @@ import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenTask;
 import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseLogInTask;
 import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseResourceAccessTask;
 import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseTokenResponseData;
-import com.amazonaws.cognito.sync.demo.client.login.LoginCredentials;
 import com.amazonaws.cognito.sync.demo.client.login.LoginResponseData;
 import com.amazonaws.regions.Regions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -83,10 +83,7 @@ public class MainActivity extends Activity {
                         String username = txtUsername.getText().toString();
                         String password = txtPassword.getText().toString();
                         if (username.isEmpty() || password.isEmpty()) {
-                            new AlertDialog.Builder(MainActivity.this)
-                                    .setTitle("Login error")
-                                    .setMessage("Username or password cannot be empty!!")
-                                    .show();
+                            Toast.makeText(MainActivity.this, "username or password cannot be empty!!", Toast.LENGTH_LONG).show();
                         } else {
                             login(username, password);
                         }
@@ -160,8 +157,7 @@ public class MainActivity extends Activity {
 
     private void login(final String username, String password) {
         Cognito.INSTANCE.credentialsProvider().clearCredentials();
-        LoginCredentials loginCredentials = new LoginCredentials(username, password);
-        apiClient.login(username, loginCredentials.getPassword())
+        apiClient.login(username, password)
                 .map(new Function<LoginResponseData, String>() {
                     @Override
                     public String apply(@NonNull LoginResponseData login) throws Exception {

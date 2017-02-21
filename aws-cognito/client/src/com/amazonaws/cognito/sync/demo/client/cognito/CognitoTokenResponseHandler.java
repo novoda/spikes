@@ -32,7 +32,7 @@ public class CognitoTokenResponseHandler implements ResponseHandler<CognitoToken
     @Override
     public CognitoTokenResponseData handleResponse(String response) throws IOException {
         try {
-            String json = AESEncryption.unwrap(response, this.key);
+            String json = AESEncryption.unwrap(response, key);
             String identityId = Utilities.extractElement(json, "identityId");
             String token = Utilities.extractElement(json, "token");
             return new CognitoTokenResponseData(identityId, token);

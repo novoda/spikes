@@ -19,11 +19,6 @@ public class CognitoTokenResponseData {
     private final String identityId;
     private final String token;
 
-    public CognitoTokenResponseData() {
-        this.identityId = null;
-        this.token = null;
-    }
-
     public CognitoTokenResponseData(final String identityId, final String token) {
         this.identityId = identityId;
         this.token = token;
