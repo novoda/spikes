@@ -1,12 +1,12 @@
 /**
  * Copyright 2010-2014 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
  * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
+ * <p>
+ * http://aws.amazon.com/apache2.0
+ * <p>
  * or in the "license" file accompanying this file. This file is distributed
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
@@ -21,8 +21,6 @@ import com.amazonaws.cognito.sync.demo.client.Utilities;
 
 import java.io.IOException;
 
-import okhttp3.Response;
-
 public class CognitoTokenResponseHandler implements ResponseHandler<CognitoTokenResponseData> {
 
     private final String key;
@@ -32,18 +30,14 @@ public class CognitoTokenResponseHandler implements ResponseHandler<CognitoToken
     }
 
     @Override
-    public CognitoTokenResponseData handleResponse(Response response) throws IOException {
-        if (response.isSuccessful()) {
-            try {
-                String json = AESEncryption.unwrap(response.body().string(), this.key);
-                String identityId = Utilities.extractElement(json, "identityId");
-                String token = Utilities.extractElement(json, "token");
-                return new CognitoTokenResponseData(identityId, token);
-            } catch (Exception exception) {
-                throw new IOException(exception);
-            }
-        } else {
-            return new CognitoTokenResponseData();
+    public CognitoTokenResponseData handleResponse(String response) throws IOException {
+        try {
+            String json = AESEncryption.unwrap(response, this.key);
+            String identityId = Utilities.extractElement(json, "identityId");
+            String token = Utilities.extractElement(json, "token");
+            return new CognitoTokenResponseData(identityId, token);
+        } catch (Exception exception) {
+            throw new IOException(exception);
         }
     }
 

@@ -22,10 +22,7 @@ public class CognitoTokenTask implements CompletableOnSubscribe {
     public void subscribe(CompletableEmitter e) throws Exception {
         ServerCognitoIdentityProvider identityProvider = (ServerCognitoIdentityProvider) credentialsProvider.getIdentityProvider();
         addLogins(username, identityProvider.getProviderName());
-        String token = credentialsProvider.getIdentityProvider().refresh();
-        if (token == null) {
-            e.onError(new RuntimeException("Can't fetch cognito token, did you log in to the custom server first?"));
-        }
+        credentialsProvider.getIdentityProvider().refresh();
         e.onComplete();
     }
 

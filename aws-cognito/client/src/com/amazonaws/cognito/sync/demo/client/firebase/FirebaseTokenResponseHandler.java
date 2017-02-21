@@ -19,14 +19,11 @@ import com.amazonaws.cognito.sync.demo.client.ResponseHandler;
 
 import java.io.IOException;
 
-import okhttp3.Response;
-
 public class FirebaseTokenResponseHandler implements ResponseHandler<FirebaseTokenResponseData> {
 
     @Override
-    public FirebaseTokenResponseData handleResponse(Response response) throws IOException {
-        String token = response.body().string();
-        return new FirebaseTokenResponseData(token);
+    public FirebaseTokenResponseData handleResponse(String response) throws IOException {
+        return new FirebaseTokenResponseData(response);
     }
 
 }

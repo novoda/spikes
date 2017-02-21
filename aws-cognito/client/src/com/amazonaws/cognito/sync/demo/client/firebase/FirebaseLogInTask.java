@@ -16,7 +16,6 @@
 package com.amazonaws.cognito.sync.demo.client.firebase;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -43,9 +42,7 @@ public class FirebaseLogInTask implements CompletableOnSubscribe {
                         if (task.isSuccessful()) {
                             emitter.onComplete();
                         } else {
-                            Exception exception = task.getException();
-                            Log.e("FirebaseAuthentication", "signInWithCustomToken failed!", exception);
-                            emitter.onError(exception);
+                            emitter.onError(task.getException());
                         }
                     }
                 });

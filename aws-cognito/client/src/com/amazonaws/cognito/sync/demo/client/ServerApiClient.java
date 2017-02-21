@@ -102,7 +102,7 @@ public class ServerApiClient {
                 .map(new Function<Response, T>() {
                     @Override
                     public T apply(@NonNull Response response) throws Exception {
-                        return handler.handleResponse(response);
+                        return handler.handleResponse(response.body().string());
                     }
                 });
     }
