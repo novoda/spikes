@@ -17,24 +17,22 @@ package com.amazonaws.cognito.sync.demo;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amazonaws.cognito.sync.demo.client.server.AndroidExecutionStrategy;
-import com.amazonaws.cognito.sync.demo.client.server.ServerApiClient;
 import com.amazonaws.cognito.sync.demo.client.cognito.Cognito;
 import com.amazonaws.cognito.sync.demo.client.cognito.CognitoResourceAccessTask;
 import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenTask;
 import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseLogInTask;
 import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseResourceAccessTask;
 import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseTokenResponseData;
+import com.amazonaws.cognito.sync.demo.client.server.AndroidExecutionStrategy;
 import com.amazonaws.cognito.sync.demo.client.server.LoginResponseData;
+import com.amazonaws.cognito.sync.demo.client.server.ServerApiClient;
 import com.amazonaws.regions.Regions;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -58,132 +56,51 @@ public class MainActivity extends Activity {
         apiClient = ((AuthApplication) getApplication()).getApiClient();
         identifiers = ((AuthApplication) getApplication()).getIdentifiers();
 
-        Button btnLogin = (Button) findViewById(R.id.btnLogin);
-        btnLogin.setOnClickListener(new OnClickListener() {
+        findViewById(R.id.btnLogin).setOnClickListener(showLoginDialog());
+        findViewById(R.id.btnAccessResourceCognito).setOnClickListener(triggerAccessToCognitoResource());
+        findViewById(R.id.btnAccessFirebaseResource).setOnClickListener(triggerAccessToFirebaseResource());
+        findViewById(R.id.btnWipedata).setOnClickListener(showWipeConfirmationDialog());
+    }
+
+    private OnClickListener showLoginDialog() {
+        return new OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Dialog dialog = new Dialog(MainActivity.this);
-                dialog.setContentView(R.layout.login_dialog);
-                dialog.setTitle("Sample developer dialog");
-                final TextView txtUsername = (TextView) dialog.findViewById(R.id.txtUsername);
-                txtUsername.setHint("Username");
-                final TextView txtPassword = (TextView) dialog.findViewById(R.id.txtPassword);
-                txtPassword.setHint("Password");
-                Button btnOk = (Button) dialog.findViewById(R.id.btnLogin);
-                Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
-
-                btnCancel.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-
-                btnOk.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String username = txtUsername.getText().toString();
-                        String password = txtPassword.getText().toString();
-                        if (username.isEmpty() || password.isEmpty()) {
-                            Toast.makeText(MainActivity.this, "username or password cannot be empty!!", Toast.LENGTH_LONG).show();
-                        } else {
-                            login(username, password);
-                        }
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
+                View layout = getLayoutInflater().inflate(R.layout.login_dialog, null);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                dialog.setView(layout);
+                dialog.setTitle("Sample developer login");
+                String username = extractTextFrom(layout, R.id.txtUsername);
+                String password = extractTextFrom(layout, R.id.txtPassword);
+                dialog.setPositiveButton("Login", triggerLogin(username, password));
+                dialog.setNegativeButton("Cancel", null);
+                dialog.create().show();
             }
-        });
+        };
+    }
 
-        findViewById(R.id.btnAccessFirebaseResource).setOnClickListener(
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        fetchFirebaseToken()
-                                .flatMapCompletable(new Function<String, CompletableSource>() {
-                                    @Override
-                                    public CompletableSource apply(@NonNull String token) throws Exception {
-                                        return signInToFirebase(token);
-                                    }
-                                })
-                                .andThen(accessFirebaseResource())
-                                .compose(new AndroidExecutionStrategy<String>())
-                                .subscribe(new ToastObserver(MainActivity.this));
-                    }
-                });
+    private String extractTextFrom(View view, int textViewResourceId) {
+        return ((TextView) view.findViewById(textViewResourceId)).getText().toString();
+    }
 
-        findViewById(R.id.btnAccessResourceCognito).setOnClickListener(new OnClickListener() {
+    private DialogInterface.OnClickListener triggerLogin(final String username, final String password) {
+        return new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                fetchCognitoToken()
-                        .doOnNext(new Consumer<String>() {
-                            @Override
-                            public void accept(@NonNull String token) throws Exception {
-                                identifiers.registerCognitoToken(token);
-                            }
-                        })
-                        .flatMap(new Function<String, ObservableSource<String>>() {
-                            @Override
-                            public ObservableSource<String> apply(@NonNull String s) throws Exception {
-                                return accessCognitoResource();
-                            }
-                        })
-                        .compose(new AndroidExecutionStrategy<String>())
-                        .subscribe(new ToastObserver(MainActivity.this));
+            public void onClick(DialogInterface dialog, int which) {
+                if (username.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "username or password cannot be empty!", Toast.LENGTH_LONG).show();
+                } else {
+                    login(username, password);
+                }
+                dialog.dismiss();
             }
-        });
-
-        findViewById(R.id.btnWipedata).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                wipeData();
-            }
-        });
-    }
-
-    private Observable<String> fetchCognitoToken() {
-        return Observable.create(new CognitoTokenTask(Cognito.INSTANCE.credentialsProvider(), identifiers.getUserName()));
-    }
-
-    private Observable<String> accessCognitoResource() {
-        Regions region = Regions.fromName(BuildConfig.REGION);
-        return Observable.create(new CognitoResourceAccessTask(getApplicationContext(), Cognito.INSTANCE.credentialsProvider(), region));
-    }
-
-    private Observable<String> fetchFirebaseToken() {
-        return apiClient.getFirebaseToken(identifiers.getFirebaseToken(), identifiers.getKeyForDevice())
-                .map(new Function<FirebaseTokenResponseData, String>() {
-                    @Override
-                    public String apply(@NonNull FirebaseTokenResponseData response) throws Exception {
-                        return response.getToken();
-                    }
-                })
-                .doOnNext(new Consumer<String>() {
-                    @Override
-                    public void accept(@NonNull String token) throws Exception {
-                        identifiers.registerFirebaseToken(token);
-                    }
-                });
-    }
-
-    private Completable signInToFirebase(String token) {
-        return Completable.create(new FirebaseLogInTask(token));
-    }
-
-    private Observable<String> accessFirebaseResource() {
-        return Observable.create(new FirebaseResourceAccessTask());
+        };
     }
 
     private void login(final String username, String password) {
         Cognito.INSTANCE.credentialsProvider().clearCredentials();
         apiClient.login(username, password, identifiers.getUidForDevice())
-                .doOnNext(new Consumer<LoginResponseData>() {
-                    @Override
-                    public void accept(@NonNull LoginResponseData login) throws Exception {
-                        identifiers.registerUser(username, login.getKey());
-                    }
-                })
+                .doOnNext(saveUserInformations(username))
                 .map(new Function<LoginResponseData, String>() {
                     @Override
                     public String apply(@NonNull LoginResponseData login) throws Exception {
@@ -194,25 +111,116 @@ public class MainActivity extends Activity {
                 .subscribe(new ToastObserver(this));
     }
 
-    private void wipeData() {
-        new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Wipe data?")
-                .setMessage("This will log off your current session and wipe all user data. Any data not synchronized will be lost.")
-                .setPositiveButton("Yes", wipeListener())
-                .setNegativeButton("No", cancelListener())
-                .show();
-    }
-
-    private DialogInterface.OnClickListener cancelListener() {
-        return new DialogInterface.OnClickListener() {
+    private Consumer<LoginResponseData> saveUserInformations(final String username) {
+        return new Consumer<LoginResponseData>() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+            public void accept(@NonNull LoginResponseData login) throws Exception {
+                identifiers.registerUser(username, login.getKey());
             }
         };
     }
 
-    private DialogInterface.OnClickListener wipeListener() {
+    private OnClickListener triggerAccessToCognitoResource() {
+        return new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fetchCognitoToken()
+                        .doOnNext(saveCognitoToken())
+                        .flatMap(accessCognitoResource())
+                        .compose(new AndroidExecutionStrategy<String>())
+                        .subscribe(new ToastObserver(MainActivity.this));
+            }
+        };
+    }
+
+    private Consumer<String> saveCognitoToken() {
+        return new Consumer<String>() {
+            @Override
+            public void accept(@NonNull String token) throws Exception {
+                identifiers.registerCognitoToken(token);
+            }
+        };
+    }
+
+    private Observable<String> fetchCognitoToken() {
+        return Observable.create(new CognitoTokenTask(Cognito.INSTANCE.credentialsProvider(), identifiers.getUserName()));
+    }
+
+    private Function<String, ObservableSource<String>> accessCognitoResource() {
+        return new Function<String, ObservableSource<String>>() {
+            @Override
+            public ObservableSource<String> apply(@NonNull String ignore) throws Exception {
+                CognitoResourceAccessTask source = new CognitoResourceAccessTask(getApplicationContext(), Cognito.INSTANCE.credentialsProvider(), Regions.fromName(BuildConfig.REGION));
+                return Observable.create(source);
+            }
+        };
+    }
+
+    private OnClickListener triggerAccessToFirebaseResource() {
+        return new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fetchFirebaseToken()
+                        .flatMapCompletable(signInToFirebase())
+                        .andThen(accessFirebaseResource())
+                        .compose(new AndroidExecutionStrategy<String>())
+                        .subscribe(new ToastObserver(MainActivity.this));
+            }
+        };
+    }
+
+    private Observable<String> fetchFirebaseToken() {
+        return apiClient.getFirebaseToken(identifiers.getFirebaseToken(), identifiers.getKeyForDevice())
+                .map(toTokenOnly())
+                .doOnNext(saveFirebaseToken());
+    }
+
+    private Function<FirebaseTokenResponseData, String> toTokenOnly() {
+        return new Function<FirebaseTokenResponseData, String>() {
+            @Override
+            public String apply(@NonNull FirebaseTokenResponseData response) throws Exception {
+                return response.getToken();
+            }
+        };
+    }
+
+    private Consumer<String> saveFirebaseToken() {
+        return new Consumer<String>() {
+            @Override
+            public void accept(@NonNull String token) throws Exception {
+                identifiers.registerFirebaseToken(token);
+            }
+        };
+    }
+
+    private Function<String, CompletableSource> signInToFirebase() {
+        return new Function<String, CompletableSource>() {
+            @Override
+            public CompletableSource apply(@NonNull String token) throws Exception {
+                return Completable.create(new FirebaseLogInTask(token));
+            }
+        };
+    }
+
+    private Observable<String> accessFirebaseResource() {
+        return Observable.create(new FirebaseResourceAccessTask());
+    }
+
+    private OnClickListener showWipeConfirmationDialog() {
+        return new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Wipe data?")
+                        .setMessage("This will log off your current session and wipe all user data. Any data not synchronized will be lost.")
+                        .setPositiveButton("Yes", triggerDataWipe())
+                        .setNegativeButton("No", null)
+                        .show();
+            }
+        };
+    }
+
+    private DialogInterface.OnClickListener triggerDataWipe() {
         return new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

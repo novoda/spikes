@@ -12,40 +12,17 @@
         android:id="@+id/txtUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Username"
         android:inputType="text" >
-
-        <requestFocus>
-        </requestFocus>
+        <requestFocus/>
     </EditText>
 
     <EditText
         android:id="@+id/txtPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+      android:hint="Password"
         android:inputType="textPassword" >
     </EditText>
-
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum ="1.0">
-
-        <Button
-            android:id="@+id/btnCancel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="Cancel" >
-        </Button>
-
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="Login" >
-        </Button>
-    </LinearLayout>
 
 </LinearLayout>
