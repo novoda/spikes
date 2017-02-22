@@ -60,9 +60,7 @@ public class ServerApiClient {
         return Observable.just(new CognitoTokenResponseData(identityId, token));
     }
 
-    public Observable<FirebaseTokenResponseData> getFirebaseToken() {
-        String firebaseToken = identifiers.getFirebaseToken();
-        String key = identifiers.getKeyForDevice();
+    public Observable<FirebaseTokenResponseData> getFirebaseToken(String firebaseToken, String key) {
         if (firebaseToken == null) {
             return getToken(new HashMap<String, String>(), null, "getfirebasetoken", new FirebaseTokenResponseHandler(key), "firebase");
         }
@@ -77,8 +75,7 @@ public class ServerApiClient {
         return execute(getTokenRequestData, responseHandler, new HttpErrorInterceptor(messageConverter));
     }
 
-    public Observable<LoginResponseData> login(String username, String password) {
-        String uid = identifiers.getUidForDevice();
+    public Observable<LoginResponseData> login(String username, String password, String uid) {
         String decryptionKey = computeDecryptionKey(username, password, baseUrl);
         LoginRequestData loginRequest = new LoginRequestData(baseUrl, uid, username, decryptionKey);
         ResponseHandler<LoginResponseData> handler = new LoginResponseHandler(decryptionKey);

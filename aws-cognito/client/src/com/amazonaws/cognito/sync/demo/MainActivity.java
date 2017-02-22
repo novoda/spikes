@@ -41,7 +41,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import io.reactivex.Completable;
 import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
 public class MainActivity extends Activity {
@@ -115,7 +117,18 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 fetchCognitoToken()
-                        .andThen(accessCognitoResource())
+                        .doOnNext(new Consumer<String>() {
+                            @Override
+                            public void accept(@NonNull String token) throws Exception {
+                                identifiers.registerCognitoToken(token);
+                            }
+                        })
+                        .flatMap(new Function<String, ObservableSource<String>>() {
+                            @Override
+                            public ObservableSource<String> apply(@NonNull String s) throws Exception {
+                                return accessCognitoResource();
+                            }
+                        })
                         .compose(new AndroidExecutionStrategy<String>())
                         .subscribe(new ToastObserver(MainActivity.this));
             }
@@ -129,8 +142,8 @@ public class MainActivity extends Activity {
         });
     }
 
-    private Completable fetchCognitoToken() {
-        return Completable.create(new CognitoTokenTask(Cognito.INSTANCE.credentialsProvider(), identifiers));
+    private Observable<String> fetchCognitoToken() {
+        return Observable.create(new CognitoTokenTask(Cognito.INSTANCE.credentialsProvider(), identifiers.getUserName()));
     }
 
     private Observable<String> accessCognitoResource() {
@@ -139,13 +152,17 @@ public class MainActivity extends Activity {
     }
 
     private Observable<String> fetchFirebaseToken() {
-        return apiClient.getFirebaseToken()
+        return apiClient.getFirebaseToken(identifiers.getFirebaseToken(), identifiers.getKeyForDevice())
                 .map(new Function<FirebaseTokenResponseData, String>() {
                     @Override
                     public String apply(@NonNull FirebaseTokenResponseData response) throws Exception {
-                        String token = response.getToken();
+                        return response.getToken();
+                    }
+                })
+                .doOnNext(new Consumer<String>() {
+                    @Override
+                    public void accept(@NonNull String token) throws Exception {
                         identifiers.registerFirebaseToken(token);
-                        return token;
                     }
                 });
     }
@@ -160,11 +177,16 @@ public class MainActivity extends Activity {
 
     private void login(final String username, String password) {
         Cognito.INSTANCE.credentialsProvider().clearCredentials();
-        apiClient.login(username, password)
+        apiClient.login(username, password, identifiers.getUidForDevice())
+                .doOnNext(new Consumer<LoginResponseData>() {
+                    @Override
+                    public void accept(@NonNull LoginResponseData login) throws Exception {
+                        identifiers.registerUser(username, login.getKey());
+                    }
+                })
                 .map(new Function<LoginResponseData, String>() {
                     @Override
                     public String apply(@NonNull LoginResponseData login) throws Exception {
-                        identifiers.registerUser(username, login.getKey());
                         return "User " + username + " logged in!";
                     }
                 })
