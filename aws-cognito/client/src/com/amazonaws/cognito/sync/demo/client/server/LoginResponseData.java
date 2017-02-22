@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package com.amazonaws.cognito.sync.demo.client.login;
+package com.amazonaws.cognito.sync.demo.client.server;
 
 public class LoginResponseData {
     private final String key;

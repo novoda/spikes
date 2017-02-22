@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package com.amazonaws.cognito.sync.demo.client;
+package com.amazonaws.cognito.sync.demo.client.server;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;

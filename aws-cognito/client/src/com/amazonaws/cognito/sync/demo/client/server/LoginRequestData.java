@@ -13,10 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package com.amazonaws.cognito.sync.demo.client.login;
-
-import com.amazonaws.cognito.sync.demo.client.RequestData;
-import com.amazonaws.cognito.sync.demo.client.Utilities;
+package com.amazonaws.cognito.sync.demo.client.server;
 
 import okhttp3.HttpUrl;
 

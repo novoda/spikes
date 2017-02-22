@@ -17,8 +17,8 @@ package com.amazonaws.cognito.sync.demo.client.cognito;
 
 import android.support.annotation.NonNull;
 
-import com.amazonaws.cognito.sync.demo.client.RequestData;
-import com.amazonaws.cognito.sync.demo.client.Utilities;
+import com.amazonaws.cognito.sync.demo.client.server.RequestData;
+import com.amazonaws.cognito.sync.demo.client.server.Utilities;
 
 import java.util.Map;
 

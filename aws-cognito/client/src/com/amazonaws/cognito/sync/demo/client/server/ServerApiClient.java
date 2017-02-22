@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package com.amazonaws.cognito.sync.demo.client;
+package com.amazonaws.cognito.sync.demo.client.server;
 
 import com.amazonaws.cognito.sync.demo.Identifiers;
 import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenRequestData;
@@ -21,9 +21,6 @@ import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenResponseData;
 import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenResponseHandler;
 import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseTokenResponseData;
 import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseTokenResponseHandler;
-import com.amazonaws.cognito.sync.demo.client.login.LoginRequestData;
-import com.amazonaws.cognito.sync.demo.client.login.LoginResponseData;
-import com.amazonaws.cognito.sync.demo.client.login.LoginResponseHandler;
 
 import java.io.IOException;
 import java.util.HashMap;

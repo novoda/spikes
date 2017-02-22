@@ -26,15 +26,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amazonaws.cognito.sync.demo.client.AndroidExecutionStrategy;
-import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
+import com.amazonaws.cognito.sync.demo.client.server.AndroidExecutionStrategy;
+import com.amazonaws.cognito.sync.demo.client.server.ServerApiClient;
 import com.amazonaws.cognito.sync.demo.client.cognito.Cognito;
 import com.amazonaws.cognito.sync.demo.client.cognito.CognitoResourceAccessTask;
 import com.amazonaws.cognito.sync.demo.client.cognito.CognitoTokenTask;
 import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseLogInTask;
 import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseResourceAccessTask;
 import com.amazonaws.cognito.sync.demo.client.firebase.FirebaseTokenResponseData;
-import com.amazonaws.cognito.sync.demo.client.login.LoginResponseData;
+import com.amazonaws.cognito.sync.demo.client.server.LoginResponseData;
 import com.amazonaws.regions.Regions;
 import com.google.firebase.auth.FirebaseAuth;
 

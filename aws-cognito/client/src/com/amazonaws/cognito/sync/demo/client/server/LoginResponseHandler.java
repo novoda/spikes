@@ -13,11 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package com.amazonaws.cognito.sync.demo.client.login;
-
-import com.amazonaws.cognito.sync.demo.client.AESEncryption;
-import com.amazonaws.cognito.sync.demo.client.ResponseHandler;
-import com.amazonaws.cognito.sync.demo.client.Utilities;
+package com.amazonaws.cognito.sync.demo.client.server;
 
 import java.io.IOException;
 

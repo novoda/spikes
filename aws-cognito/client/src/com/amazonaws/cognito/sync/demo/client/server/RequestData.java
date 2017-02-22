@@ -13,12 +13,10 @@
  * permissions and limitations under the License.
  */
 
-package com.amazonaws.cognito.sync.demo.client;
+package com.amazonaws.cognito.sync.demo.client.server;
 
-import java.io.IOException;
+public abstract class RequestData {
 
-public interface ResponseHandler<T> {
-
-    T handleResponse(String response) throws IOException;
+    public abstract String buildRequestUrl();
 
 }

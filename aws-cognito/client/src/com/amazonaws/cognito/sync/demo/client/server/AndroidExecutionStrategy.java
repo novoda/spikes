@@ -1,4 +1,4 @@
-package com.amazonaws.cognito.sync.demo.client;
+package com.amazonaws.cognito.sync.demo.client.server;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;

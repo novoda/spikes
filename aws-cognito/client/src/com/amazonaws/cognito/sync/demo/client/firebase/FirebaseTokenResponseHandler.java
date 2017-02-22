@@ -15,9 +15,9 @@
 
 package com.amazonaws.cognito.sync.demo.client.firebase;
 
-import com.amazonaws.cognito.sync.demo.client.AESEncryption;
-import com.amazonaws.cognito.sync.demo.client.ResponseHandler;
-import com.amazonaws.cognito.sync.demo.client.Utilities;
+import com.amazonaws.cognito.sync.demo.client.server.AESEncryption;
+import com.amazonaws.cognito.sync.demo.client.server.ResponseHandler;
+import com.amazonaws.cognito.sync.demo.client.server.Utilities;
 
 import java.io.IOException;
 

@@ -3,7 +3,7 @@ package com.amazonaws.cognito.sync.demo;
 import android.app.Application;
 import android.preference.PreferenceManager;
 
-import com.amazonaws.cognito.sync.demo.client.ServerApiClient;
+import com.amazonaws.cognito.sync.demo.client.server.ServerApiClient;
 import com.amazonaws.cognito.sync.demo.client.cognito.Cognito;
 import com.google.firebase.FirebaseApp;
 
