@@ -71,13 +71,13 @@ public class ServerCognitoIdentityProvider extends AWSAbstractCognitoDeveloperId
   }
 
   private void ensureLoginData() {
-    if (getProviderName() == null || this.loginsMap.isEmpty() || !this.loginsMap.containsKey(getProviderName())) {
+    if (getProviderName() == null || loginsMap.isEmpty() || !loginsMap.containsKey(getProviderName())) {
       throw new RuntimeException("invalid login data!");
     }
   }
 
   private CognitoTokenResponseData updateCognitoToken() {
-    CognitoTokenResponseData response = serverApiClient.getCognitoToken(this.loginsMap, identityId).blockingFirst();
+    CognitoTokenResponseData response = serverApiClient.getCognitoToken(loginsMap, identityId).blockingFirst();
     update(response.getIdentityId(), response.getToken());
     return response;
   }

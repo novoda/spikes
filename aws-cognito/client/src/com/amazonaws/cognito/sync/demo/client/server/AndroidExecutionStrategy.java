@@ -10,8 +10,8 @@ public class AndroidExecutionStrategy<T> implements ObservableTransformer<T, T> 
 
     @Override
     public ObservableSource<T> apply(Observable<T> observable) {
-        return observable.
-                subscribeOn(Schedulers.io())
+        return observable
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
