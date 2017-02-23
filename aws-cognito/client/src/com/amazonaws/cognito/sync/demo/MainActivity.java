@@ -70,23 +70,19 @@ public class MainActivity extends Activity {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
                 dialog.setView(layout);
                 dialog.setTitle("Sample developer login");
-                String username = extractTextFrom(layout, R.id.txtUsername);
-                String password = extractTextFrom(layout, R.id.txtPassword);
-                dialog.setPositiveButton("Login", triggerLogin(username, password));
+                dialog.setPositiveButton("Login", triggerLogin(layout));
                 dialog.setNegativeButton("Cancel", null);
                 dialog.create().show();
             }
         };
     }
 
-    private String extractTextFrom(View view, int textViewResourceId) {
-        return ((TextView) view.findViewById(textViewResourceId)).getText().toString();
-    }
-
-    private DialogInterface.OnClickListener triggerLogin(final String username, final String password) {
+    private DialogInterface.OnClickListener triggerLogin(final View layout) {
         return new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                String username = extractTextFrom(layout, R.id.txtUsername);
+                String password = extractTextFrom(layout, R.id.txtPassword);
                 if (username.isEmpty() || password.isEmpty()) {
                     Toast.makeText(MainActivity.this, "username or password cannot be empty!", Toast.LENGTH_LONG).show();
                 } else {
@@ -95,6 +91,10 @@ public class MainActivity extends Activity {
                 dialog.dismiss();
             }
         };
+    }
+
+    private String extractTextFrom(View view, int textViewResourceId) {
+        return ((TextView) view.findViewById(textViewResourceId)).getText().toString();
     }
 
     private void login(final String username, String password) {
