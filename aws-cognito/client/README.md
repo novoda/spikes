@@ -1,70 +1,67 @@
-Running the CognitoSyncDemo Sample
+Running the Custom Authentication Sample
 ============================================
-This sample demonstrates how to use Cognito Sync client library on Android. It supports Facebook Login, Login with Amazon, developer authenticated identities as well as Unauthenticated Identities.
+This is a fork of [aws-sdk-android-samples/CognitoSyncDemo](https://github.com/awslabs/aws-sdk-android-samples/tree/master/CognitoSyncDemo). It has been quite heavily modified to remove what we were not interested in, add Firebase support and bringing it to an acceptable level in terms of code quality.
+For the client to work you also need the [server](../server).
 
-1. Import the CognitoSyncDemo project into your IDE.
-   - If you are using Eclipse:
-      * Go to File -> Import. Import Wizard will open.
-      * Select General -> Existing Projects into Workspace. Click Next.
-      * In Select root directory, browse to the samples directory.
-      * Select the CognitoSyncDemo project to import.
-      * Click Finish.
-   - If you are using Android Studio:
+This sample demonstrates how to fetch tokens from Cognito and Firebase on Android in order to access restricted resources (respectively, lambdas and database).
+It supports Cognito developer authenticated identities as well as Firebase (using the custom authentication system).
+
+1. Import the client project into Android Studio
       * From the Welcome screen, click on "Import project".
-      * Browse to the CognitoSyncDemo directory and press OK.
+      * Browse to the client directory and press OK.
 	  * Accept the messages about adding Gradle to the project.
 	  * If the SDK reports some missing Android SDK packages (like Build Tools or the Android API package), follow the instructions to install them.
-	  
-2. Import the libraries :
-   - If you use Eclipse, you will need to download the AWS SDK for Android (http://aws.amazon.com/mobile/sdk/) and extract and copy these jars into the 'libs' directory for the project:
-      * aws-android-sdk-core-X.X.X.jar
-      * aws-android-sdk-cognito-X.X.X.jar
-   - If you use Android Studio, Gradle will take care of downloading these dependencies for you.
 
-3. Import the Facebook SDK into the project. Note that while Facebook Login is not required to run the app, the Facebook SDK is still required to build it.
-   - If you are using Eclipse, you will need to download the Facebook SDK, import it to the workspace and add it as a dependency of CognitoSyncDemo.
-   - If you use Android Studio, again Gradle will do everything for you.
+2. Update your App configuration for Cognito:
+   * Make sure you have [created and configured an identity pool](https://console.aws.amazon.com/cognito/) and you downloaded the starter code at the last step of the wizard.
+   * Create a `secret.properties` file at the root and paste:
+   ```
+   identity_pool=
+   region=
+   developer_provider=
+   authentication_endpoint=
+   ```
+   * Set the `identity_pool` and `region` with the values from the starter code.
+   * Set the `authentication_endpoint` received from the Amazon ElasticBeanStalk console.
+   * Set the `developer_provider` to the one you set in Amazon Cognito console for your identity pool.
 
-4. Update your App configuration for Cognito:
-   * Make sure you have an identity pool created and configured at https://console.aws.amazon.com/cognito/ and you downloaded the starter code at the last step of the wizard.
-   * Open CognitoSyncClientManager.java
-   * Update "IDENTITY_POOL_ID", and "REGION" with the values from the starter code.
-   * At this point you can run the sample if you have the support of unauthenticated identity configured in the identity pool.
-     + Go to Project ->  Clean.
-     + Go to Project ->  Build All.
-     + Go to Run -> Run.
-   * To support Facebook Login and Login with Amazon, continue with step 5 and step 6.
+3. Create an Amazon resource accessible only for authenticated users
+   * Create a lambda named `CognitoAuthTest` (we choosed the hello-world / nodejs blueprint) and paste the following so when calling this lambda you get `Server say hello and welcome!` as a result
+       ```
+       'use strict';
 
-5. To add support for Facebook Login (Optional)
-   * Follow the instructions at https://developers.facebook.com/docs/android/getting-started/ to create a Facebook app
-     + For "Package Name", enter com.amazonaws.cognito.sync.demo
-     + For "Class Name", enter com.amazonaws.cognito.sync.demo.MainActivity
-     + You may also need to include a key hash
-   * Make sure your identity pool is configured to support Facebook login by entering the Facebook app ID at https://console.aws.amazon.com/cognito/ from the previous step.
-   * Import the Facebook SDK into Eclipse following https://developers.facebook.com/docs/android/getting-started/
-   * Link to the Facebook SDK project and configure the Facebook app ID
-     + Open the strings.xml file located in res/values
-     + Update "facebook_app_id" with the app ID of the app you created
-     + Open project properties and under Android remove the placeholder Facebook library "path/to/facebook/sdk" and add "FacebookSDK"
-   * At this point you can run the sample with Facebook Login.
+       console.log('Loading function');
 
-6. To add support for Login with Amazon. (Optional)
-   * Follow the instructions at https://login.amazon.com/android to register a new application
-     + For "Label", enter Cognito sync demo
-     + For "Package Name", enter com.amazonaws.cognito.sync.demo
-   * Make sure your identity pool is configured to support Login with Amazon by entering the Client ID at https://console.aws.amazon.com/cognito/ from the previous step.
-   * Copy and paste the API key to assets/api_key.txt
-   * If this isn't configured properly, the "Login with Amazon" button will be disabled in the sample app.
-   
-7. To add support for Login with Twitter. (Optional)
-   * You need to have an app registered in https://apps.twitter.com/
-   * Your Twitter app has to be configured to use a callback. It can be any valid URL (eg: http://example.com) as it will be overriden by the Android app, but it won't work if left empty in the configuration.
-   * Open the strings.xml file in this project and set the 'twitter_consumer_key' and 'twitter_consumer_secret' to these in your Twitter app. You can also set twitter_callback_url to any string you want, as it will override the callback you set on the Twitter app.
-   * Make sure your identity pool is configured to support Twitter login by entering the same conusmer key and secret at https://console.aws.amazon.com/cognito/.
-      
-8. To add support for Developer authenticated identities using the Sample Cognito Developer Authentication application (Optional)
-	* Follow the ReadMe instructions in [the server side application](https://github.com/awslabs/amazon-cognito-developer-authentication-sample) and set up the server application.
-	* In the CognitoSyncClientManager class set the useDeveloperAuthenticatedIdentities boolean to 'true'. 
-	* In the DeveloperAuthenticationProvider class :
-		* Set the application endpoint received from the Amazon ElasticBeanStalk console.
-		* Set the developer provider name in the to the one you set in Amazon Cognito console for your identity pool.
+       exports.handler = (event, context, callback) => {
+           callback(null, 'Server say hello and welcome!');
+       };
+       ```
+       Role should be `lambda_basic_execution` as we don't need anything else
+   * Go then to IAM -> Roles -> *_Auth_role (the role corresponding to authenticated users for your identitiy pool) and edit the Policy
+   * Under Statement, add this bit which allow access to our authenticated user to the lambda we just created
+       ```
+       {
+           "Effect": "Allow",
+           "Action": [
+               "lambda:InvokeFunction"
+           ],
+           "Resource": [
+               "arn:aws:lambda:YOUR_REGION:YOUR_ACCOUND_ID:function:CognitoAuthTest"
+           ]
+       }
+       ```
+       Dont forget to replace YOUR_REGION and YOUR_ACCOUND_ID (that you can find under support in the top bar -> support center)
+
+4. Update your App configuration for Firebase:
+   * Create a Firebase project in the [Firebase console](https://console.firebase.google.com/) by clicking on Create New Project.
+   * Click Add Firebase to your Android app and follow the setup steps.
+   * When prompted, enter `com.amazonaws.cognito.sync.demo` for the app package name.
+   * At the end, you'll download a google-services.json file and put it in the root folder.
+
+5. Create a Firebase resource accessible only for authenticated users:
+   * In the [Firebase console](https://console.firebase.google.com/), go to the Database section and a child named `test_reading` with the value you want. The value is going to be read when trying to access the Firebase resource. If you go to the RULES tab you can see the database is only accessible to authenticated users by default.
+
+6. Run the app:
+   * Trying to access resources when you are not logged in to your server is going to yield an error
+   * Once logged using the login button (don't forget to add a user! See the server README of this sample) you can then access firebase and amazon resources (it will also fetch and cache the corresponding token before doing so)
+   * The wipe data button will disconnect cognito and firebase and wipe the shared preferences (except the device UID)
