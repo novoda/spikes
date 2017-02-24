@@ -89,7 +89,7 @@ This sample application demonstrates the developer-authenticated functionality o
 16. Click **Roles**.
 17. Select the entry for "aws-elasticbeanstalk-ec2-role."
 18. Click **Attach" Policy**.
-19. Choose "AmazonCognitoDeveloperAuthenticatedIdentities," and then click **Attach Policy**.
+19. Choose "AmazonCognitoDeveloperAuthenticatedIdentities," and then click **Attach Policy**. Same goes for "AmazonDynamoDBFullAccess"
 20. Register users using any web browser using ElasticBeanStalkApplicationURL/jsp/register.jsp. This URL is listed at the top of the Elastic Beanstalk console homepage and ends in ".elasticbeanstalk.com."
 21. Get the `firebase.json` file for the server following [these instructions](https://firebase.google.com/docs/admin/setup)
 
