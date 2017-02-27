@@ -30,7 +30,7 @@ class InputVerifier {
         listening = true;
     }
 
-    private Group.OnGroupButtonPressedListener groupButtonPressedListener = new Group.OnGroupButtonPressedListener() {
+    private final Group.OnGroupButtonPressedListener groupButtonPressedListener = new Group.OnGroupButtonPressedListener() {
         @Override
         public void onGroupButtonPressed(Group group) {
             if (sequenceToVerify.get(currentIndex) != group) {
