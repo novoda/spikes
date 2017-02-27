@@ -38,7 +38,7 @@ public class SimonSays implements AutoCloseable {
         this.buzzer = buzzer;
         sequence = new ArrayList<>();
         random = new Random();
-        sequencer = new Sequencer();
+        sequencer = new Sequencer(onRoundSequenceFinishedListener);
         inputVerifier = new InputVerifier(groups);
     }
 
@@ -60,10 +60,10 @@ public class SimonSays implements AutoCloseable {
     }
 
     private void playSequence() {
-        sequencer.play(sequence, GROUP_ON_DURATION_MS, GROUP_OFF_DURATION_MS, onSequenceFinishedListener);
+        sequencer.playRoundSequence(sequence, GROUP_ON_DURATION_MS, GROUP_OFF_DURATION_MS);
     }
 
-    private OnSequenceFinishedListener onSequenceFinishedListener = new OnSequenceFinishedListener() {
+    private final OnSequenceFinishedListener onRoundSequenceFinishedListener = new OnSequenceFinishedListener() {
         @Override
         public void onSequenceFinished() {
             Log.d(TAG, "onSequenceFinished() called");
@@ -71,7 +71,7 @@ public class SimonSays implements AutoCloseable {
         }
     };
 
-    private InputVerificationListener inputVerificationListener = new InputVerificationListener() {
+    private final InputVerificationListener inputVerificationListener = new InputVerificationListener() {
         @Override
         public void onCorrectInput() {
             Log.d(TAG, "onCorrectInput() called");
@@ -87,6 +87,7 @@ public class SimonSays implements AutoCloseable {
                 highscore.setNew(round);
                 // TODO: play highscore sequence
             }
+            state = State.IDLE; // TODO call stop on above sequence end instead
         }
     };
 

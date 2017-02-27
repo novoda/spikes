@@ -3,6 +3,9 @@ package com.novoda.simonsaysandroidthings.game;
 import android.os.Handler;
 import android.os.Message;
 
+import com.novoda.simonsaysandroidthings.game.SequencerCommand.FinishCommand;
+import com.novoda.simonsaysandroidthings.game.SequencerCommand.StartCommand;
+import com.novoda.simonsaysandroidthings.game.SequencerCommand.StopCommand;
 import com.novoda.simonsaysandroidthings.hw.io.Group;
 
 import java.util.ArrayList;
@@ -10,35 +13,70 @@ import java.util.List;
 
 class Sequencer {
 
-    private static final int MSG_PROCESS_COMMAND = 1;
-    private static final int MSG_SEQUENCE_FINISHED = 2;
+    static final int MSG_PROCESS_COMMAND = 1;
+    static final int MSG_SEQUENCE_FINISHED = 2;
 
-    private Handler handler = new SequencerHandler();
-    private OnSequenceFinishedListener listener;
+    private final Handler handler;
 
-    void play(List<Group> sequence, int groupOnMs, int groupOffMs, OnSequenceFinishedListener listener) {
-        this.listener = listener;
-        List<Command> commands = buildCommands(sequence, groupOnMs, groupOffMs);
-        enqueueCommands(commands);
+    Sequencer(OnSequenceFinishedListener listener) {
+        handler = new SequencerHandler(listener);
     }
 
-    private List<Command> buildCommands(List<Group> sequence, int groupOnMs, int groupOffMs) {
-        List<Command> commands = new ArrayList<>();
-        int size = sequence.size();
-        for (int i = 0; i < size; i++) {
-            commands.add(new Command(groupOnMs, Command.Type.START, sequence.get(i)));
-            commands.add(new Command(groupOffMs, Command.Type.STOP, sequence.get(i)));
+    void playRoundSequence(List<Group> sequence, int groupOnMs, int groupOffMs) {
+        List<SequencerCommand> commands = buildRoundSequenceCommands(sequence, groupOnMs, groupOffMs);
+        enqueueSequenceCommands(commands);
+    }
+
+    private List<SequencerCommand> buildRoundSequenceCommands(List<Group> sequence, int groupOnMs, int groupOffMs) {
+        List<SequencerCommand> commands = new ArrayList<>();
+        int sequenceSize = sequence.size();
+        SequencerCommand lastCommand = null;
+        for (int i = 0; i < sequenceSize; i++) {
+            StartCommand startCommand = createStartCommand(sequence.get(i), groupOnMs, lastCommand);
+            commands.add(startCommand);
+            StopCommand stopCommand = createStopCommand(sequence.get(i), groupOffMs, startCommand);
+            commands.add(stopCommand);
+            lastCommand = stopCommand;
         }
-        commands.add(new Command(1, Command.Type.FINISHED, null));
+        FinishCommand finishCommand = createFinishCommand(lastCommand);
+        commands.add(finishCommand);
         return commands;
     }
 
-    private void enqueueCommands(List<Command> commands) {
-        Message message = handler.obtainMessage(MSG_PROCESS_COMMAND, 0, 0, commands);
+    private StartCommand createStartCommand(Group group, int groupOnMs, SequencerCommand lastCommand) {
+        StartCommand startCommand = new StartCommand(group, groupOnMs);
+        setNextCommandForLast(lastCommand, startCommand);
+        return startCommand;
+    }
+
+    private void setNextCommandForLast(SequencerCommand lastCommand, SequencerCommand nextCommand) {
+        if (lastCommand != null) {
+            lastCommand.setNextCommand(nextCommand);
+        }
+    }
+
+    private StopCommand createStopCommand(Group group, int groupOffMs, StartCommand lastCommand) {
+        StopCommand stopCommand = new StopCommand(group, groupOffMs);
+        setNextCommandForLast(lastCommand, stopCommand);
+        return stopCommand;
+    }
+
+    private FinishCommand createFinishCommand(SequencerCommand lastCommand) {
+        FinishCommand finishCommand = new FinishCommand();
+        setNextCommandForLast(lastCommand, finishCommand);
+        return finishCommand;
+    }
+
+    private void enqueueSequenceCommands(List<SequencerCommand> commands) {
+        Message message = handler.obtainMessage(MSG_PROCESS_COMMAND, commands.get(0));
         handler.sendMessage(message);
     }
 
-    public void stop() {
+    void playSuccessSequence(List<Group> groups, OnSequenceFinishedListener listener) {
+
+    }
+
+    void stop() {
         handler.removeMessages(MSG_PROCESS_COMMAND);
         handler.removeMessages(MSG_SEQUENCE_FINISHED);
     }
@@ -49,75 +87,29 @@ class Sequencer {
 
     }
 
-    private class SequencerHandler extends Handler {
+    private static class SequencerHandler extends Handler {
+
+        private OnSequenceFinishedListener listener;
+
+        private SequencerHandler(OnSequenceFinishedListener listener) {
+            this.listener = listener;
+        }
 
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MSG_PROCESS_COMMAND:
-                    //noinspection unchecked
-                    List<Command> commands = (List<Command>) msg.obj;
-                    int current = msg.arg1;
-                    commands.get(current).type.execute(this, current, commands);
+                    SequencerCommand command = (SequencerCommand) msg.obj;
+                    command.execute(this);
                     break;
                 case MSG_SEQUENCE_FINISHED:
-                    if (listener != null) {
-                        listener.onSequenceFinished();
-                    }
+                    listener.onSequenceFinished();
                     break;
                 default:
                     super.handleMessage(msg);
                     break;
             }
         }
-
-    }
-
-    private static class Command {
-
-        Command(int durationMs, Type type, Group group) {
-            this.durationMs = durationMs;
-            this.type = type;
-            this.group = group;
-        }
-
-        enum Type {
-
-            START {
-                @Override
-                void execute(Handler handler, int current, List<Command> commands) {
-                    Command command = commands.get(current);
-                    command.group.play();
-                    Message message = handler.obtainMessage(MSG_PROCESS_COMMAND, current + 1, 0, commands);
-                    handler.sendMessageDelayed(message, command.durationMs);
-                }
-
-            },
-            STOP {
-                @Override
-                void execute(Handler handler, int current, List<Command> commands) {
-                    Command command = commands.get(current);
-                    command.group.stop();
-                    Message message = handler.obtainMessage(MSG_PROCESS_COMMAND, current + 1, 0, commands);
-                    handler.sendMessageDelayed(message, command.durationMs);
-                }
-
-            },
-            FINISHED {
-                @Override
-                void execute(Handler handler, int current, List<Command> commands) {
-                    handler.sendEmptyMessage(MSG_SEQUENCE_FINISHED);
-                }
-
-            };
-
-            abstract void execute(Handler sequencerHandler, int current, List<Command> commands);
-
-        }
-
-        private final int durationMs;
-        private final Type type;
-        private final Group group;
 
     }
 
