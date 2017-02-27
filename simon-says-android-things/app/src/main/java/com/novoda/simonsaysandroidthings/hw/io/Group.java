@@ -47,6 +47,7 @@ public class Group implements AutoCloseable {
             public void onButtonReleased(Button button) {
                 if (wasPressed) {
                     stop();
+                    wasPressed = false;
                     listener.onGroupButtonPressed(Group.this);
                 }
             }
