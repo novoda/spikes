@@ -13,7 +13,7 @@
 -keepattributes Signature
 
 # keep serializable classes
--keepclassmembers class * implements java.io.Serializable {
+-keep class * implements java.io.Serializable {
     static final long serialVersionUID;
     private static final java.io.ObjectStreamField[] serialPersistentFields;
     private void writeObject(java.io.ObjectOutputStream);
