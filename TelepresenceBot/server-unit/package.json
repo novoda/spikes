@@ -1,0 +1,26 @@
+{
+  "name": "tpbot_server",
+  "version": "0.1.0",
+  "description": "Middleman server for the tpbot android application.",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/novoda/spikes/tree/master/TelepresenceBot"
+  },
+  "author": "Novoda",
+  "license": "MIT",
+  "dependencies": {
+    "socket.io": "^1.7.3"
+  },
+  "devDependencies": {
+    "mocha": "^3.2.0",
+    "should": "^11.2.0",
+    "unit.js": "^2.0.0"
+  }
+}
