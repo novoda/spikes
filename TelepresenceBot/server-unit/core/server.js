@@ -18,7 +18,5 @@ io.sockets.on('connection', function (client) {
 });
 
 function toKeysArrayFrom(objects) {
-    return Object.keys(objects).map(function(key) {
-        return key;
-    });
+    return Object.keys(objects);
 }
