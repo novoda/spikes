@@ -8,7 +8,6 @@ io.sockets.on('connection', function (client) {
     clients[client.id] = client;
     io.sockets.emit('connected', toKeysArrayFrom(clients));
 
-
     client.on('disconnect', function() {
         console.log('disconnecting: ' + client.id);
         delete clients[client.id];
