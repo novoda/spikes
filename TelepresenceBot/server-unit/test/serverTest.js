@@ -14,14 +14,33 @@ describe("TelepresenceBot Server: DummyTest ",function() {
     it('Should add client to list of clients on connection.', function(done) {
         var client = io.connect(socketURL, options);
 
-        client.on('connected', function(actualClients) {
-            var expectedClients = [client.id];
+        client.on('connected', function(actualConnectedClients) {
+            var expectedConnectedClients = [client.id];
 
-            test.array(actualClients)
-                .is(expectedClients);
+            test.array(actualConnectedClients)
+                .is(expectedConnectedClients);
 
             client.disconnect();
             done();
+        })
+    });
+
+    it('Should remove client from list of clients on disconnection.', function(done) {
+        var testObserver = io.connect(socketURL, options);
+        var client = io.connect(socketURL, options);
+
+        testObserver.on('connected', function(data) {
+            client.disconnect();
+
+            testObserver.on('disconnected', function(actualConnectedClients) {
+                var expectedConnectedClients = [testObserver.id];
+
+                test.array(actualConnectedClients)
+                    .is(expectedConnectedClients);
+
+                testObserver.disconnect();
+                done();
+            });
         })
     });
 
