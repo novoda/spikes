@@ -5,8 +5,11 @@ var clients = {};
 io.sockets.on('connection', function (client) {
 
     console.log('connecting: ' + client.id);
-    clients[client.id] = client;
-    io.sockets.emit('connected', toKeysArrayFrom(clients));
+
+    client.on("connect_as_human", function(data, acknowledgement){
+        clients[client.id] = client;
+        acknowledgement(toKeysArrayFrom(clients));
+    });
 
     client.on('disconnect', function() {
         console.log('disconnecting: ' + client.id);
