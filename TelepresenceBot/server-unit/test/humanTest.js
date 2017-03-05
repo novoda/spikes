@@ -55,40 +55,51 @@ describe("TelepresenceBot Server: HumanTest ",function() {
     });
 
     it('Should add human to list of humans on connection.', function(done) {
-        var bot = io.connect(socketURL, botOptions);
+        var testObserver = io.connect(socketURL, testOptions);
 
-        bot.on('connected', function(actualConnectedBots){
-            var human = io.connect(socketURL, options);
+        testObserver.on('connect', function(){
+            var bot = io.connect(socketURL, botOptions);
 
-            human.on('connected', function(actualConnectedHumans){
-                var expectedConnectedHumans = [human.id];
-                test.array(actualConnectedHumans)
-                    .is(expectedConnectedHumans);
+            testObserver.on('connected_bot', function(){
+                var human = io.connect(socketURL, options);
 
-                human.disconnect();
-                bot.disconnect();
+                testObserver.on('connected_human', function(actualConnectedHumans){
+                    var expectedConnectedHumans = [human.id];
+                    test.array(actualConnectedHumans)
+                        .is(expectedConnectedHumans);
 
-                done();
-            })
+                    human.disconnect();
+                    bot.disconnect();
+
+                    done();
+                });
+            });
         });
     });
 
     it('Should remove human from list of humans on disconnection.', function(done) {
-        var bot = io.connect(socketURL, botOptions);
+        var testObserver = io.connect(socketURL, testOptions);
 
-        bot.on('connected', function(actualConnectedBots){
-            var human = io.connect(socketURL, options);
+        testObserver.on('connect', function(){
+            var bot = io.connect(socketURL, botOptions);
 
-            human.on('connected', function(actualConnectedHumans){
-                var expectedConnectedHumans = [human.id];
-                test.array(actualConnectedHumans)
-                    .is(expectedConnectedHumans);
+            testObserver.on('connected_bot', function(){
+                var human = io.connect(socketURL, options);
 
-                human.disconnect();
-                bot.disconnect();
+                testObserver.on('connected_human', function(){
+                    human.disconnect();
 
-                done();
-            })
+                    testObserver.on('disconnected_human', function(actualConnectedHumans){
+                        test.array(actualConnectedHumans)
+                            .isEmpty();
+
+                        bot.disconnect();
+                        testObserver.disconnect();
+
+                        done();
+                    });
+                });
+            });
         });
     });
 
