@@ -26,17 +26,19 @@ io.use(function(client, next){
 io.sockets.on('connection', function (client) {
 
     console.log('Connecting: ', client.id);
+    var rawClientType = client.handshake.query.clientType;
+    var clientType = ClientType.from(rawClientType);
 
-    switch(client.handshake.query.clientType) {
-        case "human":
+    switch(clientType) {
+        case ClientType.HUMAN:
             humans[client.id] = client;
             io.sockets.emit('connected', toKeysArrayFrom(humans));
             break;
-        case "bot":
+        case ClientType.BOT:
             bots[client.id] = client;
             io.sockets.emit('connected', toKeysArrayFrom(bots));
             break;
-        case "test":
+        case ClientType.TEST:
             io.sockets.emit('connected');
             break;
         default:
@@ -45,7 +47,7 @@ io.sockets.on('connection', function (client) {
 
 
     client.on('disconnect', function() {
-        console.log('disconnecting: ' + client.id);
+        console.log('Disconnecting: ' + client.id);
         delete humans[client.id];
         delete bots[client.id];
         io.sockets.emit('disconnected', toKeysArrayFrom(humans));
