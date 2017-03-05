@@ -1,21 +1,25 @@
 var io = require('socket.io').listen(5000);
+var ClientType = require("./clientType.js");
 
 var humans = {};
 var bots = {};
 
 io.use(function(client, next){
-    var clientType = client.handshake.query.clientType;
+    var rawClientType = client.handshake.query.clientType;
+    var clientType = ClientType.from(rawClientType);
 
-    if(clientType == "bot") {
-        return next();
-    }
+    switch(clientType) {
+        case ClientType.BOT:
+            return next();
+        case ClientType.HUMAN:
+            if(Object.keys(bots).length > 0) {
+                return next();
+            } else {
+                return next(new Error('No bots available'));
+            }
+        default:
+            return next(new Error('Unrecognised clientType: ' + rawClientType));
 
-    if(clientType == "human" && Object.keys(bots).length > 0) {
-        return next();
-    } else if(clientType == "human" && Object.keys(bots).length <= 0) {
-        next(new Error('No bots available'));
-    } else {
-        next(new Error('Unrecognised clientType: ' + clientType));
     }
 });
 
@@ -36,7 +40,7 @@ io.sockets.on('connection', function (client) {
             io.sockets.emit('connected');
             break;
         default:
-            throw 'Unexpected clientType: ' + clientType;
+            throw 'Unexpected rawClientType: ' + clientType;
     }
 
 
