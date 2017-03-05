@@ -1,14 +1,17 @@
 var io = require('socket.io').listen(5000);
 var ClientType = require("./clientType.js");
+var LoggingClient = require("./loggingClient.js");
 
 var humans = {};
 var bots = {};
+var testClient = new LoggingClient();
 
 io.use(function(client, next){
     var rawClientType = client.handshake.query.clientType;
     var clientType = ClientType.from(rawClientType);
 
     switch(clientType) {
+        case ClientType.TEST:
         case ClientType.BOT:
             return next();
         case ClientType.HUMAN:
@@ -25,21 +28,22 @@ io.use(function(client, next){
 
 io.sockets.on('connection', function (client) {
 
-    console.log('Connecting: ', client.id);
     var rawClientType = client.handshake.query.clientType;
     var clientType = ClientType.from(rawClientType);
 
     switch(clientType) {
         case ClientType.HUMAN:
             humans[client.id] = client;
-            io.sockets.emit('connected', toKeysArrayFrom(humans));
+            testClient.emit('connected', toKeysArrayFrom(humans));
             break;
         case ClientType.BOT:
             bots[client.id] = client;
-            io.sockets.emit('connected', toKeysArrayFrom(bots));
+            testClient.emit('connected_bot', toKeysArrayFrom(bots));
             break;
         case ClientType.TEST:
-            io.sockets.emit('connected');
+            console.log('switching test client');
+            testClient = client;
+            testClient.emit('connected');
             break;
         default:
             throw 'Unexpected rawClientType: ' + clientType;
@@ -47,11 +51,10 @@ io.sockets.on('connection', function (client) {
 
 
     client.on('disconnect', function() {
-        console.log('Disconnecting: ' + client.id);
         delete humans[client.id];
         delete bots[client.id];
-        io.sockets.emit('disconnected', toKeysArrayFrom(humans));
-        io.sockets.emit('disconnected_bots', toKeysArrayFrom(humans));
+        testClient.emit('disconnected_human', toKeysArrayFrom(humans));
+        testClient.emit('disconnected_bot', toKeysArrayFrom(bots));
     });
 
 });

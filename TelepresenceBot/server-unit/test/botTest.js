@@ -10,35 +10,49 @@ var options ={
     query: 'clientType=bot'
 };
 
+var testOptions ={
+    transports: ['websocket'],
+    'force new connection': true,
+    query: 'clientType=test'
+};
+
 describe("TelepresenceBot Server: BotTest ",function() {
 
     it('Should add bot to list of bots on connection.', function(done) {
-        var bot = io.connect(socketURL, options);
+        var testObserver = io.connect(socketURL, testOptions);
 
-        bot.on('connected', function(actualConnectedBots){
-            var expectedConnectedBots = [bot.id];
-            test.array(actualConnectedBots)
-                .is(expectedConnectedBots);
+        testObserver.on('connected', function(){
+            var bot = io.connect(socketURL, options);
 
-            bot.disconnect();
-            done();
+            testObserver.on('connected_bot', function(actualConnectedBots){
+                var expectedConnectedBots = [bot.id];
+                test.array(actualConnectedBots)
+                    .is(expectedConnectedBots);
+
+                bot.disconnect();
+                testObserver.disconnect();
+                done();
+            });
         });
     });
 
     it('Should remove bot from list of bots on disconnection.', function(done) {
-        var testObserver = io.connect(socketURL, options);
-        var bot = io.connect(socketURL, options);
+        var testObserver = io.connect(socketURL, testOptions);
 
-        bot.on('connected', function(){
-            bot.disconnect();
-        });
+        testObserver.on('connected', function(){
+            var bot = io.connect(socketURL, options);
 
-        testObserver.on('disconnected_bots', function(actualConnectedBots) {
-            test.array(actualConnectedBots)
-                .isEmpty();
+            testObserver.on('connected_bot', function(){
+                bot.disconnect();
 
-            testObserver.disconnect();
-            done();
+                testObserver.on('disconnected_bot', function(actualConnectedBots) {
+                    test.array(actualConnectedBots)
+                    .isEmpty();
+
+                    testObserver.disconnect();
+                    done();
+                });
+            });
         });
     });
 

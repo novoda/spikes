@@ -10,6 +10,18 @@ var options ={
     query: 'clientType=human'
 };
 
+var botOptions ={
+    transports: ['websocket'],
+    'force new connection': true,
+    query: 'clientType=bot'
+};
+
+var testOptions ={
+    transports: ['websocket'],
+    'force new connection': true,
+    query: 'clientType=test'
+};
+
 describe("TelepresenceBot Server: HumanTest ",function() {
 
     it('Should throw error when attempting to connect as non-human.', function(done){
@@ -43,34 +55,40 @@ describe("TelepresenceBot Server: HumanTest ",function() {
     });
 
     it('Should add human to list of humans on connection.', function(done) {
-        var human = io.connect(socketURL, options);
+        var bot = io.connect(socketURL, botOptions);
 
-        human.on('connected', function(actualConnectedHumans){
-            var expectedConnectedHumans = [human.id];
-            test.array(actualConnectedHumans)
-                .is(expectedConnectedHumans);
+        bot.on('connected', function(actualConnectedBots){
+            var human = io.connect(socketURL, options);
 
-            human.disconnect();
-            done();
+            human.on('connected', function(actualConnectedHumans){
+                var expectedConnectedHumans = [human.id];
+                test.array(actualConnectedHumans)
+                    .is(expectedConnectedHumans);
+
+                human.disconnect();
+                bot.disconnect();
+
+                done();
+            })
         });
     });
 
     it('Should remove human from list of humans on disconnection.', function(done) {
-        var testObserver = io.connect(socketURL, options);
-        var human = io.connect(socketURL, options);
+        var bot = io.connect(socketURL, botOptions);
 
-        human.on('connected', function(){
-            human.disconnect();
-        });
+        bot.on('connected', function(actualConnectedBots){
+            var human = io.connect(socketURL, options);
 
-        testObserver.on('disconnected', function(actualConnectedHumans) {
-            var expectedConnectedHumans = [testObserver.id];
+            human.on('connected', function(actualConnectedHumans){
+                var expectedConnectedHumans = [human.id];
+                test.array(actualConnectedHumans)
+                    .is(expectedConnectedHumans);
 
-            test.array(actualConnectedHumans)
-                .is(expectedConnectedHumans);
+                human.disconnect();
+                bot.disconnect();
 
-            testObserver.disconnect();
-            done();
+                done();
+            })
         });
     });
 
