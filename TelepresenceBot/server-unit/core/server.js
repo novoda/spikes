@@ -34,7 +34,7 @@ io.sockets.on('connection', function (client) {
     switch(clientType) {
         case ClientType.HUMAN:
             humans[client.id] = client;
-            testClient.emit('connected', toKeysArrayFrom(humans));
+            testClient.emit('connected_human', toKeysArrayFrom(humans));
             break;
         case ClientType.BOT:
             bots[client.id] = client;
@@ -42,7 +42,7 @@ io.sockets.on('connection', function (client) {
             break;
         case ClientType.TEST:
             console.log('switching test client');
-            testClient = client;
+            testClient = new LoggingClient(client);
             testClient.emit('connected');
             break;
         default:
