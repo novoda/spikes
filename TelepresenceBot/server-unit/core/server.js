@@ -1,12 +1,18 @@
 var io = require('socket.io').listen(5000);
 
 var humans = {};
+var bots = {};
 
 io.use(function(client, next){
-    if(client.handshake.query.clientType == "human") {
+    console.log(Object.keys(bots).length);
+
+    if(client.handshake.query.clientType == "human" && Object.keys(bots).length > 0) {
         return next();
+    } else if(client.handshake.query.clientType == "human" && Object.keys(bots).length <= 0) {
+        next(new Error('No bots available'));
+    } else {
+        next(new Error('Unrecognised clientType: ' + client.handshake.query.clientType));
     }
-    next(new Error('Unrecognised clientType: ', client.handshake.query.clientType));
 });
 
 io.sockets.on('connection', function (client) {

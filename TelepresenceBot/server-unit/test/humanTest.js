@@ -21,7 +21,22 @@ describe("TelepresenceBot Server: HumanTest ",function() {
 
         var human = io.connect(socketURL, nonHumanOptions);
 
-        human.on('error', function(){
+        human.on('error', function(errorMessage){
+            test.string(errorMessage)
+                .is("Unrecognised clientType: non-human");
+
+            human.disconnect();
+            done();
+        });
+    });
+
+    it('Should refuse connection when a bot is not available', function(done){
+        var human = io.connect(socketURL, options);
+
+        human.on('error', function(errorMessage){
+            test.string(errorMessage)
+                .is("No bots available");
+
             human.disconnect();
             done();
         });
