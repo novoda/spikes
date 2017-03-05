@@ -1,20 +1,24 @@
 var io = require('socket.io').listen(5000);
 
-var clients = {};
+var humans = {};
+
+io.use(function(client, next){
+    if(client.handshake.query.clientType == "human") {
+        return next();
+    }
+    next(new Error('Unrecognised clientType: ', client.handshake.query.clientType));
+});
 
 io.sockets.on('connection', function (client) {
 
-    console.log('connecting: ' + client.id);
-
-    client.on("connect_as_human", function(data, acknowledgement){
-        clients[client.id] = client;
-        acknowledgement(toKeysArrayFrom(clients));
-    });
+    console.log('Connecting: ', client.id);
+    humans[client.id] = client;
+    io.sockets.emit('connected', toKeysArrayFrom(humans));
 
     client.on('disconnect', function() {
         console.log('disconnecting: ' + client.id);
-        delete clients[client.id];
-        io.sockets.emit('disconnected', toKeysArrayFrom(clients));
+        delete humans[client.id];
+        io.sockets.emit('disconnected', toKeysArrayFrom(humans));
     });
 
 });
