@@ -3,7 +3,6 @@ package com.novoda.movies;
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.novoda.espresso.HitCounter;
 import com.novoda.espresso.ViewActivityRule;
 
 import org.junit.After;
@@ -95,55 +94,6 @@ public class MovieItemViewTest {
         onView(withId(R.id.movie_item_button_play)).perform(click());
 
         verify(movieItemListener, never()).onClickPlay(eq(EDWARD_SCISSORHANDS));
-    }
-
-    private static class HitCountingMovieItemViewListener implements MovieItemView.Listener {
-
-        private static final String ON_CLICK = "onClick ";
-        private static final String ON_CLICK_PLAY = "onClickPlay ";
-        private static final String ON_CLICK_FAVORITE = "onClickFavorite ";
-
-        private final HitCounter hitCounter = new HitCounter();
-
-        @Override
-        public void onClick(Movie movie) {
-            hitCounter.markHit(ON_CLICK + movie.name);
-        }
-
-        public void assertClick(Movie movie) {
-            hitCounter.assertHit(ON_CLICK + movie.name);
-        }
-
-        public void assertNoClick(Movie movie) {
-            hitCounter.assertNoHit(ON_CLICK + movie.name);
-        }
-
-        @Override
-        public void onClickPlay(Movie movie) {
-            hitCounter.markHit(ON_CLICK_PLAY + movie.name);
-        }
-
-        public void assertClickPlay(Movie movie) {
-            hitCounter.assertHit(ON_CLICK_PLAY + movie.name);
-        }
-
-        public void assertNoClickPlay(Movie movie) {
-            hitCounter.assertNoHit(ON_CLICK_PLAY + movie.name);
-        }
-
-        @Override
-        public void onClickFavorite(Movie movie) {
-            hitCounter.markHit(ON_CLICK_FAVORITE + movie.name);
-        }
-
-        public void assertClickFavourite(Movie movie) {
-            hitCounter.assertHit(ON_CLICK_FAVORITE + movie.name);
-        }
-
-        public void assertNoClickFavourite(Movie movie) {
-            hitCounter.assertNoHit(ON_CLICK_FAVORITE + movie.name);
-        }
-
     }
 
 }
