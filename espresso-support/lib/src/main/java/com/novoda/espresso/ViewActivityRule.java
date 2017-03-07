@@ -16,7 +16,7 @@ public class ViewActivityRule<T> extends ActivityTestRule<ViewActivity> {
 
     @Override
     protected Intent getActivityIntent() {
-        Intent intent = new Intent("com.novoda.espresso.SHOW_VIEW");
+        Intent intent = super.getActivityIntent();
         intent.putExtra(ViewActivity.EXTRA_LAYOUT_ID, id);
         return intent;
     }

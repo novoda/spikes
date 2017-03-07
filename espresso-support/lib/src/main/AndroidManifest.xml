@@ -4,14 +4,7 @@
 
     <application tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".ViewActivity">
-
-            <intent-filter>
-                <action android:name="com.novoda.espresso.SHOW_VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-
-        </activity>
+        <activity android:name=".ViewActivity" />
 
     </application>
 
