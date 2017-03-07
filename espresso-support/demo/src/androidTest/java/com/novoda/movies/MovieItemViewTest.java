@@ -11,12 +11,18 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -26,16 +32,20 @@ public class MovieItemViewTest {
     private static final Movie NOT_EDWARD_SCISSORHANDS = new Movie("NOT Edward Scissorhands");
 
     @Rule
+    public MockitoRule mockitoRule = MockitoJUnit.rule();
+
+    @Rule
     public ViewActivityRule<MovieItemView> viewActivityRule = new ViewActivityRule<>(R.layout.test_movie_item_view);
 
-    private HitCountingMovieItemViewListener hitCountingListener;
+    @Mock
+    MovieItemView.Listener movieItemListener;
+
 
     @Before
     public void setUp() {
         MovieItemView view = viewActivityRule.getView();
 
-        hitCountingListener = new HitCountingMovieItemViewListener();
-        view.attachListener(hitCountingListener);
+        view.attachListener(movieItemListener);
 
         // setup standard 'given' used for all tests
         viewActivityRule.bindViewUsing(new ViewActivityRule.Binder<MovieItemView>() {
@@ -55,21 +65,21 @@ public class MovieItemViewTest {
     public void clickMovieItemView() {
         onView(withClassName(is(MovieItemView.class.getName()))).perform(click());
 
-        hitCountingListener.assertClick(EDWARD_SCISSORHANDS);
+        verify(movieItemListener).onClick(eq(EDWARD_SCISSORHANDS));
     }
 
     @Test
     public void clickMovieFavoriteView() {
         onView(withId(R.id.movie_item_button_favorite)).perform(click());
 
-        hitCountingListener.assertClickFavourite(EDWARD_SCISSORHANDS);
+        verify(movieItemListener).onClickFavorite(eq(EDWARD_SCISSORHANDS));
     }
 
     @Test
     public void clickMoviePlayView() {
         onView(withId(R.id.movie_item_button_play)).perform(click());
 
-        hitCountingListener.assertClickPlay(EDWARD_SCISSORHANDS);
+        verify(movieItemListener).onClickPlay(eq(EDWARD_SCISSORHANDS));
     }
 
     @Test
@@ -84,8 +94,7 @@ public class MovieItemViewTest {
 
         onView(withId(R.id.movie_item_button_play)).perform(click());
 
-        // like `Mockito.verify(foo, never())`
-        hitCountingListener.assertNoClickPlay(EDWARD_SCISSORHANDS);
+        verify(movieItemListener, never()).onClickPlay(eq(EDWARD_SCISSORHANDS));
     }
 
     private static class HitCountingMovieItemViewListener implements MovieItemView.Listener {
