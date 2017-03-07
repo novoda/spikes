@@ -16,12 +16,12 @@ public class ViewActivityRule<T> extends ActivityTestRule<ViewActivity> {
 
     @Override
     protected Intent getActivityIntent() {
-        Intent activityIntent = super.getActivityIntent();
-        activityIntent.putExtra(ViewActivity.EXTRA_LAYOUT_ID, id);
-        return activityIntent;
+        Intent intent = new Intent("com.novoda.espresso.SHOW_VIEW");
+        intent.putExtra(ViewActivity.EXTRA_LAYOUT_ID, id);
+        return intent;
     }
 
-    public void bindView(final Binder<T> binder) {
+    public void bindViewUsing(final Binder<T> binder) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -31,7 +31,7 @@ public class ViewActivityRule<T> extends ActivityTestRule<ViewActivity> {
         });
     }
 
-    private T getView() {
+    public T getView() {
         return (T) getActivity().getView();
     }
 
