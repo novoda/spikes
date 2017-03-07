@@ -1,0 +1,23 @@
+ext {
+    androidCompileSdkVersion = 25
+    androidBuildToolsVersion = '25.0.1'
+    androidMinSdkVersion = 16
+    androidTargetSdkVersion = 25
+
+    supportLibraryVersion = '23.1.1'
+
+    librariesBuild = [
+        androidGradleBuildTools: 'com.android.tools.build:gradle:2.3.0',
+        bintrayRelease         : 'com.novoda:bintray-release:0.4.0'
+    ]
+
+    libraries = [
+        supportAppCompatV7: "com.android.support:appcompat-v7:${supportLibraryVersion}"
+    ]
+
+    librariesTest = [
+        androidTestRunner  : 'com.android.support.test:runner:0.5',
+        androidEspressoCore: 'com.android.support.test.espresso:espresso-core:2.2.2',
+        jUnit              : 'junit:junit:4.12',
+    ]
+}

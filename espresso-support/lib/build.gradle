@@ -1,0 +1,37 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath librariesBuild.androidGradleBuildTools
+        classpath librariesBuild.bintrayRelease
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'bintray-release'
+
+android {
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
+
+    defaultConfig {
+        minSdkVersion androidMinSdkVersion
+    }
+}
+
+dependencies {
+    compile librariesTest.androidTestRunner
+    compile librariesTest.androidEspressoCore
+}
+
+publish {
+    userOrg = 'novoda'
+    repoName = 'maven'
+    groupId = 'com.novoda'
+    artifactId = 'espresso-support'
+    version = project.version
+    uploadName = 'espresso-support'
+    description = 'Support classes and functions for Espresso testing'
+    website = 'https://github.com/novoda/spikes/tree/master/espresso-support'
+}

@@ -1,0 +1,8 @@
+<resources>
+
+  <string name="app_name">Movies</string>
+  <string name="action_click_movie">Open details</string>
+  <string name="action_click_play_movie">Play</string>
+  <string name="action_click_favorite_movie">Favorite</string>
+
+</resources>

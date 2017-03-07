@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <View
+        android:id="@+id/movie_item_image_poster"
+        android:layout_width="120dp"
+        android:layout_height="160dp"
+        android:background="@android:color/holo_blue_dark" />
+
+    <View
+        android:id="@+id/movie_item_button_favorite"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/holo_orange_light" />
+
+    <TextView
+        android:id="@+id/movie_item_text_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/movie_item_button_favorite"
+        android:layout_toRightOf="@id/movie_item_image_poster"
+        android:paddingLeft="8dp"
+        android:textColor="@android:color/white"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/movie_item_button_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/movie_item_text_name"
+        android:layout_alignBottom="@id/movie_item_image_poster"
+        android:layout_marginLeft="8dp"
+        android:background="@android:color/holo_red_light"
+        android:gravity="center"
+        android:minHeight="48dp"
+        android:minWidth="96dp"
+        android:padding="4dp"
+        android:text="Play"
+        android:textAllCaps="true"
+        android:textColor="@android:color/white" />
+
+</merge>
