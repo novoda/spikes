@@ -39,9 +39,9 @@ dependencies {
     // lib contains an Activity that needs to be part of app under test
     debugCompile project(':lib')
 
-    androidTestCompile 'org.mockito:mockito-core:1.10.19'
-    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
-    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
+    androidTestCompile librariesTest.mockitoCore
+    androidTestCompile librariesTest.dexmaker
+    androidTestCompile librariesTest.dexmakerMockito
 
     androidTestCompile(librariesTest.androidTestRunner) {
         exclude group: 'com.android.support', module: 'support-annotations'
