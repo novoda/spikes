@@ -46,13 +46,7 @@ public class MovieItemViewTest {
 
         view.attachListener(movieItemListener);
 
-        // setup standard 'given' used for all tests
-        viewActivityRule.bindViewUsing(new ViewActivityRule.Binder<MovieItemView>() {
-            @Override
-            public void bind(MovieItemView view) {
-                view.bind(EDWARD_SCISSORHANDS);
-            }
-        });
+        givenMovieItemViewIsBoundTo(EDWARD_SCISSORHANDS);
     }
 
     @After
@@ -83,17 +77,20 @@ public class MovieItemViewTest {
 
     @Test
     public void rebindWithDifferentMovie_noClickMoviePlayView() {
-        // setup 'given' in test
-        viewActivityRule.bindViewUsing(new ViewActivityRule.Binder<MovieItemView>() {
-            @Override
-            public void bind(MovieItemView view) {
-                view.bind(NOT_EDWARD_SCISSORHANDS);
-            }
-        });
+        givenMovieItemViewIsBoundTo(NOT_EDWARD_SCISSORHANDS);
 
         onView(withId(R.id.movie_item_button_play)).perform(click());
 
         verify(movieItemListener, never()).onClickPlay(eq(EDWARD_SCISSORHANDS));
+    }
+
+    private void givenMovieItemViewIsBoundTo(final Movie movie) {
+        viewActivityRule.bindViewUsing(new ViewActivityRule.Binder<MovieItemView>() {
+            @Override
+            public void bind(MovieItemView view) {
+                view.bind(movie);
+            }
+        });
     }
 
 }
