@@ -7,6 +7,15 @@ public class Group implements AutoCloseable {
     private final Buzzer buzzer;
     private final int frequency;
 
+    public static Group copyWithFrequency(Group group, int frequency) {
+        return new Group(
+                group.led,
+                group.button,
+                group.buzzer,
+                frequency
+        );
+    }
+
     public Group(Led led, Button button, Buzzer buzzer, int frequency) {
         this.led = led;
         this.button = button;

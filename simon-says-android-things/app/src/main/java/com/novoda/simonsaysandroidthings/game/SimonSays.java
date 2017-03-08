@@ -38,7 +38,7 @@ public class SimonSays implements AutoCloseable {
         this.buzzer = buzzer;
         sequence = new ArrayList<>();
         random = new Random();
-        sequencer = new Sequencer(onRoundSequenceFinishedListener);
+        sequencer = new Sequencer();
         inputVerifier = new InputVerifier(groups);
     }
 
@@ -60,7 +60,7 @@ public class SimonSays implements AutoCloseable {
     }
 
     private void playSequence() {
-        sequencer.playRoundSequence(sequence, GROUP_ON_DURATION_MS, GROUP_OFF_DURATION_MS);
+        sequencer.playRoundSequence(sequence, GROUP_ON_DURATION_MS, GROUP_OFF_DURATION_MS, onRoundSequenceFinishedListener);
     }
 
     private final OnSequenceFinishedListener onRoundSequenceFinishedListener = new OnSequenceFinishedListener() {
@@ -71,23 +71,47 @@ public class SimonSays implements AutoCloseable {
         }
     };
 
+    private final OnSequenceFinishedListener onSuccessSequenceFinishedListener = new OnSequenceFinishedListener() {
+        @Override
+        public void onSequenceFinished() {
+            Log.d(TAG, "onSequenceFinished() called");
+            nextRound();
+        }
+    };
+
+    private final OnSequenceFinishedListener onFailureSequenceFinishedListener = new OnSequenceFinishedListener() {
+        @Override
+        public void onSequenceFinished() {
+            Log.d(TAG, "onSequenceFinished() called");
+            int score = round - 1;
+            if (score > highscore.current()) {
+                highscore.setNew(score);
+                sequencer.playHighscoreSequence(groups, onHighscoreSequenceFinishedListener);
+            } else {
+                stop();
+            }
+        }
+    };
+
+    private final OnSequenceFinishedListener onHighscoreSequenceFinishedListener = new OnSequenceFinishedListener() {
+        @Override
+        public void onSequenceFinished() {
+            Log.d(TAG, "onSequenceFinished() called");
+            stop();
+        }
+    };
+
     private final InputVerificationListener inputVerificationListener = new InputVerificationListener() {
         @Override
         public void onCorrectInput() {
             Log.d(TAG, "onCorrectInput() called");
-            // TODO play success sequence and advance to next round
-            nextRound();
+            sequencer.playSuccessSequence(groups, onSuccessSequenceFinishedListener);
         }
 
         @Override
         public void onWrongInput() {
             Log.d(TAG, "onWrongInput() called");
-            // TODO play failure sequence
-            if (round > highscore.current()) {
-                highscore.setNew(round);
-                // TODO: play highscore sequence
-            }
-            state = State.IDLE; // TODO call stop on above sequence end instead
+            sequencer.playFailureSequence(groups, onFailureSequenceFinishedListener);
         }
     };
 

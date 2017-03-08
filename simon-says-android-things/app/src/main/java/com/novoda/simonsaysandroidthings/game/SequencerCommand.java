@@ -68,13 +68,13 @@ abstract class SequencerCommand {
 
     final static class FinishCommand extends SequencerCommand {
 
-        FinishCommand() {
-            super(null, 0);
+        FinishCommand(int delayMs) {
+            super(null, delayMs);
         }
 
         @Override
         public void execute(Handler handler) {
-            handler.sendEmptyMessage(MSG_SEQUENCE_FINISHED);
+            handler.sendEmptyMessageDelayed(MSG_SEQUENCE_FINISHED, getDurationMs());
         }
     }
 }
