@@ -29,9 +29,9 @@ publish {
     userOrg = 'novoda'
     repoName = 'maven'
     groupId = 'com.novoda'
-    artifactId = 'espresso-support'
+    artifactId = 'espresso-support-extras'
     version = project.version
     uploadName = 'espresso-support'
-    description = 'Support classes and functions for Espresso testing'
+    description = 'Additional app resources used by espresso-support-core'
     website = 'https://github.com/novoda/spikes/tree/master/espresso-support'
 }

@@ -1,8 +1,10 @@
-package com.novoda.espresso;
+package com.novoda.espresso.core;
 
 import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.test.rule.ActivityTestRule;
+
+import com.novoda.espresso.ViewActivity;
 
 public class ViewActivityRule<T> extends ActivityTestRule<ViewActivity> {
 

@@ -36,8 +36,8 @@ android {
 }
 
 dependencies {
-    // lib contains an Activity that needs to be part of app under test
-    debugCompile project(':lib')
+    debugCompile project(':extras')
+    androidTestCompile project(':core')
 
     androidTestCompile libraries.mockitoCore
     androidTestCompile libraries.dexmaker
