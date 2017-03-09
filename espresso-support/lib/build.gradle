@@ -3,8 +3,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath librariesBuild.androidGradleBuildTools
-        classpath librariesBuild.bintrayRelease
+        classpath libraries.build.androidGradle
+        classpath libraries.build.bintrayRelease
     }
 }
 
@@ -12,17 +12,17 @@ apply plugin: 'com.android.library'
 apply plugin: 'bintray-release'
 
 android {
-    compileSdkVersion androidCompileSdkVersion
-    buildToolsVersion androidBuildToolsVersion
+    compileSdkVersion versions.androidSdk.compile
+    buildToolsVersion versions.androidSdk.buildTools
 
     defaultConfig {
-        minSdkVersion androidMinSdkVersion
+        minSdkVersion versions.androidSdk.min
     }
 }
 
 dependencies {
-    compile librariesTest.androidTestRunner
-    compile librariesTest.androidEspressoCore
+    compile libraries.androidTestRunner
+    compile libraries.androidEspressoCore
 }
 
 publish {

@@ -3,20 +3,20 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath librariesBuild.androidGradleBuildTools
+        classpath libraries.build.androidGradle
     }
 }
 
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion androidCompileSdkVersion
-    buildToolsVersion androidBuildToolsVersion
+    compileSdkVersion versions.androidSdk.compile
+    buildToolsVersion versions.androidSdk.buildTools
 
     defaultConfig {
         applicationId "com.novoda.movies"
-        minSdkVersion androidMinSdkVersion
-        targetSdkVersion androidTargetSdkVersion
+        minSdkVersion versions.androidSdk.min
+        targetSdkVersion versions.androidSdk.target
         versionCode 1
         versionName "1.0"
 
@@ -39,14 +39,14 @@ dependencies {
     // lib contains an Activity that needs to be part of app under test
     debugCompile project(':lib')
 
-    androidTestCompile librariesTest.mockitoCore
-    androidTestCompile librariesTest.dexmaker
-    androidTestCompile librariesTest.dexmakerMockito
+    androidTestCompile libraries.mockitoCore
+    androidTestCompile libraries.dexmaker
+    androidTestCompile libraries.dexmakerMockito
 
-    androidTestCompile(librariesTest.androidTestRunner) {
+    androidTestCompile(libraries.androidTestRunner) {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    androidTestCompile(librariesTest.androidEspressoCore) {
+    androidTestCompile(libraries.androidEspressoCore) {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
 }
