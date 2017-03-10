@@ -1,23 +1,25 @@
 ext {
-    androidCompileSdkVersion = 25
-    androidBuildToolsVersion = '25.0.1'
-    androidMinSdkVersion = 16
-    androidTargetSdkVersion = 25
-
-    supportLibraryVersion = '23.1.1'
-
-    librariesBuild = [
-        androidGradleBuildTools: 'com.android.tools.build:gradle:2.3.0',
-        bintrayRelease         : 'com.novoda:bintray-release:0.4.0'
+    versions = [
+            androidSdk: [
+                    compile   : 25,
+                    min       : 16,
+                    target    : 25,
+                    buildTools: '25.0.2'
+            ],
+            dexmaker  : '1.2',
     ]
 
     libraries = [
-        supportAppCompatV7: "com.android.support:appcompat-v7:${supportLibraryVersion}"
-    ]
-
-    librariesTest = [
-        androidTestRunner  : 'com.android.support.test:runner:0.5',
-        androidEspressoCore: 'com.android.support.test.espresso:espresso-core:2.2.2',
-        jUnit              : 'junit:junit:4.12',
+            build              : [
+                    androidGradle : 'com.android.tools.build:gradle:2.3.0',
+                    bintrayRelease: 'com.novoda:bintray-release:0.4.0'
+            ],
+            androidTestRunner  : 'com.android.support.test:runner:0.5',
+            androidEspressoCore: 'com.android.support.test.espresso:espresso-core:2.2.2',
+            dexmaker           : "com.google.dexmaker:dexmaker:${versions.dexmaker}",
+            dexmakerMockito    : "com.google.dexmaker:dexmaker-mockito:${versions.dexmaker}",
+            jUnit              : 'junit:junit:4.12',
+            mockitoCore        : 'org.mockito:mockito-core:1.10.19',
+            supportAppCompatV7 : 'com.android.support:appcompat-v7:25.2.0'
     ]
 }

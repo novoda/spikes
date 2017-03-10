@@ -1,0 +1,37 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath libraries.build.androidGradle
+        classpath libraries.build.bintrayRelease
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'bintray-release'
+
+android {
+    compileSdkVersion versions.androidSdk.compile
+    buildToolsVersion versions.androidSdk.buildTools
+
+    defaultConfig {
+        minSdkVersion versions.androidSdk.min
+    }
+}
+
+dependencies {
+    compile libraries.androidTestRunner
+    compile libraries.androidEspressoCore
+}
+
+publish {
+    userOrg = 'novoda'
+    repoName = 'maven'
+    groupId = 'com.novoda'
+    artifactId = 'espresso-support-extras'
+    version = project.version
+    uploadName = 'espresso-support'
+    description = 'Additional app resources used by espresso-support-core'
+    website = 'https://github.com/novoda/spikes/tree/master/espresso-support'
+}

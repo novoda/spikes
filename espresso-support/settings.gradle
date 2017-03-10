@@ -1,2 +1,3 @@
-include ':lib'
+include ':core'
+include ':extras'
 include ':demo'
