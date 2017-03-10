@@ -1,12 +1,12 @@
 ext {
     versions = [
-            androidSdk    : [
+            androidSdk: [
                     compile   : 25,
                     min       : 16,
                     target    : 25,
-                    buildTools: '25.0.1'
+                    buildTools: '25.0.2'
             ],
-            supportLibrary: '23.1.1'
+            dexmaker  : '1.2',
     ]
 
     libraries = [
@@ -16,10 +16,10 @@ ext {
             ],
             androidTestRunner  : 'com.android.support.test:runner:0.5',
             androidEspressoCore: 'com.android.support.test.espresso:espresso-core:2.2.2',
-            dexmaker           : 'com.google.dexmaker:dexmaker:1.2',
-            dexmakerMockito    : 'com.google.dexmaker:dexmaker-mockito:1.2',
+            dexmaker           : "com.google.dexmaker:dexmaker:${versions.dexmaker}",
+            dexmakerMockito    : "com.google.dexmaker:dexmaker-mockito:${versions.dexmaker}",
             jUnit              : 'junit:junit:4.12',
             mockitoCore        : 'org.mockito:mockito-core:1.10.19',
-            supportAppCompatV7 : "com.android.support:appcompat-v7:${versions.supportLibraryVersion}",
+            supportAppCompatV7 : 'com.android.support:appcompat-v7:25.2.0'
     ]
 }
