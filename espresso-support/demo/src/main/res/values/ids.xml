@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <item name="action_click_movie" type="id" />
+  <item name="action_click_play_movie" type="id" />
+  <item name="action_click_favorite_movie" type="id" />
+
+</resources>

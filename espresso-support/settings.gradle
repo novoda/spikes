@@ -1,0 +1,3 @@
+include ':core'
+include ':extras'
+include ':demo'
