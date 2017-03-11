@@ -2,7 +2,7 @@ var io = require('socket.io').listen(5000);
 var ClientType = require("./clientType.js");
 var LoggingClient = require("./loggingClient.js");
 
-var humans = {};
+var humans = [];
 var bots = {};
 var testClient = new LoggingClient();
 
@@ -33,11 +33,12 @@ io.sockets.on('connection', function (client) {
 
     switch(clientType) {
         case ClientType.HUMAN:
-            humans[client.id] = client;
-            testClient.emit('connected_human', toKeysArrayFrom(humans));
+            humans.push(client.id);
+            testClient.emit('connected_human', humans);
             break;
         case ClientType.BOT:
             bots[client.id] = client;
+            client.join("london");
             testClient.emit('connected_bot', toKeysArrayFrom(bots));
             break;
         case ClientType.TEST:
@@ -51,7 +52,7 @@ io.sockets.on('connection', function (client) {
 
 
     client.on('disconnect', function() {
-        delete humans[client.id];
+        humans.splice(humans.indexOf(client.id), 1);
         delete bots[client.id];
         testClient.emit('disconnected_human', toKeysArrayFrom(humans));
         testClient.emit('disconnected_bot', toKeysArrayFrom(bots));
