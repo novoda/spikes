@@ -1,4 +1,4 @@
-package com.novoda.espresso.core;
+package com.novoda.espresso;
 
 import android.content.Intent;
 import android.support.annotation.LayoutRes;

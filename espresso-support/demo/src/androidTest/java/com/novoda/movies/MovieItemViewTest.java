@@ -3,7 +3,7 @@ package com.novoda.movies;
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.novoda.espresso.core.ViewActivityRule;
+import com.novoda.espresso.ViewActivityRule;
 
 import org.junit.After;
 import org.junit.Before;
