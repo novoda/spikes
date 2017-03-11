@@ -2,6 +2,7 @@ var io = require('socket.io').listen(5000);
 var ClientType = require("./clientType.js");
 var LoggingClient = require("./loggingClient.js");
 
+var room = "London";
 var humans = [];
 var bots = [];
 var testClient = new LoggingClient();
@@ -15,7 +16,8 @@ io.use(function(client, next){
         case ClientType.BOT:
             return next();
         case ClientType.HUMAN:
-            if(Object.keys(bots).length > 0) {
+            var roomRoster = io.sockets.adapter.rooms[room];
+            if(roomRoster != undefined && roomRoster.length == 1) {
                 return next();
             } else {
                 return next(new Error('No bots available'));
@@ -34,10 +36,12 @@ io.sockets.on('connection', function (client) {
     switch(clientType) {
         case ClientType.HUMAN:
             humans.push(client.id);
+            client.join(room);
             testClient.emit('connected_human', humans);
             break;
         case ClientType.BOT:
             bots.push(client.id);
+            client.join(room);
             testClient.emit('connected_bot', bots);
             break;
         case ClientType.TEST:
