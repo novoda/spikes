@@ -8,8 +8,7 @@ import io.socket.client.Socket;
 import io.socket.client.SocketIOException;
 import io.socket.emitter.Emitter;
 
-import static io.socket.client.Socket.EVENT_CONNECT;
-import static io.socket.client.Socket.EVENT_CONNECT_ERROR;
+import static io.socket.client.Socket.*;
 
 public class SocketConnectionObservable extends Observable<Result> {
 
@@ -24,6 +23,7 @@ public class SocketConnectionObservable extends Observable<Result> {
     @Override
     public Observable<Result> start() {
         socket.on(EVENT_CONNECT_ERROR, connectionTimeoutListener);
+        socket.on(EVENT_ERROR, connectionErrorListener);
         socket.on(EVENT_CONNECT, connectionEstablishedListener);
         socket.connect();
         return this;
@@ -36,6 +36,21 @@ public class SocketConnectionObservable extends Observable<Result> {
                 @Override
                 public void run() {
                     notifyOf(Result.from(new SocketIOException("connection timeout")));
+                }
+            });
+        }
+    };
+
+    private final Emitter.Listener connectionErrorListener = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (args[0] != null && args[0] instanceof String) {
+                        String errorMessage = String.valueOf(args[0]);
+                        notifyOf(Result.from(new SocketIOException(errorMessage)));
+                    }
                 }
             });
         }
