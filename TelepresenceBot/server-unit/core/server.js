@@ -3,7 +3,7 @@ var ClientType = require("./clientType.js");
 var LoggingClient = require("./loggingClient.js");
 
 var humans = [];
-var bots = {};
+var bots = [];
 var testClient = new LoggingClient();
 
 io.use(function(client, next){
@@ -37,9 +37,8 @@ io.sockets.on('connection', function (client) {
             testClient.emit('connected_human', humans);
             break;
         case ClientType.BOT:
-            bots[client.id] = client;
-            client.join("london");
-            testClient.emit('connected_bot', toKeysArrayFrom(bots));
+            bots.push(client.id);
+            testClient.emit('connected_bot', bots);
             break;
         case ClientType.TEST:
             console.log('switching test client');
@@ -53,13 +52,9 @@ io.sockets.on('connection', function (client) {
 
     client.on('disconnect', function() {
         humans.splice(humans.indexOf(client.id), 1);
-        delete bots[client.id];
-        testClient.emit('disconnected_human', toKeysArrayFrom(humans));
-        testClient.emit('disconnected_bot', toKeysArrayFrom(bots));
+        bots.splice(bots.indexOf(client.id), 1);
+        testClient.emit('disconnected_human', humans);
+        testClient.emit('disconnected_bot', bots);
     });
 
 });
-
-function toKeysArrayFrom(objects) {
-    return Object.keys(objects);
-}
