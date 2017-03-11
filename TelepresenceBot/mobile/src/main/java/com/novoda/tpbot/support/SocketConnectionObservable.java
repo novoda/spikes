@@ -44,7 +44,13 @@ public class SocketConnectionObservable extends Observable<Result> {
     private final Emitter.Listener connectionEstablishedListener = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            notifyOf(Result.from("Successful connection"));
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    notifyOf(Result.from("Successful connection"));
+                }
+            });
         }
     };
+
 }
