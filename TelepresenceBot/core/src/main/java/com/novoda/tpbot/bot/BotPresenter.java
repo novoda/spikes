@@ -30,6 +30,7 @@ class BotPresenter {
         unsubscribe(connectionObservable);
         unsubscribe(directionObservable);
         tpService.disconnect();
+        botView.onDisconnect();
     }
 
     void startListeningForDirection() {

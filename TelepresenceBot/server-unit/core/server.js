@@ -59,6 +59,7 @@ io.sockets.on('connection', function (client) {
     client.on('disconnect', function() {
         humans.splice(humans.indexOf(client.id), 1);
         bots.splice(bots.indexOf(client.id), 1);
+        leaveAllRooms(client);
         testClient.emit('disconnected_human', humans);
         testClient.emit('disconnected_bot', bots);
     });
@@ -72,9 +73,12 @@ io.sockets.on('connection', function (client) {
     });
 
     function leaveAllRooms(client) {
-        var rooms = Object.keys(io.sockets.adapter.sids[client.id]);
-        for(var i = 0; i < rooms.length; i++) {
-            client.leave(rooms[i]);
+        var roomsAndSockets = io.sockets.adapter.sids[client.id];
+        if(roomsAndSockets != undefined) {
+            var rooms = Object.keys(roomsAndSockets);
+            for(var room in rooms) {
+                client.leave(room);
+            }
         }
     }
 
