@@ -2,9 +2,16 @@ buildscript {
     apply from: 'dependencies.gradle'
 }
 
-allprojects {
-    version = '0.0.1'
+ext {
+    artifactsPublish = [
+            userOrg: 'novoda',
+            groupId: 'com.novoda',
+            version: '0.0.1',
+            website: 'https://github.com/novoda/spikes/tree/master/espresso-support'
+    ]
+}
 
+allprojects {
     repositories {
         jcenter()
     }

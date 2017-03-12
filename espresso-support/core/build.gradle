@@ -31,12 +31,10 @@ dependencies {
 }
 
 publish {
-    userOrg = 'novoda'
-    repoName = 'maven'
-    groupId = 'com.novoda'
+    userOrg = artifactsPublish.userOrg
+    groupId = artifactsPublish.groupId
+    version = artifactsPublish.version
+    website = artifactsPublish.website
     artifactId = 'espresso-support'
-    version = project.version
-    uploadName = 'espresso-support'
     description = 'Support classes and functions for Espresso testing'
-    website = 'https://github.com/novoda/spikes/tree/master/espresso-support'
 }

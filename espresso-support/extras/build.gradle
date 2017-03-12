@@ -25,12 +25,10 @@ android {
 }
 
 publish {
-    userOrg = 'novoda'
-    repoName = 'maven'
-    groupId = 'com.novoda'
+    userOrg = artifactsPublish.userOrg
+    groupId = artifactsPublish.groupId
+    version = artifactsPublish.version
+    website = artifactsPublish.website
     artifactId = 'espresso-support-extras'
-    version = project.version
-    uploadName = 'espresso-support'
-    description = 'Additional app resources used by espresso-support-core'
-    website = 'https://github.com/novoda/spikes/tree/master/espresso-support'
+    description = 'Additional app resources used by espresso-support'
 }
