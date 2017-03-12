@@ -59,14 +59,14 @@ adb shell pm grant com.novoda.movies android.permission.WRITE_SECURE_SETTINGS
 If the app is installed and the permission granted, you can enable/disable TalkBack via adb with the following actions:
 
 ```bash
-$ adb shell am start -a "com.novoda.talkbacktoggle.ENABLE_TALKBACK"
-$ adb shell am start -a "com.novoda.talkbacktoggle.DISABLE_TALKBACK"
+$ adb shell am start -a "com.novoda.espresso.ENABLE_TALKBACK"
+$ adb shell am start -a "com.novoda.espresso.DISABLE_TALKBACK"
 ```
 
 You can also do the same with an Intent:
 
 ```java
-Intent intent = new Intent("com.novoda.talkbacktoggle.ENABLE_TALKBACK")
+Intent intent = new Intent("com.novoda.espresso.ENABLE_TALKBACK")
 context.startActivity(intent);
 ```
 
@@ -75,7 +75,7 @@ context.startActivity(intent);
 You can run the demo tests with the following commands:
 
 ```bash
-./gradlew demo:installDebug; adb shell pm grant com.novoda.movies android.permission.WRITE_SECURE_SETTINGS; adb shell am start -a "com.novoda.talkbacktoggle.DISABLE_TALKBACK"; ./gradlew demo:cAT; adb shell am start -a "com.novoda.talkbacktoggle.DISABLE_TALKBACK";
+./gradlew demo:installDebug; adb shell pm grant com.novoda.movies android.permission.WRITE_SECURE_SETTINGS; adb shell am start -a "com.novoda.espresso.DISABLE_TALKBACK"; ./gradlew demo:cAT; adb shell am start -a "com.novoda.espresso.DISABLE_TALKBACK";
 ```
 
 You have to install the app first to set the permission. We also disable TalkBack before and after the tests so we don't mess up non-TalkBack tests.
@@ -85,6 +85,6 @@ You have to install the app first to set the permission. We also disable TalkBac
 Here are a list of useful links:
 
  * We always welcome people to contribute new features or bug fixes, [here is how](https://github.com/novoda/novoda/blob/master/CONTRIBUTING.md)
- * If you have a problem check the [Issues Page](https://github.com/novoda/talkback-toggle/issues) first to see if we are working on it // TODO: waiting on repo to exist
+ * If you have a problem check the [Issues Page](https://github.com/novoda/espresso-support/issues) first to see if we are working on it // TODO: waiting on repo to exist
 
 

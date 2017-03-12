@@ -13,12 +13,12 @@
     <activity android:name=".TalkBackStateSettingActivity">
 
       <intent-filter>
-        <action android:name="com.novoda.talkbacktoggle.ENABLE_TALKBACK" />
+        <action android:name="com.novoda.espresso.ENABLE_TALKBACK" />
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
 
       <intent-filter>
-        <action android:name="com.novoda.talkbacktoggle.DISABLE_TALKBACK" />
+        <action android:name="com.novoda.espresso.DISABLE_TALKBACK" />
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
 
