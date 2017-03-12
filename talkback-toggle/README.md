@@ -1,5 +1,7 @@
 # talkback-toggle [![Build](https://ci.novoda.com/buildStatus/icon?job=talkback-toggle)](https://ci.novoda.com/job/talkback-toggle/lastBuild/console) [![Download](https://api.bintray.com/packages/novoda/maven/talkback-toggle/images/download.svg)](https://bintray.com/novoda/maven/talkback-toggle/_latestVersion) [![License](https://raw.githubusercontent.com/novoda/novoda/master/assets/btn_apache_lisence.png)](LICENSE.txt)
 
+:warning: this work has been folded into the [`espresso-support`](https://github.com/novoda/spikes/tree/master/espresso-support) spike. There's not much value in toggling TalkBack outside of tests, and that library is open for further state setting (e.g. non-touch vs touch mode).
+
 Turn Android Talkback on and off simply by sending an intent!
 
 ## Description
