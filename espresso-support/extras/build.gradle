@@ -18,6 +18,10 @@ android {
     defaultConfig {
         minSdkVersion versions.androidSdk.min
     }
+
+    lintOptions {
+        lintConfig file("../lint-config.xml")
+    }
 }
 
 dependencies {
