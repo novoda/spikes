@@ -15,7 +15,7 @@ The artifacts are not yet available on JCenter. Until then, you can add the Novo
 
 ```
 maven {
-    url  "http://dl.bintray.com/novoda/maven"
+    url 'http://dl.bintray.com/novoda/maven'
 }
 
 ...
