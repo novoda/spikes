@@ -13,15 +13,15 @@ public class TalkBackActivityTestRule<T extends Activity> extends ActivityTestRu
     }
 
     @Override
-    protected void afterActivityLaunched() {
-        super.afterActivityLaunched();
-        talkBackStateSettingRequester.requestEnableTalkBack(getActivity());
+    protected void beforeActivityLaunched() {
+        super.beforeActivityLaunched();
+        talkBackStateSettingRequester.requestEnableTalkBack();
     }
 
     @Override
     protected void afterActivityFinished() {
         super.afterActivityFinished();
-        talkBackStateSettingRequester.requestDisableTalkBack(getActivity());
+        talkBackStateSettingRequester.requestDisableTalkBack();
     }
 
 }

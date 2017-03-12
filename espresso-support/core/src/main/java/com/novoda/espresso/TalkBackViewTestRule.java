@@ -13,15 +13,15 @@ public class TalkBackViewTestRule<T extends View> extends ViewTestRule<T> {
     }
 
     @Override
-    protected void afterActivityLaunched() {
-        super.afterActivityLaunched();
-        talkBackStateSettingRequester.requestEnableTalkBack(getActivity());
+    protected void beforeActivityLaunched() {
+        super.beforeActivityLaunched();
+        talkBackStateSettingRequester.requestEnableTalkBack();
     }
 
     @Override
     protected void afterActivityFinished() {
         super.afterActivityFinished();
-        talkBackStateSettingRequester.requestDisableTalkBack(getActivity());
+        talkBackStateSettingRequester.requestDisableTalkBack();
     }
 
 }
