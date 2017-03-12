@@ -1,5 +1,6 @@
 package com.novoda.tpbot.human;
 
+import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.Result;
 import com.novoda.tpbot.support.Observable;
 import com.novoda.tpbot.support.Observer;
@@ -22,6 +23,10 @@ class HumanPresenter {
         observable = humanTpService.connectTo(serverAddress)
                 .attach(new ConnectionObserver())
                 .start();
+    }
+
+    void moveIn(Direction direction) {
+        humanTpService.moveIn(direction);
     }
 
     void stopPresenting() {
