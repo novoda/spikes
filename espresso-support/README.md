@@ -9,6 +9,22 @@ The library is split into two components:
 
 The `extras` dependency adds some components to your app (hence it's not `androidTestCompile`), e.g. the `ViewActivity`.
 
+## Usage
+
+The artifacts are not yet available on JCenter. Until then, you can add the Novoda bintray repo:
+
+```
+maven {
+    url  "http://dl.bintray.com/novoda/maven"
+}
+
+...
+
+
+debugCompile 'com.novoda:espresso-support-extras:0.0.1'
+androidTestCompile 'com.novoda:espresso-support:0.0.1'
+```
+
 ## Testing views in isolation
 
 Use the `ViewTestRule`, passing in a layout resource. It'll inflate the resource into the `ViewActivity` with `MATCH_PARENT` for both dimensions. You can use `rule.getView()` to obtain an instance of the View and it'll be typed to the class you specified.
