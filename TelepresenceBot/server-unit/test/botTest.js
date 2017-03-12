@@ -10,6 +10,12 @@ var options ={
     query: 'clientType=bot'
 };
 
+var humanOptions ={
+    transports: ['websocket'],
+    'force new connection': true,
+    query: 'clientType=human'
+};
+
 var testOptions ={
     transports: ['websocket'],
     'force new connection': true,
@@ -51,6 +57,32 @@ describe("TelepresenceBot Server: BotTest ",function() {
 
                     testObserver.disconnect();
                     done();
+                });
+            });
+        });
+    });
+
+    it('Should forward movement directions from human to bot.', function(done) {
+        var testObserver = io.connect(socketURL, testOptions);
+
+        testObserver.on('connected', function(){
+            var bot = io.connect(socketURL, options);
+
+            testObserver.on('connected_bot', function(){
+                var human = io.connect(socketURL, humanOptions);
+
+                testObserver.on('connected_human', function(){
+                    human.emit('move_in', 'w');
+
+                    bot.on('direction', function(actualDirection){
+                        test.string(actualDirection)
+                            .is('w');
+
+                        testObserver.disconnect();
+                        human.disconnect();
+                        bot.disconnect();
+                        done();
+                    });
                 });
             });
         });

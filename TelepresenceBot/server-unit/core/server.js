@@ -64,10 +64,11 @@ io.sockets.on('connection', function (client) {
     });
 
     client.on('move_in', function(direction) {
-        console.log('direction: ', direction);
-        var something = Object.keys(io.sockets.adapter.sids[client.id]);
-        console.log(something);
-        io.to(client.room).emit('direction', direction);
+        var rooms = Object.keys(io.sockets.adapter.sids[client.id]);
+        if(rooms != undefined && rooms.length == 1) {
+            io.to(rooms[0]).emit('direction', direction);
+            testClient.emit('direction', direction);
+        }
     });
 
     function leaveAllRooms(client) {
