@@ -25,6 +25,7 @@ public class SocketConnectionObservable extends Observable<Result> {
         socket.on(EVENT_CONNECT_ERROR, connectionTimeoutListener);
         socket.on(EVENT_ERROR, connectionErrorListener);
         socket.on(EVENT_CONNECT, connectionEstablishedListener);
+        socket.on(EVENT_DISCONNECT, disconnectionListener);
         socket.connect();
         return this;
     }
@@ -63,6 +64,18 @@ public class SocketConnectionObservable extends Observable<Result> {
                 @Override
                 public void run() {
                     notifyOf(Result.from("Successful connection"));
+                }
+            });
+        }
+    };
+
+    private final Emitter.Listener disconnectionListener = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    notifyOf(Result.from(new SocketIOException("Disconnected")));
                 }
             });
         }
