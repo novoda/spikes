@@ -30,7 +30,7 @@ publish {
     userOrg = 'novoda'
     repoName = 'maven'
     groupId = 'com.novoda'
-    artifactId = 'espresso-support-core'
+    artifactId = 'espresso-support'
     version = project.version
     uploadName = 'espresso-support'
     description = 'Support classes and functions for Espresso testing'
