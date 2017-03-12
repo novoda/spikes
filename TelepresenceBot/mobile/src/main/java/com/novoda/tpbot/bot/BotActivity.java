@@ -84,7 +84,7 @@ public class BotActivity extends AppCompatActivity implements BotView {
     private final ServerDeclarationListener serverDeclarationListener = new ServerDeclarationListener() {
         @Override
         public void onConnect(String serverAddress) {
-            debugView.showPermanently(getResources().getString(R.string.connecting_ellipsis));
+            debugView.showPermanently(getString(R.string.connecting_ellipsis));
             presenter.startPresenting(serverAddress);
         }
     };
@@ -177,14 +177,14 @@ public class BotActivity extends AppCompatActivity implements BotView {
 
     @Override
     public void onConnect(String message) {
-        debugView.showPermanently(getResources().getString(R.string.connected));
+        debugView.showPermanently(getString(R.string.connected));
         switchableView.setDisplayedChild(1);
         presenter.startListeningForDirection();
     }
 
     @Override
     public void onDisconnect() {
-        debugView.showPermanently("");
+        debugView.showPermanently(getString(R.string.disconnected));
         switchableView.setDisplayedChild(0);
     }
 

@@ -10,5 +10,6 @@
   <string name="connect">Connect </string>
   <string name="connecting_ellipsis">Connecting…</string>
   <string name="connected">Connected</string>
+  <string name="disconnected">Disconnected</string>
 
 </resources>
