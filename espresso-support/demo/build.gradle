@@ -36,8 +36,12 @@ android {
 }
 
 dependencies {
+    compile libraries.accessibilitools
+
     debugCompile project(':extras')
-    androidTestCompile project(':core')
+    androidTestCompile(project(':core')) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
 
     androidTestCompile libraries.mockitoCore
     androidTestCompile libraries.dexmaker

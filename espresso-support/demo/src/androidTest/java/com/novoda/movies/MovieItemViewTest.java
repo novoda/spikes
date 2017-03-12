@@ -3,7 +3,7 @@ package com.novoda.movies;
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.novoda.espresso.ViewActivityRule;
+import com.novoda.espresso.ViewTestRule;
 
 import org.junit.After;
 import org.junit.Before;
@@ -34,14 +34,14 @@ public class MovieItemViewTest {
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Rule
-    public ViewActivityRule<MovieItemView> viewActivityRule = new ViewActivityRule<>(R.layout.test_movie_item_view);
+    public ViewTestRule<MovieItemView> viewTestRule = new ViewTestRule<>(R.layout.test_movie_item_view);
 
     @Mock
     MovieItemView.Listener movieItemListener;
 
     @Before
     public void setUp() {
-        MovieItemView view = viewActivityRule.getView();
+        MovieItemView view = viewTestRule.getView();
 
         view.attachListener(movieItemListener);
 
@@ -50,7 +50,7 @@ public class MovieItemViewTest {
 
     @After
     public void tearDown() {
-        viewActivityRule.getView().detachListeners();
+        viewTestRule.getView().detachListeners();
     }
 
     @Test
@@ -84,7 +84,7 @@ public class MovieItemViewTest {
     }
 
     private void givenMovieItemViewIsBoundTo(final Movie movie) {
-        viewActivityRule.bindViewUsing(new ViewActivityRule.Binder<MovieItemView>() {
+        viewTestRule.bindViewUsing(new ViewTestRule.Binder<MovieItemView>() {
             @Override
             public void bind(MovieItemView view) {
                 view.bind(movie);

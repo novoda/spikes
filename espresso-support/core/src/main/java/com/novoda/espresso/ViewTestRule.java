@@ -3,15 +3,16 @@ package com.novoda.espresso;
 import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.test.rule.ActivityTestRule;
+import android.view.View;
 
 import com.novoda.espresso.ViewActivity;
 
-public class ViewActivityRule<T> extends ActivityTestRule<ViewActivity> {
+public class ViewTestRule<T extends View> extends ActivityTestRule<ViewActivity> {
 
     @LayoutRes
     private final int id;
 
-    public ViewActivityRule(@LayoutRes int id) {
+    public ViewTestRule(@LayoutRes int id) {
         super(ViewActivity.class);
         this.id = id;
     }
