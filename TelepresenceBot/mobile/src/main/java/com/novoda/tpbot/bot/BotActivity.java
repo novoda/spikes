@@ -30,7 +30,6 @@ import java.util.HashMap;
 
 public class BotActivity extends AppCompatActivity implements BotView {
 
-    private static final String EMPTY = "";
     private SelfDestructingMessageView debugView;
     private SwitchableView switchableView;
 
@@ -185,7 +184,7 @@ public class BotActivity extends AppCompatActivity implements BotView {
 
     @Override
     public void onDisconnect() {
-        debugView.showTimed(EMPTY);
+        debugView.showPermanently("");
         switchableView.setDisplayedChild(0);
     }
 

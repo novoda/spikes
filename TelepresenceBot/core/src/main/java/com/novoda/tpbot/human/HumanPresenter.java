@@ -32,6 +32,7 @@ class HumanPresenter {
     void stopPresenting() {
         unsubscribe(observable);
         humanTpService.disconnect();
+        humanView.onDisconnect();
     }
 
     private class ConnectionObserver implements Observer<Result> {
