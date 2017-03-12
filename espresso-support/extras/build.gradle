@@ -24,11 +24,6 @@ android {
     }
 }
 
-dependencies {
-    compile libraries.androidTestRunner
-    compile libraries.androidEspressoCore
-}
-
 publish {
     userOrg = 'novoda'
     repoName = 'maven'
