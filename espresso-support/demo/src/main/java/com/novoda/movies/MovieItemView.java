@@ -33,7 +33,7 @@ public class MovieItemView extends RelativeLayout {
     public MovieItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
         a11yServices = AccessibilityServices.newInstance(context);
-        dialogCreator = new ActionsAlertDialogCreator(getContext());
+        dialogCreator = new ActionsAlertDialogCreator(context);
     }
 
     @Override
