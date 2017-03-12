@@ -36,11 +36,13 @@ io.sockets.on('connection', function (client) {
     switch(clientType) {
         case ClientType.HUMAN:
             humans.push(client.id);
+            leaveAllRooms(client);
             client.join(room);
             testClient.emit('connected_human', humans);
             break;
         case ClientType.BOT:
             bots.push(client.id);
+            leaveAllRooms(client);
             client.join(room);
             testClient.emit('connected_bot', bots);
             break;
@@ -60,5 +62,19 @@ io.sockets.on('connection', function (client) {
         testClient.emit('disconnected_human', humans);
         testClient.emit('disconnected_bot', bots);
     });
+
+    client.on('move_in', function(direction) {
+        console.log('direction: ', direction);
+        var something = Object.keys(io.sockets.adapter.sids[client.id]);
+        console.log(something);
+        io.to(client.room).emit('direction', direction);
+    });
+
+    function leaveAllRooms(client) {
+        var rooms = Object.keys(io.sockets.adapter.sids[client.id]);
+        for(var i = 0; i < rooms.length; i++) {
+            client.leave(rooms[i]);
+        }
+    }
 
 });
