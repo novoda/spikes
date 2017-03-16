@@ -8,7 +8,9 @@ import io.socket.client.Socket;
 import io.socket.client.SocketIOException;
 import io.socket.emitter.Emitter;
 
-import static io.socket.client.Socket.*;
+import static io.socket.client.Socket.EVENT_CONNECT;
+import static io.socket.client.Socket.EVENT_CONNECT_ERROR;
+import static io.socket.client.Socket.EVENT_ERROR;
 
 public class SocketConnectionObservable extends Observable<Result> {
 
