@@ -37,7 +37,7 @@ class SocketIOTpService implements BotTpService {
         try {
             URL url = new URL(serverAddress);
             IO.Options options = new IO.Options();
-            options.query = ClientType.BOT.rawClientType();
+            options.query = ClientType.BOT.rawQuery();
             socket = IO.socket(url.toExternalForm(), options);
         } catch (MalformedURLException | URISyntaxException exception) {
             MalformedServerAddressException exceptionWithUserFacingMessage = new MalformedServerAddressException(exception);

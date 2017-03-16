@@ -5,14 +5,14 @@ public enum ClientType {
     BOT("clientType=bot"),
     HUMAN("clientType=human");
 
-    private final String rawClientType;
+    private final String rawQuery;
 
-    ClientType(String rawClientType) {
-        this.rawClientType = rawClientType;
+    ClientType(String rawQuery) {
+        this.rawQuery = rawQuery;
     }
 
-    public String rawClientType() {
-        return rawClientType;
+    public String rawQuery() {
+        return rawQuery;
     }
 
 }

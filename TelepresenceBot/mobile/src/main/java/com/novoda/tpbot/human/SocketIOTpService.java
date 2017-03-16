@@ -36,7 +36,7 @@ class SocketIOTpService implements HumanTpService {
         try {
             URL url = new URL(serverAddress);
             IO.Options options = new IO.Options();
-            options.query = ClientType.HUMAN.rawClientType();
+            options.query = ClientType.HUMAN.rawQuery();
             socket = IO.socket(url.toExternalForm(), options);
         } catch (MalformedURLException | URISyntaxException exception) {
             MalformedServerAddressException exceptionWithUserFacingMessage = new MalformedServerAddressException(exception);
