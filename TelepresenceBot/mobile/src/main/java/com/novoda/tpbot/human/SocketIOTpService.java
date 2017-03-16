@@ -5,6 +5,7 @@ import android.os.Looper;
 
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.Result;
+import com.novoda.tpbot.support.ClientType;
 import com.novoda.tpbot.support.Event;
 import com.novoda.tpbot.support.MalformedServerAddressException;
 import com.novoda.tpbot.support.Observable;
@@ -34,12 +35,14 @@ class SocketIOTpService implements HumanTpService {
     public Observable<Result> connectTo(String serverAddress) {
         try {
             URL url = new URL(serverAddress);
-            socket = IO.socket(url.toExternalForm());
+            IO.Options options = new IO.Options();
+            options.query = ClientType.HUMAN.rawQuery();
+            socket = IO.socket(url.toExternalForm(), options);
         } catch (MalformedURLException | URISyntaxException exception) {
             MalformedServerAddressException exceptionWithUserFacingMessage = new MalformedServerAddressException(exception);
             return Observable.just(Result.from(exceptionWithUserFacingMessage));
         }
-        return new SocketConnectionObservable(socket, handler, Event.JOIN_HUMAN);
+        return new SocketConnectionObservable(socket, handler);
     }
 
     @Override
