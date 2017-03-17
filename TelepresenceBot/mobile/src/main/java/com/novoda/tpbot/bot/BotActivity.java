@@ -179,7 +179,7 @@ public class BotActivity extends AppCompatActivity implements BotView {
     public void onConnect(String message) {
         debugView.showPermanently(getString(R.string.connected));
         switchableView.setDisplayedChild(1);
-        presenter.startListeningForDirection();
+        presenter.onConnect();
     }
 
     @Override

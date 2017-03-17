@@ -33,7 +33,7 @@ class BotPresenter {
         botView.onDisconnect();
     }
 
-    void startListeningForDirection() {
+    void onConnect() {
         directionObservable = tpService.listen()
                 .attach(new DirectionObserver())
                 .start();

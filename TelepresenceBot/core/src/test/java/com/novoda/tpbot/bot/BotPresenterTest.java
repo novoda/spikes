@@ -82,7 +82,7 @@ public class BotPresenterTest {
     public void givenDirection_whenStartListeningForDirectionIsCalled_thenTpServiceMoveInIsCalled() {
         when(tpService.listen()).thenReturn(Observable.just(DIRECTION));
 
-        presenter.startListeningForDirection();
+        presenter.onConnect();
 
         verify(botView).moveIn(DIRECTION);
     }
@@ -92,7 +92,7 @@ public class BotPresenterTest {
         Observable<Direction> observable = Observable.just(DIRECTION);
         Observable<Direction> spyObservable = Mockito.spy(observable);
         when(tpService.listen()).thenReturn(spyObservable);
-        presenter.startListeningForDirection();
+        presenter.onConnect();
 
         presenter.stopPresenting();
 
