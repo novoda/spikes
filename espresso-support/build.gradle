@@ -6,7 +6,7 @@ ext {
     artifactsPublish = [
             userOrg: 'novoda',
             groupId: 'com.novoda',
-            version: '0.0.1',
+            version: '0.0.2',
             website: 'https://github.com/novoda/spikes/tree/master/espresso-support'
     ]
 }
