@@ -49,7 +49,9 @@ public class TalkBackStateSettingRequester {
     }
 
     private void sendIntent(String action) {
-        context.startActivity(new Intent(action));
+        Intent intent = new Intent(action);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
         sleepToAllowTalkBackServiceToChangeState();
     }
 
