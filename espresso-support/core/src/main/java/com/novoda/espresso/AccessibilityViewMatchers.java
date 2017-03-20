@@ -1,6 +1,8 @@
 package com.novoda.espresso;
 
 import android.content.res.Resources;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.annotation.StringRes;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -13,6 +15,7 @@ import static org.hamcrest.Matchers.is;
 
 public class AccessibilityViewMatchers {
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     public static Matcher<? super View> withUsageHintOnClick(@StringRes final int resourceId) {
         return new TypeSafeMatcher<View>() {
 
@@ -60,10 +63,12 @@ public class AccessibilityViewMatchers {
         };
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     public static Matcher<? super View> withUsageHintOnClick(CharSequence text) {
         return withUsageHintOnClick(is(text));
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     public static Matcher<? super View> withUsageHintOnClick(final Matcher<? extends CharSequence> charSequenceMatcher) {
         return new TypeSafeMatcher<View>() {
             @Override
@@ -86,6 +91,7 @@ public class AccessibilityViewMatchers {
         };
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     public static Matcher<? super View> withUsageHintOnLongClick(@StringRes final int resourceId) {
         return new TypeSafeMatcher<View>() {
 
@@ -133,10 +139,12 @@ public class AccessibilityViewMatchers {
         };
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     public static Matcher<? super View> withUsageHintOnLongClick(CharSequence text) {
         return withUsageHintOnLongClick(is(text));
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     public static Matcher<? super View> withUsageHintOnLongClick(final Matcher<? extends CharSequence> charSequenceMatcher) {
         return new TypeSafeMatcher<View>() {
             @Override
@@ -159,6 +167,7 @@ public class AccessibilityViewMatchers {
         };
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     public static AccessibilityNodeInfo.AccessibilityAction findAction(AccessibilityNodeInfo accessibilityNodeInfo, int actionId) {
         for (AccessibilityNodeInfo.AccessibilityAction accessibilityAction : accessibilityNodeInfo.getActionList()) {
             if (actionId == accessibilityAction.getId()) {
