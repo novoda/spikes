@@ -36,11 +36,13 @@ io.sockets.on('connection', function (client) {
     switch(clientType) {
         case ClientType.HUMAN:
             humans.push(client.id);
+            leaveAllRooms(client);
             client.join(room);
             testClient.emit('connected_human', humans);
             break;
         case ClientType.BOT:
             bots.push(client.id);
+            leaveAllRooms(client);
             client.join(room);
             testClient.emit('connected_bot', bots);
             break;
@@ -55,10 +57,40 @@ io.sockets.on('connection', function (client) {
 
 
     client.on('disconnect', function() {
+        disconnectRoom(room);
+
         humans.splice(humans.indexOf(client.id), 1);
         bots.splice(bots.indexOf(client.id), 1);
         testClient.emit('disconnected_human', humans);
         testClient.emit('disconnected_bot', bots);
     });
+
+    client.on('move_in', function(direction) {
+        var rooms = Object.keys(io.sockets.adapter.sids[client.id]);
+        for(var i = 0; i < rooms.length; i++) {
+            io.to(rooms[i]).emit('direction', direction);
+            testClient.emit('direction', direction);
+        }
+    });
+
+    function leaveAllRooms(client) {
+        var rooms = Object.keys(io.sockets.adapter.sids[client.id]);
+        for(var i = 0; i < rooms.length; i++) {
+            client.leave(rooms[i]);
+        }
+    }
+
+    function disconnectRoom(name) {
+        var room = io.sockets.adapter.rooms[name];
+
+        if(room != undefined) {
+            var clients = io.sockets.adapter.rooms[name].sockets;
+
+            for(var client in clients) {
+                var connectedClient = io.sockets.connected[client];
+                connectedClient.disconnect();
+            }
+        }
+    }
 
 });

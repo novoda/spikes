@@ -30,12 +30,7 @@ class BotPresenter {
         unsubscribe(connectionObservable);
         unsubscribe(directionObservable);
         tpService.disconnect();
-    }
-
-    void startListeningForDirection() {
-        directionObservable = tpService.listen()
-                .attach(new DirectionObserver())
-                .start();
+        botView.onDisconnect();
     }
 
     private class ConnectionObserver implements Observer<Result> {
@@ -46,6 +41,10 @@ class BotPresenter {
                 botView.onError(result.exception().get().getMessage());
             } else {
                 botView.onConnect(result.message().get());
+
+                directionObservable = tpService.listen()
+                        .attach(new DirectionObserver())
+                        .start();
             }
         }
 

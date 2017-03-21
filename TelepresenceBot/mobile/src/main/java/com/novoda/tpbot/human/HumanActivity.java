@@ -48,7 +48,8 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         @Override
         public void onCommandRepeated(String command) {
             debugView.showTimed(command);
-            // TODO: send command to the receiver (bot) part
+            Direction direction = Direction.from(command);
+            presenter.moveIn(direction);
         }
     };
 
@@ -66,31 +67,32 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
 
         @Override
         public void onLazersFired() {
-            commandRepeater.startRepeatingCommand(LAZERS);
+            // no-op for debug
         }
 
         @Override
         public void onLazersReleased() {
-            commandRepeater.stopRepeatingCommand(LAZERS);
+            // no-op for debug
         }
     };
 
     private final ServerDeclarationListener serverDeclarationListener = new ServerDeclarationListener() {
         @Override
         public void onConnect(String serverAddress) {
-            debugView.showPermanently(getResources().getString(R.string.connecting_ellipsis));
+            debugView.showPermanently(getString(R.string.connecting_ellipsis));
             presenter.startPresenting(serverAddress);
         }
     };
 
     @Override
     public void onConnect(String message) {
-        debugView.showPermanently(getResources().getString(R.string.connected));
+        debugView.showPermanently(getString(R.string.connected));
         switchableView.setDisplayedChild(1);
     }
 
     @Override
     public void onDisconnect() {
+        debugView.showPermanently(getString(R.string.disconnected));
         switchableView.setDisplayedChild(0);
     }
 
