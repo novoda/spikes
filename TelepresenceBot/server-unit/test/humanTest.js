@@ -7,13 +7,13 @@ var socketURL = 'http://0.0.0.0:5000'
 var options ={
     transports: ['websocket'],
     'force new connection': true,
-    query: 'clientType=human'
+    query: 'clientType=human&room=London'
 };
 
 var botOptions ={
     transports: ['websocket'],
     'force new connection': true,
-    query: 'clientType=bot'
+    query: 'clientType=bot&room=London'
 };
 
 var testOptions ={

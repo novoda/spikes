@@ -8,6 +8,8 @@ var bots = [];
 var testClient = new LoggingClient();
 
 io.use(function(client, next){
+
+    var rawRoom = client.handshake.query.room;
     var rawClientType = client.handshake.query.clientType;
     var clientType = ClientType.from(rawClientType);
 
@@ -16,7 +18,7 @@ io.use(function(client, next){
         case ClientType.BOT:
             return next();
         case ClientType.HUMAN:
-            var roomRoster = io.sockets.adapter.rooms[room];
+            var roomRoster = io.sockets.adapter.rooms[rawRoom];
             if(roomRoster != undefined && roomRoster.length == 1) {
                 return next();
             } else {
@@ -26,22 +28,24 @@ io.use(function(client, next){
             return next(new Error('Unrecognised clientType: ' + rawClientType));
 
     }
+
 });
 
 io.sockets.on('connection', function (client) {
 
+    var rawRoom = client.handshake.query.room;
     var rawClientType = client.handshake.query.clientType;
     var clientType = ClientType.from(rawClientType);
 
     switch(clientType) {
         case ClientType.HUMAN:
             humans.push(client.id);
-            client.join(room);
+            client.join(rawRoom);
             testClient.emit('connected_human', humans);
             break;
         case ClientType.BOT:
             bots.push(client.id);
-            client.join(room);
+            client.join(rawRoom);
             testClient.emit('connected_bot', bots);
             break;
         case ClientType.TEST:
