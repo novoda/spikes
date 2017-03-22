@@ -13,7 +13,7 @@ var options ={
 var humanOptions ={
     transports: ['websocket'],
     'force new connection': true,
-    query: 'clientType=human'
+    query: 'clientType=human&room=London'
 };
 
 var testOptions ={
@@ -44,7 +44,7 @@ describe("TelepresenceBot Server: BotTest ",function() {
         });
     });
 
-    it('Should remove bot from list of bots on disconnection.', function(done) {
+    it('Should remove bot from Room:London on disconnection.', function(done) {
         var testObserver = io.connect(socketURL, testOptions);
 
         testObserver.on('connected', function(){
