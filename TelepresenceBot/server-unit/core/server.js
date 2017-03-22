@@ -59,7 +59,6 @@ io.sockets.on('connection', function (client) {
             throw 'Unexpected rawClientType: ' + clientType;
     }
 
-    // TODO: check this disconnect method, it is not removing the human.
     client.on('disconnect', function() {
         disconnectRoom(client.id);
         testClient.emit('disconnected_human', asRoomsWithSocketIds());
@@ -85,13 +84,6 @@ function disconnectRoom(name) {
             var connectedClient = io.sockets.connected[client];
             connectedClient.disconnect();
         }
-    }
-}
-
-function leaveAllRooms(client) {
-    var rooms = Object.keys(io.sockets.adapter.rooms[client.id]);
-    for(var i = 0; i < rooms.length; i++) {
-        client.leave(rooms[i]);
     }
 }
 
