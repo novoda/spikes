@@ -18,19 +18,15 @@ io.use(function(client, next){
         case ClientType.BOT:
             return next();
         case ClientType.HUMAN:
-            console.log(rawRoom);
             var roomRoster = io.sockets.adapter.rooms[rawRoom];
-            console.log(io.sockets.adapter.rooms);
 
             if(roomRoster != undefined) {
                 for (socketId in roomRoster.sockets) {
-                    console.log("botRooms: ", io.sockets.connected[socketId].rooms);
-                    console.log("botRoom: ", io.sockets.adapter.rooms[socketId]);
 
-                    var botsRoom = io.sockets.adapter.rooms[socketId];
-                    if(botsRoom.length != undefined && botsRoom.length == 1) { // Doesn't contain a human.
-                        client.handshake.query.room = socketId; // Replace the room with the bot socket id.
-                        console.log("query: ", client.handshake.query);
+                    var socketsInBotRoom = io.sockets.adapter.rooms[socketId];
+
+                    if(botNotConnectedToHuman(socketsInBotRoom)) {
+                        client.handshake.query.room = socketId;
                         return next();
                     }
                 }
@@ -43,6 +39,10 @@ io.use(function(client, next){
     }
 
 });
+
+function botNotConnectedToHuman(socketsInBotRoom) {
+    return  socketsInBotRoom.length != undefined && socketsInBotRoom.length == 1;
+}
 
 io.sockets.on('connection', function (client) {
 
