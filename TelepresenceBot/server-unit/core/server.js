@@ -4,8 +4,6 @@ var LoggingClient = require("./loggingClient.js");
 var BotLocator = require("./botLocator.js");
 
 var room = "London";
-var humans = [];
-var bots = [];
 var testClient = new LoggingClient();
 var botLocator = new BotLocator(io.sockets.adapter.rooms);
 
@@ -43,12 +41,10 @@ io.sockets.on('connection', function (client) {
 
     switch(clientType) {
         case ClientType.HUMAN:
-            humans.push(client.id);
             client.join(roomName);
             testClient.emit('connected_human', humans);
             break;
         case ClientType.BOT:
-            bots.push(client.id);
             client.join(roomName);
             testClient.emit('connected_bot', asRoomsWithSocketIds());
             break;
@@ -63,8 +59,6 @@ io.sockets.on('connection', function (client) {
 
 
     client.on('disconnect', function() {
-        humans.splice(humans.indexOf(client.id), 1);
-        bots.splice(bots.indexOf(client.id), 1);
         testClient.emit('disconnected_human', asRoomsWithSocketIds());
         testClient.emit('disconnected_bot', asRoomsWithSocketIds());
     });
