@@ -12,8 +12,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class BotPresenterTest {
 
@@ -36,6 +35,8 @@ public class BotPresenterTest {
     @Before
     public void setUp() throws Exception {
         presenter = new BotPresenter(tpService, botView);
+
+        when(tpService.listen()).thenReturn(Observable.just(DIRECTION));
     }
 
     @Test
@@ -79,24 +80,49 @@ public class BotPresenterTest {
     }
 
     @Test
-    public void givenDirection_whenStartListeningForDirectionIsCalled_thenTpServiceMoveInIsCalled() {
-        when(tpService.listen()).thenReturn(Observable.just(DIRECTION));
+    public void givenSuccessfulConnection_whenStartPresenting_thenStartsListeningForDirections() {
+        when(tpService.connectTo(SERVER_ADDRESS)).thenReturn(Observable.just(SUCCESS_RESULT));
 
-        presenter.startListeningForDirection();
+        presenter.startPresenting(SERVER_ADDRESS);
+
+        verify(tpService).listen();
+    }
+
+    @Test
+    public void givenUnsuccessfulConnection_whenStartPresenting_thenDoesNotStartListeningForDirections() {
+        when(tpService.connectTo(SERVER_ADDRESS)).thenReturn(Observable.just(FAILURE_RESULT));
+
+        presenter.startPresenting(SERVER_ADDRESS);
+
+        verify(tpService, never()).listen();
+    }
+
+    @Test
+    public void givenStartedListeningForDirections_whenDirectionIsEmitted_thenBotViewMoveInDirectionIsCalled() {
+        givenStartedListeningForDirections();
+
+        presenter.startPresenting(SERVER_ADDRESS);
 
         verify(botView).moveIn(DIRECTION);
     }
 
     @Test
     public void givenStartedListeningForDirections_whenStopPresentingIsCalled_thenDirectionObservableObserversAreDetached() {
-        Observable<Direction> observable = Observable.just(DIRECTION);
-        Observable<Direction> spyObservable = Mockito.spy(observable);
-        when(tpService.listen()).thenReturn(spyObservable);
-        presenter.startListeningForDirection();
+        Observable<Direction> spyObservable = givenStartedListeningForDirections();
 
+        presenter.startPresenting(SERVER_ADDRESS);
         presenter.stopPresenting();
 
         verify(spyObservable).detachObservers();
+    }
+
+    private Observable<Direction> givenStartedListeningForDirections() {
+        when(tpService.connectTo(SERVER_ADDRESS)).thenReturn(Observable.just(SUCCESS_RESULT));
+
+        Observable<Direction> observable = Observable.just(DIRECTION);
+        Observable<Direction> spyObservable = Mockito.spy(observable);
+        when(tpService.listen()).thenReturn(spyObservable);
+        return spyObservable;
     }
 
 }

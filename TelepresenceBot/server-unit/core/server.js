@@ -63,6 +63,13 @@ io.sockets.on('connection', function (client) {
         testClient.emit('disconnected_bot', asRoomsWithSocketIds());
     });
 
+    client.on('move_in', function(direction) {
+        var rooms = Object.keys(io.sockets.adapter.sids[client.id]);
+        for(var i = 0; i < rooms.length; i++) {
+            io.to(rooms[i]).emit('direction', direction);
+            testClient.emit('direction', direction);
+        }
+    });
 });
 
 function asRoomsWithSocketIds() {

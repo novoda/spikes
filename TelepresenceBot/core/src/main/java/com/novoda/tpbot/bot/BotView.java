@@ -6,6 +6,8 @@ interface BotView {
 
     void onConnect(String message);
 
+    void onDisconnect();
+
     void onError(String message);
 
     void moveIn(Direction direction);

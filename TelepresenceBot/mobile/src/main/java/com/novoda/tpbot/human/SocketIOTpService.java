@@ -48,7 +48,7 @@ class SocketIOTpService implements HumanTpService {
 
     @Override
     public void moveIn(Direction direction) {
-        socket.emit(Event.MOVE_IN.rawEvent(), direction);
+        socket.emit(Event.MOVE_IN.rawEvent(), direction.rawDirection());
     }
 
     @Override
