@@ -42,7 +42,7 @@ io.sockets.on('connection', function (client) {
     switch(clientType) {
         case ClientType.HUMAN:
             client.join(roomName);
-            testClient.emit('connected_human', humans);
+            testClient.emit('connected_human', asRoomsWithSocketIds());
             break;
         case ClientType.BOT:
             client.join(roomName);
