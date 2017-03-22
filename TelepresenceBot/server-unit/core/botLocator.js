@@ -7,7 +7,6 @@ BotLocator.prototype.locateFirstAvailableBotIn = function(room) {
 
     if(botsInRoom != undefined) {
         for (socketId in botsInRoom.sockets) {
-
             var socketsInBotRoom = this.rooms[socketId];
 
             if(botNotConnectedToHuman(socketsInBotRoom)) {
