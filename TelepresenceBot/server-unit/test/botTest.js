@@ -24,28 +24,12 @@ describe("TelepresenceBot Server: BotTest ",function() {
         testObserver.on('connected', function(){
             var bot = io.connect(socketURL, options);
 
-            testObserver.on('connected_bot', function(actualConnectedBots){
-                var expectedConnectedBots = [bot.id];
-                test.array(actualConnectedBots)
-                    .is(expectedConnectedBots);
+            testObserver.on('connected_bot', function(roomsWithSockets){
+                var expectedSockets = [bot.id];
+                var actualSockets = roomsWithSockets["London"];
 
-                bot.disconnect();
-                testObserver.disconnect();
-                done();
-            });
-        });
-    });
-
-    it('Should add bot to list of bots on connection.', function(done) {
-        var testObserver = io.connect(socketURL, testOptions);
-
-        testObserver.on('connected', function(){
-            var bot = io.connect(socketURL, options);
-
-            testObserver.on('connected_bot', function(actualConnectedBots){
-                var expectedConnectedBots = [bot.id];
-                test.array(actualConnectedBots)
-                    .is(expectedConnectedBots);
+                test.array(actualSockets)
+                    .is(expectedSockets);
 
                 bot.disconnect();
                 testObserver.disconnect();
@@ -63,9 +47,11 @@ describe("TelepresenceBot Server: BotTest ",function() {
             testObserver.on('connected_bot', function(){
                 bot.disconnect();
 
-                testObserver.on('disconnected_bot', function(actualConnectedBots) {
-                    test.array(actualConnectedBots)
-                    .isEmpty();
+                testObserver.on('disconnected_bot', function(roomsWithSockets) {
+                    var actualSockets = roomsWithSockets["London"];
+
+                    test.value(actualSockets)
+                        .isUndefined();
 
                     testObserver.disconnect();
                     done();

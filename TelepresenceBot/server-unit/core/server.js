@@ -65,8 +65,8 @@ io.sockets.on('connection', function (client) {
     client.on('disconnect', function() {
         humans.splice(humans.indexOf(client.id), 1);
         bots.splice(bots.indexOf(client.id), 1);
-        testClient.emit('disconnected_human', humans);
-        testClient.emit('disconnected_bot', bots);
+        testClient.emit('disconnected_human', asRoomsWithSocketIds());
+        testClient.emit('disconnected_bot', asRoomsWithSocketIds());
     });
 
 });
