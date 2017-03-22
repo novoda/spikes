@@ -61,19 +61,9 @@ io.sockets.on('connection', function (client) {
 
     // TODO: check this disconnect method, it is not removing the human.
     client.on('disconnect', function() {
-        switch(clientType) {
-            case ClientType.HUMAN:
-                testClient.emit('disconnected_human', asRoomsWithSocketIds());
-                break;
-            case ClientType.BOT:
-                disconnectRoom(client.id);
-                testClient.emit('disconnected_bot', asRoomsWithSocketIds());
-                break;
-            case ClientType.TEST:
-                break;
-            default:
-                throw 'Unexpected rawClientType: ' + clientType;
-        }
+        disconnectRoom(client.id);
+        testClient.emit('disconnected_human', asRoomsWithSocketIds());
+        testClient.emit('disconnected_bot', asRoomsWithSocketIds());
     });
 
     client.on('move_in', function(direction) {
