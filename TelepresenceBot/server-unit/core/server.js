@@ -50,7 +50,7 @@ io.sockets.on('connection', function (client) {
         case ClientType.BOT:
             bots.push(client.id);
             client.join(roomName);
-            testClient.emit('connected_bot', asRoomsWithSockets());
+            testClient.emit('connected_bot', asRoomsWithSocketIds());
             break;
         case ClientType.TEST:
             console.log('switching test client');
@@ -71,13 +71,13 @@ io.sockets.on('connection', function (client) {
 
 });
 
-function asRoomsWithSockets() {
+function asRoomsWithSocketIds() {
     var roomNames = Object.keys(io.sockets.adapter.rooms);
     var roomsWithSockets = {};
 
     for(var i = 0; i < roomNames.length; i++) {
         var room = io.sockets.adapter.rooms[roomNames[i]];
-        roomsWithSockets[roomNames[i]] = room.sockets;
+        roomsWithSockets[roomNames[i]] = Object.keys(room.sockets);
     }
 
     return roomsWithSockets;
