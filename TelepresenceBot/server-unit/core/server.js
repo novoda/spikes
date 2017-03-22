@@ -1,11 +1,13 @@
 var io = require('socket.io').listen(5000);
 var ClientType = require("./clientType.js");
 var LoggingClient = require("./loggingClient.js");
+var BotLocator = require("./botLocator.js");
 
 var room = "London";
 var humans = [];
 var bots = [];
 var testClient = new LoggingClient();
+var botLocator = new BotLocator(io.sockets.adapter.rooms);
 
 io.use(function(client, next){
 
@@ -18,31 +20,20 @@ io.use(function(client, next){
         case ClientType.BOT:
             return next();
         case ClientType.HUMAN:
-            var roomRoster = io.sockets.adapter.rooms[rawRoom];
-
-            if(roomRoster != undefined) {
-                for (socketId in roomRoster.sockets) {
-
-                    var socketsInBotRoom = io.sockets.adapter.rooms[socketId];
-
-                    if(botNotConnectedToHuman(socketsInBotRoom)) {
-                        client.handshake.query.room = socketId;
-                        return next();
-                    }
-                }
+            var human = client;
+            var bot = botLocator.locateFirstAvailableBotIn(rawRoom);
+            if(bot == undefined) {
+                return next(new Error('No bots available'));
+            } else {
+                human.handshake.query.room = bot;
+                return next();
             }
-
-            return next(new Error('No bots available'));
         default:
             return next(new Error('Unrecognised clientType: ' + rawClientType));
 
     }
 
 });
-
-function botNotConnectedToHuman(socketsInBotRoom) {
-    return  socketsInBotRoom.length != undefined && socketsInBotRoom.length == 1;
-}
 
 io.sockets.on('connection', function (client) {
 
