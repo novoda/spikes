@@ -39,9 +39,10 @@ io.sockets.on('connection', function (client) {
     var rawClientType = client.handshake.query.clientType;
     var clientType = ClientType.from(rawClientType);
 
+    console.log(clientType, client.id);
+
     switch(clientType) {
         case ClientType.HUMAN:
-            leaveAllRooms(client);
             client.join(roomName);
             testClient.emit('connected_human', asRoomsWithSocketIds());
             break;
@@ -52,18 +53,27 @@ io.sockets.on('connection', function (client) {
         case ClientType.TEST:
             console.log('switching test client');
             testClient = new LoggingClient(client);
-            testClient.emit('connected');
+            testClient.emit('connected', asRoomsWithSocketIds());
             break;
         default:
             throw 'Unexpected rawClientType: ' + clientType;
     }
 
-
+    // TODO: check this disconnect method, it is not removing the human.
     client.on('disconnect', function() {
-        disconnectAllClientsNotInARoom();
-
-        testClient.emit('disconnected_human', asRoomsWithSocketIds());
-        testClient.emit('disconnected_bot', asRoomsWithSocketIds());
+        switch(clientType) {
+            case ClientType.HUMAN:
+                testClient.emit('disconnected_human', asRoomsWithSocketIds());
+                break;
+            case ClientType.BOT:
+                disconnectRoom(client.id);
+                testClient.emit('disconnected_bot', asRoomsWithSocketIds());
+                break;
+            case ClientType.TEST:
+                break;
+            default:
+                throw 'Unexpected rawClientType: ' + clientType;
+        }
     });
 
     client.on('move_in', function(direction) {
@@ -75,21 +85,23 @@ io.sockets.on('connection', function (client) {
     });
 });
 
-function leaveAllRooms(client) {
-    var rooms = Object.keys(io.sockets.adapter.sids[client.id]);
-    for(var i = 0; i < rooms.length; i++) {
-        client.leave(rooms[i]);
+function disconnectRoom(name) {
+    var room = io.sockets.adapter.rooms[name];
+
+    if(room != undefined) {
+        var clients = io.sockets.adapter.rooms[name].sockets;
+
+        for(var client in clients) {
+            var connectedClient = io.sockets.connected[client];
+            connectedClient.disconnect();
+        }
     }
 }
 
-function disconnectAllClientsNotInARoom() {
-    var connectedClientIds = Object.keys(io.sockets.connected);
-
-    for(var i = 0; i < connectedClientIds.length; i++) {
-        var client = io.sockets.connected[connectedClientIds[i]];
-        if(client.rooms.length == 0) {
-            client.disconnect();
-        }
+function leaveAllRooms(client) {
+    var rooms = Object.keys(io.sockets.adapter.rooms[client.id]);
+    for(var i = 0; i < rooms.length; i++) {
+        client.leave(rooms[i]);
     }
 }
 

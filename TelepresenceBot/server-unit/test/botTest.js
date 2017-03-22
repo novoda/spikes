@@ -66,6 +66,32 @@ describe("TelepresenceBot Server: BotTest ",function() {
         });
     });
 
+    it('Should disconnect human on bot disconnection.', function(done) {
+        var testObserver = io.connect(socketURL, testOptions);
+
+        testObserver.on('connected', function(){
+            var bot = io.connect(socketURL, options);
+
+            testObserver.on('connected_bot', function(){
+                var human = io.connect(socketURL, humanOptions);
+
+                testObserver.on('connected_human', function(){
+                    bot.disconnect();
+
+                    testObserver.on('disconnected_human', function(roomsWithSockets){
+                        var actualSockets = roomsWithSockets[bot.id];
+
+                        test.value(actualSockets)
+                            .isUndefined();
+
+                        testObserver.disconnect();
+                        done();
+                    });
+                });
+            });
+        });
+    });
+
     it('Should forward movement directions from human to bot.', function(done) {
         var testObserver = io.connect(socketURL, testOptions);
 
