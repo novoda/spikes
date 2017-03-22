@@ -50,9 +50,7 @@ io.sockets.on('connection', function (client) {
         case ClientType.BOT:
             bots.push(client.id);
             client.join(roomName);
-
-            console.log("socketListInLondon: ", asSocketListFrom(roomName));
-            testClient.emit('connected_bot', asSocketListFrom(roomName));
+            testClient.emit('connected_bot', asRoomsWithSockets());
             break;
         case ClientType.TEST:
             console.log('switching test client');
@@ -73,12 +71,14 @@ io.sockets.on('connection', function (client) {
 
 });
 
-function asSocketListFrom(roomName) {
-    var room = io.sockets.adapter.rooms[roomName];
+function asRoomsWithSockets() {
+    var roomNames = Object.keys(io.sockets.adapter.rooms);
+    var roomsWithSockets = {};
 
-    if(room == undefined) {
-        return [];
+    for(var i = 0; i < roomNames.length; i++) {
+        var room = io.sockets.adapter.rooms[roomNames[i]];
+        roomsWithSockets[roomNames[i]] = room.sockets;
     }
 
-    return Object.keys(room.sockets);
+    return roomsWithSockets;
 }
