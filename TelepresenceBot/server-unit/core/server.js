@@ -41,6 +41,7 @@ io.sockets.on('connection', function (client) {
 
     switch(clientType) {
         case ClientType.HUMAN:
+            leaveAllRooms(client);
             client.join(roomName);
             testClient.emit('connected_human', asRoomsWithSocketIds());
             break;
@@ -59,6 +60,8 @@ io.sockets.on('connection', function (client) {
 
 
     client.on('disconnect', function() {
+        disconnectAllClientsNotInARoom();
+
         testClient.emit('disconnected_human', asRoomsWithSocketIds());
         testClient.emit('disconnected_bot', asRoomsWithSocketIds());
     });
@@ -71,6 +74,24 @@ io.sockets.on('connection', function (client) {
         }
     });
 });
+
+function leaveAllRooms(client) {
+    var rooms = Object.keys(io.sockets.adapter.sids[client.id]);
+    for(var i = 0; i < rooms.length; i++) {
+        client.leave(rooms[i]);
+    }
+}
+
+function disconnectAllClientsNotInARoom() {
+    var connectedClientIds = Object.keys(io.sockets.connected);
+
+    for(var i = 0; i < connectedClientIds.length; i++) {
+        var client = io.sockets.connected[connectedClientIds[i]];
+        if(client.rooms.length == 0) {
+            client.disconnect();
+        }
+    }
+}
 
 function asRoomsWithSocketIds() {
     var roomNames = Object.keys(io.sockets.adapter.rooms);
