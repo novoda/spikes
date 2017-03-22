@@ -2,7 +2,7 @@ var should = require('should');
 var test = require('unit.js');
 var BotLocator = require("../core/botLocator.js");
 
-var rooms = {
+var botWithNoOtherSocketsInRoom = {
     'botId': {
         sockets: {'botId':true},
         length:1
@@ -13,11 +13,11 @@ var rooms = {
     }
 };
 
-var botLocator = new BotLocator(rooms);
-
 describe("BotLocator ",function() {
 
     it('Should give undefined when bot is not found in given room.', function(done){
+        var botLocator = new BotLocator(botWithNoOtherSocketsInRoom);
+
         var bot = botLocator.locateFirstAvailableBotIn("Unexpected Room");
 
         test.value(bot)
@@ -27,6 +27,8 @@ describe("BotLocator ",function() {
     });
 
     it('Should give bot id when bot is found in given room.', function(done){
+        var botLocator = new BotLocator(botWithNoOtherSocketsInRoom);
+
         var bot = botLocator.locateFirstAvailableBotIn("London");
 
         test.string(bot)
