@@ -11,7 +11,7 @@ var botLocator = new BotLocator(io.sockets.adapter.rooms);
 
 io.use(function(client, next){
 
-    var rawRoom = client.handshake.query.room;
+    var roomName = client.handshake.query.room;
     var rawClientType = client.handshake.query.clientType;
     var clientType = ClientType.from(rawClientType);
 
@@ -21,7 +21,7 @@ io.use(function(client, next){
             return next();
         case ClientType.HUMAN:
             var human = client;
-            var bot = botLocator.locateFirstAvailableBotIn(rawRoom);
+            var bot = botLocator.locateFirstAvailableBotIn(roomName);
             if(bot == undefined) {
                 return next(new Error('No bots available'));
             } else {
@@ -37,20 +37,22 @@ io.use(function(client, next){
 
 io.sockets.on('connection', function (client) {
 
-    var rawRoom = client.handshake.query.room;
+    var roomName = client.handshake.query.room;
     var rawClientType = client.handshake.query.clientType;
     var clientType = ClientType.from(rawClientType);
 
     switch(clientType) {
         case ClientType.HUMAN:
             humans.push(client.id);
-            client.join(rawRoom);
+            client.join(roomName);
             testClient.emit('connected_human', humans);
             break;
         case ClientType.BOT:
             bots.push(client.id);
-            client.join(rawRoom);
-            testClient.emit('connected_bot', bots);
+            client.join(roomName);
+
+            console.log("socketListInLondon: ", asSocketListFrom(roomName));
+            testClient.emit('connected_bot', asSocketListFrom(roomName));
             break;
         case ClientType.TEST:
             console.log('switching test client');
@@ -70,3 +72,13 @@ io.sockets.on('connection', function (client) {
     });
 
 });
+
+function asSocketListFrom(roomName) {
+    var room = io.sockets.adapter.rooms[roomName];
+
+    if(room == undefined) {
+        return [];
+    }
+
+    return Object.keys(room.sockets);
+}

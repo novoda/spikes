@@ -18,6 +18,24 @@ var testOptions ={
 
 describe("TelepresenceBot Server: BotTest ",function() {
 
+    it('Should add bot to Room:London on connection.', function(done) {
+        var testObserver = io.connect(socketURL, testOptions);
+
+        testObserver.on('connected', function(){
+            var bot = io.connect(socketURL, options);
+
+            testObserver.on('connected_bot', function(actualConnectedBots){
+                var expectedConnectedBots = [bot.id];
+                test.array(actualConnectedBots)
+                    .is(expectedConnectedBots);
+
+                bot.disconnect();
+                testObserver.disconnect();
+                done();
+            });
+        });
+    });
+
     it('Should add bot to list of bots on connection.', function(done) {
         var testObserver = io.connect(socketURL, testOptions);
 
