@@ -3,7 +3,6 @@ var ClientType = require("./clientType.js");
 var LoggingClient = require("./loggingClient.js");
 var BotLocator = require("./botLocator.js");
 
-var room = "London";
 var testClient = new LoggingClient();
 var botLocator = new BotLocator(io.sockets.adapter.rooms);
 
