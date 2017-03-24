@@ -19,9 +19,7 @@ BotLocator.prototype.locateFirstAvailableBotIn = function(room) {
 }
 
 function botNotConnectedToHuman(socketsInBotRoom) {
-    return  socketsInBotRoom.length != undefined && socketsInBotRoom.length == 1;
+    return  socketsInBotRoom.length === 1;
 }
 
 module.exports = BotLocator;
-
-
