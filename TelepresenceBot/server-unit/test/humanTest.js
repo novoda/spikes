@@ -7,13 +7,13 @@ var socketURL = 'http://0.0.0.0:5000'
 var options ={
     transports: ['websocket'],
     'force new connection': true,
-    query: 'clientType=human'
+    query: 'clientType=human&room=London'
 };
 
 var botOptions ={
     transports: ['websocket'],
     'force new connection': true,
-    query: 'clientType=bot'
+    query: 'clientType=bot&room=London'
 };
 
 var testOptions ={
@@ -54,7 +54,7 @@ describe("TelepresenceBot Server: HumanTest ",function() {
         });
     });
 
-    it('Should add human to list of humans on connection.', function(done) {
+    it('Should add human to first available bots room.', function(done) {
         var testObserver = io.connect(socketURL, testOptions);
 
         testObserver.on('connect', function(){
@@ -63,10 +63,12 @@ describe("TelepresenceBot Server: HumanTest ",function() {
             testObserver.on('connected_bot', function(){
                 var human = io.connect(socketURL, options);
 
-                testObserver.on('connected_human', function(actualConnectedHumans){
-                    var expectedConnectedHumans = [human.id];
-                    test.array(actualConnectedHumans)
-                        .is(expectedConnectedHumans);
+                testObserver.on('connected_human', function(roomsWithSockets){
+                    var expectedSockets = [bot.id, human.id];
+                    var actualSockets = roomsWithSockets[bot.id];
+
+                    test.array(actualSockets)
+                        .is(expectedSockets);
 
                     human.disconnect();
                     bot.disconnect();
@@ -77,7 +79,7 @@ describe("TelepresenceBot Server: HumanTest ",function() {
         });
     });
 
-    it('Should remove human from list of humans on disconnection.', function(done) {
+    it('Should remove human from bots room.', function(done) {
         var testObserver = io.connect(socketURL, testOptions);
 
         testObserver.on('connect', function(){
@@ -89,9 +91,12 @@ describe("TelepresenceBot Server: HumanTest ",function() {
                 testObserver.on('connected_human', function(){
                     human.disconnect();
 
-                    testObserver.on('disconnected_human', function(actualConnectedHumans){
-                        test.array(actualConnectedHumans)
-                            .isEmpty();
+                    testObserver.on('disconnected_human', function(roomsWithSockets){
+                        var expectedSockets = [bot.id];
+                        var actualSockets = roomsWithSockets[bot.id];
+
+                        test.array(actualSockets)
+                            .is(expectedSockets);
 
                         bot.disconnect();
                         testObserver.disconnect();

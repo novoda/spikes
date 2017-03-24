@@ -6,10 +6,10 @@ LoggingClient.prototype.emit = function(event, dataToEmit) {
     if(this.client != undefined) {
         this.client.emit(event, dataToEmit);
     }
-    console.log("\nEvent Emitted: " + event);
+    console.log("\nEvent Emitted: ", event);
 
     if(dataToEmit != undefined && dataToEmit.length > 0) {
-        console.log("Data Emitted: " + dataToEmit);
+        console.log("Data Emitted: ", dataToEmit);
     }
 }
 

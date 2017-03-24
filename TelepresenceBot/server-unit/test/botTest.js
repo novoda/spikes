@@ -7,13 +7,13 @@ var socketURL = 'http://0.0.0.0:5000'
 var options ={
     transports: ['websocket'],
     'force new connection': true,
-    query: 'clientType=bot'
+    query: 'clientType=bot&room=London'
 };
 
 var humanOptions ={
     transports: ['websocket'],
     'force new connection': true,
-    query: 'clientType=human'
+    query: 'clientType=human&room=London'
 };
 
 var testOptions ={
@@ -24,16 +24,18 @@ var testOptions ={
 
 describe("TelepresenceBot Server: BotTest ",function() {
 
-    it('Should add bot to list of bots on connection.', function(done) {
+    it('Should add bot to Room:London on connection.', function(done) {
         var testObserver = io.connect(socketURL, testOptions);
 
         testObserver.on('connected', function(){
             var bot = io.connect(socketURL, options);
 
-            testObserver.on('connected_bot', function(actualConnectedBots){
-                var expectedConnectedBots = [bot.id];
-                test.array(actualConnectedBots)
-                    .is(expectedConnectedBots);
+            testObserver.on('connected_bot', function(roomsWithSockets){
+                var expectedSockets = [bot.id];
+                var actualSockets = roomsWithSockets["London"];
+
+                test.array(actualSockets)
+                    .is(expectedSockets);
 
                 bot.disconnect();
                 testObserver.disconnect();
@@ -42,7 +44,7 @@ describe("TelepresenceBot Server: BotTest ",function() {
         });
     });
 
-    it('Should remove bot from list of bots on disconnection.', function(done) {
+    it('Should remove bot from Room:London on disconnection.', function(done) {
         var testObserver = io.connect(socketURL, testOptions);
 
         testObserver.on('connected', function(){
@@ -51,12 +53,40 @@ describe("TelepresenceBot Server: BotTest ",function() {
             testObserver.on('connected_bot', function(){
                 bot.disconnect();
 
-                testObserver.on('disconnected_bot', function(actualConnectedBots) {
-                    test.array(actualConnectedBots)
-                    .isEmpty();
+                testObserver.on('disconnected_bot', function(roomsWithSockets) {
+                    var actualSockets = roomsWithSockets["London"];
+
+                    test.value(actualSockets)
+                        .isUndefined();
 
                     testObserver.disconnect();
                     done();
+                });
+            });
+        });
+    });
+
+    it('Should disconnect human on bot disconnection.', function(done) {
+        var testObserver = io.connect(socketURL, testOptions);
+
+        testObserver.on('connected', function(){
+            var bot = io.connect(socketURL, options);
+
+            testObserver.on('connected_bot', function(){
+                var human = io.connect(socketURL, humanOptions);
+
+                testObserver.on('connected_human', function(){
+                    bot.disconnect();
+
+                    testObserver.on('disconnected_human', function(roomsWithSockets){
+                        var actualSockets = roomsWithSockets[bot.id];
+
+                        test.value(actualSockets)
+                            .isUndefined();
+
+                        testObserver.disconnect();
+                        done();
+                    });
                 });
             });
         });

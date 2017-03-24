@@ -9,6 +9,7 @@ import com.novoda.tpbot.support.ClientType;
 import com.novoda.tpbot.support.Event;
 import com.novoda.tpbot.support.MalformedServerAddressException;
 import com.novoda.tpbot.support.Observable;
+import com.novoda.tpbot.support.Room;
 import com.novoda.tpbot.support.SocketConnectionObservable;
 
 import java.net.MalformedURLException;
@@ -36,7 +37,7 @@ class SocketIOTpService implements HumanTpService {
         try {
             URL url = new URL(serverAddress);
             IO.Options options = new IO.Options();
-            options.query = ClientType.HUMAN.rawQuery();
+            options.query = ClientType.HUMAN.rawQuery() + "&" + Room.LONDON.rawQuery();
             socket = IO.socket(url.toExternalForm(), options);
         } catch (MalformedURLException | URISyntaxException exception) {
             MalformedServerAddressException exceptionWithUserFacingMessage = new MalformedServerAddressException(exception);
