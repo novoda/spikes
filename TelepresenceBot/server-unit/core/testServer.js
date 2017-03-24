@@ -1,6 +1,5 @@
 var express = require('express');
 var app = express();
-var jsonFile = require('jsonfile')
 
 var port = process.env.PORT || 8080;
 
@@ -12,8 +11,7 @@ router.get('/', function(req, res) {
 
 router.route('/rooms')
     .get(function(req, res) {
-        var file = './json/rooms.json'
-        res.json(jsonFile.readFileSync(file));
+        res.sendFile(__dirname + '/json/rooms.json');
     });
 
 app.use('/api', router);
