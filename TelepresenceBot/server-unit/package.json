@@ -16,6 +16,7 @@
   "author": "Novoda",
   "license": "MIT",
   "dependencies": {
+    "chai": "^3.5.0",
     "express": "^4.15.2",
     "socket.io": "^1.7.3"
   },

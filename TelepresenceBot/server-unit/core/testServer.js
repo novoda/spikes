@@ -1,30 +1,26 @@
 var express = require('express');
 var app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
 
-var port = process.env.PORT || 8080;
-
-var router = express.Router();
-
-router.get('/', function(req, res) {
+app.get('/', function(req, res) {
     res.json({ message: 'Welcome to the TelepresenceBot api' });
 });
 
-router.route('/rooms').get(function(req, res) {
-    res.sendFile(__dirname + '/json/rooms.json');
+var server = server.listen(4200, function() {
+    console.log("Express server listening on port " + 4200);
 });
 
-router.route('/connect').get(function(req, res) {
-    var socket = io.listen(http);
-    res.send("listening");
+io.set("log level", 0);
+
+io.sockets.on("connection", function (socket) {
+    socket.on("echo", function (msg, callback) {
+        callback = callback || function () {};
+
+        socket.emit("echo", msg);
+
+        callback(null, "Done.");
+    });
 });
 
-io.on('connection', function(socket){
-  console.log('a user connected');
-});
-
-app.use('/api', router);
-
-app.listen(port);
-console.log('Starting server on ' + port);
+exports.server = server;
