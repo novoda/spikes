@@ -18,12 +18,13 @@ io.use(function(client, next){
             return next();
         case ClientType.HUMAN:
             var human = client;
-            var bot = botLocator.locateFirstAvailableBotIn(roomName);
-            if(bot == undefined) {
-                return next(new Error('No bots available'));
-            } else {
-                human.handshake.query.room = bot;
+            var availableBot = botLocator.locateFirstAvailableBotIn(roomName);
+
+            if(availableBot) {
+                human.handshake.query.room = availableBot;
                 return next();
+            } else {
+                return next(new Error('No bots available'));
             }
         default:
             return next(new Error('Unrecognised clientType: ' + rawClientType));
@@ -37,8 +38,6 @@ io.sockets.on('connection', function (client) {
     var roomName = client.handshake.query.room;
     var rawClientType = client.handshake.query.clientType;
     var clientType = ClientType.from(rawClientType);
-
-    console.log(clientType, client.id);
 
     switch(clientType) {
         case ClientType.HUMAN:
@@ -76,13 +75,15 @@ io.sockets.on('connection', function (client) {
 function disconnectRoom(name) {
     var room = io.sockets.adapter.rooms[name];
 
-    if(room != undefined) {
-        var clients = io.sockets.adapter.rooms[name].sockets;
+    if(!room) {
+        return;
+    }
 
-        for(var client in clients) {
-            var connectedClient = io.sockets.connected[client];
-            connectedClient.disconnect();
-        }
+    var clients = io.sockets.adapter.rooms[name].sockets;
+
+    for(var client in clients) {
+        var connectedClient = io.sockets.connected[client];
+        connectedClient.disconnect();
     }
 }
 
