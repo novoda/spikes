@@ -5,16 +5,17 @@ function BotLocator(rooms) {
 BotLocator.prototype.locateFirstAvailableBotIn = function(room) {
     var botsInRoom = this.rooms[room];
 
-    if(botsInRoom != undefined) {
-        for (socketId in botsInRoom.sockets) {
-            var socketsInBotRoom = this.rooms[socketId];
+    if(!botsInRoom) {
+        return;
+    }
 
-            if(botNotConnectedToHuman(socketsInBotRoom)) {
-                return socketId;
-            }
+    for (socketId in botsInRoom.sockets) {
+        var socketsInBotRoom = this.rooms[socketId];
+
+        if(botNotConnectedToHuman(socketsInBotRoom)) {
+            return socketId;
         }
     }
-    return undefined;
 }
 
 function botNotConnectedToHuman(socketsInBotRoom) {
