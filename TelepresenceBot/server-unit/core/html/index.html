@@ -12,18 +12,8 @@
     <input id="s" type="button" class="button" value="s">
     <input id="d" type="button" class="button" value="d">
 </div>
-<script src="/socket.io/socket.io.js"></script>
-<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-<script>
-  $(function () {
-    var socket = io();
-    $('form').submit(function(){
-      socket.emit('chat message', $('#m').val());
-      $('#m').val('');
-      return false;
-    });
-  });
-</script>
-</script
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script type="text/javascript" src="js\connect.js"></script>
 </body>
 </html>
