@@ -1,10 +1,5 @@
 var intervalId;
 
-function sendMessage(message) {
-    var socket = io();
-    socket.emit('chat message', message);
-}
-
 $(document).ready(function(){
 
     $("input").mousedown(function(){
@@ -14,6 +9,12 @@ $(document).ready(function(){
             sendMessage(message);
         }, 500);
     });
+
+    function sendMessage(message) {
+        var socket = io();
+        socket.emit('chat message', message);
+        $('#messages').append($('<li>').text(message));
+    }
 
     $("input").mouseup(function(){
         console.log("mouseUp");
