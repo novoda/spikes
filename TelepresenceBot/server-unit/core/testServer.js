@@ -2,13 +2,20 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
+var path = require('path')
 
 var server = server.listen(4200, function() {
     console.log("Express server listening on port " + 4200);
 });
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/html/index.html');
+});
+
+app.get('/rooms', function(req, res) {
+    res.sendFile(__dirname + '/json/rooms.json');
 });
 
 io.set("log level", 0);

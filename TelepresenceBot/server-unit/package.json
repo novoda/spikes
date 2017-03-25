@@ -18,6 +18,7 @@
   "dependencies": {
     "chai": "^3.5.0",
     "express": "^4.15.2",
+    "path": "^0.12.7",
     "socket.io": "^1.7.3"
   },
   "devDependencies": {
