@@ -12,10 +12,10 @@
 
 <ul id="messages"></ul>
 <div id="controller">
-    <input id="w" type="button" class="button" value="w" onclick="sendMessage('w')">
-    <input id="a" type="button" class="button" value="a" onclick="sendMessage('a')">
-    <input id="s" type="button" class="button" value="s" onclick="sendMessage('s')">
-    <input id="d" type="button" class="button" value="d" onclick="sendMessage('d')">
+    <input id="w" type="button" class="button" value="w" onmousedown="onMouseDown()">
+    <input id="a" type="button" class="button" value="a" onmousedown="onMouseDown()" onmouseup="onMouseUp()">
+    <input id="s" type="button" class="button" value="s" onmousedown="onMouseDown()" onmouseup="onMouseUp()">
+    <input id="d" type="button" class="button" value="d" onmousedown="onMouseDown()" onmouseup="onMouseUp()">
 </div>
 </body>
 </html>
