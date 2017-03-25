@@ -9,32 +9,53 @@ body {
     font: 13px Helvetica, Arial;
 }
 
-form {
-    background: #000;
-    padding: 3px;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+#controller {
+    height:50vh;
 }
 
-form input {
-    border: 0;
-    padding: 10px;
-    width: 90%;
-    margin-right: .5%;
-}
-
-form button {
-    width: 9%;
-    background: rgb(130, 224, 255);
+.button {
+    height:50px;
+    width:100px;
+    margin: -20px -50px;
+    background-color: #4CAF50;
     border: none;
-    padding: 10px;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+#w {
+    position:relative;
+    top:25%;
+    left:50%;
+}
+
+#s {
+    position:relative;
+    top:75%;
+    left:50%;
+}
+
+#a {
+    position:relative;
+    top:50%;
+    left:40%;
+}
+
+#d {
+    position:relative;
+    top:50%;
+    left:60%;
 }
 
 #messages {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    height:50vh;
 }
 
 #messages li {
