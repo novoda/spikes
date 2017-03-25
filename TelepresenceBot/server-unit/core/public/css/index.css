@@ -56,6 +56,9 @@ body {
     margin: 0;
     padding: 0;
     height:50vh;
+    overflow:hidden;
+    overflow-y:scroll;
+    border-bottom: solid;
 }
 
 #messages li {
