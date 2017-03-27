@@ -7,7 +7,7 @@ $(document).ready(function(){
         var message = $(this).val();
         intervalId = setInterval(function() {
             sendMessage(message);
-        }, 500);
+        }, 100);
     });
 
     function sendMessage(message) {
