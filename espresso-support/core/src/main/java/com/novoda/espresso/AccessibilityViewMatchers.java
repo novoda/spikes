@@ -1,6 +1,7 @@
 package com.novoda.espresso;
 
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.annotation.StringRes;
 import android.view.View;
@@ -40,17 +41,8 @@ public class AccessibilityViewMatchers {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("is clickable and has custom usage hint for ACTION_CLICK from resource id: ");
-                description.appendValue(resourceId);
-                if (resourceName != null) {
-                    description.appendText("[");
-                    description.appendText(resourceName);
-                    description.appendText("]");
-                }
-                if (expectedText != null) {
-                    description.appendText(" value: ");
-                    description.appendText(expectedText);
-                }
+                description.appendText("is clickable and has custom usage hint for ACTION_CLICK from resource id: ").appendValue(resourceId);
+                appendResourceNameAndExpectedTextToDescription(description, resourceName, expectedText);
             }
         };
     }
@@ -106,17 +98,8 @@ public class AccessibilityViewMatchers {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("is long clickable and has custom usage hint for ACTION_LONG_CLICK from resource id: ");
-                description.appendValue(resourceId);
-                if (resourceName != null) {
-                    description.appendText("[");
-                    description.appendText(resourceName);
-                    description.appendText("]");
-                }
-                if (expectedText != null) {
-                    description.appendText(" value: ");
-                    description.appendText(expectedText);
-                }
+                description.appendText("is long clickable and has custom usage hint for ACTION_LONG_CLICK from resource id: ").appendValue(resourceId);
+                appendResourceNameAndExpectedTextToDescription(description, resourceName, expectedText);
             }
         };
     }
@@ -155,6 +138,15 @@ public class AccessibilityViewMatchers {
             }
         }
         throw new AccessibilityActionNotFoundException(actionId);
+    }
+
+    public static void appendResourceNameAndExpectedTextToDescription(Description description, @Nullable String resourceName, @Nullable String expectedText) {
+        if (resourceName != null) {
+            description.appendText("[").appendText(resourceName).appendText("]");
+        }
+        if (expectedText != null) {
+            description.appendText(" value: ").appendText(expectedText);
+        }
     }
 
     public static class AccessibilityActionNotFoundException extends RuntimeException {
