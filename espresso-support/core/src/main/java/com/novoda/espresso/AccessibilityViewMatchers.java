@@ -19,8 +19,8 @@ public class AccessibilityViewMatchers {
     public static Matcher<? super View> withUsageHintOnClick(@StringRes final int resourceId) {
         return new TypeSafeMatcher<View>() {
 
-            private String resourceName = null;
-            private String expectedText = null;
+            private String resourceName;
+            private String expectedText;
 
             @Override
             protected boolean matchesSafely(View view) {
@@ -90,8 +90,8 @@ public class AccessibilityViewMatchers {
     public static Matcher<? super View> withUsageHintOnLongClick(@StringRes final int resourceId) {
         return new TypeSafeMatcher<View>() {
 
-            private String resourceName = null;
-            private String expectedText = null;
+            private String resourceName;
+            private String expectedText;
 
             @Override
             protected boolean matchesSafely(View view) {
