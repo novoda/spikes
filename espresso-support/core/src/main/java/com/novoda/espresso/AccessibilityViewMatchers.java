@@ -28,7 +28,7 @@ public class AccessibilityViewMatchers {
                     return false;
                 }
 
-                if (null == this.expectedText) {
+                if (expectedText == null) {
                     try {
                         expectedText = view.getResources().getString(resourceId);
                         resourceName = view.getResources().getResourceEntryName(resourceId);
@@ -36,7 +36,7 @@ public class AccessibilityViewMatchers {
                         // view could be from a context unaware of the resource id.
                     }
                 }
-                if (null != expectedText) {
+                if (expectedText != null) {
                     AccessibilityNodeInfo accessibilityNodeInfo = view.createAccessibilityNodeInfo();
                     AccessibilityNodeInfo.AccessibilityAction clickAction = findAction(accessibilityNodeInfo, AccessibilityNodeInfo.ACTION_CLICK);
 
@@ -50,12 +50,12 @@ public class AccessibilityViewMatchers {
             public void describeTo(Description description) {
                 description.appendText("is clickable and has custom usage hint for ACTION_CLICK from resource id: ");
                 description.appendValue(resourceId);
-                if (null != this.resourceName) {
+                if (resourceName != null) {
                     description.appendText("[");
                     description.appendText(resourceName);
                     description.appendText("]");
                 }
-                if (null != this.expectedText) {
+                if (expectedText != null) {
                     description.appendText(" value: ");
                     description.appendText(expectedText);
                 }
@@ -104,7 +104,7 @@ public class AccessibilityViewMatchers {
                     return false;
                 }
 
-                if (null == this.expectedText) {
+                if (expectedText == null) {
                     try {
                         expectedText = view.getResources().getString(resourceId);
                         resourceName = view.getResources().getResourceEntryName(resourceId);
@@ -112,7 +112,7 @@ public class AccessibilityViewMatchers {
                         // view could be from a context unaware of the resource id.
                     }
                 }
-                if (null != expectedText) {
+                if (expectedText != null) {
                     AccessibilityNodeInfo accessibilityNodeInfo = view.createAccessibilityNodeInfo();
                     AccessibilityNodeInfo.AccessibilityAction clickAction = findAction(accessibilityNodeInfo, AccessibilityNodeInfo.ACTION_LONG_CLICK);
 
@@ -126,12 +126,12 @@ public class AccessibilityViewMatchers {
             public void describeTo(Description description) {
                 description.appendText("is long clickable and has custom usage hint for ACTION_LONG_CLICK from resource id: ");
                 description.appendValue(resourceId);
-                if (null != this.resourceName) {
+                if (resourceName != null) {
                     description.appendText("[");
                     description.appendText(resourceName);
                     description.appendText("]");
                 }
-                if (null != this.expectedText) {
+                if (expectedText != null) {
                     description.appendText(" value: ");
                     description.appendText(expectedText);
                 }
