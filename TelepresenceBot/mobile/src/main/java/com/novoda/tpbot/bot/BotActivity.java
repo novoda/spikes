@@ -31,6 +31,7 @@ import java.util.HashMap;
 
 public class BotActivity extends AppCompatActivity implements BotView {
 
+    private static final String HANGOUTS_BASE_URL = "https://hangouts.google.com/hangouts/_/novoda.com/";
     private SelfDestructingMessageView debugView;
     private SwitchableView switchableView;
 
@@ -85,13 +86,8 @@ public class BotActivity extends AppCompatActivity implements BotView {
     private final ServerDeclarationListener serverDeclarationListener = new ServerDeclarationListener() {
         @Override
         public void onConnect(String serverAddress) {
-            String url = "https://hangouts.google.com/hangouts/_/novoda.com/bot";
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(url));
-            startActivity(i);
-            // TODO: revert.
-//            debugView.showPermanently(getString(R.string.connecting_ellipsis));
-//            presenter.startPresenting(serverAddress);
+            debugView.showPermanently(getString(R.string.connecting_ellipsis));
+            presenter.startPresenting(serverAddress);
         }
     };
 
@@ -182,9 +178,18 @@ public class BotActivity extends AppCompatActivity implements BotView {
     };
 
     @Override
-    public void onConnect(String message) {
+    public void onConnect(String room) {
         debugView.showPermanently(getString(R.string.connected));
         switchableView.setDisplayedChild(1);
+
+        joinHangoutRoom(room);
+    }
+
+    private void joinHangoutRoom(String room) {
+        String url = HANGOUTS_BASE_URL + room;
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
     }
 
     @Override

@@ -63,7 +63,7 @@ public class SocketConnectionObservable extends Observable<Result> {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    notifyOf(Result.from("Successful connection"));
+                    notifyOf(Result.from(Room.LONDON.name().toLowerCase()));
                 }
             });
         }
