@@ -18,7 +18,11 @@ import org.mockito.junit.MockitoRule;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.*;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.novoda.espresso.AccessibilityViewMatchers.withUsageHintOnClick;
+import static com.novoda.espresso.AccessibilityViewMatchers.withUsageHintOnLongClick;
 import static org.hamcrest.CoreMatchers.is;
 
 @RunWith(AndroidJUnit4.class)
@@ -55,6 +59,18 @@ public class MovieItemViewTalkBackTest {
         onView(withClassName(is(MovieItemView.class.getName()))).perform(click());
 
         checkMenuDisplayed();
+    }
+
+    @Test
+    public void movieItemViewHasCustomUsageHintOnClick() {
+        onView(withClassName(is(MovieItemView.class.getName())))
+                .check(matches(withUsageHintOnClick("see actions")));
+    }
+
+    @Test
+    public void movieItemViewHasCustomUsageHintOnLongClick() {
+        onView(withClassName(is(MovieItemView.class.getName())))
+                .check(matches(withUsageHintOnLongClick("open details")));
     }
 
     private void givenMovieItemViewIsBoundTo(final Movie movie) {
