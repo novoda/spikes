@@ -25,9 +25,17 @@ public class TelepresenceBotAccessibilityService extends AccessibilityService {
 
         if (isHangouts(packageName) && isWindowStateChangeEvent(eventType)) {
             List<AccessibilityNodeInfo> accessibilityNodes = source.findAccessibilityNodeInfosByText(JOIN_VIDEO_CALL);
-            AccessibilityNodeInfo joinCallNode = accessibilityNodes.get(0);
-            joinCallNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+            if (containsJoinButton(accessibilityNodes)) {
+                AccessibilityNodeInfo joinCallNode = accessibilityNodes.get(0);
+                joinCallNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+            } else {
+                Log.e(TelepresenceBotAccessibilityService.class.getSimpleName(), "Could not locate join video call button");
+            }
         }
+    }
+
+    private boolean containsJoinButton(List<AccessibilityNodeInfo> accessibilityNodes) {
+        return accessibilityNodes.size() > 0;
     }
 
     private boolean isHangouts(String packageName) {
