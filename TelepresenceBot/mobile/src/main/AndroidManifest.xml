@@ -3,9 +3,6 @@
   xmlns:tools="http://schemas.android.com/tools"
   package="com.novoda.tpbot">
 
-  <uses-sdk tools:overrideLibrary="android.support.test.uiautomator.v18" />
-
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.INTERNET" />
 
   <uses-feature android:name="android.hardware.usb.host" />
