@@ -34,16 +34,16 @@ public class TelepresenceBotAccessibilityService extends AccessibilityService {
         }
     }
 
-    private boolean containsJoinButton(List<AccessibilityNodeInfo> accessibilityNodes) {
-        return accessibilityNodes.size() > 0;
-    }
-
     private boolean isHangouts(String packageName) {
         return packageName.equals(HANGOUTS_PACKAGE_NAME);
     }
 
     private boolean isWindowStateChangeEvent(int eventType) {
         return eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED;
+    }
+
+    private boolean containsJoinButton(List<AccessibilityNodeInfo> accessibilityNodes) {
+        return accessibilityNodes.size() > 0;
     }
 
     @Override
