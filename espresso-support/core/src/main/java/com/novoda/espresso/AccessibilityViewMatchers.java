@@ -1,6 +1,5 @@
 package com.novoda.espresso;
 
-import android.content.res.Resources;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.annotation.StringRes;
@@ -28,20 +27,15 @@ public class AccessibilityViewMatchers {
                     return false;
                 }
 
+                expectedText = view.getResources().getString(resourceId);
+                resourceName = view.getResources().getResourceEntryName(resourceId);
+
                 if (expectedText == null) {
-                    try {
-                        expectedText = view.getResources().getString(resourceId);
-                        resourceName = view.getResources().getResourceEntryName(resourceId);
-                    } catch (Resources.NotFoundException ignored) {
-                        // view could be from a context unaware of the resource id.
-                    }
-                }
-                if (expectedText != null) {
-                    AccessibilityNodeInfo.AccessibilityAction clickAction = findAction(view, AccessibilityNodeInfo.ACTION_CLICK);
-                    return expectedText.equals(clickAction.getLabel());
-                } else {
                     return false;
                 }
+
+                AccessibilityNodeInfo.AccessibilityAction clickAction = findAction(view, AccessibilityNodeInfo.ACTION_CLICK);
+                return expectedText.equals(clickAction.getLabel());
             }
 
             @Override
@@ -99,20 +93,15 @@ public class AccessibilityViewMatchers {
                     return false;
                 }
 
+                expectedText = view.getResources().getString(resourceId);
+                resourceName = view.getResources().getResourceEntryName(resourceId);
+
                 if (expectedText == null) {
-                    try {
-                        expectedText = view.getResources().getString(resourceId);
-                        resourceName = view.getResources().getResourceEntryName(resourceId);
-                    } catch (Resources.NotFoundException ignored) {
-                        // view could be from a context unaware of the resource id.
-                    }
-                }
-                if (expectedText != null) {
-                    AccessibilityNodeInfo.AccessibilityAction clickAction = findAction(view, AccessibilityNodeInfo.ACTION_LONG_CLICK);
-                    return expectedText.equals(clickAction.getLabel());
-                } else {
                     return false;
                 }
+
+                AccessibilityNodeInfo.AccessibilityAction clickAction = findAction(view, AccessibilityNodeInfo.ACTION_LONG_CLICK);
+                return expectedText.equals(clickAction.getLabel());
             }
 
             @Override
