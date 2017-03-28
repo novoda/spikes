@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -179,6 +180,11 @@ public class BotActivity extends AppCompatActivity implements BotView {
     public void onConnect(String message) {
         debugView.showPermanently(getString(R.string.connected));
         switchableView.setDisplayedChild(1);
+
+        String url = "https://hangouts.google.com/hangouts/_/novoda.com/bot";
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
     }
 
     @Override
