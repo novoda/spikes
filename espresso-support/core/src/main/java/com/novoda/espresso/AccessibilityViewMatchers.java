@@ -37,9 +37,7 @@ public class AccessibilityViewMatchers {
                     }
                 }
                 if (expectedText != null) {
-                    AccessibilityNodeInfo accessibilityNodeInfo = view.createAccessibilityNodeInfo();
-                    AccessibilityNodeInfo.AccessibilityAction clickAction = findAction(accessibilityNodeInfo, AccessibilityNodeInfo.ACTION_CLICK);
-
+                    AccessibilityNodeInfo.AccessibilityAction clickAction = findAction(view, AccessibilityNodeInfo.ACTION_CLICK);
                     return expectedText.equals(clickAction.getLabel());
                 } else {
                     return false;
@@ -76,10 +74,7 @@ public class AccessibilityViewMatchers {
                 if (!view.isClickable()) {
                     return false;
                 }
-
-                AccessibilityNodeInfo accessibilityNodeInfo = view.createAccessibilityNodeInfo();
-                AccessibilityNodeInfo.AccessibilityAction clickAction = findAction(accessibilityNodeInfo, AccessibilityNodeInfo.ACTION_CLICK);
-
+                AccessibilityNodeInfo.AccessibilityAction clickAction = findAction(view, AccessibilityNodeInfo.ACTION_CLICK);
                 return charSequenceMatcher.matches(clickAction.getLabel());
             }
 
@@ -113,9 +108,7 @@ public class AccessibilityViewMatchers {
                     }
                 }
                 if (expectedText != null) {
-                    AccessibilityNodeInfo accessibilityNodeInfo = view.createAccessibilityNodeInfo();
-                    AccessibilityNodeInfo.AccessibilityAction clickAction = findAction(accessibilityNodeInfo, AccessibilityNodeInfo.ACTION_LONG_CLICK);
-
+                    AccessibilityNodeInfo.AccessibilityAction clickAction = findAction(view, AccessibilityNodeInfo.ACTION_LONG_CLICK);
                     return expectedText.equals(clickAction.getLabel());
                 } else {
                     return false;
@@ -152,10 +145,7 @@ public class AccessibilityViewMatchers {
                 if (!view.isLongClickable()) {
                     return false;
                 }
-
-                AccessibilityNodeInfo accessibilityNodeInfo = view.createAccessibilityNodeInfo();
-                AccessibilityNodeInfo.AccessibilityAction clickAction = findAction(accessibilityNodeInfo, AccessibilityNodeInfo.ACTION_LONG_CLICK);
-
+                AccessibilityNodeInfo.AccessibilityAction clickAction = findAction(view, AccessibilityNodeInfo.ACTION_LONG_CLICK);
                 return charSequenceMatcher.matches(clickAction.getLabel());
             }
 
@@ -168,7 +158,8 @@ public class AccessibilityViewMatchers {
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    public static AccessibilityNodeInfo.AccessibilityAction findAction(AccessibilityNodeInfo accessibilityNodeInfo, int actionId) {
+    public static AccessibilityNodeInfo.AccessibilityAction findAction(View view, int actionId) {
+        AccessibilityNodeInfo accessibilityNodeInfo = view.createAccessibilityNodeInfo();
         for (AccessibilityNodeInfo.AccessibilityAction accessibilityAction : accessibilityNodeInfo.getActionList()) {
             if (actionId == accessibilityAction.getId()) {
                 return accessibilityAction;
