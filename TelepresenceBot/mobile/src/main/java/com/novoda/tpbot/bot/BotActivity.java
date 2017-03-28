@@ -85,8 +85,13 @@ public class BotActivity extends AppCompatActivity implements BotView {
     private final ServerDeclarationListener serverDeclarationListener = new ServerDeclarationListener() {
         @Override
         public void onConnect(String serverAddress) {
-            debugView.showPermanently(getString(R.string.connecting_ellipsis));
-            presenter.startPresenting(serverAddress);
+            String url = "https://hangouts.google.com/hangouts/_/novoda.com/bot";
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
+            // TODO: revert.
+//            debugView.showPermanently(getString(R.string.connecting_ellipsis));
+//            presenter.startPresenting(serverAddress);
         }
     };
 
@@ -180,11 +185,6 @@ public class BotActivity extends AppCompatActivity implements BotView {
     public void onConnect(String message) {
         debugView.showPermanently(getString(R.string.connected));
         switchableView.setDisplayedChild(1);
-
-        String url = "https://hangouts.google.com/hangouts/_/novoda.com/bot";
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(url));
-        startActivity(i);
     }
 
     @Override
