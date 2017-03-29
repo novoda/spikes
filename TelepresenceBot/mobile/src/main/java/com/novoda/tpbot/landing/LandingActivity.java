@@ -2,12 +2,10 @@ package com.novoda.tpbot.landing;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.novoda.tpbot.R;
-import com.novoda.tpbot.automation.AutomationChecker;
 import com.novoda.tpbot.bot.BotActivity;
 import com.novoda.tpbot.human.HumanActivity;
 
@@ -23,13 +21,6 @@ public class LandingActivity extends AppCompatActivity {
 
         humanSelection.setOnClickListener(onHumanSelectionListener);
         botSelection.setOnClickListener(onBotSelectionListener);
-
-        AutomationChecker automationChecker = AutomationChecker.newInstance(getApplicationContext());
-        boolean serviceIsNotEnabled = !automationChecker.isHangoutJoinerAutomationServiceEnabled();
-
-        if (serviceIsNotEnabled) {
-            startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
-        }
     }
 
     private final View.OnClickListener onHumanSelectionListener = new View.OnClickListener() {

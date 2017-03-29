@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,15 +18,16 @@ import android.view.MenuItem;
 
 import com.novoda.notils.caster.Views;
 import com.novoda.notils.logger.toast.Toaster;
+import com.novoda.support.SelfDestructingMessageView;
+import com.novoda.support.SwitchableView;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
+import com.novoda.tpbot.ServerDeclarationListener;
+import com.novoda.tpbot.automation.AutomationChecker;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.tpbot.human.ServerDeclarationView;
-import com.novoda.support.SelfDestructingMessageView;
-import com.novoda.tpbot.ServerDeclarationListener;
-import com.novoda.support.SwitchableView;
 
 import java.util.HashMap;
 
@@ -58,6 +60,18 @@ public class BotActivity extends AppCompatActivity implements BotView {
 
         Handler handler = new Handler();
         commandRepeater = new CommandRepeater(commandRepeatedListener, handler);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        AutomationChecker automationChecker = AutomationChecker.newInstance(getApplicationContext());
+        boolean serviceIsNotEnabled = !automationChecker.isHangoutJoinerAutomationServiceEnabled();
+
+        if (serviceIsNotEnabled) {
+            startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+        }
     }
 
     private final ControllerListener controllerListener = new ControllerListener() {
