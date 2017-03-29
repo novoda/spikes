@@ -4,7 +4,7 @@ import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.Result;
 import com.novoda.tpbot.support.Observable;
 
-interface HumanTpService {
+interface HumanTelepresenceService {
 
     Observable<Result> connectTo(String serverAddress);
 

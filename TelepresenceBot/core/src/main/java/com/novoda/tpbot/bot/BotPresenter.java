@@ -9,13 +9,13 @@ import static com.novoda.tpbot.support.Observable.unsubscribe;
 
 class BotPresenter {
 
-    private final BotTpService tpService;
+    private final BotTelepresenceService tpService;
     private final BotView botView;
 
     private Observable<Result> connectionObservable;
     private Observable<Direction> directionObservable;
 
-    BotPresenter(BotTpService tpService, BotView botView) {
+    BotPresenter(BotTelepresenceService tpService, BotView botView) {
         this.tpService = tpService;
         this.botView = botView;
     }

@@ -32,7 +32,7 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
         switchableView = Views.findById(this, R.id.bot_switchable_view);
 
-        presenter = new HumanPresenter(SocketIOTpService.getInstance(), this);
+        presenter = new HumanPresenter(SocketIOTelepresenceService.getInstance(), this);
 
         Handler handler = new Handler();
         commandRepeater = new CommandRepeater(commandRepeatedListener, handler);

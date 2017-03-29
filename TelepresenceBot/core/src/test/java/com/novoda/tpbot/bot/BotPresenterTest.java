@@ -25,7 +25,7 @@ public class BotPresenterTest {
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Mock
-    BotTpService tpService;
+    BotTelepresenceService tpService;
 
     @Mock
     BotView botView;

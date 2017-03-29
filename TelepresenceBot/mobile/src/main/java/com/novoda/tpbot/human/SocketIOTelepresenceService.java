@@ -19,16 +19,16 @@ import java.net.URL;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 
-class SocketIOTpService implements HumanTpService {
+class SocketIOTelepresenceService implements HumanTelepresenceService {
 
     private Socket socket;
     private final Handler handler;
 
-    static SocketIOTpService getInstance() {
+    static SocketIOTelepresenceService getInstance() {
         return LazySingleton.INSTANCE;
     }
 
-    private SocketIOTpService() {
+    private SocketIOTelepresenceService() {
         this.handler = new Handler(Looper.getMainLooper());
     }
 
@@ -60,7 +60,7 @@ class SocketIOTpService implements HumanTpService {
     }
 
     private static class LazySingleton {
-        private static final SocketIOTpService INSTANCE = new SocketIOTpService();
+        private static final SocketIOTelepresenceService INSTANCE = new SocketIOTelepresenceService();
     }
 
 }

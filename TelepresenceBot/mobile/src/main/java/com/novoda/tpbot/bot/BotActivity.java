@@ -48,7 +48,7 @@ public class BotActivity extends AppCompatActivity implements BotView {
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
         switchableView = Views.findById(this, R.id.bot_switchable_view);
 
-        presenter = new BotPresenter(SocketIOTpService.getInstance(), this);
+        presenter = new BotPresenter(SocketIOTelepresenceService.getInstance(), this);
 
         ControllerView controllerView = Views.findById(this, R.id.bot_controller_direction_view);
         controllerView.setControllerListener(controllerListener);

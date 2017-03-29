@@ -25,7 +25,7 @@ public class HumanPresenterTest {
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Mock
-    HumanTpService tpService;
+    HumanTelepresenceService tpService;
 
     @Mock
     HumanView humanView;

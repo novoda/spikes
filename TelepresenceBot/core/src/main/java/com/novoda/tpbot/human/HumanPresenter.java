@@ -9,29 +9,29 @@ import static com.novoda.tpbot.support.Observable.unsubscribe;
 
 class HumanPresenter {
 
-    private final HumanTpService humanTpService;
+    private final HumanTelepresenceService humanTelepresenceService;
     private final HumanView humanView;
 
     private Observable<Result> observable;
 
-    HumanPresenter(HumanTpService humanTpService, HumanView humanView) {
-        this.humanTpService = humanTpService;
+    HumanPresenter(HumanTelepresenceService humanTelepresenceService, HumanView humanView) {
+        this.humanTelepresenceService = humanTelepresenceService;
         this.humanView = humanView;
     }
 
     void startPresenting(String serverAddress) {
-        observable = humanTpService.connectTo(serverAddress)
+        observable = humanTelepresenceService.connectTo(serverAddress)
                 .attach(new ConnectionObserver())
                 .start();
     }
 
     void moveIn(Direction direction) {
-        humanTpService.moveIn(direction);
+        humanTelepresenceService.moveIn(direction);
     }
 
     void stopPresenting() {
         unsubscribe(observable);
-        humanTpService.disconnect();
+        humanTelepresenceService.disconnect();
         humanView.onDisconnect();
     }
 

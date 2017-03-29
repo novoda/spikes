@@ -20,16 +20,16 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-class SocketIOTpService implements BotTpService {
+class SocketIOTelepresenceService implements BotTelepresenceService {
 
     private Socket socket;
     private final Handler handler;
 
-    static SocketIOTpService getInstance() {
+    static SocketIOTelepresenceService getInstance() {
         return LazySingleton.INSTANCE;
     }
 
-    private SocketIOTpService() {
+    private SocketIOTelepresenceService() {
         this.handler = new Handler(Looper.getMainLooper());
     }
 
@@ -89,7 +89,7 @@ class SocketIOTpService implements BotTpService {
     }
 
     private static class LazySingleton {
-        private static final SocketIOTpService INSTANCE = new SocketIOTpService();
+        private static final SocketIOTelepresenceService INSTANCE = new SocketIOTelepresenceService();
     }
 
 }
