@@ -8,9 +8,9 @@ import com.novoda.tpbot.Result;
 import com.novoda.tpbot.ClientType;
 import com.novoda.tpbot.Event;
 import com.novoda.tpbot.MalformedServerAddressException;
-import com.novoda.tpbot.support.Observable;
+import com.novoda.support.Observable;
 import com.novoda.tpbot.Room;
-import com.novoda.tpbot.support.SocketConnectionObservable;
+import com.novoda.tpbot.SocketConnectionObservable;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;

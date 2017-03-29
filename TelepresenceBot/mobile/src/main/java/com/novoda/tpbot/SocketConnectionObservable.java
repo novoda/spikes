@@ -1,9 +1,8 @@
-package com.novoda.tpbot.support;
+package com.novoda.tpbot;
 
 import android.os.Handler;
 
-import com.novoda.tpbot.Result;
-import com.novoda.tpbot.Room;
+import com.novoda.support.Observable;
 
 import io.socket.client.Socket;
 import io.socket.client.SocketIOException;

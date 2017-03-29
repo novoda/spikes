@@ -1,4 +1,4 @@
-package com.novoda.tpbot.support;
+package com.novoda.support;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -12,11 +12,10 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
 
 import com.novoda.tpbot.R;
 
-public class TextViewWithForeground extends TextView {
+public class TextViewWithForeground extends android.support.v7.widget.AppCompatTextView {
 
     private static final int INVALID_RESOURCE_ID = 0;
     private Drawable foreground;

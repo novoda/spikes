@@ -1,7 +1,7 @@
 package com.novoda.tpbot.human;
 
 import com.novoda.tpbot.Result;
-import com.novoda.tpbot.support.Observable;
+import com.novoda.support.Observable;
 
 import org.junit.Before;
 import org.junit.Rule;

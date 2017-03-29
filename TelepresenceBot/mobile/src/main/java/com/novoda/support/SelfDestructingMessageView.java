@@ -1,4 +1,4 @@
-package com.novoda.tpbot.support;
+package com.novoda.support;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * A {@link TextView} that clears its content after a set period of time
  */
-public class SelfDestructingMessageView extends TextView {
+public class SelfDestructingMessageView extends android.support.v7.widget.AppCompatTextView {
 
     private static final long COMMAND_FADING_DELAY = TimeUnit.MILLISECONDS.toMillis(100);
 

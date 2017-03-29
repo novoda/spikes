@@ -23,9 +23,9 @@ import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.tpbot.human.ServerDeclarationView;
-import com.novoda.tpbot.support.SelfDestructingMessageView;
+import com.novoda.support.SelfDestructingMessageView;
 import com.novoda.tpbot.ServerDeclarationListener;
-import com.novoda.tpbot.support.SwitchableView;
+import com.novoda.support.SwitchableView;
 
 import java.util.HashMap;
 
