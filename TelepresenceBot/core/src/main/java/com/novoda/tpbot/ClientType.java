@@ -1,12 +1,13 @@
-package com.novoda.tpbot.support;
+package com.novoda.tpbot;
 
-public enum Room {
+public enum ClientType {
 
-    LONDON("room=London");
+    BOT("clientType=bot"),
+    HUMAN("clientType=human");
 
     private final String rawQuery;
 
-    Room(String rawQuery) {
+    ClientType(String rawQuery) {
         this.rawQuery = rawQuery;
     }
 

@@ -3,6 +3,7 @@ package com.novoda.tpbot.support;
 import android.os.Handler;
 
 import com.novoda.tpbot.Result;
+import com.novoda.tpbot.Room;
 
 import io.socket.client.Socket;
 import io.socket.client.SocketIOException;

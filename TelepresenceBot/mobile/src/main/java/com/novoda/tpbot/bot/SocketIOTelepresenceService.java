@@ -5,11 +5,11 @@ import android.os.Looper;
 
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.Result;
-import com.novoda.tpbot.support.ClientType;
-import com.novoda.tpbot.support.Event;
-import com.novoda.tpbot.support.MalformedServerAddressException;
+import com.novoda.tpbot.ClientType;
+import com.novoda.tpbot.Event;
+import com.novoda.tpbot.MalformedServerAddressException;
 import com.novoda.tpbot.support.Observable;
-import com.novoda.tpbot.support.Room;
+import com.novoda.tpbot.Room;
 import com.novoda.tpbot.support.SocketConnectionObservable;
 
 import java.net.MalformedURLException;
