@@ -7,7 +7,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.List;
 
-public class TelepresenceBotAccessibilityService extends AccessibilityService {
+public class HangoutJoinerAutomationService extends AccessibilityService {
 
     private static final String HANGOUTS_PACKAGE_NAME = "com.google.android.talk";
     private static final String JOIN_CALL_VIEW_ID = "com.google.android.apps.hangouts:id/join_hangout";
@@ -31,7 +31,7 @@ public class TelepresenceBotAccessibilityService extends AccessibilityService {
                 AccessibilityNodeInfo joinCallNode = accessibilityNodes.get(FIRST_ELEMENT_INDEX);
                 joinCallNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
             } else {
-                Log.e(TelepresenceBotAccessibilityService.class.getSimpleName(), "Could not locate join video call button");
+                Log.e(HangoutJoinerAutomationService.class.getSimpleName(), "Could not locate join video call button");
             }
         }
     }
@@ -50,7 +50,7 @@ public class TelepresenceBotAccessibilityService extends AccessibilityService {
 
     @Override
     public void onInterrupt() {
-        Log.e(TelepresenceBotAccessibilityService.class.getSimpleName(), "onInterrupt");
+        Log.e(HangoutJoinerAutomationService.class.getSimpleName(), "onInterrupt");
     }
 
 }

@@ -16,7 +16,7 @@
     android:theme="@style/AppTheme"
     tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
-    <service android:name="com.novoda.tpbot.automation.TelepresenceBotAccessibilityService"
+    <service android:name="com.novoda.tpbot.automation.HangoutJoinerAutomationService"
       android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
       <intent-filter>
         <action android:name="android.accessibilityservice.AccessibilityService" />
