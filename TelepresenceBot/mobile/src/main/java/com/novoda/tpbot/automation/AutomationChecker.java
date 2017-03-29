@@ -6,22 +6,28 @@ public class AutomationChecker {
 
     private final String serviceName;
     private final AndroidAccessibilitySettingsRetriever accessibilitySettingsRetriever;
+    private final ColonStringSplitter colonStringSplitter;
 
     public static AutomationChecker newInstance(Context context) {
         String serviceFullyQualifiedName = context.getPackageName() + "/" + HangoutJoinerAutomationService.class.getCanonicalName();
         AndroidAccessibilitySettingsRetriever retriever = new AndroidAccessibilitySettingsRetriever(context.getContentResolver());
-        return new AutomationChecker(serviceFullyQualifiedName, retriever);
+        ColonStringSplitter colonStringSplitter = new ColonStringSplitter();
+        return new AutomationChecker(retriever, colonStringSplitter, serviceFullyQualifiedName);
     }
 
-    AutomationChecker(String serviceName, AndroidAccessibilitySettingsRetriever accessibilitySettingsRetriever) {
+    AutomationChecker(AndroidAccessibilitySettingsRetriever accessibilitySettingsRetriever,
+                      ColonStringSplitter colonStringSplitter,
+                      String serviceName) {
         this.serviceName = serviceName;
         this.accessibilitySettingsRetriever = accessibilitySettingsRetriever;
+        this.colonStringSplitter = colonStringSplitter;
     }
 
     public boolean isHangoutJoinerAutomationServiceEnabled() {
-        String[] enabledAccessibilityServices = accessibilitySettingsRetriever.retrieveEnabledAccessibilityServices();
+        String accessibilitySettings = accessibilitySettingsRetriever.retrieveEnabledAccessibilityServices();
+        String[] accessibilityServices = colonStringSplitter.split(accessibilitySettings);
 
-        for (String service : enabledAccessibilityServices) {
+        for (String service : accessibilityServices) {
             if (matchesAutomationService(service)) {
                 return true;
             }

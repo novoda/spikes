@@ -6,17 +6,19 @@ import android.util.Log;
 
 public class AndroidAccessibilitySettingsRetriever {
 
+    private static final String EMPTY_STRING = "";
+
     private final ContentResolver contentResolver;
 
     public AndroidAccessibilitySettingsRetriever(ContentResolver contentResolver) {
         this.contentResolver = contentResolver;
     }
 
-    public String[] retrieveEnabledAccessibilityServices() {
+    public String retrieveEnabledAccessibilityServices() {
         if (canRetrieveAccessibilitySettings()) {
             return getEnabledAccessibilityServices();
         }
-        return new String[]{};
+        return EMPTY_STRING;
     }
 
     private boolean canRetrieveAccessibilitySettings() {
@@ -24,23 +26,17 @@ public class AndroidAccessibilitySettingsRetriever {
             return Settings.Secure.getInt(
                     contentResolver,
                     Settings.Secure.ACCESSIBILITY_ENABLED
-            ) != 0;
+            ) == 1;
         } catch (Settings.SettingNotFoundException e) {
             Log.e(AutomationChecker.class.getSimpleName(), "Could not find settings.", e);
             return false;
         }
     }
 
-    private String[] getEnabledAccessibilityServices() {
-        String accessibilityServices = Settings.Secure.getString(
+    private String getEnabledAccessibilityServices() {
+        return Settings.Secure.getString(
                 contentResolver,
                 Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
         );
-
-        if (accessibilityServices == null) {
-            return new String[]{};
-        } else {
-            return accessibilityServices.split(":");
-        }
     }
 }
