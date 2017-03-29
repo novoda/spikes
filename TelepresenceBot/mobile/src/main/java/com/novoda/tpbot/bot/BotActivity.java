@@ -25,7 +25,7 @@ import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServerDeclarationListener;
 import com.novoda.tpbot.automation.AndroidAccessibilitySettingsRetriever;
 import com.novoda.tpbot.automation.AutomationChecker;
-import com.novoda.tpbot.automation.ColonStringSplitter;
+import com.novoda.support.ColonStringSplitter;
 import com.novoda.tpbot.automation.HangoutJoinerAutomationService;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;

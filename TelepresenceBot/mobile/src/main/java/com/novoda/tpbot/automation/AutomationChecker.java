@@ -1,5 +1,7 @@
 package com.novoda.tpbot.automation;
 
+import com.novoda.support.ColonStringSplitter;
+
 public class AutomationChecker {
 
     private final String serviceName;

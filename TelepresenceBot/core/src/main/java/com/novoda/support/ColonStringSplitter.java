@@ -1,4 +1,4 @@
-package com.novoda.tpbot.automation;
+package com.novoda.support;
 
 public class ColonStringSplitter {
 
