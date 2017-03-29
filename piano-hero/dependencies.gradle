@@ -2,7 +2,7 @@ ext {
     versions = [
             androidSdk: [
                     compile   : 25,
-                    min       : 16,
+                    min       : 23, // for MIDI support
                     target    : 25,
                     buildTools: '25.0.2'
             ],
