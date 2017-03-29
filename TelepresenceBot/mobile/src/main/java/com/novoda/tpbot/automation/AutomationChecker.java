@@ -1,23 +1,14 @@
 package com.novoda.tpbot.automation;
 
-import android.content.Context;
-
 public class AutomationChecker {
 
     private final String serviceName;
     private final AndroidAccessibilitySettingsRetriever accessibilitySettingsRetriever;
     private final ColonStringSplitter colonStringSplitter;
 
-    public static AutomationChecker newInstance(Context context) {
-        String serviceFullyQualifiedName = context.getPackageName() + "/" + HangoutJoinerAutomationService.class.getCanonicalName();
-        AndroidAccessibilitySettingsRetriever retriever = new AndroidAccessibilitySettingsRetriever(context.getContentResolver());
-        ColonStringSplitter colonStringSplitter = new ColonStringSplitter();
-        return new AutomationChecker(retriever, colonStringSplitter, serviceFullyQualifiedName);
-    }
-
-    AutomationChecker(AndroidAccessibilitySettingsRetriever accessibilitySettingsRetriever,
-                      ColonStringSplitter colonStringSplitter,
-                      String serviceName) {
+    public AutomationChecker(AndroidAccessibilitySettingsRetriever accessibilitySettingsRetriever,
+                             ColonStringSplitter colonStringSplitter,
+                             String serviceName) {
         this.serviceName = serviceName;
         this.accessibilitySettingsRetriever = accessibilitySettingsRetriever;
         this.colonStringSplitter = colonStringSplitter;

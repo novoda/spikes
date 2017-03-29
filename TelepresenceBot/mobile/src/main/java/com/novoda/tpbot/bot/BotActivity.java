@@ -23,7 +23,10 @@ import com.novoda.support.SwitchableView;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServerDeclarationListener;
+import com.novoda.tpbot.automation.AndroidAccessibilitySettingsRetriever;
 import com.novoda.tpbot.automation.AutomationChecker;
+import com.novoda.tpbot.automation.ColonStringSplitter;
+import com.novoda.tpbot.automation.HangoutJoinerAutomationService;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
@@ -34,6 +37,7 @@ import java.util.HashMap;
 public class BotActivity extends AppCompatActivity implements BotView {
 
     private static final String HANGOUTS_BASE_URL = "https://hangouts.google.com/hangouts/_/novoda.com/";
+
     private SelfDestructingMessageView debugView;
     private SwitchableView switchableView;
 
@@ -41,6 +45,7 @@ public class BotActivity extends AppCompatActivity implements BotView {
     private boolean boundToMovementService;
     private CommandRepeater commandRepeater;
     private BotPresenter presenter;
+    private AutomationChecker automationChecker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,16 +65,17 @@ public class BotActivity extends AppCompatActivity implements BotView {
 
         Handler handler = new Handler();
         commandRepeater = new CommandRepeater(commandRepeatedListener, handler);
+
+        AndroidAccessibilitySettingsRetriever retriever = new AndroidAccessibilitySettingsRetriever(getContentResolver());
+        ColonStringSplitter colonStringSplitter = new ColonStringSplitter();
+        String serviceFullyQualifiedName = getPackageName() + "/" + HangoutJoinerAutomationService.class.getCanonicalName();
+        automationChecker = new AutomationChecker(retriever, colonStringSplitter, serviceFullyQualifiedName);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        AutomationChecker automationChecker = AutomationChecker.newInstance(getApplicationContext());
-        boolean serviceIsNotEnabled = !automationChecker.isHangoutJoinerAutomationServiceEnabled();
-
-        if (serviceIsNotEnabled) {
+        if (!automationChecker.isHangoutJoinerAutomationServiceEnabled()) {
             startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
         }
     }
