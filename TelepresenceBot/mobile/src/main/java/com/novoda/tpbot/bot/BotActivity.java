@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 
 public class BotActivity extends AppCompatActivity implements BotView {
 
+    private static final String HANGOUTS_BASE_URL = "https://hangouts.google.com/hangouts/_/novoda.com/";
     private SelfDestructingMessageView debugView;
     private SwitchableView switchableView;
 
@@ -176,9 +178,18 @@ public class BotActivity extends AppCompatActivity implements BotView {
     };
 
     @Override
-    public void onConnect(String message) {
+    public void onConnect(String room) {
         debugView.showPermanently(getString(R.string.connected));
         switchableView.setDisplayedChild(1);
+
+        joinHangoutRoom(room);
+    }
+
+    private void joinHangoutRoom(String room) {
+        String url = HANGOUTS_BASE_URL + room;
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
     }
 
     @Override
