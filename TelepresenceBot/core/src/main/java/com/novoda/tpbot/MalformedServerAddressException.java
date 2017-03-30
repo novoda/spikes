@@ -1,4 +1,4 @@
-package com.novoda.tpbot.support;
+package com.novoda.tpbot;
 
 import java.io.IOException;
 

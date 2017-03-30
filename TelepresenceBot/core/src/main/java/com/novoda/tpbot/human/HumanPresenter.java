@@ -2,36 +2,36 @@ package com.novoda.tpbot.human;
 
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.Result;
-import com.novoda.tpbot.support.Observable;
-import com.novoda.tpbot.support.Observer;
+import com.novoda.support.Observable;
+import com.novoda.support.Observer;
 
-import static com.novoda.tpbot.support.Observable.unsubscribe;
+import static com.novoda.support.Observable.unsubscribe;
 
 class HumanPresenter {
 
-    private final HumanTpService humanTpService;
+    private final HumanTelepresenceService humanTelepresenceService;
     private final HumanView humanView;
 
     private Observable<Result> observable;
 
-    HumanPresenter(HumanTpService humanTpService, HumanView humanView) {
-        this.humanTpService = humanTpService;
+    HumanPresenter(HumanTelepresenceService humanTelepresenceService, HumanView humanView) {
+        this.humanTelepresenceService = humanTelepresenceService;
         this.humanView = humanView;
     }
 
     void startPresenting(String serverAddress) {
-        observable = humanTpService.connectTo(serverAddress)
+        observable = humanTelepresenceService.connectTo(serverAddress)
                 .attach(new ConnectionObserver())
                 .start();
     }
 
     void moveIn(Direction direction) {
-        humanTpService.moveIn(direction);
+        humanTelepresenceService.moveIn(direction);
     }
 
     void stopPresenting() {
         unsubscribe(observable);
-        humanTpService.disconnect();
+        humanTelepresenceService.disconnect();
         humanView.onDisconnect();
     }
 

@@ -23,9 +23,9 @@ import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.tpbot.human.ServerDeclarationView;
-import com.novoda.tpbot.support.SelfDestructingMessageView;
-import com.novoda.tpbot.support.ServerDeclarationListener;
-import com.novoda.tpbot.support.SwitchableView;
+import com.novoda.support.SelfDestructingMessageView;
+import com.novoda.tpbot.ServerDeclarationListener;
+import com.novoda.support.SwitchableView;
 
 import java.util.HashMap;
 
@@ -48,7 +48,7 @@ public class BotActivity extends AppCompatActivity implements BotView {
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
         switchableView = Views.findById(this, R.id.bot_switchable_view);
 
-        presenter = new BotPresenter(SocketIOTpService.getInstance(), this);
+        presenter = new BotPresenter(SocketIOTelepresenceService.getInstance(), this);
 
         ControllerView controllerView = Views.findById(this, R.id.bot_controller_direction_view);
         controllerView.setControllerListener(controllerListener);

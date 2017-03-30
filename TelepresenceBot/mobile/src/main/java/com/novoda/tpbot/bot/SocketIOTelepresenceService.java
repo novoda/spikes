@@ -5,12 +5,12 @@ import android.os.Looper;
 
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.Result;
-import com.novoda.tpbot.support.ClientType;
-import com.novoda.tpbot.support.Event;
-import com.novoda.tpbot.support.MalformedServerAddressException;
-import com.novoda.tpbot.support.Observable;
-import com.novoda.tpbot.support.Room;
-import com.novoda.tpbot.support.SocketConnectionObservable;
+import com.novoda.tpbot.ClientType;
+import com.novoda.tpbot.Event;
+import com.novoda.tpbot.MalformedServerAddressException;
+import com.novoda.support.Observable;
+import com.novoda.tpbot.Room;
+import com.novoda.tpbot.SocketConnectionObservable;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -20,16 +20,16 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-class SocketIOTpService implements BotTpService {
+class SocketIOTelepresenceService implements BotTelepresenceService {
 
     private Socket socket;
     private final Handler handler;
 
-    static SocketIOTpService getInstance() {
+    static SocketIOTelepresenceService getInstance() {
         return LazySingleton.INSTANCE;
     }
 
-    private SocketIOTpService() {
+    private SocketIOTelepresenceService() {
         this.handler = new Handler(Looper.getMainLooper());
     }
 
@@ -89,7 +89,7 @@ class SocketIOTpService implements BotTpService {
     }
 
     private static class LazySingleton {
-        private static final SocketIOTpService INSTANCE = new SocketIOTpService();
+        private static final SocketIOTelepresenceService INSTANCE = new SocketIOTelepresenceService();
     }
 
 }

@@ -1,6 +1,5 @@
 package com.novoda.tpbot.controls;
 
-import com.novoda.notils.logger.simple.Log;
 import com.novoda.tpbot.Direction;
 
 public interface ControllerListener {
@@ -9,22 +8,22 @@ public interface ControllerListener {
 
         @Override
         public void onDirectionPressed(Direction direction) {
-            Log.w("onDirectionPressed() but no listener was set");
+            // no-op
         }
 
         @Override
         public void onDirectionReleased(Direction direction) {
-            Log.w("onDirectionReleased() but no listener was set");
+            // no-op
         }
 
         @Override
         public void onLazersFired() {
-            Log.w("onLazersFired() but no listener was set");
+            // no-op
         }
 
         @Override
         public void onLazersReleased() {
-            Log.w("onLazersReleased() but no listener was set");
+            // no-op
         }
 
     };

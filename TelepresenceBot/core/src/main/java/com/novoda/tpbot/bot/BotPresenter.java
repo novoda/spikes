@@ -2,20 +2,20 @@ package com.novoda.tpbot.bot;
 
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.Result;
-import com.novoda.tpbot.support.Observable;
-import com.novoda.tpbot.support.Observer;
+import com.novoda.support.Observable;
+import com.novoda.support.Observer;
 
-import static com.novoda.tpbot.support.Observable.unsubscribe;
+import static com.novoda.support.Observable.unsubscribe;
 
 class BotPresenter {
 
-    private final BotTpService tpService;
+    private final BotTelepresenceService tpService;
     private final BotView botView;
 
     private Observable<Result> connectionObservable;
     private Observable<Direction> directionObservable;
 
-    BotPresenter(BotTpService tpService, BotView botView) {
+    BotPresenter(BotTelepresenceService tpService, BotView botView) {
         this.tpService = tpService;
         this.botView = botView;
     }

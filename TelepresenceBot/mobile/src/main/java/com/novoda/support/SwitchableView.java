@@ -1,4 +1,4 @@
-package com.novoda.tpbot.support;
+package com.novoda.support;
 
 import android.content.Context;
 import android.content.res.TypedArray;
