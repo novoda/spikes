@@ -25,6 +25,10 @@ public class Chord {
         return notes;
     }
 
+    public Set<Note> notes() {
+        return notes;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
