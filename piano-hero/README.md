@@ -1,106 +1,21 @@
-# espresso-support
+# Piano Hero!
 
-Includes custom rules for testing Views in isolation and running tests with Google TalkBack enabled.
+Piano Hero! is a musical teaching tool, compatible with Android Things, helping you learn notes on the treble clef and their corresponding keys on a piano.
 
-The library is split into two components:
+## Notes (ha!)
 
-- core - main espresso dependency (`androidTestCompile`)
-- extras - optional, depending on which classes you use (`debugCompile`/`espressoCompile`)
+- can use [MIDI number](https://en.wikipedia.org/wiki/Scientific_pitch_notation#Table_of_note_frequencies) to represent pitch
+- UI will display a series of notes or chords (2 or more notes).
+- input device (touchscreen, buttons, MIDI controller) will send events which correspond to a note or chord
 
-The `extras` dependency adds some components to your app (hence it's not `androidTestCompile`), e.g. the `ViewActivity`.
+The cool thing is that the only constants will be the way we represent pitches. This means we can display notes in anyway we want:
 
-## Usage
+- using traditional musical notation, in _any_ key
+- just using text
+- playing the sound audibly at the correct pitch (whaaat?)
 
-The artifacts are not yet available on JCenter. Until then, you can add the Novoda bintray repo:
+and also input in anyway we want:
 
-```
-maven {
-    url 'http://dl.bintray.com/novoda/maven'
-}
-
-...
-
-
-debugCompile 'com.novoda:espresso-support-extras:0.0.1'
-androidTestCompile 'com.novoda:espresso-support:0.0.1'
-```
-
-## Testing views in isolation
-
-Use the `ViewTestRule`, passing in a layout resource. It'll inflate the resource into the `ViewActivity` with `MATCH_PARENT` for both dimensions. You can use `rule.getView()` to obtain an instance of the View and it'll be typed to the class you specified.
-
-```java
-@Rule
-public ViewTestRule<MovieItemView> rule = new ViewTestRule<>(R.layout.test_movie_item_view);
-```
-
-You can write BDD style tests here, highlighting the expected behaviour for your custom views, using a mixture of Espresso ViewActions and Mockito verifies:
-
-```java
-@Test
-public void givenViewIsUpdatedWithDifferentMovie_whenClicking_thenListenerDoesNotGetFiredForOriginalMovie() {
-    givenMovieItemViewIsBoundTo(EDWARD_SCISSORHANDS);
-    givenMovieItemViewIsBoundTo(NOT_EDWARD_SCISSORHANDS);
-
-    onView(withId(R.id.movie_item_button_play)).perform(click());
-
-    verify(movieItemListener, never()).onClickPlay(eq(EDWARD_SCISSORHANDS));
-}
-
-private void givenMovieItemViewIsBoundTo(final Movie movie) {
-    viewTestRule.bindViewUsing(new ViewTestRule.Binder<MovieItemView>() {
-        @Override
-        public void bind(MovieItemView view) {
-            view.bind(movie);
-        }
-    });
-}
-```
-
-:warning: This rule requires the `extras` module to be included for the app under test, so it can open the `ViewActivity`.
-
-## Testing behaviour with TalkBack enabled
-
-Often, our apps will behave differently when TalkBack is enabled to offer a more streamlined experience for users of screen readers.
-
-Use either `TalkBackViewTestRule` or `TalkBackActivityTestRule` - TalkBack will be enabled before each test is run and disabled after each test finishes.
-
-:warning: This rule requires the `extras` module to be included for the app under test, so it can open the `TalkBackStateSettingActivity`.
-:warning: Toggling TalkBack state requires the `WRITE_SECURE_SETTINGS` permission being set for the app under test.
-
-```bash
-adb shell pm grant com.novoda.movies android.permission.WRITE_SECURE_SETTINGS
-```
-
-If the app is installed and the permission granted, you can enable/disable TalkBack via adb with the following actions:
-
-```bash
-$ adb shell am start -a "com.novoda.espresso.ENABLE_TALKBACK"
-$ adb shell am start -a "com.novoda.espresso.DISABLE_TALKBACK"
-```
-
-You can also do the same with an Intent:
-
-```java
-Intent intent = new Intent("com.novoda.espresso.ENABLE_TALKBACK")
-context.startActivity(intent);
-```
-
-## Demo
-
-You can run the demo tests with the following commands:
-
-```bash
-./gradlew demo:installDebug; adb shell pm grant com.novoda.movies android.permission.WRITE_SECURE_SETTINGS; adb shell am start -a "com.novoda.espresso.DISABLE_TALKBACK"; ./gradlew demo:cAT; adb shell am start -a "com.novoda.espresso.DISABLE_TALKBACK";
-```
-
-You have to install the app first to set the permission. We also disable TalkBack before and after the tests so we don't mess up non-TalkBack tests.
-
-## Links
-
-Here are a list of useful links:
-
- * We always welcome people to contribute new features or bug fixes, [here is how](https://github.com/novoda/novoda/blob/master/CONTRIBUTING.md)
- * If you have a problem check the [Issues Page](https://github.com/novoda/espresso-support/issues) first to see if we are working on it // TODO: waiting on repo to exist
-
-
+- pressing the correct key(s) on a MIDI controller
+- typing the scientific pitch notation (e.g. "C4")
+- singing/playing the correct pitch and using a microphone to determine pitch (whaaat?)
