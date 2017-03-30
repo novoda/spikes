@@ -6,6 +6,8 @@ import java.util.Set;
 
 public class Chord {
 
+    private static final int MINIMUM_NUMBER_OF_NOTES_IN_CHORD = 2;
+
     private final Set<Note> notes;
 
     public Chord(Note... notes) {
@@ -17,7 +19,7 @@ public class Chord {
     }
 
     private Set<Note> checkHasMinimumNotes(Set<Note> notes) {
-        if (notes.size() < 2) {
+        if (notes.size() < MINIMUM_NUMBER_OF_NOTES_IN_CHORD) {
             throw new IllegalArgumentException("Chords must contain at least two Notes");
         }
         return notes;
