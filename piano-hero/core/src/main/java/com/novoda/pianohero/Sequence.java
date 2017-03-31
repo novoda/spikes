@@ -1,37 +1,35 @@
 package com.novoda.pianohero;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 public final class Sequence {
 
-    private final List<Set<Note>> notes;
+    private final List<Notes> notes;
 
-    private Sequence(List<Set<Note>> notes) {
+    private Sequence(List<Notes> notes) {
         this.notes = notes;
     }
 
-    public Set<Note> get(int position) {
+    public Notes get(int position) {
         return notes.get(position);
     }
 
-    public int size() {
+    public int length() {
         return notes.size();
     }
 
     public static class Builder {
 
-        private final List<Set<Note>> notes = new ArrayList<>();
+        private final List<Notes> notes = new ArrayList<>();
 
         public Builder add(Chord chord) {
-            notes.add(chord.notes());
+            notes.add(chord);
             return this;
         }
 
         public Builder add(Note note) {
-            notes.add(Collections.singleton(note));
+            notes.add(new Notes(note));
             return this;
         }
 

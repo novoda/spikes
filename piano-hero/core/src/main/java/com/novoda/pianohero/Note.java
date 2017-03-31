@@ -26,7 +26,7 @@ public class Note {
     static final Note A5 = new Note(81);
     static final Note A5_S = new Note(82);
     static final Note B5 = new Note(83);
-    
+
     private static final int LOWEST_MIDI_NOTE = 0;
     private static final int HIGHEST_MIDI_NOTE = 127;
 
