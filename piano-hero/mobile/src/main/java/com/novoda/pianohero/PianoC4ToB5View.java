@@ -100,33 +100,33 @@ public class PianoC4ToB5View extends PercentRelativeLayout {
     public void attach(KeyListener keyListener) {
         this.keyListener = keyListener;
 
-        bindKey(c4View, Notes.C4);
-        bindKey(d4View, Notes.D4);
-        bindKey(e4View, Notes.E4);
-        bindKey(f4View, Notes.F4);
-        bindKey(g4View, Notes.G4);
-        bindKey(a4View, Notes.A4);
-        bindKey(b4View, Notes.B4);
+        bindKey(c4View, Note.C4);
+        bindKey(d4View, Note.D4);
+        bindKey(e4View, Note.E4);
+        bindKey(f4View, Note.F4);
+        bindKey(g4View, Note.G4);
+        bindKey(a4View, Note.A4);
+        bindKey(b4View, Note.B4);
 
-        bindKey(c4sView, Notes.C4_S);
-        bindKey(d4sView, Notes.D4_S);
-        bindKey(f4sView, Notes.F4_S);
-        bindKey(g4sView, Notes.G4_S);
-        bindKey(a4sView, Notes.A4_S);
+        bindKey(c4sView, Note.C4_S);
+        bindKey(d4sView, Note.D4_S);
+        bindKey(f4sView, Note.F4_S);
+        bindKey(g4sView, Note.G4_S);
+        bindKey(a4sView, Note.A4_S);
 
-        bindKey(c5View, Notes.C5);
-        bindKey(d5View, Notes.D5);
-        bindKey(e5View, Notes.E5);
-        bindKey(f5View, Notes.F5);
-        bindKey(g5View, Notes.G5);
-        bindKey(a5View, Notes.A5);
-        bindKey(b5View, Notes.B5);
+        bindKey(c5View, Note.C5);
+        bindKey(d5View, Note.D5);
+        bindKey(e5View, Note.E5);
+        bindKey(f5View, Note.F5);
+        bindKey(g5View, Note.G5);
+        bindKey(a5View, Note.A5);
+        bindKey(b5View, Note.B5);
 
-        bindKey(c5sView, Notes.C5_S);
-        bindKey(d5sView, Notes.D5_S);
-        bindKey(f5sView, Notes.F5_S);
-        bindKey(g5sView, Notes.G5_S);
-        bindKey(a5sView, Notes.A5_S);
+        bindKey(c5sView, Note.C5_S);
+        bindKey(d5sView, Note.D5_S);
+        bindKey(f5sView, Note.F5_S);
+        bindKey(g5sView, Note.G5_S);
+        bindKey(a5sView, Note.A5_S);
     }
 
     public void detachKeyListener() {

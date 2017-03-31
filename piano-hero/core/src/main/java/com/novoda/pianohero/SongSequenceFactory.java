@@ -4,10 +4,10 @@ public class SongSequenceFactory {
 
     public Sequence maryHadALittleLamb() {
         return new Sequence.Builder()
-                .add(Notes.E4).add(Notes.D4).add(Notes.C4).add(Notes.D4).add(Notes.E4).add(Notes.E4).add(Notes.E4)
-                .add(Notes.D4).add(Notes.D4).add(Notes.D4).add(Notes.E4).add(Notes.E4).add(Notes.E4)
-                .add(Notes.E4).add(Notes.D4).add(Notes.C4).add(Notes.D4).add(Notes.E4).add(Notes.E4).add(Notes.E4)
-                .add(Notes.E4).add(Notes.D4).add(Notes.D4).add(Notes.E4).add(Notes.D4).add(Notes.C4)
+                .add(Note.E4).add(Note.D4).add(Note.C4).add(Note.D4).add(Note.E4).add(Note.E4).add(Note.E4)
+                .add(Note.D4).add(Note.D4).add(Note.D4).add(Note.E4).add(Note.E4).add(Note.E4)
+                .add(Note.E4).add(Note.D4).add(Note.C4).add(Note.D4).add(Note.E4).add(Note.E4).add(Note.E4)
+                .add(Note.E4).add(Note.D4).add(Note.D4).add(Note.E4).add(Note.D4).add(Note.C4)
                 .build();
     }
 
