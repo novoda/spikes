@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class DemoMainActivity extends Activity {
 
     private PianoC4ToB5View pianoView;
@@ -20,7 +23,7 @@ public class DemoMainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        final NoteEventDispatcher noteEventDispatcher = new NoteEventDispatcher(new NoteEventDispatcher.PlayListener() {
+        final NotesPlayedDispatcher notesPlayedDispatcher = new NotesPlayedDispatcher(new NotesPlayedDispatcher.PlayListener() {
             @Override
             public void onPlayed(Notes notes) {
                 Log.d("!!!", "user played: " + notes.toString());
@@ -29,38 +32,50 @@ public class DemoMainActivity extends Activity {
 
         pianoView.attach(new PianoC4ToB5View.KeyListener() {
             @Override
-            public void onClick(Note note) {
-                noteEventDispatcher.onReceive(note);
+            public void onPress(Note note) {
+                notesPlayedDispatcher.registerNoteOn(note);
+            }
+
+            @Override
+            public void onRelease(Note note) {
+                notesPlayedDispatcher.registerNoteOff(note);
             }
         });
-    }
-
-    private static class NoteEventDispatcher {
-
-        private final PlayListener playListener;
-
-        NoteEventDispatcher(PlayListener playListener) {
-            this.playListener = playListener;
-        }
-
-        public void onReceive(Note note) {
-            // TODO: it's not enough to collect onClicks because we need to detect when keys are pressed together
-            // we should be able to reuse this for MIDI controller since that will also send individual events
-            // Perhaps we can keep a buffer of note events and forward them on as `Notes` to the next layer
-
-            playListener.onPlayed(new Notes(note));
-        }
-
-        public interface PlayListener {
-
-            void onPlayed(Notes notes);
-        }
-
     }
 
     @Override
     protected void onPause() {
         pianoView.detachKeyListener();
         super.onPause();
+    }
+
+    private static class NotesPlayedDispatcher {
+
+        private final Set<Note> notesOn = new HashSet<>();
+
+        private final PlayListener playListener;
+
+        NotesPlayedDispatcher(PlayListener playListener) {
+            this.playListener = playListener;
+        }
+
+        public void registerNoteOn(Note note) {
+            notesOn.add(note);
+            dispatchNotesPlayed();
+        }
+
+        public void registerNoteOff(Note note) {
+            notesOn.remove(note);
+            dispatchNotesPlayed();
+        }
+
+        private void dispatchNotesPlayed() {
+            playListener.onPlayed(new Notes(notesOn));
+        }
+
+        public interface PlayListener {
+
+            void onPlayed(Notes notes);
+        }
     }
 }

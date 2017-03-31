@@ -5,11 +5,12 @@ import android.support.annotation.Nullable;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class PianoC4ToB5View extends PercentRelativeLayout {
 
-    private KeyListener keyListener;
+    private KeyListener keyListener = KeyListener.LOGGING;
 
     private View c4View;
     private View d4View;
@@ -80,7 +81,10 @@ public class PianoC4ToB5View extends PercentRelativeLayout {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
+        layoutBlackKeysBasedOnWhiteKeys();
+    }
 
+    private void layoutBlackKeysBasedOnWhiteKeys() {
         int halfBlackKeyWidth = c4sView.getWidth() / 2;
         int blackKeyHeight = c4sView.getHeight();
 
@@ -130,24 +134,47 @@ public class PianoC4ToB5View extends PercentRelativeLayout {
     }
 
     public void detachKeyListener() {
-        this.keyListener = null;
+        this.keyListener = KeyListener.LOGGING;
     }
 
     private void bindKey(final View keyView, final Note note) {
-        keyView.setOnClickListener(new OnClickListener() {
+        keyView.setOnTouchListener(new OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                if (keyListener == null) {
-                    Log.e("!!!", "Did you forget to set the listener?");
-                    return;
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    keyView.setPressed(true);
+                    keyListener.onPress(note);
+                    return true;
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    keyView.setPressed(false);
+                    keyListener.onRelease(note);
+                    return true;
+                } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    // TODO: we should return false if the touch event if x,y moves outside of bounds of this view
+                    // or if this is a white key and x,y moves onto the adjacent black key
+                    return true;
                 }
-                keyListener.onClick(note);
+                return false;
             }
         });
     }
 
     public interface KeyListener {
 
-        void onClick(Note note);
+        KeyListener LOGGING = new KeyListener() {
+            @Override
+            public void onPress(Note note) {
+                Log.e("!!!", "onPress " + note);
+            }
+
+            @Override
+            public void onRelease(Note note) {
+                Log.e("!!!", "onRelease " + note);
+            }
+        };
+
+        void onPress(Note note);
+
+        void onRelease(Note note);
     }
 }
