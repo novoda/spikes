@@ -99,13 +99,7 @@ public class PianoC4ToB5View extends PercentRelativeLayout {
 
     public void attach(KeyListener keyListener) {
         this.keyListener = keyListener;
-    }
 
-    public void detachKeyListener() {
-        this.keyListener = null;
-    }
-
-    public void bind() {
         bindKey(c4View, Notes.C4);
         bindKey(d4View, Notes.D4);
         bindKey(e4View, Notes.E4);
@@ -133,6 +127,10 @@ public class PianoC4ToB5View extends PercentRelativeLayout {
         bindKey(f5sView, Notes.F5_S);
         bindKey(g5sView, Notes.G5_S);
         bindKey(a5sView, Notes.A5_S);
+    }
+
+    public void detachKeyListener() {
+        this.keyListener = null;
     }
 
     private void bindKey(final View keyView, final Note note) {
