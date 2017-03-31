@@ -31,5 +31,6 @@ android {
 
 dependencies {
     compile project(':core')
+    compile libraries.percent
     compile libraries.supportAppCompatV7
 }
