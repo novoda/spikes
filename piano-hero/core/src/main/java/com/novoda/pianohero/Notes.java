@@ -38,4 +38,9 @@ public class Notes {
     public int hashCode() {
         return notes.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "Notes{" + notes + '}';
+    }
 }

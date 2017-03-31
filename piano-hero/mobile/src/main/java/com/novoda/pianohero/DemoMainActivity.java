@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.View;
 
 public class DemoMainActivity extends Activity {
 
@@ -21,13 +20,42 @@ public class DemoMainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        final NoteEventDispatcher noteEventDispatcher = new NoteEventDispatcher(new NoteEventDispatcher.PlayListener() {
+            @Override
+            public void onPlayed(Notes notes) {
+                Log.d("!!!", "user played: " + notes.toString());
+            }
+        });
+
         pianoView.attach(new PianoC4ToB5View.KeyListener() {
             @Override
             public void onClick(Note note) {
-                Log.d("!!!", "onClick: " + note.midi());
-
+                noteEventDispatcher.onReceive(note);
             }
         });
+    }
+
+    private static class NoteEventDispatcher {
+
+        private final PlayListener playListener;
+
+        NoteEventDispatcher(PlayListener playListener) {
+            this.playListener = playListener;
+        }
+
+        public void onReceive(Note note) {
+            // TODO: it's not enough to collect onClicks because we need to detect when keys are pressed together
+            // we should be able to reuse this for MIDI controller since that will also send individual events
+            // Perhaps we can keep a buffer of note events and forward them on as `Notes` to the next layer
+
+            playListener.onPlayed(new Notes(note));
+        }
+
+        public interface PlayListener {
+
+            void onPlayed(Notes notes);
+        }
+
     }
 
     @Override

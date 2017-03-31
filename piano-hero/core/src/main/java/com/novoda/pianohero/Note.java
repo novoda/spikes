@@ -65,4 +65,9 @@ public class Note {
     public int hashCode() {
         return midiNoteNumber;
     }
+
+    @Override
+    public String toString() {
+        return "Note{" + midiNoteNumber + '}';
+    }
 }
