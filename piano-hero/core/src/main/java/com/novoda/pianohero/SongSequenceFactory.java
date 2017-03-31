@@ -13,12 +13,12 @@ public class SongSequenceFactory {
 
     public Sequence pachelbelsCanon() {
         return new Sequence.Builder()
-                .add(Chords.C_2ND_INV).add(Chords.G).add(Chords.AM_2ND_INV).add(Chords.EM)
-                .add(Chords.F_2ND_INV).add(Chords.C).add(Chords.F_2ND_INV).add(Chords.G_2ND_INV)
-                .add(Chords.C_2ND_INV).add(Chords.G).add(Chords.AM_2ND_INV).add(Chords.EM)
-                .add(Chords.F_2ND_INV).add(Chords.C).add(Chords.F_2ND_INV).add(Chords.G_2ND_INV)
-                .add(Chords.C_2ND_INV).add(Chords.G).add(Chords.AM_2ND_INV).add(Chords.EM)
-                .add(Chords.F_2ND_INV).add(Chords.C).add(Chords.F_2ND_INV).add(Chords.G_2ND_INV).add(Chords.C)
+                .add(Chord.C_2ND_INV).add(Chord.G).add(Chord.AM_2ND_INV).add(Chord.EM)
+                .add(Chord.F_2ND_INV).add(Chord.C).add(Chord.F_2ND_INV).add(Chord.G_2ND_INV)
+                .add(Chord.C_2ND_INV).add(Chord.G).add(Chord.AM_2ND_INV).add(Chord.EM)
+                .add(Chord.F_2ND_INV).add(Chord.C).add(Chord.F_2ND_INV).add(Chord.G_2ND_INV)
+                .add(Chord.C_2ND_INV).add(Chord.G).add(Chord.AM_2ND_INV).add(Chord.EM)
+                .add(Chord.F_2ND_INV).add(Chord.C).add(Chord.F_2ND_INV).add(Chord.G_2ND_INV).add(Chord.C)
                 .build();
     }
 }
