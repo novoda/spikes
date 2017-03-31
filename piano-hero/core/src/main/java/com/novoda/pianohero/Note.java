@@ -18,6 +18,10 @@ public class Note {
         return midiNoteNumber;
     }
 
+    public int midi() {
+        return midiNoteNumber;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

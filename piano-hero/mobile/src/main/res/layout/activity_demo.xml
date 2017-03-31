@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.novoda.pianohero.PianoC4ToB5View
+        android:id="@+id/piano_view"
+        android:layout_width="450dp"
+        android:layout_height="180dp"
+        android:layout_gravity="center" />
+
+</merge>
