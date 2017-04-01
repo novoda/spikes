@@ -80,6 +80,13 @@ public class PianoC4ToB5View extends PercentRelativeLayout {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int desiredHeightMeasureSpec = MeasureSpec.makeMeasureSpec((int) (width / (1f * 329 / 141) + 0.5f), MeasureSpec.EXACTLY);
+        super.onMeasure(widthMeasureSpec, desiredHeightMeasureSpec);
+    }
+
+    @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         layoutBlackKeysBasedOnWhiteKeys();
