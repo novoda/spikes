@@ -199,7 +199,7 @@ public class PianoC4ToB5View extends PercentRelativeLayout {
 
         private static boolean eventInsideOneOfViews(View[] views, Point touchEventRelativeToParentView) {
             for (View view : views) {
-                if (eventInsideView(view, touchEventRelativeToParentView.x, Point touchEventRelativeToParentView.y)) {
+                if (eventInsideView(view, touchEventRelativeToParentView)) {
                     return true;
                 }
             }
