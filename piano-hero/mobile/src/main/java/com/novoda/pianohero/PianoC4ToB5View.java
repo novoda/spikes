@@ -1,6 +1,7 @@
 package com.novoda.pianohero;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.support.annotation.Nullable;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
@@ -138,53 +139,74 @@ public class PianoC4ToB5View extends PercentRelativeLayout {
     }
 
     private void bindKey(final View keyView, final Note note, final View... adjacentBlackKeys) {
-        // TODO: it'd be nice if user could swipe across the Piano view and the key under their finger is "pressed" - https://developer.android.com/training/gestures/viewgroup.html
+        // TODO: Allow user to drag across view to play notes - https://developer.android.com/training/gestures/viewgroup.html
+        KeyTouchListener touchListener = new KeyTouchListener(keyListener, note, adjacentBlackKeys);
+        keyView.setOnTouchListener(touchListener);
+    }
 
-        keyView.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    keyView.setPressed(true);
-                    keyListener.onPress(note);
+    private static class KeyTouchListener implements OnTouchListener {
+
+        private final KeyListener keyListener;
+        private final Note note;
+        private final View[] adjacentBlackKeys;
+
+        KeyTouchListener(KeyListener keyListener, Note note, View[] adjacentBlackKeys) {
+            this.keyListener = keyListener;
+            this.note = note;
+            this.adjacentBlackKeys = adjacentBlackKeys;
+        }
+
+        @Override
+        public boolean onTouch(View key, MotionEvent event) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    onTouchEventInsideKeyBounds(key);
                     return true;
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    keyView.setPressed(false);
-                    keyListener.onRelease(note);
+                case MotionEvent.ACTION_UP:
+                    onTouchEventOutsideKeyBounds(key);
                     return true;
-                } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                    int xRelParent = keyView.getLeft() + (int) event.getX();
-                    int yRelParent = (int) event.getY();
-                    if (eventWithinBoundsOfView(keyView, xRelParent, yRelParent) && !eventWithinBoundsOfViews(adjacentBlackKeys, xRelParent, yRelParent)) {
-                        if (!keyView.isPressed()) {
-                            keyView.setPressed(true);
-                            keyListener.onPress(note);
-                        }
+                case MotionEvent.ACTION_MOVE:
+                    Point touchEventRelativeToParentView = new Point(key.getLeft() + (int) event.getX(), (int) event.getY());
+                    if (eventInsideView(key, touchEventRelativeToParentView) && !eventInsideOneOfViews(adjacentBlackKeys, touchEventRelativeToParentView)) {
+                        onTouchEventInsideKeyBounds(key);
                         return true;
                     } else {
-                        keyView.setPressed(false);
-                        keyListener.onRelease(note);
+                        onTouchEventOutsideKeyBounds(key);
                         return false;
                     }
-                }
-                return false;
-            }
-        });
-    }
-
-    private static boolean eventWithinBoundsOfView(View view, int xRelParent, int yRelParent) {
-        boolean xWithinBounds = xRelParent >= view.getLeft() && xRelParent <= view.getRight();
-        boolean yWithinBounds = yRelParent >= view.getTop() && yRelParent <= view.getBottom();
-        return xWithinBounds && yWithinBounds;
-    }
-
-    private static boolean eventWithinBoundsOfViews(View[] views, int xRelParent, int yRelParent) {
-        for (View view : views) {
-            if (eventWithinBoundsOfView(view, xRelParent, yRelParent)) {
-                return true;
+                default:
+                    return false;
             }
         }
-        return false;
+
+        private void onTouchEventInsideKeyBounds(View key) {
+            if (!key.isPressed()) {
+                key.setPressed(true);
+                keyListener.onPress(note);
+            }
+        }
+
+        private void onTouchEventOutsideKeyBounds(View key) {
+            key.setPressed(false);
+            keyListener.onRelease(note);
+        }
+
+        private static boolean eventInsideView(View view, Point touchEventRelativeToParentView) {
+            boolean xWithinBounds = touchEventRelativeToParentView.x >= view.getLeft() && touchEventRelativeToParentView.x <= view.getRight();
+            boolean yWithinBounds = touchEventRelativeToParentView.y >= view.getTop() && touchEventRelativeToParentView.y <= view.getBottom();
+            return xWithinBounds && yWithinBounds;
+        }
+
+        private static boolean eventInsideOneOfViews(View[] views, Point touchEventRelativeToParentView) {
+            for (View view : views) {
+                if (eventInsideView(view, touchEventRelativeToParentView.x, Point touchEventRelativeToParentView.y)) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
+
 
     public interface KeyListener {
 
