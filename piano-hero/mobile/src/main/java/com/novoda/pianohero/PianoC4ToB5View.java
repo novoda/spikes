@@ -207,7 +207,6 @@ public class PianoC4ToB5View extends PercentRelativeLayout {
         }
     }
 
-
     public interface KeyListener {
 
         KeyListener LOGGING = new KeyListener() {
