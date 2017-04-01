@@ -104,13 +104,13 @@ public class PianoC4ToB5View extends PercentRelativeLayout {
     public void attach(KeyListener keyListener) {
         this.keyListener = keyListener;
 
-        bindKey(c4View, Note.C4);
-        bindKey(d4View, Note.D4);
-        bindKey(e4View, Note.E4);
-        bindKey(f4View, Note.F4);
-        bindKey(g4View, Note.G4);
-        bindKey(a4View, Note.A4);
-        bindKey(b4View, Note.B4);
+        bindKey(c4View, Note.C4, c4sView);
+        bindKey(d4View, Note.D4, c4sView, d4sView);
+        bindKey(e4View, Note.E4, d4sView);
+        bindKey(f4View, Note.F4, f4sView);
+        bindKey(g4View, Note.G4, f4sView, g4sView);
+        bindKey(a4View, Note.A4, g4sView, a4sView);
+        bindKey(b4View, Note.B4, a4sView);
 
         bindKey(c4sView, Note.C4_S);
         bindKey(d4sView, Note.D4_S);
@@ -118,13 +118,13 @@ public class PianoC4ToB5View extends PercentRelativeLayout {
         bindKey(g4sView, Note.G4_S);
         bindKey(a4sView, Note.A4_S);
 
-        bindKey(c5View, Note.C5);
-        bindKey(d5View, Note.D5);
-        bindKey(e5View, Note.E5);
-        bindKey(f5View, Note.F5);
-        bindKey(g5View, Note.G5);
-        bindKey(a5View, Note.A5);
-        bindKey(b5View, Note.B5);
+        bindKey(c5View, Note.C5, c5sView);
+        bindKey(d5View, Note.D5, c5sView, d5sView);
+        bindKey(e5View, Note.E5, d5sView);
+        bindKey(f5View, Note.F5, f5sView);
+        bindKey(g5View, Note.G5, f5sView, g5sView);
+        bindKey(a5View, Note.A5, g5sView, a5sView);
+        bindKey(b5View, Note.B5, a5sView);
 
         bindKey(c5sView, Note.C5_S);
         bindKey(d5sView, Note.D5_S);
@@ -137,7 +137,9 @@ public class PianoC4ToB5View extends PercentRelativeLayout {
         this.keyListener = KeyListener.LOGGING;
     }
 
-    private void bindKey(final View keyView, final Note note) {
+    private void bindKey(final View keyView, final Note note, final View... adjacentBlackKeys) {
+        // TODO: it'd be nice if user could swipe across the Piano view and the key under their finger is "pressed" - https://developer.android.com/training/gestures/viewgroup.html
+
         keyView.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -150,13 +152,38 @@ public class PianoC4ToB5View extends PercentRelativeLayout {
                     keyListener.onRelease(note);
                     return true;
                 } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                    // TODO: we should return false if the touch event if x,y moves outside of bounds of this view
-                    // or if this is a white key and x,y moves onto the adjacent black key
-                    return true;
+                    int xRelParent = keyView.getLeft() + (int) event.getX();
+                    int yRelParent = (int) event.getY();
+                    if (eventWithinBoundsOfView(keyView, xRelParent, yRelParent) && !eventWithinBoundsOfViews(adjacentBlackKeys, xRelParent, yRelParent)) {
+                        if (!keyView.isPressed()) {
+                            keyView.setPressed(true);
+                            keyListener.onPress(note);
+                        }
+                        return true;
+                    } else {
+                        keyView.setPressed(false);
+                        keyListener.onRelease(note);
+                        return false;
+                    }
                 }
                 return false;
             }
         });
+    }
+
+    private static boolean eventWithinBoundsOfView(View view, int xRelParent, int yRelParent) {
+        boolean xWithinBounds = xRelParent >= view.getLeft() && xRelParent <= view.getRight();
+        boolean yWithinBounds = yRelParent >= view.getTop() && yRelParent <= view.getBottom();
+        return xWithinBounds && yWithinBounds;
+    }
+
+    private static boolean eventWithinBoundsOfViews(View[] views, int xRelParent, int yRelParent) {
+        for (View view : views) {
+            if (eventWithinBoundsOfView(view, xRelParent, yRelParent)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public interface KeyListener {
