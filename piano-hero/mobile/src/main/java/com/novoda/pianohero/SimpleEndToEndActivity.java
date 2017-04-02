@@ -34,12 +34,14 @@ public class SimpleEndToEndActivity extends AppCompatActivity {
                     protected void afterTextChanged(String text) {
                         try {
                             Note note = new SimpleNoteConverter().convert(text);
-                            Notes notes = new Notes(note);
-                            Log.d("!!!", "afterTextChanged: " + notes);
-                            brain.onNotesPlayed(notes);
+                            brain.onNotesPlayed(note);
                         } catch (IllegalArgumentException e) {
                             PianoHeroApplication.popToast("that's not a simple note!");
                         }
+
+                        inputView.removeTextChangedListener(this);
+                        inputView.setText(null);
+                        inputView.addTextChangedListener(this);
                     }
                 });
 
