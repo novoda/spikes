@@ -48,6 +48,8 @@ public final class Sequence {
 
         public Builder(Sequence sequence) {
             this(sequence.notes());
+            this.latestError = sequence.latestError();
+            this.position = sequence.position;
         }
 
         private Builder(List<Notes> notes) {

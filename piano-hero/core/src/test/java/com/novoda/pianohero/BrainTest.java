@@ -57,11 +57,12 @@ public class BrainTest {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
         brain.start(sequence);
 
-        brain.onNotesPlayed(Note.D4);
+        brain.onNotesPlayed(Note.C4);
+        brain.onNotesPlayed(Note.E4);
 
         ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
-        verify(sequenceDisplayer, times(2)).display(sequenceCaptor.capture());
-        assertThat(sequenceCaptor.getValue().position()).isEqualTo(0);
+        verify(sequenceDisplayer, times(3)).display(sequenceCaptor.capture());
+        assertThat(sequenceCaptor.getValue().position()).isEqualTo(1);
     }
 
     @Test
