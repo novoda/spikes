@@ -20,6 +20,57 @@ If we want to make the user lose points, then we don't want to send all those ev
 
 If we don't care about mistakes/intermediate steps, then perhaps this is enough?
 
-## Stories
+## Rules & Layout
 
 --
+
+- Show notes on the screen
+- show 1 note at a time
+- expect user to press that note on the keyboard
+- there is a timeframe for the game (60 seconds)
+- when timeframe ends; game over
+- if correct note pressed; next note shown
+- if incorrect note pressed; note stays on screen + error msg
+- correct note increments score
+- incorrect note doesn't affect score
+- notes are either randomly selected or songs are selected
+- songs have a rating (easy (1 note at a time) , medium (just chords) hard (mix of both))
+- highest score is remembered
+- settings screen
+- setting to select random or song
+- setting to select game length
+- setting to reset highscore
+
+
+## End2End Slice
+
+- Excluding Sharps, Disregarding octaves differences
+- Show notes on the screen (textview)
+- show 1 note at a time (no looking ahead)
+- expect user to press that note on the keyboard (C on keyboard is C note)
+- if any note pressed; next note shown
+
+## Architecture
+
+UI - Showing notes on the screen (could be LEDs, or Stave on phone screen, or a textview with scientific notation on phone screen)
+Notes Input - How to input into the game (could be GPIO buttons, a midi controller, or phone screen keyboard)
+
+
+------------------------
+------------------------
+------------------------
+------------------------
+------------------------
+
+
+
+
+
+
+
+- 
+
+
+
+
+
