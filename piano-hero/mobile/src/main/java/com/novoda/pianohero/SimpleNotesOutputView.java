@@ -1,7 +1,6 @@
 package com.novoda.pianohero;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -9,6 +8,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class SimpleNotesOutputView extends LinearLayout {
+
+    private final SimplePitchNotationFormatter simplePitchNotationFormatter = new SimplePitchNotationFormatter();
 
     private TextView nextNoteToPlayTextView;
     private TextView messageTextView;
@@ -40,8 +41,7 @@ public class SimpleNotesOutputView extends LinearLayout {
                 throw new IllegalArgumentException("Sequence contains chords, that's not simple enough");
             }
             for (Note note : notes.notes()) {
-                int noteInOctave = (note.midi() + 1) % 12; // c==1,..., b==12
-                if (noteInOctave == 2 || noteInOctave == 4 || noteInOctave == 7 || noteInOctave == 9 || noteInOctave == 11) {
+                if (simplePitchNotationFormatter.format(note).endsWith("#")) {
                     throw new IllegalArgumentException("Sequence contains sharps, that's not simple enough");
                 }
             }
@@ -56,7 +56,7 @@ public class SimpleNotesOutputView extends LinearLayout {
     }
 
     private void updateNextNoteToPlayTextViewWith(Note note) {
-        String simpleNotation = note.toString(); // TODO display simple notation
+        String simpleNotation = simplePitchNotationFormatter.format(note);
         nextNoteToPlayTextView.setText(simpleNotation);
     }
 
