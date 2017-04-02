@@ -31,7 +31,15 @@ public class Brain {
         sequenceDisplayer.display(sequence);
     }
 
+    public void onNotesPlayed(Note... notes) {
+        onNotesPlayed(new Notes(notes));
+    }
+
     public void onNotesPlayed(Notes notes) {
+        if (notes.count() == 0) {
+            return;
+        }
+
         int position = sequence.position();
         Notes expectedNotes = sequence.get(position);
         if (notes.equals(expectedNotes)) {
