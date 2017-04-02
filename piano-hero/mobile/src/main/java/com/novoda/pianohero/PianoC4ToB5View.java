@@ -5,7 +5,6 @@ import android.graphics.Point;
 import android.support.annotation.Nullable;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -214,22 +213,4 @@ public class PianoC4ToB5View extends PercentRelativeLayout {
         }
     }
 
-    public interface KeyListener {
-
-        KeyListener LOGGING = new KeyListener() {
-            @Override
-            public void onPress(Note note) {
-                Log.e("!!!", "onPress " + note);
-            }
-
-            @Override
-            public void onRelease(Note note) {
-                Log.e("!!!", "onRelease " + note);
-            }
-        };
-
-        void onPress(Note note);
-
-        void onRelease(Note note);
-    }
 }
