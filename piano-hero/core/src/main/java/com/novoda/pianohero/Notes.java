@@ -1,10 +1,14 @@
 package com.novoda.pianohero;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
-public class Notes {
+public class Notes implements Iterable<Note> {
+
+    public static final Notes EMPTY = new Notes(Collections.<Note>emptySet());
 
     private final Set<Note> notes;
 
@@ -18,6 +22,15 @@ public class Notes {
 
     public Set<Note> notes() {
         return notes;
+    }
+
+    public int count() {
+        return notes.size();
+    }
+
+    @Override
+    public Iterator<Note> iterator() {
+        return notes.iterator();
     }
 
     @Override
