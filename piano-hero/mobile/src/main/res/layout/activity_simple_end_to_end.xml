@@ -1,44 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <com.novoda.pianohero.SimpleNotesOutputView
+        android:id="@+id/simple_notes_output_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_weight="50"
+        android:background="@android:color/holo_blue_light" />
 
-        <com.novoda.pianohero.SimpleNotesOutputView
-            android:id="@+id/simple_notes_output_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="50"
-            android:background="@android:color/holo_blue_light"
-            android:visibility="invisible"
-            tools:visibility="visible" />
-
-        <EditText
-            android:id="@+id/simple_notes_input_view"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="50"
-            android:background="@android:color/holo_orange_light"
-            android:gravity="center"
-            android:hint="type..."
-            android:visibility="invisible"
-            tools:text="D"
-            tools:visibility="visible" />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/simple_notes_button_start"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_margin="16dp"
-        android:text="Start" />
-
-</LinearLayout>
+</merge>

@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 public class SimpleNotesOutputView extends LinearLayout implements SequenceDisplayer {
 
     private final SimplePitchNotationFormatter simplePitchNotationFormatter = new SimplePitchNotationFormatter();
@@ -64,7 +66,8 @@ public class SimpleNotesOutputView extends LinearLayout implements SequenceDispl
     private void updateMessage(Sequence sequence) {
         if (sequence.latestError().count() == 0) {
             if (sequence.position() > 0) {
-                updateMessageTextViewWith("Woo! Keep going!");
+                String message = String.format(Locale.US, "Woo! Keep going! (%d/%d)", sequence.position() + 1, sequence.length());
+                updateMessageTextViewWith(message);
             } else {
                 messageTextView.setVisibility(INVISIBLE);
             }
