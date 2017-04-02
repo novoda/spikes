@@ -43,8 +43,7 @@ public class Notes implements Iterable<Note> {
             return false;
         }
 
-        Notes notes = (Notes) o;
-        return notes.equals(notes.notes);
+        return notes.equals(((Notes) o).notes);
     }
 
     @Override
