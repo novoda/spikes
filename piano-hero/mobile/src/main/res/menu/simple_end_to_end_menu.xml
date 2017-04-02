@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/show_keyboard"
         android:icon="@drawable/ic_keyboard_white_24dp"
@@ -12,4 +13,5 @@
         android:icon="@drawable/ic_refresh_white_24dp"
         android:title="Restart game"
         app:showAsAction="always" />
+
 </menu>
