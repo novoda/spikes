@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class SimpleNotesOutputView extends LinearLayout {
+public class SimpleNotesOutputView extends LinearLayout implements SequenceDisplayer {
 
     private final SimplePitchNotationFormatter simplePitchNotationFormatter = new SimplePitchNotationFormatter();
 
@@ -27,6 +27,7 @@ public class SimpleNotesOutputView extends LinearLayout {
         messageTextView = (TextView) findViewById(R.id.simple_notes_output_text_message);
     }
 
+    @Override
     public void display(Sequence sequence) {
         checkSequenceIsSimpleElseThrow(sequence);
 
