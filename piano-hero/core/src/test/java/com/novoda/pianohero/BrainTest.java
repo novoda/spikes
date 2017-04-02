@@ -116,7 +116,6 @@ public class BrainTest {
         verify(callback, never()).onSequenceComplete();
     }
 
-
     private Sequence make(Note... notes) {
         Sequence.Builder builder = new Sequence.Builder();
         for (Note note : notes) {
