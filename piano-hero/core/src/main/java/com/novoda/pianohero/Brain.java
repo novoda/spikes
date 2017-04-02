@@ -9,13 +9,13 @@ public class Brain {
         }
     };
 
-    private final SequenceDisplayer sequenceDisplayer;
+    private final OnSequenceUpdatedCallback onSequenceUpdatedCallback;
     private Callback callback = NOOP_CALLBACK;
 
     private Sequence sequence;
 
-    Brain(SequenceDisplayer sequenceDisplayer) {
-        this.sequenceDisplayer = sequenceDisplayer;
+    Brain(OnSequenceUpdatedCallback onSequenceUpdatedCallback) {
+        this.onSequenceUpdatedCallback = onSequenceUpdatedCallback;
     }
 
     public void attach(Callback callback) {
@@ -28,7 +28,7 @@ public class Brain {
 
     public void start(Sequence sequence) {
         this.sequence = sequence;
-        sequenceDisplayer.display(sequence);
+        onSequenceUpdatedCallback.onNext(sequence);
     }
 
     public void onNotesPlayed(Note... notes) {
@@ -51,7 +51,7 @@ public class Brain {
 
     private void displayIncorrect(Notes notes) {
         Sequence updatedSequence = new Sequence.Builder(sequence).withLatestError(notes).build();
-        sequenceDisplayer.display(updatedSequence);
+        onSequenceUpdatedCallback.onNext(updatedSequence);
     }
 
     private void moveToNextPositionOrComplete() {
@@ -60,7 +60,7 @@ public class Brain {
             callback.onSequenceComplete();
         } else {
             Sequence updatedSequence = new Sequence.Builder(sequence).atPosition(position + 1).build();
-            sequenceDisplayer.display(updatedSequence);
+            onSequenceUpdatedCallback.onNext(updatedSequence);
 
             this.sequence = updatedSequence;
         }

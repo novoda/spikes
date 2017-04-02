@@ -19,7 +19,7 @@ public class BrainTest {
     public MockitoRule rule = MockitoJUnit.rule();
 
     @Mock
-    SequenceDisplayer sequenceDisplayer;
+    OnSequenceUpdatedCallback onSequenceUpdatedCallback;
 
     @Mock
     Brain.Callback callback;
@@ -28,7 +28,7 @@ public class BrainTest {
 
     @Before
     public void setUp() {
-        brain = new Brain(sequenceDisplayer);
+        brain = new Brain(onSequenceUpdatedCallback);
     }
 
     @Test
@@ -37,7 +37,7 @@ public class BrainTest {
 
         brain.start(sequence);
 
-        verify(sequenceDisplayer).display(sequence);
+        verify(onSequenceUpdatedCallback).onNext(sequence);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class BrainTest {
         brain.onNotesPlayed(Note.C4);
 
         ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
-        verify(sequenceDisplayer, times(2)).display(sequenceCaptor.capture());
+        verify(onSequenceUpdatedCallback, times(2)).onNext(sequenceCaptor.capture());
         assertThat(sequenceCaptor.getValue().position()).isEqualTo(1);
     }
 
@@ -61,7 +61,7 @@ public class BrainTest {
         brain.onNotesPlayed(Note.E4);
 
         ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
-        verify(sequenceDisplayer, times(3)).display(sequenceCaptor.capture());
+        verify(onSequenceUpdatedCallback, times(3)).onNext(sequenceCaptor.capture());
         assertThat(sequenceCaptor.getValue().position()).isEqualTo(1);
     }
 
@@ -74,7 +74,7 @@ public class BrainTest {
         brain.onNotesPlayed(Note.E4);
 
         ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
-        verify(sequenceDisplayer, times(3)).display(sequenceCaptor.capture());
+        verify(onSequenceUpdatedCallback, times(3)).onNext(sequenceCaptor.capture());
         assertThat(sequenceCaptor.getValue().latestError()).isEqualTo(new Notes(Note.E4));
     }
 
@@ -87,7 +87,7 @@ public class BrainTest {
         brain.onNotesPlayed(Note.C4);
 
         ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
-        verify(sequenceDisplayer, times(3)).display(sequenceCaptor.capture());
+        verify(onSequenceUpdatedCallback, times(3)).onNext(sequenceCaptor.capture());
         assertThat(sequenceCaptor.getValue().latestError()).isEqualTo(Notes.EMPTY);
     }
 

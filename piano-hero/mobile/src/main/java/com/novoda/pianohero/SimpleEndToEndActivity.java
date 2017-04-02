@@ -14,17 +14,25 @@ public class SimpleEndToEndActivity extends AppCompatActivity {
     private final AndroidKeyCodeToSimpleNoteConverter keyCodeConverter = new AndroidKeyCodeToSimpleNoteConverter();
 
     private Brain brain;
+    private SimpleNotesOutputView outputView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_end_to_end);
 
-        SimpleNotesOutputView outputView = (SimpleNotesOutputView) findViewById(R.id.simple_notes_output_view);
-        brain = new Brain(outputView); // TODO: brain shouldn't touch view direct
+        outputView = (SimpleNotesOutputView) findViewById(R.id.simple_notes_output_view);
+        brain = new Brain(onSequenceUpdatedCallback);
 
         startNewGame();
     }
+
+    private final OnSequenceUpdatedCallback onSequenceUpdatedCallback = new OnSequenceUpdatedCallback() {
+        @Override
+        public void onNext(Sequence sequence) {
+            outputView.display(sequence);
+        }
+    };
 
     private void startNewGame() {
         Sequence sequence = new SongSequenceFactory().maryHadALittleLamb();

@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
-public class SimpleNotesOutputView extends LinearLayout implements SequenceDisplayer {
+public class SimpleNotesOutputView extends LinearLayout {
 
     private final SimplePitchNotationFormatter simplePitchNotationFormatter = new SimplePitchNotationFormatter();
 
@@ -29,7 +29,6 @@ public class SimpleNotesOutputView extends LinearLayout implements SequenceDispl
         messageTextView = (TextView) findViewById(R.id.simple_notes_output_text_message);
     }
 
-    @Override
     public void display(Sequence sequence) {
         checkSequenceIsSimpleElseThrow(sequence);
 
