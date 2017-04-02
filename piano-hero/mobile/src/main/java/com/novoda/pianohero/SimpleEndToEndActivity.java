@@ -14,14 +14,13 @@ public class SimpleEndToEndActivity extends AppCompatActivity {
     private final AndroidKeyCodeToSimpleNoteConverter keyCodeConverter = new AndroidKeyCodeToSimpleNoteConverter();
 
     private Brain brain;
-    private SimpleNotesOutputView outputView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_end_to_end);
 
-        outputView = (SimpleNotesOutputView) findViewById(R.id.simple_notes_output_view);
+        SimpleNotesOutputView outputView = (SimpleNotesOutputView) findViewById(R.id.simple_notes_output_view);
         brain = new Brain(outputView); // TODO: brain shouldn't touch view direct
 
         startNewGame();
@@ -42,13 +41,6 @@ public class SimpleEndToEndActivity extends AppCompatActivity {
                 startNewGame();
             }
         });
-
-        showKeyboard();
-    }
-
-    private void showKeyboard() {
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
     @Override
@@ -70,6 +62,11 @@ public class SimpleEndToEndActivity extends AppCompatActivity {
         }
     }
 
+    private void showKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+    }
+
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         try {
@@ -84,12 +81,6 @@ public class SimpleEndToEndActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         brain.removeCallbacks();
-        hideKeyboard();
         super.onPause();
-    }
-
-    private void hideKeyboard() {
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(outputView.getWindowToken(), 0);
     }
 }
