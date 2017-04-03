@@ -1,0 +1,303 @@
+/*
+ * Copyright 2010-2013 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+/**
+ * _reset.css
+ */
+
+/* YUI Reset 2.7.0 */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td{margin:0;padding:0}
+table{border-collapse:collapse;border-spacing:0}
+fieldset,img{border:0}
+address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:400}
+ol,ul{list-style:none}
+caption,th{text-align:left}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:400}
+q:before,q:after{content:''}
+abbr,acronym{border:0;border-bottom:1px dotted #000;cursor:help}
+h1,h2,h3,h4,h5,h6,strong{font-weight:700}
+em{font-style:italic}
+blockquote,ul,ol,dl{margin:1em}
+ol,ul,dl{margin-left:2em}
+ol li{list-style:decimal outside}
+ul li{list-style:disc outside}
+dl dd{margin-left:1em}
+th,td{border:1px solid #000;padding:.5em}
+th{font-weight:700;text-align:center}
+caption{margin-bottom:.5em;text-align:center}
+p,fieldset,table{margin-bottom:1em}
+
+
+/**
+ * base.css
+ */
+
+html, html body {
+	height: 100%;
+	min-height: 100%;
+	overflow: hidden;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	overflow-y: scroll;
+	text-rendering: optimizeLegibility;
+
+	-webkit-text-size-adjust:none;
+}
+
+body a {
+	color: #326EA1;
+	text-decoration: underline;
+	padding: 1px 2px;
+
+	-webkit-transition: background-color 0.15s;
+	-webkit-transition: color 0.15s;
+	-moz-transition: background-color 0.15s;
+	-moz-transition: color 0.15s;
+	transition: background-color 0.15s;
+	transition: color 0.15s;
+
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+}
+
+a:hover,
+a.hover {
+	color: #fff;
+	background-color: #333;
+	text-decoration: none;
+	padding: 1px 2px;
+}
+
+h1 {
+	font-size: 30px;
+	text-transform: none;
+	font-weight: bold;
+	margin: 20px 0 0 0;
+	padding: 0;
+}
+
+p {
+	margin: 0;
+	padding: 8px 0;
+}
+
+form {
+	margin: 0;
+	padding: 0;
+}
+
+input[type=text],
+input[type=password],
+textarea {
+	font: 12px/1.3em "Lucida Grande", Verdana, sans-serif;
+	padding: 1px 0;
+	border: 1px solid #999;
+	box-shadow: 0 1px 2px #888 inset;
+
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+
+input[type=text],
+input[type=password] {
+	padding: 4px 0 4px 4px;
+}
+
+input[type=text]:focus,
+input[type=password]:focus,
+textarea:focus {
+	background-color: #ffd;
+	border: 1px solid #000;
+}
+
+strong {
+	font-weight: bold;
+}
+
+table tr th,
+table tr td {
+	border: 1px solid #999;
+}
+
+.footnote,
+.footnote a {
+	font-size: 11px;
+	line-height: 1.3em;
+	color: #aaa;
+	letter-spacing: 0;
+}
+
+
+/**
+ * app.css
+ */
+
+body {
+	font: 16px/1.3em "Helvetica Neue", "Lucida Grande", Helvetica, Verdana, Arial, sans-serif;
+	background-color: #fff;
+	color: #333;
+}
+
+div#header {
+	background-color: #171e21;
+}
+
+div#header h1 {
+	padding: 1em;
+	color: #fff;
+	width: 750px;
+	margin: 0 auto;
+}
+
+fieldset {
+	width: 730px;
+	margin: 20px auto;
+	padding: 10px;
+	border: 1px solid #000;
+
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+fieldset legend {
+	padding: 5px 10px;
+	font-weight: bold;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+fieldset form#register {
+	padding: 10px;
+}
+
+/*div#footer {}*/
+
+div#footer p {
+	font-family: Verdana, Arial, sans-serif;
+	padding: 1em;
+	width: 750px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+table.information-box {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+table.information-box td {
+	border: none;
+	vertical-align: middle;
+}
+
+table.information-box td p {
+	display: inline-block;
+}
+
+table.information-box td.th {
+	text-align: right;
+	width: 20%;
+}
+
+table.information-box td input[type=text],
+table.information-box td input[type=password] {
+	font-size: 16px;
+	line-height: 1.3em;
+	width: 300px;
+}
+
+table.information-box td span {
+	font-size: 12px;
+	line-height: 1.0em;
+	width: 20%;
+}
+
+p.message {
+	font-size: 1.5em;
+	line-height: 1.5em;
+	text-align: center;
+	padding-bottom: 1.5em;
+}
+
+p.warning {
+	font-size: 0.8em;
+	line-height: 1.5em;
+	text-align: center;
+	padding-bottom: 1.5em;
+	color: red;
+}
+
+body.register fieldset legend {
+	color: #fff;
+	background-color: #06c;
+
+	background-image: -webkit-gradient(
+	    linear,
+	    left top,
+	    left bottom,
+	    color-stop(0.4, #06c),
+	    color-stop(1, #03c)
+	);
+	background-image: -moz-linear-gradient(
+	    center top,
+	    #06c 40%,
+	    #03c 100%
+	);
+}
+
+body.success fieldset legend {
+	color: #fff;
+	background-color: #093;
+
+	background-image: -webkit-gradient(
+	    linear,
+	    left top,
+	    left bottom,
+	    color-stop(0.4, #0b3),
+	    color-stop(1, #093)
+	);
+	background-image: -moz-linear-gradient(
+	    center top,
+	    #0b3 40%,
+	    #093 100%
+	);
+}
+
+body.failure fieldset legend {
+	color: #fff;
+	background-color: #c00;
+
+	background-image: -webkit-gradient(
+	    linear,
+	    left top,
+	    left bottom,
+	    color-stop(0.4, #f00),
+	    color-stop(1, #c00)
+	);
+	background-image: -moz-linear-gradient(
+	    center top,
+	    #e00 40%,
+	    #c00 100%
+	);
+}

@@ -1,0 +1,29 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  package="com.novoda.espresso">
+
+  <uses-permission
+    android:name="android.permission.WRITE_SECURE_SETTINGS"
+    tools:ignore="ProtectedPermissions" />
+
+  <application tools:ignore="GoogleAppIndexingWarning">
+
+    <activity android:name=".ViewActivity" />
+
+    <activity android:name=".TalkBackStateSettingActivity">
+
+      <intent-filter>
+        <action android:name="com.novoda.espresso.ENABLE_TALKBACK" />
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
+
+      <intent-filter>
+        <action android:name="com.novoda.espresso.DISABLE_TALKBACK" />
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
+
+    </activity>
+
+  </application>
+
+</manifest>

@@ -1,0 +1,16 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  package="com.novoda.movies">
+
+  <application
+    android:allowBackup="false"
+    android:icon="@drawable/ic_launcher"
+    android:label="@string/app_name"
+    android:theme="@style/AppTheme"
+    tools:ignore="GoogleAppIndexingWarning">
+
+    <activity android:name=".DemoMainActivity" />
+
+  </application>
+
+</manifest>

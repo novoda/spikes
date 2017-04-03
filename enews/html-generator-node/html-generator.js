@@ -2,17 +2,34 @@ module.exports = {
   generateHtml: generateHtml
 };
 
-var moment = require('moment');
+const moment = require('moment');
+const Mustache = require('mustache');
+const fs = require('fs');
 
 function generateHtml(eNews) {
-  var formattedTodaysDate = moment().format('YYYY-MM-DD');
-  var html = '<h1 style="font-family:serif">#enews ' + formattedTodaysDate + '</h1><br><table style="width:100%" cellspacing="20">';
-  eNews.forEach(function(each) {
-    var item = '<tr>' +
-    '<td><a href="' + each.link + '"><img src=' + each.imageUrl + ' height="150" width="150"/></td><a/>' +
-    '<td><p style="font-family:Comic Sans MS">' + '<i>' + each.originalMessage + '</i>' + '<br>' + each.title + '</p>' +
-    '<br><p style="font-family:Comic Sans MS">' + each.poster + '</p></td>';
-    html+= item;
-  });
- return html + '</table><br><br><br>sik news bro';
+  const template = fs.readFileSync('view/enews.mst', 'utf-8');
+  const partials = loadPartials();
+  const model = createModel(eNews);
+  return Mustache.render(template, model, partials);
 };
+
+function loadPartials() {
+  return {
+    title: readPartial('title.mst'),
+    textItem: readPartial('text-item.mst'),
+    imageItem: readPartial('image-item.mst'),
+    item: readPartial('item.mst')
+  }
+}
+
+function readPartial(name) {
+  return fs.readFileSync(`view/partial/${name}` , 'utf-8');
+}
+
+function createModel(eNews) {
+  const formattedTodaysDate = moment().format('YYYY-MM-DD');
+  return {
+    formattedTodaysDate: formattedTodaysDate,
+    eNews: eNews
+  };
+}

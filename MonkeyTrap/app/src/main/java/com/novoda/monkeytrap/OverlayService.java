@@ -1,13 +1,12 @@
 package com.novoda.monkeytrap;
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.IBinder;
 import android.view.WindowManager;
+
+import static android.view.View.VISIBLE;
 
 public class OverlayService extends Service {
 
@@ -50,22 +49,27 @@ public class OverlayService extends Service {
         super.onCreate();
         instance = this;
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-
-        overlayView = new OverlayView(this);
-        overlayView.setBackgroundColor(Color.parseColor("#2FA1D6"));
-        windowManager.addView(overlayView, OverlayView.createLayoutParams(getResources()));
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (overlayView != null) {
-            overlayView.setVisibility(shouldShow(intent) ? VISIBLE : GONE);
+        if (shouldShow(intent)) {
+            addOverlay();
+        } else {
+            stopSelf();
         }
-        return super.onStartCommand(intent, flags, startId);
+        return START_NOT_STICKY;
     }
 
     private boolean shouldShow(Intent intent) {
         return intent.getBooleanExtra(EXTRA_SHOW, true);
+    }
+
+    private void addOverlay() {
+        overlayView = new OverlayView(this);
+        overlayView.setBackgroundColor(Color.parseColor("#30A4D9"));
+        overlayView.setImageResource(R.drawable.novoda);
+        windowManager.addView(overlayView, OverlayView.createLayoutParams(getResources()));
     }
 
     @Override

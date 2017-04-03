@@ -1,0 +1,21 @@
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.14.1'
+}
+
+apply from: 'dependencies.gradle'
+subprojects {
+    buildscript {
+        repositories {
+            jcenter()
+        }
+        dependencies {
+            classpath gradlePlugins.gradle
+            classpath gradlePlugins.gradleAndroidCommandPlugin
+            classpath gradlePlugins.bintrayRelease
+        }
+    }
+    repositories {
+        jcenter()
+    }
+    version = '1.0.0'
+}

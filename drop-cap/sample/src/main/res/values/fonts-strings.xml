@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string name="sans_serif">fonts/SANS-SERIF_Cabin-Regular.otf</string>
+  <string name="funkrocker">fonts/funkrocker.otf</string>
+  <string name="magnificent">"fonts/magnificent.ttf"</string>
+  <string name="neuropolitical">fonts/neuropolitical_rg.ttf</string>
+
+</resources>

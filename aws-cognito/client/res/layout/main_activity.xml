@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="16dip"
+    android:paddingRight="16dip"
+    android:paddingTop="16dip"
+    android:paddingBottom="16dip"
+    >
+
+    <Button
+      android:id="@+id/btnLogin"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="18dp"
+      android:text="Login" />
+
+    <Button
+      android:id="@+id/btnAccessResourceCognito"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="18dp"
+      android:text="Access Cognito restricted resource" />
+
+    <Button
+      android:id="@+id/btnAccessFirebaseResource"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="18dp"
+      android:text="Access Firebase restricted resource" />
+
+    <Button
+        android:id="@+id/btnWipedata"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="Wipe Data" />
+
+
+</LinearLayout>

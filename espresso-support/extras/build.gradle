@@ -1,0 +1,34 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath libraries.build.androidGradle
+        classpath libraries.build.bintrayRelease
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'bintray-release'
+
+android {
+    compileSdkVersion versions.androidSdk.compile
+    buildToolsVersion versions.androidSdk.buildTools
+
+    defaultConfig {
+        minSdkVersion versions.androidSdk.min
+    }
+
+    lintOptions {
+        lintConfig file("../lint-config.xml")
+    }
+}
+
+publish {
+    userOrg = artifactsPublish.userOrg
+    groupId = artifactsPublish.groupId
+    version = artifactsPublish.version
+    website = artifactsPublish.website
+    artifactId = 'espresso-support-extras'
+    description = 'Additional app resources used by espresso-support'
+}

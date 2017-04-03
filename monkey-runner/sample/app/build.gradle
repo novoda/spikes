@@ -1,0 +1,33 @@
+apply plugin: 'com.android.application'
+apply plugin: 'android-command'
+
+apply plugin: com.novoda.monkey.MonkeyConfigurationPlugin
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion versions.androidBuildTools
+
+    defaultConfig {
+        applicationId "com.novoda.monkey"
+        minSdkVersion 16
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    dependencies {
+        compile libraries.appCompat
+        compile libraries.androidV13Support
+    }
+
+}
+
+monkeyRunner {
+    taskDependency 'installDebug'
+    eventsCount 1000
+    packageNameFilter 'com.novoda.monkey'
+}

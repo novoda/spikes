@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 public class WeatherModule implements DashboardModule {
 
     private static final long MIN_UPDATE_DELAY = TimeUnit.MINUTES.toMillis(10);
-    private static final String API_KEY = BuildConfig.OPENWEATHERMAP_API_KEY;
+    private static final String API_KEY = BuildConfig.OPEN_WEATHER_MAP_KEY;
 
     private static final double LIVERPOOL_LONGITUDE = -2.9982376;
     private static final double LIVERPOOL_LATITUDE = 53.4097205;

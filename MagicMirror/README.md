@@ -12,9 +12,10 @@ This app is meant to be installed on phones, tablets or TV sticks used in smart 
 * Face recognition with smile detector (on a dedicated screen)
 
 ##Screenshots
+
 | Info screen | Loking for face | Face sad | Face neutral | Face happy | Face oh-my-God-so-happy | 
-| --- | --- | --- | --- | --- | --- |
-|![](screenshots/info_screen.png) |![](screenshots/0_looking.png) |![](screenshots/1_sad.png) |![](screenshots/2_neutral.png) |![](screenshots/3_happy.png) |![](screenshots/4_omgSoHappy.png) |
+|---|---|---|---|---|---|
+|![](screenshots/info_screen.png)|![](screenshots/0_looking.png)|![](screenshots/1_sad.png)|![](screenshots/2_neutral.png) |![](screenshots/3_happy.png)|![](screenshots/4_omgSoHappy.png)|
 
 ##TODO
 * Use the actual coordinates of the device for weather forecast (now set to Liverpool)
@@ -22,7 +23,17 @@ This app is meant to be installed on phones, tablets or TV sticks used in smart 
 * More animations for the different face emotions
 
 ##Development
-In order to use all the features of the app, when building it from source, please make a copy of the `gradle.properties.example` file, rename it to `gradle.properties` and add the required keys.
+In order to use all the features of the app when building it from source add the `secrets.properties` file with the keys needed, as below:
+```
+# https://home.openweathermap.org/api_keys
+openWeatherMapKey=1234567890qwertyuipo
+
+# Twitter keys
+twitterConsumerKey=123456789
+twitterConsumerSecret=123456789
+twitterAccessToken=123456789
+twitterAccessTokenSecret=123456789
+
+```
 
 When deployed on an emulator, it is possible to quickly test the different emotions using the keyboard keys 0-4.
-

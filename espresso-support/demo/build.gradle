@@ -1,0 +1,52 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath libraries.build.androidGradle
+    }
+}
+
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion versions.androidSdk.compile
+    buildToolsVersion versions.androidSdk.buildTools
+
+    defaultConfig {
+        applicationId "com.novoda.movies"
+        minSdkVersion versions.androidSdk.min
+        targetSdkVersion versions.androidSdk.target
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
+        }
+    }
+}
+
+dependencies {
+    compile libraries.accessibilitools
+
+    debugCompile project(':extras')
+    androidTestCompile(project(':core')) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
+    androidTestCompile libraries.mockitoCore
+    androidTestCompile libraries.dexmaker
+    androidTestCompile libraries.dexmakerMockito
+
+    androidTestCompile(libraries.androidTestRunner) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestCompile(libraries.androidEspressoCore) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+}

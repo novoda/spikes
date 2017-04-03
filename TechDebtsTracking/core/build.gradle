@@ -1,0 +1,17 @@
+apply plugin: 'java'
+apply plugin: 'bintray-release'
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
+publish {
+    userOrg = 'novoda'
+    repoName = 'maven-private'
+    groupId = 'com.novoda'
+    artifactId = 'tech-debt-tracking'
+    version = project.version
+
+    uploadName = 'tech-debt-tracking'
+    description = '@TechDebt annotation to track your tech debts'
+    website = 'https://github.com/novoda/tech-debts-tracking'
+}

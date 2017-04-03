@@ -1,0 +1,218 @@
+{
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Description": "Sample Developer Authentication application using Amazon Cognito",
+	"Parameters": 
+	{
+		"IdentityPoolId": 
+		{
+			"Type": "String",
+			"Description": "Enter the identity pool id which has developer authenticated identities enabled"
+		},
+
+		"DeveloperProviderName": 
+		{
+			"Type": "String",
+			"Description": "Enter the developer provider name for the above identity pool"
+		}
+	},
+
+	"Resources": 
+	{
+		"DeveloperAuthenticationSampleRole": 
+		{
+			"Type": "AWS::IAM::Role",
+			"Properties": 
+			{
+				"AssumeRolePolicyDocument": 
+				{
+					"Version": "2012-10-17",
+					"Statement": 
+					[
+						{
+							"Effect": "Allow",
+							"Principal": 
+							{
+								"Service": 
+								[
+									"ec2.amazonaws.com"
+								]
+							},
+
+							"Action": 
+							[
+								"sts:AssumeRole"
+							]
+						}
+					]
+				},
+
+				"Path": "/",
+				"Policies": 
+				[
+					{
+						"PolicyName": "DeveloperAuthenticationSamplePolicy",
+						"PolicyDocument": 
+						{
+							"Version": "2012-10-17",
+							"Statement": 
+							[
+								{
+									"Action": 
+									[
+										"dynamodb:*",
+										"cognito-identity:GetOpenIdTokenForDeveloperIdentity"
+									],
+
+									"Effect": "Allow",
+									"Resource": "*"
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+
+		"DeveloperAuthenticationSampleInstanceProfile": 
+		{
+			"Type": "AWS::IAM::InstanceProfile",
+			"Properties": 
+			{
+				"Path": "/",
+				"Roles": 
+				[
+					{
+						"Ref": "DeveloperAuthenticationSampleRole"
+					}
+				]
+			}
+		},
+
+		"DeveloperAuthenticationSampleApplication": 
+		{
+			"Type": "AWS::ElasticBeanstalk::Application",
+			"Properties": 
+			{
+				"Description": "Sample developer authentication application for showcasing the developer authenticated feature of Amazon Cognito",
+				"ApplicationVersions": 
+				[
+					{
+						"VersionLabel": "Version 1.3",
+						"Description": "Release version",
+						"SourceBundle": 
+						{
+							"S3Bucket": { "Fn::Join": ["-", [ "amazon-cognito-samples", { "Ref": "AWS::Region" } ] ] },
+							"S3Key": "CognitoDevAuthSample.war"
+						}
+					}
+				],
+
+				"ConfigurationTemplates": 
+				[
+					{
+						"TemplateName": "DefaultConfiguration",
+						"Description": "64bit Amazon Linux running Tomcat 7",
+						"SolutionStackName": "64bit Amazon Linux running Tomcat 7",
+						"OptionSettings": 
+						[
+							{
+								"Namespace": "aws:elasticbeanstalk:environment",
+								"OptionName": "EnvironmentType",
+								"Value": "SingleInstance"
+							},
+
+							{
+								"Namespace": "aws:autoscaling:launchconfiguration",
+								"OptionName": "InstanceType",
+								"Value": "t1.micro"
+							},
+
+							{
+								"Namespace": "aws:autoscaling:asg",
+								"OptionName": "MaxSize",
+								"Value": "1"
+							},
+
+							{
+								"Namespace": "aws:autoscaling:launchconfiguration",
+								"OptionName": "IamInstanceProfile",
+								"Value": 
+								{
+									"Ref": "DeveloperAuthenticationSampleInstanceProfile"
+								}
+							},
+
+							{
+								"Namespace": "aws:elasticbeanstalk:application:environment",
+								"OptionName": "PARAM1",
+								"Value": 
+								{
+									"Ref": "IdentityPoolId"
+								}
+							},
+
+							{
+								"Namespace": "aws:elasticbeanstalk:application:environment",
+								"OptionName": "PARAM2",
+								"Value":
+								{
+									"Ref": "DeveloperProviderName"
+								}
+							},
+							{
+							    "Namespace": "aws:elasticbeanstalk:application:environment",
+							    "OptionName": "REGION",
+							    "Value":
+							    {
+							        "Ref": "AWS::Region"
+							    }
+							}
+						]
+					}
+				]
+			}
+		},
+
+		"DeveloperAuthenticationSampleEnvironment": 
+		{
+			"Type": "AWS::ElasticBeanstalk::Environment",
+			"Properties": 
+			{
+				"ApplicationName": 
+				{
+					"Ref": "DeveloperAuthenticationSampleApplication"
+				},
+
+				"Description": "Developer Authentication Sample Environment",
+				"TemplateName": "DefaultConfiguration",
+				"VersionLabel": "Version 1.3"
+			}
+		}
+	},
+
+	"Outputs": 
+	{
+		"ApplicationURL": 
+		{
+			"Value": 
+			{
+				"Fn::Join": 
+				[
+					"",
+					[
+						"http://",
+						{
+							"Fn::GetAtt": 
+							[
+								"DeveloperAuthenticationSampleEnvironment",
+								"EndpointURL"
+							]
+						}
+					]
+				]
+			},
+
+			"Description": "Application URL for the Developer Authentication Sample Environment"
+		}
+	}
+}

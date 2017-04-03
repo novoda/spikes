@@ -13,9 +13,9 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.view.Gravity;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
 
-class OverlayView extends FrameLayout {
+class OverlayView extends ImageView {
 
     private static final int SAFETY_MARGIN = 20;
 
