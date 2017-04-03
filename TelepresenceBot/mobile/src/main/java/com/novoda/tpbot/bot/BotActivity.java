@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.accessibility.AccessibilityManager;
 
 import com.novoda.notils.caster.Views;
 import com.novoda.notils.logger.toast.Toaster;
@@ -23,10 +24,7 @@ import com.novoda.support.SwitchableView;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServerDeclarationListener;
-import com.novoda.tpbot.automation.AndroidAccessibilitySettingsRetriever;
 import com.novoda.tpbot.automation.AutomationChecker;
-import com.novoda.support.ColonStringSplitter;
-import com.novoda.tpbot.automation.HangoutJoinerAutomationService;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
@@ -66,10 +64,8 @@ public class BotActivity extends AppCompatActivity implements BotView {
         Handler handler = new Handler();
         commandRepeater = new CommandRepeater(commandRepeatedListener, handler);
 
-        AndroidAccessibilitySettingsRetriever retriever = new AndroidAccessibilitySettingsRetriever(getContentResolver());
-        ColonStringSplitter colonStringSplitter = new ColonStringSplitter();
-        String serviceFullyQualifiedName = getPackageName() + "/" + HangoutJoinerAutomationService.class.getCanonicalName();
-        automationChecker = new AutomationChecker(retriever, colonStringSplitter, serviceFullyQualifiedName);
+        AccessibilityManager accessibilityManager = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
+        automationChecker = new AutomationChecker(accessibilityManager);
     }
 
     @Override

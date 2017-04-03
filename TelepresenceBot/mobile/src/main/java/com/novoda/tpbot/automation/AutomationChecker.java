@@ -1,35 +1,35 @@
 package com.novoda.tpbot.automation;
 
-import com.novoda.support.ColonStringSplitter;
+import android.accessibilityservice.AccessibilityServiceInfo;
+import android.view.accessibility.AccessibilityManager;
+
+import java.util.List;
 
 public class AutomationChecker {
 
-    private final String serviceName;
-    private final AndroidAccessibilitySettingsRetriever accessibilitySettingsRetriever;
-    private final ColonStringSplitter colonStringSplitter;
+    private static final String SERVICE_ID = "com.novoda.tpbot/.automation.HangoutJoinerAutomationService";
 
-    public AutomationChecker(AndroidAccessibilitySettingsRetriever accessibilitySettingsRetriever,
-                             ColonStringSplitter colonStringSplitter,
-                             String serviceName) {
-        this.serviceName = serviceName;
-        this.accessibilitySettingsRetriever = accessibilitySettingsRetriever;
-        this.colonStringSplitter = colonStringSplitter;
+    private final AccessibilityManager accessibilityManager;
+
+    public AutomationChecker(AccessibilityManager accessibilityManager) {
+        this.accessibilityManager = accessibilityManager;
     }
 
     public boolean isHangoutJoinerAutomationServiceEnabled() {
-        String accessibilitySettings = accessibilitySettingsRetriever.retrieveEnabledAccessibilityServices();
-        String[] accessibilityServices = colonStringSplitter.split(accessibilitySettings);
+        List<AccessibilityServiceInfo> visualFeedbackServices = getVisualFeedbackServices();
 
-        for (String service : accessibilityServices) {
-            if (matchesAutomationService(service)) {
+        for (AccessibilityServiceInfo service : visualFeedbackServices) {
+            if (service.getId().equalsIgnoreCase(SERVICE_ID)) {
                 return true;
             }
         }
         return false;
     }
 
-    private boolean matchesAutomationService(String serviceToCheck) {
-        return serviceName.equalsIgnoreCase(serviceToCheck);
+    private List<AccessibilityServiceInfo> getVisualFeedbackServices() {
+        return accessibilityManager.getEnabledAccessibilityServiceList(
+                AccessibilityServiceInfo.FEEDBACK_VISUAL
+        );
     }
 
 }
