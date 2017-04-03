@@ -42,9 +42,4 @@ public class SimpleNotesOutputView extends LinearLayout implements GameMvp.View 
         PianoHeroApplication.popToast("game complete, another!");
     }
 
-    @Override
-    public void showError() {
-        PianoHeroApplication.popToast("that's not a simple note!");
-    }
-
 }

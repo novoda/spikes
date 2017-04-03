@@ -18,8 +18,6 @@ interface GameMvp {
         void showRound(RoundViewModel viewModel);
 
         void showGameComplete();
-
-        void showError();
     }
 
     interface Presenter {
