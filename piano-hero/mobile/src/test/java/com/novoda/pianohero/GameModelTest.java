@@ -9,11 +9,9 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
-public class BrainTest {
+public class GameModelTest {
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
@@ -22,20 +20,24 @@ public class BrainTest {
     OnSequenceUpdatedCallback onSequenceUpdatedCallback;
 
     @Mock
-    Brain.Callback callback;
+    GameMvp.Model.Callback callback;
 
-    Brain brain;
+    private GameModel gameModel;
+
+    @Mock
+    private SongSequenceFactory mockSongFactory;
 
     @Before
     public void setUp() {
-        brain = new Brain(onSequenceUpdatedCallback);
+        gameModel = new GameModel(mockSongFactory, new SimplePitchNotationFormatter());
     }
 
     @Test
     public void whenStarted_thenDisplaysUnmodifiedSequence() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
+        when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
 
-        brain.start(sequence);
+        gameModel.startGame();
 
         verify(onSequenceUpdatedCallback).onNext(sequence);
     }
@@ -43,9 +45,11 @@ public class BrainTest {
     @Test
     public void whenNotesPlayedCorrectly_thenIncrementsSequencePosition() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
-        brain.start(sequence);
+        when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
 
-        brain.onNotesPlayed(Note.C4);
+        gameModel.startGame();
+
+        gameModel.onNotesPlayed(callback, Note.C4);
 
         ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
         verify(onSequenceUpdatedCallback, times(2)).onNext(sequenceCaptor.capture());
@@ -55,10 +59,11 @@ public class BrainTest {
     @Test
     public void whenNotesPlayedIncorrectly_thenDoesNotIncrementSequencePosition() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
-        brain.start(sequence);
+        when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
+        gameModel.startGame();
 
-        brain.onNotesPlayed(Note.C4);
-        brain.onNotesPlayed(Note.E4);
+        gameModel.onNotesPlayed(callback, Note.C4);
+        gameModel.onNotesPlayed(callback, Note.E4);
 
         ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
         verify(onSequenceUpdatedCallback, times(3)).onNext(sequenceCaptor.capture());
@@ -68,10 +73,11 @@ public class BrainTest {
     @Test
     public void whenNotesPlayedIncorrectly_thenUpdatesLatestError() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
-        brain.start(sequence);
+        when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
+        gameModel.startGame();
 
-        brain.onNotesPlayed(Note.D4);
-        brain.onNotesPlayed(Note.E4);
+        gameModel.onNotesPlayed(callback, Note.D4);
+        gameModel.onNotesPlayed(callback, Note.E4);
 
         ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
         verify(onSequenceUpdatedCallback, times(3)).onNext(sequenceCaptor.capture());
@@ -81,10 +87,11 @@ public class BrainTest {
     @Test
     public void whenNotesPlayedCorrectly_thenClearsLatestError() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
-        brain.start(sequence);
+        when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
+        gameModel.startGame();
 
-        brain.onNotesPlayed(Note.D4);
-        brain.onNotesPlayed(Note.C4);
+        gameModel.onNotesPlayed(callback, Note.D4);
+        gameModel.onNotesPlayed(callback, Note.C4);
 
         ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
         verify(onSequenceUpdatedCallback, times(3)).onNext(sequenceCaptor.capture());
@@ -94,12 +101,12 @@ public class BrainTest {
     @Test
     public void whenFinalNotesPlayedCorrectly_thenTriggersSequenceComplete() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
-        brain.attach(callback);
-        brain.start(sequence);
+        when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
+        gameModel.startGame();
 
-        brain.onNotesPlayed(Note.C4);
-        brain.onNotesPlayed(Note.D4);
-        brain.onNotesPlayed(Note.E4);
+        gameModel.onNotesPlayed(callback, Note.C4);
+        gameModel.onNotesPlayed(callback, Note.D4);
+        gameModel.onNotesPlayed(callback, Note.E4);
 
         verify(callback).onSequenceComplete();
     }
@@ -107,12 +114,12 @@ public class BrainTest {
     @Test
     public void whenFinalNotesPlayedIncorrectly_thenDoesNotTriggerSequenceComplete() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
-        brain.attach(callback);
-        brain.start(sequence);
+        when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
+        gameModel.startGame();
 
-        brain.onNotesPlayed(Note.C4);
-        brain.onNotesPlayed(Note.D4);
-        brain.onNotesPlayed(Note.F4);
+        gameModel.onNotesPlayed(callback, Note.C4);
+        gameModel.onNotesPlayed(callback, Note.D4);
+        gameModel.onNotesPlayed(callback, Note.F4);
 
         verify(callback, never()).onSequenceComplete();
     }
