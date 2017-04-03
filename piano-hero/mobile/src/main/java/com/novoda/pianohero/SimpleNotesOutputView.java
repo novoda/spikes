@@ -4,14 +4,11 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.Locale;
-
-public class SimpleNotesOutputView extends LinearLayout {
-
-    private final SimplePitchNotationFormatter simplePitchNotationFormatter = new SimplePitchNotationFormatter();
+public class SimpleNotesOutputView extends LinearLayout implements GameMvp.View {
 
     private TextView nextNoteToPlayTextView;
     private TextView messageTextView;
@@ -29,54 +26,32 @@ public class SimpleNotesOutputView extends LinearLayout {
         messageTextView = (TextView) findViewById(R.id.simple_notes_output_text_message);
     }
 
-    public void display(Sequence sequence) {
-        checkSequenceIsSimpleElseThrow(sequence);
-
-        updateNextNoteToPlay(sequence);
-        updateMessage(sequence);
+    @Override
+    public void showRound(RoundViewModel viewModel) {
+        updateNextNoteToPlay(viewModel);
+        messageTextView.setText(viewModel.getStatusMessage());
     }
 
-    private void checkSequenceIsSimpleElseThrow(Sequence sequence) {
-        for (int i = 0; i < sequence.length(); i++) {
-            Notes notes = sequence.get(i);
-            if (notes.count() > 1) {
-                throw new IllegalArgumentException("Sequence contains chords, that's not simple enough");
-            }
-            for (Note note : notes.notes()) {
-                if (simplePitchNotationFormatter.format(note).endsWith("#")) {
-                    throw new IllegalArgumentException("Sequence contains sharps, that's not simple enough");
-                }
-            }
+    private void updateNextNoteToPlay(RoundViewModel viewModel) {
+        for (String note : viewModel) {
+            nextNoteToPlayTextView.setText(note);
         }
     }
 
-    private void updateNextNoteToPlay(Sequence sequence) {
-        int nextNotesPosition = sequence.position();
-        for (Note note : sequence.get(nextNotesPosition)) {
-            updateNextNoteToPlayTextViewWith(note);
-        }
+    @Override
+    public void showGameComplete() {
+        PianoHeroApplication.popToast("game complete, another!");
     }
 
-    private void updateNextNoteToPlayTextViewWith(Note note) {
-        String simpleNotation = simplePitchNotationFormatter.format(note);
-        nextNoteToPlayTextView.setText(simpleNotation);
+    @Override
+    public void showError() {
+        PianoHeroApplication.popToast("that's not a simple note!");
     }
 
-    private void updateMessage(Sequence sequence) {
-        if (sequence.latestError().count() == 0) {
-            if (sequence.position() > 0) {
-                String message = String.format(Locale.US, "Woo! Keep going! (%d/%d)", sequence.position() + 1, sequence.length());
-                updateMessageTextViewWith(message);
-            } else {
-                messageTextView.setVisibility(INVISIBLE);
-            }
-        } else {
-            updateMessageTextViewWith("Ruhroh, try again!");
-        }
+    @Override
+    public void showKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
-    private void updateMessageTextViewWith(String message) {
-        messageTextView.setVisibility(VISIBLE);
-        messageTextView.setText(message);
-    }
 }

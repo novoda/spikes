@@ -1,54 +1,28 @@
 package com.novoda.pianohero;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
 
 public class SimpleEndToEndActivity extends AppCompatActivity {
 
-    private final AndroidKeyCodeToSimpleNoteConverter keyCodeConverter = new AndroidKeyCodeToSimpleNoteConverter();
-
-    private Brain brain;
-    private SimpleNotesOutputView outputView;
+    private AndroidKeyCodeToSimpleNoteConverter keyCodeConverter;
+    private GameMvp.Presenter presenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_end_to_end);
 
-        outputView = (SimpleNotesOutputView) findViewById(R.id.simple_notes_output_view);
-        brain = new Brain(onSequenceUpdatedCallback);
-
-        startNewGame();
-    }
-
-    private final OnSequenceUpdatedCallback onSequenceUpdatedCallback = new OnSequenceUpdatedCallback() {
-        @Override
-        public void onNext(Sequence sequence) {
-            outputView.display(sequence);
-        }
-    };
-
-    private void startNewGame() {
-        Sequence sequence = new SongSequenceFactory().maryHadALittleLamb();
-        brain.start(sequence);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        brain.attach(new Brain.Callback() {
-            @Override
-            public void onSequenceComplete() {
-                PianoHeroApplication.popToast("game complete, another!");
-                startNewGame();
-            }
-        });
+        keyCodeConverter = new AndroidKeyCodeToSimpleNoteConverter();
+        GameMvp.View outputView = (SimpleNotesOutputView) findViewById(R.id.simple_notes_output_view);
+        GameMvp.Model gameModel = new GameModel(new SongSequenceFactory(), new SimplePitchNotationFormatter());
+        presenter = new GamePresenter(gameModel, outputView);
+        presenter.onCreate();
     }
 
     @Override
@@ -60,35 +34,24 @@ public class SimpleEndToEndActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.show_keyboard) {
-            showKeyboard();
+            presenter.onShowKeyboardSelected();
             return true;
         } else if (item.getItemId() == R.id.restart_game) {
-            startNewGame();
+            presenter.onRestartGameSelected();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
     }
 
-    private void showKeyboard() {
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-    }
-
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         try {
             Note note = keyCodeConverter.convert(keyCode);
-            brain.onNotesPlayed(note);
+            presenter.onNotesPlayed(note);
         } catch (IllegalArgumentException e) {
-            PianoHeroApplication.popToast("that's not a simple note!");
+            Log.e("!!!", "Non supported key input");
         }
         return true;
-    }
-
-    @Override
-    protected void onPause() {
-        brain.removeCallbacks();
-        super.onPause();
     }
 }
