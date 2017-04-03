@@ -73,6 +73,7 @@ public class GameModel implements GameMvp.Model {
         }
     }
 
+    @Nullable
     @Override
     public RoundViewModel onNotesPlayed(Callback callback, Note... notes) {
         return onNotesPlayed(new Notes(notes), callback);
