@@ -1,5 +1,6 @@
 package com.novoda.pianohero;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 
 public class SimpleEndToEndActivity extends AppCompatActivity {
 
@@ -34,7 +36,7 @@ public class SimpleEndToEndActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.show_keyboard) {
-            presenter.onShowKeyboardSelected();
+            showKeyboard();
             return true;
         } else if (item.getItemId() == R.id.restart_game) {
             presenter.onRestartGameSelected();
@@ -42,6 +44,11 @@ public class SimpleEndToEndActivity extends AppCompatActivity {
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
     @Override

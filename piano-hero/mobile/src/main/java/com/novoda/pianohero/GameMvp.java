@@ -20,8 +20,6 @@ interface GameMvp {
         void showGameComplete();
 
         void showError();
-
-        void showKeyboard();
     }
 
     interface Presenter {
@@ -31,8 +29,6 @@ interface GameMvp {
         void onNotesPlayed(Note... notes);
 
         void onRestartGameSelected();
-
-        void onShowKeyboardSelected();
     }
 
 }

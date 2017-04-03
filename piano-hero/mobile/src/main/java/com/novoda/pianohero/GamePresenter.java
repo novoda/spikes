@@ -37,8 +37,4 @@ class GamePresenter implements GameMvp.Presenter {
         view.showRound(viewModel);
     }
 
-    @Override
-    public void onShowKeyboardSelected() {
-        view.showKeyboard();
-    }
 }
