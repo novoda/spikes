@@ -202,7 +202,7 @@ public class DropCapActivity extends Activity {
     private final OnDropCapNumberChangeListener onDropCapNumberChangeListener = new OnDropCapNumberChangeListener() {
         @Override
         public void onDropCapNumberChanged(int newNumberOfDropCaps) {
-            dropCapView.setNumberOfDropCaps(newNumberOfDropCaps);
+            // TODO: Programmatically set on DropCapView.
             numberOfDropCaps = newNumberOfDropCaps;
         }
     };

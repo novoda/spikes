@@ -32,7 +32,6 @@ public class DropCapView extends View {
     private String dropCapText;
     private String copyText;
 
-    private int numberOfDropCaps;
     private int lineSpacingExtra;
     private int numberOfLinesToSpan;
     private int dropCapWidth;
@@ -59,9 +58,6 @@ public class DropCapView extends View {
         }
 
         try {
-            int defaultNumberOfDropCaps = 0;
-            numberOfDropCaps = typedArray.getInt(R.styleable.DropCapView_numberOfDropCaps, defaultNumberOfDropCaps);
-
             String dropCapFontPath = typedArray.getString(R.styleable.DropCapView_dropCapFontPath);
             setDropCapFontType(dropCapFontPath);
 
@@ -88,16 +84,11 @@ public class DropCapView extends View {
             setCopyTextColor(copyTextColor);
 
             String text = typedArray.getString(R.styleable.DropCapView_android_text);
-            setText(text, numberOfDropCaps);
+            setText(text);
 
         } finally {
             typedArray.recycle();
         }
-    }
-
-    public void setNumberOfDropCaps(int numberOfDropCaps) {
-        String text = dropCapText + copyText;
-        setText(text, numberOfDropCaps);
     }
 
     public void setDropCapFontType(String fontPath) {
@@ -212,36 +203,27 @@ public class DropCapView extends View {
     }
 
     public void setText(String text) {
-        setText(text, numberOfDropCaps);
-    }
-
-    private void setText(String text, int numberOfDropCaps) {
-        if (sameNumberOfDropCaps(numberOfDropCaps) && sameText(text)) {
+        if (isSameText(text)) {
             return;
         }
 
         if (enoughTextForDropCap(text)) {
-            dropCapText = String.valueOf(text.substring(0, numberOfDropCaps)).toUpperCase();
-            copyText = String.valueOf(text.subSequence(dropCapText.length(), text.length()));
+            dropCapText = String.valueOf(text.charAt(0));
+            copyText = String.valueOf(text.subSequence(1, text.length()));
         } else {
             dropCapText = String.valueOf('\0');
             copyText = (text == null) ? "" : text;
         }
 
-        this.numberOfDropCaps = numberOfDropCaps;
         remeasureAndRedraw();
     }
 
-    private boolean sameNumberOfDropCaps(int numberOfDropCaps) {
-        return this.numberOfDropCaps == numberOfDropCaps;
-    }
-
-    private boolean sameText(String text) {
+    private boolean isSameText(String text) {
         return text != null && text.equals(dropCapText + copyText);
     }
 
-    private boolean enoughTextForDropCap(String text) {
-        return text != null && text.length() > numberOfDropCaps;
+    private boolean enoughTextForDropCap(CharSequence text) {
+        return text != null && text.length() > 1;
     }
 
     @Override
@@ -265,8 +247,8 @@ public class DropCapView extends View {
     }
 
     private void measureDropCapFor(int width) {
-        dropCapWidth = (int) (dropCapPaint.measureText(dropCapText, 0, dropCapText.length()) + spacer);
-        dropCapPaint.getTextBounds(dropCapText, 0, dropCapText.length(), dropCapBounds);
+        dropCapWidth = (int) (dropCapPaint.measureText(dropCapText, 0, 1) + spacer);
+        dropCapPaint.getTextBounds(dropCapText, 0, 1, dropCapBounds);
         int copyWidthForDropCap = width - dropCapWidth;
 
         if (dropCapStaticLayout == null || dropCapStaticLayout.getWidth() != copyWidthForDropCap) {
@@ -381,7 +363,7 @@ public class DropCapView extends View {
 
     private void drawDropCap(Canvas canvas) {
         float dropCapBaselineFromCopyTop = dropCapBaseline + distanceFromViewPortTop;
-        canvas.drawText(dropCapStaticLayout.getText(), 0, dropCapText.length(), getPaddingLeft(), dropCapBaselineFromCopyTop, dropCapPaint);
+        canvas.drawText(dropCapStaticLayout.getText(), 0, 1, getPaddingLeft(), dropCapBaselineFromCopyTop, dropCapPaint);
     }
 
     private void drawCopyForDropCap(Canvas canvas) {
@@ -392,7 +374,7 @@ public class DropCapView extends View {
             int baseline = dropCapStaticLayout.getLineBaseline(i) + getPaddingTop();
 
             if (i == 0) {
-                lineStart = lineStart + dropCapText.length();
+                lineStart = lineStart + 1;
             }
 
             canvas.drawText(
