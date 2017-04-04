@@ -212,7 +212,7 @@ public class DropCapView extends View {
         }
 
         if (enoughTextForDropCap(text)) {
-            dropCapText = String.valueOf(text.substring(0, numberOfDropCaps));
+            dropCapText = String.valueOf(text.substring(0, numberOfDropCaps)).toUpperCase();
             copyText = String.valueOf(text.subSequence(dropCapText.length(), text.length()));
         } else {
             dropCapText = String.valueOf('\0');
