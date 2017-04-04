@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <NumberPicker
+    android:id="@+id/drop_cap_number_picker"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true" />
+
+  <LinearLayout
+    style="?android:attr/buttonBarStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/drop_cap_number_picker"
+    android:orientation="horizontal">
+
+    <Button
+      android:id="@+id/drop_cap_number_button_negative"
+      style="?android:attr/buttonBarButtonStyle"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="100"
+      android:text="@string/fragment_cancel" />
+
+    <Button
+      android:id="@+id/drop_cap_number_button_positive"
+      style="?android:attr/buttonBarButtonStyle"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="100"
+      android:text="@string/fragment_set" />
+
+  </LinearLayout>
+
+</RelativeLayout>
