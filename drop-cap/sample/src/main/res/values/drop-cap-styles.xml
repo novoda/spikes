@@ -4,6 +4,7 @@
     parent="Theme.AppCompat.Light.DarkActionBar" />
 
   <style name="DropCap">
+    <item name="numberOfDropCaps">2</item>
     <item name="android:paddingLeft">@dimen/drop_cap_padding_left</item>
     <item name="android:paddingTop">@dimen/drop_cap_padding_top</item>
     <item name="android:paddingRight">@dimen/drop_cap_padding_right</item>

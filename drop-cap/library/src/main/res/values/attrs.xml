@@ -2,6 +2,7 @@
 <resources>
 
   <declare-styleable name="DropCapView">
+    <attr name="numberOfDropCaps" format="integer" />
     <attr name="lineSpacingExtra" format="dimension" />
     <attr name="dropCapTextSize" format="dimension" />
     <attr name="dropCapTextColor" format="color" />
