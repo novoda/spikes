@@ -19,7 +19,7 @@ public class AutomationChecker {
         List<AccessibilityServiceInfo> visualFeedbackServices = getVisualFeedbackServices();
 
         for (AccessibilityServiceInfo service : visualFeedbackServices) {
-            if (service.getId().equalsIgnoreCase(SERVICE_ID)) {
+            if (SERVICE_ID.equals(service.getId())) {
                 return true;
             }
         }
