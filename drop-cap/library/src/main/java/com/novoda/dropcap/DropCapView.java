@@ -59,14 +59,14 @@ public class DropCapView extends View {
         }
 
         try {
+            int defaultNumberOfDropCaps = 0;
+            numberOfDropCaps = typedArray.getInt(R.styleable.DropCapView_numberOfDropCaps, defaultNumberOfDropCaps);
+
             String dropCapFontPath = typedArray.getString(R.styleable.DropCapView_dropCapFontPath);
             setDropCapFontType(dropCapFontPath);
 
             String copyFontPath = typedArray.getString(R.styleable.DropCapView_copyFontPath);
             setCopyFontType(copyFontPath);
-
-            int defaultNumberOfDropCaps = 0;
-            numberOfDropCaps = typedArray.getInt(R.styleable.DropCapView_numberOfDropCaps, defaultNumberOfDropCaps);
 
             int defaultLineSpacingExtra = 0;
             lineSpacingExtra = typedArray.getDimensionPixelSize(R.styleable.DropCapView_lineSpacingExtra, defaultLineSpacingExtra);
@@ -93,6 +93,11 @@ public class DropCapView extends View {
         } finally {
             typedArray.recycle();
         }
+    }
+
+    public void setNumberOfDropCaps(int numberOfDropCaps) {
+        this.numberOfDropCaps = numberOfDropCaps;
+        remeasureAndRedraw();
     }
 
     public void setDropCapFontType(String fontPath) {
