@@ -351,7 +351,7 @@ public class DropCapView extends View {
     protected void onDraw(Canvas canvas) {
         if (canDrawDropCap) {
             drawDropCap(canvas);
-            drawCopyForDropCap(canvas);
+            drawCopyWrappingDropCap(canvas);
             drawRemainingCopy(canvas);
         } else {
             drawCopyWithoutDropCap(canvas);
@@ -363,7 +363,7 @@ public class DropCapView extends View {
         canvas.drawText(dropCapText, 0, dropCapText.length(), getPaddingLeft(), dropCapBaselineFromCopyTop, dropCapPaint);
     }
 
-    private void drawCopyForDropCap(Canvas canvas) {
+    private void drawCopyWrappingDropCap(Canvas canvas) {
         for (int i = 0; i < numberOfLinesToSpan; i++) {
             int lineStart = dropCapCopyStaticLayout.getLineStart(i);
             int lineEnd = dropCapCopyStaticLayout.getLineEnd(i);
