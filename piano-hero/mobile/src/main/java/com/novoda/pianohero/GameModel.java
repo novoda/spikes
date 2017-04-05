@@ -47,7 +47,7 @@ public class GameModel implements GameMvp.Model {
     private RoundViewModel createViewModel(Sequence updatedSequence) {
         int nextNotesPosition = updatedSequence.position();
         List<String> notations = getNotations(nextNotesPosition);
-        String statusMessage = getStatusMessage();
+        String statusMessage = getStatusMessage(updatedSequence);
         return new RoundViewModel(notations, statusMessage);
     }
 
@@ -60,7 +60,7 @@ public class GameModel implements GameMvp.Model {
         return notations;
     }
 
-    private String getStatusMessage() {
+    private String getStatusMessage(Sequence sequence) {
         if (sequence.latestError().count() == 0) {
             if (sequence.position() > 0) {
                 return String.format(Locale.US, "Woo! Keep going! (%d/%d)", sequence.position() + 1, sequence.length());
