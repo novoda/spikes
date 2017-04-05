@@ -254,13 +254,13 @@ public class DropCapView extends View {
     private void measureDropCapFor(int width) {
         dropCapWidth = (int) (dropCapPaint.measureText(dropCapText, 0, dropCapText.length()) + spacer);
         dropCapPaint.getTextBounds(dropCapText, 0, dropCapText.length(), dropCapBounds);
-        int copyWidthForDropCap = width - dropCapWidth;
+        int remainingWidthAfterDropCap = width - dropCapWidth;
 
-        if (dropCapStaticLayout == null || dropCapStaticLayout.getWidth() != copyWidthForDropCap) {
+        if (dropCapStaticLayout == null || dropCapStaticLayout.getWidth() != remainingWidthAfterDropCap) {
             dropCapStaticLayout = new StaticLayout(
-                    dropCapText + copyText,
+                    copyText,
                     copyTextPaint,
-                    copyWidthForDropCap,
+                    remainingWidthAfterDropCap,
                     Layout.Alignment.ALIGN_NORMAL,
                     SPACING_MULTIPLIER,
                     lineSpacingExtra,
@@ -372,7 +372,7 @@ public class DropCapView extends View {
 
     private void drawDropCap(Canvas canvas) {
         float dropCapBaselineFromCopyTop = dropCapBaseline + distanceFromViewPortTop;
-        canvas.drawText(dropCapStaticLayout.getText(), 0, dropCapText.length(), getPaddingLeft(), dropCapBaselineFromCopyTop, dropCapPaint);
+        canvas.drawText(dropCapText, 0, dropCapText.length(), getPaddingLeft(), dropCapBaselineFromCopyTop, dropCapPaint);
     }
 
     private void drawCopyForDropCap(Canvas canvas) {
@@ -381,10 +381,6 @@ public class DropCapView extends View {
             int lineEnd = dropCapStaticLayout.getLineEnd(i);
 
             int baseline = dropCapStaticLayout.getLineBaseline(i) + getPaddingTop();
-
-            if (i == 0) {
-                lineStart = lineStart + dropCapText.length();
-            }
 
             canvas.drawText(
                     dropCapStaticLayout.getText(),
