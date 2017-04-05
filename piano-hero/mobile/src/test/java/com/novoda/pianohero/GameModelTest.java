@@ -111,7 +111,7 @@ public class GameModelTest {
         gameModel.onNotesPlayed(completionCallback, Note.D4);
         gameModel.onNotesPlayed(completionCallback, Note.E4);
 
-        verify(completionCallback).onSequenceComplete();
+        verify(completionCallback).onGameComplete();
     }
 
     @Test
@@ -124,7 +124,7 @@ public class GameModelTest {
         gameModel.onNotesPlayed(completionCallback, Note.D4);
         gameModel.onNotesPlayed(completionCallback, Note.F4);
 
-        verify(completionCallback, never()).onSequenceComplete();
+        verify(completionCallback, never()).onGameComplete();
     }
 
     private Sequence make(Note... notes) {

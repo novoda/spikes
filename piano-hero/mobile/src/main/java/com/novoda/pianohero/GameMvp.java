@@ -13,7 +13,7 @@ interface GameMvp {
         }
 
         interface CompletionCallback {
-            void onSequenceComplete();
+            void onGameComplete();
         }
     }
 

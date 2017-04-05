@@ -82,14 +82,14 @@ public class GameModel implements GameMvp.Model {
     @Nullable
     private RoundViewModel onNotesPlayed(Notes notes, CompletionCallback completionCallback) {
         if (notes.count() == 0) {
-            completionCallback.onSequenceComplete();
+            completionCallback.onGameComplete();
             return null;
         }
 
         int currentPosition = sequence.position();
         Notes expectedNotes = sequence.get(currentPosition);
         if (currentPosition == sequence.length() - 1 && notes.equals(expectedNotes)) {
-            completionCallback.onSequenceComplete();
+            completionCallback.onGameComplete();
             return null; // TODO we should separate the querying of complete, so that null return is no necessary
         }
 
