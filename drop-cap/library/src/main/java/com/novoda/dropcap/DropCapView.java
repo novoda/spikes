@@ -235,14 +235,14 @@ public class DropCapView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int totalWidth = MeasureSpec.getSize(widthMeasureSpec);
         int horizontalPadding = getPaddingLeft() + getPaddingRight();
-        int widthWithoutPadding = totalWidth - horizontalPadding;
+        int allowedWidth = totalWidth - horizontalPadding;
 
-        measureDropCapFor(widthWithoutPadding);
+        measureDropCapFor(allowedWidth);
 
         if (canDrawDropCap) {
-            measureRemainingCopyFor(totalWidth);
+            measureRemainingCopyFor(allowedWidth);
         } else {
-            measureWholeTextFor(totalWidth);
+            measureWholeTextFor(allowedWidth);
         }
 
         int desiredHeight = dropCapLineHeight + copyStaticLayout.getHeight() + getPaddingTop() + getPaddingBottom();
