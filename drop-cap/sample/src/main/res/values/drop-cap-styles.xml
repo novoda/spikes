@@ -10,6 +10,7 @@
     <item name="android:paddingRight">@dimen/drop_cap_padding_right</item>
     <item name="android:paddingBottom">@dimen/drop_cap_padding_bottom</item>
     <item name="dropCapTextSize">@dimen/drop_cap_text</item>
+    <item name="numberOfDropCaps">@integer/drop_cap_number</item>
     <item name="dropCapFontPath">fonts/SANS-SERIF_Cabin-Regular.otf</item>
     <item name="copyTextSize">@dimen/copy_text</item>
     <item name="copyFontPath">fonts/neuropolitical_rg.ttf</item>
