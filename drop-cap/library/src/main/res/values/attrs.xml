@@ -7,6 +7,7 @@
     <attr name="dropCapTextSize" format="dimension" />
     <attr name="dropCapTextColor" format="color" />
     <attr name="dropCapFontPath" format="string" />
+    <attr name="numberOfDropCaps" format="integer" />
 
     <attr name="copyTextSize" format="dimension" />
     <attr name="copyTextColor" format="color" />

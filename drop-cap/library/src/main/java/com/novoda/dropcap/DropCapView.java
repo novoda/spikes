@@ -32,6 +32,7 @@ public class DropCapView extends View {
     private String dropCapText;
     private String copyText;
 
+    private int numberOfDropCaps;
     private int lineSpacingExtra;
     private int numberOfLinesToSpan;
     private int dropCapWidth;
@@ -63,6 +64,9 @@ public class DropCapView extends View {
 
             String copyFontPath = typedArray.getString(R.styleable.DropCapView_copyFontPath);
             setCopyFontType(copyFontPath);
+
+            int defaultNumberOfDropCaps = 1;
+            numberOfDropCaps = typedArray.getInt(R.styleable.DropCapView_numberOfDropCaps, defaultNumberOfDropCaps);
 
             int defaultLineSpacingExtra = 0;
             lineSpacingExtra = typedArray.getDimensionPixelSize(R.styleable.DropCapView_lineSpacingExtra, defaultLineSpacingExtra);
@@ -208,7 +212,7 @@ public class DropCapView extends View {
         }
 
         if (enoughTextForDropCap(text)) {
-            dropCapText = String.valueOf(text.charAt(0));
+            dropCapText = String.valueOf(text.substring(0, numberOfDropCaps));
             copyText = String.valueOf(text.subSequence(dropCapText.length(), text.length()));
         } else {
             dropCapText = String.valueOf('\0');
@@ -222,8 +226,8 @@ public class DropCapView extends View {
         return text != null && text.equals(dropCapText + copyText);
     }
 
-    private boolean enoughTextForDropCap(CharSequence text) {
-        return text != null && text.length() > 1;
+    private boolean enoughTextForDropCap(String text) {
+        return text != null && text.length() > numberOfDropCaps;
     }
 
     @Override
