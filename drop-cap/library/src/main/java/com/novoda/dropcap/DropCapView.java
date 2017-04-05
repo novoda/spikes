@@ -10,7 +10,6 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -106,7 +105,6 @@ public class DropCapView extends View {
     }
 
     public void setText(String text) {
-        Log.e(getClass().getSimpleName(), "setText");
         if (enoughTextForDropCap(text)) {
             dropCapText = String.valueOf(text.substring(0, numberOfDropCaps));
             copyText = String.valueOf(text.subSequence(dropCapText.length(), text.length()));
