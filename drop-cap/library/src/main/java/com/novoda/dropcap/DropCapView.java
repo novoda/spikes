@@ -10,6 +10,7 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -93,6 +94,30 @@ public class DropCapView extends View {
         } finally {
             typedArray.recycle();
         }
+    }
+
+    public void setNumberOfDropCaps(int numberOfDropCaps) {
+        this.numberOfDropCaps = numberOfDropCaps;
+
+        String text = dropCapText + copyText;
+        setText(text);
+    }
+
+    public void setText(String text) {
+        Log.e(getClass().getSimpleName(), "setText");
+        if (enoughTextForDropCap(text)) {
+            dropCapText = String.valueOf(text.substring(0, numberOfDropCaps));
+            copyText = String.valueOf(text.subSequence(dropCapText.length(), text.length()));
+        } else {
+            dropCapText = String.valueOf('\0');
+            copyText = (text == null) ? "" : text;
+        }
+
+        remeasureAndRedraw();
+    }
+
+    private boolean enoughTextForDropCap(String text) {
+        return text != null && text.length() > numberOfDropCaps;
     }
 
     public void setDropCapFontType(String fontPath) {
@@ -204,30 +229,6 @@ public class DropCapView extends View {
     @ColorInt
     public int getCopyTextColor() {
         return copyTextPaint.getColor();
-    }
-
-    public void setText(String text) {
-        if (isSameText(text)) {
-            return;
-        }
-
-        if (enoughTextForDropCap(text)) {
-            dropCapText = String.valueOf(text.substring(0, numberOfDropCaps));
-            copyText = String.valueOf(text.subSequence(dropCapText.length(), text.length()));
-        } else {
-            dropCapText = String.valueOf('\0');
-            copyText = (text == null) ? "" : text;
-        }
-
-        remeasureAndRedraw();
-    }
-
-    private boolean isSameText(String text) {
-        return text != null && text.equals(dropCapText + copyText);
-    }
-
-    private boolean enoughTextForDropCap(String text) {
-        return text != null && text.length() > numberOfDropCaps;
     }
 
     @Override
