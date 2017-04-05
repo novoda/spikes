@@ -23,6 +23,7 @@ public class PianoC4ToB5Activity extends AppCompatActivity {
         GameMvp.View outputView = (SimpleNotesOutputView) findViewById(R.id.simple_notes_output_view);
         GameMvp.Model gameModel = new GameModel(new SongSequenceFactory(), new SimplePitchNotationFormatter());
         presenter = new GamePresenter(gameModel, outputView);
+        presenter.onCreate();
     }
 
     @Override
