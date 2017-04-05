@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -42,7 +43,6 @@ public class BotActivity extends AppCompatActivity implements BotView {
     private MovementService movementService;
     private boolean boundToMovementService;
     private CommandRepeater commandRepeater;
-    private BotPresenter presenter;
     private AutomationChecker automationChecker;
 
     @Override
@@ -52,8 +52,6 @@ public class BotActivity extends AppCompatActivity implements BotView {
 
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
         switchableView = Views.findById(this, R.id.bot_switchable_view);
-
-        presenter = new BotPresenter(SocketIOTelepresenceService.getInstance(), this);
 
         ControllerView controllerView = Views.findById(this, R.id.bot_controller_direction_view);
         controllerView.setControllerListener(controllerListener);
@@ -100,11 +98,34 @@ public class BotActivity extends AppCompatActivity implements BotView {
     };
 
     private final ServerDeclarationListener serverDeclarationListener = new ServerDeclarationListener() {
+
+        private String serverAddress;
+
         @Override
         public void onConnect(String serverAddress) {
+            Log.e(getClass().getSimpleName(), "onConnect()");
             debugView.showPermanently(getString(R.string.connecting_ellipsis));
-            presenter.startPresenting(serverAddress);
+            this.serverAddress = serverAddress;
+            Intent botServiceIntent = new Intent(BotActivity.this, BotService.class);
+            bindService(botServiceIntent, botServiceConnection, Context.BIND_AUTO_CREATE);
         }
+
+        private final ServiceConnection botServiceConnection = new ServiceConnection() {
+
+            @Override
+            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                BotService.BotServiceBinder binder = (BotService.BotServiceBinder) iBinder;
+                binder.setBotTelepresenceService(SocketIOTelepresenceService.getInstance());
+                binder.setBotView(BotActivity.this);
+                binder.startConnection(serverAddress);
+                Log.e(getClass().getSimpleName(), "onServiceConnected");
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName componentName) {
+
+            }
+        };
     };
 
     private CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
@@ -174,7 +195,6 @@ public class BotActivity extends AppCompatActivity implements BotView {
             unbindService(serviceConnection);
             boundToMovementService = false;
         }
-        presenter.stopPresenting();
         super.onStop();
     }
 

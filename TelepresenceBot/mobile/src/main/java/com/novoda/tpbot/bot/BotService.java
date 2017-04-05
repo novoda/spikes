@@ -1,63 +1,65 @@
 package com.novoda.tpbot.bot;
 
-import android.app.IntentService;
+import android.app.Service;
 import android.content.Intent;
-import android.support.annotation.Nullable;
+import android.os.Binder;
+import android.os.IBinder;
 import android.util.Log;
 
-import com.novoda.support.Observable;
 import com.novoda.support.Observer;
 import com.novoda.tpbot.Result;
 
-import static com.novoda.support.Observable.unsubscribe;
+public class BotService extends Service {
 
-public class BotService extends IntentService {
-
-    private static final String EXTRA_SERVER_ADDRESS = "EXTRA_SERVER_ADDRESS";
+    private final IBinder binder = new BotServiceBinder();
 
     private BotTelepresenceService botTelepresenceService;
-    private Observable<Result> connectionObservable;
-
-    /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     * @param name Used to name the worker thread, important only for debugging.
-     */
-    public BotService(String name) {
-        super(name);
-    }
+    private BotView botView;
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        botTelepresenceService = SocketIOTelepresenceService.getInstance();
+    public IBinder onBind(Intent intent) {
+        return binder;
     }
 
-    @Override
-    public void onDestroy() {
-        unsubscribe(connectionObservable);
-        botTelepresenceService.disconnect();
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
-        if (intent != null && intent.hasExtra(EXTRA_SERVER_ADDRESS)) {
-            String serverAddress = intent.getStringExtra(EXTRA_SERVER_ADDRESS);
-
-            connectionObservable = botTelepresenceService.connectTo(serverAddress)
-                    .attach(new ConnectionObserver())
-                    .start();
-        }
+    private void connectTo(String serverAddress) {
+        botTelepresenceService.connectTo(serverAddress)
+                .attach(new ConnectionObserver())
+                .start();
     }
 
     private class ConnectionObserver implements Observer<Result> {
 
         @Override
         public void update(Result result) {
-            Log.e(getClass().getSimpleName(), "Pass to movement service: " + result);
+            if (result.isError()) {
+                botView.onError(result.exception().get().getMessage());
+            } else {
+                botView.onConnect(result.message().get());
+            }
         }
 
     }
 
+    @Override
+    public void onDestroy() {
+        botTelepresenceService.disconnect();
+        Log.e(getClass().getSimpleName(), "onDestroy()");
+        super.onDestroy();
+    }
+
+    class BotServiceBinder extends Binder {
+
+        void setBotTelepresenceService(BotTelepresenceService botTelepresenceService) {
+            BotService.this.botTelepresenceService = botTelepresenceService;
+        }
+
+        void setBotView(BotView botView) {
+            BotService.this.botView = botView;
+        }
+
+        void startConnection(String serverAddress) {
+            BotService.this.connectTo(serverAddress);
+        }
+
+    }
 }
