@@ -268,9 +268,7 @@ public class DropCapView extends View {
             );
 
             calculateLinesToSpan();
-
-            float baseline = dropCapBounds.height() + getPaddingTop();
-            dropCapBaseline = baseline - dropCapBounds.bottom;
+            calculateDropCapBaseline();
         }
     }
 
@@ -286,6 +284,11 @@ public class DropCapView extends View {
             }
         }
         dropCapLineHeight = currentLineTop;
+    }
+
+    private void calculateDropCapBaseline() {
+        float baseline = dropCapBounds.height() + getPaddingTop();
+        dropCapBaseline = baseline - dropCapBounds.bottom;
     }
 
     private void measureRemainingCopyFor(int totalWidth) {
