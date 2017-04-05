@@ -209,7 +209,7 @@ public class DropCapView extends View {
 
         if (enoughTextForDropCap(text)) {
             dropCapText = String.valueOf(text.charAt(0));
-            copyText = String.valueOf(text.subSequence(1, text.length()));
+            copyText = String.valueOf(text.subSequence(dropCapText.length(), text.length()));
         } else {
             dropCapText = String.valueOf('\0');
             copyText = (text == null) ? "" : text;
@@ -247,8 +247,8 @@ public class DropCapView extends View {
     }
 
     private void measureDropCapFor(int width) {
-        dropCapWidth = (int) (dropCapPaint.measureText(dropCapText, 0, 1) + spacer);
-        dropCapPaint.getTextBounds(dropCapText, 0, 1, dropCapBounds);
+        dropCapWidth = (int) (dropCapPaint.measureText(dropCapText, 0, dropCapText.length()) + spacer);
+        dropCapPaint.getTextBounds(dropCapText, 0, dropCapText.length(), dropCapBounds);
         int copyWidthForDropCap = width - dropCapWidth;
 
         if (dropCapStaticLayout == null || dropCapStaticLayout.getWidth() != copyWidthForDropCap) {
@@ -286,7 +286,7 @@ public class DropCapView extends View {
     }
 
     private void measureRemainingCopyFor(int totalWidth) {
-        int lineStart = dropCapStaticLayout.getLineEnd(numberOfLinesToSpan - 1);
+        int lineStart = dropCapStaticLayout.getLineEnd(numberOfLinesToSpanAsZeroIndex());
         int lineEnd = dropCapStaticLayout.getText().length();
         String remainingText = String.valueOf(dropCapStaticLayout.getText().subSequence(lineStart, lineEnd));
 
@@ -303,6 +303,10 @@ public class DropCapView extends View {
 
             distanceFromViewPortTop = calculateCopyDistanceFromViewPortTop();
         }
+    }
+
+    private int numberOfLinesToSpanAsZeroIndex() {
+        return numberOfLinesToSpan - 1;
     }
 
     private void measureWholeTextFor(int totalWidth) {
@@ -363,7 +367,7 @@ public class DropCapView extends View {
 
     private void drawDropCap(Canvas canvas) {
         float dropCapBaselineFromCopyTop = dropCapBaseline + distanceFromViewPortTop;
-        canvas.drawText(dropCapStaticLayout.getText(), 0, 1, getPaddingLeft(), dropCapBaselineFromCopyTop, dropCapPaint);
+        canvas.drawText(dropCapStaticLayout.getText(), 0, dropCapText.length(), getPaddingLeft(), dropCapBaselineFromCopyTop, dropCapPaint);
     }
 
     private void drawCopyForDropCap(Canvas canvas) {
@@ -390,7 +394,7 @@ public class DropCapView extends View {
 
     private void drawRemainingCopy(Canvas canvas) {
         int ascentPadding = Math.abs(dropCapStaticLayout.getTopPadding());
-        int baseline = dropCapStaticLayout.getLineBottom(numberOfLinesToSpan - 1) - ascentPadding + getPaddingTop();
+        int baseline = dropCapStaticLayout.getLineBottom(numberOfLinesToSpanAsZeroIndex()) - ascentPadding + getPaddingTop();
         canvas.translate(getPaddingLeft(), baseline);
         copyStaticLayout.draw(canvas);
     }
