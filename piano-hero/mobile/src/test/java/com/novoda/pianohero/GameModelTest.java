@@ -20,6 +20,9 @@ public class GameModelTest {
     OnSequenceUpdatedCallback onSequenceUpdatedCallback;
 
     @Mock
+    GameMvp.Model.StartCallback startCallback;
+
+    @Mock
     GameMvp.Model.CompletionCallback completionCallback;
 
     private GameModel gameModel;
@@ -37,7 +40,7 @@ public class GameModelTest {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
 
-        gameModel.startGame();
+        gameModel.startGame(startCallback);
 
         verify(onSequenceUpdatedCallback).onNext(sequence);
     }
@@ -47,7 +50,7 @@ public class GameModelTest {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
 
-        gameModel.startGame();
+        gameModel.startGame(startCallback);
 
         gameModel.onNotesPlayed(completionCallback, Note.C4);
 
@@ -60,7 +63,7 @@ public class GameModelTest {
     public void whenNotesPlayedIncorrectly_thenDoesNotIncrementSequencePosition() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
-        gameModel.startGame();
+        gameModel.startGame(startCallback);
 
         gameModel.onNotesPlayed(completionCallback, Note.C4);
         gameModel.onNotesPlayed(completionCallback, Note.E4);
@@ -74,7 +77,7 @@ public class GameModelTest {
     public void whenNotesPlayedIncorrectly_thenUpdatesLatestError() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
-        gameModel.startGame();
+        gameModel.startGame(startCallback);
 
         gameModel.onNotesPlayed(completionCallback, Note.D4);
         gameModel.onNotesPlayed(completionCallback, Note.E4);
@@ -88,7 +91,7 @@ public class GameModelTest {
     public void whenNotesPlayedCorrectly_thenClearsLatestError() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
-        gameModel.startGame();
+        gameModel.startGame(startCallback);
 
         gameModel.onNotesPlayed(completionCallback, Note.D4);
         gameModel.onNotesPlayed(completionCallback, Note.C4);
@@ -102,7 +105,7 @@ public class GameModelTest {
     public void whenFinalNotesPlayedCorrectly_thenTriggersSequenceComplete() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
-        gameModel.startGame();
+        gameModel.startGame(startCallback);
 
         gameModel.onNotesPlayed(completionCallback, Note.C4);
         gameModel.onNotesPlayed(completionCallback, Note.D4);
@@ -115,7 +118,7 @@ public class GameModelTest {
     public void whenFinalNotesPlayedIncorrectly_thenDoesNotTriggerSequenceComplete() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
-        gameModel.startGame();
+        gameModel.startGame(startCallback);
 
         gameModel.onNotesPlayed(completionCallback, Note.C4);
         gameModel.onNotesPlayed(completionCallback, Note.D4);

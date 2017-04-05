@@ -12,9 +12,15 @@ class GamePresenter implements GameMvp.Presenter {
 
     @Override
     public void onCreate() {
-        RoundViewModel viewModel = gameModel.startGame();
-        view.showRound(viewModel);
+        gameModel.startGame(andInformView);
     }
+
+    private final GameMvp.Model.StartCallback andInformView = new GameMvp.Model.StartCallback() {
+        @Override
+        public void onGameStarted(RoundViewModel viewModel) {
+            view.showRound(viewModel);
+        }
+    };
 
     @Override
     public void onNotesPlayed(Note... notes) {
@@ -22,7 +28,7 @@ class GamePresenter implements GameMvp.Presenter {
             @Override
             public void onSequenceComplete() {
                 view.showGameComplete();
-                gameModel.startGame();
+                gameModel.startGame(andInformView);
             }
         }, notes);
         if (viewModel == null) {
@@ -33,8 +39,7 @@ class GamePresenter implements GameMvp.Presenter {
 
     @Override
     public void onRestartGameSelected() {
-        RoundViewModel viewModel = gameModel.startGame();
-        view.showRound(viewModel);
+        gameModel.startGame(andInformView);
     }
 
 }

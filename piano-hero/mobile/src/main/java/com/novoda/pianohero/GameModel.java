@@ -15,19 +15,19 @@ public class GameModel implements GameMvp.Model {
     private Sequence sequence;
 
     GameModel(
-            SongSequenceFactory songSequenceFactory,
-            SimplePitchNotationFormatter pitchNotationFormatter) {
+        SongSequenceFactory songSequenceFactory,
+        SimplePitchNotationFormatter pitchNotationFormatter) {
         this.songSequenceFactory = songSequenceFactory;
         this.pitchNotationFormatter = pitchNotationFormatter;
     }
 
     @Override
-    public RoundViewModel startGame() {
+    public void startGame(StartCallback callback) {
         sequence = songSequenceFactory.maryHadALittleLamb();
 
         checkSequenceIsSimpleElseThrow(sequence);
 
-        return createViewModel(sequence);
+        callback.onGameStarted(createViewModel(sequence));
     }
 
     private void checkSequenceIsSimpleElseThrow(Sequence sequence) {
