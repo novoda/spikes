@@ -1,4 +1,4 @@
-#include <AFMotor.h> // from https://github.com/adafruit/Adafruit-Motor-Shield-library
+#include <AFMotor.h> // from https://github.com/adafruit/Adafruit_Motor_Shield_V2_Library
 #include <Servo.h> 
 
 AF_DCMotor motorRight1(3);
