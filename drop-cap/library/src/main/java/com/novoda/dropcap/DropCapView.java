@@ -239,7 +239,7 @@ public class DropCapView extends View {
 
         measureDropCapFor(widthWithoutPadding);
 
-        if (enoughLinesForDropCap()) {
+        if (enoughLinesToWrapDropCap()) {
             measureRemainingCopyFor(totalWidth);
         } else {
             measureWholeTextFor(totalWidth);
@@ -329,7 +329,7 @@ public class DropCapView extends View {
         }
     }
 
-    private boolean enoughLinesForDropCap() {
+    private boolean enoughLinesToWrapDropCap() {
         return dropCapCopyStaticLayout.getLineCount() > numberOfLinesToSpan && numberOfLinesToSpan > 0;
     }
 
@@ -342,7 +342,7 @@ public class DropCapView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (enoughLinesForDropCap()) {
+        if (enoughLinesToWrapDropCap()) {
             drawDropCap(canvas);
             drawCopyForDropCap(canvas);
             drawRemainingCopy(canvas);
