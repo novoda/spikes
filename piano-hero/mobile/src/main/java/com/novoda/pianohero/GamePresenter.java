@@ -18,7 +18,7 @@ class GamePresenter implements GameMvp.Presenter {
 
     @Override
     public void onNotesPlayed(Note... notes) {
-        RoundViewModel viewModel = gameModel.onNotesPlayed(new GameMvp.Model.Callback() {
+        RoundViewModel viewModel = gameModel.onNotesPlayed(new GameMvp.Model.CompletionCallback() {
             @Override
             public void onSequenceComplete() {
                 view.showGameComplete();

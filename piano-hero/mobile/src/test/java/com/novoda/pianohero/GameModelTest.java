@@ -20,7 +20,7 @@ public class GameModelTest {
     OnSequenceUpdatedCallback onSequenceUpdatedCallback;
 
     @Mock
-    GameMvp.Model.Callback callback;
+    GameMvp.Model.CompletionCallback completionCallback;
 
     private GameModel gameModel;
 
@@ -49,7 +49,7 @@ public class GameModelTest {
 
         gameModel.startGame();
 
-        gameModel.onNotesPlayed(callback, Note.C4);
+        gameModel.onNotesPlayed(completionCallback, Note.C4);
 
         ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
         verify(onSequenceUpdatedCallback, times(2)).onNext(sequenceCaptor.capture());
@@ -62,8 +62,8 @@ public class GameModelTest {
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
         gameModel.startGame();
 
-        gameModel.onNotesPlayed(callback, Note.C4);
-        gameModel.onNotesPlayed(callback, Note.E4);
+        gameModel.onNotesPlayed(completionCallback, Note.C4);
+        gameModel.onNotesPlayed(completionCallback, Note.E4);
 
         ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
         verify(onSequenceUpdatedCallback, times(3)).onNext(sequenceCaptor.capture());
@@ -76,8 +76,8 @@ public class GameModelTest {
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
         gameModel.startGame();
 
-        gameModel.onNotesPlayed(callback, Note.D4);
-        gameModel.onNotesPlayed(callback, Note.E4);
+        gameModel.onNotesPlayed(completionCallback, Note.D4);
+        gameModel.onNotesPlayed(completionCallback, Note.E4);
 
         ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
         verify(onSequenceUpdatedCallback, times(3)).onNext(sequenceCaptor.capture());
@@ -90,8 +90,8 @@ public class GameModelTest {
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
         gameModel.startGame();
 
-        gameModel.onNotesPlayed(callback, Note.D4);
-        gameModel.onNotesPlayed(callback, Note.C4);
+        gameModel.onNotesPlayed(completionCallback, Note.D4);
+        gameModel.onNotesPlayed(completionCallback, Note.C4);
 
         ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
         verify(onSequenceUpdatedCallback, times(3)).onNext(sequenceCaptor.capture());
@@ -104,11 +104,11 @@ public class GameModelTest {
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
         gameModel.startGame();
 
-        gameModel.onNotesPlayed(callback, Note.C4);
-        gameModel.onNotesPlayed(callback, Note.D4);
-        gameModel.onNotesPlayed(callback, Note.E4);
+        gameModel.onNotesPlayed(completionCallback, Note.C4);
+        gameModel.onNotesPlayed(completionCallback, Note.D4);
+        gameModel.onNotesPlayed(completionCallback, Note.E4);
 
-        verify(callback).onSequenceComplete();
+        verify(completionCallback).onSequenceComplete();
     }
 
     @Test
@@ -117,11 +117,11 @@ public class GameModelTest {
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
         gameModel.startGame();
 
-        gameModel.onNotesPlayed(callback, Note.C4);
-        gameModel.onNotesPlayed(callback, Note.D4);
-        gameModel.onNotesPlayed(callback, Note.F4);
+        gameModel.onNotesPlayed(completionCallback, Note.C4);
+        gameModel.onNotesPlayed(completionCallback, Note.D4);
+        gameModel.onNotesPlayed(completionCallback, Note.F4);
 
-        verify(callback, never()).onSequenceComplete();
+        verify(completionCallback, never()).onSequenceComplete();
     }
 
     private Sequence make(Note... notes) {

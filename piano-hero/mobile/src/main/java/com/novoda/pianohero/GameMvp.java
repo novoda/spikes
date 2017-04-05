@@ -6,9 +6,9 @@ interface GameMvp {
 
         RoundViewModel startGame();
 
-        RoundViewModel onNotesPlayed(Callback callback, Note... note);
+        RoundViewModel onNotesPlayed(CompletionCallback callback, Note... note);
 
-        interface Callback {
+        interface CompletionCallback {
             void onSequenceComplete();
         }
     }
