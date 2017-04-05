@@ -269,10 +269,8 @@ public class DropCapView extends View {
 
             calculateLinesToSpan();
 
-            if (enoughLinesForDropCap()) {
-                float baseline = dropCapBounds.height() + getPaddingTop();
-                dropCapBaseline = baseline - dropCapBounds.bottom;
-            }
+            float baseline = dropCapBounds.height() + getPaddingTop();
+            dropCapBaseline = baseline - dropCapBounds.bottom;
         }
     }
 
