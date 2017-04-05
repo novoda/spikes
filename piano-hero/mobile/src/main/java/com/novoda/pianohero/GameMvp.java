@@ -6,10 +6,14 @@ interface GameMvp {
 
         void startGame(StartCallback callback);
 
-        RoundViewModel onNotesPlayed(CompletionCallback callback, Note... note);
+        void playGameRound(RoundCallback rCallback, CompletionCallback cCallback, Note... notes);
 
         interface StartCallback {
             void onGameStarted(RoundViewModel viewModel);
+        }
+
+        interface RoundCallback {
+            void onRoundUpdate(RoundViewModel viewModel);
         }
 
         interface CompletionCallback {

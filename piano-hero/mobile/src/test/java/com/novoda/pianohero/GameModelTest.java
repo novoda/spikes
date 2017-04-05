@@ -23,6 +23,9 @@ public class GameModelTest {
     GameMvp.Model.StartCallback startCallback;
 
     @Mock
+    GameMvp.Model.RoundCallback roundCallback;
+
+    @Mock
     GameMvp.Model.CompletionCallback completionCallback;
 
     private GameModel gameModel;
@@ -52,7 +55,7 @@ public class GameModelTest {
 
         gameModel.startGame(startCallback);
 
-        gameModel.onNotesPlayed(completionCallback, Note.C4);
+        gameModel.playGameRound(roundCallback, completionCallback, Note.C4);
 
         ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
         verify(onSequenceUpdatedCallback, times(2)).onNext(sequenceCaptor.capture());
@@ -65,8 +68,8 @@ public class GameModelTest {
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
         gameModel.startGame(startCallback);
 
-        gameModel.onNotesPlayed(completionCallback, Note.C4);
-        gameModel.onNotesPlayed(completionCallback, Note.E4);
+        gameModel.playGameRound(roundCallback, completionCallback, Note.C4);
+        gameModel.playGameRound(roundCallback, completionCallback, Note.E4);
 
         ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
         verify(onSequenceUpdatedCallback, times(3)).onNext(sequenceCaptor.capture());
@@ -79,8 +82,8 @@ public class GameModelTest {
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
         gameModel.startGame(startCallback);
 
-        gameModel.onNotesPlayed(completionCallback, Note.D4);
-        gameModel.onNotesPlayed(completionCallback, Note.E4);
+        gameModel.playGameRound(roundCallback, completionCallback, Note.D4);
+        gameModel.playGameRound(roundCallback, completionCallback, Note.E4);
 
         ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
         verify(onSequenceUpdatedCallback, times(3)).onNext(sequenceCaptor.capture());
@@ -93,8 +96,8 @@ public class GameModelTest {
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
         gameModel.startGame(startCallback);
 
-        gameModel.onNotesPlayed(completionCallback, Note.D4);
-        gameModel.onNotesPlayed(completionCallback, Note.C4);
+        gameModel.playGameRound(roundCallback, completionCallback, Note.D4);
+        gameModel.playGameRound(roundCallback, completionCallback, Note.C4);
 
         ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
         verify(onSequenceUpdatedCallback, times(3)).onNext(sequenceCaptor.capture());
@@ -107,9 +110,9 @@ public class GameModelTest {
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
         gameModel.startGame(startCallback);
 
-        gameModel.onNotesPlayed(completionCallback, Note.C4);
-        gameModel.onNotesPlayed(completionCallback, Note.D4);
-        gameModel.onNotesPlayed(completionCallback, Note.E4);
+        gameModel.playGameRound(roundCallback, completionCallback, Note.C4);
+        gameModel.playGameRound(roundCallback, completionCallback, Note.D4);
+        gameModel.playGameRound(roundCallback, completionCallback, Note.E4);
 
         verify(completionCallback).onGameComplete();
     }
@@ -120,9 +123,9 @@ public class GameModelTest {
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
         gameModel.startGame(startCallback);
 
-        gameModel.onNotesPlayed(completionCallback, Note.C4);
-        gameModel.onNotesPlayed(completionCallback, Note.D4);
-        gameModel.onNotesPlayed(completionCallback, Note.F4);
+        gameModel.playGameRound(roundCallback, completionCallback, Note.C4);
+        gameModel.playGameRound(roundCallback, completionCallback, Note.D4);
+        gameModel.playGameRound(roundCallback, completionCallback, Note.F4);
 
         verify(completionCallback, never()).onGameComplete();
     }

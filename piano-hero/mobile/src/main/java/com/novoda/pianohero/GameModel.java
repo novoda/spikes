@@ -1,7 +1,6 @@
 package com.novoda.pianohero;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,32 +72,29 @@ public class GameModel implements GameMvp.Model {
         }
     }
 
-    @Nullable
     @Override
-    public RoundViewModel onNotesPlayed(CompletionCallback completionCallback, Note... notes) {
-        return onNotesPlayed(new Notes(notes), completionCallback);
+    public void playGameRound(
+        RoundCallback roundCallback,
+        CompletionCallback completionCallback,
+        Note... notesCollection) {
+        Notes notes = new Notes(notesCollection);
+        playGameRound(roundCallback, completionCallback, notes);
     }
 
-    @Nullable
-    private RoundViewModel onNotesPlayed(Notes notes, CompletionCallback completionCallback) {
-        if (notes.count() == 0) {
-            completionCallback.onGameComplete();
-            return null;
-        }
-
+    private void playGameRound(RoundCallback roundCallback, CompletionCallback completionCallback, Notes notes) {
         int currentPosition = sequence.position();
         Notes expectedNotes = sequence.get(currentPosition);
         if (currentPosition == sequence.length() - 1 && notes.equals(expectedNotes)) {
             completionCallback.onGameComplete();
-            return null; // TODO we should separate the querying of complete, so that null return is no necessary
+            return;
         }
 
         if (notes.equals(expectedNotes)) {
             this.sequence = new Sequence.Builder(sequence).atPosition(currentPosition + 1).build();
-            return createViewModel(sequence);
+            roundCallback.onRoundUpdate(createViewModel(sequence));
         } else {
             Sequence updatedSequence = new Sequence.Builder(sequence).withLatestError(notes).build();
-            return createViewModel(updatedSequence);
+            roundCallback.onRoundUpdate(createViewModel(updatedSequence));
         }
     }
 
