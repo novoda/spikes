@@ -382,7 +382,7 @@ public class DropCapView extends View {
             int baseline = dropCapStaticLayout.getLineBaseline(i) + getPaddingTop();
 
             if (i == 0) {
-                lineStart = lineStart + 1;
+                lineStart = lineStart + dropCapText.length();
             }
 
             canvas.drawText(
