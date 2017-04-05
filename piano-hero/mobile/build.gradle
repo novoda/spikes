@@ -31,5 +31,10 @@ android {
 
 dependencies {
     compile project(':core')
+    compile libraries.percent
     compile libraries.supportAppCompatV7
+
+    testCompile libraries.jUnit
+    testCompile libraries.festAssertCore
+    testCompile libraries.mockitoCore
 }
