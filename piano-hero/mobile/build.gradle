@@ -34,6 +34,8 @@ dependencies {
     compile libraries.percent
     compile libraries.supportAppCompatV7
 
+    provided 'com.google.android.things:androidthings:0.3-devpreview'
+
     testCompile libraries.jUnit
     testCompile libraries.festAssertCore
     testCompile libraries.mockitoCore
