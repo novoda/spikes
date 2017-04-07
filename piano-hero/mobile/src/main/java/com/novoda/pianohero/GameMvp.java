@@ -25,7 +25,7 @@ interface GameMvp {
 
         void showRound(RoundViewModel viewModel);
 
-        void showGameComplete();
+        void showGameComplete(GameOverViewModel viewModel);
     }
 
     interface Presenter {
