@@ -1,4 +1,4 @@
-# espresso-support
+# espresso-support [![Download](https://api.bintray.com/packages/novoda/maven/espresso-support/images/download.svg)](https://bintray.com/novoda/maven/espresso-support/_latestVersion) [![License](https://raw.githubusercontent.com/novoda/novoda/master/assets/btn_apache_lisence.png)](LICENSE.txt)
 
 Includes custom rules for testing Views in isolation and running tests with Google TalkBack enabled.
 
