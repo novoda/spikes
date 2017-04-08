@@ -11,18 +11,11 @@ The `extras` dependency adds some components to your app (hence it's not `androi
 
 ## Usage
 
-The artifacts are not yet available on JCenter. Until then, you can add the Novoda bintray repo:
+The artifacts are available on JCenter:
 
 ```
-maven {
-    url 'http://dl.bintray.com/novoda/maven'
-}
-
-...
-
-
-debugCompile 'com.novoda:espresso-support-extras:0.0.1'
-androidTestCompile 'com.novoda:espresso-support:0.0.1'
+debugCompile 'com.novoda:espresso-support-extras:<latest-version>'
+androidTestCompile 'com.novoda:espresso-support:<latest-version>'
 ```
 
 ## Testing views in isolation
