@@ -34,7 +34,7 @@ class GamePresenter implements GameMvp.Presenter {
             new GameMvp.Model.CompletionCallback() {
                 @Override
                 public void onGameComplete() {
-                    view.showGameComplete();
+                    view.showGameComplete(new GameOverViewModel("game complete, another!"));
                     gameModel.startGame(andInformView);
                 }
             },
