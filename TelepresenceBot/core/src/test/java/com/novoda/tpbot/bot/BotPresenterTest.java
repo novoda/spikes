@@ -34,7 +34,7 @@ public class BotPresenterTest {
 
     @Before
     public void setUp() throws Exception {
-        presenter = new BotPresenter(tpService, botView);
+        presenter = new BotPresenter(tpService, botView, );
 
         when(tpService.listen()).thenReturn(Observable.just(DIRECTION));
     }
