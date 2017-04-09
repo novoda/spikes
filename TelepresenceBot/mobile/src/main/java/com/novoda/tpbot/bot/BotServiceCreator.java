@@ -6,16 +6,21 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 
-public class BotServiceCreator {
+class BotServiceCreator {
 
     private final Context context;
     private final BotView botView;
     private final String serverAddress;
 
-    public BotServiceCreator(Context context, BotView botView, String serverAddress) {
+    BotServiceCreator(Context context, BotView botView, String serverAddress) {
         this.context = context;
         this.botView = botView;
         this.serverAddress = serverAddress;
+    }
+
+    void create() {
+        Intent botServiceIntent = new Intent(context, BotService.class);
+        context.bindService(botServiceIntent, botServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     private final ServiceConnection botServiceConnection = new ServiceConnection() {
@@ -34,12 +39,7 @@ public class BotServiceCreator {
         }
     };
 
-    public void create() {
-        Intent botServiceIntent = new Intent(context, BotService.class);
-        context.bindService(botServiceIntent, botServiceConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    public void destroy() {
+    void destroy() {
         context.unbindService(botServiceConnection);
         context.stopService(new Intent(context, BotService.class));
     }
