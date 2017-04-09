@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.util.Log;
 
 public class BotServiceCreator {
 
@@ -27,7 +26,6 @@ public class BotServiceCreator {
             BotPresenter botPresenter = new BotPresenter(SocketIOTelepresenceService.getInstance(), botView, serverAddress);
             binder.setBotPresenter(botPresenter);
             binder.onDependenciesBound();
-            Log.e(getClass().getSimpleName(), "onServiceConnected");
         }
 
         @Override

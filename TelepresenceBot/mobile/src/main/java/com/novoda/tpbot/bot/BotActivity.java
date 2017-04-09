@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -105,7 +104,6 @@ public class BotActivity extends AppCompatActivity implements BotView {
             debugView.showPermanently(getString(R.string.connecting_ellipsis));
             botServiceCreator = new BotServiceCreator(getApplicationContext(), BotActivity.this, serverAddress);
             botServiceCreator.create();
-            Log.e(getClass().getSimpleName(), "onConnect()");
         }
     };
 
