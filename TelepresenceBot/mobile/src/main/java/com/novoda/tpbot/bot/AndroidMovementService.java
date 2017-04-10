@@ -23,11 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AndroidMovementService extends Service {
+public class AndroidMovementService extends Service implements MovementService {
 
+    static final String ACTION_USB_PERMISSION = "com.novoda.tpbot.USB_PERMISSION";
     private static final String SERIAL_TAG = "SERIAL";
 
-    private static final String ACTION_USB_PERMISSION = "com.novoda.tpbot.USB_PERMISSION";
     private static final List<Integer> SUPPORTED_VENDOR_IDS = Arrays.asList(9025, 10755, 4292); // TODO: read from devices_filter.xml
 
     private UsbDevice device;
@@ -59,7 +59,7 @@ public class AndroidMovementService extends Service {
         return START_STICKY;
     }
 
-    public void startConnection() {
+    private void startConnection() {
         if (isSerialStarted) {
             return;
         }
@@ -95,33 +95,33 @@ public class AndroidMovementService extends Service {
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            MovementServiceIntentHandler intentHandler = new MovementServiceIntentHandler(this);
-
-            if (intent.getAction().equals(ACTION_USB_PERMISSION)) {
-                boolean permissionGranted = intent.getExtras().getBoolean(UsbManager.EXTRA_PERMISSION_GRANTED);
-                if (permissionGranted) {
-                    setupSerialPort();
-                } else {
-                    Log.d(SERIAL_TAG, "Permission not granted");
-                    toaster.popToast("Permission not granted");
-                }
-            } else if (intent.getAction().equals(UsbManager.ACTION_USB_DEVICE_ATTACHED)) {
-                toaster.popToast("Device connected");
-                startConnection();
-            } else if (intent.getAction().equals(UsbManager.ACTION_USB_DEVICE_DETACHED)) {
-                Log.d(SERIAL_TAG, "USB device detached");
-                toaster.popToast("USB device detached");
-                closeConnection();
-            }
+            MovementServiceIntentHandler.IntentHandler intentHandler = MovementServiceIntentHandler.get(intent.getAction());
+            intentHandler.handle(intent, AndroidMovementService.this);
         }
     };
 
-    private interface MovementServiceFoo {
-        void setupSerialPort();
+    @Override
+    public void onPermissionGranted() {
+        setupSerialPort();
+    }
 
-        void startConnection();
+    @Override
+    public void onPermissionDenied() {
+        Log.d(SERIAL_TAG, "Permission not granted");
+        toaster.popToast("Permission not granted");
+    }
 
-        void closeConnection();
+    @Override
+    public void onDeviceAttached() {
+        toaster.popToast("Device connected");
+        startConnection();
+    }
+
+    @Override
+    public void onDeviceDetached() {
+        Log.d(SERIAL_TAG, "USB device detached");
+        toaster.popToast("USB device detached");
+        closeConnection();
     }
 
     private void setupSerialPort() {
@@ -202,14 +202,14 @@ public class AndroidMovementService extends Service {
         isSerialStarted = false;
     }
 
-    public static class Binder extends android.os.Binder {
+    static class Binder extends android.os.Binder {
         private final AndroidMovementService service;
 
         Binder(AndroidMovementService service) {
             this.service = service;
         }
 
-        public AndroidMovementService getService() {
+        AndroidMovementService getService() {
             return service;
         }
     }
