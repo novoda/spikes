@@ -82,6 +82,7 @@ public class MovementService extends Service {
             }
         }
         if (!supportedDeviceFound) {
+            Log.e(SERIAL_TAG, "Device is not in list of supported devices. See SUPPORTED_VENDOR_IDS");
             connection = null;
             device = null;
         }
