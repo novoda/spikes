@@ -47,15 +47,25 @@ public class AndroidMovementService extends Service implements MovementService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        createBroadcastReceiver();
+        startConnection();
+        return START_STICKY;
+    }
+
+    private void createBroadcastReceiver() {
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         registerReceiver(broadcastReceiver, filter);
-
-        startConnection();
-
-        return START_STICKY;
     }
+
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            MovementServiceIntentHandler.IntentHandler intentHandler = MovementServiceIntentHandler.get(intent.getAction());
+            intentHandler.handle(intent, AndroidMovementService.this);
+        }
+    };
 
     private void startConnection() {
         if (isSerialStarted) {
@@ -90,14 +100,6 @@ public class AndroidMovementService extends Service implements MovementService {
     private boolean isSupportedDeviceID(int deviceVID) {
         return SUPPORTED_VENDOR_IDS.contains(deviceVID);
     }
-
-    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            MovementServiceIntentHandler.IntentHandler intentHandler = MovementServiceIntentHandler.get(intent.getAction());
-            intentHandler.handle(intent, AndroidMovementService.this);
-        }
-    };
 
     @Override
     public void onPermissionGranted() {
