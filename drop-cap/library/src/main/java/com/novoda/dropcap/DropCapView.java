@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
+import android.support.annotation.Nullable;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -104,7 +105,7 @@ public class DropCapView extends View {
         setText(text);
     }
 
-    public void setText(String text) {
+    public void setText(@Nullable String text) {
         if (enoughTextForDropCap(text)) {
             dropCapText = String.valueOf(text.substring(0, numberOfDropCaps));
             copyText = String.valueOf(text.subSequence(dropCapText.length(), text.length()));
@@ -120,7 +121,7 @@ public class DropCapView extends View {
         return text != null && text.length() > numberOfDropCaps;
     }
 
-    public void setDropCapFontType(String fontPath) {
+    public void setDropCapFontType(@Nullable String fontPath) {
         Typeface typeface = typefaceFactory.createFrom(getContext(), fontPath);
         if (dropCapPaint.getTypeface() == typeface) {
             return;
@@ -142,7 +143,7 @@ public class DropCapView extends View {
         }
     }
 
-    public void setCopyFontType(String fontPath) {
+    public void setCopyFontType(@Nullable String fontPath) {
         Typeface typeface = typefaceFactory.createFrom(getContext(), fontPath);
         if (copyTextPaint.getTypeface() == typeface) {
             return;
