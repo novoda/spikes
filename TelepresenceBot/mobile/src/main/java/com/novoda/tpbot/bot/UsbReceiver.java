@@ -8,7 +8,7 @@ import android.hardware.usb.UsbManager;
 public class UsbReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent movementService = new Intent(context.getApplicationContext(), MovementService.class);
+        Intent movementService = new Intent(context.getApplicationContext(), AndroidMovementService.class);
         if (usbConnected(intent)) {
             context.startService(movementService);
         } else if (usbDisconnected(intent)) {

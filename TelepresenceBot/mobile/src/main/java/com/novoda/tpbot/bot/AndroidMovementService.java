@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MovementService extends Service {
+public class AndroidMovementService extends Service {
 
     private static final String SERIAL_TAG = "SERIAL";
 
@@ -42,8 +42,8 @@ public class MovementService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        toaster = Toaster.newInstance(MovementService.this);
-        toaster.popToast(MovementService.class.getSimpleName() + " started");
+        toaster = Toaster.newInstance(AndroidMovementService.this);
+        toaster.popToast(AndroidMovementService.class.getSimpleName() + " started");
     }
 
     @Override
@@ -95,6 +95,8 @@ public class MovementService extends Service {
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            MovementServiceIntentHandler intentHandler = new MovementServiceIntentHandler(this);
+
             if (intent.getAction().equals(ACTION_USB_PERMISSION)) {
                 boolean permissionGranted = intent.getExtras().getBoolean(UsbManager.EXTRA_PERMISSION_GRANTED);
                 if (permissionGranted) {
@@ -113,6 +115,14 @@ public class MovementService extends Service {
             }
         }
     };
+
+    private interface MovementServiceFoo {
+        void setupSerialPort();
+
+        void startConnection();
+
+        void closeConnection();
+    }
 
     private void setupSerialPort() {
         connection = usbManager.openDevice(device);
@@ -193,13 +203,13 @@ public class MovementService extends Service {
     }
 
     public static class Binder extends android.os.Binder {
-        private final MovementService service;
+        private final AndroidMovementService service;
 
-        Binder(MovementService service) {
+        Binder(AndroidMovementService service) {
             this.service = service;
         }
 
-        public MovementService getService() {
+        public AndroidMovementService getService() {
             return service;
         }
     }
