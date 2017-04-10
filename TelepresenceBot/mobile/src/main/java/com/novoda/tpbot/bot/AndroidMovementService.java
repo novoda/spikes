@@ -35,7 +35,6 @@ public class AndroidMovementService extends Service implements MovementService {
     private UsbManager usbManager;
     private UsbSerialDevice serialPort;
     private boolean isSerialStarted;
-    private PendingIntent pendingIntent;
 
     private Toaster toaster;
 
@@ -48,7 +47,6 @@ public class AndroidMovementService extends Service implements MovementService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
@@ -76,6 +74,7 @@ public class AndroidMovementService extends Service implements MovementService {
             int deviceVID = device.getVendorId();
 
             if (isSupportedDeviceID(deviceVID)) {
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
                 usbManager.requestPermission(device, pendingIntent);
                 supportedDeviceFound = true;
                 break;
