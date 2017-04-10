@@ -2,7 +2,8 @@ package com.novoda.tpbot.bot;
 
 import android.content.Intent;
 import android.hardware.usb.UsbManager;
-import android.util.Log;
+
+import com.novoda.notils.exception.DeveloperError;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +46,7 @@ class MovementServiceIntentHandler {
         if (actionMap.containsKey(action)) {
             return actionMap.get(action);
         } else {
-            return new LoggingIntentHelper();
+            throw new DeveloperError("No associated " + IntentHandler.class.getSimpleName() + " for action: " + action);
         }
     }
 
@@ -53,11 +54,4 @@ class MovementServiceIntentHandler {
         void handle(Intent intent, MovementService movementService);
     }
 
-    private static class LoggingIntentHelper implements IntentHandler {
-
-        @Override
-        public void handle(Intent intent, MovementService movementService) {
-            Log.d(getClass().getSimpleName(), "No associated " + IntentHandler.class.getSimpleName() + " for action: " + intent.getAction());
-        }
-    }
 }
