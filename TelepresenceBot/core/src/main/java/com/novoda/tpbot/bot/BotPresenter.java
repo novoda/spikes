@@ -11,16 +11,18 @@ class BotPresenter {
 
     private final BotTelepresenceService tpService;
     private final BotView botView;
+    private final String serverAddress;
 
     private Observable<Result> connectionObservable;
     private Observable<Direction> directionObservable;
 
-    BotPresenter(BotTelepresenceService tpService, BotView botView) {
+    BotPresenter(BotTelepresenceService tpService, BotView botView, String serverAddress) {
         this.tpService = tpService;
         this.botView = botView;
+        this.serverAddress = serverAddress;
     }
 
-    void startPresenting(String serverAddress) {
+    void startPresenting() {
         connectionObservable = tpService.connectTo(serverAddress)
                 .attach(new ConnectionObserver())
                 .start();

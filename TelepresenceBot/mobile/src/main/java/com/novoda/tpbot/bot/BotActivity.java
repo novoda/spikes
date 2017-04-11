@@ -42,8 +42,8 @@ public class BotActivity extends AppCompatActivity implements BotView {
     private MovementService movementService;
     private boolean boundToMovementService;
     private CommandRepeater commandRepeater;
-    private BotPresenter presenter;
     private AutomationChecker automationChecker;
+    private BotServiceCreator botServiceCreator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +52,6 @@ public class BotActivity extends AppCompatActivity implements BotView {
 
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
         switchableView = Views.findById(this, R.id.bot_switchable_view);
-
-        presenter = new BotPresenter(SocketIOTelepresenceService.getInstance(), this);
 
         ControllerView controllerView = Views.findById(this, R.id.bot_controller_direction_view);
         controllerView.setControllerListener(controllerListener);
@@ -100,10 +98,12 @@ public class BotActivity extends AppCompatActivity implements BotView {
     };
 
     private final ServerDeclarationListener serverDeclarationListener = new ServerDeclarationListener() {
+
         @Override
         public void onConnect(String serverAddress) {
             debugView.showPermanently(getString(R.string.connecting_ellipsis));
-            presenter.startPresenting(serverAddress);
+            botServiceCreator = new BotServiceCreator(getApplicationContext(), BotActivity.this, serverAddress);
+            botServiceCreator.create();
         }
     };
 
@@ -174,8 +174,13 @@ public class BotActivity extends AppCompatActivity implements BotView {
             unbindService(serviceConnection);
             boundToMovementService = false;
         }
-        presenter.stopPresenting();
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        botServiceCreator.destroy();
+        super.onDestroy();
     }
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
