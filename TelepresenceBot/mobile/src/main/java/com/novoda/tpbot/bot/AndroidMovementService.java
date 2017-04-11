@@ -7,40 +7,34 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
-import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import com.felhr.usbserial.UsbSerialDevice;
 import com.novoda.notils.logger.simple.Log;
 import com.novoda.notils.logger.toast.Toaster;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.novoda.support.Optional;
 
 public class AndroidMovementService extends Service implements MovementService {
 
     static final String ACTION_USB_PERMISSION = "com.novoda.tpbot.USB_PERMISSION";
-    private static final String SERIAL_TAG = "SERIAL";
-
-    private static final List<Integer> SUPPORTED_VENDOR_IDS = Arrays.asList(9025, 10755, 4292); // TODO: read from devices_filter.xml
-
-    private UsbDevice device;
-    private UsbDeviceConnection connection;
-    private UsbSerialDevice serialPort;
-    private SerialPortMonitor serialPortMonitor;
-    private boolean isSerialStarted;
 
     private Toaster toaster;
+    private UsbManager usbManager;
+    private SupportedDeviceRetriever supportedDeviceRetriever;
+    private SerialPortMonitor serialPortMonitor;
+
+    private Optional<UsbDevice> supportedUsbDevice = Optional.absent();
 
     @Override
     public void onCreate() {
         super.onCreate();
         toaster = Toaster.newInstance(AndroidMovementService.this);
         toaster.popToast(AndroidMovementService.class.getSimpleName() + " started");
+
+        usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
+        supportedDeviceRetriever = new SupportedDeviceRetriever(usbManager);
+        serialPortMonitor = new SerialPortMonitor(usbManager, dataReceiver);
     }
 
     @Override
@@ -66,34 +60,17 @@ public class AndroidMovementService extends Service implements MovementService {
     };
 
     private void startConnection() {
-        if (isSerialStarted) {
+        if (supportedUsbDevice.isPresent()) {
             return;
         }
 
-        UsbManager usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
-        HashMap<String, UsbDevice> usbDevices = usbManager.getDeviceList();
-        serialPortMonitor = new SerialPortMonitor(usbManager, dataReceiver);
+        supportedUsbDevice = supportedDeviceRetriever.retrieveFirstSupportedUsbDevice();
 
-        if (usbDevices.isEmpty()) {
-            return;
-        }
-
-        boolean supportedDeviceFound = false;
-        for (Map.Entry<String, UsbDevice> entry : usbDevices.entrySet()) {
-            device = entry.getValue();
-            int deviceVID = device.getVendorId();
-
-            if (isSupportedDeviceID(deviceVID)) {
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
-                usbManager.requestPermission(device, pendingIntent);
-                supportedDeviceFound = true;
-                break;
-            }
-        }
-        if (!supportedDeviceFound) {
-            Log.e(SERIAL_TAG, "Device is not in list of supported devices. See SUPPORTED_VENDOR_IDS");
-            connection = null;
-            device = null;
+        if (supportedUsbDevice.isPresent()) {
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
+            usbManager.requestPermission(supportedUsbDevice.get(), pendingIntent);
+        } else {
+            Log.d(getClass().getSimpleName(), "Could not find a supported Usb device.");
         }
     }
 
@@ -104,18 +81,14 @@ public class AndroidMovementService extends Service implements MovementService {
         }
     };
 
-    private boolean isSupportedDeviceID(int deviceVID) {
-        return SUPPORTED_VENDOR_IDS.contains(deviceVID);
-    }
-
     @Override
     public void onPermissionGranted() {
-        serialPortMonitor.tryToMonitorSerialPortFor(device);
+        serialPortMonitor.tryToMonitorSerialPortFor(supportedUsbDevice.get());
     }
 
     @Override
     public void onPermissionDenied() {
-        Log.d(SERIAL_TAG, "Permission not granted");
+        Log.d(getClass().getSimpleName(), "Permission not granted");
         toaster.popToast("Permission not granted");
     }
 
@@ -127,7 +100,7 @@ public class AndroidMovementService extends Service implements MovementService {
 
     @Override
     public void onDeviceDetached() {
-        Log.d(SERIAL_TAG, "USB device detached");
+        Log.d(getClass().getSimpleName(), "USB device detached");
         toaster.popToast("USB device detached");
         closeConnection();
     }
@@ -139,13 +112,7 @@ public class AndroidMovementService extends Service implements MovementService {
     }
 
     public void sendCommand(String command) {
-        if (serialPort != null) {
-            serialPort.write(command.getBytes());
-        } else {
-            Log.d(SERIAL_TAG, "Serial not connected for command " + command);
-            toaster.popToast("Serial not connected for command " + command);
-            // TODO forward to the human part
-        }
+        serialPortMonitor.trySendCommand(command);
     }
 
     @Override
@@ -160,15 +127,7 @@ public class AndroidMovementService extends Service implements MovementService {
     }
 
     private void closeConnection() {
-        if (serialPort != null) {
-            serialPort.close();
-            serialPort = null;
-        }
-        if (connection != null) {
-            connection.close();
-            connection = null;
-        }
-        isSerialStarted = false;
+        serialPortMonitor.stopMonitoring();
     }
 
     static class Binder extends android.os.Binder {

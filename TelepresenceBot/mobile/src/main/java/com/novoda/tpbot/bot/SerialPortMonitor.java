@@ -16,6 +16,9 @@ class SerialPortMonitor {
     private final UsbManager usbManager;
     private final DataReceiver dataReceiver;
 
+    private UsbSerialDevice serialPort;
+    private UsbDeviceConnection deviceConnection;
+
     SerialPortMonitor(UsbManager usbManager, DataReceiver dataReceiver) {
         this.usbManager = usbManager;
         this.dataReceiver = dataReceiver;
@@ -27,8 +30,8 @@ class SerialPortMonitor {
             return false;
         }
 
-        UsbDeviceConnection deviceConnection = usbManager.openDevice(usbDevice);
-        UsbSerialDevice serialPort = UsbSerialDevice.createUsbSerialDevice(usbDevice, deviceConnection);
+        deviceConnection = usbManager.openDevice(usbDevice);
+        serialPort = UsbSerialDevice.createUsbSerialDevice(usbDevice, deviceConnection);
 
         if (serialPort.open()) {
             serialPort.setBaudRate(9600);
@@ -47,7 +50,7 @@ class SerialPortMonitor {
     private UsbSerialInterface.UsbReadCallback onDataReceivedListener = new UsbSerialInterface.UsbReadCallback() {
         @Override
         public void onReceivedData(byte[] arg0) {
-            String data = null;
+            String data;
             try {
                 data = new String(arg0, "UTF-8");
                 dataReceiver.onReceive(data);
@@ -57,7 +60,29 @@ class SerialPortMonitor {
         }
     };
 
-    public interface DataReceiver {
+    void stopMonitoring() {
+        if (serialPort != null) {
+            serialPort.close();
+            serialPort = null;
+        }
+
+        if (deviceConnection != null) {
+            deviceConnection.close();
+            deviceConnection = null;
+        }
+    }
+
+    boolean trySendCommand(String command) {
+        if (serialPort == null) {
+            Log.d(getClass().getSimpleName(), "Not connected to SerialPort, unable to send command: " + command);
+            return false;
+        }
+
+        serialPort.write(command.getBytes());
+        return true;
+    }
+
+    interface DataReceiver {
         void onReceive(String data);
     }
 
