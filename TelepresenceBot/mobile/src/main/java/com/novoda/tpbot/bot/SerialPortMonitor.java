@@ -60,6 +60,16 @@ class SerialPortMonitor {
         }
     };
 
+    boolean trySendCommand(String command) {
+        if (serialPort == null) {
+            Log.d(getClass().getSimpleName(), "Not connected to SerialPort, unable to send command: " + command);
+            return false;
+        }
+
+        serialPort.write(command.getBytes());
+        return true;
+    }
+
     void stopMonitoring() {
         if (serialPort != null) {
             serialPort.close();
@@ -70,16 +80,6 @@ class SerialPortMonitor {
             deviceConnection.close();
             deviceConnection = null;
         }
-    }
-
-    boolean trySendCommand(String command) {
-        if (serialPort == null) {
-            Log.d(getClass().getSimpleName(), "Not connected to SerialPort, unable to send command: " + command);
-            return false;
-        }
-
-        serialPort.write(command.getBytes());
-        return true;
     }
 
     interface DataReceiver {
