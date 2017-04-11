@@ -3,6 +3,7 @@
   <string name="fragment_tag_text_size">text_size_fragment</string>
   <string name="fragment_tag_text_color">text_color_fragment</string>
   <string name="fragment_tag_typeface">typeface_fragment</string>
+  <string name="fragment_tag_drop_cap_number">drop_cap_number_fragment</string>
 
   <string name="fragment_cancel">Cancel</string>
   <string name="fragment_set">Set</string>

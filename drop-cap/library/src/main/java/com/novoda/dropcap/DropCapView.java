@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
+import android.support.annotation.Nullable;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -27,17 +28,20 @@ public class DropCapView extends View {
     private final float spacer;
 
     private Layout copyStaticLayout;
-    private Layout dropCapStaticLayout;
+    private Layout dropCapCopyStaticLayout;
 
     private String dropCapText;
     private String copyText;
 
+    private int numberOfDropCaps;
     private int lineSpacingExtra;
     private int numberOfLinesToSpan;
     private int dropCapWidth;
     private int dropCapLineHeight;
     private float dropCapBaseline;
     private float distanceFromViewPortTop;
+
+    private boolean canDrawDropCap;
 
     public DropCapView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -63,6 +67,9 @@ public class DropCapView extends View {
 
             String copyFontPath = typedArray.getString(R.styleable.DropCapView_copyFontPath);
             setCopyFontType(copyFontPath);
+
+            int defaultNumberOfDropCaps = 1;
+            numberOfDropCaps = typedArray.getInt(R.styleable.DropCapView_numberOfDropCaps, defaultNumberOfDropCaps);
 
             int defaultLineSpacingExtra = 0;
             lineSpacingExtra = typedArray.getDimensionPixelSize(R.styleable.DropCapView_lineSpacingExtra, defaultLineSpacingExtra);
@@ -91,7 +98,30 @@ public class DropCapView extends View {
         }
     }
 
-    public void setDropCapFontType(String fontPath) {
+    public void setNumberOfDropCaps(int numberOfDropCaps) {
+        this.numberOfDropCaps = numberOfDropCaps;
+
+        String text = dropCapText + copyText;
+        setText(text);
+    }
+
+    public void setText(@Nullable String text) {
+        if (enoughTextForDropCap(text)) {
+            dropCapText = String.valueOf(text.substring(0, numberOfDropCaps));
+            copyText = String.valueOf(text.subSequence(dropCapText.length(), text.length()));
+        } else {
+            dropCapText = String.valueOf('\0');
+            copyText = (text == null) ? "" : text;
+        }
+
+        remeasureAndRedraw();
+    }
+
+    private boolean enoughTextForDropCap(String text) {
+        return text != null && text.length() > numberOfDropCaps;
+    }
+
+    public void setDropCapFontType(@Nullable String fontPath) {
         Typeface typeface = typefaceFactory.createFrom(getContext(), fontPath);
         if (dropCapPaint.getTypeface() == typeface) {
             return;
@@ -105,15 +135,15 @@ public class DropCapView extends View {
     }
 
     private void remeasureAndRedraw() {
-        if (dropCapStaticLayout != null || copyStaticLayout != null) {
+        if (dropCapCopyStaticLayout != null || copyStaticLayout != null) {
             copyStaticLayout = null;
-            dropCapStaticLayout = null;
+            dropCapCopyStaticLayout = null;
             requestLayout();
             invalidate();
         }
     }
 
-    public void setCopyFontType(String fontPath) {
+    public void setCopyFontType(@Nullable String fontPath) {
         Typeface typeface = typefaceFactory.createFrom(getContext(), fontPath);
         if (copyTextPaint.getTypeface() == typeface) {
             return;
@@ -202,30 +232,6 @@ public class DropCapView extends View {
         return copyTextPaint.getColor();
     }
 
-    public void setText(String text) {
-        if (isSameText(text)) {
-            return;
-        }
-
-        if (enoughTextForDropCap(text)) {
-            dropCapText = String.valueOf(text.charAt(0));
-            copyText = String.valueOf(text.subSequence(1, text.length()));
-        } else {
-            dropCapText = String.valueOf('\0');
-            copyText = (text == null) ? "" : text;
-        }
-
-        remeasureAndRedraw();
-    }
-
-    private boolean isSameText(String text) {
-        return text != null && text.equals(dropCapText + copyText);
-    }
-
-    private boolean enoughTextForDropCap(CharSequence text) {
-        return text != null && text.length() > 1;
-    }
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int totalWidth = MeasureSpec.getSize(widthMeasureSpec);
@@ -234,7 +240,7 @@ public class DropCapView extends View {
 
         measureDropCapFor(widthWithoutPadding);
 
-        if (enoughLinesForDropCap()) {
+        if (canDrawDropCap) {
             measureRemainingCopyFor(totalWidth);
         } else {
             measureWholeTextFor(totalWidth);
@@ -246,16 +252,16 @@ public class DropCapView extends View {
         super.onMeasure(widthMeasureSpec, desiredHeightMeasureSpec);
     }
 
-    private void measureDropCapFor(int width) {
-        dropCapWidth = (int) (dropCapPaint.measureText(dropCapText, 0, 1) + spacer);
-        dropCapPaint.getTextBounds(dropCapText, 0, 1, dropCapBounds);
-        int copyWidthForDropCap = width - dropCapWidth;
+    private void measureDropCapFor(int totalWidth) {
+        dropCapWidth = (int) (dropCapPaint.measureText(dropCapText, 0, dropCapText.length()) + spacer);
+        dropCapPaint.getTextBounds(dropCapText, 0, dropCapText.length(), dropCapBounds);
+        int remainingWidthAfterDropCap = totalWidth - dropCapWidth;
 
-        if (dropCapStaticLayout == null || dropCapStaticLayout.getWidth() != copyWidthForDropCap) {
-            dropCapStaticLayout = new StaticLayout(
-                    dropCapText + copyText,
+        if (dropCapCopyStaticLayout == null || dropCapCopyStaticLayout.getWidth() != remainingWidthAfterDropCap) {
+            dropCapCopyStaticLayout = new StaticLayout(
+                    copyText,
                     copyTextPaint,
-                    copyWidthForDropCap,
+                    remainingWidthAfterDropCap,
                     Layout.Alignment.ALIGN_NORMAL,
                     SPACING_MULTIPLIER,
                     lineSpacingExtra,
@@ -263,11 +269,9 @@ public class DropCapView extends View {
             );
 
             calculateLinesToSpan();
+            calculateDropCapBaseline();
 
-            if (enoughLinesForDropCap()) {
-                float baseline = dropCapBounds.height() + getPaddingTop();
-                dropCapBaseline = baseline - dropCapBounds.bottom;
-            }
+            canDrawDropCap = enoughLinesToWrapDropCap() && dropCapCopyFitsWithin(totalWidth);
         }
     }
 
@@ -275,20 +279,34 @@ public class DropCapView extends View {
         int currentLineTop = 0;
         numberOfLinesToSpan = 0;
 
-        for (int i = 0; i < dropCapStaticLayout.getLineCount(); i++) {
-            currentLineTop = dropCapStaticLayout.getLineTop(i);
+        for (int i = 0; i < dropCapCopyStaticLayout.getLineCount(); i++) {
+            currentLineTop = dropCapCopyStaticLayout.getLineTop(i);
             if (currentLineTop >= dropCapBounds.height()) {
                 numberOfLinesToSpan = i;
-                i = dropCapStaticLayout.getLineCount();
+                i = dropCapCopyStaticLayout.getLineCount();
             }
         }
         dropCapLineHeight = currentLineTop;
     }
 
+    private void calculateDropCapBaseline() {
+        float baseline = dropCapBounds.height() + getPaddingTop();
+        dropCapBaseline = baseline - dropCapBounds.bottom;
+    }
+
+    private boolean enoughLinesToWrapDropCap() {
+        return dropCapCopyStaticLayout.getLineCount() > numberOfLinesToSpan && numberOfLinesToSpan > 0;
+    }
+
+    private boolean dropCapCopyFitsWithin(int totalWidth) {
+        float dropCapAndCopyWidth = dropCapCopyStaticLayout.getLineRight(0) + dropCapWidth;
+        return dropCapCopyStaticLayout.getLineCount() > 0 && dropCapAndCopyWidth < totalWidth;
+    }
+
     private void measureRemainingCopyFor(int totalWidth) {
-        int lineStart = dropCapStaticLayout.getLineEnd(numberOfLinesToSpan - 1);
-        int lineEnd = dropCapStaticLayout.getText().length();
-        String remainingText = String.valueOf(dropCapStaticLayout.getText().subSequence(lineStart, lineEnd));
+        int lineStart = dropCapCopyStaticLayout.getLineEnd(numberOfLinesToSpanAsZeroIndex());
+        int lineEnd = dropCapCopyStaticLayout.getText().length();
+        String remainingText = String.valueOf(dropCapCopyStaticLayout.getText().subSequence(lineStart, lineEnd));
 
         if (copyStaticLayout == null || copyStaticLayout.getWidth() != totalWidth || !remainingText.equals(copyStaticLayout.getText())) {
             copyStaticLayout = new StaticLayout(
@@ -305,6 +323,10 @@ public class DropCapView extends View {
         }
     }
 
+    private int numberOfLinesToSpanAsZeroIndex() {
+        return numberOfLinesToSpan - 1;
+    }
+
     private void measureWholeTextFor(int totalWidth) {
         if (copyStaticLayout == null || copyStaticLayout.getWidth() != totalWidth) {
             copyStaticLayout = new StaticLayout(
@@ -319,10 +341,6 @@ public class DropCapView extends View {
         }
     }
 
-    private boolean enoughLinesForDropCap() {
-        return dropCapStaticLayout.getLineCount() > numberOfLinesToSpan && numberOfLinesToSpan > 0;
-    }
-
     private float calculateCopyDistanceFromViewPortTop() {
         copyTextPaint.getTextBounds("d", 0, 1, characterBounds);
         float dHeight = characterBounds.height();
@@ -332,13 +350,43 @@ public class DropCapView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (enoughLinesForDropCap()) {
+        if (canDrawDropCap) {
             drawDropCap(canvas);
-            drawCopyForDropCap(canvas);
+            drawCopyWrappingDropCap(canvas);
             drawRemainingCopy(canvas);
         } else {
             drawCopyWithoutDropCap(canvas);
         }
+    }
+
+    private void drawDropCap(Canvas canvas) {
+        float dropCapBaselineFromCopyTop = dropCapBaseline + distanceFromViewPortTop;
+        canvas.drawText(dropCapText, 0, dropCapText.length(), getPaddingLeft(), dropCapBaselineFromCopyTop, dropCapPaint);
+    }
+
+    private void drawCopyWrappingDropCap(Canvas canvas) {
+        for (int i = 0; i < numberOfLinesToSpan; i++) {
+            int lineStart = dropCapCopyStaticLayout.getLineStart(i);
+            int lineEnd = dropCapCopyStaticLayout.getLineEnd(i);
+
+            int baseline = dropCapCopyStaticLayout.getLineBaseline(i) + getPaddingTop();
+
+            canvas.drawText(
+                    dropCapCopyStaticLayout.getText(),
+                    lineStart,
+                    lineEnd,
+                    getPaddingLeft() + dropCapWidth,
+                    baseline,
+                    dropCapCopyStaticLayout.getPaint()
+            );
+        }
+    }
+
+    private void drawRemainingCopy(Canvas canvas) {
+        int ascentPadding = Math.abs(dropCapCopyStaticLayout.getTopPadding());
+        int baseline = dropCapCopyStaticLayout.getLineBottom(numberOfLinesToSpanAsZeroIndex()) - ascentPadding + getPaddingTop();
+        canvas.translate(getPaddingLeft(), baseline);
+        copyStaticLayout.draw(canvas);
     }
 
     private void drawCopyWithoutDropCap(Canvas canvas) {
@@ -359,40 +407,6 @@ public class DropCapView extends View {
                     copyStaticLayout.getPaint()
             );
         }
-    }
-
-    private void drawDropCap(Canvas canvas) {
-        float dropCapBaselineFromCopyTop = dropCapBaseline + distanceFromViewPortTop;
-        canvas.drawText(dropCapStaticLayout.getText(), 0, 1, getPaddingLeft(), dropCapBaselineFromCopyTop, dropCapPaint);
-    }
-
-    private void drawCopyForDropCap(Canvas canvas) {
-        for (int i = 0; i < numberOfLinesToSpan; i++) {
-            int lineStart = dropCapStaticLayout.getLineStart(i);
-            int lineEnd = dropCapStaticLayout.getLineEnd(i);
-
-            int baseline = dropCapStaticLayout.getLineBaseline(i) + getPaddingTop();
-
-            if (i == 0) {
-                lineStart = lineStart + 1;
-            }
-
-            canvas.drawText(
-                    dropCapStaticLayout.getText(),
-                    lineStart,
-                    lineEnd,
-                    getPaddingLeft() + dropCapWidth,
-                    baseline,
-                    dropCapStaticLayout.getPaint()
-            );
-        }
-    }
-
-    private void drawRemainingCopy(Canvas canvas) {
-        int ascentPadding = Math.abs(dropCapStaticLayout.getTopPadding());
-        int baseline = dropCapStaticLayout.getLineBottom(numberOfLinesToSpan - 1) - ascentPadding + getPaddingTop();
-        canvas.translate(getPaddingLeft(), baseline);
-        copyStaticLayout.draw(canvas);
     }
 
 }

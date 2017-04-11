@@ -68,6 +68,7 @@
   <string name="drop_cap_edit_copy_color">Edit Copy Color</string>
   <string name="drop_cap_edit_drop_cap_typeface">Edit DropCap Typeface</string>
   <string name="drop_cap_edit_copy_typeface">Edit Copy Typeface</string>
+  <string name="drop_cap_edit_drop_cap_number">Edit number of DropCaps</string>
   <string name="drop_cap_update_text">Update text</string>
 
 </resources>
