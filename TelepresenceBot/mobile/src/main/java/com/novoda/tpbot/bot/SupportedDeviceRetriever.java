@@ -6,7 +6,6 @@ import android.hardware.usb.UsbManager;
 import com.novoda.support.Optional;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,10 +20,9 @@ class SupportedDeviceRetriever {
     }
 
     Optional<UsbDevice> retrieveFirstSupportedUsbDevice() {
-        HashMap<String, UsbDevice> usbDevices = usbManager.getDeviceList();
+        Map<String, UsbDevice> usbDevices = usbManager.getDeviceList();
 
-        for (Map.Entry<String, UsbDevice> usbDeviceEntry : usbDevices.entrySet()) {
-            UsbDevice usbDevice = usbDeviceEntry.getValue();
+        for (UsbDevice usbDevice : usbDevices.values()) {
             int deviceVID = usbDevice.getVendorId();
 
             if (isSupportedDeviceID(deviceVID)) {
