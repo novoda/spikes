@@ -13,11 +13,9 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.felhr.usbserial.UsbSerialDevice;
-import com.felhr.usbserial.UsbSerialInterface;
 import com.novoda.notils.logger.simple.Log;
 import com.novoda.notils.logger.toast.Toaster;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -32,8 +30,8 @@ public class AndroidMovementService extends Service implements MovementService {
 
     private UsbDevice device;
     private UsbDeviceConnection connection;
-    private UsbManager usbManager;
     private UsbSerialDevice serialPort;
+    private SerialPortMonitor serialPortMonitor;
     private boolean isSerialStarted;
 
     private Toaster toaster;
@@ -72,8 +70,10 @@ public class AndroidMovementService extends Service implements MovementService {
             return;
         }
 
-        usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
+        UsbManager usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
         HashMap<String, UsbDevice> usbDevices = usbManager.getDeviceList();
+        serialPortMonitor = new SerialPortMonitor(usbManager, dataReceiver);
+
         if (usbDevices.isEmpty()) {
             return;
         }
@@ -97,13 +97,20 @@ public class AndroidMovementService extends Service implements MovementService {
         }
     }
 
+    private final SerialPortMonitor.DataReceiver dataReceiver = new SerialPortMonitor.DataReceiver() {
+        @Override
+        public void onReceive(String data) {
+
+        }
+    };
+
     private boolean isSupportedDeviceID(int deviceVID) {
         return SUPPORTED_VENDOR_IDS.contains(deviceVID);
     }
 
     @Override
     public void onPermissionGranted() {
-        setupSerialPort();
+        serialPortMonitor.tryToMonitorSerialPortFor(device);
     }
 
     @Override
@@ -124,45 +131,6 @@ public class AndroidMovementService extends Service implements MovementService {
         toaster.popToast("USB device detached");
         closeConnection();
     }
-
-    private void setupSerialPort() {
-        connection = usbManager.openDevice(device);
-        serialPort = UsbSerialDevice.createUsbSerialDevice(device, connection);
-        if (serialPort == null) {
-            Log.d(SERIAL_TAG, "Port is null");
-            toaster.popToast("Port is null");
-            return;
-        }
-
-        if (serialPort.open()) {
-            toaster.popToast("Opening serial connection");
-            serialPort.setBaudRate(9600);
-            serialPort.setDataBits(UsbSerialInterface.DATA_BITS_8);
-            serialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
-            serialPort.setParity(UsbSerialInterface.PARITY_NONE);
-            serialPort.setFlowControl(UsbSerialInterface.FLOW_CONTROL_OFF);
-            serialPort.read(onDataReceivedListener);
-            isSerialStarted = true;
-            toaster.popToast("Serial connection open");
-        } else {
-            Log.d(SERIAL_TAG, "Port is not open");
-            toaster.popToast("Port is not open");
-        }
-    }
-
-    private UsbSerialInterface.UsbReadCallback onDataReceivedListener = new UsbSerialInterface.UsbReadCallback() {
-        @Override
-        public void onReceivedData(byte[] arg0) {
-            String data = null;
-            try {
-                data = new String(arg0, "UTF-8");
-                Log.d(SERIAL_TAG, "Received from USB serial " + data);
-                // TODO forward to the UI
-            } catch (UnsupportedEncodingException e) {
-                Log.e(e, "Error receiving data from USB serial");
-            }
-        }
-    };
 
     @Nullable
     @Override
