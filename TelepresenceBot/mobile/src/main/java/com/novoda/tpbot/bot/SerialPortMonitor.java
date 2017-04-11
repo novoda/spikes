@@ -15,23 +15,25 @@ class SerialPortMonitor {
 
     private final UsbManager usbManager;
     private final DataReceiver dataReceiver;
+    private final SerialPortCreator serialPortCreator;
 
     private UsbSerialDevice serialPort;
     private UsbDeviceConnection deviceConnection;
 
-    SerialPortMonitor(UsbManager usbManager, DataReceiver dataReceiver) {
+    SerialPortMonitor(UsbManager usbManager, DataReceiver dataReceiver, SerialPortCreator serialPortCreator) {
         this.usbManager = usbManager;
         this.dataReceiver = dataReceiver;
+        this.serialPortCreator = serialPortCreator;
     }
 
     boolean tryToMonitorSerialPortFor(UsbDevice usbDevice) {
-        if (usbDevice == null || UsbSerialDevice.isCdcDevice(usbDevice)) {
-            Log.d(getClass().getSimpleName(), "CdcDevice is not supported");
+        deviceConnection = usbManager.openDevice(usbDevice);
+        serialPort = serialPortCreator.create(usbDevice, deviceConnection);
+
+        if (deviceConnection == null || serialPort == null) {
+            stopMonitoring();
             return false;
         }
-
-        deviceConnection = usbManager.openDevice(usbDevice);
-        serialPort = UsbSerialDevice.createUsbSerialDevice(usbDevice, deviceConnection);
 
         if (serialPort.open()) {
             serialPort.setBaudRate(9600);
@@ -42,6 +44,7 @@ class SerialPortMonitor {
             serialPort.read(onDataReceivedListener);
             return true;
         } else {
+            stopMonitoring();
             return false;
         }
 
@@ -60,7 +63,7 @@ class SerialPortMonitor {
         }
     };
 
-    boolean trySendCommand(String command) {
+    boolean tryToSendCommand(String command) {
         if (serialPort == null) {
             Log.d(getClass().getSimpleName(), "Not connected to SerialPort, unable to send command: " + command);
             return false;

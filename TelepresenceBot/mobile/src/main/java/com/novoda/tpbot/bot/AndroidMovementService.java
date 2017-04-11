@@ -34,7 +34,8 @@ public class AndroidMovementService extends Service implements MovementService {
 
         usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
         supportedDeviceRetriever = new SupportedDeviceRetriever(usbManager);
-        serialPortMonitor = new SerialPortMonitor(usbManager, dataReceiver);
+        SerialPortCreator serialPortCreator = new SerialPortCreator();
+        serialPortMonitor = new SerialPortMonitor(usbManager, dataReceiver, serialPortCreator);
     }
 
     @Override
@@ -112,7 +113,7 @@ public class AndroidMovementService extends Service implements MovementService {
     }
 
     public void sendCommand(String command) {
-        serialPortMonitor.trySendCommand(command);
+        serialPortMonitor.tryToSendCommand(command);
     }
 
     @Override
