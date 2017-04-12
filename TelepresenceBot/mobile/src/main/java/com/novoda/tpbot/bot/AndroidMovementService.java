@@ -78,7 +78,7 @@ public class AndroidMovementService extends Service implements MovementService {
     private final SerialPortMonitor.DataReceiver dataReceiver = new SerialPortMonitor.DataReceiver() {
         @Override
         public void onReceive(String data) {
-
+            // TODO: forward feedback to the UI.
         }
     };
 
