@@ -179,7 +179,9 @@ public class BotActivity extends AppCompatActivity implements BotView {
 
     @Override
     protected void onDestroy() {
-        botServiceCreator.destroy();
+        if (botServiceCreator != null) {
+            botServiceCreator.destroy();
+        }
         super.onDestroy();
     }
 
