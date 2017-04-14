@@ -5,12 +5,25 @@ import android.graphics.Point;
 import android.support.annotation.Nullable;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 public class PianoC4ToB5View extends PercentRelativeLayout {
 
-    private KeyListener keyListener = KeyListener.LOGGING;
+    private static final KeyListener LOGGING_KEY_LISTENER = new KeyListener() {
+        @Override
+        public void onPress(Note note) {
+            Log.e("!!!", "onPress " + note);
+        }
+
+        @Override
+        public void onRelease(Note note) {
+            Log.e("!!!", "onRelease " + note);
+        }
+    };
+
+    private KeyListener keyListener = LOGGING_KEY_LISTENER;
 
     private View c4View;
     private View d4View;
@@ -141,7 +154,7 @@ public class PianoC4ToB5View extends PercentRelativeLayout {
     }
 
     public void detachKeyListener() {
-        this.keyListener = KeyListener.LOGGING;
+        this.keyListener = LOGGING_KEY_LISTENER;
     }
 
     private void bindKey(final View keyView, final Note note, final View... adjacentBlackKeys) {
