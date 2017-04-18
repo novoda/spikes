@@ -26,6 +26,9 @@ android {
         versionName "1.0"
         buildConfigProperties buildProperties.secrets
     }
+    lintOptions {
+        abortOnError false
+    }
     buildTypes {
         release {
             minifyEnabled false

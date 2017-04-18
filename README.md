@@ -1,4 +1,4 @@
-Spikes
+Spikes 
 ======
 
 This is where we explore new ideas, hack around bug fixes and spark new code babies.
