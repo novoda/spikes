@@ -5,12 +5,25 @@ import android.graphics.Point;
 import android.support.annotation.Nullable;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 public class PianoC4ToB5View extends PercentRelativeLayout {
 
-    private KeyListener keyListener = KeyListener.LOGGING;
+    private static final NoteListener LOGGING_KEY_LISTENER = new NoteListener() {
+        @Override
+        public void onPress(Note note) {
+            Log.e("!!!", "onPress " + note);
+        }
+
+        @Override
+        public void onRelease(Note note) {
+            Log.e("!!!", "onRelease " + note);
+        }
+    };
+
+    private NoteListener noteListener = LOGGING_KEY_LISTENER;
 
     private View c4View;
     private View d4View;
@@ -108,8 +121,8 @@ public class PianoC4ToB5View extends PercentRelativeLayout {
         a5sView.layout(a5View.getRight() - halfBlackKeyWidth, 0, a5View.getRight() + halfBlackKeyWidth, blackKeyHeight);
     }
 
-    public void attach(KeyListener keyListener) {
-        this.keyListener = keyListener;
+    public void attach(NoteListener noteListener) {
+        this.noteListener = noteListener;
 
         bindKey(c4View, Note.C4, c4sView);
         bindKey(d4View, Note.D4, c4sView, d4sView);
@@ -141,23 +154,23 @@ public class PianoC4ToB5View extends PercentRelativeLayout {
     }
 
     public void detachKeyListener() {
-        this.keyListener = KeyListener.LOGGING;
+        this.noteListener = LOGGING_KEY_LISTENER;
     }
 
     private void bindKey(final View keyView, final Note note, final View... adjacentBlackKeys) {
         // TODO: Allow user to drag across view to play notes - https://developer.android.com/training/gestures/viewgroup.html
-        KeyTouchListener touchListener = new KeyTouchListener(keyListener, note, adjacentBlackKeys);
+        KeyTouchListener touchListener = new KeyTouchListener(noteListener, note, adjacentBlackKeys);
         keyView.setOnTouchListener(touchListener);
     }
 
     private static class KeyTouchListener implements OnTouchListener {
 
-        private final KeyListener keyListener;
+        private final NoteListener noteListener;
         private final Note note;
         private final View[] adjacentBlackKeys;
 
-        KeyTouchListener(KeyListener keyListener, Note note, View[] adjacentBlackKeys) {
-            this.keyListener = keyListener;
+        KeyTouchListener(NoteListener noteListener, Note note, View[] adjacentBlackKeys) {
+            this.noteListener = noteListener;
             this.note = note;
             this.adjacentBlackKeys = adjacentBlackKeys;
         }
@@ -188,13 +201,13 @@ public class PianoC4ToB5View extends PercentRelativeLayout {
         private void onTouchEventInsideKeyBounds(View key) {
             if (!key.isPressed()) {
                 key.setPressed(true);
-                keyListener.onPress(note);
+                noteListener.onPress(note);
             }
         }
 
         private void onTouchEventOutsideKeyBounds(View key) {
             key.setPressed(false);
-            keyListener.onRelease(note);
+            noteListener.onRelease(note);
         }
 
         private static boolean eventInsideView(View view, Point touchEventRelativeToParentView) {
