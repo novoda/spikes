@@ -18,3 +18,4 @@ Use one of the following commands depending on the target platform:
 ##Tests##
 To run all the tests use the custom script we defined with the command
 `npm run test-cli`
+
