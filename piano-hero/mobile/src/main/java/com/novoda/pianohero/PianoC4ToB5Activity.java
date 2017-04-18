@@ -54,7 +54,7 @@ public class PianoC4ToB5Activity extends AppCompatActivity {
         super.onPause();
     }
 
-    private static class NotesPlayedDispatcher implements KeyListener {
+    private static class NotesPlayedDispatcher implements NoteListener {
 
         private final Set<Note> notesOn = new HashSet<>();
         private final GamePresenter presenter;

@@ -1,6 +1,6 @@
 package com.novoda.pianohero;
 
-interface KeyListener {
+interface NoteListener {
 
     void onPress(Note note);
 
