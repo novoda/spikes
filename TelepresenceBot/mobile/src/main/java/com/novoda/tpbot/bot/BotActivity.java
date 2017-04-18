@@ -39,7 +39,7 @@ public class BotActivity extends AppCompatActivity implements BotView {
     private SelfDestructingMessageView debugView;
     private SwitchableView switchableView;
 
-    private MovementService movementService;
+    private AndroidMovementService androidMovementService;
     private boolean boundToMovementService;
     private CommandRepeater commandRepeater;
     private AutomationChecker automationChecker;
@@ -111,7 +111,7 @@ public class BotActivity extends AppCompatActivity implements BotView {
         @Override
         public void onCommandRepeated(String command) {
             if (boundToMovementService) {
-                movementService.sendCommand(command);
+                androidMovementService.sendCommand(command);
             }
         }
     };
@@ -119,7 +119,7 @@ public class BotActivity extends AppCompatActivity implements BotView {
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent = new Intent(this, MovementService.class);
+        Intent intent = new Intent(this, AndroidMovementService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -179,7 +179,9 @@ public class BotActivity extends AppCompatActivity implements BotView {
 
     @Override
     protected void onDestroy() {
-        botServiceCreator.destroy();
+        if (botServiceCreator != null) {
+            botServiceCreator.destroy();
+        }
         super.onDestroy();
     }
 
@@ -187,8 +189,8 @@ public class BotActivity extends AppCompatActivity implements BotView {
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            MovementService.Binder binder = (MovementService.Binder) iBinder;
-            movementService = binder.getService();
+            AndroidMovementService.Binder binder = (AndroidMovementService.Binder) iBinder;
+            androidMovementService = binder.getService();
             boundToMovementService = true;
         }
 

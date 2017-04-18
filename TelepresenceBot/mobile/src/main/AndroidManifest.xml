@@ -58,7 +58,7 @@
     </receiver>
 
     <service
-      android:name="com.novoda.tpbot.bot.MovementService"
+      android:name="com.novoda.tpbot.bot.AndroidMovementService"
       android:exported="false" />
 
     <service
