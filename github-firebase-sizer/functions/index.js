@@ -11,8 +11,19 @@ exports.sizePR = functions.https.onRequest((request, response) => {
   if (request.get('X-GitHub-Event') === 'ping') {
     console.log('Pong!');
     response.status(200).end();
-  } else {
-    console.log(request.body.pull_request.additions);
+  } else if (request.get('X-GitHub-Event') === 'pull_request') {
+    const additions = request.body.pull_request.additions;
+    const deletions = request.body.pull_request.deletions;
+    const total = additions + deletions;
+    if (total < 300) {
+      console.log('Tiny PR 👏');
+    } else if (total < 800) {
+      console.log('Medium-sized PR 👍')
+    } else {
+      console.log('Pretty big PR there... can you split it down?');
+    }
     response.status(200).end();
+  } else {
+    response.status(500).end();
   }
 });
