@@ -148,7 +148,7 @@ public class RGBmatrixPanel {
 // substract that from the row sleep time.
     private static final int RowClockTime = 3400;
     //
-    private static final long[] RowSleepNanos = {
+    public static final long[] RowSleepNanos = {
         // Only using the first PwmBits elements.
         (1 * RowClockTime) - RowClockTime,
         (2 * RowClockTime) - RowClockTime,
@@ -303,7 +303,7 @@ public class RGBmatrixPanel {
         }
     }
 
-//    // Clear the inside of the given Rectangle.
+    //    // Clear the inside of the given Rectangle.
 //    void RgbMatrix::
 //
 //    clearRect(uint8_t fx, uint8_t fy, uint8_t fw, uint8_t fh) {
@@ -478,7 +478,9 @@ public class RGBmatrixPanel {
 //    }
 //
     void drawPixel(byte x, byte y, Color color) {
-        if (x >= Width || y >= Height) return;
+        if (x >= Width || y >= Height) {
+            return;
+        }
 
         // Four 32x32 panels would be connected like:  [>] [>]
         //                                             [<] [<]
@@ -514,14 +516,14 @@ public class RGBmatrixPanel {
 
             if (y < 16) {
                 // Upper sub-panel
-                bits.bits.r1 = (red & mask) == mask;
-                bits.bits.g1 = (green & mask) == mask;
-                bits.bits.b1 = (blue & mask) == mask;
+                bits.bits.r1 = ((red & mask) == mask) ? 1 : 0;
+                bits.bits.g1 = ((green & mask) == mask) ? 1 : 0;
+                bits.bits.b1 = ((blue & mask) == mask) ? 1 : 0;
             } else {
                 // Lower sub-panel
-                bits.bits.r2 = (red & mask) == mask;
-                bits.bits.g2 = (green & mask) == mask;
-                bits.bits.b2 = (blue & mask) == mask;
+                bits.bits.r2 = ((red & mask) == mask) ? 1 : 0;
+                bits.bits.g2 = ((green & mask) == mask) ? 1 : 0;
+                bits.bits.b2 = ((blue & mask) == mask) ? 1 : 0;
             }
         }
     }

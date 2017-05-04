@@ -8,14 +8,17 @@ import android.media.midi.MidiOutputPort;
 import android.media.midi.MidiReceiver;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
+import android.os.HandlerThread;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.PeripheralManagerService;
 import com.google.android.things.pio.UartDevice;
 import com.google.android.things.pio.UartDeviceCallback;
+import com.novoda.pianohero.hax.RGBmatrixPanel;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -63,11 +66,145 @@ public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.
             throw new IllegalStateException("Cannot open bus to input peripheral.", e);
         }
 
-        handler = new Handler(Looper.getMainLooper());
+        haxUpdateDisplay();
+
+        HandlerThread thread = new HandlerThread("BackgroundThread");
+        thread.start();
+        handler = new Handler(thread.getLooper());
+
+        // TODO hax
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                haxUpdateDisplay();
+            }
+        });
 
         GameMvp.Model gameModel = new GameModel(new SongSequenceFactory(), new SimplePitchNotationFormatter());
         presenter = new GamePresenter(gameModel, this);
         presenter.onCreate();
+    }
+
+    private void haxUpdateDisplay() {
+        PeripheralManagerService service = new PeripheralManagerService();
+        try {
+            Gpio busOutputEnabled = service.openGpio("BCM2");
+            Gpio busSerialClock = service.openGpio("BCM3");
+            Gpio busDataLatch = service.openGpio("BCM4");
+            Gpio busRowAddressA = service.openGpio("BCM7");
+            Gpio busRowAddressB = service.openGpio("BCM8");
+            Gpio busRowAddressC = service.openGpio("BCM19");
+            Gpio busRowAddressD = service.openGpio("BCM20");
+            Gpio busLedR1 = service.openGpio("BCM17");
+            Gpio busLedB1 = service.openGpio("BCM18");
+            Gpio busLedG1 = service.openGpio("BCM22");
+            Gpio busLedR2 = service.openGpio("BCM23");
+            Gpio busLedB2 = service.openGpio("BCM24");
+            Gpio busLedG2 = service.openGpio("BCM25");
+
+            busOutputEnabled.setValue(true);
+            busSerialClock.setValue(true);
+            busDataLatch.setValue(true);
+
+            busRowAddressA.setValue(true);
+            busRowAddressB.setValue(true);
+            busRowAddressC.setValue(true);
+            busRowAddressD.setValue(true);
+
+            for (int row = 0; row < 16; ++row) {
+                // Rows can't be switched very quickly without ghosting, so we do the
+                // full PWM of one row before switching rows.
+                for (int b = 0; b < 7; b++) {
+
+                    // Clock in the row. The time this takes is the smallest time we can
+                    // leave the LEDs on, thus the smallest time-constant we can use for
+                    // PWM (doubling the sleep time with each bit).
+                    // So this is the critical path; I'd love to know if we can employ some
+                    // DMA techniques to speed this up.
+                    // (With this code, one row roughly takes 3.0 - 3.4usec to clock in).
+                    //
+                    // However, in particular for longer chaining, it seems we need some more
+                    // wait time to settle.
+                    long stabilizeWait = TimeUnit.NANOSECONDS.toMillis(256); //TODO: mateo was 256
+
+                    for (int col = 0; col < 32; ++col) {
+
+                        busOutputEnabled.setValue(false);
+                        busSerialClock.setValue(false);
+                        busDataLatch.setValue(false);
+
+                        busRowAddressA.setValue(false);
+                        busRowAddressB.setValue(false);
+                        busRowAddressC.setValue(false);
+                        busRowAddressD.setValue(false);
+
+                        busLedR1.setValue(false);
+                        busLedG1.setValue(false);
+                        busLedB1.setValue(false);
+                        busLedR2.setValue(false);
+                        busLedG2.setValue(false);
+                        busLedB2.setValue(false);
+
+                        SystemClock.sleep(stabilizeWait);
+
+                        busLedR1.setValue(true);
+                        busLedG1.setValue(true);
+                        busLedB1.setValue(true);
+                        busLedR2.setValue(true);
+                        busLedG2.setValue(true);
+                        busLedB2.setValue(true);
+
+                        SystemClock.sleep(stabilizeWait);
+
+                        busSerialClock.setValue(true);
+
+                        SystemClock.sleep(stabilizeWait);
+                    }
+
+                    // switch off while strobe (latch).
+                    busOutputEnabled.setValue(true);
+
+                    // rowAddress is 4 bits
+                    if ((row & 8) == 8) {
+                        busRowAddressD.setValue(true);
+                    }
+                    if ((row & 4) == 4) {
+                        busRowAddressC.setValue(true);
+                    }
+                    if ((row & 2) == 2) {
+                        busRowAddressB.setValue(true);
+                    }
+                    if ((row & 1) == 1) {
+                        busRowAddressA.setValue(true);
+                    }
+
+                    busOutputEnabled.setValue(false);
+                    busSerialClock.setValue(false);
+                    busDataLatch.setValue(false);
+
+                    busLedR1.setValue(false);
+                    busLedG1.setValue(false);
+                    busLedB1.setValue(false);
+                    busLedR2.setValue(false);
+                    busLedG2.setValue(false);
+                    busLedB2.setValue(false);
+
+                    // strobe - on and off
+                    busDataLatch.setValue(true);
+                    busDataLatch.setValue(false);
+
+                    // Now switch on for the given sleep time.
+                    busOutputEnabled.setValue(true);
+
+                    // If we use less bits, then use the upper areas which leaves us more CPU time to do other stuff.
+                    SystemClock.sleep(TimeUnit.NANOSECONDS.toMillis(RGBmatrixPanel.RowSleepNanos[b]));
+                    Log.d("TUT", "drawing something?");
+                }
+            }
+
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     @Override
