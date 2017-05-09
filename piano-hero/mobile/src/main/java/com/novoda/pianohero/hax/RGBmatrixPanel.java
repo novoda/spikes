@@ -75,14 +75,14 @@ public class RGBmatrixPanel {
         }
 
         int raw = 0;
-        Pins bits = new Pins();
+        Pins pins = new Pins();
     }
 
     // Because a 32x32 Panel is composed of two 16x32 sub-panels, and each
     // 32x32 Panel requires writing an LED from each sub-panel at a time, the
     // following data structure represents two rows: n and n+16.
     private static class TwoRows {
-        GpioPins[] column = new GpioPins[COLUMN_COUNT];  //TODO: Does this only use color bits?
+        GpioPins[] column = new GpioPins[COLUMN_COUNT];  //TODO: Does this only use color pins?
     }
 
     private static class Display {
@@ -138,7 +138,7 @@ public class RGBmatrixPanel {
             (16 * RowClockTime) - RowClockTime,
             (32 * RowClockTime) - RowClockTime,
             (64 * RowClockTime) - RowClockTime,
-            // Too much flicker with 8 bits. We should have a separate screen pass
+            // Too much flicker with 8 pins. We should have a separate screen pass
             // with this bit plane. Or interlace. Or trick with -OE switch on in the
             // middle of row-clocking, thus have RowClockTime / 2
             (128 * RowClockTime) - RowClockTime, // too much flicker.
@@ -186,8 +186,8 @@ public class RGBmatrixPanel {
             for (TwoRows rows : display.row) {
                 for (GpioPins pins : rows.column) {
                     pins.raw = 0;
-                    pins.bits = new GpioPins.Pins();
-                    gpioProxy.writeOutputBits(pins); // TODO does this even work?
+                    pins.pins = new GpioPins.Pins();
+                    gpioProxy.write(pins); // TODO does this even work?
                 }
             }
         }
@@ -197,21 +197,21 @@ public class RGBmatrixPanel {
      * Write pixels to the LED panel.
      */
     public void updateDisplay() {
-        GpioPins serialMask = new GpioPins();   // Mask of bits we need to set while clocking in.
-        serialMask.bits.r1 = serialMask.bits.g1 = serialMask.bits.b1 = true;
-        serialMask.bits.r2 = serialMask.bits.g2 = serialMask.bits.b2 = true;
-        serialMask.bits.clock = true;
+        GpioPins serialMask = new GpioPins();   // Mask of pins we need to set while clocking in.
+        serialMask.pins.r1 = serialMask.pins.g1 = serialMask.pins.b1 = true;
+        serialMask.pins.r2 = serialMask.pins.g2 = serialMask.pins.b2 = true;
+        serialMask.pins.clock = true;
 
         GpioPins rowMask = new GpioPins();
-        rowMask.bits.rowAddress = 0xf;
+        rowMask.pins.rowAddress = 0xf;
 
         GpioPins clock = new GpioPins();
         GpioPins outputEnable = new GpioPins();
         GpioPins latch = new GpioPins();
 
-        clock.bits.clock = true;
-        outputEnable.bits.outputEnabled = true;
-        latch.bits.latch = true;
+        clock.pins.clock = true;
+        outputEnable.pins.outputEnabled = true;
+        latch.pins.latch = true;
 
         GpioPins rowBits = new GpioPins();
 
@@ -235,33 +235,33 @@ public class RGBmatrixPanel {
                 for (byte col = 0; col < COLUMN_COUNT; ++col) {
                     GpioPins out = rowData.column[col];
                     gpioProxy.clearBits(~out.raw & serialMask.raw);  // also: resets clock.
-                    gpioProxy.writeOutputBits(out);
+                    gpioProxy.write(out);
                     sleepNanos(StabilizeWaitNanos);
                     gpioProxy.setBits(out.raw & serialMask.raw);
-                    gpioProxy.writeOutputBits(out);
+                    gpioProxy.write(out);
                     sleepNanos(StabilizeWaitNanos);
                     gpioProxy.setBits(clock.raw);
-                    gpioProxy.writeOutputBits(clock);
+                    gpioProxy.write(clock);
                     sleepNanos(StabilizeWaitNanos);
                 }
 
                 gpioProxy.setBits(outputEnable.raw);  // switch off while strobe (latch).
-                gpioProxy.writeOutputBits(outputEnable);
+                gpioProxy.write(outputEnable);
 
-                rowBits.bits.rowAddress = row;
+                rowBits.pins.rowAddress = row;
                 gpioProxy.setBits(rowBits.raw & rowMask.raw);
                 gpioProxy.clearBits(~rowBits.raw & rowMask.raw);
-                gpioProxy.writeOutputBits(rowBits);
+                gpioProxy.write(rowBits);
 
                 gpioProxy.setBits(latch.raw);   // strobe - on and off
                 gpioProxy.clearBits(latch.raw);
-                gpioProxy.writeOutputBits(latch);
+                gpioProxy.write(latch);
 
                 // Now switch on for the given sleep time.
                 gpioProxy.clearBits(outputEnable.raw);
-                gpioProxy.writeOutputBits(outputEnable);
+                gpioProxy.write(outputEnable);
 
-                // If we use less bits, then use the upper areas which leaves us more
+                // If we use less pins, then use the upper areas which leaves us more
                 // CPU time to do other stuff.
                 sleepNanos(ROW_SLEEP_NANOS[b + (7 - PWM_BITS)]);
             }
@@ -270,13 +270,13 @@ public class RGBmatrixPanel {
 
     public void foo() {
         GpioPins pins = new GpioPins();
-        pins.bits.outputEnabled = true;
-        pins.bits.clock = true;
-        pins.bits.latch = true;
+        pins.pins.outputEnabled = true;
+        pins.pins.clock = true;
+        pins.pins.latch = true;
 
-        pins.bits.rowAddress = 1111;
+        pins.pins.rowAddress = 1111;
 
-        gpioProxy.writeOutputBits(pins);
+        gpioProxy.write(pins);
 
         for (int row = 0; row < 16; ++row) {
             // Rows can't be switched very quickly without ghosting, so we do the
@@ -297,73 +297,73 @@ public class RGBmatrixPanel {
 
                 for (int col = 0; col < 32; ++col) {
 
-                    pins.bits.outputEnabled = false;
-                    pins.bits.clock = false;
-                    pins.bits.latch = false;
+                    pins.pins.outputEnabled = false;
+                    pins.pins.clock = false;
+                    pins.pins.latch = false;
 
-                    pins.bits.rowAddress = 0000;
+                    pins.pins.rowAddress = 0000;
 
-                    pins.bits.r1 = false;
-                    pins.bits.g1 = false;
-                    pins.bits.b1 = false;
-                    pins.bits.r2 = false;
-                    pins.bits.g2 = false;
-                    pins.bits.b2 = false;
+                    pins.pins.r1 = false;
+                    pins.pins.g1 = false;
+                    pins.pins.b1 = false;
+                    pins.pins.r2 = false;
+                    pins.pins.g2 = false;
+                    pins.pins.b2 = false;
 
-                    gpioProxy.writeOutputBits(pins);
+                    gpioProxy.write(pins);
                     SystemClock.sleep(stabilizeWait);
 
-                    pins.bits.r1 = true;
-                    pins.bits.g1 = true;
-                    pins.bits.b1 = true;
-                    pins.bits.r2 = true;
-                    pins.bits.g2 = true;
-                    pins.bits.b2 = true;
+                    pins.pins.r1 = true;
+                    pins.pins.g1 = true;
+                    pins.pins.b1 = true;
+                    pins.pins.r2 = true;
+                    pins.pins.g2 = true;
+                    pins.pins.b2 = true;
 
-                    gpioProxy.writeOutputBits(pins);
+                    gpioProxy.write(pins);
                     SystemClock.sleep(stabilizeWait);
 
-                    pins.bits.clock = true;
+                    pins.pins.clock = true;
 
-                    gpioProxy.writeOutputBits(pins);
+                    gpioProxy.write(pins);
                     SystemClock.sleep(stabilizeWait);
 
                 }
 
                 // switch off while strobe (latch).
-                pins.bits.outputEnabled = false;
+                pins.pins.outputEnabled = false;
 
-                gpioProxy.writeOutputBits(pins);
+                gpioProxy.write(pins);
 
-                pins.bits.rowAddress = row;
+                pins.pins.rowAddress = row;
 
-                pins.bits.outputEnabled = false;
-                pins.bits.clock = false;
-                pins.bits.latch = false;
+                pins.pins.outputEnabled = false;
+                pins.pins.clock = false;
+                pins.pins.latch = false;
 
-                pins.bits.r1 = false;
-                pins.bits.g1 = false;
-                pins.bits.b1 = false;
-                pins.bits.r2 = false;
-                pins.bits.g2 = false;
-                pins.bits.b2 = false;
+                pins.pins.r1 = false;
+                pins.pins.g1 = false;
+                pins.pins.b1 = false;
+                pins.pins.r2 = false;
+                pins.pins.g2 = false;
+                pins.pins.b2 = false;
 
-                gpioProxy.writeOutputBits(pins);
+                gpioProxy.write(pins);
 
                 // strobe  on and off
-                pins.bits.latch = true;
+                pins.pins.latch = true;
 
-                gpioProxy.writeOutputBits(pins);
+                gpioProxy.write(pins);
 
-                pins.bits.latch = false;
+                pins.pins.latch = false;
 
-                gpioProxy.writeOutputBits(pins);
+                gpioProxy.write(pins);
 
                 // Now switch on for the given sleep time.
-                pins.bits.outputEnabled = true;
+                pins.pins.outputEnabled = true;
 
-                gpioProxy.writeOutputBits(pins);
-                // If we use less bits, then use the upper areas which leaves us more CPU time to do other stuff.
+                gpioProxy.write(pins);
+                // If we use less pins, then use the upper areas which leaves us more CPU time to do other stuff.
                 SystemClock.sleep(TimeUnit.NANOSECONDS.toMillis(ROW_SLEEP_NANOS[b]));
                 Log.d("TUT", "drawing something?");
 
@@ -401,18 +401,18 @@ public class RGBmatrixPanel {
 //        for (int b = PWM_BITS - 1; b >= 0; b--) {
 //            for (int x = fx; x < maxX; x++) {
 //                for (int y = fy; y < maxY; y++) {
-//                    GpioPins * bits = &plane[b].row[y & 0xf].column[x];
+//                    GpioPins * pins = &plane[b].row[y & 0xf].column[x];
 //
 //                    if (y < 16) {
 //                        // Upper sub-panel
-//                        bits.bits.r1 = 0;
-//                        bits.bits.g1 = 0;
-//                        bits.bits.b1 = 0;
+//                        pins.pins.r1 = 0;
+//                        pins.pins.g1 = 0;
+//                        pins.pins.b1 = 0;
 //                    } else {
 //                        // Lower sub-panel
-//                        bits.bits.r2 = 0;
-//                        bits.bits.g2 = 0;
-//                        bits.bits.b2 = 0;
+//                        pins.pins.r2 = 0;
+//                        pins.pins.g2 = 0;
+//                        pins.pins.b2 = 0;
 //                    }
 //                }
 //            }
@@ -426,18 +426,18 @@ public class RGBmatrixPanel {
 //        for (int b = PWM_BITS - 1; b >= 0; b--) {
 //            for (int x = 0; x < WIDTH; x++) {
 //                for (int y = 0; y < HEIGHT; y++) {
-//                    GpioPins * bits = &plane[b].row[y & 0xf].column[x];
+//                    GpioPins * pins = &plane[b].row[y & 0xf].column[x];
 //
 //                    if (y < 16) {
 //                        // Upper sub-panel
-//                        bits.bits.r1 >>= 1;
-//                        bits.bits.g1 >>= 1;
-//                        bits.bits.b1 >>= 1;
+//                        pins.pins.r1 >>= 1;
+//                        pins.pins.g1 >>= 1;
+//                        pins.pins.b1 >>= 1;
 //                    } else {
 //                        // Lower sub-panel
-//                        bits.bits.r2 >>= 1;
-//                        bits.bits.g2 >>= 1;
-//                        bits.bits.b2 >>= 1;
+//                        pins.pins.r2 >>= 1;
+//                        pins.pins.g2 >>= 1;
+//                        pins.pins.b2 >>= 1;
 //                    }
 //                }
 //            }
@@ -457,18 +457,18 @@ public class RGBmatrixPanel {
 //        for (int b = PWM_BITS - 1; b >= 0; b--) {
 //            for (int x = fx; x < maxX; x++) {
 //                for (int y = fy; y < maxY; y++) {
-//                    GpioPins * bits = &plane[b].row[y & 0xf].column[x];
+//                    GpioPins * pins = &plane[b].row[y & 0xf].column[x];
 //
 //                    if (y < 16) {
 //                        // Upper sub-panel
-//                        bits.bits.r1 >>= 1;
-//                        bits.bits.g1 >>= 1;
-//                        bits.bits.b1 >>= 1;
+//                        pins.pins.r1 >>= 1;
+//                        pins.pins.g1 >>= 1;
+//                        pins.pins.b1 >>= 1;
 //                    } else {
 //                        // Lower sub-panel
-//                        bits.bits.r2 >>= 1;
-//                        bits.bits.g2 >>= 1;
-//                        bits.bits.b2 >>= 1;
+//                        pins.pins.r2 >>= 1;
+//                        pins.pins.g2 >>= 1;
+//                        pins.pins.b2 >>= 1;
 //                    }
 //                }
 //            }
@@ -479,30 +479,30 @@ public class RGBmatrixPanel {
 //
 //    // Call this after drawing on the display and before calling fadeIn().
 //    void setupFadeIn() {
-//        // Copy the plane and then set all bits to 0.
+//        // Copy the plane and then set all pins to 0.
 //        memcpy( & fadeInPlane, &plane, sizeof(plane));
 //        clearDisplay();
 //    }
 //
 //    // Fade in whatever is stored in the fadeInPlane.
 //    void fadeIn() {
-//        // Loop over copy of plane and set bits in actual plane.
+//        // Loop over copy of plane and set pins in actual plane.
 //        for (int b = 0; b < PWM_BITS; b++) {
 //            for (int x = 0; x < WIDTH; x++) {
 //                for (int y = 0; y < HEIGHT; y++) {
 //                    GpioPins * fiBits = &fadeInPlane[b].row[y & 0xf].column[x];
-//                    GpioPins * bits = &plane[b].row[y & 0xf].column[x];
+//                    GpioPins * pins = &plane[b].row[y & 0xf].column[x];
 //
 //                    if (y < 16) {
 //                        // Upper sub-panel
-//                        bits.bits.r1 = fiBits.bits.r1;
-//                        bits.bits.g1 = fiBits.bits.g1;
-//                        bits.bits.b1 = fiBits.bits.b1;
+//                        pins.pins.r1 = fiBits.pins.r1;
+//                        pins.pins.g1 = fiBits.pins.g1;
+//                        pins.pins.b1 = fiBits.pins.b1;
 //                    } else {
 //                        // Lower sub-panel
-//                        bits.bits.r2 = fiBits.bits.r2;
-//                        bits.bits.g2 = fiBits.bits.g2;
-//                        bits.bits.b2 = fiBits.bits.b2;
+//                        pins.pins.r2 = fiBits.pins.r2;
+//                        pins.pins.g2 = fiBits.pins.g2;
+//                        pins.pins.b2 = fiBits.pins.b2;
 //                    }
 //                }
 //            }
@@ -517,18 +517,18 @@ public class RGBmatrixPanel {
 //            //Each time through, clear the top row.
 //            for (int x = 0; x < WIDTH; x++) {
 //                for (int b = PWM_BITS - 1; b >= 0; b--) {
-//                    GpioPins * bits = &plane[b].row[(frame) & 0xf].column[x];
+//                    GpioPins * pins = &plane[b].row[(frame) & 0xf].column[x];
 //
 //                    if (frame < 16) {
 //                        // Upper sub-panel
-//                        bits.bits.r1 = 0;
-//                        bits.bits.g1 = 0;
-//                        bits.bits.b1 = 0;
+//                        pins.pins.r1 = 0;
+//                        pins.pins.g1 = 0;
+//                        pins.pins.b1 = 0;
 //                    } else {
 //                        // Lower sub-panel
-//                        bits.bits.r2 = 0;
-//                        bits.bits.g2 = 0;
-//                        bits.bits.b2 = 0;
+//                        pins.pins.r2 = 0;
+//                        pins.pins.g2 = 0;
+//                        pins.pins.b2 = 0;
 //                    }
 //                }
 //            }
@@ -541,19 +541,19 @@ public class RGBmatrixPanel {
 //
 //                        if (y == 16) //Special case when we cross the panels
 //                        {
-//                            currBits.bits.r2 = prevBits.bits.r1;
-//                            currBits.bits.g2 = prevBits.bits.g1;
-//                            currBits.bits.b2 = prevBits.bits.b1;
+//                            currBits.pins.r2 = prevBits.pins.r1;
+//                            currBits.pins.g2 = prevBits.pins.g1;
+//                            currBits.pins.b2 = prevBits.pins.b1;
 //                        } else if (y < 16) {
 //                            // Upper sub-panel
-//                            currBits.bits.r1 = prevBits.bits.r1;
-//                            currBits.bits.g1 = prevBits.bits.g1;
-//                            currBits.bits.b1 = prevBits.bits.b1;
+//                            currBits.pins.r1 = prevBits.pins.r1;
+//                            currBits.pins.g1 = prevBits.pins.g1;
+//                            currBits.pins.b1 = prevBits.pins.b1;
 //                        } else {
 //                            // Lower sub-panel
-//                            currBits.bits.r2 = prevBits.bits.r2;
-//                            currBits.bits.g2 = prevBits.bits.g2;
-//                            currBits.bits.b2 = prevBits.bits.b2;
+//                            currBits.pins.r2 = prevBits.pins.r2;
+//                            currBits.pins.g2 = prevBits.pins.g2;
+//                            currBits.pins.b2 = prevBits.pins.b2;
 //                        }
 //                    }
 //                }
@@ -596,21 +596,21 @@ public class RGBmatrixPanel {
         green >>= 8 - PWM_BITS;
         blue >>= 8 - PWM_BITS;
 
-        // Set RGB bits for this pixel in each PWM bit plane.
+        // Set RGB pins for this pixel in each PWM bit plane.
         for (int b = 0; b < PWM_BITS; b++) {
             byte mask = (byte) (1 << b);
             GpioPins bits = plane[b].row[y & 0xf].column[x];
 
             if (y < 16) {
                 // Upper sub-panel
-                bits.bits.r1 = ((red & mask) == mask);
-                bits.bits.g1 = ((green & mask) == mask);
-                bits.bits.b1 = ((blue & mask) == mask);
+                bits.pins.r1 = ((red & mask) == mask);
+                bits.pins.g1 = ((green & mask) == mask);
+                bits.pins.b1 = ((blue & mask) == mask);
             } else {
                 // Lower sub-panel
-                bits.bits.r2 = ((red & mask) == mask);
-                bits.bits.g2 = ((green & mask) == mask);
-                bits.bits.b2 = ((blue & mask) == mask);
+                bits.pins.r2 = ((red & mask) == mask);
+                bits.pins.g2 = ((green & mask) == mask);
+                bits.pins.b2 = ((blue & mask) == mask);
             }
         }
     }

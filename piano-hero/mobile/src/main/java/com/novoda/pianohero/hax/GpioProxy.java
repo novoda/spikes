@@ -17,8 +17,6 @@ import java.io.IOException;
  */
 public class GpioProxy {
 
-    private RGBmatrixPanel.GpioPins outputBits;
-
     private Gpio busOutputEnabled;
     private Gpio busSerialClock;
     private Gpio busDataLatch;
@@ -33,17 +31,7 @@ public class GpioProxy {
     private Gpio busLedG2;
     private Gpio busLedB2;
 
-    /* Hardware registers for peripherals start at this address */
-    private static final int BCM2708_PERI_BASE = 0x20000000;
-
-    /* Offset for the GPIO controller */
-    private static final int GPIO_BASE = BCM2708_PERI_BASE + 0x200000;
-    // Page and Block size are both 4kb
-//#define PAGE_SIZE (4*1024)
-    private static final int BLOCK_SIZE = 4 * 1024;
-
     public GpioProxy() {
-        this.outputBits = new RGBmatrixPanel.GpioPins();
         PeripheralManagerService service = new PeripheralManagerService();
         try {
             busOutputEnabled = service.openGpio("BCM4");
@@ -82,64 +70,45 @@ public class GpioProxy {
         pin.setActiveType(Gpio.ACTIVE_HIGH);
     }
 
-    // Sets bits which are 1. Ignores bits which are 0.
+    // Sets pins which are 1. Ignores pins which are 0.
     //  Converted from Macro: #define GPIO_SET *(gpio+7)
     void setBits(int value) {
         // *(gpio + 7) = value;
         // TODO
     }
 
-    // Clears bits which are 1. Ignores bits which are 0.
+    // Clears pins which are 1. Ignores pins which are 0.
     //  Converted from Macro: #define GPIO_CLR *(gpio+10)
     void clearBits(int value) {
 //    *(gpio + 10) = value;
 //         TODO
     }
 
-    RGBmatrixPanel.GpioPins writeOutputBits(RGBmatrixPanel.GpioPins outputs) {
+    void write(RGBmatrixPanel.GpioPins gpio) {
         try {
-            outputBits = outputs;
-
 //            for (int b = 0; b < 27; ++b) {
-                busOutputEnabled.setValue(outputs.bits.outputEnabled);
-                busSerialClock.setValue(outputs.bits.clock);
-                busDataLatch.setValue(outputs.bits.latch);
+            busOutputEnabled.setValue(gpio.pins.outputEnabled);
+            busSerialClock.setValue(gpio.pins.clock);
+            busDataLatch.setValue(gpio.pins.latch);
 
-                int rowAddress = outputs.bits.rowAddress;
-                // rowAddress is always 4 bits
-                if ((rowAddress & 8) == 8) {
-                    busRowAddressD.setValue(true);
-                } else {
-                    busRowAddressD.setValue(false);
-                }
-                if ((rowAddress & 4) == 4) {
-                    busRowAddressC.setValue(true);
-                } else {
-                    busRowAddressC.setValue(false);
-                }
-                if ((rowAddress & 2) == 2) {
-                    busRowAddressB.setValue(true);
-                } else {
-                    busRowAddressB.setValue(false);
-                }
-                if ((rowAddress & 1) == 1) {
-                    busRowAddressA.setValue(true);
-                } else {
-                    busRowAddressA.setValue(false);
-                }
+            int rowAddress = gpio.pins.rowAddress;
+            // rowAddress is always 4 pins
+            busRowAddressD.setValue((rowAddress & 8) == 8);
+            busRowAddressC.setValue((rowAddress & 4) == 4);
+            busRowAddressB.setValue((rowAddress & 2) == 2);
+            busRowAddressA.setValue((rowAddress & 1) == 1);
 
-                busLedR1.setValue(outputs.bits.r1);
-                busLedG1.setValue(outputs.bits.g1);
-                busLedB1.setValue(outputs.bits.b1);
+            busLedR1.setValue(gpio.pins.r1);
+            busLedG1.setValue(gpio.pins.g1);
+            busLedB1.setValue(gpio.pins.b1);
 
-                busLedR2.setValue(outputs.bits.r2);
-                busLedG2.setValue(outputs.bits.g2);
-                busLedB2.setValue(outputs.bits.b2);
+            busLedR2.setValue(gpio.pins.r2);
+            busLedG2.setValue(gpio.pins.g2);
+            busLedB2.setValue(gpio.pins.b2);
 //            }
 
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
-        return outputBits;
     }
 }
