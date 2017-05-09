@@ -283,25 +283,29 @@ public class RGBmatrixPanel {
             // full PWM of one row before switching rows.
             for (int b = 0; b < PWM_BITS; b++) {
 
+                TwoRows rowData = plane[b].row[row];
+
                 // Clock in the row. The time this takes is the smallest time we can
                 // leave the LEDs on, thus the smallest timeconstant we can use for
                 // PWM (doubling the sleep time with each bit).
                 // So this is the critical path; I'd love to know if we can employ some
                 // DMA techniques to speed this up.
-                // (With this code, one row roughly takes 3.0  3.4usec to clock in).
+                // (With this code, one row roughly takes 3.0-3.4usec to clock in).
                 //
                 // However, in particular for longer chaining, it seems we need some more
                 // wait time to settle.
 
-                long stabilizeWait = TimeUnit.NANOSECONDS.toMillis(256); //TODO: mateo was 256
+                long stabilizeWait = TimeUnit.NANOSECONDS.toMillis(156); //TODO: mateo was 256
 
                 for (int col = 0; col < COLUMN_COUNT; ++col) {
+
+                    GpioPins colPins = rowData.column[col];
 
                     pins.pins.outputEnabled = false;
                     pins.pins.clock = false;
                     pins.pins.latch = false;
 
-                    pins.pins.rowAddress = 0000;
+                    pins.pins.rowAddress = col;
 
                     pins.pins.r1 = false;
                     pins.pins.g1 = false;
@@ -311,7 +315,7 @@ public class RGBmatrixPanel {
                     pins.pins.b2 = false;
 
                     gpioProxy.write(pins);
-                    SystemClock.sleep(stabilizeWait);
+                    sleepNanos(stabilizeWait);
 
                     pins.pins.r1 = true;
                     pins.pins.g1 = true;
@@ -321,12 +325,12 @@ public class RGBmatrixPanel {
                     pins.pins.b2 = true;
 
                     gpioProxy.write(pins);
-                    SystemClock.sleep(stabilizeWait);
+                    sleepNanos(stabilizeWait);
 
                     pins.pins.clock = true;
 
                     gpioProxy.write(pins);
-                    SystemClock.sleep(stabilizeWait);
+                    sleepNanos(stabilizeWait);
 
                 }
 
@@ -364,7 +368,7 @@ public class RGBmatrixPanel {
 
                 gpioProxy.write(pins);
                 // If we use less pins, then use the upper areas which leaves us more CPU time to do other stuff.
-                SystemClock.sleep(TimeUnit.NANOSECONDS.toMillis(ROW_SLEEP_NANOS[b + (7 - PWM_BITS)]));
+                sleepNanos(TimeUnit.NANOSECONDS.toMillis(ROW_SLEEP_NANOS[b + (7 - PWM_BITS)]));
                 Log.d("TUT", "drawing something?");
 
             }
