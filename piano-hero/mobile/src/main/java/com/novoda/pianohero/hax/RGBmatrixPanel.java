@@ -278,10 +278,10 @@ public class RGBmatrixPanel {
 
         gpioProxy.write(pins);
 
-        for (int row = 0; row < 16; ++row) {
+        for (int row = 0; row < ROWS_PER_SUB_PANEL; ++row) {
             // Rows can't be switched very quickly without ghosting, so we do the
             // full PWM of one row before switching rows.
-            for (int b = 0; b < 7; b++) {
+            for (int b = 0; b < PWM_BITS; b++) {
 
                 // Clock in the row. The time this takes is the smallest time we can
                 // leave the LEDs on, thus the smallest timeconstant we can use for
@@ -295,7 +295,7 @@ public class RGBmatrixPanel {
 
                 long stabilizeWait = TimeUnit.NANOSECONDS.toMillis(256); //TODO: mateo was 256
 
-                for (int col = 0; col < 32; ++col) {
+                for (int col = 0; col < COLUMN_COUNT; ++col) {
 
                     pins.pins.outputEnabled = false;
                     pins.pins.clock = false;
@@ -364,7 +364,7 @@ public class RGBmatrixPanel {
 
                 gpioProxy.write(pins);
                 // If we use less pins, then use the upper areas which leaves us more CPU time to do other stuff.
-                SystemClock.sleep(TimeUnit.NANOSECONDS.toMillis(ROW_SLEEP_NANOS[b]));
+                SystemClock.sleep(TimeUnit.NANOSECONDS.toMillis(ROW_SLEEP_NANOS[b + (7 - PWM_BITS)]));
                 Log.d("TUT", "drawing something?");
 
             }
