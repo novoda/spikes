@@ -14,10 +14,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class RGBmatrixPanel {
 
-    private static class Color {
-        int red;
-        int green;
-        int blue;
+    public static class Color {
+        public int red;
+        public int green;
+        public int blue;
     }
 
 //#include "RgbMatrix.h"
@@ -65,10 +65,13 @@ public class RGBmatrixPanel {
             boolean outputEnabled = true;
             boolean clock = true;
             boolean latch = true;
+
             int rowAddress = 0;
+
             boolean r1 = true;
             boolean g1 = true;
             boolean b1 = true;
+
             boolean r2 = true;
             boolean g2 = true;
             boolean b2 = true;
@@ -127,21 +130,21 @@ public class RGBmatrixPanel {
 // Clocking in a row takes about 3.4usec (TODO: per board)
 // Because clocking the data in is part of the 'wait time', we need to
 // substract that from the row sleep time.
-    private static final int RowClockTime = 3400;
+    private static final int ROW_CLOCK_TIME = 3400;
     //
     private static final long[] ROW_SLEEP_NANOS = {
             // Only using the first PWM_BITS elements.
-            (1 * RowClockTime) - RowClockTime,
-            (2 * RowClockTime) - RowClockTime,
-            (4 * RowClockTime) - RowClockTime,
-            (8 * RowClockTime) - RowClockTime,
-            (16 * RowClockTime) - RowClockTime,
-            (32 * RowClockTime) - RowClockTime,
-            (64 * RowClockTime) - RowClockTime,
+            (1 * ROW_CLOCK_TIME) - ROW_CLOCK_TIME,
+            (2 * ROW_CLOCK_TIME) - ROW_CLOCK_TIME,
+            (4 * ROW_CLOCK_TIME) - ROW_CLOCK_TIME,
+            (8 * ROW_CLOCK_TIME) - ROW_CLOCK_TIME,
+            (16 * ROW_CLOCK_TIME) - ROW_CLOCK_TIME,
+            (32 * ROW_CLOCK_TIME) - ROW_CLOCK_TIME,
+            (64 * ROW_CLOCK_TIME) - ROW_CLOCK_TIME,
             // Too much flicker with 8 pins. We should have a separate screen pass
             // with this bit plane. Or interlace. Or trick with -OE switch on in the
-            // middle of row-clocking, thus have RowClockTime / 2
-            (128 * RowClockTime) - RowClockTime, // too much flicker.
+            // middle of row-clocking, thus have ROW_CLOCK_TIME / 2
+            (128 * ROW_CLOCK_TIME) - ROW_CLOCK_TIME, // too much flicker.
     };
 
     public RGBmatrixPanel(GpioProxy gpioProxy) {
@@ -282,7 +285,6 @@ public class RGBmatrixPanel {
             // Rows can't be switched very quickly without ghosting, so we do the
             // full PWM of one row before switching rows.
             for (int b = 0; b < PWM_BITS; b++) {
-
                 TwoRows rowData = plane[b].row[row];
 
                 // Clock in the row. The time this takes is the smallest time we can
@@ -298,7 +300,6 @@ public class RGBmatrixPanel {
                 long stabilizeWait = TimeUnit.NANOSECONDS.toMillis(156); //TODO: mateo was 256
 
                 for (int col = 0; col < COLUMN_COUNT; ++col) {
-
                     GpioPins colPins = rowData.column[col];
 
                     pins.pins.outputEnabled = false;
@@ -306,7 +307,7 @@ public class RGBmatrixPanel {
                     pins.pins.latch = false;
 
                     pins.pins.rowAddress = col;
-
+                    // Clear
                     pins.pins.r1 = false;
                     pins.pins.g1 = false;
                     pins.pins.b1 = false;
@@ -317,12 +318,13 @@ public class RGBmatrixPanel {
                     gpioProxy.write(pins);
                     sleepNanos(stabilizeWait);
 
+                    // Set
                     pins.pins.r1 = true;
-                    pins.pins.g1 = true;
-                    pins.pins.b1 = true;
+                    pins.pins.g1 = false;
+                    pins.pins.b1 = false;
                     pins.pins.r2 = true;
-                    pins.pins.g2 = true;
-                    pins.pins.b2 = true;
+                    pins.pins.g2 = false;
+                    pins.pins.b2 = false;
 
                     gpioProxy.write(pins);
                     sleepNanos(stabilizeWait);
@@ -396,8 +398,8 @@ public class RGBmatrixPanel {
         }
     }
 
-    //    // Clear the inside of the given Rectangle.
-//    public clearRect(uint8_t fx, uint8_t fy, uint8_t fw, uint8_t fh) {
+    // Clear the inside of the given Rectangle.
+    public void clearRect(int fx, int fy, int fw, int fh) {
 //        uint8_t maxX, maxY;
 //        maxX = (fx + fw) > WIDTH ? WIDTH : (fx + fw);
 //        maxY = (fy + fh) > HEIGHT ? HEIGHT : (fy + fh);
@@ -421,12 +423,10 @@ public class RGBmatrixPanel {
 //                }
 //            }
 //        }
-//    }
-//
-//    // Fade whatever is on the display to black.
-//    void RgbMatrix::
-//
-//    fadeDisplay() {
+    }
+
+    //    // Fade whatever is on the display to black.
+    void fadeDisplay() {
 //        for (int b = PWM_BITS - 1; b >= 0; b--) {
 //            for (int x = 0; x < WIDTH; x++) {
 //                for (int y = 0; y < HEIGHT; y++) {
@@ -448,12 +448,10 @@ public class RGBmatrixPanel {
 //            //TODO: make this dependent on PWM_BITS (longer sleep for fewer PWM_BITS).
 //            usleep(100000); // 1/10 second
 //        }
-//    }
-//
-//    // Fade whatever is shown inside the given Rectangle.
-//    void RgbMatrix::
-//
-//    fadeRect(uint8_t fx, uint8_t fy, uint8_t fw, uint8_t fh) {
+    }
+
+    //    // Fade whatever is shown inside the given Rectangle.
+    void fadeRect(int fx, int fy, int fw, int fh) {
 //        uint8_t maxX, maxY;
 //        maxX = (fx + fw) > WIDTH ? WIDTH : (fx + fw);
 //        maxY = (fy + fh) > HEIGHT ? HEIGHT : (fy + fh);
@@ -479,18 +477,19 @@ public class RGBmatrixPanel {
 //            //TODO: make this param and/or dependent on PWM_BITS (longer sleep for fewer PWM_BITS).
 //            usleep(100000); // 1/10 second
 //        }
-//    }
-//
-//    // Call this after drawing on the display and before calling fadeIn().
-//    void setupFadeIn() {
-//        // Copy the plane and then set all pins to 0.
+    }
+
+    //    // Call this after drawing on the display and before calling fadeIn().
+    void setupFadeIn() {
+        // Copy the plane and then set all pins to 0.
 //        memcpy( & fadeInPlane, &plane, sizeof(plane));
-//        clearDisplay();
+        clearDisplay();
 //    }
 //
 //    // Fade in whatever is stored in the fadeInPlane.
-//    void fadeIn() {
-//        // Loop over copy of plane and set pins in actual plane.
+
+    void fadeIn() {
+        // Loop over copy of plane and set pins in actual plane.
 //        for (int b = 0; b < PWM_BITS; b++) {
 //            for (int x = 0; x < WIDTH; x++) {
 //                for (int y = 0; y < HEIGHT; y++) {
@@ -512,11 +511,12 @@ public class RGBmatrixPanel {
 //            }
 //            //TODO: make this a param and/or dependent on PWM_BITS (longer sleep for fewer PWM_BITS).
 //            usleep(100000); // 1/10 second
-//        }
-//    }
+    }
+
+    //    }
 //
 //    // Wipe all pixels down off the screen
-//    void wipeDown() {
+    void wipeDown() {
 //        for (int frame = 0; frame < HEIGHT; frame++) {
 //            //Each time through, clear the top row.
 //            for (int x = 0; x < WIDTH; x++) {
@@ -566,9 +566,10 @@ public class RGBmatrixPanel {
 //            //TODO: make this param and/or dependent on PWM_BITS (longer sleep for fewer PWM_BITS).
 //            usleep(25000);
 //        }
-//    }
-//
-    void drawPixel(byte x, byte y, Color color) {
+    }
+
+    //
+    public void drawPixel(byte x, byte y, Color color) {
         if (x >= WIDTH || y >= HEIGHT) {
             return;
         }
@@ -616,12 +617,13 @@ public class RGBmatrixPanel {
                 bits.pins.g2 = ((green & mask) == mask);
                 bits.pins.b2 = ((blue & mask) == mask);
             }
+
+            plane[b].row[y & 0xf].column[x] = bits;
         }
     }
-//
-//    // Bresenham's Line Algorithm
-//    void drawLine(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,
-//             Color color) {
+
+    //    // Bresenham's Line Algorithm
+    void drawLine(int x0, int y0, int x1, int y1, Color color) {
 //        int16_t steep = abs(y1 - y0) > abs(x1 - x0);
 //
 //        if (steep) {
@@ -661,49 +663,41 @@ public class RGBmatrixPanel {
 //                err += dx;
 //            }
 //        }
-//    }
-//
+    }
+
+    //
 //    // Draw a vertical line
-//    void drawVLine(uint8_t x, uint8_t y, uint8_t h, Color color) {
+    void drawVLine(int x, int y, int h, Color color) {
 //        drawLine(x, y, x, y + h - 1, color);
-//    }
-//
+    }
+
+    //
 //    // Draw a horizontal line
-//    void RgbMatrix::
-//
-//    drawHLine(uint8_t x, uint8_t y, uint8_t w, Color color) {
+    void drawHLine(int x, int y, int w, Color color) {
 //        drawLine(x, y, x + w - 1, y, color);
-//    }
-//
+    }
+
+    //
 //    // Draw the outline of a rectangle (no fill)
-//    void RgbMatrix::
-//
-//    drawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, Color color) {
+    void drawRect(int x, int y, int w, int h, Color color) {
 //        drawHLine(x, y, w, color);
 //        drawHLine(x, y + h - 1, w, color);
 //        drawVLine(x, y, h, color);
 //        drawVLine(x + w - 1, y, h, color);
-//    }
-//
-//    void RgbMatrix::
-//
-//    fillRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, Color color) {
+    }
+
+    void fillRect(int x, int y, int w, int h, Color color) {
 //        for (uint8_t i = x; i < x + w; i++) {
 //            drawVLine(i, y, h, color);
 //        }
-//    }
-//
-//    void RgbMatrix::
-//
-//    fillScreen(Color color) {
+    }
+
+    void fillScreen(Color color) {
 //        fillRect(0, 0, WIDTH, HEIGHT, color);
-//    }
-//
-//    // Draw a rounded rectangle with radius r.
-//    void RgbMatrix::
-//
-//    drawRoundRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t r,
-//                  Color color) {
+    }
+
+    // Draw a rounded rectangle with radius r.
+    void drawRoundRect(int x, int y, int w, int h, int r, Color color) {
 //        drawHLine(x + r, y, w - 2 * r, color);
 //        drawHLine(x + r, y + h - 1, w - 2 * r, color);
 //        drawVLine(x, y + r, h - 2 * r, color);
@@ -713,22 +707,17 @@ public class RGBmatrixPanel {
 //        drawCircleQuadrant(x + w - r - 1, y + r, r, 2, color);
 //        drawCircleQuadrant(x + w - r - 1, y + h - r - 1, r, 4, color);
 //        drawCircleQuadrant(x + r, y + h - r - 1, r, 8, color);
-//    }
-//
-//    void RgbMatrix::
-//
-//    fillRoundRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t r,
-//                  Color color) {
+    }
+
+    void fillRoundRect(int x, int y, int w, int h, int r, Color color) {
 //        fillRect(x + r, y, w - 2 * r, h, color);
 //
 //        fillCircleHalf(x + r, y + r, r, 1, h - 2 * r - 1, color);
 //        fillCircleHalf(x + w - r - 1, y + r, r, 2, h - 2 * r - 1, color);
-//    }
-//
-//    // Draw the outline of a cirle (no fill) - Midpoint Circle Algorithm
-//    void RgbMatrix::
-//
-//    drawCircle(uint8_t x, uint8_t y, uint8_t r, Color color) {
+    }
+
+    // Draw the outline of a cirle (no fill) - Midpoint Circle Algorithm
+    void drawCircle(int x, int y, int r, Color color) {
 //        int16_t f = 1 - r;
 //        int16_t ddFx = 1;
 //        int16_t ddFy = -2 * r;
@@ -760,13 +749,10 @@ public class RGBmatrixPanel {
 //            drawPixel(x + y1, y - x1, color);
 //            drawPixel(x - y1, y - x1, color);
 //        }
-//    }
-//
-//    // Draw one of the four quadrants of a circle.
-//    void RgbMatrix::
-//
-//    drawCircleQuadrant(uint8_t x, uint8_t y, uint8_t r, uint8_t quadrant,
-//                       Color color) {
+    }
+
+    // Draw one of the four quadrants of a circle.
+    void drawCircleQuadrant(int x, int y, int r, int quadrant, Color color) {
 //        int16_t f = 1 - r;
 //        int16_t ddFx = 1;
 //        int16_t ddFy = -2 * r;
@@ -808,20 +794,14 @@ public class RGBmatrixPanel {
 //                drawPixel(x - x1, y + y1, color);
 //            }
 //        }
-//    }
-//
-//    void RgbMatrix::
-//
-//    fillCircle(uint8_t x, uint8_t y, uint8_t r, Color color) {
+    }
+
+    void fillCircle(int x, int y, int r, Color color) {
 //        drawVLine(x, y - r, 2 * r + 1, color);
 //        fillCircleHalf(x, y, r, 3, 0, color);
-//    }
-//
-//    void RgbMatrix::
-//
-//    fillCircleHalf(uint8_t x, uint8_t y, uint8_t r,
-//                   uint8_t half, uint8_t stretch,
-//                   Color color) {
+    }
+
+    void fillCircleHalf(int x, int y, int r, int half, int stretch, Color color) {
 //        int16_t f = 1 - r;
 //        int16_t ddFx = 1;
 //        int16_t ddFy = -2 * r;
@@ -879,14 +859,10 @@ public class RGBmatrixPanel {
 //        }
 //
 //        drawLine(prevX, prevY, x + r * cos(endAngle), y + r * sin(endAngle), color);
-//    }
-//
-//    // Draw the outline of a wedge.
-//    void RgbMatrix::
-//
-//    drawWedge(uint8_t x, uint8_t y, uint8_t r,  //TODO: add inner radius
-//              float startAngle, float endAngle,
-//              Color color) {
+    }
+
+    // Draw the outline of a wedge. //TODO: add inner radius
+    void drawWedge(int x, int y, int r, float startAngle, float endAngle, Color color) {
 //        // Convert degrees to radians
 //        float degreesPerRadian = M_PI / 180;
 //
@@ -918,25 +894,19 @@ public class RGBmatrixPanel {
 //        }
 //
 //        drawLine(prevX, prevY, x, y, color);
-//    }
-//
-//    void RgbMatrix::
-//
-//    drawTriangle(uint8_t x1, uint8_t y1,
-//                 uint8_t x2, uint8_t y2,
-//                 uint8_t x3, uint8_t y3,
-//                 Color color) {
+    }
+
+    void drawTriangle(int x1, int y1,
+                      int x2, int y2,
+                      int x3, int y3, Color color) {
 //        drawLine(x1, y1, x2, y2, color);
 //        drawLine(x2, y2, x3, y3, color);
 //        drawLine(x3, y3, x1, y1, color);
-//    }
-//
-//    void RgbMatrix::
-//
-//    fillTriangle(uint8_t x1, uint8_t y1,
-//                 uint8_t x2, uint8_t y2,
-//                 uint8_t x3, uint8_t y3,
-//                 Color color) {
+    }
+
+    void fillTriangle(int x1, int y1,
+                      int x2, int y2,
+                      int x3, int y3, Color color) {
 //        int16_t a, b, y, last;
 //
 //        // Sort coordinates by Y order (y3 >= y2 >= y1)
@@ -1029,12 +999,10 @@ public class RGBmatrixPanel {
 //
 //            drawHLine(a, y, b - a + 1, color);
 //        }
-//    }
-//
-//    // Special method to create a color wheel on the display.
-//    void RgbMatrix::
-//
-//    drawColorWheel() {
+    }
+
+    // Special method to create a color wheel on the display.
+    void drawColorWheel() {
 //        int x, y, hue;
 //        float dx, dy, d;
 //        uint8_t sat, val;
@@ -1078,24 +1046,18 @@ public class RGBmatrixPanel {
 //                drawPixel(x, y, color);
 //            }
 //        }
-//    }
-//
-//    void RgbMatrix::
-//
-//    setTextCursor(uint8_t x, uint8_t y) {
+    }
+
+    void setTextCursor(int x, int y) {
 //        _textCursorX = x;
 //        _textCursorY = y;
-//    }
-//
-//    void RgbMatrix::
-//
-//    setFontColor(Color color) {
+    }
+
+    void setFontColor(Color color) {
 //        _fontColor = color;
-//    }
-//
-//    void RgbMatrix::
-//
-//    setFontSize(uint8_t size) {
+    }
+
+    void setFontSize(int size) {
 //        _fontSize = (size >= 3) ? 3 : size; //only 3 sizes for now
 //
 //        if (_fontSize == 1) {
@@ -1110,18 +1072,14 @@ public class RGBmatrixPanel {
 //            _fontWidth = 5;
 //            _fontHeight = 7;
 //        }
-//    }
-//
-//    void RgbMatrix::
-//
-//    setWordWrap(bool wrap) {
+    }
+
+    void setWordWrap(boolean wrap) {
 //        _wordWrap = wrap;
-//    }
-//
-//    // Write a character using the Text cursor and stored Font settings.
-//    void RgbMatrix::
-//
-//    writeChar(unsigned char c) {
+    }
+
+    // Write a character using the Text cursor and stored Font settings.
+    void writeChar(char c) {
 //        if (c == '\n') {
 //            _textCursorX = 0;
 //            _textCursorY += _fontHeight;
@@ -1137,13 +1095,10 @@ public class RGBmatrixPanel {
 //                _textCursorY += _fontHeight + 1;
 //            }
 //        }
-//    }
-//
-//    // Put a character on the display using glcd fonts.
-//    void RgbMatrix::
-//
-//    putChar(uint8_t x, uint8_t y, unsigned char c, uint8_t size,
-//            Color color) {
+    }
+
+    // Put a character on the display using glcd fonts.
+    void putChar(int x, int y, char c, int size, Color color) {
 //        unsigned char *font = Font5x7;
 //        uint8_t fontWidth = 5;
 //        uint8_t fontHeight = 7;
@@ -1180,12 +1135,10 @@ public class RGBmatrixPanel {
 //                line >>= 1;
 //            }
 //        }
-//    }
-//
-//    //Leave output in 24-bit color (#RRGGBB)
-//    Color RgbMatrix::
-//
-//    colorHSV(long hue, uint8_t sat, uint8_t val) {
+    }
+
+    //Leave output in 24-bit color (#RRGGBB)
+    Color colorHSV(long hue, int sat, int val) {
 //        uint8_t r, g, b, lo;
 //        uint16_t s1, v1;
 //
@@ -1246,6 +1199,6 @@ public class RGBmatrixPanel {
 //        c.blue = (b * v1) >> 8;
 //
 //        return c;
-//    }
+    }
 
 }
