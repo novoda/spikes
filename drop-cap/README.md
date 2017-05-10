@@ -20,7 +20,9 @@ To start using this library, add these lines to the `build.gradle` of your proje
 
 ```groovy
 repositories {
-    jcenter()
+    maven {
+        url 'https://dl.bintray.com/novoda/maven'
+    }
 }
 
 dependencies {
