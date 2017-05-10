@@ -9,8 +9,7 @@ import android.util.Log;
 
 import com.novoda.pianohero.hax.GpioProxy;
 import com.novoda.pianohero.hax.RGBmatrixPanel;
-
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import com.novoda.pianohero.hax.RGBmatrixPanel.Color;
 
 public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.View {
 
@@ -38,7 +37,23 @@ public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.
         handler = new Handler(thread.getLooper());
 
         rgbMatrixPanel = new RGBmatrixPanel(new GpioProxy());
+        rgbMatrixPanel.clearDisplay();
         handler.post(hax);
+
+        Color color = new Color();
+        color.red = 0;
+        color.blue = 255;
+        color.green = 0;
+        rgbMatrixPanel.drawPixel(1, 1, color);
+        rgbMatrixPanel.drawPixel(2, 2, color);
+        rgbMatrixPanel.drawPixel(3, 3, color);
+        rgbMatrixPanel.drawPixel(4, 4, color);
+        rgbMatrixPanel.drawPixel(5, 5, color);
+        rgbMatrixPanel.drawPixel(6, 6, color);
+        rgbMatrixPanel.drawPixel(7, 7, color);
+        rgbMatrixPanel.drawPixel(8, 8, color);
+        rgbMatrixPanel.drawPixel(9, 9, color);
+        rgbMatrixPanel.drawPixel(10, 10, color);
 
 //        GameMvp.Model gameModel = new GameModel(new SongSequenceFactory(), new SimplePitchNotationFormatter());
 //        presenter = new GamePresenter(gameModel, this);
@@ -49,7 +64,7 @@ public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.
         @Override
         public void run() {
             rgbMatrixPanel.foo();
-            handler.postDelayed(this, MILLISECONDS.toMillis(100));
+            handler.post(this);
         }
     };
 

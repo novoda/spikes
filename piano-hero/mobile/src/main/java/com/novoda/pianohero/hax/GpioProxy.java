@@ -84,29 +84,52 @@ public class GpioProxy {
 //         TODO
     }
 
-    void write(RGBmatrixPanel.GpioPins gpio) {
+    void writeRowAddress(int rowAddress) {
         try {
-//            for (int b = 0; b < 27; ++b) {
-            busOutputEnabled.setValue(gpio.pins.outputEnabled);
-            busSerialClock.setValue(gpio.pins.clock);
-            busDataLatch.setValue(gpio.pins.latch);
-
-            int rowAddress = gpio.pins.rowAddress;
             // rowAddress is always 4 pins
             busRowAddressD.setValue((rowAddress & 8) == 8);
             busRowAddressC.setValue((rowAddress & 4) == 4);
             busRowAddressB.setValue((rowAddress & 2) == 2);
             busRowAddressA.setValue((rowAddress & 1) == 1);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 
-            busLedR1.setValue(gpio.pins.r1);
-            busLedG1.setValue(gpio.pins.g1);
-            busLedB1.setValue(gpio.pins.b1);
+    void writePixel(RGBmatrixPanel.PixelPins pins) {
+        try {
+            busLedR1.setValue(pins.r1);
+            busLedG1.setValue(pins.g1);
+            busLedB1.setValue(pins.b1);
 
-            busLedR2.setValue(gpio.pins.r2);
-            busLedG2.setValue(gpio.pins.g2);
-            busLedB2.setValue(gpio.pins.b2);
-//            }
+            busLedR2.setValue(pins.r2);
+            busLedG2.setValue(pins.g2);
+            busLedB2.setValue(pins.b2);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 
+    void writeClock(boolean value) {
+        try {
+            busSerialClock.setValue(value);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+
+    }
+
+    void writeOutputEnabled(boolean value) {
+        try {
+            busOutputEnabled.setValue(value);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    void writeLatch(boolean value) {
+        try {
+            busDataLatch.setValue(value);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }

@@ -59,33 +59,21 @@ public class RGBmatrixPanel {
     //   GPIO 27            -->  G2 (LED 2: Green)
     //   GPIO 17            -->  B2 (LED 2: Blue)
 
-    static class GpioPins {
+    static class PixelPins {
+        boolean r1;
+        boolean g1;
+        boolean b1;
 
-        static class Pins {
-            boolean outputEnabled = true;
-            boolean clock = true;
-            boolean latch = true;
-
-            int rowAddress = 0;
-
-            boolean r1 = true;
-            boolean g1 = true;
-            boolean b1 = true;
-
-            boolean r2 = true;
-            boolean g2 = true;
-            boolean b2 = true;
-        }
-
-        int raw = 0;
-        Pins pins = new Pins();
+        boolean r2;
+        boolean g2;
+        boolean b2;
     }
 
     // Because a 32x32 Panel is composed of two 16x32 sub-panels, and each
     // 32x32 Panel requires writing an LED from each sub-panel at a time, the
     // following data structure represents two rows: n and n+16.
     private static class TwoRows {
-        GpioPins[] column = new GpioPins[COLUMN_COUNT];  //TODO: Does this only use color pins?
+        PixelPins[] column = new PixelPins[COLUMN_COUNT];
     }
 
     private static class Display {
@@ -96,11 +84,11 @@ public class RGBmatrixPanel {
     private Display[] fadeInPlane = new Display[PWM_BITS]; //2nd plane for handling fadeIn
 
     // Members for writing text
-    private byte _textCursorX, _textCursorY;
+    private int _textCursorX, _textCursorY;
     private Color _fontColor;
-    private byte _fontSize;
-    private byte _fontWidth;
-    private byte _fontHeight;
+    private int _fontSize;
+    private int _fontWidth;
+    private int _fontHeight;
     private boolean _wordWrap;
 
     //#finish include "RgbMatrix.h"
@@ -150,15 +138,12 @@ public class RGBmatrixPanel {
     public RGBmatrixPanel(GpioProxy gpioProxy) {
         this.gpioProxy = gpioProxy;
 
-//        assert (result == b.raw);
-//        assert (PWM_BITS < 8);  // only up to 7 makes sense.
-
         for (int i = 0; i < plane.length; i++) {
             Display display = new Display();
             for (int j = 0; j < display.row.length; j++) {
                 TwoRows twoRows = new TwoRows();
                 for (int k = 0; k < twoRows.column.length; k++) {
-                    twoRows.column[k] = new GpioPins();
+                    twoRows.column[k] = new PixelPins();
                 }
                 display.row[j] = twoRows;
             }
@@ -177,109 +162,30 @@ public class RGBmatrixPanel {
         _fontWidth = 3;
         _fontHeight = 5;
         _wordWrap = true;
-
-        clearDisplay();
     }
 
     /*
      * Clear the entire display
      */
     public void clearDisplay() {
-        for (Display display : plane) {
-            for (TwoRows rows : display.row) {
-                for (GpioPins pins : rows.column) {
-                    pins.raw = 0;
-                    pins.pins = new GpioPins.Pins();
-                    gpioProxy.write(pins); // TODO does this even work?
-                }
-            }
-        }
-    }
-
-    /**
-     * Write pixels to the LED panel.
-     */
-    public void updateDisplay() {
-        GpioPins serialMask = new GpioPins();   // Mask of pins we need to set while clocking in.
-        serialMask.pins.r1 = serialMask.pins.g1 = serialMask.pins.b1 = true;
-        serialMask.pins.r2 = serialMask.pins.g2 = serialMask.pins.b2 = true;
-        serialMask.pins.clock = true;
-
-        GpioPins rowMask = new GpioPins();
-        rowMask.pins.rowAddress = 0xf;
-
-        GpioPins clock = new GpioPins();
-        GpioPins outputEnable = new GpioPins();
-        GpioPins latch = new GpioPins();
-
-        clock.pins.clock = true;
-        outputEnable.pins.outputEnabled = true;
-        latch.pins.latch = true;
-
-        GpioPins rowBits = new GpioPins();
-
-        for (byte row = 0; row < ROWS_PER_SUB_PANEL; ++row) {
-            // Rows can't be switched very quickly without ghosting, so we do the
-            // full PWM of one row before switching rows.
-            for (int b = 0; b < PWM_BITS; b++) {
-                TwoRows rowData = plane[b].row[row];
-
-                // Clock in the row. The time this takes is the smallest time we can
-                // leave the LEDs on, thus the smallest time-constant we can use for
-                // PWM (doubling the sleep time with each bit).
-                // So this is the critical path; I'd love to know if we can employ some
-                // DMA techniques to speed this up.
-                // (With this code, one row roughly takes 3.0 - 3.4usec to clock in).
-                //
-                // However, in particular for longer chaining, it seems we need some more
-                // wait time to settle.
-                long StabilizeWaitNanos = 256; //TODO: mateo was 256
-
-                for (byte col = 0; col < COLUMN_COUNT; ++col) {
-                    GpioPins out = rowData.column[col];
-                    gpioProxy.clearBits(~out.raw & serialMask.raw);  // also: resets clock.
-                    gpioProxy.write(out);
-                    sleepNanos(StabilizeWaitNanos);
-                    gpioProxy.setBits(out.raw & serialMask.raw);
-                    gpioProxy.write(out);
-                    sleepNanos(StabilizeWaitNanos);
-                    gpioProxy.setBits(clock.raw);
-                    gpioProxy.write(clock);
-                    sleepNanos(StabilizeWaitNanos);
-                }
-
-                gpioProxy.setBits(outputEnable.raw);  // switch off while strobe (latch).
-                gpioProxy.write(outputEnable);
-
-                rowBits.pins.rowAddress = row;
-                gpioProxy.setBits(rowBits.raw & rowMask.raw);
-                gpioProxy.clearBits(~rowBits.raw & rowMask.raw);
-                gpioProxy.write(rowBits);
-
-                gpioProxy.setBits(latch.raw);   // strobe - on and off
-                gpioProxy.clearBits(latch.raw);
-                gpioProxy.write(latch);
-
-                // Now switch on for the given sleep time.
-                gpioProxy.clearBits(outputEnable.raw);
-                gpioProxy.write(outputEnable);
-
-                // If we use less pins, then use the upper areas which leaves us more
-                // CPU time to do other stuff.
-                sleepNanos(ROW_SLEEP_NANOS[b + (7 - PWM_BITS)]);
-            }
-        }
+        // TODO look at cpp again to do this
+//        for (Display display : plane) {
+//            for (TwoRows rows : display.row) {
+//                for (PixelPins pins : rows.column) {
+//                    pins.r1 = false;
+//                    pins.g1 = false;
+//                    pins.b1 = false;
+//                    pins.r2 = false;
+//                    pins.g2 = false;
+//                    pins.b2 = false;
+//                    gpioProxy.writePixel(pins); // TODO does this even work?
+//                }
+//            }
+//        }
     }
 
     public void foo() {
-        GpioPins pins = new GpioPins();
-        pins.pins.outputEnabled = true;
-        pins.pins.clock = true;
-        pins.pins.latch = true;
-
-        pins.pins.rowAddress = 1111;
-
-        gpioProxy.write(pins);
+        PixelPins pixelPins = new PixelPins();
 
         for (int row = 0; row < ROWS_PER_SUB_PANEL; ++row) {
             // Rows can't be switched very quickly without ghosting, so we do the
@@ -300,95 +206,67 @@ public class RGBmatrixPanel {
                 long stabilizeWait = TimeUnit.NANOSECONDS.toMillis(156); //TODO: mateo was 256
 
                 for (int col = 0; col < COLUMN_COUNT; ++col) {
-                    GpioPins colPins = rowData.column[col];
+                    PixelPins colPins = rowData.column[col];
 
-                    pins.pins.outputEnabled = false;
-                    pins.pins.clock = false;
-                    pins.pins.latch = false;
+                    // Clear bits (clock)
+                    gpioProxy.writeClock(false);
+                    // Clear bits
+                    pixelPins.r1 = false;
+                    pixelPins.g1 = false;
+                    pixelPins.b1 = false;
 
-                    pins.pins.rowAddress = col;
-                    // Clear
-                    pins.pins.r1 = false;
-                    pins.pins.g1 = false;
-                    pins.pins.b1 = false;
-                    pins.pins.r2 = false;
-                    pins.pins.g2 = false;
-                    pins.pins.b2 = false;
+                    pixelPins.r2 = false;
+                    pixelPins.g2 = false;
+                    pixelPins.b2 = false;
 
-                    gpioProxy.write(pins);
-                    sleepNanos(stabilizeWait);
+                    gpioProxy.writePixel(pixelPins);
+                    sleep(stabilizeWait);
 
-                    // Set
-                    pins.pins.r1 = true;
-                    pins.pins.g1 = false;
-                    pins.pins.b1 = false;
-                    pins.pins.r2 = true;
-                    pins.pins.g2 = false;
-                    pins.pins.b2 = false;
+                    // Set bits
+                    pixelPins.r1 = colPins.r1;
+                    pixelPins.g1 = colPins.g1;
+                    pixelPins.b1 = colPins.b1;
 
-                    gpioProxy.write(pins);
-                    sleepNanos(stabilizeWait);
+                    pixelPins.r2 = colPins.r2;
+                    pixelPins.g2 = colPins.g2;
+                    pixelPins.b2 = colPins.b2;
 
-                    pins.pins.clock = true;
+                    gpioProxy.writePixel(pixelPins);
+                    sleep(stabilizeWait);
 
-                    gpioProxy.write(pins);
-                    sleepNanos(stabilizeWait);
-
+                    // Set bits (clock)
+                    gpioProxy.writeClock(true);
+                    sleep(stabilizeWait);
                 }
 
                 // switch off while strobe (latch).
-                pins.pins.outputEnabled = false;
+                gpioProxy.writeOutputEnabled(true);
 
-                gpioProxy.write(pins);
+                gpioProxy.writeRowAddress(row);
 
-                pins.pins.rowAddress = row;
-
-                pins.pins.outputEnabled = false;
-                pins.pins.clock = false;
-                pins.pins.latch = false;
-
-                pins.pins.r1 = false;
-                pins.pins.g1 = false;
-                pins.pins.b1 = false;
-                pins.pins.r2 = false;
-                pins.pins.g2 = false;
-                pins.pins.b2 = false;
-
-                gpioProxy.write(pins);
-
-                // strobe  on and off
-                pins.pins.latch = true;
-
-                gpioProxy.write(pins);
-
-                pins.pins.latch = false;
-
-                gpioProxy.write(pins);
+                // strobe - on and off
+                gpioProxy.writeLatch(true);
+                gpioProxy.writeLatch(false);
 
                 // Now switch on for the given sleep time.
-                pins.pins.outputEnabled = true;
+                gpioProxy.writeOutputEnabled(false);
 
-                gpioProxy.write(pins);
                 // If we use less pins, then use the upper areas which leaves us more CPU time to do other stuff.
-                sleepNanos(TimeUnit.NANOSECONDS.toMillis(ROW_SLEEP_NANOS[b + (7 - PWM_BITS)]));
-                Log.d("TUT", "drawing something?");
-
+                sleep(ROW_SLEEP_NANOS[b + (7 - PWM_BITS)]);
+                Log.d("!!!", "drawing something?");
             }
         }
     }
 
-    private static void sleepNanos(long nanos) {
+    private static void sleep(long nanos) {
         // For sleep times above 20usec, nanosleep seems to be fine, but it has
         // an offset of about 20usec (on the RPi distribution I was testing it on).
         // That means, we need to give it 80us to get 100us.
-        // For values lower than roughly 30us, this is not accurate anymore and we
-        // need to switch to busy wait.
-        // TODO: compile Linux kernel realtime extensions and watch if the offset-time
-        // changes and hope for less jitter.
+        // For values lower than roughly 30us, this is not accurate anymore and we need to switch to busy wait.
+        // idea: compile Linux kernel realtime extensions and watch if the offset-time changes and hope for less jitter.
         if (nanos > 28000) {
-//            struct timespec sleep_time = {0, nanos - 20000};
-//            nanosleep( & sleep_time, NULL);
-            SystemClock.sleep(nanos - 20000);
+            long total = nanos - 20000;
+            SystemClock.sleep(TimeUnit.NANOSECONDS.toMillis(total));
         } else {
             // The following loop is determined empirically on a 700Mhz RPi
             for (int i = (int) (nanos >> 2); i != 0; --i) {
@@ -407,7 +285,7 @@ public class RGBmatrixPanel {
 //        for (int b = PWM_BITS - 1; b >= 0; b--) {
 //            for (int x = fx; x < maxX; x++) {
 //                for (int y = fy; y < maxY; y++) {
-//                    GpioPins * pins = &plane[b].row[y & 0xf].column[x];
+//                    PixelPins * pins = &plane[b].row[y & 0xf].column[x];
 //
 //                    if (y < 16) {
 //                        // Upper sub-panel
@@ -430,7 +308,7 @@ public class RGBmatrixPanel {
 //        for (int b = PWM_BITS - 1; b >= 0; b--) {
 //            for (int x = 0; x < WIDTH; x++) {
 //                for (int y = 0; y < HEIGHT; y++) {
-//                    GpioPins * pins = &plane[b].row[y & 0xf].column[x];
+//                    PixelPins * pins = &plane[b].row[y & 0xf].column[x];
 //
 //                    if (y < 16) {
 //                        // Upper sub-panel
@@ -459,7 +337,7 @@ public class RGBmatrixPanel {
 //        for (int b = PWM_BITS - 1; b >= 0; b--) {
 //            for (int x = fx; x < maxX; x++) {
 //                for (int y = fy; y < maxY; y++) {
-//                    GpioPins * pins = &plane[b].row[y & 0xf].column[x];
+//                    PixelPins * pins = &plane[b].row[y & 0xf].column[x];
 //
 //                    if (y < 16) {
 //                        // Upper sub-panel
@@ -484,17 +362,16 @@ public class RGBmatrixPanel {
         // Copy the plane and then set all pins to 0.
 //        memcpy( & fadeInPlane, &plane, sizeof(plane));
         clearDisplay();
-//    }
-//
-//    // Fade in whatever is stored in the fadeInPlane.
+    }
 
+    // Fade in whatever is stored in the fadeInPlane.
     void fadeIn() {
         // Loop over copy of plane and set pins in actual plane.
 //        for (int b = 0; b < PWM_BITS; b++) {
 //            for (int x = 0; x < WIDTH; x++) {
 //                for (int y = 0; y < HEIGHT; y++) {
-//                    GpioPins * fiBits = &fadeInPlane[b].row[y & 0xf].column[x];
-//                    GpioPins * pins = &plane[b].row[y & 0xf].column[x];
+//                    PixelPins * fiBits = &fadeInPlane[b].row[y & 0xf].column[x];
+//                    PixelPins * pins = &plane[b].row[y & 0xf].column[x];
 //
 //                    if (y < 16) {
 //                        // Upper sub-panel
@@ -521,7 +398,7 @@ public class RGBmatrixPanel {
 //            //Each time through, clear the top row.
 //            for (int x = 0; x < WIDTH; x++) {
 //                for (int b = PWM_BITS - 1; b >= 0; b--) {
-//                    GpioPins * pins = &plane[b].row[(frame) & 0xf].column[x];
+//                    PixelPins * pins = &plane[b].row[(frame) & 0xf].column[x];
 //
 //                    if (frame < 16) {
 //                        // Upper sub-panel
@@ -540,8 +417,8 @@ public class RGBmatrixPanel {
 //            for (int y = HEIGHT - 1; y > frame; y--) {
 //                for (int x = 0; x < WIDTH; x++) {
 //                    for (int b = PWM_BITS - 1; b >= 0; b--) {
-//                        GpioPins * prevBits = &plane[b].row[(y - 1) & 0xf].column[x];
-//                        GpioPins * currBits = &plane[b].row[y & 0xf].column[x];
+//                        PixelPins * prevBits = &plane[b].row[(y - 1) & 0xf].column[x];
+//                        PixelPins * currBits = &plane[b].row[y & 0xf].column[x];
 //
 //                        if (y == 16) //Special case when we cross the panels
 //                        {
@@ -569,7 +446,7 @@ public class RGBmatrixPanel {
     }
 
     //
-    public void drawPixel(byte x, byte y, Color color) {
+    public void drawPixel(int x, int y, Color color) {
         if (x >= WIDTH || y >= HEIGHT) {
             return;
         }
@@ -604,116 +481,121 @@ public class RGBmatrixPanel {
         // Set RGB pins for this pixel in each PWM bit plane.
         for (int b = 0; b < PWM_BITS; b++) {
             byte mask = (byte) (1 << b);
-            GpioPins bits = plane[b].row[y & 0xf].column[x];
+            PixelPins pins = plane[b].row[y & 0xf].column[x];
 
             if (y < 16) {
                 // Upper sub-panel
-                bits.pins.r1 = ((red & mask) == mask);
-                bits.pins.g1 = ((green & mask) == mask);
-                bits.pins.b1 = ((blue & mask) == mask);
+                pins.r1 = ((red & mask) == mask);
+                pins.g1 = ((green & mask) == mask);
+                pins.b1 = ((blue & mask) == mask);
             } else {
                 // Lower sub-panel
-                bits.pins.r2 = ((red & mask) == mask);
-                bits.pins.g2 = ((green & mask) == mask);
-                bits.pins.b2 = ((blue & mask) == mask);
+                pins.r2 = ((red & mask) == mask);
+                pins.g2 = ((green & mask) == mask);
+                pins.b2 = ((blue & mask) == mask);
             }
-
-            plane[b].row[y & 0xf].column[x] = bits;
         }
     }
 
-    //    // Bresenham's Line Algorithm
-    void drawLine(int x0, int y0, int x1, int y1, Color color) {
-//        int16_t steep = abs(y1 - y0) > abs(x1 - x0);
-//
-//        if (steep) {
-//            std::swap (x0, y0);
-//            std::swap (x1, y1);
-//        }
-//
-//        if (x0 > x1) {
-//            std::swap (x0, x1);
-//            std::swap (y0, y1);
-//        }
-//
-//        int16_t dx, dy;
-//        dx = x1 - x0;
-//        dy = abs(y1 - y0);
-//
-//        int16_t err = dx / 2;
-//        int16_t ystep;
-//
-//        if (y0 < y1) {
-//            ystep = 1;
-//        } else {
-//            ystep = -1;
-//        }
-//
-//        for (; x0 <= x1; x0++) {
-//            if (steep) {
-//                drawPixel(y0, x0, color);
-//            } else {
-//                drawPixel(x0, y0, color);
-//            }
-//
-//            err -= dy;
-//
-//            if (err < 0) {
-//                y0 += ystep;
-//                err += dx;
-//            }
-//        }
+    /**
+     * Bresenham's Line Algorithm
+     */
+    public void drawLine(int x0, int y0, int x1, int y1, Color color) {
+        boolean steep = Math.abs(y1 - y0) > Math.abs(x1 - x0);
+
+        if (steep) {
+            y0 = swap(x0, x0 = y0);
+            y1 = swap(x1, x1 = y1);
+        }
+
+        if (x0 > x1) {
+            x1 = swap(x0, x0 = x1);
+            y1 = swap(y0, y0 = y1);
+        }
+
+        int dx, dy;
+        dx = x1 - x0;
+        dy = Math.abs(y1 - y0);
+
+        int err = dx / 2;
+        int ystep;
+
+        if (y0 < y1) {
+            ystep = 1;
+        } else {
+            ystep = -1;
+        }
+
+        for (; x0 <= x1; x0++) {
+            if (steep) {
+                drawPixel(y0, x0, color);
+            } else {
+                drawPixel(x0, y0, color);
+            }
+
+            err -= dy;
+
+            if (err < 0) {
+                y0 += ystep;
+                err += dx;
+            }
+        }
     }
 
-    //
-//    // Draw a vertical line
-    void drawVLine(int x, int y, int h, Color color) {
-//        drawLine(x, y, x, y + h - 1, color);
+    /**
+     * so gross
+     * http://stackoverflow.com/a/20600020
+     */
+    private int swap(int a, int b) {
+        return a;
     }
 
-    //
-//    // Draw a horizontal line
-    void drawHLine(int x, int y, int w, Color color) {
-//        drawLine(x, y, x + w - 1, y, color);
+    // Draw a vertical line
+    public void drawVLine(int x, int y, int h, Color color) {
+        drawLine(x, y, x, y + h - 1, color);
     }
 
-    //
-//    // Draw the outline of a rectangle (no fill)
-    void drawRect(int x, int y, int w, int h, Color color) {
-//        drawHLine(x, y, w, color);
-//        drawHLine(x, y + h - 1, w, color);
-//        drawVLine(x, y, h, color);
-//        drawVLine(x + w - 1, y, h, color);
+    // Draw a horizontal line
+    public void drawHLine(int x, int y, int w, Color color) {
+        drawLine(x, y, x + w - 1, y, color);
     }
 
-    void fillRect(int x, int y, int w, int h, Color color) {
-//        for (uint8_t i = x; i < x + w; i++) {
-//            drawVLine(i, y, h, color);
-//        }
+    // Draw the outline of a rectangle (no fill)
+    public void drawRect(int x, int y, int w, int h, Color color) {
+        drawHLine(x, y, w, color);
+        drawHLine(x, y + h - 1, w, color);
+        drawVLine(x, y, h, color);
+        drawVLine(x + w - 1, y, h, color);
     }
 
-    void fillScreen(Color color) {
-//        fillRect(0, 0, WIDTH, HEIGHT, color);
+    public void fillRect(int x, int y, int w, int h, Color color) {
+        for (int i = x; i < x + w; i++) {
+            drawVLine(i, y, h, color);
+        }
+    }
+
+    public void fillScreen(Color color) {
+        fillRect(0, 0, WIDTH, HEIGHT, color);
     }
 
     // Draw a rounded rectangle with radius r.
-    void drawRoundRect(int x, int y, int w, int h, int r, Color color) {
-//        drawHLine(x + r, y, w - 2 * r, color);
-//        drawHLine(x + r, y + h - 1, w - 2 * r, color);
-//        drawVLine(x, y + r, h - 2 * r, color);
-//        drawVLine(x + w - 1, y + r, h - 2 * r, color);
-//
-//        drawCircleQuadrant(x + r, y + r, r, 1, color);
-//        drawCircleQuadrant(x + w - r - 1, y + r, r, 2, color);
-//        drawCircleQuadrant(x + w - r - 1, y + h - r - 1, r, 4, color);
-//        drawCircleQuadrant(x + r, y + h - r - 1, r, 8, color);
+    public void drawRoundRect(int x, int y, int w, int h, int r, Color color) {
+        drawHLine(x + r, y, w - 2 * r, color);
+        drawHLine(x + r, y + h - 1, w - 2 * r, color);
+        drawVLine(x, y + r, h - 2 * r, color);
+        drawVLine(x + w - 1, y + r, h - 2 * r, color);
+
+        drawCircleQuadrant(x + r, y + r, r, 1, color);
+        drawCircleQuadrant(x + w - r - 1, y + r, r, 2, color);
+        drawCircleQuadrant(x + w - r - 1, y + h - r - 1, r, 4, color);
+        drawCircleQuadrant(x + r, y + h - r - 1, r, 8, color);
     }
 
-    void fillRoundRect(int x, int y, int w, int h, int r, Color color) {
-//        fillRect(x + r, y, w - 2 * r, h, color);
-//
-//        fillCircleHalf(x + r, y + r, r, 1, h - 2 * r - 1, color);
-//        fillCircleHalf(x + w - r - 1, y + r, r, 2, h - 2 * r - 1, color);
+    public void fillRoundRect(int x, int y, int w, int h, int r, Color color) {
+        fillRect(x + r, y, w - 2 * r, h, color);
+
+        fillCircleHalf(x + r, y + r, r, 1, h - 2 * r - 1, color);
+        fillCircleHalf(x + w - r - 1, y + r, r, 2, h - 2 * r - 1, color);
     }
 
     // Draw the outline of a cirle (no fill) - Midpoint Circle Algorithm
@@ -752,7 +634,7 @@ public class RGBmatrixPanel {
     }
 
     // Draw one of the four quadrants of a circle.
-    void drawCircleQuadrant(int x, int y, int r, int quadrant, Color color) {
+    public void drawCircleQuadrant(int x, int y, int r, int quadrant, Color color) {
 //        int16_t f = 1 - r;
 //        int16_t ddFx = 1;
 //        int16_t ddFy = -2 * r;
@@ -796,12 +678,12 @@ public class RGBmatrixPanel {
 //        }
     }
 
-    void fillCircle(int x, int y, int r, Color color) {
-//        drawVLine(x, y - r, 2 * r + 1, color);
-//        fillCircleHalf(x, y, r, 3, 0, color);
+    public void fillCircle(int x, int y, int r, Color color) {
+        drawVLine(x, y - r, 2 * r + 1, color);
+        fillCircleHalf(x, y, r, 3, 0, color);
     }
 
-    void fillCircleHalf(int x, int y, int r, int half, int stretch, Color color) {
+    public void fillCircleHalf(int x, int y, int r, int half, int stretch, Color color) {
 //        int16_t f = 1 - r;
 //        int16_t ddFx = 1;
 //        int16_t ddFy = -2 * r;
@@ -862,7 +744,7 @@ public class RGBmatrixPanel {
     }
 
     // Draw the outline of a wedge. //TODO: add inner radius
-    void drawWedge(int x, int y, int r, float startAngle, float endAngle, Color color) {
+    public void drawWedge(int x, int y, int r, float startAngle, float endAngle, Color color) {
 //        // Convert degrees to radians
 //        float degreesPerRadian = M_PI / 180;
 //
@@ -896,12 +778,12 @@ public class RGBmatrixPanel {
 //        drawLine(prevX, prevY, x, y, color);
     }
 
-    void drawTriangle(int x1, int y1,
-                      int x2, int y2,
-                      int x3, int y3, Color color) {
-//        drawLine(x1, y1, x2, y2, color);
-//        drawLine(x2, y2, x3, y3, color);
-//        drawLine(x3, y3, x1, y1, color);
+    public void drawTriangle(int x1, int y1,
+                             int x2, int y2,
+                             int x3, int y3, Color color) {
+        drawLine(x1, y1, x2, y2, color);
+        drawLine(x2, y2, x3, y3, color);
+        drawLine(x3, y3, x1, y1, color);
     }
 
     void fillTriangle(int x1, int y1,
@@ -1049,56 +931,56 @@ public class RGBmatrixPanel {
     }
 
     void setTextCursor(int x, int y) {
-//        _textCursorX = x;
-//        _textCursorY = y;
+        _textCursorX = x;
+        _textCursorY = y;
     }
 
     void setFontColor(Color color) {
-//        _fontColor = color;
+        _fontColor = color;
     }
 
-    void setFontSize(int size) {
-//        _fontSize = (size >= 3) ? 3 : size; //only 3 sizes for now
-//
-//        if (_fontSize == 1) {
-//            _fontWidth = 3;
-//            _fontHeight = 5;
-//        } else if (_fontSize == 2) //medium (4x6)
-//        {
-//            _fontWidth = 4;
-//            _fontHeight = 6;
-//        } else if (_fontSize == 3) //large (5x7)
-//        {
-//            _fontWidth = 5;
-//            _fontHeight = 7;
-//        }
+    public void setFontSize(int size) {
+        _fontSize = (size >= 3) ? 3 : size; //only 3 sizes for now
+
+        if (_fontSize == 1) {
+            _fontWidth = 3;
+            _fontHeight = 5;
+        } else if (_fontSize == 2) //medium (4x6)
+        {
+            _fontWidth = 4;
+            _fontHeight = 6;
+        } else if (_fontSize == 3) //large (5x7)
+        {
+            _fontWidth = 5;
+            _fontHeight = 7;
+        }
     }
 
-    void setWordWrap(boolean wrap) {
-//        _wordWrap = wrap;
+    public void setWordWrap(boolean wrap) {
+        _wordWrap = wrap;
     }
 
     // Write a character using the Text cursor and stored Font settings.
-    void writeChar(char c) {
-//        if (c == '\n') {
-//            _textCursorX = 0;
-//            _textCursorY += _fontHeight;
-//        } else if (c == '\r') {
-//            ; //ignore
-//        } else {
-//            putChar(_textCursorX, _textCursorY, c, _fontSize, _fontColor);
-//
-//            _textCursorX += _fontWidth + 1;
-//
-//            if (_wordWrap && (_textCursorX > (WIDTH - _fontWidth))) {
-//                _textCursorX = 0;
-//                _textCursorY += _fontHeight + 1;
-//            }
-//        }
+    public void writeChar(char c) {
+        if (c == '\n') {
+            _textCursorX = 0;
+            _textCursorY += _fontHeight;
+        } else if (c == '\r') {
+            ; //ignore
+        } else {
+            putChar(_textCursorX, _textCursorY, c, _fontSize, _fontColor);
+
+            _textCursorX += _fontWidth + 1;
+
+            if (_wordWrap && (_textCursorX > (WIDTH - _fontWidth))) {
+                _textCursorX = 0;
+                _textCursorY += _fontHeight + 1;
+            }
+        }
     }
 
     // Put a character on the display using glcd fonts.
-    void putChar(int x, int y, char c, int size, Color color) {
+    public void putChar(int x, int y, char c, int size, Color color) {
 //        unsigned char *font = Font5x7;
 //        uint8_t fontWidth = 5;
 //        uint8_t fontHeight = 7;
@@ -1193,12 +1075,12 @@ public class RGBmatrixPanel {
 //        // Value (brightness): Add 1, similar to above.
 //        v1 = val + 1;
 //
-//        Color c;
+        Color c = new Color();
 //        c.red = (r * v1) >> 8;
 //        c.green = (g * v1) >> 8;
 //        c.blue = (b * v1) >> 8;
 //
-//        return c;
+        return c;
     }
 
 }
