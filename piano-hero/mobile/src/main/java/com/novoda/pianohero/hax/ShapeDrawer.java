@@ -1,6 +1,5 @@
 package com.novoda.pianohero.hax;
 
-import com.novoda.pianohero.hax.RGBmatrixPanel.Color;
 import com.novoda.pianohero.hax.RGBmatrixPanel.Display;
 import com.novoda.pianohero.hax.RGBmatrixPanel.PixelPins;
 

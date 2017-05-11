@@ -16,18 +16,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class RGBmatrixPanel {
 
-    private final ShapeDrawer shapeDrawer;
-
-    public static class Color {
-        public int red;
-        public int green;
-        public int blue;
-    }
-
-//#include "RgbMatrix.h"
-
-    // WIDTH and HEIGHT of the RBG Matrix.
-    // If chaining multiple boards together, this is the overall WIDTH x HEIGHT.
+    /**
+     * WIDTH and HEIGHT of the RBG Matrix.
+     * If chaining multiple boards together, this is the overall WIDTH x HEIGHT.
+     */
     private static final int WIDTH = 32;
     private static final int HEIGHT = 32;
     // The 32x32 RGB Matrix is broken into two 16x32 sub-panels.
@@ -41,6 +33,8 @@ public class RGBmatrixPanel {
     private static final int PWM_BITS = 7; //max is 7
 
     private final GpioProxy gpioProxy;
+    private final ShapeDrawer shapeDrawer;
+    private final FontDrawer fontDrawer;
 
     // The following data structure represents the pins on the Raspberry Pi GPIO.
     // Each RGB LED Panel requires writing to 2 LED's at a time, so the data
@@ -87,43 +81,12 @@ public class RGBmatrixPanel {
     private Display[] plane = new Display[PWM_BITS];
     private Display[] fadeInPlane = new Display[PWM_BITS]; //2nd plane for handling fadeIn
 
-    // Members for writing text
-    private int textCursorX, textCursorY;
-    private Color fontColor;
-    private int fontSize;
-    private int fontWidth;
-    private int fontHeight;
-    private boolean wordWrap;
-
-    //#finish include "RgbMatrix.h"
-//
-//#include "FONT_3_X_5.h"
-//#include "FONT_4_X_6.h"
-//#include "FONT_5_X_7.h"
-//
-//#include<assert.h>
-//#include<math.h>
-//#include<stdint.h>
-//#include<stdlib.h>
-//#include<stdio.h>
-//#include<string.h>
-//#include<time.h>
-//#include<unistd.h>
-//
-//#include<algorithm>
-//
-//#
-//    define _USE_MATH_DEFINES
-//
-//#
-//
-//    define pgm_read_byte(addr) (*(const unsigned char *)(addr))
-//
-// Clocking in a row takes about 3.4usec (TODO: per board)
-// Because clocking the data in is part of the 'wait time', we need to
-// substract that from the row sleep time.
+    /**
+     * Clocking in a row takes about 3.4usec (TODO: per board)
+     * Because clocking the data in is part of the 'wait time', we need to subtract that from the row sleep time.
+     */
     private static final int ROW_CLOCK_TIME = 3400;
-    //
+
     private static final long[] ROW_SLEEP_NANOS = {
             // Only using the first PWM_BITS elements.
             (1 * ROW_CLOCK_TIME) - ROW_CLOCK_TIME,
@@ -154,20 +117,8 @@ public class RGBmatrixPanel {
             plane[i] = display;
         }
 
-        //Initialize text members
-        textCursorX = 0;
-        textCursorY = 0;
-        Color white = new Color();
-        white.red = 255;
-        white.green = 255;
-        white.blue = 255;
-        fontColor = white;
-        fontSize = 1;
-        fontWidth = 3;
-        fontHeight = 5;
-        wordWrap = true;
-
         shapeDrawer = new ShapeDrawer(WIDTH, HEIGHT, PWM_BITS, plane);
+        fontDrawer = new FontDrawer(WIDTH, shapeDrawer);
     }
 
     /*
@@ -194,8 +145,8 @@ public class RGBmatrixPanel {
         PixelPins pixelPins = new PixelPins();
 
         for (int row = 0; row < ROWS_PER_SUB_PANEL; ++row) {
-            // Rows can't be switched very quickly without ghosting, so we do the
-            // full PWM of one row before switching rows.
+            // Rows can't be switched very quickly without ghosting,
+            // so we do the full PWM of one row before switching rows.
             for (int b = 0; b < PWM_BITS; b++) {
                 TwoRows rowData = plane[b].row[row];
 
@@ -541,163 +492,27 @@ public class RGBmatrixPanel {
     }
 
     void setTextCursor(int x, int y) {
-        textCursorX = x;
-        textCursorY = y;
+        fontDrawer.setTextCursor(x, y);
     }
 
     void setFontColor(Color color) {
-        fontColor = color;
+        fontDrawer.setFontColor(color);
     }
 
     public void setFontSize(int size) {
-        fontSize = (size >= 3) ? 3 : size; //only 3 sizes for now
-
-        if (fontSize == 1) {
-            fontWidth = 3;
-            fontHeight = 5;
-        } else if (fontSize == 2) //medium (4x6)
-        {
-            fontWidth = 4;
-            fontHeight = 6;
-        } else if (fontSize == 3) //large (5x7)
-        {
-            fontWidth = 5;
-            fontHeight = 7;
-        }
+        fontDrawer.setFontSize(size);
     }
 
     public void setWordWrap(boolean wrap) {
-        wordWrap = wrap;
+        fontDrawer.setWordWrap(wrap);
     }
 
     public void writeText(String text) {
-        for (char c : text.toCharArray()) {
-            writeChar(c);
-        }
+        fontDrawer.writeText(text);
     }
 
     // Write a character using the Text cursor and stored Font settings.
     public void writeChar(char c) {
-        if (c == '\n') {
-            textCursorX = 0;
-            textCursorY += fontHeight;
-        } else if (c == '\r') {
-            ; //ignore
-        } else {
-            putChar(textCursorX, textCursorY, c, fontSize, fontColor);
-
-            textCursorX += fontWidth + 1;
-
-            if (wordWrap && (textCursorX > (WIDTH - fontWidth))) {
-                textCursorX = 0;
-                textCursorY += fontHeight + 1;
-            }
-        }
+        fontDrawer.writeChar(c);
     }
-
-    // Put a character on the display using glcd fonts.
-    private void putChar(int x, int y, char c, int size, Color color) {
-        char[] font;
-        short fontWidth;
-        short fontHeight;
-
-        if (size == 1) { // small
-            font = Fonts.FONT_3_X_5;
-            fontWidth = 3;
-            fontHeight = 5;
-        } else if (size == 2) { // medium
-            font = Fonts.FONT_4_X_6;
-            fontWidth = 4;
-            fontHeight = 6;
-        } else if (size == 3) { // large
-            font = Fonts.FONT_5_X_7;
-            fontWidth = 5;
-            fontHeight = 7;
-        } else {
-            throw new IllegalStateException(size + " is not supported. Try a number between 1-3 inclusive.");
-        }
-
-        for (int i = 0; i < fontWidth + 1; i++) {
-            int line;
-
-            if (i == fontWidth) {
-                line = 0x0;
-            } else {
-                line = font[((c - 0x20) * fontWidth) + i];
-            }
-
-            for (int j = 0; j < fontHeight + 1; j++) {
-                if ((line & 0x1) == 1) {
-                    drawPixel(x + i, y + j, color);
-                }
-
-                line >>= 1;
-            }
-        }
-    }
-
-    //Leave output in 24-bit color (#RRGGBB)
-    Color colorHSV(long hue, int sat, int val) {
-//        uint8_t r, g, b, lo;
-//        uint16_t s1, v1;
-//
-//        // Hue
-//        hue %= 1536;             // -1535 to +1535
-//        if (hue < 0) hue += 1536; //     0 to +1535
-//
-//        lo = hue & 255;  // Low byte = primary/secondary color mix
-//
-//        // High byte = sextant of colorwheel
-//        switch (hue >> 8) {
-//            case 0:
-//                r = 255;
-//                g = lo;
-//                b = 0;
-//                break; // R to Y
-//            case 1:
-//                r = 255 - lo;
-//                g = 255;
-//                b = 0;
-//                break; // Y to G
-//            case 2:
-//                r = 0;
-//                g = 255;
-//                b = lo;
-//                break; // G to C
-//            case 3:
-//                r = 0;
-//                g = 255 - lo;
-//                b = 255;
-//                break; // C to B
-//            case 4:
-//                r = lo;
-//                g = 0;
-//                b = 255;
-//                break; // B to M
-//            default:
-//                r = 255;
-//                g = 0;
-//                b = 255 - lo;
-//                break; // M to R
-//        }
-//
-//        // Saturation: add 1 so range is 1 to 256, which allows a bitwise right shift
-//        // on the result rather than a costly divide.
-//        s1 = sat + 1;
-//
-//        r = 255 - (((255 - r) * s1) >> 8);
-//        g = 255 - (((255 - g) * s1) >> 8);
-//        b = 255 - (((255 - b) * s1) >> 8);
-//
-//        // Value (brightness): Add 1, similar to above.
-//        v1 = val + 1;
-//
-        Color c = new Color();
-//        c.red = (r * v1) >> 8;
-//        c.green = (g * v1) >> 8;
-//        c.blue = (b * v1) >> 8;
-//
-        return c;
-    }
-
 }

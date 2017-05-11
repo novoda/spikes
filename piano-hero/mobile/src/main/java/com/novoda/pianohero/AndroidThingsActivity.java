@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.novoda.pianohero.hax.GpioProxy;
 import com.novoda.pianohero.hax.RGBmatrixPanel;
-import com.novoda.pianohero.hax.RGBmatrixPanel.Color;
+import com.novoda.pianohero.hax.Color;
 
 public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.View {
 
