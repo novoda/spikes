@@ -1,5 +1,6 @@
 package com.novoda.pianohero;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -9,7 +10,6 @@ import android.util.Log;
 
 import com.novoda.pianohero.hax.GpioProxy;
 import com.novoda.pianohero.hax.RGBmatrixPanel;
-import com.novoda.pianohero.hax.Color;
 
 public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.View {
 
@@ -40,43 +40,39 @@ public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.
         rgbMatrixPanel.clearDisplay();
         handler.post(hax);
 
-        int yellow = android.graphics.Color.YELLOW;
-        Color color = new Color();
-        color.red = android.graphics.Color.red(yellow);
-        color.blue = android.graphics.Color.blue(yellow);
-        color.green = android.graphics.Color.green(yellow);
-//        rgbMatrixPanel.drawPixel(3, 3, color);
-//        rgbMatrixPanel.drawPixel(4, 3, color);
-//        rgbMatrixPanel.drawPixel(5, 3, color);
-//        rgbMatrixPanel.drawPixel(6, 3, color);
-//        rgbMatrixPanel.drawPixel(7, 3, color);
-//        rgbMatrixPanel.drawPixel(8, 3, color);
-//        rgbMatrixPanel.drawPixel(9, 3, color);
+//        rgbMatrixPanel.drawPixel(3, 3, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(4, 3, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(5, 3, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(6, 3, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(7, 3, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(8, 3, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(9, 3, Color.YELLOW);
 //
-//        rgbMatrixPanel.drawPixel(3, 3, color);
-//        rgbMatrixPanel.drawPixel(3, 4, color);
-//        rgbMatrixPanel.drawPixel(3, 5, color);
-//        rgbMatrixPanel.drawPixel(3, 6, color);
-//        rgbMatrixPanel.drawPixel(3, 7, color);
-//        rgbMatrixPanel.drawPixel(3, 8, color);
-//        rgbMatrixPanel.drawPixel(3, 9, color);
+//        rgbMatrixPanel.drawPixel(3, 3, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(3, 4, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(3, 5, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(3, 6, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(3, 7, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(3, 8, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(3, 9, Color.YELLOW);
 //
-//        rgbMatrixPanel.drawPixel(9, 3, color);
-//        rgbMatrixPanel.drawPixel(9, 4, color);
-//        rgbMatrixPanel.drawPixel(9, 5, color);
-//        rgbMatrixPanel.drawPixel(9, 6, color);
-//        rgbMatrixPanel.drawPixel(9, 7, color);
-//        rgbMatrixPanel.drawPixel(9, 8, color);
-//        rgbMatrixPanel.drawPixel(9, 9, color);
+//        rgbMatrixPanel.drawPixel(9, 3, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(9, 4, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(9, 5, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(9, 6, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(9, 7, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(9, 8, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(9, 9, Color.YELLOW);
 //
-//        rgbMatrixPanel.drawPixel(3, 9, color);
-//        rgbMatrixPanel.drawPixel(4, 9, color);
-//        rgbMatrixPanel.drawPixel(5, 9, color);
-//        rgbMatrixPanel.drawPixel(6, 9, color);
-//        rgbMatrixPanel.drawPixel(7, 9, color);
-//        rgbMatrixPanel.drawPixel(8, 9, color);
-//        rgbMatrixPanel.drawPixel(9, 9, color);
+//        rgbMatrixPanel.drawPixel(3, 9, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(4, 9, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(5, 9, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(6, 9, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(7, 9, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(8, 9, Color.YELLOW);
+//        rgbMatrixPanel.drawPixel(9, 9, Color.YELLOW);
 
+        rgbMatrixPanel.setFontColor(Color.YELLOW);
         rgbMatrixPanel.writeText("Hello?");
 
 //        GameMvp.Model gameModel = new GameModel(new SongSequenceFactory(), new SimplePitchNotationFormatter());

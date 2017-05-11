@@ -17,7 +17,7 @@ public class ShapeDrawer {
         this.plane = plane;
     }
 
-    public void drawPixel(int x, int y, Color color) {
+    public void drawPixel(int x, int y, int color) {
         if (x >= width || y >= height) {
             return;
         }
@@ -32,9 +32,9 @@ public class ShapeDrawer {
         }
 
         // Break out values from structure
-        int red = color.red;
-        int green = color.green;
-        int blue = color.blue;
+        int red = android.graphics.Color.red(color);
+        int green = android.graphics.Color.green(color);
+        int blue = android.graphics.Color.blue(color);
 
         //TODO: Adding Gamma correction slowed down the PWM and made
         //      the matrix flicker, so I'm removing it for now.
@@ -71,7 +71,7 @@ public class ShapeDrawer {
     /**
      * Bresenham's Line Algorithm
      */
-    public void drawLine(int x0, int y0, int x1, int y1, Color color) {
+    public void drawLine(int x0, int y0, int x1, int y1, int color) {
         boolean steep = Math.abs(y1 - y0) > Math.abs(x1 - x0);
 
         if (steep) {
@@ -122,31 +122,31 @@ public class ShapeDrawer {
     }
 
     // Draw a vertical line
-    public void drawVLine(int x, int y, int h, Color color) {
+    public void drawVLine(int x, int y, int h, int color) {
         drawLine(x, y, x, y + h - 1, color);
     }
 
     // Draw a horizontal line
-    public void drawHLine(int x, int y, int w, Color color) {
+    public void drawHLine(int x, int y, int w, int color) {
         drawLine(x, y, x + w - 1, y, color);
     }
 
     // Draw the outline of a rectangle (no fill)
-    public void drawRect(int x, int y, int w, int h, Color color) {
+    public void drawRect(int x, int y, int w, int h, int color) {
         drawHLine(x, y, w, color);
         drawHLine(x, y + h - 1, w, color);
         drawVLine(x, y, h, color);
         drawVLine(x + w - 1, y, h, color);
     }
 
-    public void fillRect(int x, int y, int w, int h, Color color) {
+    public void fillRect(int x, int y, int w, int h, int color) {
         for (int i = x; i < x + w; i++) {
             drawVLine(i, y, h, color);
         }
     }
 
     // Draw a rounded rectangle with radius r.
-    public void drawRoundRect(int x, int y, int w, int h, int r, Color color) {
+    public void drawRoundRect(int x, int y, int w, int h, int r, int color) {
         drawHLine(x + r, y, w - 2 * r, color);
         drawHLine(x + r, y + h - 1, w - 2 * r, color);
         drawVLine(x, y + r, h - 2 * r, color);
@@ -158,7 +158,7 @@ public class ShapeDrawer {
         drawCircleQuadrant(x + r, y + h - r - 1, r, 8, color);
     }
 
-    public void fillRoundRect(int x, int y, int w, int h, int r, Color color) {
+    public void fillRoundRect(int x, int y, int w, int h, int r, int color) {
         fillRect(x + r, y, w - 2 * r, h, color);
 
         fillCircleHalf(x + r, y + r, r, 1, h - 2 * r - 1, color);
@@ -166,7 +166,7 @@ public class ShapeDrawer {
     }
 
     // Draw the outline of a cirle (no fill) - Midpoint Circle Algorithm
-    void drawCircle(int x, int y, int r, Color color) {
+    void drawCircle(int x, int y, int r, int color) {
 //        int16_t f = 1 - r;
 //        int16_t ddFx = 1;
 //        int16_t ddFy = -2 * r;
@@ -201,7 +201,7 @@ public class ShapeDrawer {
     }
 
     // Draw one of the four quadrants of a circle.
-    public void drawCircleQuadrant(int x, int y, int r, int quadrant, Color color) {
+    public void drawCircleQuadrant(int x, int y, int r, int quadrant, int color) {
 //        int16_t f = 1 - r;
 //        int16_t ddFx = 1;
 //        int16_t ddFy = -2 * r;
@@ -245,12 +245,12 @@ public class ShapeDrawer {
 //        }
     }
 
-    public void fillCircle(int x, int y, int r, Color color) {
+    public void fillCircle(int x, int y, int r, int color) {
         drawVLine(x, y - r, 2 * r + 1, color);
         fillCircleHalf(x, y, r, 3, 0, color);
     }
 
-    public void fillCircleHalf(int x, int y, int r, int half, int stretch, Color color) {
+    public void fillCircleHalf(int x, int y, int r, int half, int stretch, int color) {
 //        int16_t f = 1 - r;
 //        int16_t ddFx = 1;
 //        int16_t ddFy = -2 * r;
@@ -285,7 +285,7 @@ public class ShapeDrawer {
     // Draw an Arc
     public void drawArc(int x, int y, int r,
                  float startAngle, float endAngle,
-                 Color color) {
+                 int color) {
 //        // Convert degrees to radians
 //        float degreesPerRadian = M_PI / 180;
 //
@@ -309,7 +309,7 @@ public class ShapeDrawer {
     }
 
     // Draw the outline of a wedge. //TODO: add inner radius
-    public void drawWedge(int x, int y, int r, float startAngle, float endAngle, Color color) {
+    public void drawWedge(int x, int y, int r, float startAngle, float endAngle, int color) {
 //        // Convert degrees to radians
 //        float degreesPerRadian = M_PI / 180;
 //
@@ -345,7 +345,7 @@ public class ShapeDrawer {
 
     public void drawTriangle(int x1, int y1,
                              int x2, int y2,
-                             int x3, int y3, Color color) {
+                             int x3, int y3, int color) {
         drawLine(x1, y1, x2, y2, color);
         drawLine(x2, y2, x3, y3, color);
         drawLine(x3, y3, x1, y1, color);
@@ -353,7 +353,7 @@ public class ShapeDrawer {
 
     void fillTriangle(int x1, int y1,
                       int x2, int y2,
-                      int x3, int y3, Color color) {
+                      int x3, int y3, int color) {
 //        int16_t a, b, y, last;
 //
 //        // Sort coordinates by Y order (y3 >= y2 >= y1)
@@ -459,7 +459,7 @@ public class ShapeDrawer {
 //
 //  float const Half = (WIDTH - 1) / 2;
 //
-//        Color color;
+//        int color;
 //
 //        for (y = 0; y < WIDTH; y++) {
 //            dy = Half - (float) y;

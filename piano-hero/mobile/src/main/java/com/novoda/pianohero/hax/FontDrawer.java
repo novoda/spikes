@@ -6,7 +6,7 @@ public class FontDrawer {
     private final ShapeDrawer shapeDrawer;
 
     private int textCursorX, textCursorY;
-    private Color fontColor;
+    private int fontColor;
     private int fontSize;
     private int fontWidth;
     private int fontHeight;
@@ -18,11 +18,7 @@ public class FontDrawer {
 
         textCursorX = 0;
         textCursorY = 0;
-        Color white = new Color();
-        white.red = 255;
-        white.green = 255;
-        white.blue = 255;
-        fontColor = white;
+        fontColor = android.graphics.Color.WHITE;
         fontSize = 1;
         fontWidth = 3;
         fontHeight = 5;
@@ -34,7 +30,7 @@ public class FontDrawer {
         textCursorY = y;
     }
 
-    void setFontColor(Color color) {
+    void setFontColor(int color) {
         fontColor = color;
     }
 
@@ -85,7 +81,7 @@ public class FontDrawer {
     }
 
     // Put a character on the display using glcd fonts.
-    private void putChar(int x, int y, char c, int size, Color color) {
+    private void putChar(int x, int y, char c, int size, int color) {
         char[] font;
         short fontWidth;
         short fontHeight;

@@ -47,25 +47,30 @@ public class GpioProxy {
             busLedR2 = service.openGpio("BCM22");
             busLedG2 = service.openGpio("BCM27");
             busLedB2 = service.openGpio("BCM17");
-            setGpioPin(busOutputEnabled);
-            setGpioPin(busSerialClock);
-            setGpioPin(busDataLatch);
-            setGpioPin(busRowAddressA);
-            setGpioPin(busRowAddressB);
-            setGpioPin(busRowAddressC);
-            setGpioPin(busRowAddressD);
-            setGpioPin(busLedR1);
-            setGpioPin(busLedB1);
-            setGpioPin(busLedG1);
-            setGpioPin(busLedR2);
-            setGpioPin(busLedG2);
-            setGpioPin(busLedB2);
+            setGpioPinLow(busOutputEnabled);
+            setGpioPinHigh(busSerialClock);
+            setGpioPinHigh(busDataLatch);
+            setGpioPinHigh(busRowAddressA);
+            setGpioPinHigh(busRowAddressB);
+            setGpioPinHigh(busRowAddressC);
+            setGpioPinHigh(busRowAddressD);
+            setGpioPinHigh(busLedR1);
+            setGpioPinHigh(busLedB1);
+            setGpioPinHigh(busLedG1);
+            setGpioPinHigh(busLedR2);
+            setGpioPinHigh(busLedG2);
+            setGpioPinHigh(busLedB2);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
     }
 
-    private void setGpioPin(Gpio pin) throws IOException {
+    private static void setGpioPinLow(Gpio pin) throws IOException {
+        pin.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
+        pin.setActiveType(Gpio.ACTIVE_LOW);
+    }
+
+    private static void setGpioPinHigh(Gpio pin) throws IOException {
         pin.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
         pin.setActiveType(Gpio.ACTIVE_HIGH);
     }

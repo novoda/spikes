@@ -142,8 +142,6 @@ public class RGBmatrixPanel {
     }
 
     public void updateDisplay() {
-        PixelPins pixelPins = new PixelPins();
-
         for (int row = 0; row < ROWS_PER_SUB_PANEL; ++row) {
             // Rows can't be switched very quickly without ghosting,
             // so we do the full PWM of one row before switching rows.
@@ -166,30 +164,22 @@ public class RGBmatrixPanel {
                     PixelPins colPins = rowData.column[col];
 
                     // Clear bits (clock)
-                    gpioProxy.writeClock(false);
+//                    gpioProxy.writeClock(false);
 //                  sleep(stabilizeWait);
 
-                    // Set bits
-                    pixelPins.r1 = colPins.r1;
-                    pixelPins.g1 = colPins.g1;
-                    pixelPins.b1 = colPins.b1;
-
-                    pixelPins.r2 = colPins.r2;
-                    pixelPins.g2 = colPins.g2;
-                    pixelPins.b2 = colPins.b2;
-
-                    gpioProxy.writePixel(pixelPins);
+                    gpioProxy.writePixel(colPins);
 //                    sleep(stabilizeWait);
 
                     // Set bits (clock)
                     // The CLK (clock) signal marks the arrival of each bit of data.
                     gpioProxy.writeClock(true);
+                    gpioProxy.writeClock(false);
 //                    sleep(stabilizeWait);
                 }
 
                 // switch off while strobe (latch).
                 // OE (output enable) switches the LEDs off when transitioning from one row to the next.
-                gpioProxy.writeOutputEnabled(true);
+                gpioProxy.writeOutputEnabled(false);
 
                 // select which two rows of the display are currently lit.
                 gpioProxy.writeRowAddress(row);
@@ -200,7 +190,7 @@ public class RGBmatrixPanel {
                 gpioProxy.writeLatch(false);
 
                 // Now switch on for the given sleep time.
-                gpioProxy.writeOutputEnabled(false);
+                gpioProxy.writeOutputEnabled(true);
 
                 // If we use less pins, then use the upper areas which leaves us more CPU time to do other stuff.
 //                sleep(ROW_SLEEP_NANOS[b + (7 - PWM_BITS)]);
@@ -396,95 +386,95 @@ public class RGBmatrixPanel {
     }
 
     //
-    public void drawPixel(int x, int y, Color color) {
+    public void drawPixel(int x, int y, int color) {
         shapeDrawer.drawPixel(x, y, color);
     }
 
-    public void drawLine(int x0, int y0, int x1, int y1, Color color) {
+    public void drawLine(int x0, int y0, int x1, int y1, int color) {
         shapeDrawer.drawLine(x0, y0, x1, y1, color);
     }
 
     // Draw a vertical line
-    public void drawVLine(int x, int y, int h, Color color) {
+    public void drawVLine(int x, int y, int h, int color) {
         shapeDrawer.drawVLine(x, y, h, color);
     }
 
     // Draw a horizontal line
-    public void drawHLine(int x, int y, int w, Color color) {
+    public void drawHLine(int x, int y, int w, int color) {
         shapeDrawer.drawHLine(x, y, w, color);
     }
 
     // Draw the outline of a rectangle (no fill)
-    public void drawRect(int x, int y, int w, int h, Color color) {
+    public void drawRect(int x, int y, int w, int h, int color) {
         shapeDrawer.drawRect(x, y, w, h, color);
     }
 
-    public void fillRect(int x, int y, int w, int h, Color color) {
+    public void fillRect(int x, int y, int w, int h, int color) {
         shapeDrawer.fillRect(x, y, w, h, color);
     }
 
-    public void fillScreen(Color color) {
+    public void fillScreen(int color) {
         shapeDrawer.fillRect(0, 0, WIDTH, HEIGHT, color);
     }
 
     // Draw a rounded rectangle with radius r.
-    public void drawRoundRect(int x, int y, int w, int h, int r, Color color) {
+    public void drawRoundRect(int x, int y, int w, int h, int r, int color) {
         shapeDrawer.drawRoundRect(x, y, w, h, r, color);
     }
 
-    public void fillRoundRect(int x, int y, int w, int h, int r, Color color) {
+    public void fillRoundRect(int x, int y, int w, int h, int r, int color) {
         shapeDrawer.fillRoundRect(x, y, w, h, r, color);
     }
 
     // Draw the outline of a cirle (no fill) - Midpoint Circle Algorithm
-    void drawCircle(int x, int y, int r, Color color) {
+    void drawCircle(int x, int y, int r, int color) {
         shapeDrawer.drawCircle(x, y, r, color);
     }
 
     // Draw one of the four quadrants of a circle.
-    public void drawCircleQuadrant(int x, int y, int r, int quadrant, Color color) {
+    public void drawCircleQuadrant(int x, int y, int r, int quadrant, int color) {
         shapeDrawer.drawCircleQuadrant(x, y, r, quadrant, color);
     }
 
-    public void fillCircle(int x, int y, int r, Color color) {
+    public void fillCircle(int x, int y, int r, int color) {
         shapeDrawer.fillCircle(x, y, r, color);
     }
 
-    public void fillCircleHalf(int x, int y, int r, int half, int stretch, Color color) {
+    public void fillCircleHalf(int x, int y, int r, int half, int stretch, int color) {
         shapeDrawer.fillCircleHalf(x, y, r, half, stretch, color);
     }
 
-    void drawArc(int x, int y, int r, float startAngle, float endAngle, Color color) {
+    void drawArc(int x, int y, int r, float startAngle, float endAngle, int color) {
         shapeDrawer.drawArc(x, y, r, startAngle, endAngle, color);
     }
 
     // Draw the outline of a wedge. //TODO: add inner radius
-    public void drawWedge(int x, int y, int r, float startAngle, float endAngle, Color color) {
+    public void drawWedge(int x, int y, int r, float startAngle, float endAngle, int color) {
         shapeDrawer.drawWedge(x, y, r, startAngle, endAngle, color);
     }
 
     public void drawTriangle(int x1, int y1,
                              int x2, int y2,
-                             int x3, int y3, Color color) {
+                             int x3, int y3, int color) {
         shapeDrawer.drawTriangle(x1, y1, x2, y2, x3, y3, color);
     }
 
-    void fillTriangle(int x1, int y1,
+    public void fillTriangle(int x1, int y1,
                       int x2, int y2,
-                      int x3, int y3, Color color) {
+                      int x3, int y3, int color) {
         shapeDrawer.fillTriangle(x1, y1, x2, y2, x3, y3, color);
     }
 
     // Special method to create a color wheel on the display.
-    void drawColorWheel() {
+    public void drawColorWheel() {
         shapeDrawer.drawColorWheel();
     }
 
-    void setTextCursor(int x, int y) {
+    public void setTextCursor(int x, int y) {
         fontDrawer.setTextCursor(x, y);
     }
 
-    void setFontColor(Color color) {
+    public void setFontColor(int color) {
         fontDrawer.setFontColor(color);
     }
 
