@@ -40,20 +40,43 @@ public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.
         rgbMatrixPanel.clearDisplay();
         handler.post(hax);
 
+        int yellow = android.graphics.Color.YELLOW;
         Color color = new Color();
-        color.red = 0;
-        color.blue = 255;
-        color.green = 0;
-        rgbMatrixPanel.drawPixel(1, 1, color);
-        rgbMatrixPanel.drawPixel(2, 2, color);
+        color.red = android.graphics.Color.red(yellow);
+        color.blue = android.graphics.Color.blue(yellow);
+        color.green = android.graphics.Color.green(yellow);
         rgbMatrixPanel.drawPixel(3, 3, color);
-        rgbMatrixPanel.drawPixel(4, 4, color);
-        rgbMatrixPanel.drawPixel(5, 5, color);
-        rgbMatrixPanel.drawPixel(6, 6, color);
-        rgbMatrixPanel.drawPixel(7, 7, color);
-        rgbMatrixPanel.drawPixel(8, 8, color);
+        rgbMatrixPanel.drawPixel(4, 3, color);
+        rgbMatrixPanel.drawPixel(5, 3, color);
+        rgbMatrixPanel.drawPixel(6, 3, color);
+        rgbMatrixPanel.drawPixel(7, 3, color);
+        rgbMatrixPanel.drawPixel(8, 3, color);
+        rgbMatrixPanel.drawPixel(9, 3, color);
+
+        rgbMatrixPanel.drawPixel(3, 3, color);
+        rgbMatrixPanel.drawPixel(3, 4, color);
+        rgbMatrixPanel.drawPixel(3, 5, color);
+        rgbMatrixPanel.drawPixel(3, 6, color);
+        rgbMatrixPanel.drawPixel(3, 7, color);
+        rgbMatrixPanel.drawPixel(3, 8, color);
+        rgbMatrixPanel.drawPixel(3, 9, color);
+
+        rgbMatrixPanel.drawPixel(9, 3, color);
+        rgbMatrixPanel.drawPixel(9, 4, color);
+        rgbMatrixPanel.drawPixel(9, 5, color);
+        rgbMatrixPanel.drawPixel(9, 6, color);
+        rgbMatrixPanel.drawPixel(9, 7, color);
+        rgbMatrixPanel.drawPixel(9, 8, color);
         rgbMatrixPanel.drawPixel(9, 9, color);
-        rgbMatrixPanel.drawPixel(10, 10, color);
+
+        rgbMatrixPanel.drawPixel(3, 9, color);
+        rgbMatrixPanel.drawPixel(4, 9, color);
+        rgbMatrixPanel.drawPixel(5, 9, color);
+        rgbMatrixPanel.drawPixel(6, 9, color);
+        rgbMatrixPanel.drawPixel(7, 9, color);
+        rgbMatrixPanel.drawPixel(8, 9, color);
+        rgbMatrixPanel.drawPixel(9, 9, color);
+
 
 //        GameMvp.Model gameModel = new GameModel(new SongSequenceFactory(), new SimplePitchNotationFormatter());
 //        presenter = new GamePresenter(gameModel, this);
