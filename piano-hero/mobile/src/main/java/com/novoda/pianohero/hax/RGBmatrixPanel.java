@@ -88,12 +88,12 @@ public class RGBmatrixPanel {
     private Display[] fadeInPlane = new Display[PWM_BITS]; //2nd plane for handling fadeIn
 
     // Members for writing text
-    private int _textCursorX, _textCursorY;
-    private Color _fontColor;
-    private int _fontSize;
-    private int _fontWidth;
-    private int _fontHeight;
-    private boolean _wordWrap;
+    private int textCursorX, textCursorY;
+    private Color fontColor;
+    private int fontSize;
+    private int fontWidth;
+    private int fontHeight;
+    private boolean wordWrap;
 
     //#finish include "RgbMatrix.h"
 //
@@ -155,17 +155,17 @@ public class RGBmatrixPanel {
         }
 
         //Initialize text members
-        _textCursorX = 0;
-        _textCursorY = 0;
+        textCursorX = 0;
+        textCursorY = 0;
         Color white = new Color();
         white.red = 255;
         white.green = 255;
         white.blue = 255;
-        _fontColor = white;
-        _fontSize = 1;
-        _fontWidth = 3;
-        _fontHeight = 5;
-        _wordWrap = true;
+        fontColor = white;
+        fontSize = 1;
+        fontWidth = 3;
+        fontHeight = 5;
+        wordWrap = true;
 
         shapeDrawer = new ShapeDrawer(WIDTH, HEIGHT, PWM_BITS, plane);
     }
@@ -541,33 +541,33 @@ public class RGBmatrixPanel {
     }
 
     void setTextCursor(int x, int y) {
-        _textCursorX = x;
-        _textCursorY = y;
+        textCursorX = x;
+        textCursorY = y;
     }
 
     void setFontColor(Color color) {
-        _fontColor = color;
+        fontColor = color;
     }
 
     public void setFontSize(int size) {
-        _fontSize = (size >= 3) ? 3 : size; //only 3 sizes for now
+        fontSize = (size >= 3) ? 3 : size; //only 3 sizes for now
 
-        if (_fontSize == 1) {
-            _fontWidth = 3;
-            _fontHeight = 5;
-        } else if (_fontSize == 2) //medium (4x6)
+        if (fontSize == 1) {
+            fontWidth = 3;
+            fontHeight = 5;
+        } else if (fontSize == 2) //medium (4x6)
         {
-            _fontWidth = 4;
-            _fontHeight = 6;
-        } else if (_fontSize == 3) //large (5x7)
+            fontWidth = 4;
+            fontHeight = 6;
+        } else if (fontSize == 3) //large (5x7)
         {
-            _fontWidth = 5;
-            _fontHeight = 7;
+            fontWidth = 5;
+            fontHeight = 7;
         }
     }
 
     public void setWordWrap(boolean wrap) {
-        _wordWrap = wrap;
+        wordWrap = wrap;
     }
 
     public void writeText(String text) {
@@ -579,18 +579,18 @@ public class RGBmatrixPanel {
     // Write a character using the Text cursor and stored Font settings.
     public void writeChar(char c) {
         if (c == '\n') {
-            _textCursorX = 0;
-            _textCursorY += _fontHeight;
+            textCursorX = 0;
+            textCursorY += fontHeight;
         } else if (c == '\r') {
             ; //ignore
         } else {
-            putChar(_textCursorX, _textCursorY, c, _fontSize, _fontColor);
+            putChar(textCursorX, textCursorY, c, fontSize, fontColor);
 
-            _textCursorX += _fontWidth + 1;
+            textCursorX += fontWidth + 1;
 
-            if (_wordWrap && (_textCursorX > (WIDTH - _fontWidth))) {
-                _textCursorX = 0;
-                _textCursorY += _fontHeight + 1;
+            if (wordWrap && (textCursorX > (WIDTH - fontWidth))) {
+                textCursorX = 0;
+                textCursorY += fontHeight + 1;
             }
         }
     }
