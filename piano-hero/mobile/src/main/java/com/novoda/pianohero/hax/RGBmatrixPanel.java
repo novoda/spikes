@@ -160,24 +160,14 @@ public class RGBmatrixPanel {
                 // However, in particular for longer chaining, it seems we need some more
                 // wait time to settle.
 
-                long stabilizeWait = TimeUnit.NANOSECONDS.toMillis(156); //TODO: mateo was 256
+//                long stabilizeWait = TimeUnit.NANOSECONDS.toMillis(156); //TODO: mateo was 256
 
                 for (int col = 0; col < COLUMN_COUNT; ++col) {
                     PixelPins colPins = rowData.column[col];
 
                     // Clear bits (clock)
                     gpioProxy.writeClock(false);
-                    // Clear bits
-                    pixelPins.r1 = false;
-                    pixelPins.g1 = false;
-                    pixelPins.b1 = false;
-
-                    pixelPins.r2 = false;
-                    pixelPins.g2 = false;
-                    pixelPins.b2 = false;
-
-                    gpioProxy.writePixel(pixelPins);
-                    sleep(stabilizeWait);
+//                  sleep(stabilizeWait);
 
                     // Set bits
                     pixelPins.r1 = colPins.r1;
@@ -189,12 +179,12 @@ public class RGBmatrixPanel {
                     pixelPins.b2 = colPins.b2;
 
                     gpioProxy.writePixel(pixelPins);
-                    sleep(stabilizeWait);
+//                    sleep(stabilizeWait);
 
                     // Set bits (clock)
                     // The CLK (clock) signal marks the arrival of each bit of data.
                     gpioProxy.writeClock(true);
-                    sleep(stabilizeWait);
+//                    sleep(stabilizeWait);
                 }
 
                 // switch off while strobe (latch).
@@ -213,8 +203,7 @@ public class RGBmatrixPanel {
                 gpioProxy.writeOutputEnabled(false);
 
                 // If we use less pins, then use the upper areas which leaves us more CPU time to do other stuff.
-                sleep(ROW_SLEEP_NANOS[b + (7 - PWM_BITS)]);
-                Log.d("!!!", "drawing something?");
+//                sleep(ROW_SLEEP_NANOS[b + (7 - PWM_BITS)]);
             }
         }
     }
