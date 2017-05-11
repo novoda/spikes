@@ -11,6 +11,8 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * This code is based on a cool example found at:
  * https://github.com/mattdh666/rpi-led-matrix-panel/
+ * <p>
+ * https://cdn-learn.adafruit.com/downloads/pdf/32x16-32x32-rgb-led-matrix.pdf
  */
 public class RGBmatrixPanel {
 
@@ -95,9 +97,9 @@ public class RGBmatrixPanel {
 
     //#finish include "RgbMatrix.h"
 //
-//#include "Font3x5.h"
-//#include "Font4x6.h"
-//#include "Font5x7.h"
+//#include "FONT_3_X_5.h"
+//#include "FONT_4_X_6.h"
+//#include "FONT_5_X_7.h"
 //
 //#include<assert.h>
 //#include<math.h>
@@ -188,7 +190,7 @@ public class RGBmatrixPanel {
 //        }
     }
 
-    public void foo() {
+    public void updateDisplay() {
         PixelPins pixelPins = new PixelPins();
 
         for (int row = 0; row < ROWS_PER_SUB_PANEL; ++row) {
@@ -239,16 +241,20 @@ public class RGBmatrixPanel {
                     sleep(stabilizeWait);
 
                     // Set bits (clock)
+                    // The CLK (clock) signal marks the arrival of each bit of data.
                     gpioProxy.writeClock(true);
                     sleep(stabilizeWait);
                 }
 
                 // switch off while strobe (latch).
+                // OE (output enable) switches the LEDs off when transitioning from one row to the next.
                 gpioProxy.writeOutputEnabled(true);
 
+                // select which two rows of the display are currently lit.
                 gpioProxy.writeRowAddress(row);
 
                 // strobe - on and off
+                // The LAT (latch) signal marks the end of a row of data.
                 gpioProxy.writeLatch(true);
                 gpioProxy.writeLatch(false);
 
@@ -564,6 +570,12 @@ public class RGBmatrixPanel {
         _wordWrap = wrap;
     }
 
+    public void writeText(String text) {
+        for (char c : text.toCharArray()) {
+            writeChar(c);
+        }
+    }
+
     // Write a character using the Text cursor and stored Font settings.
     public void writeChar(char c) {
         if (c == '\n') {
@@ -584,43 +596,44 @@ public class RGBmatrixPanel {
     }
 
     // Put a character on the display using glcd fonts.
-    public void putChar(int x, int y, char c, int size, Color color) {
-//        unsigned char *font = Font5x7;
-//        uint8_t fontWidth = 5;
-//        uint8_t fontHeight = 7;
-//
-//        if (size == 1) //small (3x5)
-//        {
-//            font = Font3x5;
-//            fontWidth = 3;
-//            fontHeight = 5;
-//        } else if (size == 2) //medium (4x6)
-//        {
-//            font = Font4x6;
-//            fontWidth = 4;
-//            fontHeight = 6;
-//        } else if (size == 3) //large (5x7)
-//        {
-//            ; //already initialized as default
-//        }
-//
-//        for (int i = 0; i < fontWidth + 1; i++) {
-//            uint8_t line;
-//
-//            if (i == fontWidth) {
-//                line = 0x0;
-//            } else {
-//                line = pgm_read_byte(font + ((c - 0x20) * fontWidth) + i);
-//            }
-//
-//            for (int j = 0; j < fontHeight + 1; j++) {
-//                if (line & 0x1) {
-//                    drawPixel(x + i, y + j, color);
-//                }
-//
-//                line >>= 1;
-//            }
-//        }
+    private void putChar(int x, int y, char c, int size, Color color) {
+        char[] font;
+        short fontWidth;
+        short fontHeight;
+
+        if (size == 1) { // small
+            font = Fonts.FONT_3_X_5;
+            fontWidth = 3;
+            fontHeight = 5;
+        } else if (size == 2) { // medium
+            font = Fonts.FONT_4_X_6;
+            fontWidth = 4;
+            fontHeight = 6;
+        } else if (size == 3) { // large
+            font = Fonts.FONT_5_X_7;
+            fontWidth = 5;
+            fontHeight = 7;
+        } else {
+            throw new IllegalStateException(size + " is not supported. Try a number between 1-3 inclusive.");
+        }
+
+        for (int i = 0; i < fontWidth + 1; i++) {
+            int line;
+
+            if (i == fontWidth) {
+                line = 0x0;
+            } else {
+                line = font[((c - 0x20) * fontWidth) + i];
+            }
+
+            for (int j = 0; j < fontHeight + 1; j++) {
+                if ((line & 0x1) == 1) {
+                    drawPixel(x + i, y + j, color);
+                }
+
+                line >>= 1;
+            }
+        }
     }
 
     //Leave output in 24-bit color (#RRGGBB)

@@ -45,38 +45,39 @@ public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.
         color.red = android.graphics.Color.red(yellow);
         color.blue = android.graphics.Color.blue(yellow);
         color.green = android.graphics.Color.green(yellow);
-        rgbMatrixPanel.drawPixel(3, 3, color);
-        rgbMatrixPanel.drawPixel(4, 3, color);
-        rgbMatrixPanel.drawPixel(5, 3, color);
-        rgbMatrixPanel.drawPixel(6, 3, color);
-        rgbMatrixPanel.drawPixel(7, 3, color);
-        rgbMatrixPanel.drawPixel(8, 3, color);
-        rgbMatrixPanel.drawPixel(9, 3, color);
+//        rgbMatrixPanel.drawPixel(3, 3, color);
+//        rgbMatrixPanel.drawPixel(4, 3, color);
+//        rgbMatrixPanel.drawPixel(5, 3, color);
+//        rgbMatrixPanel.drawPixel(6, 3, color);
+//        rgbMatrixPanel.drawPixel(7, 3, color);
+//        rgbMatrixPanel.drawPixel(8, 3, color);
+//        rgbMatrixPanel.drawPixel(9, 3, color);
+//
+//        rgbMatrixPanel.drawPixel(3, 3, color);
+//        rgbMatrixPanel.drawPixel(3, 4, color);
+//        rgbMatrixPanel.drawPixel(3, 5, color);
+//        rgbMatrixPanel.drawPixel(3, 6, color);
+//        rgbMatrixPanel.drawPixel(3, 7, color);
+//        rgbMatrixPanel.drawPixel(3, 8, color);
+//        rgbMatrixPanel.drawPixel(3, 9, color);
+//
+//        rgbMatrixPanel.drawPixel(9, 3, color);
+//        rgbMatrixPanel.drawPixel(9, 4, color);
+//        rgbMatrixPanel.drawPixel(9, 5, color);
+//        rgbMatrixPanel.drawPixel(9, 6, color);
+//        rgbMatrixPanel.drawPixel(9, 7, color);
+//        rgbMatrixPanel.drawPixel(9, 8, color);
+//        rgbMatrixPanel.drawPixel(9, 9, color);
+//
+//        rgbMatrixPanel.drawPixel(3, 9, color);
+//        rgbMatrixPanel.drawPixel(4, 9, color);
+//        rgbMatrixPanel.drawPixel(5, 9, color);
+//        rgbMatrixPanel.drawPixel(6, 9, color);
+//        rgbMatrixPanel.drawPixel(7, 9, color);
+//        rgbMatrixPanel.drawPixel(8, 9, color);
+//        rgbMatrixPanel.drawPixel(9, 9, color);
 
-        rgbMatrixPanel.drawPixel(3, 3, color);
-        rgbMatrixPanel.drawPixel(3, 4, color);
-        rgbMatrixPanel.drawPixel(3, 5, color);
-        rgbMatrixPanel.drawPixel(3, 6, color);
-        rgbMatrixPanel.drawPixel(3, 7, color);
-        rgbMatrixPanel.drawPixel(3, 8, color);
-        rgbMatrixPanel.drawPixel(3, 9, color);
-
-        rgbMatrixPanel.drawPixel(9, 3, color);
-        rgbMatrixPanel.drawPixel(9, 4, color);
-        rgbMatrixPanel.drawPixel(9, 5, color);
-        rgbMatrixPanel.drawPixel(9, 6, color);
-        rgbMatrixPanel.drawPixel(9, 7, color);
-        rgbMatrixPanel.drawPixel(9, 8, color);
-        rgbMatrixPanel.drawPixel(9, 9, color);
-
-        rgbMatrixPanel.drawPixel(3, 9, color);
-        rgbMatrixPanel.drawPixel(4, 9, color);
-        rgbMatrixPanel.drawPixel(5, 9, color);
-        rgbMatrixPanel.drawPixel(6, 9, color);
-        rgbMatrixPanel.drawPixel(7, 9, color);
-        rgbMatrixPanel.drawPixel(8, 9, color);
-        rgbMatrixPanel.drawPixel(9, 9, color);
-
+        rgbMatrixPanel.writeText("Hello?");
 
 //        GameMvp.Model gameModel = new GameModel(new SongSequenceFactory(), new SimplePitchNotationFormatter());
 //        presenter = new GamePresenter(gameModel, this);
@@ -86,7 +87,7 @@ public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.
     private final Runnable hax = new Runnable() {
         @Override
         public void run() {
-            rgbMatrixPanel.foo();
+            rgbMatrixPanel.updateDisplay();
             handler.post(this);
         }
     };
