@@ -17,6 +17,35 @@ public class ShapeDrawer {
         this.plane = plane;
     }
 
+    /**
+     * Clear the inside of the given Rectangle.
+     */
+    public void clearRect(int fx, int fy, int fw, int fh) {
+        int maxX, maxY;
+        maxX = (fx + fw) > width ? width : (fx + fw);
+        maxY = (fy + fh) > height ? height : (fy + fh);
+
+        for (int b = pwmBits - 1; b >= 0; b--) {
+            for (int x = fx; x < maxX; x++) {
+                for (int y = fy; y < maxY; y++) {
+                    PixelPins pins = plane[b].row[y & 0xf].column[x];
+
+                    if (y < 16) {
+                        // Upper sub-panel
+                        pins.r1 = false;
+                        pins.g1 = false;
+                        pins.b1 = false;
+                    } else {
+                        // Lower sub-panel
+                        pins.r2 = false;
+                        pins.g2 = false;
+                        pins.b2 = false;
+                    }
+                }
+            }
+        }
+    }
+
     public void drawPixel(int x, int y, int color) {
         if (x >= width || y >= height) {
             return;

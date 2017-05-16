@@ -201,56 +201,34 @@ public class RGBmatrixPanel {
         }
     }
 
-    // Clear the inside of the given Rectangle.
-    public void clearRect(int fx, int fy, int fw, int fh) {
-//        uint8_t maxX, maxY;
-//        maxX = (fx + fw) > WIDTH ? WIDTH : (fx + fw);
-//        maxY = (fy + fh) > HEIGHT ? HEIGHT : (fy + fh);
-//
-//        for (int b = PWM_BITS - 1; b >= 0; b--) {
-//            for (int x = fx; x < maxX; x++) {
-//                for (int y = fy; y < maxY; y++) {
-//                    PixelPins * pins = &plane[b].row[y & 0xf].column[x];
-//
-//                    if (y < 16) {
-//                        // Upper sub-panel
-//                        pins.pins.r1 = 0;
-//                        pins.pins.g1 = 0;
-//                        pins.pins.b1 = 0;
-//                    } else {
-//                        // Lower sub-panel
-//                        pins.pins.r2 = 0;
-//                        pins.pins.g2 = 0;
-//                        pins.pins.b2 = 0;
-//                    }
-//                }
-//            }
-//        }
-    }
-
     //    // Fade whatever is on the display to black.
     void fadeDisplay() {
-//        for (int b = PWM_BITS - 1; b >= 0; b--) {
-//            for (int x = 0; x < WIDTH; x++) {
-//                for (int y = 0; y < HEIGHT; y++) {
-//                    PixelPins * pins = &plane[b].row[y & 0xf].column[x];
-//
-//                    if (y < 16) {
-//                        // Upper sub-panel
-//                        pins.pins.r1 >>= 1;
-//                        pins.pins.g1 >>= 1;
-//                        pins.pins.b1 >>= 1;
-//                    } else {
-//                        // Lower sub-panel
-//                        pins.pins.r2 >>= 1;
-//                        pins.pins.g2 >>= 1;
-//                        pins.pins.b2 >>= 1;
-//                    }
-//                }
-//            }
-//            //TODO: make this dependent on PWM_BITS (longer sleep for fewer PWM_BITS).
-//            usleep(100000); // 1/10 second
-//        }
+        for (int b = PWM_BITS - 1; b >= 0; b--) {
+            for (int x = 0; x < WIDTH; x++) {
+                for (int y = 0; y < HEIGHT; y++) {
+                    PixelPins pins = plane[b].row[y & 0xf].column[x];
+
+                    if (y < 16) {
+                        // Upper sub-panel
+                        pins.r1 >>= 1;
+                        pins.g1 >>= 1;
+                        pins.b1 >>= 1;
+                    } else {
+                        // Lower sub-panel
+                        pins.r2 >>= 1;
+                        pins.g2 >>= 1;
+                        pins.b2 >>= 1;
+                    }
+                }
+            }
+            //TODO: make this dependent on PWM_BITS (longer sleep for fewer PWM_BITS).
+            SystemClock.sleep(TimeUnit.MILLISECONDS.toMillis(100)); // 1/10 second
+        }
+    }
+
+    // Clear the inside of the given Rectangle.
+    public void clearRect(int fx, int fy, int fw, int fh) {
+        shapeDrawer.clearRect(fx, fy, fw, fh);
     }
 
     //    // Fade whatever is shown inside the given Rectangle.
