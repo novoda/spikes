@@ -14,6 +14,26 @@ import java.io.IOException;
  * <p>
  * // This code is based on an example found at:
  * //   http://elinux.org/Rpi_Datasheet_751_GPIO_Registers
+ * // The following data structure represents the pins on the Raspberry Pi GPIO.
+ * // Each RGB LED Panel requires writing to 2 LED's at a time, so the data
+ * // structure represents 2 pixels on an RGB LED matrix. The data structure maps
+ * // the GPIO pins to the LED matrix controls.
+ * //
+ * // The GPIO pins are mapped to the LED Matrix as follows:
+ * //
+ * //   GPIO 4             -->  OE (Output Enabled)
+ * //   GPIO 19            -->  CLK (Serial Clock)
+ * //   GPIO 26            -->  LAT (Data Latch)
+ * //   GPIO 23            -->  A  --|
+ * //   GPIO 24            -->  B    |   Row
+ * //   GPIO 5             -->  C    | Address
+ * //   GPIO 6             -->  D  --|
+ * //   GPIO 21            -->  R1 (LED 1: Red)
+ * //   GPIO 20            -->  G1 (LED 1: Green)
+ * //   GPIO 16            -->  B1 (LED 1: Blue)
+ * //   GPIO 22            -->  R2 (LED 2: Red)
+ * //   GPIO 27            -->  G2 (LED 2: Green)
+ * //   GPIO 17            -->  B2 (LED 2: Blue)
  */
 public class GpioProxy {
 

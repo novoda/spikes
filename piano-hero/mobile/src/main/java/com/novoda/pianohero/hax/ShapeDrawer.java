@@ -284,8 +284,8 @@ public class ShapeDrawer {
 
     // Draw an Arc
     public void drawArc(int x, int y, int r,
-                 float startAngle, float endAngle,
-                 int color) {
+                        float startAngle, float endAngle,
+                        int color) {
 //        // Convert degrees to radians
 //        float degreesPerRadian = M_PI / 180;
 //

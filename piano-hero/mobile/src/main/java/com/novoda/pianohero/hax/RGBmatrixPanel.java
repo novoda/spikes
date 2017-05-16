@@ -22,40 +22,36 @@ public class RGBmatrixPanel {
      */
     private static final int WIDTH = 32;
     private static final int HEIGHT = 32;
-    // The 32x32 RGB Matrix is broken into two 16x32 sub-panels.
+
+    /**
+     * The 32x32 RGB Matrix is broken into two 16x32 sub-panels.
+     */
     private static final int ROWS_PER_SUB_PANEL = 16;
+
+    /**
+     * The 32x32 RGB Matrix is broken into two 16x32 sub-panels.
+     */
     private static final int COLS_PER_SUB_PANEL = 32;
-    // Number of Daisy-Chained Boards
+
+    /**
+     * Number of Daisy-Chained Boards
+     */
     private static final int CHAINED_BOARDS_COUNT = 1;
-    // Number of Columns
+
+    /**
+     * Number of Columns
+     */
     private static final int COLUMN_COUNT = CHAINED_BOARDS_COUNT * COLS_PER_SUB_PANEL;
-    // Pulse WIDTH Modulation (PWM) Resolution
-    private static final int PWM_BITS = 7; //max is 7
+    /**
+     * Pulse WIDTH Modulation (PWM) Resolution
+     * <p>
+     * Max 7
+     */
+    private static final int PWM_BITS = 7;
 
     private final GpioProxy gpioProxy;
     private final ShapeDrawer shapeDrawer;
     private final FontDrawer fontDrawer;
-
-    // The following data structure represents the pins on the Raspberry Pi GPIO.
-    // Each RGB LED Panel requires writing to 2 LED's at a time, so the data
-    // structure represents 2 pixels on an RGB LED matrix. The data structure maps
-    // the GPIO pins to the LED matrix controls.
-    //
-    // The GPIO pins are mapped to the LED Matrix as follows:
-    //
-    //   GPIO 4             -->  OE (Output Enabled)
-    //   GPIO 19            -->  CLK (Serial Clock)
-    //   GPIO 26            -->  LAT (Data Latch)
-    //   GPIO 23            -->  A  --|
-    //   GPIO 24            -->  B    |   Row
-    //   GPIO 5             -->  C    | Address
-    //   GPIO 6             -->  D  --|
-    //   GPIO 21            -->  R1 (LED 1: Red)
-    //   GPIO 20            -->  G1 (LED 1: Green)
-    //   GPIO 16            -->  B1 (LED 1: Blue)
-    //   GPIO 22            -->  R2 (LED 2: Red)
-    //   GPIO 27            -->  G2 (LED 2: Green)
-    //   GPIO 17            -->  B2 (LED 2: Blue)
 
     static class PixelPins {
         boolean r1;
@@ -67,9 +63,11 @@ public class RGBmatrixPanel {
         boolean b2;
     }
 
-    // Because a 32x32 Panel is composed of two 16x32 sub-panels, and each
-    // 32x32 Panel requires writing an LED from each sub-panel at a time, the
-    // following data structure represents two rows: n and n+16.
+    /**
+     * Because a 32x32 Panel is composed of two 16x32 sub-panels, and each
+     * 32x32 Panel requires writing an LED from each sub-panel at a time, the
+     * following data structure represents two rows: n and n+16.
+     */
     static class TwoRows {
         PixelPins[] column = new PixelPins[COLUMN_COUNT];
     }
@@ -125,20 +123,7 @@ public class RGBmatrixPanel {
      * Clear the entire display
      */
     public void clearDisplay() {
-        // TODO look at cpp again to do this
-//        for (Display display : plane) {
-//            for (TwoRows rows : display.row) {
-//                for (PixelPins pins : rows.column) {
-//                    pins.r1 = false;
-//                    pins.g1 = false;
-//                    pins.b1 = false;
-//                    pins.r2 = false;
-//                    pins.g2 = false;
-//                    pins.b2 = false;
-//                    gpioProxy.writePixel(pins); // TODO does this even work?
-//                }
-//            }
-//        }
+        clearRect(0, 0, WIDTH, HEIGHT);
     }
 
     public void updateDisplay() {
@@ -460,8 +445,8 @@ public class RGBmatrixPanel {
     }
 
     public void fillTriangle(int x1, int y1,
-                      int x2, int y2,
-                      int x3, int y3, int color) {
+                             int x2, int y2,
+                             int x3, int y3, int color) {
         shapeDrawer.fillTriangle(x1, y1, x2, y2, x3, y3, color);
     }
 
