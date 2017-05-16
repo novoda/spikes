@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <dimen name="drop_cap_padding_left">0dp</dimen>
-  <dimen name="drop_cap_padding_top">0dp</dimen>
-  <dimen name="drop_cap_padding_right">0dp</dimen>
-  <dimen name="drop_cap_padding_bottom">0dp</dimen>
+  <dimen name="drop_cap_padding_left">10dp</dimen>
+  <dimen name="drop_cap_padding_top">10dp</dimen>
+  <dimen name="drop_cap_padding_right">10dp</dimen>
+  <dimen name="drop_cap_padding_bottom">10dp</dimen>
 
   <dimen name="drop_cap_text">64sp</dimen>
   <dimen name="copy_text">21sp</dimen>

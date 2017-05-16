@@ -4,7 +4,10 @@ import com.googlecode.jatl.Html;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MainHtml {
@@ -23,7 +26,21 @@ public class MainHtml {
         LocalDateTime end = LocalDateTime.now().minusDays(7);
         Stream<ChannelHistory.Message> messageStream = scraper.scrape(start, end);
 
-        String html = new NewsletterGenerator().generate(messageStream);
-        System.out.println(html);
+        Stream<URL> urls = messageStream.map(message -> {
+            String content = message.toString();
+            System.out.println(content);
+            int urlStart = content.indexOf("http");
+            int urlEnd = content.indexOf('>', urlStart);
+            String url = content.substring(urlStart, urlEnd);
+            try {
+                return new URL(url);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        System.out.println(urls.collect(Collectors.toList()));
+
+//        String html = new NewsletterGenerator().generate(messageStream);
+//        System.out.println(html);
     }
 }

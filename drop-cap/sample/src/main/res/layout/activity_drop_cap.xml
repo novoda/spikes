@@ -85,6 +85,13 @@
 
   </LinearLayout>
 
+  <Button
+    android:id="@+id/drop_cap_number"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:text="@string/drop_cap_edit_drop_cap_number" />
+
   <EditText
     android:id="@+id/drop_cap_edit_text"
     android:layout_width="match_parent"
