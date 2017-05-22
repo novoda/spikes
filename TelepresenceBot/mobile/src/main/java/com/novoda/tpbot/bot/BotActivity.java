@@ -28,7 +28,7 @@ import com.novoda.tpbot.automation.AutomationChecker;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
-import com.novoda.tpbot.human.ServerDeclarationView;
+import com.novoda.tpbot.controls.ServerDeclarationView;
 
 import java.util.HashMap;
 

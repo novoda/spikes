@@ -13,6 +13,7 @@ import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.support.SelfDestructingMessageView;
 import com.novoda.tpbot.ServerDeclarationListener;
 import com.novoda.support.SwitchableView;
+import com.novoda.tpbot.controls.ServerDeclarationView;
 
 public class HumanActivity extends AppCompatActivity implements HumanView {
 
