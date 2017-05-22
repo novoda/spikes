@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 public class CommandRepeater {
 
-    private static final long COMMAND_REPEAT_DELAY = TimeUnit.MILLISECONDS.toMillis(100);
+    private static final long COMMAND_REPEAT_DELAY = TimeUnit.MILLISECONDS.toMillis(80);
 
     private final Listener listener;
     private final Handler handler;
