@@ -42,7 +42,7 @@ class BotPresenter {
             if (result.isError()) {
                 botView.onError(result.exception().get().getMessage());
             } else {
-                botView.onConnect(result.message().get());
+                botView.onConnect(result.message().get(), serverAddress);
 
                 directionObservable = tpService.listen()
                         .attach(new DirectionObserver())

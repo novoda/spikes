@@ -1,6 +1,8 @@
 package com.novoda.tpbot.controls;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
@@ -33,6 +35,12 @@ public class ServerDeclarationView extends LinearLayout {
                 serverDeclarationListener.onConnect(serverAddress);
             }
         });
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        LastServerPreferences lastServerPreferences = new LastServerPreferences(sharedPreferences);
+        if (lastServerPreferences.containsLastConnectedServer()) {
+            serverAddressDeclaration.setText(lastServerPreferences.getLastConnectedServer());
+        }
     }
 
     public void setServerDeclarationListener(ServerDeclarationListener serverDeclarationListener) {

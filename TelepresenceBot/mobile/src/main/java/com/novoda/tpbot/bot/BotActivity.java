@@ -4,12 +4,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -28,6 +30,7 @@ import com.novoda.tpbot.automation.AutomationChecker;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
+import com.novoda.tpbot.controls.LastServerPreferences;
 import com.novoda.tpbot.controls.ServerDeclarationView;
 
 import java.util.HashMap;
@@ -44,6 +47,7 @@ public class BotActivity extends AppCompatActivity implements BotView {
     private CommandRepeater commandRepeater;
     private AutomationChecker automationChecker;
     private BotServiceCreator botServiceCreator;
+    private LastServerPreferences lastServerPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,9 @@ public class BotActivity extends AppCompatActivity implements BotView {
 
         AccessibilityManager accessibilityManager = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
         automationChecker = new AutomationChecker(accessibilityManager);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        lastServerPreferences = new LastServerPreferences(sharedPreferences);
     }
 
     @Override
@@ -201,10 +208,11 @@ public class BotActivity extends AppCompatActivity implements BotView {
     };
 
     @Override
-    public void onConnect(String room) {
+    public void onConnect(String room, String serverAddress) {
         debugView.showPermanently(getString(R.string.connected));
         switchableView.setDisplayedChild(1);
 
+        lastServerPreferences.saveLastConnectedServer(serverAddress);
         joinHangoutRoom(room);
     }
 

@@ -1,18 +1,21 @@
 package com.novoda.tpbot.human;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.novoda.notils.caster.Views;
+import com.novoda.support.SelfDestructingMessageView;
+import com.novoda.support.SwitchableView;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
+import com.novoda.tpbot.ServerDeclarationListener;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
-import com.novoda.support.SelfDestructingMessageView;
-import com.novoda.tpbot.ServerDeclarationListener;
-import com.novoda.support.SwitchableView;
+import com.novoda.tpbot.controls.LastServerPreferences;
 import com.novoda.tpbot.controls.ServerDeclarationView;
 
 public class HumanActivity extends AppCompatActivity implements HumanView {
@@ -24,6 +27,7 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
     private CommandRepeater commandRepeater;
 
     private HumanPresenter presenter;
+    private LastServerPreferences lastServerPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,9 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
 
         ServerDeclarationView serverDeclarationView = Views.findById(switchableView, R.id.bot_server_declaration_view);
         serverDeclarationView.setServerDeclarationListener(serverDeclarationListener);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        lastServerPreferences = new LastServerPreferences(sharedPreferences);
     }
 
     private final CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
@@ -86,7 +93,8 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
     };
 
     @Override
-    public void onConnect(String message) {
+    public void onConnect(String message, String serverAddress) {
+        lastServerPreferences.saveLastConnectedServer(serverAddress);
         debugView.showPermanently(getString(R.string.connected));
         switchableView.setDisplayedChild(1);
     }

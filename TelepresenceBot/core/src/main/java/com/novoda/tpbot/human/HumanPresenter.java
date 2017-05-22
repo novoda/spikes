@@ -13,6 +13,7 @@ class HumanPresenter {
     private final HumanView humanView;
 
     private Observable<Result> observable;
+    private String serverAddress;
 
     HumanPresenter(HumanTelepresenceService humanTelepresenceService, HumanView humanView) {
         this.humanTelepresenceService = humanTelepresenceService;
@@ -20,6 +21,7 @@ class HumanPresenter {
     }
 
     void startPresenting(String serverAddress) {
+        this.serverAddress = serverAddress;
         observable = humanTelepresenceService.connectTo(serverAddress)
                 .attach(new ConnectionObserver())
                 .start();
@@ -42,7 +44,7 @@ class HumanPresenter {
             if (result.isError()) {
                 humanView.onError(result.exception().get().getMessage());
             } else {
-                humanView.onConnect(result.message().get());
+                humanView.onConnect(result.message().get(), serverAddress);
             }
         }
 

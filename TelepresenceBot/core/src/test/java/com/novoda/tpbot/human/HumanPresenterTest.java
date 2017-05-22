@@ -43,7 +43,7 @@ public class HumanPresenterTest {
 
         presenter.startPresenting(SERVER_ADDRESS);
 
-        verify(humanView).onConnect(SUCCESS_RESULT.message().get());
+        verify(humanView).onConnect(SUCCESS_RESULT.message().get(), SERVER_ADDRESS);
     }
 
     @Test

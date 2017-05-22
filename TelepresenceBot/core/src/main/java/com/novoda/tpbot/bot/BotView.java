@@ -4,7 +4,7 @@ import com.novoda.tpbot.Direction;
 
 interface BotView {
 
-    void onConnect(String room);
+    void onConnect(String room, String serverAddress);
 
     void onDisconnect();
 

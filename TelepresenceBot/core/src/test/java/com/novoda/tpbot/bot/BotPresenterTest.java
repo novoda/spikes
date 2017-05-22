@@ -45,7 +45,7 @@ public class BotPresenterTest {
 
         presenter.startPresenting();
 
-        verify(botView).onConnect(SUCCESS_RESULT.message().get());
+        verify(botView).onConnect(SUCCESS_RESULT.message().get(), SERVER_ADDRESS);
     }
 
     @Test
