@@ -2,6 +2,7 @@ package com.novoda.pianohero;
 
 import android.content.Context;
 import android.hardware.usb.UsbDevice;
+import android.util.Log;
 
 import jp.kshoji.driver.midi.device.MidiInputDevice;
 import jp.kshoji.driver.midi.device.MidiOutputDevice;
@@ -16,26 +17,32 @@ abstract class SimpleUsbMidiDriver extends UsbMidiDriver {
 
     @Override
     public void onDeviceAttached(UsbDevice usbDevice) {
+        Log.v("!!!", "device attached");
     }
 
     @Override
     public void onMidiInputDeviceAttached(MidiInputDevice midiInputDevice) {
+        Log.v("!!!", "midi input device attached");
     }
 
     @Override
     public void onMidiOutputDeviceAttached(MidiOutputDevice midiOutputDevice) {
+        Log.v("!!!", "midi output device attached");
     }
 
     @Override
     public void onDeviceDetached(UsbDevice usbDevice) {
+        Log.v("!!!", "device detached");
     }
 
     @Override
     public void onMidiInputDeviceDetached(MidiInputDevice midiInputDevice) {
+        Log.v("!!!", "midi input device detached");
     }
 
     @Override
     public void onMidiOutputDeviceDetached(MidiOutputDevice midiOutputDevice) {
+        Log.v("!!!", "midi output device detached");
     }
 
     @Override
