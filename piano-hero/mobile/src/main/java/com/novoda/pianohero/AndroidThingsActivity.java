@@ -7,19 +7,24 @@ import android.util.Log;
 
 public class AndroidThingsActivity extends AppCompatActivity {
 
+    private final SimplePitchNotationFormatter simplePitchNotationFormatter = new SimplePitchNotationFormatter();
     private MidiKeyboardDriver midiKeyboardDriver;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("!!!", "I'm running");
-
         midiKeyboardDriver = new MidiKeyboardDriver.KeyStationMini32(this);
-        midiKeyboardDriver.attachListener(new MidiKeyboardDriver.KeyListener() {
+        midiKeyboardDriver.attachListener(new NoteListener() {
 
             @Override
-            public void onKeyPressed(Note note) {
-                Log.d("!!!", "Note pressed " + note);
+            public void onPress(Note note) {
+                Log.d("!!!", "Note pressed " + simplePitchNotationFormatter.format(note));
+            }
+
+            @Override
+            public void onRelease(Note note) {
+                Log.d("!!!", "Note released " + simplePitchNotationFormatter.format(note));
             }
         });
         midiKeyboardDriver.open();
@@ -30,4 +35,5 @@ public class AndroidThingsActivity extends AppCompatActivity {
         super.onDestroy();
         midiKeyboardDriver.close();
     }
+
 }

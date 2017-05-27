@@ -1,14 +1,10 @@
 package com.novoda.pianohero;
 
 import android.content.Context;
-import android.hardware.usb.UsbDevice;
-import android.util.Log;
 
 import jp.kshoji.driver.midi.device.MidiInputDevice;
 
 interface MidiKeyboardDriver {
-
-    void attachListener(KeyListener keyListener);
 
     void attachListener(NoteListener noteListener);
 
@@ -16,14 +12,7 @@ interface MidiKeyboardDriver {
 
     void close();
 
-    interface KeyListener {
-
-        void onKeyPressed(Note note);
-
-    }
-
     class KeyStationMini32 extends SimpleUsbMidiDriver implements MidiKeyboardDriver {
-        private KeyListener keyListener;
         private NoteListener noteListener;
 
         KeyStationMini32(Context context) {
@@ -31,23 +20,8 @@ interface MidiKeyboardDriver {
         }
 
         @Override
-        public void attachListener(KeyListener keyListener) {
-            this.keyListener = keyListener;
-        }
-
-        @Override
         public void attachListener(NoteListener noteListener) {
             this.noteListener = noteListener;
-        }
-
-        @Override
-        public void onDeviceAttached(UsbDevice usbDevice) {
-            Log.d("!!!", "device attached");
-        }
-
-        @Override
-        public void onDeviceDetached(UsbDevice usbDevice) {
-            Log.d("!!!", "device detached");
         }
 
         @Override
@@ -57,12 +31,8 @@ interface MidiKeyboardDriver {
                 int channel,
                 int note,
                 int velocity) {
-            Note wrappedNote = new Note(note);
             if (noteListener != null) {
-                noteListener.onPress(wrappedNote);
-            }
-            if (keyListener != null) {
-                keyListener.onKeyPressed(wrappedNote);
+                noteListener.onPress(new Note(note));
             }
         }
 
