@@ -18,8 +18,8 @@ public class AndroidThingsActivity extends AppCompatActivity {
         midiKeyboardDriver.attachListener(new MidiKeyboardDriver.KeyListener() {
 
             @Override
-            public void onKeyPressed(MidiKeyboardDriver.Note note) {
-                Log.d("!!!", "note pressed " + note);
+            public void onKeyPressed(Note note) {
+                Log.d("!!!", "Note pressed " + note);
             }
         });
         midiKeyboardDriver.open();
