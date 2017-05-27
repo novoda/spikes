@@ -6,13 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class PianoC4ToB5Activity extends AppCompatActivity {
 
     private PianoC4ToB5View inputView;
     private GamePresenter presenter;
+    private MidiKeyboardDriver midiKeyboardDriver;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -20,6 +18,7 @@ public class PianoC4ToB5Activity extends AppCompatActivity {
         setContentView(R.layout.activity_piano_c4_to_b5);
 
         inputView = (PianoC4ToB5View) findViewById(R.id.piano_view);
+        midiKeyboardDriver = new MidiKeyboardDriver.KeyStationMini32(this);
         GameMvp.View outputView = (SimpleNotesOutputView) findViewById(R.id.simple_notes_output_view);
         GameMvp.Model gameModel = new GameModel(new SongSequenceFactory(), new SimplePitchNotationFormatter());
         presenter = new GamePresenter(gameModel, outputView);
@@ -29,7 +28,10 @@ public class PianoC4ToB5Activity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        inputView.attach(new NotesPlayedDispatcher(presenter));
+        NotesPlayedDispatcher noteListener = new NotesPlayedDispatcher(presenter);
+        midiKeyboardDriver.attachListener(noteListener);
+        midiKeyboardDriver.open();
+        inputView.attach(noteListener);
     }
 
     @Override
@@ -50,34 +52,9 @@ public class PianoC4ToB5Activity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        midiKeyboardDriver.close();
         inputView.detachKeyListener();
         super.onPause();
     }
 
-    private static class NotesPlayedDispatcher implements NoteListener {
-
-        private final Set<Note> notesOn = new HashSet<>();
-        private final GamePresenter presenter;
-
-        NotesPlayedDispatcher(GamePresenter presenter) {
-            this.presenter = presenter;
-        }
-
-        @Override
-        public void onPress(Note note) {
-            notesOn.add(note);
-            dispatchNotesPlayed();
-        }
-
-        @Override
-        public void onRelease(Note note) {
-            notesOn.remove(note);
-            dispatchNotesPlayed();
-        }
-
-        private void dispatchNotesPlayed() {
-            presenter.onNotesPlayed(notesOn.toArray(new Note[notesOn.size()]));
-        }
-
-    }
 }
