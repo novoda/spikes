@@ -38,7 +38,7 @@ public class TestTrebleStaffWidgetActivity extends AppCompatActivity {
 
     public void playIncorrectNote(View view) {
         sequence = new Sequence.Builder(sequence)
-                .withLatestError(new Notes(Note.B5))
+                .withLatestError(new Notes(new Note(63)))
                 .build();
         pojoViewWrapper.show(sequence);
     }
