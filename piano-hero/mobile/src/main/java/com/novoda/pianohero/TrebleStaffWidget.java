@@ -74,6 +74,10 @@ public class TrebleStaffWidget extends FrameLayout {
     public void show(List<Note> notes, int indexNextPlayableNote, @Nullable Note lastErrorNote) {
         removeAllViews();
 
+        if (lastErrorNote != null) {
+            addErrorNoteWidget(new SequenceNote(lastErrorNote, indexNextPlayableNote));
+        }
+
         for (int index = 0; index < notes.size(); index++) {
             Note note = notes.get(index);
             if (index < indexNextPlayableNote) {
@@ -81,10 +85,6 @@ public class TrebleStaffWidget extends FrameLayout {
             } else {
                 addNoteWidget(new SequenceNote(note, index));
             }
-        }
-
-        if (lastErrorNote != null) {
-            addErrorNoteWidget(new SequenceNote(lastErrorNote, indexNextPlayableNote));
         }
     }
 
@@ -131,7 +131,6 @@ public class TrebleStaffWidget extends FrameLayout {
         }
     }
 
-
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         for (int i = 0; i < getChildCount(); i++) {
@@ -142,7 +141,12 @@ public class TrebleStaffWidget extends FrameLayout {
     private void layout(NoteWidget noteWidget) {
         SequenceNote sequenceNote = (SequenceNote) noteWidget.getTag(R.id.tag_treble_staff_widget_note);
 
-        int noteLeft = sequenceNote.positionInSequence * (sharpDrawable.getBounds().width() + noteDrawable.getBounds().width() + noteDrawable.getBounds().width());
+        int noteLeft;
+        if (noteWidget.getMeasuredWidth() > noteDrawable.getBounds().width()) {
+            noteLeft = (sequenceNote.positionInSequence * (sharpDrawable.getBounds().width() + noteDrawable.getBounds().width() + noteDrawable.getBounds().width())) - sharpDrawable.getBounds().width();
+        } else {
+            noteLeft = sequenceNote.positionInSequence * (sharpDrawable.getBounds().width() + noteDrawable.getBounds().width() + noteDrawable.getBounds().width());
+        }
         int noteTop = (int) (positioner.yPosition(sequenceNote.note) - (0.5 * noteWidget.getMeasuredHeight()));
         int noteRight = noteLeft + noteWidget.getMeasuredWidth();
         int noteBottom = noteTop + noteWidget.getMeasuredHeight();
