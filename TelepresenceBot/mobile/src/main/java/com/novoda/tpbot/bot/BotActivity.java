@@ -230,6 +230,7 @@ public class BotActivity extends AppCompatActivity implements BotView {
     @Override
     public void moveIn(Direction direction) {
         debugView.showTimed(direction.visualRepresentation());
+        commandRepeatedListener.onCommandRepeated(direction.rawDirection());
     }
 
 }
