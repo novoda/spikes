@@ -15,10 +15,11 @@
         <activity android:name=".SimpleEndToEndActivity" />
         <activity android:name=".PianoC4ToB5Activity" />
         <activity android:name=".AndroidThingsActivity" />
+        <activity android:name=".TestTrebleStaffWidgetActivity" />
 
         <activity-alias
             android:name=".launcher"
-            android:targetActivity=".SimpleEndToEndActivity">
+            android:targetActivity=".TestTrebleStaffWidgetActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

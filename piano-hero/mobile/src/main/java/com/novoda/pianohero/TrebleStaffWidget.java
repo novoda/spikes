@@ -14,6 +14,7 @@ import java.util.List;
 public class TrebleStaffWidget extends FrameLayout {
 
     private static final String SHARP_SYMBOL = "#";
+    private static final int VIEW_HEIGHT_IN_NUMBER_OF_NOTES = 8;
 
     private final SimplePitchNotationFormatter formatter = new SimplePitchNotationFormatter();
     private final Drawable completedNoteDrawable;
@@ -22,6 +23,7 @@ public class TrebleStaffWidget extends FrameLayout {
     private final Drawable sharpDrawable;
     private final Drawable errorNoteDrawable;
     private final Drawable errorSharpDrawable;
+    private final C4ToB5TrebleStaffPositioner positioner;
 
     public TrebleStaffWidget(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -33,6 +35,14 @@ public class TrebleStaffWidget extends FrameLayout {
         sharpDrawable = sharpDrawable(context, R.drawable.sharp);
         errorNoteDrawable = noteDrawable(context, R.drawable.note_error);
         errorSharpDrawable = sharpDrawable(context, R.drawable.sharp_error);
+
+        positioner = C4ToB5TrebleStaffPositioner.createPositionerGivenNoteHeight(noteDrawable.getBounds().height());
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int height = noteDrawable.getBounds().height() * VIEW_HEIGHT_IN_NUMBER_OF_NOTES;
+        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
     }
 
     private Drawable noteDrawable(Context context, @DrawableRes int res) {
@@ -51,8 +61,8 @@ public class TrebleStaffWidget extends FrameLayout {
         return drawable;
     }
 
-    public void show(List<Note> notes, int nextNoteToPlayIndex) {
-        show(notes, nextNoteToPlayIndex, null);
+    public void show(List<Note> notes, int indexNextPlayableNote) {
+        show(notes, indexNextPlayableNote, null);
     }
 
     public void show(List<Note> notes, int indexNextPlayableNote, @Nullable Note lastErrorNote) {
@@ -61,58 +71,76 @@ public class TrebleStaffWidget extends FrameLayout {
         for (int index = 0; index < notes.size(); index++) {
             Note note = notes.get(index);
             if (index < indexNextPlayableNote) {
-                addCompletedNoteWidget(note);
+                addCompletedNoteWidget(new SequenceNote(note, index));
             } else {
-                addNoteWidget(note);
+                addNoteWidget(new SequenceNote(note, index));
             }
         }
 
         if (lastErrorNote != null) {
-            addErrorNoteWidget(lastErrorNote);
+            addErrorNoteWidget(new SequenceNote(lastErrorNote, indexNextPlayableNote));
         }
     }
 
-    private void addNoteWidget(Note note) {
-        boolean shouldDisplaySharp = formatter.format(note).endsWith(SHARP_SYMBOL);
+    private void addNoteWidget(SequenceNote sequenceNote) {
+        boolean shouldDisplaySharp = formatter.format(sequenceNote.note).endsWith(SHARP_SYMBOL);
         if (shouldDisplaySharp) {
-            addNoteWidget(note, noteDrawable, sharpDrawable);
+            addNoteWidget(sequenceNote, noteDrawable, sharpDrawable);
         } else {
-            addNoteWidget(note, noteDrawable, null);
+            addNoteWidget(sequenceNote, noteDrawable, null);
         }
     }
 
-    private void addErrorNoteWidget(Note note) {
-        boolean shouldDisplaySharp = formatter.format(note).endsWith(SHARP_SYMBOL);
+    private void addErrorNoteWidget(SequenceNote sequenceNote) {
+        boolean shouldDisplaySharp = formatter.format(sequenceNote.note).endsWith(SHARP_SYMBOL);
         if (shouldDisplaySharp) {
-            addNoteWidget(note, errorNoteDrawable, errorSharpDrawable);
+            addNoteWidget(sequenceNote, errorNoteDrawable, errorSharpDrawable);
         } else {
-            addNoteWidget(note, errorNoteDrawable, null);
+            addNoteWidget(sequenceNote, errorNoteDrawable, null);
         }
     }
 
-    private void addCompletedNoteWidget(Note note) {
-        boolean shouldDisplaySharp = formatter.format(note).endsWith(SHARP_SYMBOL);
+    private void addCompletedNoteWidget(SequenceNote sequenceNote) {
+        boolean shouldDisplaySharp = formatter.format(sequenceNote.note).endsWith(SHARP_SYMBOL);
         if (shouldDisplaySharp) {
-            addNoteWidget(note, completedNoteDrawable, completedSharpDrawable);
+            addNoteWidget(sequenceNote, completedNoteDrawable, completedSharpDrawable);
         } else {
-            addNoteWidget(note, completedNoteDrawable, null);
+            addNoteWidget(sequenceNote, completedNoteDrawable, null);
         }
     }
 
-    private void addNoteWidget(Note note, Drawable noteDrawable, Drawable sharpDrawable) {
+    private void addNoteWidget(SequenceNote note, Drawable noteDrawable, Drawable sharpDrawable) {
         NoteWidget view = new NoteWidget(getContext(), noteDrawable, sharpDrawable);
         view.setTag(R.id.tag_treble_staff_widget_note, note);
         addView(view);
     }
 
+    private static class SequenceNote {
+        public final Note note;
+        public final int positionInSequence;
+
+        private SequenceNote(Note note, int positionInSequence) {
+            this.note = note;
+            this.positionInSequence = positionInSequence;
+        }
+    }
+
+
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        // TODO: position the NoteWidgets, taking into account the treble clef
         for (int i = 0; i < getChildCount(); i++) {
-            NoteWidget noteWidget = (NoteWidget) getChildAt(i);
-            Note note = (Note) noteWidget.getTag(R.id.tag_treble_staff_widget_note);
-            // TODO: calculate the Y position based on the note's midi value
+            layout((NoteWidget) getChildAt(i));
         }
+    }
+
+    private void layout(NoteWidget noteWidget) {
+        SequenceNote sequenceNote = (SequenceNote) noteWidget.getTag(R.id.tag_treble_staff_widget_note);
+
+        int noteLeft = sequenceNote.positionInSequence * (sharpDrawable.getBounds().width() + noteDrawable.getBounds().width() + noteDrawable.getBounds().width());
+        int noteTop = (int) (positioner.yPosition(sequenceNote.note) - (noteWidget.getMeasuredHeight() * 0.5));
+        int noteRight = noteLeft + noteWidget.getMeasuredWidth();
+        int noteBottom = noteTop + noteWidget.getMeasuredHeight();
+        noteWidget.layout(noteLeft, noteTop, noteRight, noteBottom);
     }
 
     @Override

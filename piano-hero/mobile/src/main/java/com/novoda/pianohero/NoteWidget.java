@@ -56,11 +56,11 @@ public class NoteWidget extends View {
         int width;
         int height;
         if (sharpDrawable != null) {
-            width = sharpDrawable.getIntrinsicWidth() + noteDrawable.getIntrinsicWidth();
-            height = Math.max(sharpDrawable.getIntrinsicHeight(), noteDrawable.getIntrinsicHeight());
+            width = sharpDrawable.getIntrinsicWidth() + noteDrawable.getBounds().width();
+            height = Math.max(sharpDrawable.getIntrinsicHeight(), noteDrawable.getBounds().height());
         } else {
-            width = noteDrawable.getIntrinsicWidth();
-            height = noteDrawable.getIntrinsicHeight();
+            width = noteDrawable.getBounds().width();
+            height = noteDrawable.getBounds().height();
         }
         setMeasuredDimension(width, height);
     }
@@ -71,7 +71,7 @@ public class NoteWidget extends View {
         if (sharpDrawable != null) {
             sharpDrawable.draw(canvas);
             int count = canvas.save();
-            canvas.translate(sharpDrawable.getIntrinsicWidth(), (float) ((getHeight() - noteDrawable.getIntrinsicHeight()) * 0.5));
+            canvas.translate(sharpDrawable.getBounds().width(), (float) ((getHeight() - noteDrawable.getBounds().height()) * 0.5));
             noteDrawable.draw(canvas);
             canvas.restoreToCount(count);
         } else {
