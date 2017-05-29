@@ -143,7 +143,7 @@ public class TrebleStaffWidget extends FrameLayout {
         SequenceNote sequenceNote = (SequenceNote) noteWidget.getTag(R.id.tag_treble_staff_widget_note);
 
         int noteLeft = sequenceNote.positionInSequence * (sharpDrawable.getBounds().width() + noteDrawable.getBounds().width() + noteDrawable.getBounds().width());
-        int noteTop = (int) positioner.yPosition(sequenceNote.note);
+        int noteTop = (int) (positioner.yPosition(sequenceNote.note) - (0.5 * noteWidget.getMeasuredHeight()));
         int noteRight = noteLeft + noteWidget.getMeasuredWidth();
         int noteBottom = noteTop + noteWidget.getMeasuredHeight();
         noteWidget.layout(noteLeft, noteTop, noteRight, noteBottom);
