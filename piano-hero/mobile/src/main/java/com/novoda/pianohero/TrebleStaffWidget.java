@@ -143,9 +143,9 @@ public class TrebleStaffWidget extends FrameLayout {
 
         int noteLeft;
         if (noteWidget.getMeasuredWidth() > noteDrawable.getBounds().width()) {
-            noteLeft = (sequenceNote.positionInSequence * (sharpDrawable.getBounds().width() + noteDrawable.getBounds().width() + noteDrawable.getBounds().width())) - sharpDrawable.getBounds().width();
-        } else {
             noteLeft = sequenceNote.positionInSequence * (sharpDrawable.getBounds().width() + noteDrawable.getBounds().width() + noteDrawable.getBounds().width());
+        } else {
+            noteLeft = sharpDrawable.getBounds().width() + sequenceNote.positionInSequence * (sharpDrawable.getBounds().width() + noteDrawable.getBounds().width() + noteDrawable.getBounds().width());
         }
         int noteTop = (int) (positioner.yPosition(sequenceNote.note) - (0.5 * noteWidget.getMeasuredHeight()));
         int noteRight = noteLeft + noteWidget.getMeasuredWidth();
