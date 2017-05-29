@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TrebleStaffWidget extends FrameLayout {
@@ -18,6 +19,7 @@ public class TrebleStaffWidget extends FrameLayout {
     private static final String SHARP_SYMBOL = "#";
     private static final int VIEW_HEIGHT_IN_NUMBER_OF_NOTES = 8;
 
+    private final List<NoteWidget> noteWidgetsThatRequireLedgerLines = new ArrayList<>();
     private final SimplePitchNotationFormatter formatter = new SimplePitchNotationFormatter();
     private final Drawable completedNoteDrawable;
     private final Drawable completedSharpDrawable;
@@ -40,7 +42,6 @@ public class TrebleStaffWidget extends FrameLayout {
         errorSharpDrawable = sharpDrawable(context, R.drawable.sharp_error);
         linesPaint = new Paint();
         linesPaint.setColor(Color.BLACK);
-        linesPaint.setStrokeWidth(2);
 
         positioner = C4ToB5TrebleStaffPositioner.createPositionerGivenNoteHeight(noteDrawable.getBounds().height());
     }
@@ -73,6 +74,7 @@ public class TrebleStaffWidget extends FrameLayout {
 
     public void show(List<Note> notes, int indexNextPlayableNote, @Nullable Note lastErrorNote) {
         removeAllViews();
+        noteWidgetsThatRequireLedgerLines.clear();
 
         if (lastErrorNote != null) {
             addErrorNoteWidget(new SequenceNote(lastErrorNote, indexNextPlayableNote));
@@ -116,19 +118,12 @@ public class TrebleStaffWidget extends FrameLayout {
     }
 
     private void addNoteWidget(SequenceNote note, Drawable noteDrawable, Drawable sharpDrawable) {
-        NoteWidget view = new NoteWidget(getContext(), noteDrawable, sharpDrawable);
-        view.setTag(R.id.tag_treble_staff_widget_note, note);
-        addView(view);
-    }
-
-    private static class SequenceNote {
-        public final Note note;
-        public final int positionInSequence;
-
-        private SequenceNote(Note note, int positionInSequence) {
-            this.note = note;
-            this.positionInSequence = positionInSequence;
+        NoteWidget noteWidget = new NoteWidget(getContext(), noteDrawable, sharpDrawable);
+        noteWidget.setTag(R.id.tag_treble_staff_widget_note, note);
+        if (note.note.midi() < Note.D4.midi() || Note.G4_S.midi() < note.note.midi()) {
+            noteWidgetsThatRequireLedgerLines.add(noteWidget);
         }
+        addView(noteWidget);
     }
 
     @Override
@@ -156,18 +151,58 @@ public class TrebleStaffWidget extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        // TODO: draw ledger lines (where necessary) and the Treble clef
+        // TODO: draw Treble clef
         int noteHeight = noteDrawable.getBounds().height();
-        int startY = 2 * noteHeight;
-        drawStaffLine(canvas, startY);
-        drawStaffLine(canvas, startY + noteHeight);
-        drawStaffLine(canvas, startY + 2 * noteHeight);
-        drawStaffLine(canvas, startY + 3 * noteHeight);
-        drawStaffLine(canvas, startY + 4 * noteHeight);
+        int topStaffY = 2 * noteHeight;
+        int bottomStaffY = topStaffY + 4 * noteHeight;
+        drawStaffLines(canvas, noteHeight, topStaffY, bottomStaffY);
+        drawLedgerLines(canvas, noteHeight, topStaffY, bottomStaffY);
+    }
+
+    private void drawStaffLines(Canvas canvas, int noteHeight, int topStaffY, int bottomStaffY) {
+        for (int i = 0; i <= (bottomStaffY - topStaffY) / noteHeight; i++) {
+            drawStaffLine(canvas, topStaffY + i * noteHeight);
+        }
     }
 
     private void drawStaffLine(Canvas canvas, int y) {
         canvas.drawLine(0, y, getRight(), y, linesPaint);
+    }
+
+    private void drawLedgerLines(Canvas canvas, int noteHeight, int topStaffY, int bottomStaffY) {
+        for (NoteWidget noteWidget : noteWidgetsThatRequireLedgerLines) {
+            drawLedgerLines(canvas, noteWidget, noteHeight, topStaffY, bottomStaffY);
+        }
+    }
+
+    private void drawLedgerLines(Canvas canvas, NoteWidget noteWidget, int noteHeight, int topStaffY, int bottomStaffY) {
+        int noteWidgetCenterY = noteWidget.getTop() + (int) ((noteWidget.getBottom() - noteWidget.getTop()) * 0.5);
+        if (noteWidgetCenterY > bottomStaffY) {
+            drawLedgerLinesForNote(canvas, noteWidget, noteHeight, bottomStaffY, noteWidgetCenterY);
+        } else {
+            drawLedgerLinesForNote(canvas, noteWidget, noteHeight, topStaffY - noteHeight, noteWidgetCenterY);
+        }
+    }
+
+    private void drawLedgerLinesForNote(Canvas canvas, NoteWidget noteWidget, int noteHeight, int firstLineY, int lastLineY) {
+        for (int i = 0; i <= (lastLineY - firstLineY) / noteHeight; i++) {
+            drawLedgerLine(canvas, noteWidget, firstLineY + i * noteHeight);
+        }
+    }
+
+    private void drawLedgerLine(Canvas canvas, NoteWidget noteWidget, int y) {
+        int extra = (int) (noteWidget.getWidth() * 0.3);
+        canvas.drawLine(noteWidget.getLeft() - extra, y, noteWidget.getRight() + extra, y, linesPaint);
+    }
+
+    private static class SequenceNote {
+        final Note note;
+        final int positionInSequence;
+
+        SequenceNote(Note note, int positionInSequence) {
+            this.note = note;
+            this.positionInSequence = positionInSequence;
+        }
     }
 
 }
