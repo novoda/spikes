@@ -2,6 +2,8 @@ package com.novoda.pianohero;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
@@ -24,6 +26,7 @@ public class TrebleStaffWidget extends FrameLayout {
     private final Drawable errorNoteDrawable;
     private final Drawable errorSharpDrawable;
     private final C4ToB5TrebleStaffPositioner positioner;
+    private final Paint linesPaint;
 
     public TrebleStaffWidget(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -35,6 +38,9 @@ public class TrebleStaffWidget extends FrameLayout {
         sharpDrawable = sharpDrawable(context, R.drawable.sharp);
         errorNoteDrawable = noteDrawable(context, R.drawable.note_error);
         errorSharpDrawable = sharpDrawable(context, R.drawable.sharp_error);
+        linesPaint = new Paint();
+        linesPaint.setColor(Color.BLACK);
+        linesPaint.setStrokeWidth(2);
 
         positioner = C4ToB5TrebleStaffPositioner.createPositionerGivenNoteHeight(noteDrawable.getBounds().height());
     }
@@ -137,7 +143,7 @@ public class TrebleStaffWidget extends FrameLayout {
         SequenceNote sequenceNote = (SequenceNote) noteWidget.getTag(R.id.tag_treble_staff_widget_note);
 
         int noteLeft = sequenceNote.positionInSequence * (sharpDrawable.getBounds().width() + noteDrawable.getBounds().width() + noteDrawable.getBounds().width());
-        int noteTop = (int) (positioner.yPosition(sequenceNote.note) - (noteWidget.getMeasuredHeight() * 0.5));
+        int noteTop = (int) positioner.yPosition(sequenceNote.note);
         int noteRight = noteLeft + noteWidget.getMeasuredWidth();
         int noteBottom = noteTop + noteWidget.getMeasuredHeight();
         noteWidget.layout(noteLeft, noteTop, noteRight, noteBottom);
@@ -146,7 +152,18 @@ public class TrebleStaffWidget extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        // TODO: draw the Treble clef, staff lines and ledger lines (where necessary)
+        // TODO: draw ledger lines (where necessary) and the Treble clef
+        int noteHeight = noteDrawable.getBounds().height();
+        int startY = 2 * noteHeight;
+        drawStaffLine(canvas, startY);
+        drawStaffLine(canvas, startY + noteHeight);
+        drawStaffLine(canvas, startY + 2 * noteHeight);
+        drawStaffLine(canvas, startY + 3 * noteHeight);
+        drawStaffLine(canvas, startY + 4 * noteHeight);
+    }
+
+    private void drawStaffLine(Canvas canvas, int y) {
+        canvas.drawLine(0, y, getRight(), y, linesPaint);
     }
 
 }
