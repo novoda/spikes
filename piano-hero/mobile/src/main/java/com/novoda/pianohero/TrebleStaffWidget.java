@@ -21,6 +21,7 @@ public class TrebleStaffWidget extends FrameLayout {
 
     private final List<NoteWidget> noteWidgetsThatRequireLedgerLines = new ArrayList<>();
     private final SimplePitchNotationFormatter formatter = new SimplePitchNotationFormatter();
+    private final Drawable trebleClefDrawable;
     private final Drawable completedNoteDrawable;
     private final Drawable completedSharpDrawable;
     private final Drawable noteDrawable;
@@ -34,6 +35,7 @@ public class TrebleStaffWidget extends FrameLayout {
         super(context, attrs);
         setWillNotDraw(false);
 
+        trebleClefDrawable = trebleClefDrawable(context);
         completedNoteDrawable = noteDrawable(context, R.drawable.note_completed);
         completedSharpDrawable = sharpDrawable(context, R.drawable.sharp_completed);
         noteDrawable = noteDrawable(context, R.drawable.note);
@@ -46,10 +48,12 @@ public class TrebleStaffWidget extends FrameLayout {
         positioner = C4ToB5TrebleStaffPositioner.createPositionerGivenNoteHeight(noteDrawable.getBounds().height());
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int height = noteDrawable.getBounds().height() * VIEW_HEIGHT_IN_NUMBER_OF_NOTES;
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
+    private Drawable trebleClefDrawable(Context context) {
+        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.treble_clef);
+        int width = context.getResources().getDimensionPixelSize(R.dimen.treble_clef_width);
+        int height = context.getResources().getDimensionPixelSize(R.dimen.treble_clef_height);
+        drawable.setBounds(0, 0, width, height);
+        return drawable;
     }
 
     private Drawable noteDrawable(Context context, @DrawableRes int res) {
@@ -66,6 +70,12 @@ public class TrebleStaffWidget extends FrameLayout {
         int height = context.getResources().getDimensionPixelSize(R.dimen.sharp_height);
         drawable.setBounds(0, 0, width, height);
         return drawable;
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int height = noteDrawable.getBounds().height() * VIEW_HEIGHT_IN_NUMBER_OF_NOTES;
+        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
     }
 
     public void show(List<Note> notes, int indexNextPlayableNote) {
@@ -136,11 +146,12 @@ public class TrebleStaffWidget extends FrameLayout {
     private void layout(NoteWidget noteWidget) {
         SequenceNote sequenceNote = (SequenceNote) noteWidget.getTag(R.id.tag_treble_staff_widget_note);
 
+        int trebleClefOffset = (int) (trebleClefDrawable.getBounds().width() * 1.5);
         int noteLeft;
         if (noteWidget.getMeasuredWidth() > noteDrawable.getBounds().width()) {
-            noteLeft = sequenceNote.positionInSequence * (sharpDrawable.getBounds().width() + noteDrawable.getBounds().width() + noteDrawable.getBounds().width());
+            noteLeft = trebleClefOffset + (sequenceNote.positionInSequence * (sharpDrawable.getBounds().width() + noteDrawable.getBounds().width() + noteDrawable.getBounds().width()));
         } else {
-            noteLeft = sharpDrawable.getBounds().width() + sequenceNote.positionInSequence * (sharpDrawable.getBounds().width() + noteDrawable.getBounds().width() + noteDrawable.getBounds().width());
+            noteLeft = trebleClefOffset + sharpDrawable.getBounds().width() + sequenceNote.positionInSequence * (sharpDrawable.getBounds().width() + noteDrawable.getBounds().width() + noteDrawable.getBounds().width());
         }
         int noteTop = (int) (positioner.yPosition(sequenceNote.note) - (0.5 * noteWidget.getMeasuredHeight()));
         int noteRight = noteLeft + noteWidget.getMeasuredWidth();
@@ -151,8 +162,13 @@ public class TrebleStaffWidget extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        // TODO: draw Treble clef
         int noteHeight = noteDrawable.getBounds().height();
+
+        int saveCount = canvas.save();
+        canvas.translate(0, (float) (noteHeight * 0.5));
+        trebleClefDrawable.draw(canvas);
+        canvas.restoreToCount(saveCount);
+
         int topStaffY = 2 * noteHeight;
         int bottomStaffY = topStaffY + 4 * noteHeight;
         drawStaffLines(canvas, noteHeight, topStaffY, bottomStaffY);
@@ -186,11 +202,11 @@ public class TrebleStaffWidget extends FrameLayout {
 
     private void drawLedgerLinesForNote(Canvas canvas, NoteWidget noteWidget, int noteHeight, int firstLineY, int lastLineY) {
         for (int i = 0; i <= (lastLineY - firstLineY) / noteHeight; i++) {
-            drawLedgerLine(canvas, noteWidget, firstLineY + i * noteHeight);
+            drawLedgerLineWithABitExtraEitherSide(canvas, noteWidget, firstLineY + i * noteHeight);
         }
     }
 
-    private void drawLedgerLine(Canvas canvas, NoteWidget noteWidget, int y) {
+    private void drawLedgerLineWithABitExtraEitherSide(Canvas canvas, NoteWidget noteWidget, int y) {
         int extra = (int) (noteWidget.getWidth() * 0.3);
         canvas.drawLine(noteWidget.getLeft() - extra, y, noteWidget.getRight() + extra, y, linesPaint);
     }
