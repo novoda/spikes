@@ -56,8 +56,8 @@ public class NoteWidget extends View {
         int width;
         int height;
         if (sharpDrawable != null) {
-            width = sharpDrawable.getIntrinsicWidth() + noteDrawable.getBounds().width();
-            height = Math.max(sharpDrawable.getIntrinsicHeight(), noteDrawable.getBounds().height());
+            width = sharpDrawable.getBounds().width() + noteDrawable.getBounds().width();
+            height = Math.max(sharpDrawable.getBounds().height(), noteDrawable.getBounds().height());
         } else {
             width = noteDrawable.getBounds().width();
             height = noteDrawable.getBounds().height();
