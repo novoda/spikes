@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="note_width">16sp</dimen>
+    <dimen name="note_height">10sp</dimen>
+    <dimen name="sharp_width">9sp</dimen>
+    <dimen name="sharp_height">28sp</dimen>
+</resources>
