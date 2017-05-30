@@ -1,9 +1,10 @@
 package com.novoda.tpbot.bot;
 
-import com.novoda.tpbot.Direction;
-import com.novoda.tpbot.Result;
 import com.novoda.support.Observable;
 import com.novoda.support.Observer;
+import com.novoda.tpbot.Direction;
+import com.novoda.tpbot.Result;
+import com.novoda.tpbot.controls.LastServerPersistence;
 
 import static com.novoda.support.Observable.unsubscribe;
 
@@ -11,14 +12,16 @@ class BotPresenter {
 
     private final BotTelepresenceService tpService;
     private final BotView botView;
+    private final LastServerPersistence lastServerPersistence;
     private final String serverAddress;
 
     private Observable<Result> connectionObservable;
     private Observable<Direction> directionObservable;
 
-    BotPresenter(BotTelepresenceService tpService, BotView botView, String serverAddress) {
+    BotPresenter(BotTelepresenceService tpService, BotView botView, LastServerPersistence lastServerPersistence, String serverAddress) {
         this.tpService = tpService;
         this.botView = botView;
+        this.lastServerPersistence = lastServerPersistence;
         this.serverAddress = serverAddress;
     }
 
@@ -42,6 +45,7 @@ class BotPresenter {
             if (result.isError()) {
                 botView.onError(result.exception().get().getMessage());
             } else {
+                lastServerPersistence.saveLastConnectedServer(serverAddress);
                 botView.onConnect(result.message().get(), serverAddress);
 
                 directionObservable = tpService.listen()
