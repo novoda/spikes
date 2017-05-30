@@ -15,6 +15,7 @@ import com.novoda.tpbot.ServerDeclarationListener;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
+import com.novoda.tpbot.controls.LastServerPersistence;
 import com.novoda.tpbot.controls.LastServerPreferences;
 import com.novoda.tpbot.controls.ServerDeclarationView;
 
@@ -27,7 +28,6 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
     private CommandRepeater commandRepeater;
 
     private HumanPresenter presenter;
-    private LastServerPreferences lastServerPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,9 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
         switchableView = Views.findById(this, R.id.bot_switchable_view);
 
-        presenter = new HumanPresenter(SocketIOTelepresenceService.getInstance(), this);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        LastServerPersistence lastServerPersistence = new LastServerPreferences(sharedPreferences);
+        presenter = new HumanPresenter(SocketIOTelepresenceService.getInstance(), this, lastServerPersistence);
 
         Handler handler = new Handler();
         commandRepeater = new CommandRepeater(commandRepeatedListener, handler);
@@ -48,8 +50,7 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         ServerDeclarationView serverDeclarationView = Views.findById(switchableView, R.id.bot_server_declaration_view);
         serverDeclarationView.setServerDeclarationListener(serverDeclarationListener);
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        lastServerPreferences = new LastServerPreferences(sharedPreferences);
+
     }
 
     private final CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
@@ -93,8 +94,7 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
     };
 
     @Override
-    public void onConnect(String message, String serverAddress) {
-        lastServerPreferences.saveLastConnectedServer(serverAddress);
+    public void onConnect(String message) {
         debugView.showPermanently(getString(R.string.connected));
         switchableView.setDisplayedChild(1);
     }

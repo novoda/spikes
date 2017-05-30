@@ -2,6 +2,7 @@ package com.novoda.tpbot.human;
 
 import com.novoda.tpbot.Result;
 import com.novoda.support.Observable;
+import com.novoda.tpbot.controls.LastServerPersistence;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -12,6 +13,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -30,11 +32,14 @@ public class HumanPresenterTest {
     @Mock
     HumanView humanView;
 
+    @Mock
+    private LastServerPersistence lastServerPersistence;
+
     private HumanPresenter presenter;
 
     @Before
     public void setUp() throws Exception {
-        presenter = new HumanPresenter(tpService, humanView);
+        presenter = new HumanPresenter(tpService, humanView, lastServerPersistence);
     }
 
     @Test
@@ -43,7 +48,7 @@ public class HumanPresenterTest {
 
         presenter.startPresenting(SERVER_ADDRESS);
 
-        verify(humanView).onConnect(SUCCESS_RESULT.message().get(), SERVER_ADDRESS);
+        verify(humanView).onConnect(SUCCESS_RESULT.message().get());
     }
 
     @Test
@@ -75,6 +80,24 @@ public class HumanPresenterTest {
         presenter.stopPresenting();
 
         verify(spyObservable).detachObservers();
+    }
+
+    @Test
+    public void givenSuccessfulConnection_whenStartPresenting_thenServerAddressIsStored() {
+        when(tpService.connectTo(anyString())).thenReturn(Observable.just(SUCCESS_RESULT));
+
+        presenter.startPresenting(SERVER_ADDRESS);
+
+        verify(lastServerPersistence).saveLastConnectedServer(SERVER_ADDRESS);
+    }
+
+    @Test
+    public void givenUnsuccessfulConnection_whenStartPresenting_thenServerAddressIsNotStored() {
+        when(tpService.connectTo(anyString())).thenReturn(Observable.just(FAILURE_RESULT));
+
+        presenter.startPresenting(SERVER_ADDRESS);
+
+        verify(lastServerPersistence, never()).saveLastConnectedServer(anyString());
     }
 
 }
