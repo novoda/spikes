@@ -28,7 +28,7 @@ import com.novoda.tpbot.automation.AutomationChecker;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
-import com.novoda.tpbot.human.ServerDeclarationView;
+import com.novoda.tpbot.controls.ServerDeclarationView;
 
 import java.util.HashMap;
 
@@ -201,7 +201,7 @@ public class BotActivity extends AppCompatActivity implements BotView {
     };
 
     @Override
-    public void onConnect(String room) {
+    public void onConnect(String room, String serverAddress) {
         debugView.showPermanently(getString(R.string.connected));
         switchableView.setDisplayedChild(1);
 

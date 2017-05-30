@@ -3,6 +3,7 @@ package com.novoda.tpbot.bot;
 import com.novoda.support.Observable;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.Result;
+import com.novoda.tpbot.controls.LastServerPersistence;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -28,13 +29,16 @@ public class BotPresenterTest {
     BotTelepresenceService tpService;
 
     @Mock
+    private LastServerPersistence lastServerPersistence;
+
+    @Mock
     BotView botView;
 
     private BotPresenter presenter;
 
     @Before
     public void setUp() throws Exception {
-        presenter = new BotPresenter(tpService, botView, SERVER_ADDRESS);
+        presenter = new BotPresenter(tpService, botView, lastServerPersistence, SERVER_ADDRESS);
 
         when(tpService.listen()).thenReturn(Observable.just(DIRECTION));
     }
@@ -45,7 +49,7 @@ public class BotPresenterTest {
 
         presenter.startPresenting();
 
-        verify(botView).onConnect(SUCCESS_RESULT.message().get());
+        verify(botView).onConnect(SUCCESS_RESULT.message().get(), SERVER_ADDRESS);
     }
 
     @Test
@@ -95,6 +99,24 @@ public class BotPresenterTest {
         presenter.startPresenting();
 
         verify(tpService, never()).listen();
+    }
+
+    @Test
+    public void givenSuccessfulConnection_whenStartPresenting_thenServerAddressIsStored() {
+        when(tpService.connectTo(SERVER_ADDRESS)).thenReturn(Observable.just(SUCCESS_RESULT));
+
+        presenter.startPresenting();
+
+        verify(lastServerPersistence).saveLastConnectedServer(SERVER_ADDRESS);
+    }
+
+    @Test
+    public void givenUnsuccessfulConnection_whenStartPresenting_thenServerAddressIsNotStored() {
+        when(tpService.connectTo(SERVER_ADDRESS)).thenReturn(Observable.just(FAILURE_RESULT));
+
+        presenter.startPresenting();
+
+        verify(lastServerPersistence, never()).saveLastConnectedServer(anyString());
     }
 
     @Test

@@ -1,18 +1,23 @@
 package com.novoda.tpbot.human;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.novoda.notils.caster.Views;
+import com.novoda.support.SelfDestructingMessageView;
+import com.novoda.support.SwitchableView;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
+import com.novoda.tpbot.ServerDeclarationListener;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
-import com.novoda.support.SelfDestructingMessageView;
-import com.novoda.tpbot.ServerDeclarationListener;
-import com.novoda.support.SwitchableView;
+import com.novoda.tpbot.controls.LastServerPersistence;
+import com.novoda.tpbot.controls.LastServerPreferences;
+import com.novoda.tpbot.controls.ServerDeclarationView;
 
 public class HumanActivity extends AppCompatActivity implements HumanView {
 
@@ -32,7 +37,9 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
         switchableView = Views.findById(this, R.id.bot_switchable_view);
 
-        presenter = new HumanPresenter(SocketIOTelepresenceService.getInstance(), this);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        LastServerPersistence lastServerPersistence = new LastServerPreferences(sharedPreferences);
+        presenter = new HumanPresenter(SocketIOTelepresenceService.getInstance(), this, lastServerPersistence);
 
         Handler handler = new Handler();
         commandRepeater = new CommandRepeater(commandRepeatedListener, handler);
@@ -42,6 +49,8 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
 
         ServerDeclarationView serverDeclarationView = Views.findById(switchableView, R.id.bot_server_declaration_view);
         serverDeclarationView.setServerDeclarationListener(serverDeclarationListener);
+
+
     }
 
     private final CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
