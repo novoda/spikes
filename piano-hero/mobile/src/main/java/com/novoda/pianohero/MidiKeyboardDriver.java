@@ -1,6 +1,8 @@
 package com.novoda.pianohero;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import jp.kshoji.driver.midi.device.MidiInputDevice;
 
@@ -14,9 +16,11 @@ interface MidiKeyboardDriver {
 
     class KeyStationMini32 extends SimpleUsbMidiDriver implements MidiKeyboardDriver {
         private NoteListener noteListener;
+        private Handler handler;
 
         KeyStationMini32(Context context) {
             super(context);
+            handler = new Handler(Looper.getMainLooper());
         }
 
         @Override
@@ -29,11 +33,18 @@ interface MidiKeyboardDriver {
                 MidiInputDevice midiInputDevice,
                 int cable,
                 int channel,
-                int note,
+                final int note,
                 int velocity) {
-            if (noteListener != null) {
-                noteListener.onPlay(new Note(note));
-            }
+
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (noteListener != null) {
+                        noteListener.onPlay(new Note(note));
+                    }
+                }
+            });
         }
+
     }
 }
