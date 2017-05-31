@@ -53,7 +53,7 @@ public final class Sequence {
         }
 
         public Builder(Sequence sequence) {
-            this(sequence.notes().notes());
+            this(sequence.notes().asList());
             this.latestError = sequence.latestError();
             this.position = sequence.position;
         }

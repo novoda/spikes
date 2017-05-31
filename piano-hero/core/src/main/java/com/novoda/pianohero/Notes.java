@@ -11,7 +11,7 @@ public class Notes implements Iterable<Note> {
         this.notes = notes;
     }
 
-    public List<Note> notes() {
+    public List<Note> asList() {
         return notes;
     }
 

@@ -18,9 +18,9 @@ class AndroidThingsView implements GameMvp.View {
     public void showRound(RoundViewModel viewModel) {
         Sequence sequence = viewModel.getSequence();
         if (sequence.latestError() == null) {
-            trebleStaffWidget.show(sequence.notes().notes(), sequence.position());
+            trebleStaffWidget.show(sequence.notes().asList(), sequence.position());
         } else {
-            trebleStaffWidget.show(sequence.notes().notes(), sequence.position(), sequence.latestError());
+            trebleStaffWidget.show(sequence.notes().asList(), sequence.position(), sequence.latestError());
         }
 
         statusTextView.setText(viewModel.getStatusMessage());
