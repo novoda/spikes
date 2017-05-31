@@ -24,23 +24,23 @@ class GamePresenter implements GameMvp.Presenter {
 
     @Override
     public void onNotePlayed(Note note) {
-        gameModel.playGameRound(
-                new GameMvp.Model.RoundCallback() {
-                    @Override
-                    public void onRoundUpdate(RoundViewModel viewModel) {
-                        view.showRound(viewModel);
-                    }
-                },
-                new GameMvp.Model.CompletionCallback() {
-                    @Override
-                    public void onGameComplete() {
-                        view.showGameComplete(new GameOverViewModel("game complete, another!"));
-                        gameModel.startGame(andInformView);
-                    }
-                },
-                note
-        );
+        gameModel.playGameRound(roundCallback, gameCompletionCallback, note);
     }
+
+    private final GameMvp.Model.RoundCallback roundCallback = new GameMvp.Model.RoundCallback() {
+        @Override
+        public void onRoundUpdate(RoundViewModel viewModel) {
+            view.showRound(viewModel);
+        }
+    };
+
+    private final GameMvp.Model.CompletionCallback gameCompletionCallback = new GameMvp.Model.CompletionCallback() {
+        @Override
+        public void onGameComplete() {
+            view.showGameComplete(new GameOverViewModel("game complete, another!"));
+            gameModel.startGame(andInformView);
+        }
+    };
 
     @Override
     public void onRestartGameSelected() {
