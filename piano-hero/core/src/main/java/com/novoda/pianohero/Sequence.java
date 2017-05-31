@@ -3,19 +3,22 @@ package com.novoda.pianohero;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 public final class Sequence {
 
-    private final List<Notes> notes;
+    private final Notes notes;
     private final int position;
-    private final Notes latestError;
+    @Nullable
+    private final Note latestError;
 
-    private Sequence(List<Notes> notes, int position, Notes latestError) {
+    private Sequence(Notes notes, int position, @Nullable Note latestError) {
         this.notes = notes;
         this.position = position;
         this.latestError = latestError;
     }
 
-    public Notes get(int position) {
+    public Note get(int position) {
         return notes().get(position);
     }
 
@@ -23,50 +26,48 @@ public final class Sequence {
         return position;
     }
 
-    public Notes latestError() {
+    @Nullable
+    public Note latestError() {
         return latestError;
     }
 
-    public List<Notes> notes() {
+    public Notes notes() {
         return notes;
     }
 
     public int length() {
-        return notes().size();
+        return notes().length();
     }
 
     public static class Builder {
 
-        private final List<Notes> notes = new ArrayList<>();
+        private final List<Note> notes = new ArrayList<>();
 
-        private Notes latestError = Notes.EMPTY;
+        @Nullable
+        private Note latestError;
+
         private int position = 0;
 
         public Builder() {
-            this(new ArrayList<Notes>());
+            this(new ArrayList<Note>());
         }
 
         public Builder(Sequence sequence) {
-            this(sequence.notes());
+            this(sequence.notes().notes());
             this.latestError = sequence.latestError();
             this.position = sequence.position;
         }
 
-        private Builder(List<Notes> notes) {
+        private Builder(List<Note> notes) {
             this.notes.addAll(notes);
         }
 
-        public Builder add(Chord chord) {
-            notes.add(chord);
-            return this;
-        }
-
         public Builder add(Note note) {
-            notes.add(new Notes(note));
+            notes.add(note);
             return this;
         }
 
-        public Builder withLatestError(Notes latestError) {
+        public Builder withLatestError(@Nullable Note latestError) {
             this.latestError = latestError;
             return this;
         }
@@ -77,7 +78,7 @@ public final class Sequence {
         }
 
         public Sequence build() {
-            return new Sequence(notes, position, latestError);
+            return new Sequence(new Notes(notes), position, latestError);
         }
     }
 }

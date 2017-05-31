@@ -6,7 +6,7 @@ interface GameMvp {
 
         void startGame(StartCallback callback);
 
-        void playGameRound(RoundCallback rCallback, CompletionCallback cCallback, Note... notes);
+        void playGameRound(RoundCallback rCallback, CompletionCallback cCallback, Note note);
 
         interface StartCallback {
             void onGameStarted(RoundViewModel viewModel);
@@ -32,7 +32,7 @@ interface GameMvp {
 
         void onCreate();
 
-        void onNotesPlayed(Note... notes);
+        void onNotePlayed(Note note);
 
         void onRestartGameSelected();
     }

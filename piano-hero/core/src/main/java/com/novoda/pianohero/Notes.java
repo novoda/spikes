@@ -1,36 +1,36 @@
 package com.novoda.pianohero;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 public class Notes implements Iterable<Note> {
 
-    public static final Notes EMPTY = new Notes(Collections.<Note>emptySet());
-
-    private final Set<Note> notes;
+    private final List<Note> notes;
 
     public Notes(Note... notes) {
-        this(new HashSet<>(Arrays.asList(notes)));
+        this(Arrays.asList(notes));
     }
 
-    public Notes(Set<Note> notes) {
+    public Notes(List<Note> notes) {
         this.notes = notes;
     }
 
-    public Set<Note> notes() {
+    public List<Note> notes() {
         return notes;
     }
 
-    public int count() {
+    public int length() {
         return notes.size();
     }
 
     @Override
     public Iterator<Note> iterator() {
         return notes.iterator();
+    }
+
+    public Note get(int position) {
+        return notes.get(position);
     }
 
     @Override

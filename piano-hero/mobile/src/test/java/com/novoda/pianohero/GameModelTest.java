@@ -9,13 +9,19 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class GameModelTest {
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
 
+    // TODO: these tests are assuming this callback is used but it isn't anymore
+    // rather than delete, would rather update the viewmodel to use the sequence and then use
+    // that callback in the verifies - the logic should be the same
     @Mock
     OnSequenceUpdatedCallback onSequenceUpdatedCallback;
 
@@ -87,7 +93,7 @@ public class GameModelTest {
 
         ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
         verify(onSequenceUpdatedCallback, times(3)).onNext(sequenceCaptor.capture());
-        assertThat(sequenceCaptor.getValue().latestError()).isEqualTo(new Notes(Note.E4));
+        assertThat(sequenceCaptor.getValue().latestError()).isEqualTo(Note.E4);
     }
 
     @Test
@@ -101,7 +107,7 @@ public class GameModelTest {
 
         ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
         verify(onSequenceUpdatedCallback, times(3)).onNext(sequenceCaptor.capture());
-        assertThat(sequenceCaptor.getValue().latestError()).isEqualTo(Notes.EMPTY);
+        assertThat(sequenceCaptor.getValue().latestError()).isNull();
     }
 
     @Test
