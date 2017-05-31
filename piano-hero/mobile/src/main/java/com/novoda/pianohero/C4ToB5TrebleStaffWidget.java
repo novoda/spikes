@@ -14,7 +14,7 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrebleStaffWidget extends FrameLayout {
+public class C4ToB5TrebleStaffWidget extends FrameLayout {
 
     private static final String SHARP_SYMBOL = "#";
     private static final int VIEW_HEIGHT_IN_NUMBER_OF_NOTES = 8;
@@ -31,7 +31,7 @@ public class TrebleStaffWidget extends FrameLayout {
     private final C4ToB5TrebleStaffPositioner positioner;
     private final Paint linesPaint;
 
-    public TrebleStaffWidget(Context context, @Nullable AttributeSet attrs) {
+    public C4ToB5TrebleStaffWidget(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         setWillNotDraw(false);
 

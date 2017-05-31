@@ -20,8 +20,8 @@ public class AndroidThingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_android_things);
 
         TextView statusTextView = (TextView) findViewById(R.id.status_text_view);
-        TrebleStaffWidget trebleStaffWidget = (TrebleStaffWidget) findViewById(R.id.treble_staff_widget);
-        GameMvp.View gameView = new AndroidThingsView(statusTextView, trebleStaffWidget);
+        C4ToB5TrebleStaffWidget c4ToB5TrebleStaffWidget = (C4ToB5TrebleStaffWidget) findViewById(R.id.treble_staff_widget);
+        GameMvp.View gameView = new AndroidThingsView(statusTextView, c4ToB5TrebleStaffWidget);
 
         GameModel gameModel = new GameModel(new SongSequenceFactory(), simplePitchNotationFormatter);
 

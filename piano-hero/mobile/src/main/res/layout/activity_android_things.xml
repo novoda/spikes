@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.novoda.pianohero.TrebleStaffWidget
+    <com.novoda.pianohero.C4ToB5TrebleStaffWidget
         android:id="@+id/treble_staff_widget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

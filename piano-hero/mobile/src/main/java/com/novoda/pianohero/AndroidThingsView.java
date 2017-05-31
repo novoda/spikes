@@ -7,28 +7,31 @@ import java.util.Collections;
 class AndroidThingsView implements GameMvp.View {
 
     private final TextView statusTextView;
-    private final TrebleStaffWidget trebleStaffWidget;
+    private final C4ToB5TrebleStaffWidget c4ToB5TrebleStaffWidget;
 
-    AndroidThingsView(TextView statusTextView, TrebleStaffWidget trebleStaffWidget) {
+    AndroidThingsView(TextView statusTextView, C4ToB5TrebleStaffWidget c4ToB5TrebleStaffWidget) {
         this.statusTextView = statusTextView;
-        this.trebleStaffWidget = trebleStaffWidget;
+        this.c4ToB5TrebleStaffWidget = c4ToB5TrebleStaffWidget;
     }
 
     @Override
     public void showRound(RoundViewModel viewModel) {
         Sequence sequence = viewModel.getSequence();
-        if (sequence.latestError() == null) {
-            trebleStaffWidget.show(sequence.notes().asList(), sequence.position());
+        if (sequence.latestError() != null && betweenC4AndB5Inclusive(sequence.latestError())) {
+            c4ToB5TrebleStaffWidget.show(sequence.notes().asList(), sequence.position(), sequence.latestError());
         } else {
-            trebleStaffWidget.show(sequence.notes().asList(), sequence.position(), sequence.latestError());
+            c4ToB5TrebleStaffWidget.show(sequence.notes().asList(), sequence.position());
         }
-
         statusTextView.setText(viewModel.getStatusMessage());
+    }
+
+    private boolean betweenC4AndB5Inclusive(Note note) {
+        return note.midi() >= 60 && note.midi() <= 83;
     }
 
     @Override
     public void showGameComplete(GameOverViewModel viewModel) {
         statusTextView.setText(viewModel.getMessage());
-        trebleStaffWidget.show(Collections.<Note>emptyList(), 0);
+        c4ToB5TrebleStaffWidget.show(Collections.<Note>emptyList(), 0);
     }
 }
