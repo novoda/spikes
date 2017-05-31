@@ -1,16 +1,21 @@
 package com.novoda.pianohero;
 
 class RoundViewModel {
-    private final String note;
+
+    private final Sequence sequence;
     private final String statusMessage;
 
-    RoundViewModel(String note, String statusMessage) {
-        this.note = note;
+    RoundViewModel(Sequence sequence) {
+        this(sequence, "");
+    }
+
+    RoundViewModel(Sequence sequence, String statusMessage) {
+        this.sequence = sequence;
         this.statusMessage = statusMessage;
     }
 
-    public String getNote() {
-        return note;
+    public Sequence getSequence() {
+        return sequence;
     }
 
     public String getStatusMessage() {

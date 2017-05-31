@@ -25,18 +25,6 @@ interface MidiKeyboardDriver {
         }
 
         @Override
-        public void onMidiNoteOn(
-                MidiInputDevice midiInputDevice,
-                int cable,
-                int channel,
-                int note,
-                int velocity) {
-            if (noteListener != null) {
-                noteListener.onPress(new Note(note));
-            }
-        }
-
-        @Override
         public void onMidiNoteOff(
                 MidiInputDevice midiInputDevice,
                 int cable,
@@ -44,7 +32,7 @@ interface MidiKeyboardDriver {
                 int note,
                 int velocity) {
             if (noteListener != null) {
-                noteListener.onRelease(new Note(note));
+                noteListener.onPlay(new Note(note));
             }
         }
     }

@@ -11,7 +11,8 @@ public class GameModel implements GameMvp.Model {
 
     GameModel(
             SongSequenceFactory songSequenceFactory,
-            SimplePitchNotationFormatter pitchNotationFormatter) {
+            SimplePitchNotationFormatter pitchNotationFormatter
+    ) {
         this.songSequenceFactory = songSequenceFactory;
         this.pitchNotationFormatter = pitchNotationFormatter;
     }
@@ -24,10 +25,8 @@ public class GameModel implements GameMvp.Model {
     }
 
     private RoundViewModel createViewModel(Sequence sequence) {
-        int nextNotesPosition = sequence.position();
-        String nextNoteAsText = pitchNotationFormatter.format(sequence.get(nextNotesPosition));
         String statusMessage = getStatusMessage(sequence);
-        return new RoundViewModel(nextNoteAsText, statusMessage);
+        return new RoundViewModel(sequence, statusMessage);
     }
 
     private String getStatusMessage(Sequence sequence) {
@@ -38,7 +37,9 @@ public class GameModel implements GameMvp.Model {
                 return "";
             }
         } else {
-            return "Ruhroh, try again!";
+            String nextNoteAsText = pitchNotationFormatter.format(sequence.get(sequence.position()));
+            String latestErrorAsText = pitchNotationFormatter.format(sequence.latestError());
+            return String.format(Locale.US, "Ruhroh! The correct note is %s but you played %s.", nextNoteAsText, latestErrorAsText);
         }
     }
 

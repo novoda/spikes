@@ -4,11 +4,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -18,12 +20,6 @@ public class GameModelTest {
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
-
-    // TODO: these tests are assuming this callback is used but it isn't anymore
-    // rather than delete, would rather update the viewmodel to use the sequence and then use
-    // that callback in the verifies - the logic should be the same
-    @Mock
-    OnSequenceUpdatedCallback onSequenceUpdatedCallback;
 
     @Mock
     GameMvp.Model.StartCallback startCallback;
@@ -45,27 +41,26 @@ public class GameModelTest {
     }
 
     @Test
-    public void whenStarted_thenDisplaysUnmodifiedSequence() {
+    public void whenStarted_thenStartsGame() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
 
         gameModel.startGame(startCallback);
 
-        verify(onSequenceUpdatedCallback).onNext(sequence);
+        verify(startCallback).onGameStarted(Matchers.<RoundViewModel>any());
     }
 
     @Test
     public void whenNotesPlayedCorrectly_thenIncrementsSequencePosition() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
-
         gameModel.startGame(startCallback);
 
         gameModel.playGameRound(roundCallback, completionCallback, Note.C4);
 
-        ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
-        verify(onSequenceUpdatedCallback, times(2)).onNext(sequenceCaptor.capture());
-        assertThat(sequenceCaptor.getValue().position()).isEqualTo(1);
+        ArgumentCaptor<RoundViewModel> roundViewModelCaptor = ArgumentCaptor.forClass(RoundViewModel.class);
+        verify(roundCallback).onRoundUpdate(roundViewModelCaptor.capture());
+        assertThat(roundViewModelCaptor.getValue().getSequence().position()).isEqualTo(1);
     }
 
     @Test
@@ -77,9 +72,9 @@ public class GameModelTest {
         gameModel.playGameRound(roundCallback, completionCallback, Note.C4);
         gameModel.playGameRound(roundCallback, completionCallback, Note.E4);
 
-        ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
-        verify(onSequenceUpdatedCallback, times(3)).onNext(sequenceCaptor.capture());
-        assertThat(sequenceCaptor.getValue().position()).isEqualTo(1);
+        ArgumentCaptor<RoundViewModel> roundViewModelCaptor = ArgumentCaptor.forClass(RoundViewModel.class);
+        verify(roundCallback, times(2)).onRoundUpdate(roundViewModelCaptor.capture());
+        assertThat(roundViewModelCaptor.getValue().getSequence().position()).isEqualTo(1);
     }
 
     @Test
@@ -91,9 +86,9 @@ public class GameModelTest {
         gameModel.playGameRound(roundCallback, completionCallback, Note.D4);
         gameModel.playGameRound(roundCallback, completionCallback, Note.E4);
 
-        ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
-        verify(onSequenceUpdatedCallback, times(3)).onNext(sequenceCaptor.capture());
-        assertThat(sequenceCaptor.getValue().latestError()).isEqualTo(Note.E4);
+        ArgumentCaptor<RoundViewModel> roundViewModelCaptor = ArgumentCaptor.forClass(RoundViewModel.class);
+        verify(roundCallback, times(2)).onRoundUpdate(roundViewModelCaptor.capture());
+        assertThat(roundViewModelCaptor.getValue().getSequence().latestError()).isEqualTo(Note.E4);
     }
 
     @Test
@@ -105,9 +100,9 @@ public class GameModelTest {
         gameModel.playGameRound(roundCallback, completionCallback, Note.D4);
         gameModel.playGameRound(roundCallback, completionCallback, Note.C4);
 
-        ArgumentCaptor<Sequence> sequenceCaptor = ArgumentCaptor.forClass(Sequence.class);
-        verify(onSequenceUpdatedCallback, times(3)).onNext(sequenceCaptor.capture());
-        assertThat(sequenceCaptor.getValue().latestError()).isNull();
+        ArgumentCaptor<RoundViewModel> roundViewModelCaptor = ArgumentCaptor.forClass(RoundViewModel.class);
+        verify(roundCallback, times(2)).onRoundUpdate(roundViewModelCaptor.capture());
+        assertThat(roundViewModelCaptor.getValue().getSequence().latestError()).isNull();
     }
 
     @Test

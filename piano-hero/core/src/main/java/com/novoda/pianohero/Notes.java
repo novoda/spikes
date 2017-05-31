@@ -1,16 +1,11 @@
 package com.novoda.pianohero;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 public class Notes implements Iterable<Note> {
 
     private final List<Note> notes;
-
-    public Notes(Note... notes) {
-        this(Arrays.asList(notes));
-    }
 
     public Notes(List<Note> notes) {
         this.notes = notes;
