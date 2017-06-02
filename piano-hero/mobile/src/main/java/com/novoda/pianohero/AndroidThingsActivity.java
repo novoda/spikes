@@ -10,7 +10,6 @@ public class AndroidThingsActivity extends AppCompatActivity {
 
     private final SimplePitchNotationFormatter simplePitchNotationFormatter = new SimplePitchNotationFormatter();
 
-    private MidiKeyboardDriver midiKeyboardDriver;
     private GamePresenter gamePresenter;
 
     @Override
@@ -23,17 +22,9 @@ public class AndroidThingsActivity extends AppCompatActivity {
         C4ToB5TrebleStaffWidget c4ToB5TrebleStaffWidget = (C4ToB5TrebleStaffWidget) findViewById(R.id.treble_staff_widget);
         GameMvp.View gameView = new AndroidThingsView(statusTextView, c4ToB5TrebleStaffWidget);
 
-        GameModel gameModel = new GameModel(new SongSequenceFactory(), simplePitchNotationFormatter);
-
+        MidiKeyboardDriver midiKeyboardDriver = new MidiKeyboardDriver.KeyStationMini32(this);
+        GameModel gameModel = new GameModel(new SongSequenceFactory(), simplePitchNotationFormatter, midiKeyboardDriver);
         gamePresenter = new GamePresenter(gameModel, gameView);
-        midiKeyboardDriver = new MidiKeyboardDriver.KeyStationMini32(this);
-        midiKeyboardDriver.attachListener(new NoteListener() {
-
-            @Override
-            public void onPlay(Note note) {
-                gamePresenter.onNotePlayed(note);
-            }
-        });
 
         gamePresenter.onCreate();
     }
@@ -41,12 +32,12 @@ public class AndroidThingsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        midiKeyboardDriver.open();
+        gamePresenter.onResume();
     }
 
     @Override
     protected void onPause() {
-        midiKeyboardDriver.close();
+        gamePresenter.onPause();
         super.onPause();
     }
 

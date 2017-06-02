@@ -4,9 +4,13 @@ interface GameMvp {
 
     interface Model {
 
-        void startGame(StartCallback callback);
+        void startGame(StartCallback callback, RoundCallback rCallback, CompletionCallback cCallback);
+
+        void startup();
 
         void playGameRound(RoundCallback rCallback, CompletionCallback cCallback, Note note);
+
+        void shutdown();
 
         interface StartCallback {
             void onGameStarted(RoundViewModel viewModel);
@@ -32,9 +36,9 @@ interface GameMvp {
 
         void onCreate();
 
-        void onNotePlayed(Note note);
+        void onResume();
 
-        void onRestartGameSelected();
+        void onPause();
     }
 
 }
