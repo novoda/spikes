@@ -6,22 +6,35 @@ public class GameModel implements GameMvp.Model {
 
     private final SongSequenceFactory songSequenceFactory;
     private final SimplePitchNotationFormatter pitchNotationFormatter;
+    private final MidiKeyboardDriver midiKeyboardDriver;
 
     private Sequence sequence;
 
     GameModel(
             SongSequenceFactory songSequenceFactory,
-            SimplePitchNotationFormatter pitchNotationFormatter
-    ) {
+            SimplePitchNotationFormatter pitchNotationFormatter,
+            MidiKeyboardDriver midiKeyboardDriver) {
         this.songSequenceFactory = songSequenceFactory;
         this.pitchNotationFormatter = pitchNotationFormatter;
+        this.midiKeyboardDriver = midiKeyboardDriver;
     }
 
     @Override
-    public void startGame(StartCallback callback) {
-        sequence = songSequenceFactory.maryHadALittleLamb();
+    public void startGame(StartCallback callback, final RoundCallback roundCallback, final CompletionCallback completionCallback) {
+        midiKeyboardDriver.attachListener(new NoteListener() {
+            @Override
+            public void onPlay(Note note) {
+                playGameRound(roundCallback, completionCallback, note);
+            }
+        });
 
+        sequence = songSequenceFactory.maryHadALittleLamb();
         callback.onGameStarted(createViewModel(sequence));
+    }
+
+    @Override
+    public void startup() {
+        midiKeyboardDriver.open();
     }
 
     private RoundViewModel createViewModel(Sequence sequence) {
@@ -63,6 +76,11 @@ public class GameModel implements GameMvp.Model {
             Sequence updatedSequence = new Sequence.Builder(sequence).withLatestError(note).build();
             roundCallback.onRoundUpdate(createViewModel(updatedSequence));
         }
+    }
+
+    @Override
+    public void shutdown() {
+        midiKeyboardDriver.close();
     }
 
 }
