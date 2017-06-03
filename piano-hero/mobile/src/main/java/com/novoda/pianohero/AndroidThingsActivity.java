@@ -17,9 +17,9 @@ public class AndroidThingsActivity extends AppCompatActivity {
         Log.d("!!!", "I'm running");
         setContentView(R.layout.activity_android_things);
 
-        GameMvp.View gameView = (GameScreen) findViewById(R.id.game_screen);
+        GameMvp.View gameView = (GameMvp.View) findViewById(R.id.game_screen);
         Piano virtualPiano = (Piano) findViewById(R.id.piano_view);
-        Piano piano = new KeyStationMini32(this);
+//        Piano piano = new KeyStationMini32(this);
         GameModel gameModel = new GameModel(new SongSequenceFactory(), simplePitchNotationFormatter, virtualPiano);
         gamePresenter = new GamePresenter(gameModel, gameView);
 
