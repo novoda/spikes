@@ -1,11 +1,16 @@
 package com.novoda.pianohero;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import static android.view.View.GONE;
+
 public class AndroidThingsActivity extends AppCompatActivity {
+
+    private static final boolean HIDE_VIRTUAL_PIANO = true;
 
     private final SimplePitchNotationFormatter simplePitchNotationFormatter = new SimplePitchNotationFormatter();
 
@@ -18,12 +23,21 @@ public class AndroidThingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_android_things);
 
         GameMvp.View gameView = (GameMvp.View) findViewById(R.id.game_screen);
-        Piano virtualPiano = (Piano) findViewById(R.id.piano_view);
-//        Piano piano = new KeyStationMini32(this);
-        GameModel gameModel = new GameModel(new SongSequenceFactory(), simplePitchNotationFormatter, virtualPiano);
+        Piano piano = createPiano();
+        GameModel gameModel = new GameModel(new SongSequenceFactory(), simplePitchNotationFormatter, piano);
         gamePresenter = new GamePresenter(gameModel, gameView);
 
         gamePresenter.onCreate();
+    }
+
+    private Piano createPiano() {
+        PianoC4ToB5View virtualPianoView = (PianoC4ToB5View) findViewById(R.id.piano_view);
+        if (HIDE_VIRTUAL_PIANO) {
+            virtualPianoView.setVisibility(GONE);
+            return new CompositePiano(new KeyStationMini32(this));
+        } else {
+            return new CompositePiano(virtualPianoView, new KeyStationMini32(this));
+        }
     }
 
     @Override

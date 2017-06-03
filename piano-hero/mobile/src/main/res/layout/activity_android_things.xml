@@ -11,14 +11,11 @@
         android:layout_height="match_parent"
         android:layout_weight="100" />
 
-    <android.support.v4.widget.Space
-        android:layout_width="16dp"
-        android:layout_height="wrap_content" />
-
     <com.novoda.pianohero.PianoC4ToB5View
         android:id="@+id/piano_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
         android:layout_weight="100" />
 
 </LinearLayout>
