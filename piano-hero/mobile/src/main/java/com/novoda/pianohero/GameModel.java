@@ -6,22 +6,22 @@ public class GameModel implements GameMvp.Model {
 
     private final SongSequenceFactory songSequenceFactory;
     private final SimplePitchNotationFormatter pitchNotationFormatter;
-    private final MidiKeyboardDriver midiKeyboardDriver;
+    private final Piano piano;
 
     private Sequence sequence;
 
     GameModel(
             SongSequenceFactory songSequenceFactory,
             SimplePitchNotationFormatter pitchNotationFormatter,
-            MidiKeyboardDriver midiKeyboardDriver) {
+            Piano piano) {
         this.songSequenceFactory = songSequenceFactory;
         this.pitchNotationFormatter = pitchNotationFormatter;
-        this.midiKeyboardDriver = midiKeyboardDriver;
+        this.piano = piano;
     }
 
     @Override
     public void startGame(StartCallback callback, final RoundCallback roundCallback, final CompletionCallback completionCallback) {
-        midiKeyboardDriver.attachListener(new NoteListener() {
+        piano.attachListener(new NoteListener() {
             @Override
             public void onPlay(Note note) {
                 playGameRound(roundCallback, completionCallback, note);
@@ -34,7 +34,7 @@ public class GameModel implements GameMvp.Model {
 
     @Override
     public void startup() {
-        midiKeyboardDriver.open();
+        piano.open();
     }
 
     private RoundViewModel createViewModel(Sequence sequence) {
@@ -80,7 +80,7 @@ public class GameModel implements GameMvp.Model {
 
     @Override
     public void shutdown() {
-        midiKeyboardDriver.close();
+        piano.close();
     }
 
 }
