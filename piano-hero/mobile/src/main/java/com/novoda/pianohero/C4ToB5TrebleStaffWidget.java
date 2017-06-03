@@ -80,11 +80,19 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
     }
 
-    public void show(List<Note> notes, int indexNextPlayableNote) {
-        show(notes, indexNextPlayableNote, null);
+    public void show(Sequence sequence) {
+        if (sequence.latestError() != null && betweenC4AndB5Inclusive(sequence.latestError())) {
+            show(sequence.notes().asList(), sequence.position(), sequence.latestError());
+        } else {
+            show(sequence.notes().asList(), sequence.position(), null);
+        }
     }
 
-    public void show(List<Note> notes, int indexNextPlayableNote, @Nullable Note lastErrorNote) {
+    private boolean betweenC4AndB5Inclusive(Note note) {
+        return note.midi() >= 60 && note.midi() <= 83;
+    }
+
+    private void show(List<Note> notes, int indexNextPlayableNote, @Nullable Note lastErrorNote) {
         removeAllViews();
         noteWidgetsThatRequireLedgerLines.clear();
 

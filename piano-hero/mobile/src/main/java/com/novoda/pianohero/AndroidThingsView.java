@@ -1,8 +1,7 @@
 package com.novoda.pianohero;
 
+import android.view.View;
 import android.widget.TextView;
-
-import java.util.Collections;
 
 class AndroidThingsView implements GameMvp.View {
 
@@ -16,22 +15,14 @@ class AndroidThingsView implements GameMvp.View {
 
     @Override
     public void showRound(RoundViewModel viewModel) {
-        Sequence sequence = viewModel.getSequence();
-        if (sequence.latestError() != null && betweenC4AndB5Inclusive(sequence.latestError())) {
-            c4ToB5TrebleStaffWidget.show(sequence.notes().asList(), sequence.position(), sequence.latestError());
-        } else {
-            c4ToB5TrebleStaffWidget.show(sequence.notes().asList(), sequence.position());
-        }
         statusTextView.setText(viewModel.getStatusMessage());
-    }
-
-    private boolean betweenC4AndB5Inclusive(Note note) {
-        return note.midi() >= 60 && note.midi() <= 83;
+        c4ToB5TrebleStaffWidget.show(viewModel.getSequence());
+        c4ToB5TrebleStaffWidget.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showGameComplete(GameOverViewModel viewModel) {
         statusTextView.setText(viewModel.getMessage());
-        c4ToB5TrebleStaffWidget.show(Collections.<Note>emptyList(), 0);
+        c4ToB5TrebleStaffWidget.setVisibility(View.GONE);
     }
 }
