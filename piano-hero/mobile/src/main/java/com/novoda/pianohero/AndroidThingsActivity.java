@@ -18,10 +18,7 @@ public class AndroidThingsActivity extends AppCompatActivity {
         Log.d("!!!", "I'm running");
         setContentView(R.layout.activity_android_things);
 
-        TextView statusTextView = (TextView) findViewById(R.id.status_text_view);
-        C4ToB5TrebleStaffWidget c4ToB5TrebleStaffWidget = (C4ToB5TrebleStaffWidget) findViewById(R.id.treble_staff_widget);
-        GameMvp.View gameView = new AndroidThingsView(statusTextView, c4ToB5TrebleStaffWidget);
-
+        GameMvp.View gameView = (GameScreen) findViewById(R.id.game_screen);
         MidiKeyboardDriver midiKeyboardDriver = new MidiKeyboardDriver.KeyStationMini32(this);
         GameModel gameModel = new GameModel(new SongSequenceFactory(), simplePitchNotationFormatter, midiKeyboardDriver);
         gamePresenter = new GamePresenter(gameModel, gameView);

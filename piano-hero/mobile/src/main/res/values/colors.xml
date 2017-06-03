@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="notation_default">#000000</color>
+    <color name="background">#30548E</color>
+    <color name="notation_default">#FFFFFF</color>
     <color name="notation_completed">#00FF00</color>
     <color name="notation_error">#FF0000</color>
 </resources>

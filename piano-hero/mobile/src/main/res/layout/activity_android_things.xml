@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.novoda.pianohero.GameScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/game_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/status_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <com.novoda.pianohero.C4ToB5TrebleStaffWidget
-        android:id="@+id/treble_staff_widget"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-</LinearLayout>
+    android:padding="16dp" />
