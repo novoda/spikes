@@ -191,6 +191,9 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         }
     }
 
+    // TODO: fix calculation for drawing ledger lines
+    // Check by using a different colored paint for ledger lines than staff lines,
+    // then changing Settings > Display > Text Size
     private void drawLedgerLines(Canvas canvas, NoteWidget noteWidget, int noteHeight, int topStaffY, int bottomStaffY) {
         int noteWidgetCenterY = noteWidget.getTop() + (int) ((noteWidget.getBottom() - noteWidget.getTop()) * 0.5);
         if (noteWidgetCenterY > bottomStaffY) {
