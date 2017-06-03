@@ -15,7 +15,6 @@
             android:id="@+id/game_screen_text_play_note"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
             android:gravity="center"
             android:textSize="36sp"
             tools:text="C4" />
