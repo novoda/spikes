@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="treble_clef_margin_left">12sp</dimen>
     <dimen name="treble_clef_width">25sp</dimen>
     <dimen name="treble_clef_height">72sp</dimen>
     <dimen name="note_width">16sp</dimen>

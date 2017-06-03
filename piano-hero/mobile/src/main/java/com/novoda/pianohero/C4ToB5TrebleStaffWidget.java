@@ -21,6 +21,7 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
 
     private final List<NoteWidget> noteWidgetsThatRequireLedgerLines = new ArrayList<>();
     private final SimplePitchNotationFormatter formatter = new SimplePitchNotationFormatter();
+    private final int trebleClefMarginLeftPx;
     private final Drawable trebleClefDrawable;
     private final Drawable completedNoteDrawable;
     private final Drawable completedSharpDrawable;
@@ -35,6 +36,7 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         super(context, attrs);
         setWillNotDraw(false);
 
+        trebleClefMarginLeftPx = context.getResources().getDimensionPixelSize(R.dimen.treble_clef_margin_left);
         trebleClefDrawable = trebleClefDrawable(context);
         completedNoteDrawable = noteDrawable(context, R.drawable.note_completed);
         completedSharpDrawable = sharpDrawable(context, R.drawable.sharp_completed);
@@ -146,7 +148,7 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
     private void layout(NoteWidget noteWidget) {
         SequenceNote sequenceNote = (SequenceNote) noteWidget.getTag(R.id.tag_treble_staff_widget_note);
 
-        int trebleClefOffset = (int) (trebleClefDrawable.getBounds().width() * 1.5);
+        int trebleClefOffset = trebleClefMarginLeftPx + (int) (trebleClefDrawable.getBounds().width() * 1.5);
         int noteLeft;
         if (noteWidget.getMeasuredWidth() > noteDrawable.getBounds().width()) {
             noteLeft = trebleClefOffset + (sequenceNote.positionInSequence * (sharpDrawable.getBounds().width() + noteDrawable.getBounds().width() + noteDrawable.getBounds().width()));
@@ -165,7 +167,7 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         int noteHeight = noteDrawable.getBounds().height();
 
         int saveCount = canvas.save();
-        canvas.translate(0, (float) (noteHeight * 0.5));
+        canvas.translate(trebleClefMarginLeftPx, (float) (noteHeight * 0.5));
         trebleClefDrawable.draw(canvas);
         canvas.restoreToCount(saveCount);
 
