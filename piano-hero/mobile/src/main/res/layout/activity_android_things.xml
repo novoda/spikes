@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.novoda.pianohero.GameScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/game_screen"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp" />
+    android:gravity="center"
+    android:padding="16dp">
+
+    <com.novoda.pianohero.GameScreen
+        android:id="@+id/game_screen"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="100" />
+
+    <android.support.v4.widget.Space
+        android:layout_width="16dp"
+        android:layout_height="wrap_content" />
+
+    <com.novoda.pianohero.PianoC4ToB5View
+        android:id="@+id/piano_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="100" />
+
+</LinearLayout>
