@@ -8,9 +8,10 @@ import android.view.View;
 
 import static android.view.View.GONE;
 
-public class AndroidThingsActivity extends AppCompatActivity {
+public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.View {
 
     private GamePresenter gamePresenter;
+    private GameScreen gameView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -21,8 +22,8 @@ public class AndroidThingsActivity extends AppCompatActivity {
         SimplePitchNotationFormatter simplePitchNotationFormatter = new SimplePitchNotationFormatter();
         Piano piano = createPiano();
         GameModel gameModel = new GameModel(new SongSequenceFactory(), simplePitchNotationFormatter, piano);
-        GameMvp.View gameView = (GameMvp.View) findViewById(R.id.game_screen);
-        gamePresenter = new GamePresenter(gameModel, gameView);
+        gameView = (GameScreen) findViewById(R.id.game_screen);
+        gamePresenter = new GamePresenter(gameModel, this);
 
         gamePresenter.onCreate();
     }
@@ -51,9 +52,23 @@ public class AndroidThingsActivity extends AppCompatActivity {
     }
 
     @Override
+    public void showRound(RoundViewModel viewModel) {
+        gameView.showSuccess(viewModel);
+    }
+
+    @Override
+    public void showError(RoundViewModel viewModel) {
+        gameView.showError(viewModel);
+    }
+
+    @Override
+    public void showGameComplete(GameOverViewModel viewModel) {
+        gameView.showGameComplete(viewModel);
+    }
+
+    @Override
     protected void onPause() {
         gamePresenter.onPause();
         super.onPause();
     }
-
 }

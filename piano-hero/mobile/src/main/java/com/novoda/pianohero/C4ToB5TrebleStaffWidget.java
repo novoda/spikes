@@ -78,7 +78,7 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
     }
 
-    public void show(final Sequence sequence) {
+    public void showProgress(final Sequence sequence) {
         if (getMeasuredWidth() == 0) { // apparently onMeasure is first called after Activity.onResume, and we rely on onMeasure to layout correctly
             getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
@@ -99,21 +99,15 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
 
         int startIndexInclusive = (sequence.position() / numberOfNotesWeHaveSpaceFor) * numberOfNotesWeHaveSpaceFor;
         int endIndexExclusive = startIndexInclusive + numberOfNotesWeHaveSpaceFor;
-        List<Note> currentWindow = sequence.notes().asList().subList(startIndexInclusive, endIndexExclusive < sequence.length() ? endIndexExclusive : sequence.length());
+        int windowStart = startIndexInclusive;
+        int windowEnd = endIndexExclusive < sequence.length() ? endIndexExclusive : sequence.length();
+        List<Note> currentWindow = sequence.notes().asList().subList(windowStart, windowEnd);
         int positionRelativeToWindow = sequence.position() - startIndexInclusive;
 
-        if (sequence.latestError() != null && betweenC4AndB5Inclusive(sequence.latestError())) { // check prevents attempting to show latestErrors which are out of bounds
-            show(currentWindow, positionRelativeToWindow, sequence.latestError());
-        } else {
-            show(currentWindow, positionRelativeToWindow, null);
-        }
+        show(currentWindow, positionRelativeToWindow);
     }
 
-    private boolean betweenC4AndB5Inclusive(Note note) {
-        return note.midi() >= 60 && note.midi() <= 83;
-    }
-
-    private void show(List<Note> notes, int indexNextPlayableNote, @Nullable Note lastErrorNote) {
+    private void show(List<Note> notes, int indexNextPlayableNote) {
         removeAllViews();
 
         for (int index = 0; index < notes.size(); index++) {
@@ -124,10 +118,6 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
                 addNoteWidget(new SequenceNote(note, index));
             }
         }
-
-        if (lastErrorNote != null) {
-            addErrorNoteWidget(new SequenceNote(lastErrorNote, indexNextPlayableNote));
-        }
     }
 
     private void addNoteWidget(SequenceNote sequenceNote) {
@@ -136,15 +126,6 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
             addNoteWidget(sequenceNote, noteDrawable, sharpDrawable);
         } else {
             addNoteWidget(sequenceNote, noteDrawable, null);
-        }
-    }
-
-    private void addErrorNoteWidget(SequenceNote sequenceNote) {
-        boolean shouldDisplaySharp = formatter.format(sequenceNote.note).endsWith(SHARP_SYMBOL);
-        if (shouldDisplaySharp) {
-            addNoteWidget(sequenceNote, errorNoteDrawable, errorSharpDrawable);
-        } else {
-            addNoteWidget(sequenceNote, errorNoteDrawable, null);
         }
     }
 
@@ -233,6 +214,26 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
     private void drawLedgerLineWithABitExtraEitherSide(Canvas canvas, NoteWidget noteWidget, int y) {
         int extra = (int) (noteWidget.getWidth() * 0.3);
         canvas.drawLine(noteWidget.getLeft() - extra, y, noteWidget.getRight() + extra, y, linesPaint);
+    }
+
+    public void showError(Sequence sequence) {
+        int spaceRequiredForTrebleClef = notesOffsetToAllowSpaceForTrebleClef();
+        int eachNoteWidth = widthForNoteWidgetIncludingSharpAndLeftMargin();
+        int numberOfNotesWeHaveSpaceFor = (getMeasuredWidth() - spaceRequiredForTrebleClef) / eachNoteWidth;
+
+        int startIndexInclusive = (sequence.position() / numberOfNotesWeHaveSpaceFor) * numberOfNotesWeHaveSpaceFor;
+        int positionRelativeToWindow = sequence.position() - startIndexInclusive;
+
+        addErrorNoteWidget(new SequenceNote(sequence.latestError(), positionRelativeToWindow));
+    }
+
+    private void addErrorNoteWidget(SequenceNote sequenceNote) {
+        boolean shouldDisplaySharp = formatter.format(sequenceNote.note).endsWith(SHARP_SYMBOL);
+        if (shouldDisplaySharp) {
+            addNoteWidget(sequenceNote, errorNoteDrawable, errorSharpDrawable);
+        } else {
+            addNoteWidget(sequenceNote, errorNoteDrawable, null);
+        }
     }
 
     private static class SequenceNote {

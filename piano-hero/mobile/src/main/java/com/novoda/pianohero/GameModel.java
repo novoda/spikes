@@ -38,21 +38,26 @@ public class GameModel implements GameMvp.Model {
     }
 
     private RoundViewModel createViewModel(Sequence sequence) {
-        String statusMessage = getStatusMessage(sequence);
-        return new RoundViewModel(sequence, statusMessage);
+        String successMessage = getSuccessMessage(sequence);
+        String errorMessage = getErrorMessage(sequence);
+        return new RoundViewModel(sequence, successMessage, errorMessage);
     }
 
-    private String getStatusMessage(Sequence sequence) {
-        if (sequence.latestError() == null) {
-            if (sequence.position() > 0) {
-                return String.format(Locale.US, "Woo! Keep going! (%d/%d)", sequence.position() + 1, sequence.length());
-            } else {
-                return "";
-            }
+    private String getSuccessMessage(Sequence sequence) {
+        if (sequence.position() > 0) {
+            return String.format(Locale.US, "Woo! Keep going! (%d/%d)", sequence.position() + 1, sequence.length());
         } else {
+            return "";
+        }
+    }
+
+    private String getErrorMessage(Sequence sequence) {
+        if (sequence.hasError()) {
             String nextNoteAsText = pitchNotationFormatter.format(sequence.get(sequence.position()));
             String latestErrorAsText = pitchNotationFormatter.format(sequence.latestError());
             return String.format(Locale.US, "Ruhroh! The correct note is %s but you played %s.", nextNoteAsText, latestErrorAsText);
+        } else {
+            return "";
         }
     }
 

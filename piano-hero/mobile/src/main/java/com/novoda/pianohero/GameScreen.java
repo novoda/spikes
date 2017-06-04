@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
-public class GameScreen extends LinearLayoutCompat implements GameMvp.View {
+public class GameScreen extends LinearLayoutCompat {
 
     private static final String NEXT_NOTE_HINT_FORMAT = "Next: %s";
 
@@ -39,15 +39,14 @@ public class GameScreen extends LinearLayoutCompat implements GameMvp.View {
         statusTextView = (TextView) findViewById(R.id.game_screen_text_status);
     }
 
-    @Override
-    public void showRound(RoundViewModel viewModel) {
-        statusTextView.setText(viewModel.getStatusMessage());
+    public void showSuccess(RoundViewModel viewModel) {
+        statusTextView.setText(viewModel.getSuccessMessage());
 
         Sequence sequence = viewModel.getSequence();
         playNoteTextView.setText(currentNote(sequence));
         nextNoteTextView.setText(nextNote(sequence));
 
-        trebleStaffWidget.show(sequence);
+        trebleStaffWidget.showProgress(sequence);
         trebleStaffWidget.setVisibility(View.VISIBLE);
     }
 
@@ -65,7 +64,12 @@ public class GameScreen extends LinearLayoutCompat implements GameMvp.View {
         }
     }
 
-    @Override
+    public void showError(RoundViewModel viewModel) {
+        statusTextView.setText(viewModel.getErrorMessage());
+
+        trebleStaffWidget.showError(viewModel.getSequence());
+    }
+
     public void showGameComplete(GameOverViewModel viewModel) {
         statusTextView.setText(viewModel.getMessage());
         trebleStaffWidget.setVisibility(View.GONE);

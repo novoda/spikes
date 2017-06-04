@@ -30,6 +30,8 @@ interface GameMvp {
         void showRound(RoundViewModel viewModel);
 
         void showGameComplete(GameOverViewModel viewModel);
+
+        void showError(RoundViewModel viewModel);
     }
 
     interface Presenter {

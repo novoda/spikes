@@ -1,9 +1,8 @@
 package com.novoda.pianohero;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.annotation.Nullable;
 
 public final class Sequence {
 
@@ -26,17 +25,25 @@ public final class Sequence {
         return position;
     }
 
-    @Nullable
-    public Note latestError() {
-        return latestError;
-    }
-
     public Notes notes() {
         return notes;
     }
 
     public int length() {
         return notes().length();
+    }
+
+    public boolean hasError() {
+        return latestError != null && betweenC4AndB5Inclusive(latestError);
+    }
+
+    private boolean betweenC4AndB5Inclusive(Note note) {
+        return note.midi() >= 60 && note.midi() <= 83;
+    }
+
+    @Nullable
+    public Note latestError() {
+        return latestError;
     }
 
     public static class Builder {

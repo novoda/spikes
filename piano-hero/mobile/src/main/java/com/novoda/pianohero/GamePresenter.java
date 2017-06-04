@@ -31,6 +31,9 @@ class GamePresenter implements GameMvp.Presenter {
         @Override
         public void onRoundUpdate(RoundViewModel viewModel) {
             view.showRound(viewModel);
+            if (viewModel.hasError()) {
+                view.showError(viewModel);
+            }
         }
     };
 

@@ -3,23 +3,28 @@ package com.novoda.pianohero;
 class RoundViewModel {
 
     private final Sequence sequence;
-    private final String statusMessage;
+    private final String successMessage;
+    private final String errorMessage;
 
-    RoundViewModel(Sequence sequence) {
-        this(sequence, "");
-    }
-
-    RoundViewModel(Sequence sequence, String statusMessage) {
+    RoundViewModel(Sequence sequence, String successMessage, String errorMessage) {
         this.sequence = sequence;
-        this.statusMessage = statusMessage;
+        this.successMessage = successMessage;
+        this.errorMessage = errorMessage;
     }
 
     public Sequence getSequence() {
         return sequence;
     }
 
-    public String getStatusMessage() {
-        return statusMessage;
+    public String getSuccessMessage() {
+        return successMessage;
     }
 
+    public boolean hasError() {
+        return sequence.hasError();
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
 }
