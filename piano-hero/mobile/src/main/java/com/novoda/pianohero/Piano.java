@@ -8,4 +8,8 @@ interface Piano {
 
     void close();
 
+    interface NoteListener {
+
+        void onPlay(Note note);
+    }
 }

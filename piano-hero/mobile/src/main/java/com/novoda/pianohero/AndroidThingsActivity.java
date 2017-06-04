@@ -30,12 +30,12 @@ public class AndroidThingsActivity extends AppCompatActivity {
     }
 
     private Piano createPiano() {
-        PianoC4ToB5View virtualPianoView = (PianoC4ToB5View) findViewById(R.id.piano_view);
+        C4ToB5ViewPiano virtualPianoView = (C4ToB5ViewPiano) findViewById(R.id.piano_view);
         if (HIDE_VIRTUAL_PIANO) {
             virtualPianoView.setVisibility(GONE);
-            return new CompositePiano(new KeyStationMini32(this));
+            return new CompositePiano(new KeyStationMini32Piano(this));
         } else {
-            return new CompositePiano(virtualPianoView, new KeyStationMini32(this));
+            return new CompositePiano(virtualPianoView, new KeyStationMini32Piano(this));
         }
     }
 

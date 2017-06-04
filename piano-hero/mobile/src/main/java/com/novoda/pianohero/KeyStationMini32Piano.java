@@ -6,12 +6,12 @@ import android.os.Looper;
 
 import jp.kshoji.driver.midi.device.MidiInputDevice;
 
-class KeyStationMini32 extends SimpleUsbMidiDriver implements Piano {
+class KeyStationMini32Piano extends SimpleUsbMidiDriver implements Piano {
 
     private NoteListener noteListener;
     private Handler handler;
 
-    KeyStationMini32(Context context) {
+    KeyStationMini32Piano(Context context) {
         super(context);
         handler = new Handler(Looper.getMainLooper());
     }

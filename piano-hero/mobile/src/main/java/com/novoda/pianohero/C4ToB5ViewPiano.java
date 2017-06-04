@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class PianoC4ToB5View extends PercentRelativeLayout implements Piano {
+public class C4ToB5ViewPiano extends PercentRelativeLayout implements Piano {
 
     private static final NoteListener LOGGING_KEY_LISTENER = new NoteListener() {
         @Override
@@ -48,7 +48,7 @@ public class PianoC4ToB5View extends PercentRelativeLayout implements Piano {
     private View g5sView;
     private View a5sView;
 
-    public PianoC4ToB5View(Context context, @Nullable AttributeSet attrs) {
+    public C4ToB5ViewPiano(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 

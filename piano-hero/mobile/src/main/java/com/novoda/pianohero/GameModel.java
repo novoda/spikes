@@ -21,7 +21,7 @@ public class GameModel implements GameMvp.Model {
 
     @Override
     public void startGame(StartCallback callback, final RoundCallback roundCallback, final CompletionCallback completionCallback) {
-        piano.attachListener(new NoteListener() {
+        piano.attachListener(new Piano.NoteListener() {
             @Override
             public void onPlay(Note note) {
                 playGameRound(roundCallback, completionCallback, note);

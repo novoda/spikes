@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:layout_weight="100" />
 
-    <com.novoda.pianohero.PianoC4ToB5View
+    <com.novoda.pianohero.C4ToB5ViewPiano
         android:id="@+id/piano_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
