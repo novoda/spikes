@@ -11,7 +11,8 @@ import static android.view.View.GONE;
 public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.View {
 
     private GamePresenter gamePresenter;
-    private GameScreen gameView;
+    private GameScreen gameScreen;
+    private Speaker speaker;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -19,10 +20,13 @@ public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.
         Log.d("!!!", "I'm running");
         setContentView(R.layout.activity_android_things);
 
+        speaker = new Speaker(getPackageManager());
+        speaker.open();
+
         SimplePitchNotationFormatter simplePitchNotationFormatter = new SimplePitchNotationFormatter();
         Piano piano = createPiano();
         GameModel gameModel = new GameModel(new SongSequenceFactory(), simplePitchNotationFormatter, piano);
-        gameView = (GameScreen) findViewById(R.id.game_screen);
+        gameScreen = (GameScreen) findViewById(R.id.game_screen);
         gamePresenter = new GamePresenter(gameModel, this);
 
         gamePresenter.onCreate();
@@ -39,7 +43,7 @@ public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.
         }
     }
 
-    public boolean isThingsDevice() {
+    private boolean isThingsDevice() {
         return getPackageManager().hasSystemFeature("android.hardware.type.embedded");
         // TODO once targeting 'O' use constant
         // PackageManager.FEATURE_EMBEDDED
@@ -53,22 +57,30 @@ public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.
 
     @Override
     public void showRound(RoundViewModel viewModel) {
-        gameView.showSuccess(viewModel);
+        gameScreen.showSuccess(viewModel);
+        speaker.play(viewModel.getSuccessSound());
     }
 
     @Override
     public void showError(RoundViewModel viewModel) {
-        gameView.showError(viewModel);
+        gameScreen.showError(viewModel);
+        speaker.play(viewModel.getErrorSound());
     }
 
     @Override
     public void showGameComplete(GameOverViewModel viewModel) {
-        gameView.showGameComplete(viewModel);
+        gameScreen.showGameComplete(viewModel);
     }
 
     @Override
     protected void onPause() {
         gamePresenter.onPause();
         super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        speaker.close();
+        super.onDestroy();
     }
 }
