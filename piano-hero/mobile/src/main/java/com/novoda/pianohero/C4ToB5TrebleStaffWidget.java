@@ -11,7 +11,6 @@ import android.util.AttributeSet;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class C4ToB5TrebleStaffWidget extends FrameLayout {
@@ -19,7 +18,6 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
     private static final String SHARP_SYMBOL = "#";
     private static final int VIEW_HEIGHT_IN_NUMBER_OF_NOTES = 8;
 
-    private final List<NoteWidget> noteWidgetsThatRequireLedgerLines = new ArrayList<>();
     private final SimplePitchNotationFormatter formatter = new SimplePitchNotationFormatter();
     private final int trebleClefMarginLeftPx;
     private final Drawable trebleClefDrawable;
@@ -117,7 +115,6 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
 
     private void show(List<Note> notes, int indexNextPlayableNote, @Nullable Note lastErrorNote) {
         removeAllViews();
-        noteWidgetsThatRequireLedgerLines.clear();
 
         for (int index = 0; index < notes.size(); index++) {
             Note note = notes.get(index);
@@ -160,12 +157,9 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         }
     }
 
-    private void addNoteWidget(SequenceNote note, Drawable noteDrawable, Drawable sharpDrawable) {
+    private void addNoteWidget(SequenceNote sequenceNote, Drawable noteDrawable, Drawable sharpDrawable) {
         NoteWidget noteWidget = new NoteWidget(getContext(), noteDrawable, sharpDrawable);
-        noteWidget.setTag(R.id.tag_treble_staff_widget_note, note);
-        if (note.note.midi() < Note.D4.midi() || Note.G4_S.midi() < note.note.midi()) {
-            noteWidgetsThatRequireLedgerLines.add(noteWidget);
-        }
+        noteWidget.setTag(R.id.tag_treble_staff_widget_note, sequenceNote);
         addView(noteWidget);
     }
 
@@ -225,26 +219,14 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
     }
 
     private void drawLedgerLines(Canvas canvas, int noteHeight, int topStaffY, int bottomStaffY) {
-        for (NoteWidget noteWidget : noteWidgetsThatRequireLedgerLines) {
-            drawLedgerLines(canvas, noteWidget, noteHeight, topStaffY, bottomStaffY);
-        }
-    }
-
-    // TODO: fix calculation for drawing ledger lines
-    // Check by using a different colored paint for ledger lines than staff lines,
-    // then changing Settings > Display > Text Size
-    private void drawLedgerLines(Canvas canvas, NoteWidget noteWidget, int noteHeight, int topStaffY, int bottomStaffY) {
-        int noteWidgetCenterY = noteWidget.getTop() + (int) ((noteWidget.getBottom() - noteWidget.getTop()) * 0.5);
-        if (noteWidgetCenterY > bottomStaffY) {
-            drawLedgerLinesForNote(canvas, noteWidget, noteHeight, bottomStaffY, noteWidgetCenterY);
-        } else {
-            drawLedgerLinesForNote(canvas, noteWidget, noteHeight, topStaffY - noteHeight, noteWidgetCenterY);
-        }
-    }
-
-    private void drawLedgerLinesForNote(Canvas canvas, NoteWidget noteWidget, int noteHeight, int firstLineY, int lastLineY) {
-        for (int i = 0; i <= (lastLineY - firstLineY) / noteHeight; i++) {
-            drawLedgerLineWithABitExtraEitherSide(canvas, noteWidget, firstLineY + i * noteHeight);
+        for (int i = 0; i < getChildCount(); i++) {
+            NoteWidget noteWidget = (NoteWidget) getChildAt(i);
+            Note note = ((SequenceNote) noteWidget.getTag(R.id.tag_treble_staff_widget_note)).note;
+            if (Note.B5.equals(note) || Note.A5.equals(note) || Note.A5_S.equals(note)) {
+                drawLedgerLineWithABitExtraEitherSide(canvas, noteWidget, topStaffY - noteHeight);
+            } else if (Note.C4.equals(note) || Note.C4_S.equals(note)) {
+                drawLedgerLineWithABitExtraEitherSide(canvas, noteWidget, bottomStaffY + noteHeight);
+            }
         }
     }
 
