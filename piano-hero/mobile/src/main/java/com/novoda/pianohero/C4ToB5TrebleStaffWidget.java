@@ -2,13 +2,13 @@ package com.novoda.pianohero;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
@@ -80,11 +80,34 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
     }
 
-    public void show(Sequence sequence) {
-        if (sequence.latestError() != null && betweenC4AndB5Inclusive(sequence.latestError())) {
-            show(sequence.notes().asList(), sequence.position(), sequence.latestError());
+    public void show(final Sequence sequence) {
+        if (getMeasuredWidth() == 0) { // apparently onMeasure is first called after Activity.onResume, and we rely on onMeasure to layout correctly
+            getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    showSubsetOfNotesThatFitFrom(sequence);
+                }
+            });
         } else {
-            show(sequence.notes().asList(), sequence.position(), null);
+            showSubsetOfNotesThatFitFrom(sequence);
+        }
+    }
+
+    private void showSubsetOfNotesThatFitFrom(Sequence sequence) {
+        int spaceRequiredForTrebleClef = notesOffsetToAllowSpaceForTrebleClef();
+        int eachNoteWidth = widthForNoteWidgetIncludingSharpAndLeftMargin();
+        int numberOfNotesWeHaveSpaceFor = (getMeasuredWidth() - spaceRequiredForTrebleClef) / eachNoteWidth;
+
+        int startIndexInclusive = (sequence.position() / numberOfNotesWeHaveSpaceFor) * numberOfNotesWeHaveSpaceFor;
+        int endIndexExclusive = startIndexInclusive + numberOfNotesWeHaveSpaceFor;
+        List<Note> currentWindow = sequence.notes().asList().subList(startIndexInclusive, endIndexExclusive < sequence.length() ? endIndexExclusive : sequence.length());
+        int positionRelativeToWindow = sequence.position() - startIndexInclusive;
+
+        if (sequence.latestError() != null && betweenC4AndB5Inclusive(sequence.latestError())) { // check prevents attempting to show latestErrors which are out of bounds
+            show(currentWindow, positionRelativeToWindow, sequence.latestError());
+        } else {
+            show(currentWindow, positionRelativeToWindow, null);
         }
     }
 
@@ -96,10 +119,6 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         removeAllViews();
         noteWidgetsThatRequireLedgerLines.clear();
 
-        if (lastErrorNote != null) {
-            addErrorNoteWidget(new SequenceNote(lastErrorNote, indexNextPlayableNote));
-        }
-
         for (int index = 0; index < notes.size(); index++) {
             Note note = notes.get(index);
             if (index < indexNextPlayableNote) {
@@ -107,6 +126,10 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
             } else {
                 addNoteWidget(new SequenceNote(note, index));
             }
+        }
+
+        if (lastErrorNote != null) {
+            addErrorNoteWidget(new SequenceNote(lastErrorNote, indexNextPlayableNote));
         }
     }
 
@@ -156,17 +179,23 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
     private void layout(NoteWidget noteWidget) {
         SequenceNote sequenceNote = (SequenceNote) noteWidget.getTag(R.id.tag_treble_staff_widget_note);
 
-        int trebleClefOffset = trebleClefMarginLeftPx + (int) (trebleClefDrawable.getBounds().width() * 1.5);
-        int noteLeft;
-        if (noteWidget.getMeasuredWidth() > noteDrawable.getBounds().width()) {
-            noteLeft = trebleClefOffset + (sequenceNote.positionInSequence * (sharpDrawable.getBounds().width() + noteDrawable.getBounds().width() + noteDrawable.getBounds().width()));
-        } else {
-            noteLeft = trebleClefOffset + sharpDrawable.getBounds().width() + sequenceNote.positionInSequence * (sharpDrawable.getBounds().width() + noteDrawable.getBounds().width() + noteDrawable.getBounds().width());
+        int noteLeft = notesOffsetToAllowSpaceForTrebleClef() + (sequenceNote.positionInSequence * widthForNoteWidgetIncludingSharpAndLeftMargin());
+        if (noteWidget.getMeasuredWidth() <= noteDrawable.getBounds().width()) { // if this is not a sharped note
+            noteLeft += sharpDrawable.getBounds().width(); // we leave a gap so spacing between notes (disregarding sharps) is uniform
         }
+
         int noteTop = (int) (positioner.yPosition(sequenceNote.note) - (0.5 * noteWidget.getMeasuredHeight()));
         int noteRight = noteLeft + noteWidget.getMeasuredWidth();
         int noteBottom = noteTop + noteWidget.getMeasuredHeight();
         noteWidget.layout(noteLeft, noteTop, noteRight, noteBottom);
+    }
+
+    private int widthForNoteWidgetIncludingSharpAndLeftMargin() {
+        return sharpDrawable.getBounds().width() + noteDrawable.getBounds().width() + noteDrawable.getBounds().width();
+    }
+
+    private int notesOffsetToAllowSpaceForTrebleClef() {
+        return trebleClefMarginLeftPx + (int) (trebleClefDrawable.getBounds().width() * 1.5);
     }
 
     @Override
