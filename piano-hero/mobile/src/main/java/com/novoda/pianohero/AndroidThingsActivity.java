@@ -4,12 +4,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import static android.view.View.GONE;
 
 public class AndroidThingsActivity extends AppCompatActivity {
-
-    private final SimplePitchNotationFormatter simplePitchNotationFormatter = new SimplePitchNotationFormatter();
 
     private GamePresenter gamePresenter;
 
@@ -19,9 +18,10 @@ public class AndroidThingsActivity extends AppCompatActivity {
         Log.d("!!!", "I'm running");
         setContentView(R.layout.activity_android_things);
 
-        GameMvp.View gameView = (GameMvp.View) findViewById(R.id.game_screen);
+        SimplePitchNotationFormatter simplePitchNotationFormatter = new SimplePitchNotationFormatter();
         Piano piano = createPiano();
         GameModel gameModel = new GameModel(new SongSequenceFactory(), simplePitchNotationFormatter, piano);
+        GameMvp.View gameView = (GameMvp.View) findViewById(R.id.game_screen);
         gamePresenter = new GamePresenter(gameModel, gameView);
 
         gamePresenter.onCreate();
@@ -33,6 +33,7 @@ public class AndroidThingsActivity extends AppCompatActivity {
             virtualPianoView.setVisibility(GONE);
             return new CompositePiano(new KeyStationMini32Piano(this));
         } else {
+            virtualPianoView.setVisibility(View.VISIBLE);
             return new CompositePiano(virtualPianoView, new KeyStationMini32Piano(this));
         }
     }
