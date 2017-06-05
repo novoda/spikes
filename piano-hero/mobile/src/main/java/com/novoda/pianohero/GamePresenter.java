@@ -29,7 +29,13 @@ class GamePresenter implements GameMvp.Presenter {
 
     private final GameMvp.Model.RoundCallback roundCallback = new GameMvp.Model.RoundCallback() {
         @Override
+        public void onRoundStart(int midi) {
+            view.startSound(midi);
+        }
+
+        @Override
         public void onRoundUpdate(RoundViewModel viewModel) {
+            view.stopSound();
             view.showRound(viewModel);
             if (viewModel.hasError()) {
                 view.showError(viewModel);

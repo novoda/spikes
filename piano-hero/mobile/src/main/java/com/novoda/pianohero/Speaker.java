@@ -4,9 +4,6 @@ import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.SystemClock;
 import android.util.Log;
 
 import com.google.android.things.pio.PeripheralManagerService;
@@ -14,7 +11,6 @@ import com.google.android.things.pio.Pwm;
 
 import java.io.IOException;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class Speaker {
 
@@ -34,7 +30,7 @@ public class Speaker {
         }
         PeripheralManagerService service = new PeripheralManagerService();
         try {
-            bus = service.openPwm("PWM1");
+            bus = service.openPwm("PWM2");
             bus.setPwmDutyCycle(50);
         } catch (IOException e) {
             throw new IllegalStateException("Cannot open buzzer bus");
@@ -44,34 +40,39 @@ public class Speaker {
 
     private boolean isThingsDevice() {
         return packageManager.hasSystemFeature("android.hardware.type.embedded");
-        // TODO once targeting 'O' use constant
-        // PackageManager.FEATURE_EMBEDDED
+        // TODO once targeting 'O' use constant PackageManager.FEATURE_EMBEDDED
     }
 
-    public void play(double frequency) {
+    public void start(double frequency) {
         if (isThingsDevice()) {
-            try {
-                bus.setPwmFrequencyHz(frequency);
-                final HandlerThread thread = new HandlerThread("ThreadForEverything" + threadNamer);
-                thread.start();
-                new Handler(thread.getLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            bus.setEnabled(true);
-                            SystemClock.sleep(TimeUnit.MILLISECONDS.toMillis(100));
-                            bus.setEnabled(false);
-                        } catch (IOException e) {
-                            throw new IllegalStateException("can't make noise", e);
-                        }
-                        thread.quit();
-                    }
-                });
-            } catch (IOException e) {
-                throw new IllegalStateException("can't setup to make noise", e);
-            }
+            playBuzzerSound(frequency);
         } else {
-            playSound(frequency);
+            playSynthSound(frequency);
+        }
+    }
+
+    private void playBuzzerSound(double frequency) {
+        try {
+            bus.setPwmFrequencyHz(frequency);
+            bus.setEnabled(true);
+        } catch (IOException e) {
+            throw new IllegalStateException("can't make noise", e);
+        }
+    }
+
+    public void stop() {
+        if (isThingsDevice()) {
+            stopBuzzerSound();
+        } else {
+            stopSynthSound();
+        }
+    }
+
+    private void stopBuzzerSound() {
+        try {
+            bus.setEnabled(false);
+        } catch (IOException e) {
+            e.printStackTrace(); // TODO
         }
     }
 
@@ -87,17 +88,21 @@ public class Speaker {
     }
 
     private final double duration = 0.1; // seconds
+
     private final int sampleRate = 8000;
     private final int numSamples = (int) (duration * sampleRate);
     private final double sample[] = new double[numSamples];
 
-    private void playSound(double frequency) {
+    private AudioTrack audioTrack;
+
+    private void playSynthSound(double frequency) {
         byte[] sound = genTone(frequency);
-        final AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
-                                                     sampleRate, AudioFormat.CHANNEL_OUT_MONO,
-                                                     AudioFormat.ENCODING_PCM_16BIT, sound.length,
-                                                     AudioTrack.MODE_STATIC
+        audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
+                                    sampleRate, AudioFormat.CHANNEL_OUT_MONO,
+                                    AudioFormat.ENCODING_PCM_16BIT, sound.length,
+                                    AudioTrack.MODE_STATIC
         );
+        audioTrack.setLoopPoints(0, audioTrack.getBufferSizeInFrames(), -1);
         audioTrack.write(sound, 0, sound.length);
         audioTrack.play();
     }
@@ -121,5 +126,11 @@ public class Speaker {
 
         }
         return generatedSnd;
+    }
+
+    private void stopSynthSound() {
+        if (audioTrack != null) {
+            audioTrack.stop();
+        }
     }
 }

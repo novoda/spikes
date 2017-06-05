@@ -10,6 +10,8 @@ interface Piano {
 
     interface NoteListener {
 
-        void onPlay(Note note);
+        void onStart(Note note);
+
+        void onStop(Note note);
     }
 }

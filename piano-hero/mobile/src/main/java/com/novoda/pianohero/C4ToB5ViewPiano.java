@@ -13,9 +13,15 @@ public class C4ToB5ViewPiano extends PercentRelativeLayout implements Piano {
 
     private static final NoteListener LOGGING_KEY_LISTENER = new NoteListener() {
         @Override
-        public void onPlay(Note note) {
-            Log.e("!!!", "onPlay " + note);
+        public void onStart(Note note) {
+            Log.e("!!!", "onStart " + note);
         }
+
+        @Override
+        public void onStop(Note note) {
+            Log.e("!!!", "onStop " + note);
+        }
+
     };
 
     private NoteListener noteListener = LOGGING_KEY_LISTENER;
@@ -203,12 +209,13 @@ public class C4ToB5ViewPiano extends PercentRelativeLayout implements Piano {
         private void onTouchEventInsideKeyBounds(View key) {
             if (!key.isPressed()) {
                 key.setPressed(true);
+                noteListener.onStart(note);
             }
         }
 
         private void onTouchEventOutsideKeyBounds(View key) {
             key.setPressed(false);
-            noteListener.onPlay(note);
+            noteListener.onStop(note);
         }
 
         private static boolean eventInsideView(View view, Point touchEventRelativeToParentView) {

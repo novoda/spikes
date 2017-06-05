@@ -22,6 +22,23 @@ class KeyStationMini32Piano extends SimpleUsbMidiDriver implements Piano {
     }
 
     @Override
+    public void onMidiNoteOn(
+            MidiInputDevice midiInputDevice,
+            int cable,
+            int channel,
+            final int note,
+            int velocity) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (noteListener != null) {
+                    noteListener.onStart(new Note(note));
+                }
+            }
+        });
+    }
+
+    @Override
     public void onMidiNoteOff(
             MidiInputDevice midiInputDevice,
             int cable,
@@ -33,7 +50,7 @@ class KeyStationMini32Piano extends SimpleUsbMidiDriver implements Piano {
             @Override
             public void run() {
                 if (noteListener != null) {
-                    noteListener.onPlay(new Note(note));
+                    noteListener.onStop(new Note(note));
                 }
             }
         });

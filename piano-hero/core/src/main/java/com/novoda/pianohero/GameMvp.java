@@ -17,6 +17,8 @@ interface GameMvp {
         }
 
         interface RoundCallback {
+            void onRoundStart(int midi);
+
             void onRoundUpdate(RoundViewModel viewModel);
         }
 
@@ -26,6 +28,10 @@ interface GameMvp {
     }
 
     interface View {
+
+        void startSound(int midi);
+
+        void stopSound();
 
         void showRound(RoundViewModel viewModel);
 
