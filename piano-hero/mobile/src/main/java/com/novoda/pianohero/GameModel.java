@@ -1,5 +1,7 @@
 package com.novoda.pianohero;
 
+import android.util.Log;
+
 import java.util.Locale;
 
 public class GameModel implements GameMvp.Model {
@@ -26,7 +28,9 @@ public class GameModel implements GameMvp.Model {
         piano.attachListener(new Piano.NoteListener() {
             @Override
             public void onStart(Note note) {
-                roundCallback.onRoundStart(440 * (2 ^ ((note.midi() - 69) / 12)));
+                double midi = 440 * (2 ^ ((note.midi() - 69) / 12));
+                Log.d("!!!", "Freq: " + midi);
+                roundCallback.onRoundStart(midi);
             }
 
             @Override

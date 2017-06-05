@@ -56,7 +56,7 @@ public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.
     }
 
     @Override
-    public void startSound(int midi) {
+    public void startSound(double midi) {
         speaker.start(midi);
     }
 
