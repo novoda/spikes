@@ -30,7 +30,7 @@ public class Speaker {
         }
         PeripheralManagerService service = new PeripheralManagerService();
         try {
-            bus = service.openPwm("PWM2");
+            bus = service.openPwm("PWM1");
             bus.setPwmDutyCycle(50);
         } catch (IOException e) {
             throw new IllegalStateException("Cannot open buzzer bus");
