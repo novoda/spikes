@@ -28,9 +28,8 @@ public class GameModel implements GameMvp.Model {
         piano.attachListener(new Piano.NoteListener() {
             @Override
             public void onStart(Note note) {
-                double midi = 440 * (2 ^ ((note.midi() - 69) / 12));
-                Log.d("!!!", "Freq: " + midi);
-                roundCallback.onRoundStart(midi);
+                double frequency = frequencyFor(note);
+                roundCallback.onRoundStart(frequency);
             }
 
             @Override
@@ -66,7 +65,11 @@ public class GameModel implements GameMvp.Model {
 
     private double getSuccessSound(Sequence sequence) {
         Note note = sequence.get(sequence.position());
-        return 440 * (2 ^ ((note.midi() - 69) / 12));
+        return frequencyFor(note);
+    }
+
+    private double frequencyFor(Note note) {
+        return 440 * Math.pow(2, (note.midi() - 69) * 1f / 12);
     }
 
     private String getErrorMessage(Sequence sequence) {
@@ -82,7 +85,7 @@ public class GameModel implements GameMvp.Model {
     private double getErrorSound() {
         // Could make a twanging noise if you wanted to get serious
         Note note = sequence.get(sequence.position());
-        return 440 * (2 ^ ((note.midi() - 69) / 12));
+        return frequencyFor(note);
     }
 
     @Override
