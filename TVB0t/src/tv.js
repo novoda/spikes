@@ -6,49 +6,9 @@ export default class TV {
     this.config = config
   }
 
-  async fetch(result) {
-    console.log(result)
-    if (result.action === 'tv_channel.now') {
-      const token = await this.token()
-      const program = await this.now(token, result.parameters)
-      return {
-        speech: program.title,
-        displayText: program.title,
-        data: {
-          slack: {
-            attachments: [
-              {
-                title: program.title,
-                text: program.brand.summary,
-                image_url: program.brand.image.href
-              }
-            ]
-          },
-          google: {
-            expectUserResponse: true,
-            richResponse: {
-              items: [
-                {
-                  simpleResponse: {
-                    textToSpeech: program.title
-                  }
-                },
-                {
-                  basicCard: {
-                    title: program.title,
-                    formattedText: program.brand.summary,
-                    image: {
-                      url: program.brand.image.href,
-                      accessibilityText: program.title + ' poster'
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        }
-      }
-    }
+  async fetch(time, tvChannel) {
+    const token = await this.token()
+    return await this.now(token, time, tvChannel)
   }
 
   async token() {
@@ -66,7 +26,7 @@ export default class TV {
     return payload.access_token
   }
 
-  async now(token, parameters) {
+  async now(token, time, tvChannel) {
     const programmesOnAllChannel = await request({
       uri: this.config.urls.now,
       headers: {
@@ -74,9 +34,8 @@ export default class TV {
       },
       json: true
     })
-    const time = parameters['date-time'] || 'now'
     const programmesOnDesiredChannel = programmesOnAllChannel.filter(item => item.type === time.toUpperCase())[0]
-    return programmesOnDesiredChannel.sliceItems.filter(item => item.slot.slotTXChannel === parameters['tv-channel'])[0]
+    return programmesOnDesiredChannel.sliceItems.filter(item => item.slot.slotTXChannel === tvChannel)[0]
   }
 
 }
