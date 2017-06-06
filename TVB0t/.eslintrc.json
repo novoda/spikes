@@ -1,0 +1,12 @@
+{
+  "extends": "eslint-config-novoda",
+  "rules": {
+    "semi": ["error", "never"],
+    "indent": ["error", 2],
+    "no-console": "off"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017,
+    "sourceType": "module"
+  }
+}

@@ -1,0 +1,42 @@
+task lint(dependsOn: yarn_run_lint)
+
+task test(dependsOn: [yarn_run_test, lint])
+
+task babel(dependsOn: yarn_run_babel)
+
+task outdatedModules(dependsOn: yarn_outdated)
+
+task prodModules(type: YarnTask) {
+  args = ['install', '--prod']
+}
+
+task devModules(type: YarnTask) {
+  args = ['install']
+}
+
+task zip(type: Zip) {
+    group 'Deploy'
+    description 'Zips resources for lambda deployment.'
+    from '.'
+    include 'dist/*.js'
+    include 'node_modules/**'
+    destinationDir file('build/distributions')
+    baseName project.name
+    version project.version
+}
+
+task clean(type: Delete) {
+    group 'Deploy'
+    description 'Removes all existing build artifacts.'
+    delete 'build', 'dist'
+}
+
+task build(type: GradleBuild) {
+    group 'Deploy'
+    description 'Builds the distribution zip.'
+    inputs.files fileTree('src')
+    inputs.file 'package.json'
+    inputs.file 'yarn.lock'
+    outputs.dir 'build/distributions'
+    tasks = ['clean', 'yarn', 'babel', 'test', 'prodModules', 'zip', 'devModules']
+}

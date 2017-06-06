@@ -1,0 +1,14 @@
+plugins {
+    id 'com.moowork.node' version '1.1.1'
+}
+
+node {
+    version = '6.10.1'
+    npmVersion = '5.0.0'
+    yarnVersion = '0.24.6'
+    download = true
+}
+
+version = '1.0'
+
+apply from: file('node_module_tasks.gradle')

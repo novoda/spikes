@@ -1,0 +1,13 @@
+# Dependency directories
+node_modules/
+
+# Yarn Integrity file
+.yarn-integrity
+
+.gradle/
+.idea/
+build/
+dist/
+
+#secrets
+src/config.js
