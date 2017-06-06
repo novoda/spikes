@@ -124,6 +124,7 @@ public class SimonSays implements AutoCloseable {
     }
 
     public void toggle() {
+        Log.d(TAG, "toggle() called");
         if (state == State.IDLE) {
             start();
         } else {
