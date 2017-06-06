@@ -1,8 +1,9 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import TV from './tv.js'
+import config from './config.js'
 
-const tv = new TV()
+const tv = new TV(config)
 const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))

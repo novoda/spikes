@@ -1,7 +1,10 @@
 import request from 'request-promise-native'
-import config from './config.js'
 
 export default class TV {
+
+  constructor(config) {
+    this.config = config
+  }
 
   async fetch(result) {
     console.log(result)
@@ -51,9 +54,9 @@ export default class TV {
   async token() {
     const payload = await request({
       method: 'POST',
-      uri: config.urls.token,
+      uri: this.config.urls.token,
       headers: {
-        'Authorization': `Basic ${config.token}`
+        'Authorization': `Basic ${this.config.token}`
       },
       form: {
         grant_type: 'client_credentials'
@@ -65,7 +68,7 @@ export default class TV {
 
   async now(token, parameters) {
     const programmesOnAllChannel = await request({
-      uri: config.urls.now,
+      uri: this.config.urls.now,
       headers: {
         'Authorization': `Bearer ${token}`
       },
