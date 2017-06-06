@@ -9,42 +9,42 @@ class Rpi3BoardFactory extends BoardFactory {
 
     @Override
     public String getRedLedGpio() {
-        return "BCM6";
-    }
-
-    @Override
-    public String getBlueLedGpio() {
-        return "BCM19";
-    }
-
-    @Override
-    public String getYellowLedGpio() {
-        return "BCM26";
-    }
-
-    @Override
-    public String getGreenButtonGpio() {
         return "BCM12";
     }
 
     @Override
-    public String getRedButtonGpio() {
-        return "BCM16";
+    public String getBlueLedGpio() {
+        return "BCM18";
     }
 
     @Override
-    public String getBlueButtonGpio() {
+    public String getYellowLedGpio() {
+        return "BCM17";
+    }
+
+    @Override
+    public String getGreenButtonGpio() {
+        return "BCM19";
+    }
+
+    @Override
+    public String getRedButtonGpio() {
         return "BCM20";
     }
 
     @Override
-    public String getYellowButtonGpio() {
+    public String getBlueButtonGpio() {
         return "BCM21";
     }
 
     @Override
+    public String getYellowButtonGpio() {
+        return "BCM27";
+    }
+
+    @Override
     public String getBuzzerPwm() {
-        return "PWM0";
+        return "PWM1";
     }
 
     @Override
