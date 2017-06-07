@@ -6,15 +6,10 @@ export default class TV {
     this.config = config
   }
 
-  async fetch(time, tvChannel) {
-    const token = await this.token()
-    return await this.now(token, time, tvChannel)
-  }
-
   async token() {
     const payload = await request({
       method: 'POST',
-      uri: this.config.urls.token,
+      uri: this.url(this.config.paths.token),
       headers: {
         'Authorization': `Basic ${this.config.token}`
       },
@@ -26,16 +21,30 @@ export default class TV {
     return payload.access_token
   }
 
-  async now(token, time, tvChannel) {
-    const programmesOnAllChannel = await request({
-      uri: this.config.urls.now,
+  url(path) {
+    return this.config.endpoint + path
+  }
+
+  async now() {
+    const token = await this.token()
+    return await request({
+      uri: this.url(this.config.paths.now),
       headers: {
         'Authorization': `Bearer ${token}`
       },
       json: true
     })
-    const programmesOnDesiredChannel = programmesOnAllChannel.filter(item => item.type === time.toUpperCase())[0]
-    return programmesOnDesiredChannel.sliceItems.filter(item => item.slot.slotTXChannel === tvChannel)[0]
+  }
+
+  async show(show) {
+    const token = await this.token()
+    return await request({
+      uri: this.url(this.config.paths.show).replace('{{show}}', show),
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      json: true
+    })
   }
 
 }

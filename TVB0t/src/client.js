@@ -35,7 +35,7 @@ function sendToLocalServer(response) {
     body: response,
     json: true
   }).then(response => {
-    print('local server response:', response || 'Got no response back :(')
+    print('local server response:', JSON.stringify(response, null, 2) || 'Got no response back :(')
     rl.prompt()
   })
 }
