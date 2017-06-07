@@ -9,6 +9,8 @@ public class GameModel implements GameMvp.Model {
 
     private static final String NEXT_NOTE_HINT_FORMAT = "Next: %s";
     private static final String SHARP_SYMBOL = "#";
+    private static final long GAME_LENGTH = TimeUnit.SECONDS.toMillis(60);
+    private static final long CLOCK_UPDATE_RATE = TimeUnit.SECONDS.toMillis(1);
 
     private final SongSequenceFactory songSequenceFactory;
     private final SimplePitchNotationFormatter pitchNotationFormatter;
@@ -44,8 +46,7 @@ public class GameModel implements GameMvp.Model {
             }
         });
 
-        sequence = songSequenceFactory.maryHadALittleLamb();
-        CountDownTimer countDownTimer = new CountDownTimer(TimeUnit.SECONDS.toMillis(60), TimeUnit.SECONDS.toMillis(1)) {
+        CountDownTimer countDownTimer = new CountDownTimer(GAME_LENGTH, CLOCK_UPDATE_RATE) {
             @Override
             public void onTick(long millisUntilFinished) {
                 long secondsLeft = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished);
@@ -59,6 +60,7 @@ public class GameModel implements GameMvp.Model {
             }
         };
         countDownTimer.start();
+        sequence = songSequenceFactory.maryHadALittleLamb();
         callback.onGameStarted(createSuccessViewModel(sequence));
     }
 
