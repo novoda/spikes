@@ -22,19 +22,19 @@ class GamePresenter implements GameMvp.Presenter {
 
     private final GameMvp.Model.StartCallback andInformView = new GameMvp.Model.StartCallback() {
         @Override
-        public void onGameStarted(RoundViewModel viewModel) {
+        public void onGameStarted(RoundEndViewModel viewModel) {
             view.showRound(viewModel);
         }
     };
 
     private final GameMvp.Model.RoundCallback roundCallback = new GameMvp.Model.RoundCallback() {
         @Override
-        public void onRoundStart(double midi) {
-            view.startSound(midi);
+        public void onRoundStart(RoundStartViewModel viewModel) {
+            view.startSound(viewModel.getNoteFrequency());
         }
 
         @Override
-        public void onRoundUpdate(RoundViewModel viewModel) {
+        public void onRoundUpdate(RoundEndViewModel viewModel) {
             view.stopSound();
             view.showRound(viewModel);
             if (viewModel.hasError()) {

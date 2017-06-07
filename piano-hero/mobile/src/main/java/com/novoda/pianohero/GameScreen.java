@@ -39,7 +39,7 @@ public class GameScreen extends LinearLayoutCompat {
         statusTextView = (TextView) findViewById(R.id.game_screen_text_status);
     }
 
-    public void showSuccess(RoundViewModel viewModel) {
+    public void showSuccess(RoundEndViewModel viewModel) {
         statusTextView.setText(viewModel.getSuccessMessage());
 
         Sequence sequence = viewModel.getSequence();
@@ -64,7 +64,7 @@ public class GameScreen extends LinearLayoutCompat {
         }
     }
 
-    public void showError(RoundViewModel viewModel) {
+    public void showError(RoundEndViewModel viewModel) {
         statusTextView.setText(viewModel.getErrorMessage());
 
         trebleStaffWidget.showError(viewModel.getSequence());

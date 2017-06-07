@@ -13,13 +13,13 @@ interface GameMvp {
         void shutdown();
 
         interface StartCallback {
-            void onGameStarted(RoundViewModel viewModel);
+            void onGameStarted(RoundEndViewModel viewModel);
         }
 
         interface RoundCallback {
-            void onRoundStart(double midi);
+            void onRoundStart(RoundStartViewModel viewModel);
 
-            void onRoundUpdate(RoundViewModel viewModel);
+            void onRoundUpdate(RoundEndViewModel viewModel);
         }
 
         interface CompletionCallback {
@@ -33,11 +33,11 @@ interface GameMvp {
 
         void stopSound();
 
-        void showRound(RoundViewModel viewModel);
+        void showRound(RoundEndViewModel viewModel);
 
         void showGameComplete(GameOverViewModel viewModel);
 
-        void showError(RoundViewModel viewModel);
+        void showError(RoundEndViewModel viewModel);
     }
 
     interface Presenter {

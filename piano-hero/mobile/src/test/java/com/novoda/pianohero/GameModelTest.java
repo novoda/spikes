@@ -43,7 +43,7 @@ public class GameModelTest {
 
         gameModel.startGame(startCallback, roundCallback, completionCallback);
 
-        verify(startCallback).onGameStarted(Matchers.<RoundViewModel>any());
+        verify(startCallback).onGameStarted(Matchers.<RoundEndViewModel>any());
     }
 
     @Test
@@ -54,7 +54,7 @@ public class GameModelTest {
 
         gameModel.playGameRound(roundCallback, completionCallback, Note.C4);
 
-        ArgumentCaptor<RoundViewModel> roundViewModelCaptor = ArgumentCaptor.forClass(RoundViewModel.class);
+        ArgumentCaptor<RoundEndViewModel> roundViewModelCaptor = ArgumentCaptor.forClass(RoundEndViewModel.class);
         verify(roundCallback).onRoundUpdate(roundViewModelCaptor.capture());
         assertThat(roundViewModelCaptor.getValue().getSequence().position()).isEqualTo(1);
     }
@@ -68,7 +68,7 @@ public class GameModelTest {
         gameModel.playGameRound(roundCallback, completionCallback, Note.C4);
         gameModel.playGameRound(roundCallback, completionCallback, Note.E4);
 
-        ArgumentCaptor<RoundViewModel> roundViewModelCaptor = ArgumentCaptor.forClass(RoundViewModel.class);
+        ArgumentCaptor<RoundEndViewModel> roundViewModelCaptor = ArgumentCaptor.forClass(RoundEndViewModel.class);
         verify(roundCallback, times(2)).onRoundUpdate(roundViewModelCaptor.capture());
         assertThat(roundViewModelCaptor.getValue().getSequence().position()).isEqualTo(1);
     }
@@ -82,7 +82,7 @@ public class GameModelTest {
         gameModel.playGameRound(roundCallback, completionCallback, Note.D4);
         gameModel.playGameRound(roundCallback, completionCallback, Note.E4);
 
-        ArgumentCaptor<RoundViewModel> roundViewModelCaptor = ArgumentCaptor.forClass(RoundViewModel.class);
+        ArgumentCaptor<RoundEndViewModel> roundViewModelCaptor = ArgumentCaptor.forClass(RoundEndViewModel.class);
         verify(roundCallback, times(2)).onRoundUpdate(roundViewModelCaptor.capture());
         assertThat(roundViewModelCaptor.getValue().getSequence().latestError()).isEqualTo(Note.E4);
     }
@@ -96,7 +96,7 @@ public class GameModelTest {
         gameModel.playGameRound(roundCallback, completionCallback, Note.D4);
         gameModel.playGameRound(roundCallback, completionCallback, Note.C4);
 
-        ArgumentCaptor<RoundViewModel> roundViewModelCaptor = ArgumentCaptor.forClass(RoundViewModel.class);
+        ArgumentCaptor<RoundEndViewModel> roundViewModelCaptor = ArgumentCaptor.forClass(RoundEndViewModel.class);
         verify(roundCallback, times(2)).onRoundUpdate(roundViewModelCaptor.capture());
         assertThat(roundViewModelCaptor.getValue().getSequence().latestError()).isNull();
     }

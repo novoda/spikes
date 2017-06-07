@@ -27,7 +27,7 @@ public class GameModel implements GameMvp.Model {
             @Override
             public void onStart(Note note) {
                 double frequency = frequencyFor(note);
-                roundCallback.onRoundStart(frequency);
+                roundCallback.onRoundStart(new RoundStartViewModel(frequency));
             }
 
             @Override
@@ -49,10 +49,10 @@ public class GameModel implements GameMvp.Model {
         piano.open();
     }
 
-    private RoundViewModel createViewModel(Sequence sequence) {
+    private RoundEndViewModel createViewModel(Sequence sequence) {
         String successMessage = getSuccessMessage(sequence);
         String errorMessage = getErrorMessage(sequence);
-        return new RoundViewModel(sequence, successMessage, errorMessage);
+        return new RoundEndViewModel(sequence, successMessage, errorMessage);
     }
 
     private String getSuccessMessage(Sequence sequence) {
