@@ -4,6 +4,7 @@ import java.util.Locale;
 
 public class GameModel implements GameMvp.Model {
 
+    private static final String NEXT_NOTE_HINT_FORMAT = "Next: %s";
     private static final String SHARP_SYMBOL = "#";
 
     private final SongSequenceFactory songSequenceFactory;
@@ -55,7 +56,28 @@ public class GameModel implements GameMvp.Model {
         String successMessage = getSuccessMessage(sequence);
         String errorMessage = getErrorMessage(sequence);
 
-        return new RoundEndViewModel(sequence, successMessage, errorMessage, false); // boolean is a smell here, errors not needed in success
+        String currentNoteFormatted = currentNote(sequence);
+        String nextNoteFormatted = nextNote(sequence);
+
+        return new RoundEndViewModel(sequence,
+                                     currentNoteFormatted, nextNoteFormatted,
+                                     successMessage, errorMessage,
+                                     false
+        ); // boolean is a smell here, errors not needed in success
+    }
+
+    private String currentNote(Sequence sequence) {
+        Note note = sequence.get(sequence.position());
+        return pitchNotationFormatter.format(note);
+    }
+
+    private String nextNote(Sequence sequence) {
+        if (sequence.position() + 1 < sequence.length()) {
+            String nextNote = pitchNotationFormatter.format(sequence.get(sequence.position() + 1));
+            return String.format(Locale.US, NEXT_NOTE_HINT_FORMAT, nextNote);
+        } else {
+            return "";
+        }
     }
 
     private RoundEndViewModel createErrorViewModel(Sequence sequence) {
@@ -65,7 +87,14 @@ public class GameModel implements GameMvp.Model {
         Note errorNote = sequence.latestError();
         boolean isSharpError = pitchNotationFormatter.format(errorNote).endsWith(SHARP_SYMBOL);
 
-        return new RoundEndViewModel(sequence, successMessage, errorMessage, isSharpError);
+        String currentNoteFormatted = currentNote(sequence);
+        String nextNoteFormatted = nextNote(sequence);
+
+        return new RoundEndViewModel(sequence,
+                                     currentNoteFormatted, nextNoteFormatted,
+                                     successMessage, errorMessage,
+                                     isSharpError
+        );
     }
 
     private String getSuccessMessage(Sequence sequence) {

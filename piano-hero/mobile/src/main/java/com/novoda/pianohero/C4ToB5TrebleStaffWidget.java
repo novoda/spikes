@@ -221,7 +221,7 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
 
     public void showError(RoundEndViewModel viewModel) {
         Sequence sequence = viewModel.getSequence();
-        int positionRelativeToWindow = getPositionRelativeToWindow(sequence);
+        int positionRelativeToWindow = getPositionRelativeToWindow(sequence.position());
 
         SequenceNote sequenceNote = new SequenceNote(sequence.latestError(), positionRelativeToWindow);
         addNoteWidget(sequenceNote, errorNoteDrawable);
@@ -229,19 +229,19 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
 
     public void showSharpError(RoundEndViewModel viewModel) {
         Sequence sequence = viewModel.getSequence();
-        int positionRelativeToWindow = getPositionRelativeToWindow(sequence);
+        int positionRelativeToWindow = getPositionRelativeToWindow(sequence.position());
 
         SequenceNote sequenceNote = new SequenceNote(sequence.latestError(), positionRelativeToWindow);
         addSharpNoteWidget(sequenceNote, errorNoteDrawable, errorSharpDrawable);
     }
 
-    private int getPositionRelativeToWindow(Sequence sequence) {
+    private int getPositionRelativeToWindow(int currentPosition) {
         int spaceRequiredForTrebleClef = notesOffsetToAllowSpaceForTrebleClef();
         int eachNoteWidth = widthForNoteWidgetIncludingSharpAndLeftMargin();
         int numberOfNotesWeHaveSpaceFor = (getMeasuredWidth() - spaceRequiredForTrebleClef) / eachNoteWidth;
 
-        int startIndexInclusive = (sequence.position() / numberOfNotesWeHaveSpaceFor) * numberOfNotesWeHaveSpaceFor;
-        return sequence.position() - startIndexInclusive;
+        int startIndexInclusive = (currentPosition / numberOfNotesWeHaveSpaceFor) * numberOfNotesWeHaveSpaceFor;
+        return currentPosition - startIndexInclusive;
     }
 
     private static class SequenceNote {

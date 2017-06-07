@@ -6,13 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
-import java.util.Locale;
-
 public class GameScreen extends LinearLayoutCompat {
-
-    private static final String NEXT_NOTE_HINT_FORMAT = "Next: %s";
-
-    private final SimplePitchNotationFormatter formatter;
 
     private C4ToB5TrebleStaffWidget trebleStaffWidget;
     private View mainMenuButton;
@@ -24,7 +18,6 @@ public class GameScreen extends LinearLayoutCompat {
     public GameScreen(Context context, AttributeSet attrs) {
         super(context, attrs);
         super.setOrientation(VERTICAL);
-        this.formatter = new SimplePitchNotationFormatter();
     }
 
     @Override
@@ -42,26 +35,11 @@ public class GameScreen extends LinearLayoutCompat {
     public void showSuccess(RoundEndViewModel viewModel) {
         statusTextView.setText(viewModel.getSuccessMessage());
 
-        Sequence sequence = viewModel.getSequence();
-        playNoteTextView.setText(currentNote(sequence));
-        nextNoteTextView.setText(nextNote(sequence));
+        playNoteTextView.setText(viewModel.getCurrentNoteFormatted());
+        nextNoteTextView.setText(viewModel.getNextNoteFormatted());
 
         trebleStaffWidget.showProgress(viewModel);
         trebleStaffWidget.setVisibility(View.VISIBLE);
-    }
-
-    private String currentNote(Sequence sequence) {
-        Note note = sequence.get(sequence.position());
-        return formatter.format(note);
-    }
-
-    private String nextNote(Sequence sequence) {
-        if (sequence.position() + 1 < sequence.length()) {
-            String nextNote = formatter.format(sequence.get(sequence.position() + 1));
-            return String.format(Locale.US, NEXT_NOTE_HINT_FORMAT, nextNote);
-        } else {
-            return "";
-        }
     }
 
     public void showError(RoundEndViewModel viewModel) {
