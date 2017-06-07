@@ -21,7 +21,7 @@ export default class ActionResolver {
     return {
       speech: program.title,
       displayText: program.title,
-      contextOut: [{name: 'show', lifespan: 5, parameters: {name: program.title, tv_channel: program.slot.slotTXChannel}}],
+      contextOut: [{name: 'show', lifespan: 5, parameters: {name: program.title, tv_channel: program.slot.slotTXChannel, time: program.slot.slotTXDate}}],
       data: {
         slack: {
           attachments: [
