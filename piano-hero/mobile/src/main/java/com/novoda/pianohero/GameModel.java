@@ -69,6 +69,7 @@ public class GameModel implements GameMvp.Model {
             @Override
             public void onSongComplete() {
                 songCompleteCallback.onSongComplete();
+                startNextSong();
             }
 
         });
@@ -109,8 +110,7 @@ public class GameModel implements GameMvp.Model {
         piano.open();
     }
 
-    @Override
-    public void startNextSong() {
+    private void startNextSong() {
         Sequence sequence = songSequenceFactory.maryHadALittleLamb();
         songPlayer.loadSong(sequence);
     }

@@ -80,8 +80,7 @@ class GamePresenter implements GameMvp.Presenter {
     private final GameMvp.Model.SongCompleteCallback songCompleteCallback = new GameMvp.Model.SongCompleteCallback() {
         @Override
         public void onSongComplete() {
-            view.showSongComplete(new SongCompleteViewModel("show complete, start another!"));
-            gameModel.startNextSong();
+            view.showSongComplete(new SongCompleteViewModel("Nice, Song complete!"));
         }
     };
 

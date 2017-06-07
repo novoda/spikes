@@ -13,8 +13,6 @@ interface GameMvp {
 
         void startup();
 
-        void startNextSong();
-
         void shutdown();
 
         interface GameStartCallback {
