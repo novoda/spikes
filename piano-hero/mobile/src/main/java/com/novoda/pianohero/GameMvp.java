@@ -5,6 +5,7 @@ interface GameMvp {
     interface Model {
 
         void startGame(GameStartCallback callback,
+                       GameClockCallback cCallback,
                        RoundCallback rCallback,
                        SongCompleteCallback sCallback,
                        GameCompleteCallback gCallback);
@@ -17,6 +18,10 @@ interface GameMvp {
 
         interface GameStartCallback {
             void onGameStarted(RoundEndViewModel viewModel);
+        }
+
+        interface GameClockCallback {
+            void onClockTick(ClockViewModel viewModel);
         }
 
         interface RoundCallback {
@@ -39,6 +44,8 @@ interface GameMvp {
         void startSound(double midi);
 
         void stopSound();
+
+        void showClock(ClockViewModel viewModel);
 
         void showRound(RoundEndViewModel viewModel);
 

@@ -14,6 +14,7 @@ class GamePresenter implements GameMvp.Presenter {
     public void onCreate() {
         gameModel.startGame(
             gameStartCallback,
+            gameClockCallback,
             roundCallback,
             songCompleteCallback,
             gameCompleteCallback
@@ -29,6 +30,13 @@ class GamePresenter implements GameMvp.Presenter {
         @Override
         public void onGameStarted(RoundEndViewModel viewModel) {
             view.showRound(viewModel);
+        }
+    };
+
+    private final GameMvp.Model.GameClockCallback gameClockCallback = new GameMvp.Model.GameClockCallback() {
+        @Override
+        public void onClockTick(ClockViewModel viewModel) {
+            view.showClock(viewModel);
         }
     };
 

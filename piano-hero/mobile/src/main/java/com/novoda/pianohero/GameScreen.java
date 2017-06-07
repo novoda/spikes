@@ -3,6 +3,7 @@ package com.novoda.pianohero;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -59,5 +60,11 @@ public class GameScreen extends LinearLayoutCompat {
     public void showGameComplete(GameOverViewModel viewModel) {
         statusTextView.setText(viewModel.getMessage());
         trebleStaffWidget.setVisibility(View.GONE);
+    }
+
+    public void showClock(ClockViewModel viewModel) {
+//        statusTextView.setText(viewModel.getTimeLeftFormatted());
+        // TODO View stuff @ataulm
+        Log.d("!!", viewModel.getTimeLeftFormatted() + " tick.");
     }
 }

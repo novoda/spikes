@@ -27,6 +27,7 @@ public class GameModel implements GameMvp.Model {
 
     @Override
     public void startGame(GameStartCallback callback,
+                          final GameClockCallback clockCallback,
                           final RoundCallback roundCallback,
                           final SongCompleteCallback songCompleteCallback,
                           final GameCompleteCallback gameCompleteCallback) {
@@ -47,7 +48,8 @@ public class GameModel implements GameMvp.Model {
         CountDownTimer countDownTimer = new CountDownTimer(TimeUnit.SECONDS.toMillis(60), TimeUnit.SECONDS.toMillis(1)) {
             @Override
             public void onTick(long millisUntilFinished) {
-
+                long secondsLeft = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished);
+                clockCallback.onClockTick(new ClockViewModel(secondsLeft + "s"));
             }
 
             @Override
