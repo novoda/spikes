@@ -6,19 +6,14 @@ class RoundEndViewModel {
     private final String currentNoteFormatted;
     private final String nextNoteFormatted;
     private final String successMessage;
-    private final String errorMessage;
-    private final boolean isSharpError;
 
     RoundEndViewModel(Sequence sequence,
                       String currentNoteFormatted, String nextNoteFormatted,
-                      String successMessage, String errorMessage,
-                      boolean isSharpError) {
+                      String successMessage) {
         this.sequence = sequence;
         this.currentNoteFormatted = currentNoteFormatted;
         this.nextNoteFormatted = nextNoteFormatted;
         this.successMessage = successMessage;
-        this.errorMessage = errorMessage;
-        this.isSharpError = isSharpError;
     }
 
     public Sequence getSequence() {
@@ -27,18 +22,6 @@ class RoundEndViewModel {
 
     public String getSuccessMessage() {
         return successMessage;
-    }
-
-    public boolean hasError() {
-        return sequence.hasError();
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public boolean isSharpError() {
-        return isSharpError;
     }
 
     public String getCurrentNoteFormatted() {
