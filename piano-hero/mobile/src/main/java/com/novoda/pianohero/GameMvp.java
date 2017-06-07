@@ -12,7 +12,6 @@ interface GameMvp {
 
         void startup();
 
-        void playGameRound(RoundCallback rCallback, SongCompleteCallback cCallback, Note note);
 
         void shutdown();
 

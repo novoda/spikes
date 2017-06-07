@@ -76,8 +76,7 @@ public class GameModel implements GameMvp.Model {
         piano.open();
     }
 
-    @Override
-    public void playGameRound(
+    private void playGameRound(
         RoundCallback roundCallback,
         SongCompleteCallback songCompleteCallback,
         Note note
