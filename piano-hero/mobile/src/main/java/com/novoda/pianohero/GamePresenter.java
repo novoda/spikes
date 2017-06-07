@@ -13,7 +13,7 @@ class GamePresenter implements GameMvp.Presenter {
     @Override
     public void onCreate() {
         gameModel.startGame(
-            startCallback,
+            gameStartCallback,
             roundCallback,
             songCompleteCallback,
             gameCompleteCallback
@@ -25,7 +25,7 @@ class GamePresenter implements GameMvp.Presenter {
         gameModel.startup();
     }
 
-    private final GameMvp.Model.StartCallback startCallback = new GameMvp.Model.StartCallback() {
+    private final GameMvp.Model.GameStartCallback gameStartCallback = new GameMvp.Model.GameStartCallback() {
         @Override
         public void onGameStarted(RoundEndViewModel viewModel) {
             view.showRound(viewModel);

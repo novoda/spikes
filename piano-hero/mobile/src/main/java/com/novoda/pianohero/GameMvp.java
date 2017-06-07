@@ -4,7 +4,7 @@ interface GameMvp {
 
     interface Model {
 
-        void startGame(StartCallback callback,
+        void startGame(GameStartCallback callback,
                        RoundCallback rCallback,
                        SongCompleteCallback sCallback,
                        GameCompleteCallback gCallback);
@@ -15,7 +15,7 @@ interface GameMvp {
 
         void shutdown();
 
-        interface StartCallback {
+        interface GameStartCallback {
             void onGameStarted(RoundEndViewModel viewModel);
         }
 

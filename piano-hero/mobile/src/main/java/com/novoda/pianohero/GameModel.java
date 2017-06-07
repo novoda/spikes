@@ -26,7 +26,7 @@ public class GameModel implements GameMvp.Model {
     }
 
     @Override
-    public void startGame(StartCallback callback,
+    public void startGame(GameStartCallback callback,
                           final RoundCallback roundCallback,
                           final SongCompleteCallback songCompleteCallback,
                           final GameCompleteCallback gameCompleteCallback) {

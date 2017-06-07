@@ -18,7 +18,7 @@ public class GameModelTest {
     public MockitoRule rule = MockitoJUnit.rule();
 
     @Mock
-    GameMvp.Model.StartCallback startCallback;
+    GameMvp.Model.GameStartCallback gameStartCallback;
 
     @Mock
     GameMvp.Model.RoundCallback roundCallback;
@@ -41,16 +41,16 @@ public class GameModelTest {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
 
-        gameModel.startGame(startCallback, roundCallback, songCompleteCallback);
+        gameModel.startGame(gameStartCallback, roundCallback, songCompleteCallback);
 
-        verify(startCallback).onGameStarted(Matchers.<RoundEndViewModel>any());
+        verify(gameStartCallback).onGameStarted(Matchers.<RoundEndViewModel>any());
     }
 
     @Test
     public void whenNotesPlayedCorrectly_thenIncrementsSequencePosition() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
-        gameModel.startGame(startCallback, roundCallback, songCompleteCallback);
+        gameModel.startGame(gameStartCallback, roundCallback, songCompleteCallback);
 
         gameModel.playGameRound(roundCallback, songCompleteCallback, Note.C4);
 
@@ -63,7 +63,7 @@ public class GameModelTest {
     public void whenNotesPlayedIncorrectly_thenDoesNotIncrementSequencePosition() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
-        gameModel.startGame(startCallback, roundCallback, songCompleteCallback);
+        gameModel.startGame(gameStartCallback, roundCallback, songCompleteCallback);
 
         gameModel.playGameRound(roundCallback, songCompleteCallback, Note.C4);
         gameModel.playGameRound(roundCallback, songCompleteCallback, Note.E4);
@@ -77,7 +77,7 @@ public class GameModelTest {
     public void whenNotesPlayedIncorrectly_thenUpdatesLatestError() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
-        gameModel.startGame(startCallback, roundCallback, songCompleteCallback);
+        gameModel.startGame(gameStartCallback, roundCallback, songCompleteCallback);
 
         gameModel.playGameRound(roundCallback, songCompleteCallback, Note.D4);
         gameModel.playGameRound(roundCallback, songCompleteCallback, Note.E4);
@@ -91,7 +91,7 @@ public class GameModelTest {
     public void whenNotesPlayedCorrectly_thenClearsLatestError() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
-        gameModel.startGame(startCallback, roundCallback, songCompleteCallback);
+        gameModel.startGame(gameStartCallback, roundCallback, songCompleteCallback);
 
         gameModel.playGameRound(roundCallback, songCompleteCallback, Note.D4);
         gameModel.playGameRound(roundCallback, songCompleteCallback, Note.C4);
@@ -105,7 +105,7 @@ public class GameModelTest {
     public void whenFinalNotesPlayedCorrectly_thenTriggersSequenceComplete() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
-        gameModel.startGame(startCallback, roundCallback, songCompleteCallback);
+        gameModel.startGame(gameStartCallback, roundCallback, songCompleteCallback);
 
         gameModel.playGameRound(roundCallback, songCompleteCallback, Note.C4);
         gameModel.playGameRound(roundCallback, songCompleteCallback, Note.D4);
@@ -118,7 +118,7 @@ public class GameModelTest {
     public void whenFinalNotesPlayedIncorrectly_thenDoesNotTriggerSequenceComplete() {
         Sequence sequence = make(Note.C4, Note.D4, Note.E4);
         when(mockSongFactory.maryHadALittleLamb()).thenReturn(sequence);
-        gameModel.startGame(startCallback, roundCallback, songCompleteCallback);
+        gameModel.startGame(gameStartCallback, roundCallback, songCompleteCallback);
 
         gameModel.playGameRound(roundCallback, songCompleteCallback, Note.C4);
         gameModel.playGameRound(roundCallback, songCompleteCallback, Note.D4);
