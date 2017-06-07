@@ -200,11 +200,15 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
     private void drawLedgerLines(Canvas canvas, int noteHeight, int topStaffY, int bottomStaffY) {
         for (int i = 0; i < getChildCount(); i++) {
             NoteWidget noteWidget = (NoteWidget) getChildAt(i);
-            Note note = ((SequenceNote) noteWidget.getTag(R.id.tag_treble_staff_widget_note)).note;
-            if (Note.B5.equals(note) || Note.A5.equals(note) || Note.A5_S.equals(note)) {
+            SequenceNote sequenceNote = (SequenceNote) noteWidget.getTag(R.id.tag_treble_staff_widget_note);
+            boolean aboveStave = sequenceNote.isAboveStave();
+            boolean belowStave = sequenceNote.isBelowStave();
+            if (aboveStave) {
                 drawLedgerLineWithABitExtraEitherSide(canvas, noteWidget, topStaffY - noteHeight);
-            } else if (Note.C4.equals(note) || Note.C4_S.equals(note)) {
-                drawLedgerLineWithABitExtraEitherSide(canvas, noteWidget, bottomStaffY + noteHeight);
+            } else {
+                if (belowStave) {
+                    drawLedgerLineWithABitExtraEitherSide(canvas, noteWidget, bottomStaffY + noteHeight);
+                }
             }
         }
     }
@@ -246,6 +250,14 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         SequenceNote(Note note, int positionInSequence) {
             this.note = note;
             this.positionInSequence = positionInSequence;
+        }
+
+        boolean isAboveStave() {
+            return Note.B5.equals(note) || Note.A5.equals(note) || Note.A5_S.equals(note);
+        }
+
+        boolean isBelowStave() {
+            return Note.C4.equals(note) || Note.C4_S.equals(note);
         }
     }
 
