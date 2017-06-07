@@ -4,6 +4,8 @@ import java.util.Locale;
 
 public class GameModel implements GameMvp.Model {
 
+    private static final String SHARP_SYMBOL = "#";
+
     private final SongSequenceFactory songSequenceFactory;
     private final SimplePitchNotationFormatter pitchNotationFormatter;
     private final Piano piano;
@@ -37,7 +39,7 @@ public class GameModel implements GameMvp.Model {
         });
 
         sequence = songSequenceFactory.maryHadALittleLamb();
-        callback.onGameStarted(createViewModel(sequence));
+        callback.onGameStarted(createSuccessViewModel(sequence));
     }
 
     private double frequencyFor(Note note) {
@@ -49,10 +51,21 @@ public class GameModel implements GameMvp.Model {
         piano.open();
     }
 
-    private RoundEndViewModel createViewModel(Sequence sequence) {
+    private RoundEndViewModel createSuccessViewModel(Sequence sequence) {
         String successMessage = getSuccessMessage(sequence);
         String errorMessage = getErrorMessage(sequence);
-        return new RoundEndViewModel(sequence, successMessage, errorMessage);
+
+        return new RoundEndViewModel(sequence, successMessage, errorMessage, false); // boolean is a smell here, errors not needed in success
+    }
+
+    private RoundEndViewModel createErrorViewModel(Sequence sequence) {
+        String successMessage = getSuccessMessage(sequence);
+        String errorMessage = getErrorMessage(sequence);
+
+        Note errorNote = sequence.latestError();
+        boolean isSharpError = pitchNotationFormatter.format(errorNote).endsWith(SHARP_SYMBOL);
+
+        return new RoundEndViewModel(sequence, successMessage, errorMessage, isSharpError);
     }
 
     private String getSuccessMessage(Sequence sequence) {
@@ -88,10 +101,10 @@ public class GameModel implements GameMvp.Model {
 
         if (note.equals(expectedNote)) {
             this.sequence = new Sequence.Builder(sequence).withLatestError(null).atPosition(currentPosition + 1).build();
-            roundCallback.onRoundUpdate(createViewModel(sequence));
+            roundCallback.onRoundUpdate(createSuccessViewModel(sequence));
         } else {
             Sequence updatedSequence = new Sequence.Builder(sequence).withLatestError(note).build();
-            roundCallback.onRoundUpdate(createViewModel(updatedSequence));
+            roundCallback.onRoundUpdate(createErrorViewModel(updatedSequence));
         }
     }
 

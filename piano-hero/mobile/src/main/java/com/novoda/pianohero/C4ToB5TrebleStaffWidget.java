@@ -15,10 +15,8 @@ import java.util.List;
 
 public class C4ToB5TrebleStaffWidget extends FrameLayout {
 
-    private static final String SHARP_SYMBOL = "#";
     private static final int VIEW_HEIGHT_IN_NUMBER_OF_NOTES = 8;
 
-    private final SimplePitchNotationFormatter formatter = new SimplePitchNotationFormatter();
     private final int trebleClefMarginLeftPx;
     private final Drawable trebleClefDrawable;
     private final Drawable completedNoteDrawable;
@@ -78,21 +76,22 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
     }
 
-    public void showProgress(final Sequence sequence) {
+    public void showProgress(final RoundEndViewModel viewModel) {
         if (getMeasuredWidth() == 0) { // apparently onMeasure is first called after Activity.onResume, and we rely on onMeasure to layout correctly
             getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
                     getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    showSubsetOfNotesThatFitFrom(sequence);
+                    showSubsetOfNotesThatFitFrom(viewModel);
                 }
             });
         } else {
-            showSubsetOfNotesThatFitFrom(sequence);
+            showSubsetOfNotesThatFitFrom(viewModel);
         }
     }
 
-    private void showSubsetOfNotesThatFitFrom(Sequence sequence) {
+    private void showSubsetOfNotesThatFitFrom(RoundEndViewModel viewModel) {
+        final Sequence sequence = viewModel.getSequence();
         int spaceRequiredForTrebleClef = notesOffsetToAllowSpaceForTrebleClef();
         int eachNoteWidth = widthForNoteWidgetIncludingSharpAndLeftMargin();
         int numberOfNotesWeHaveSpaceFor = (getMeasuredWidth() - spaceRequiredForTrebleClef) / eachNoteWidth;
@@ -104,34 +103,32 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         List<Note> currentWindow = sequence.notes().asList().subList(windowStart, windowEnd);
         int positionRelativeToWindow = sequence.position() - startIndexInclusive;
 
-        show(currentWindow, positionRelativeToWindow);
+        show(currentWindow, positionRelativeToWindow, viewModel.isSharpError());
     }
 
-    private void show(List<Note> notes, int indexNextPlayableNote) {
+    private void show(List<Note> notes, int indexNextPlayableNote, boolean sharpError) {
         removeAllViews();
 
         for (int index = 0; index < notes.size(); index++) {
             Note note = notes.get(index);
             if (index < indexNextPlayableNote) {
-                addCompletedNoteWidget(new SequenceNote(note, index));
+                addCompletedNoteWidget(new SequenceNote(note, index), sharpError);
             } else {
-                addNoteWidget(new SequenceNote(note, index));
+                addNoteWidget(new SequenceNote(note, index), sharpError);
             }
         }
     }
 
-    private void addNoteWidget(SequenceNote sequenceNote) {
-        boolean shouldDisplaySharp = formatter.format(sequenceNote.note).endsWith(SHARP_SYMBOL);
-        if (shouldDisplaySharp) {
+    private void addNoteWidget(SequenceNote sequenceNote, boolean sharpError) {
+        if (sharpError) {
             addNoteWidget(sequenceNote, noteDrawable, sharpDrawable);
         } else {
             addNoteWidget(sequenceNote, noteDrawable, null);
         }
     }
 
-    private void addCompletedNoteWidget(SequenceNote sequenceNote) {
-        boolean shouldDisplaySharp = formatter.format(sequenceNote.note).endsWith(SHARP_SYMBOL);
-        if (shouldDisplaySharp) {
+    private void addCompletedNoteWidget(SequenceNote sequenceNote, boolean sharpError) {
+        if (sharpError) {
             addNoteWidget(sequenceNote, completedNoteDrawable, completedSharpDrawable);
         } else {
             addNoteWidget(sequenceNote, completedNoteDrawable, null);
@@ -216,7 +213,8 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         canvas.drawLine(noteWidget.getLeft() - extra, y, noteWidget.getRight() + extra, y, linesPaint);
     }
 
-    public void showError(Sequence sequence) {
+    public void showError(RoundEndViewModel viewModel) {
+        Sequence sequence = viewModel.getSequence();
         int spaceRequiredForTrebleClef = notesOffsetToAllowSpaceForTrebleClef();
         int eachNoteWidth = widthForNoteWidgetIncludingSharpAndLeftMargin();
         int numberOfNotesWeHaveSpaceFor = (getMeasuredWidth() - spaceRequiredForTrebleClef) / eachNoteWidth;
@@ -224,12 +222,11 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         int startIndexInclusive = (sequence.position() / numberOfNotesWeHaveSpaceFor) * numberOfNotesWeHaveSpaceFor;
         int positionRelativeToWindow = sequence.position() - startIndexInclusive;
 
-        addErrorNoteWidget(new SequenceNote(sequence.latestError(), positionRelativeToWindow));
+        addErrorNoteWidget(new SequenceNote(sequence.latestError(), positionRelativeToWindow), viewModel.isSharpError());
     }
 
-    private void addErrorNoteWidget(SequenceNote sequenceNote) {
-        boolean shouldDisplaySharp = formatter.format(sequenceNote.note).endsWith(SHARP_SYMBOL);
-        if (shouldDisplaySharp) {
+    private void addErrorNoteWidget(SequenceNote sequenceNote, boolean sharpError) {
+        if (sharpError) {
             addNoteWidget(sequenceNote, errorNoteDrawable, errorSharpDrawable);
         } else {
             addNoteWidget(sequenceNote, errorNoteDrawable, null);

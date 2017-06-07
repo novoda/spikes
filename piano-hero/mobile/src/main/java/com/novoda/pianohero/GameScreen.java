@@ -46,7 +46,7 @@ public class GameScreen extends LinearLayoutCompat {
         playNoteTextView.setText(currentNote(sequence));
         nextNoteTextView.setText(nextNote(sequence));
 
-        trebleStaffWidget.showProgress(sequence);
+        trebleStaffWidget.showProgress(viewModel);
         trebleStaffWidget.setVisibility(View.VISIBLE);
     }
 
@@ -67,7 +67,7 @@ public class GameScreen extends LinearLayoutCompat {
     public void showError(RoundEndViewModel viewModel) {
         statusTextView.setText(viewModel.getErrorMessage());
 
-        trebleStaffWidget.showError(viewModel.getSequence());
+        trebleStaffWidget.showError(viewModel);
     }
 
     public void showGameComplete(GameOverViewModel viewModel) {
