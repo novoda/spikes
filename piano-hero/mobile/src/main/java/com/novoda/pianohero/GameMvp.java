@@ -38,6 +38,8 @@ interface GameMvp {
         void showGameComplete(GameOverViewModel viewModel);
 
         void showError(RoundEndViewModel viewModel);
+
+        void showSharpError(RoundEndViewModel viewModel);
     }
 
     interface Presenter {

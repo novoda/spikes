@@ -76,6 +76,11 @@ public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.
     }
 
     @Override
+    public void showSharpError(RoundEndViewModel viewModel) {
+        gameScreen.showSharpError(viewModel);
+    }
+
+    @Override
     public void showGameComplete(GameOverViewModel viewModel) {
         gameScreen.showGameComplete(viewModel);
     }

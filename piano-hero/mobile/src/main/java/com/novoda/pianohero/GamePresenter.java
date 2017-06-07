@@ -38,7 +38,11 @@ class GamePresenter implements GameMvp.Presenter {
             view.stopSound();
             view.showRound(viewModel);
             if (viewModel.hasError()) {
-                view.showError(viewModel);
+                if (viewModel.isSharpError()) {
+                    view.showSharpError(viewModel);
+                } else {
+                    view.showError(viewModel);
+                }
             }
         }
     };
