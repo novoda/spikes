@@ -28,8 +28,8 @@ class GamePresenter implements GameMvp.Presenter {
 
     private final GameMvp.Model.GameStartCallback gameStartCallback = new GameMvp.Model.GameStartCallback() {
         @Override
-        public void onGameStarted(RoundEndViewModel viewModel) {
-            view.showRound(viewModel);
+        public void onGameStarted(GameStartViewModel viewModel) {
+            view.showGameStarted(viewModel);
         }
     };
 

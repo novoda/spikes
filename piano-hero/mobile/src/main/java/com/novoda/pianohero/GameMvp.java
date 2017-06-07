@@ -16,7 +16,7 @@ interface GameMvp {
         void shutdown();
 
         interface GameStartCallback {
-            void onGameStarted(RoundEndViewModel viewModel);
+            void onGameStarted(GameStartViewModel viewModel);
         }
 
         interface GameClockCallback {
@@ -49,6 +49,8 @@ interface GameMvp {
         void stopSound();
 
         void showClock(ClockViewModel viewModel);
+
+        void showGameStarted(GameStartViewModel viewModel);
 
         void showRound(RoundEndViewModel viewModel);
 

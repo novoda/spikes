@@ -76,22 +76,21 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
     }
 
-    public void showProgress(final RoundEndViewModel viewModel) {
+    public void showProgress(final Sequence sequence) {
         if (getMeasuredWidth() == 0) { // apparently onMeasure is first called after Activity.onResume, and we rely on onMeasure to layout correctly
             getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
                     getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    showSubsetOfNotesThatFitFrom(viewModel);
+                    showSubsetOfNotesThatFitFrom(sequence);
                 }
             });
         } else {
-            showSubsetOfNotesThatFitFrom(viewModel);
+            showSubsetOfNotesThatFitFrom(sequence);
         }
     }
 
-    private void showSubsetOfNotesThatFitFrom(RoundEndViewModel viewModel) {
-        final Sequence sequence = viewModel.getSequence();
+    private void showSubsetOfNotesThatFitFrom(Sequence sequence) {
         int spaceRequiredForTrebleClef = notesOffsetToAllowSpaceForTrebleClef();
         int eachNoteWidth = widthForNoteWidgetIncludingSharpAndLeftMargin();
         int numberOfNotesWeHaveSpaceFor = (getMeasuredWidth() - spaceRequiredForTrebleClef) / eachNoteWidth;

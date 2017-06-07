@@ -33,13 +33,23 @@ public class GameScreen extends LinearLayoutCompat {
         statusTextView = (TextView) findViewById(R.id.game_screen_text_status);
     }
 
+    public void showStart(GameStartViewModel viewModel) {
+        statusTextView.setText(viewModel.getStartMessage());
+
+        playNoteTextView.setText(viewModel.getCurrentNoteFormatted());
+        nextNoteTextView.setText(viewModel.getNextNoteFormatted());
+
+        trebleStaffWidget.showProgress(viewModel.getSequence());
+        trebleStaffWidget.setVisibility(View.VISIBLE);
+    }
+
     public void showSuccess(RoundEndViewModel viewModel) {
         statusTextView.setText(viewModel.getSuccessMessage());
 
         playNoteTextView.setText(viewModel.getCurrentNoteFormatted());
         nextNoteTextView.setText(viewModel.getNextNoteFormatted());
 
-        trebleStaffWidget.showProgress(viewModel);
+        trebleStaffWidget.showProgress(viewModel.getSequence());
         trebleStaffWidget.setVisibility(View.VISIBLE);
     }
 

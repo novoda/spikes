@@ -64,11 +64,11 @@ public class GameModel implements GameMvp.Model {
         };
         countDownTimer.start();
         sequence = songSequenceFactory.maryHadALittleLamb();
-        callback.onGameStarted(createRoundEndViewModel(sequence)); // TODO wrong view model
     }
 
     private double frequencyFor(Note note) {
         return 440 * Math.pow(2, (note.midi() - 69) * 1f / 12);
+        callback.onGameStarted(createGameStartViewModel(sequence));
     }
 
     @Override
@@ -172,4 +172,17 @@ public class GameModel implements GameMvp.Model {
         piano.close();
     }
 
+    private GameStartViewModel createGameStartViewModel(Sequence sequence) {
+        String message = "Let's start!";
+
+        String currentNoteFormatted = currentNote(sequence);
+        String nextNoteFormatted = nextNote(sequence);
+
+        return new GameStartViewModel(
+            sequence,
+            currentNoteFormatted,
+            nextNoteFormatted,
+            message
+        );
+    }
 }
