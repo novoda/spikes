@@ -10,11 +10,8 @@ import com.google.android.things.pio.PeripheralManagerService;
 import com.google.android.things.pio.Pwm;
 
 import java.io.IOException;
-import java.util.Random;
 
 public class Speaker {
-
-    private final Random threadNamer = new Random();
 
     private final PackageManager packageManager;
 
