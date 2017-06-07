@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export default class ActionResolver {
 
   constructor(tv) {
@@ -29,18 +31,26 @@ export default class ActionResolver {
       speech: show.title,
       displayText: show.title,
       contextOut: [this.contextForShow(show, show.slot.slotTXDate)],
-      data: this.cardsForShow(show)
+      data: this.cardsForShow(show, show.brand.title)
     }
   }
 
   contextForShow(show, time) {
-    return {name: 'show', lifespan: 5, parameters: {name: show.title, tv_channel: show.brand.presentationBrand, time}}
+    return {
+      name: 'show',
+      lifespan: 5,
+      parameters: {
+        name: show.title,
+        tv_channel: show.brand.presentationBrand,
+        time: moment(time).fromNow()
+      }
+    }
   }
 
-  cardsForShow(show) {
+  cardsForShow(show, textToSpeech) {
     return {
       slack: this.cardSlackForShow(show),
-      google: this.cardGoogleForShow(show)
+      google: this.cardGoogleForShow(show, textToSpeech)
     }
   }
 
@@ -56,14 +66,14 @@ export default class ActionResolver {
     }
   }
 
-  cardGoogleForShow(show) {
+  cardGoogleForShow(show, textToSpeech) {
     return {
       expectUserResponse: true,
       richResponse: {
         items: [
           {
             simpleResponse: {
-              textToSpeech: show.brand.title
+              textToSpeech: textToSpeech
             }
           },
           {
@@ -87,7 +97,7 @@ export default class ActionResolver {
       speech: show.brand.summary,
       displayText: show.brand.summary,
       contextOut: [this.contextForShow(show, episodes[episodes.length - 1].firstTXDate)],
-      data: this.cardsForShow(show)
+      data: this.cardsForShow(show, show.brand.summary)
     }
   }
 
