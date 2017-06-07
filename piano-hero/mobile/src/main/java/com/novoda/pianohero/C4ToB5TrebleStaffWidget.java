@@ -121,21 +121,27 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
 
     private void addNoteWidget(SequenceNote sequenceNote, boolean sharpError) {
         if (sharpError) {
-            addNoteWidget(sequenceNote, noteDrawable, sharpDrawable);
+            addSharpNoteWidget(sequenceNote, noteDrawable, sharpDrawable);
         } else {
-            addNoteWidget(sequenceNote, noteDrawable, null);
+            addNoteWidget(sequenceNote, noteDrawable);
         }
     }
 
     private void addCompletedNoteWidget(SequenceNote sequenceNote, boolean sharpError) {
         if (sharpError) {
-            addNoteWidget(sequenceNote, completedNoteDrawable, completedSharpDrawable);
+            addSharpNoteWidget(sequenceNote, completedNoteDrawable, completedSharpDrawable);
         } else {
-            addNoteWidget(sequenceNote, completedNoteDrawable, null);
+            addNoteWidget(sequenceNote, completedNoteDrawable);
         }
     }
 
-    private void addNoteWidget(SequenceNote sequenceNote, Drawable noteDrawable, Drawable sharpDrawable) {
+    private void addNoteWidget(SequenceNote sequenceNote, Drawable noteDrawable) {
+        NoteWidget noteWidget = new NoteWidget(getContext(), noteDrawable, null);
+        noteWidget.setTag(R.id.tag_treble_staff_widget_note, sequenceNote);
+        addView(noteWidget);
+    }
+
+    private void addSharpNoteWidget(SequenceNote sequenceNote, Drawable noteDrawable, Drawable sharpDrawable) {
         NoteWidget noteWidget = new NoteWidget(getContext(), noteDrawable, sharpDrawable);
         noteWidget.setTag(R.id.tag_treble_staff_widget_note, sequenceNote);
         addView(noteWidget);
@@ -222,14 +228,11 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         int startIndexInclusive = (sequence.position() / numberOfNotesWeHaveSpaceFor) * numberOfNotesWeHaveSpaceFor;
         int positionRelativeToWindow = sequence.position() - startIndexInclusive;
 
-        addErrorNoteWidget(new SequenceNote(sequence.latestError(), positionRelativeToWindow), viewModel.isSharpError());
-    }
-
-    private void addErrorNoteWidget(SequenceNote sequenceNote, boolean sharpError) {
-        if (sharpError) {
-            addNoteWidget(sequenceNote, errorNoteDrawable, errorSharpDrawable);
+        SequenceNote sequenceNote = new SequenceNote(sequence.latestError(), positionRelativeToWindow);
+        if (viewModel.isSharpError()) {
+            addSharpNoteWidget(sequenceNote, errorNoteDrawable, errorSharpDrawable);
         } else {
-            addNoteWidget(sequenceNote, errorNoteDrawable, null);
+            addNoteWidget(sequenceNote, errorNoteDrawable);
         }
     }
 
