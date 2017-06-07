@@ -103,35 +103,30 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         List<Note> currentWindow = sequence.notes().asList().subList(windowStart, windowEnd);
         int positionRelativeToWindow = sequence.position() - startIndexInclusive;
 
-        show(currentWindow, positionRelativeToWindow, viewModel.isSharpError());
+        show(currentWindow, positionRelativeToWindow);
     }
 
-    private void show(List<Note> notes, int indexNextPlayableNote, boolean sharpError) {
+    private void show(List<Note> notes, int indexNextPlayableNote) {
         removeAllViews();
 
         for (int index = 0; index < notes.size(); index++) {
             Note note = notes.get(index);
-            if (index < indexNextPlayableNote) {
-                addCompletedNoteWidget(new SequenceNote(note, index), sharpError);
+            SequenceNote sequenceNote = new SequenceNote(note, index);
+            boolean complete = index < indexNextPlayableNote;
+            boolean sharp = note.isSharp();
+            if (complete) {
+                if (sharp) {
+                    addSharpNoteWidget(sequenceNote, completedNoteDrawable, completedSharpDrawable);
+                } else {
+                    addNoteWidget(sequenceNote, completedNoteDrawable);
+                }
             } else {
-                addNoteWidget(new SequenceNote(note, index), sharpError);
+                if (sharp) {
+                    addSharpNoteWidget(sequenceNote, noteDrawable, sharpDrawable);
+                } else {
+                    addNoteWidget(sequenceNote, noteDrawable);
+                }
             }
-        }
-    }
-
-    private void addNoteWidget(SequenceNote sequenceNote, boolean sharpError) {
-        if (sharpError) {
-            addSharpNoteWidget(sequenceNote, noteDrawable, sharpDrawable);
-        } else {
-            addNoteWidget(sequenceNote, noteDrawable);
-        }
-    }
-
-    private void addCompletedNoteWidget(SequenceNote sequenceNote, boolean sharpError) {
-        if (sharpError) {
-            addSharpNoteWidget(sequenceNote, completedNoteDrawable, completedSharpDrawable);
-        } else {
-            addNoteWidget(sequenceNote, completedNoteDrawable);
         }
     }
 
