@@ -25,7 +25,7 @@ public class GameModel implements GameMvp.Model {
     @Override
     public void startGame(StartCallback callback,
                           final RoundCallback roundCallback,
-                          final CompletionCallback completionCallback) {
+                          final SongCompleteCallback songCompleteCallback) {
         piano.attachListener(new Piano.NoteListener() {
             @Override
             public void onStart(Note note) {
@@ -35,7 +35,7 @@ public class GameModel implements GameMvp.Model {
 
             @Override
             public void onStop(Note note) {
-                playGameRound(roundCallback, completionCallback, note);
+                playGameRound(roundCallback, songCompleteCallback, note);
             }
         });
 
@@ -118,13 +118,13 @@ public class GameModel implements GameMvp.Model {
     @Override
     public void playGameRound(
             RoundCallback roundCallback,
-            CompletionCallback completionCallback,
+            SongCompleteCallback songCompleteCallback,
             Note note
     ) {
         int currentPosition = sequence.position();
         Note expectedNote = sequence.get(currentPosition);
         if (currentPosition == sequence.length() - 1 && note.equals(expectedNote)) {
-            completionCallback.onGameComplete();
+            songCompleteCallback.onSongComplete();
             return;
         }
 
