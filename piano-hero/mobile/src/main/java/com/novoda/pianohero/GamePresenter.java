@@ -47,15 +47,24 @@ class GamePresenter implements GameMvp.Presenter {
         }
 
         @Override
-        public void onRoundUpdate(RoundEndViewModel viewModel) {
+        public void onRoundEnd(RoundEndViewModel viewModel) {
             view.stopSound();
             view.showRound(viewModel);
-            if (viewModel.hasError()) {
-                if (viewModel.isSharpError()) {
-                    view.showSharpError(viewModel);
-                } else {
-                    view.showError(viewModel);
-                }
+        }
+
+        @Override
+        public void onRoundSuccess(RoundSuccessViewModel viewModel) {
+            // increment score
+        }
+
+        @Override
+        public void onRoundError(RoundErrorViewModel viewModel) {
+            // decrement score
+
+            if (viewModel.isSharpError()) {
+                view.showSharpError(viewModel);
+            } else {
+                view.showError(viewModel);
             }
         }
     };

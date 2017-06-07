@@ -151,10 +151,10 @@ public class GameModel implements GameMvp.Model {
 
         if (note.equals(expectedNote)) {
             this.sequence = new Sequence.Builder(sequence).withLatestError(null).atPosition(currentPosition + 1).build();
-            roundCallback.onRoundUpdate(createSuccessViewModel(sequence));
+            roundCallback.onRoundEnd(createSuccessViewModel(sequence));
         } else {
             Sequence updatedSequence = new Sequence.Builder(sequence).withLatestError(note).build();
-            roundCallback.onRoundUpdate(createErrorViewModel(updatedSequence));
+            roundCallback.onRoundEnd(createErrorViewModel(updatedSequence));
         }
     }
 

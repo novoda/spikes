@@ -218,7 +218,7 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         canvas.drawLine(noteWidget.getLeft() - extra, y, noteWidget.getRight() + extra, y, linesPaint);
     }
 
-    public void showError(RoundEndViewModel viewModel) {
+    public void showError(RoundErrorViewModel viewModel) {
         Sequence sequence = viewModel.getSequence();
         int positionRelativeToWindow = getPositionRelativeToWindow(sequence.position());
 
@@ -226,7 +226,7 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         addNoteWidget(sequenceNote, errorNoteDrawable);
     }
 
-    public void showSharpError(RoundEndViewModel viewModel) {
+    public void showSharpError(RoundErrorViewModel viewModel) {
         Sequence sequence = viewModel.getSequence();
         int positionRelativeToWindow = getPositionRelativeToWindow(sequence.position());
 

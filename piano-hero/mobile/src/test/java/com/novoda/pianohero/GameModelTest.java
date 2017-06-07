@@ -55,7 +55,7 @@ public class GameModelTest {
         gameModel.playGameRound(roundCallback, songCompleteCallback, Note.C4);
 
         ArgumentCaptor<RoundEndViewModel> roundViewModelCaptor = ArgumentCaptor.forClass(RoundEndViewModel.class);
-        verify(roundCallback).onRoundUpdate(roundViewModelCaptor.capture());
+        verify(roundCallback).onRoundEnd(roundViewModelCaptor.capture());
         assertThat(roundViewModelCaptor.getValue().getSequence().position()).isEqualTo(1);
     }
 
@@ -69,7 +69,7 @@ public class GameModelTest {
         gameModel.playGameRound(roundCallback, songCompleteCallback, Note.E4);
 
         ArgumentCaptor<RoundEndViewModel> roundViewModelCaptor = ArgumentCaptor.forClass(RoundEndViewModel.class);
-        verify(roundCallback, times(2)).onRoundUpdate(roundViewModelCaptor.capture());
+        verify(roundCallback, times(2)).onRoundEnd(roundViewModelCaptor.capture());
         assertThat(roundViewModelCaptor.getValue().getSequence().position()).isEqualTo(1);
     }
 
@@ -83,7 +83,7 @@ public class GameModelTest {
         gameModel.playGameRound(roundCallback, songCompleteCallback, Note.E4);
 
         ArgumentCaptor<RoundEndViewModel> roundViewModelCaptor = ArgumentCaptor.forClass(RoundEndViewModel.class);
-        verify(roundCallback, times(2)).onRoundUpdate(roundViewModelCaptor.capture());
+        verify(roundCallback, times(2)).onRoundEnd(roundViewModelCaptor.capture());
         assertThat(roundViewModelCaptor.getValue().getSequence().latestError()).isEqualTo(Note.E4);
     }
 
@@ -97,7 +97,7 @@ public class GameModelTest {
         gameModel.playGameRound(roundCallback, songCompleteCallback, Note.C4);
 
         ArgumentCaptor<RoundEndViewModel> roundViewModelCaptor = ArgumentCaptor.forClass(RoundEndViewModel.class);
-        verify(roundCallback, times(2)).onRoundUpdate(roundViewModelCaptor.capture());
+        verify(roundCallback, times(2)).onRoundEnd(roundViewModelCaptor.capture());
         assertThat(roundViewModelCaptor.getValue().getSequence().latestError()).isNull();
     }
 

@@ -47,12 +47,12 @@ public class GameScreen extends LinearLayoutCompat {
         statusTextView.setText(viewModel.getMessage());
     }
 
-    public void showError(RoundEndViewModel viewModel) {
+    public void showError(RoundErrorViewModel viewModel) {
         statusTextView.setText(viewModel.getErrorMessage());
         trebleStaffWidget.showError(viewModel);
     }
 
-    public void showSharpError(RoundEndViewModel viewModel) {
+    public void showSharpError(RoundErrorViewModel viewModel) {
         statusTextView.setText(viewModel.getErrorMessage());
         trebleStaffWidget.showSharpError(viewModel);
     }

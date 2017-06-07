@@ -27,7 +27,11 @@ interface GameMvp {
         interface RoundCallback {
             void onRoundStart(RoundStartViewModel viewModel);
 
-            void onRoundUpdate(RoundEndViewModel viewModel);
+            void onRoundEnd(RoundEndViewModel viewModel);
+
+            void onRoundSuccess(RoundSuccessViewModel viewModel);
+
+            void onRoundError(RoundErrorViewModel viewModel);
         }
 
         interface SongCompleteCallback {
@@ -53,9 +57,9 @@ interface GameMvp {
 
         void showGameComplete(GameOverViewModel viewModel);
 
-        void showError(RoundEndViewModel viewModel);
+        void showError(RoundErrorViewModel viewModel);
 
-        void showSharpError(RoundEndViewModel viewModel);
+        void showSharpError(RoundErrorViewModel viewModel);
     }
 
     interface Presenter {
