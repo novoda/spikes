@@ -60,6 +60,8 @@ interface GameMvp {
         void showError(RoundErrorViewModel viewModel);
 
         void showSharpError(RoundErrorViewModel viewModel);
+
+        void showScore(String score);
     }
 
     interface Presenter {

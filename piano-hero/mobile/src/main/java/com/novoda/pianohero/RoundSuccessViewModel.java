@@ -1,6 +1,13 @@
 package com.novoda.pianohero;
 
 class RoundSuccessViewModel {
+    private final int score;
 
-    // nothing atm just keeping the pattern
+    public RoundSuccessViewModel(int score) {
+        this.score = score;
+    }
+
+    public String getScoreFormatted() {
+        return "Score: " + score + " :-)";
+    }
 }

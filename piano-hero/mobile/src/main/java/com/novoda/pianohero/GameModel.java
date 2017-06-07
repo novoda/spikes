@@ -11,12 +11,14 @@ public class GameModel implements GameMvp.Model {
     private static final String SHARP_SYMBOL = "#";
     private static final long GAME_LENGTH = TimeUnit.SECONDS.toMillis(60);
     private static final long CLOCK_UPDATE_RATE = TimeUnit.SECONDS.toMillis(1);
+    private static final int START_SCORE = 500;
 
     private final SongSequenceFactory songSequenceFactory;
     private final SimplePitchNotationFormatter pitchNotationFormatter;
     private final Piano piano;
 
     private Sequence sequence;
+    private int score = START_SCORE; // TODO object
 
     GameModel(
         SongSequenceFactory songSequenceFactory,
@@ -33,6 +35,7 @@ public class GameModel implements GameMvp.Model {
                           final RoundCallback roundCallback,
                           final SongCompleteCallback songCompleteCallback,
                           final GameCompleteCallback gameCompleteCallback) {
+        score = START_SCORE;
         piano.attachListener(new Piano.NoteListener() {
             @Override
             public void onStart(Note note) {
@@ -88,9 +91,13 @@ public class GameModel implements GameMvp.Model {
         }
 
         if (note.equals(expectedNote)) {
+            score += 7;
+
             this.sequence = new Sequence.Builder(sequence).withLatestError(null).atPosition(currentPosition + 1).build();
             roundCallback.onRoundSuccess(createSuccessViewModel(sequence));
         } else {
+            score -= 3;
+
             Sequence updatedSequence = new Sequence.Builder(sequence).withLatestError(note).build();
             roundCallback.onRoundError(createErrorViewModel(updatedSequence));
         }
@@ -112,7 +119,7 @@ public class GameModel implements GameMvp.Model {
     }
 
     private RoundSuccessViewModel createSuccessViewModel(Sequence sequence) {
-        return new RoundSuccessViewModel();
+        return new RoundSuccessViewModel(score);
     }
 
     private String currentNote(Sequence sequence) {
@@ -138,7 +145,8 @@ public class GameModel implements GameMvp.Model {
         return new RoundErrorViewModel(
             sequence,
             errorMessage,
-            isSharpError
+            isSharpError,
+            score
         );
     }
 

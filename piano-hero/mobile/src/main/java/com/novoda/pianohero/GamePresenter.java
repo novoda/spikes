@@ -54,12 +54,12 @@ class GamePresenter implements GameMvp.Presenter {
 
         @Override
         public void onRoundSuccess(RoundSuccessViewModel viewModel) {
-            // increment score
+            view.showScore(viewModel.getScoreFormatted());
         }
 
         @Override
         public void onRoundError(RoundErrorViewModel viewModel) {
-            // decrement score
+            view.showScore(viewModel.getScoreFormatted());
 
             if (viewModel.isSharpError()) {
                 view.showSharpError(viewModel);
@@ -73,7 +73,6 @@ class GamePresenter implements GameMvp.Presenter {
         @Override
         public void onSongComplete() {
             view.showSongComplete(new SongCompleteViewModel("show complete, start another!"));
-            // TODO start next song
         }
     };
 
