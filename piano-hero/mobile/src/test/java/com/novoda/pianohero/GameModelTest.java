@@ -33,7 +33,8 @@ public class GameModelTest {
 
     @Before
     public void setUp() {
-        gameModel = new GameModel(mockSongFactory, new SimplePitchNotationFormatter(), null);
+        final SimplePitchNotationFormatter pitchNotationFormatter = new SimplePitchNotationFormatter();
+        gameModel = new GameModel(mockSongFactory, null, new ViewModelConverter(pitchNotationFormatter), new SongPlayer(pitchNotationFormatter));
     }
 
     @Test

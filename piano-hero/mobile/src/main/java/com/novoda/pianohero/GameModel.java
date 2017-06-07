@@ -2,50 +2,86 @@ package com.novoda.pianohero;
 
 import android.os.CountDownTimer;
 
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class GameModel implements GameMvp.Model {
 
-    private static final String NEXT_NOTE_HINT_FORMAT = "Next: %s";
-    private static final String SHARP_SYMBOL = "#";
     private static final long GAME_LENGTH = TimeUnit.SECONDS.toMillis(60);
     private static final long CLOCK_UPDATE_RATE = TimeUnit.SECONDS.toMillis(1);
     private static final int START_SCORE = 500;
 
     private final SongSequenceFactory songSequenceFactory;
-    private final SimplePitchNotationFormatter pitchNotationFormatter;
     private final Piano piano;
+    private final SongPlayer songPlayer;
+    private final ViewModelConverter converter;
 
-    private Sequence sequence;
     private int score = START_SCORE; // TODO object
 
     GameModel(
         SongSequenceFactory songSequenceFactory,
-        SimplePitchNotationFormatter pitchNotationFormatter,
-        Piano piano) {
+        Piano piano,
+        ViewModelConverter converter,
+        SongPlayer songPlayer) {
         this.songSequenceFactory = songSequenceFactory;
-        this.pitchNotationFormatter = pitchNotationFormatter;
         this.piano = piano;
+        this.converter = converter;
+        this.songPlayer = songPlayer;
     }
 
     @Override
-    public void startGame(GameStartCallback callback,
+    public void startGame(final GameStartCallback callback,
+                          final SongStartCallback songStartCallback,
                           final GameClockCallback clockCallback,
                           final RoundCallback roundCallback,
                           final SongCompleteCallback songCompleteCallback,
                           final GameCompleteCallback gameCompleteCallback) {
         score = START_SCORE;
+
+        songPlayer.attachListeners(new SongPlayer.SongGameCallback() {
+            @Override
+            public void onSongStarted(Sequence sequence, Note currentNote, Note nextNote) {
+                songStartCallback.onSongStarted(converter.createSongStartViewModel(currentNote, nextNote));
+            }
+
+            @Override
+            public void onRoundStart(RoundStartViewModel viewModel) {
+                roundCallback.onRoundStart(viewModel);
+            }
+
+            @Override
+            public void onRoundEnd(Sequence sequence, Note currentNote, Note nextNote) {
+                RoundEndViewModel viewModel = converter.createRoundEndViewModel(sequence, currentNote, nextNote);
+                roundCallback.onRoundEnd(viewModel);
+            }
+
+            @Override
+            public void onRoundSuccess(Sequence sequence) {
+                score += 7;
+                roundCallback.onRoundSuccess(converter.createSuccessViewModel(score));
+            }
+
+            @Override
+            public void onRoundError(Sequence sequence) {
+                score -= 3;
+                roundCallback.onRoundError(converter.createErrorViewModel(sequence, score));
+            }
+
+            @Override
+            public void onSongComplete() {
+                songCompleteCallback.onSongComplete();
+            }
+
+        });
+
         piano.attachListener(new Piano.NoteListener() {
             @Override
             public void onStart(Note note) {
-                double frequency = frequencyFor(note);
-                roundCallback.onRoundStart(new RoundStartViewModel(frequency));
+                songPlayer.onStartPlayed(note);
             }
 
             @Override
             public void onStop(Note note) {
-                playGameRound(roundCallback, songCompleteCallback, note);
+                songPlayer.onStopPlaying(note);
             }
         });
 
@@ -53,22 +89,19 @@ public class GameModel implements GameMvp.Model {
             @Override
             public void onTick(long millisUntilFinished) {
                 long secondsLeft = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished);
-                clockCallback.onClockTick(new ClockViewModel(secondsLeft + "s"));
+                clockCallback.onClockTick(converter.createClockViewModel(secondsLeft));
             }
 
             @Override
             public void onFinish() {
-                GameOverViewModel viewModel = new GameOverViewModel("GAME OVER");
-                gameCompleteCallback.onGameComplete(viewModel);
+                gameCompleteCallback.onGameComplete(converter.createGameOverViewModel());
             }
         };
         countDownTimer.start();
-        sequence = songSequenceFactory.maryHadALittleLamb();
-    }
-
-    private double frequencyFor(Note note) {
-        return 440 * Math.pow(2, (note.midi() - 69) * 1f / 12);
-        callback.onGameStarted(createGameStartViewModel(sequence));
+        Sequence sequence = songSequenceFactory.maryHadALittleLamb();
+        songPlayer.loadSong(sequence);
+        GameStartViewModel viewModel = converter.createGameStartViewModel(sequence);
+        callback.onGameStarted(viewModel);
     }
 
     @Override
@@ -76,113 +109,14 @@ public class GameModel implements GameMvp.Model {
         piano.open();
     }
 
-    private void playGameRound(
-        RoundCallback roundCallback,
-        SongCompleteCallback songCompleteCallback,
-        Note note
-    ) {
-        roundCallback.onRoundEnd(createRoundEndViewModel(sequence));
-        int currentPosition = sequence.position();
-        Note expectedNote = sequence.get(currentPosition);
-        if (currentPosition == sequence.length() - 1 && note.equals(expectedNote)) {
-            songCompleteCallback.onSongComplete();
-            return;
-        }
-
-        if (note.equals(expectedNote)) {
-            score += 7;
-
-            this.sequence = new Sequence.Builder(sequence).withLatestError(null).atPosition(currentPosition + 1).build();
-            roundCallback.onRoundSuccess(createSuccessViewModel(sequence));
-        } else {
-            score -= 3;
-
-            Sequence updatedSequence = new Sequence.Builder(sequence).withLatestError(note).build();
-            roundCallback.onRoundError(createErrorViewModel(updatedSequence));
-        }
-    }
-
-    private RoundEndViewModel createRoundEndViewModel(Sequence sequence) {
-        String successMessage = getSuccessMessage(sequence);
-        String errorMessage = getErrorMessage(sequence);
-
-        String currentNoteFormatted = currentNote(sequence);
-        String nextNoteFormatted = nextNote(sequence);
-
-        return new RoundEndViewModel(
-            sequence,
-            currentNoteFormatted,
-            nextNoteFormatted,
-            successMessage
-        );
-    }
-
-    private RoundSuccessViewModel createSuccessViewModel(Sequence sequence) {
-        return new RoundSuccessViewModel(score);
-    }
-
-    private String currentNote(Sequence sequence) {
-        Note note = sequence.get(sequence.position());
-        return pitchNotationFormatter.format(note);
-    }
-
-    private String nextNote(Sequence sequence) {
-        if (sequence.position() + 1 < sequence.length()) {
-            String nextNote = pitchNotationFormatter.format(sequence.get(sequence.position() + 1));
-            return String.format(Locale.US, NEXT_NOTE_HINT_FORMAT, nextNote);
-        } else {
-            return "";
-        }
-    }
-
-    private RoundErrorViewModel createErrorViewModel(Sequence sequence) {
-        String errorMessage = getErrorMessage(sequence);
-
-        Note errorNote = sequence.latestError();
-        boolean isSharpError = pitchNotationFormatter.format(errorNote).endsWith(SHARP_SYMBOL);
-
-        return new RoundErrorViewModel(
-            sequence,
-            errorMessage,
-            isSharpError,
-            score
-        );
-    }
-
-    private String getSuccessMessage(Sequence sequence) {
-        if (sequence.position() > 0) {
-            return String.format(Locale.US, "Woo! Keep going! (%d/%d)", sequence.position() + 1, sequence.length());
-        } else {
-            return "";
-        }
-    }
-
-    private String getErrorMessage(Sequence sequence) {
-        if (sequence.hasError()) {
-            String nextNoteAsText = pitchNotationFormatter.format(sequence.get(sequence.position()));
-            String latestErrorAsText = pitchNotationFormatter.format(sequence.latestError());
-            return String.format(Locale.US, "Ruhroh! The correct note is %s but you played %s.", nextNoteAsText, latestErrorAsText);
-        } else {
-            return "";
-        }
+    @Override
+    public void startNextSong() {
+        Sequence sequence = songSequenceFactory.maryHadALittleLamb();
+        songPlayer.loadSong(sequence);
     }
 
     @Override
     public void shutdown() {
         piano.close();
-    }
-
-    private GameStartViewModel createGameStartViewModel(Sequence sequence) {
-        String message = "Let's start!";
-
-        String currentNoteFormatted = currentNote(sequence);
-        String nextNoteFormatted = nextNote(sequence);
-
-        return new GameStartViewModel(
-            sequence,
-            currentNoteFormatted,
-            nextNoteFormatted,
-            message
-        );
     }
 }

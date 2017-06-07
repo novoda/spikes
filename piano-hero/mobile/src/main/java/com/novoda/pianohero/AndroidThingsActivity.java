@@ -25,7 +25,10 @@ public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.
 
         SimplePitchNotationFormatter simplePitchNotationFormatter = new SimplePitchNotationFormatter();
         Piano piano = createPiano();
-        GameModel gameModel = new GameModel(new SongSequenceFactory(), simplePitchNotationFormatter, piano);
+        SongSequenceFactory songSequenceFactory = new SongSequenceFactory();
+        ViewModelConverter viewModelConverter = new ViewModelConverter(simplePitchNotationFormatter);
+        SongPlayer songPlayer = new SongPlayer();
+        GameModel gameModel = new GameModel(songSequenceFactory, piano, viewModelConverter, songPlayer);
         gameScreen = (GameScreen) findViewById(R.id.game_screen);
         gamePresenter = new GamePresenter(gameModel, this);
 
@@ -72,7 +75,12 @@ public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.
 
     @Override
     public void showGameStarted(GameStartViewModel viewModel) {
-        gameScreen.showStart(viewModel);
+        gameScreen.showGameStart(viewModel);
+    }
+
+    @Override
+    public void showSong(SongStartViewModel viewModel) {
+        gameScreen.showSongStart(viewModel);
     }
 
     @Override
