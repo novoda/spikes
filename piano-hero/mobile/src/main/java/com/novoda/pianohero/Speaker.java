@@ -69,7 +69,7 @@ public class Speaker {
         try {
             bus.setEnabled(false);
         } catch (IOException e) {
-            e.printStackTrace(); // TODO
+            throw new IllegalStateException("can't stop noise", e);
         }
     }
 
