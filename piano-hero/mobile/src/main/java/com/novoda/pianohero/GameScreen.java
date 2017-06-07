@@ -42,6 +42,10 @@ public class GameScreen extends LinearLayoutCompat {
         trebleStaffWidget.setVisibility(View.VISIBLE);
     }
 
+    public void showSongComplete(SongCompleteViewModel viewModel) {
+        statusTextView.setText(viewModel.getMessage());
+    }
+
     public void showError(RoundEndViewModel viewModel) {
         statusTextView.setText(viewModel.getErrorMessage());
         trebleStaffWidget.showError(viewModel);

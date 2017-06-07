@@ -1,6 +1,9 @@
 package com.novoda.pianohero;
 
+import android.os.CountDownTimer;
+
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class GameModel implements GameMvp.Model {
 
@@ -14,9 +17,9 @@ public class GameModel implements GameMvp.Model {
     private Sequence sequence;
 
     GameModel(
-            SongSequenceFactory songSequenceFactory,
-            SimplePitchNotationFormatter pitchNotationFormatter,
-            Piano piano) {
+        SongSequenceFactory songSequenceFactory,
+        SimplePitchNotationFormatter pitchNotationFormatter,
+        Piano piano) {
         this.songSequenceFactory = songSequenceFactory;
         this.pitchNotationFormatter = pitchNotationFormatter;
         this.piano = piano;
@@ -25,7 +28,8 @@ public class GameModel implements GameMvp.Model {
     @Override
     public void startGame(StartCallback callback,
                           final RoundCallback roundCallback,
-                          final SongCompleteCallback songCompleteCallback) {
+                          final SongCompleteCallback songCompleteCallback,
+                          final GameCompleteCallback gameCompleteCallback) {
         piano.attachListener(new Piano.NoteListener() {
             @Override
             public void onStart(Note note) {
@@ -40,6 +44,19 @@ public class GameModel implements GameMvp.Model {
         });
 
         sequence = songSequenceFactory.maryHadALittleLamb();
+        CountDownTimer countDownTimer = new CountDownTimer(TimeUnit.SECONDS.toMillis(60), TimeUnit.SECONDS.toMillis(1)) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                GameOverViewModel viewModel = new GameOverViewModel("GAME OVER");
+                gameCompleteCallback.onGameComplete(viewModel);
+            }
+        };
+        countDownTimer.start();
         callback.onGameStarted(createSuccessViewModel(sequence));
     }
 
@@ -117,9 +134,9 @@ public class GameModel implements GameMvp.Model {
 
     @Override
     public void playGameRound(
-            RoundCallback roundCallback,
-            SongCompleteCallback songCompleteCallback,
-            Note note
+        RoundCallback roundCallback,
+        SongCompleteCallback songCompleteCallback,
+        Note note
     ) {
         int currentPosition = sequence.position();
         Note expectedNote = sequence.get(currentPosition);

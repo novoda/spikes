@@ -12,7 +12,12 @@ class GamePresenter implements GameMvp.Presenter {
 
     @Override
     public void onCreate() {
-        gameModel.startGame(andInformView, roundCallback, songCompleteCallback);
+        gameModel.startGame(
+            startCallback,
+            roundCallback,
+            songCompleteCallback,
+            gameCompleteCallback
+        );
     }
 
     @Override
@@ -20,7 +25,7 @@ class GamePresenter implements GameMvp.Presenter {
         gameModel.startup();
     }
 
-    private final GameMvp.Model.StartCallback andInformView = new GameMvp.Model.StartCallback() {
+    private final GameMvp.Model.StartCallback startCallback = new GameMvp.Model.StartCallback() {
         @Override
         public void onGameStarted(RoundEndViewModel viewModel) {
             view.showRound(viewModel);
@@ -49,9 +54,16 @@ class GamePresenter implements GameMvp.Presenter {
 
     private final GameMvp.Model.SongCompleteCallback songCompleteCallback = new GameMvp.Model.SongCompleteCallback() {
         @Override
-        public void onGameComplete() {
-            view.showGameComplete(new GameOverViewModel("game complete, another!"));
-            gameModel.startGame(andInformView, roundCallback, songCompleteCallback);
+        public void onSongComplete() {
+            view.showSongComplete(new SongCompleteViewModel("show complete, start another!"));
+            // TODO start next song
+        }
+    };
+
+    private final GameMvp.Model.GameCompleteCallback gameCompleteCallback = new GameMvp.Model.GameCompleteCallback() {
+        @Override
+        public void onGameComplete(GameOverViewModel viewModel) {
+            view.showGameComplete(viewModel);
         }
     };
 
