@@ -1,7 +1,5 @@
 package com.novoda.pianohero;
 
-import android.util.Log;
-
 import java.util.Locale;
 
 public class GameModel implements GameMvp.Model {
@@ -42,6 +40,10 @@ public class GameModel implements GameMvp.Model {
         callback.onGameStarted(createViewModel(sequence));
     }
 
+    private double frequencyFor(Note note) {
+        return 440 * Math.pow(2, (note.midi() - 69) * 1f / 12);
+    }
+
     @Override
     public void startup() {
         piano.open();
@@ -49,10 +51,8 @@ public class GameModel implements GameMvp.Model {
 
     private RoundViewModel createViewModel(Sequence sequence) {
         String successMessage = getSuccessMessage(sequence);
-        double successSound = getSuccessSound(sequence);
         String errorMessage = getErrorMessage(sequence);
-        double errorSound = getSuccessSound(sequence);
-        return new RoundViewModel(sequence, successMessage, successSound, errorMessage, errorSound);
+        return new RoundViewModel(sequence, successMessage, errorMessage);
     }
 
     private String getSuccessMessage(Sequence sequence) {
@@ -63,15 +63,6 @@ public class GameModel implements GameMvp.Model {
         }
     }
 
-    private double getSuccessSound(Sequence sequence) {
-        Note note = sequence.get(sequence.position());
-        return frequencyFor(note);
-    }
-
-    private double frequencyFor(Note note) {
-        return 440 * Math.pow(2, (note.midi() - 69) * 1f / 12);
-    }
-
     private String getErrorMessage(Sequence sequence) {
         if (sequence.hasError()) {
             String nextNoteAsText = pitchNotationFormatter.format(sequence.get(sequence.position()));
@@ -80,12 +71,6 @@ public class GameModel implements GameMvp.Model {
         } else {
             return "";
         }
-    }
-
-    private double getErrorSound() {
-        // Could make a twanging noise if you wanted to get serious
-        Note note = sequence.get(sequence.position());
-        return frequencyFor(note);
     }
 
     @Override
