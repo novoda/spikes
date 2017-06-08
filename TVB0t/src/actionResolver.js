@@ -44,8 +44,13 @@ export default class ActionResolver {
         contextOut: [context]
       }
     }
-    default:
-      return {}
+    default: {
+      const message = 'Oops this is not handled yet!'
+      return {
+        speech: message,
+        displayText: message
+      }
+    }
     }
   }
 
