@@ -44,6 +44,23 @@ export default class ActionResolver {
         contextOut: [context]
       }
     }
+    case 'show.addtomylist': {
+      const tvShow = parameters['tv-show'] || this.extractParametersForContext('show', contexts)['name']
+      const showName = this.toWebSafeShowName(tvShow)
+      let message
+      try {
+        const response = await this.tv.addToMyList(showName)
+        console.log(response)
+        message = tvShow + ' added to your list!'
+      } catch (e) {
+        console.log(e)
+        message = 'Oops, something went wrong while trying to add ' + tvShow + ' to your list'
+      }
+      return {
+        speech: message,
+        displayText: message
+      }
+    }
     default: {
       const message = 'Oops this is not handled yet!'
       return {

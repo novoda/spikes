@@ -60,4 +60,16 @@ export default class TV {
     })
   }
 
+  async addToMyList(show) {
+    const token = await this.token()
+    return await request({
+      method: 'POST',
+      uri: this.url(this.config.paths.list).replace('{{show}}', show),
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      json: true
+    })
+  }
+
 }
