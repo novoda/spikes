@@ -10,14 +10,14 @@ export default class ActionResolver {
     switch (action) {
     case 'tv_channel.now': {
       const time = parameters['date-time'] || 'now'
-      const tvChannel = parameters['tv-channel'] || contexts.find(context => context.name === 'show').parameters['tv-channel']
+      const tvChannel = parameters['tv-channel'] || this.extractParametersForContext('show', contexts)['tv-channel']
       const shows = await this.tv.now()
       const showsOnDesiredChannel = shows.filter(item => item.type === time.toUpperCase())[0]
       const show = showsOnDesiredChannel.sliceItems.filter(item => item.slot.slotTXChannel === tvChannel)[0]
       return this.buildNowMessage(show)
     }
     case 'show.details': {
-      const showName = parameters['tv-show'].toLowerCase().replace(/ /g, '-')
+      const showName = this.toWebSafeShowName(parameters['tv-show'])
       const show = await this.tv.show(showName)
       return this.buildShowMessage(show)
     }
@@ -26,9 +26,39 @@ export default class ActionResolver {
       const recommendations = homepage.sliceGroups[0].slices.find(slice => slice.type === 'RECOMMENDATIONS').sliceItems
       return this.buildRecommendationMessage(recommendations.slice(0, 3))
     }
+    case 'show.time-starting': {
+      const tvShow = parameters['tv-show']
+      let time = this.extractParametersForContext('show', contexts).time
+      if (!time) {
+        const showName = this.toWebSafeShowName(tvShow)
+        const show = await this.tv.show(showName)
+        const episodes = show.brand.episodes
+        time = episodes[episodes.length - 1].firstTXDate
+      }
+      const message = tvShow + ' starts at ' + moment(time).format('h:mm a dddd, MMMM Do')
+      const context = this.extractContext('show', contexts)
+      context.parameters.time = time
+      return {
+        speech: message,
+        displayText: message,
+        contextOut: [context]
+      }
+    }
     default:
       return {}
     }
+  }
+
+  extractParametersForContext(contextName, contexts) {
+    return this.extractContext(contextName, contexts).parameters
+  }
+
+  extractContext(contextName, contexts) {
+    return contexts.find(context => context.name === contextName)
+  }
+
+  toWebSafeShowName(showName) {
+    return showName.toLowerCase().replace(/ /g, '-')
   }
 
   buildNowMessage(show) {
@@ -47,7 +77,7 @@ export default class ActionResolver {
       parameters: {
         name: show.brand.title,
         tv_channel: show.brand.presentationBrand,
-        time: moment(time).fromNow()
+        time
       }
     }
   }
