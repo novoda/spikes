@@ -39,8 +39,8 @@ public class GameModel implements GameMvp.Model {
 
         songPlayer.attachListeners(new SongPlayer.SongGameCallback() {
             @Override
-            public void onSongStarted(Sequence sequence, Note currentNote, Note nextNote) {
-                songStartCallback.onSongStarted(converter.createSongStartViewModel(currentNote, nextNote));
+            public void onSongStarted(Sequence sequence) {
+                songStartCallback.onSongStarted(converter.createSongStartViewModel(sequence));
             }
 
             @Override
@@ -49,8 +49,8 @@ public class GameModel implements GameMvp.Model {
             }
 
             @Override
-            public void onRoundEnd(Sequence sequence, Note currentNote, Note nextNote) {
-                RoundEndViewModel viewModel = converter.createRoundEndViewModel(sequence, currentNote, nextNote);
+            public void onRoundEnd(Sequence sequence) {
+                RoundEndViewModel viewModel = converter.createRoundEndViewModel(sequence);
                 roundCallback.onRoundEnd(viewModel);
             }
 

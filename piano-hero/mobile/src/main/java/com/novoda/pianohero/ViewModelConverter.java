@@ -35,10 +35,10 @@ class ViewModelConverter {
         return new ClockViewModel(secondsLeft + "s");
     }
 
-    SongStartViewModel createSongStartViewModel(Note currentNote, Note nextNote) {
+    SongStartViewModel createSongStartViewModel(Sequence sequence) {
         return new SongStartViewModel(
-                currentNoteFormatted(currentNote),
-                nextNoteFormatted(nextNote)
+                currentNoteFormatted(sequence.getCurrentNote()),
+                nextNoteFormatted(sequence.getNextNote())
         );
     }
 
@@ -51,16 +51,13 @@ class ViewModelConverter {
         return String.format(Locale.US, NEXT_NOTE_HINT_FORMAT, nextNote);
     }
 
-    RoundEndViewModel createRoundEndViewModel(
-            Sequence sequence,
-            Note currentNote,
-            Note nextNote) {
+    RoundEndViewModel createRoundEndViewModel(Sequence sequence) {
         String successMessage = getSuccessMessage(sequence);
 
         return new RoundEndViewModel(
                 sequence,
-                currentNoteFormatted(currentNote),
-                nextNoteFormatted(nextNote),
+                currentNoteFormatted(sequence.getCurrentNote()),
+                nextNoteFormatted(sequence.getNextNote()),
                 successMessage
         );
     }

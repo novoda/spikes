@@ -18,19 +18,15 @@ public final class Sequence {
     }
 
     public Note get(int position) {
-        return notes().get(position);
+        return notes.get(position);
     }
 
     public int position() {
         return position;
     }
 
-    public Notes notes() {
-        return notes;
-    }
-
     public int length() {
-        return notes().length();
+        return notes.length();
     }
 
     public boolean hasError() {
@@ -46,6 +42,41 @@ public final class Sequence {
         return latestError;
     }
 
+    public Note getCurrentNote() {
+        return notes.get(position);
+    }
+
+    public Note getNextNote() {
+        int nextPosition = this.position + 1;
+        return notes.get(nextPosition);
+    }
+
+    public boolean currentNoteIs(Note note) {
+        return notes.get(position).equals(note);
+    }
+
+    public Sequence nextPosition() {
+        return new Sequence.Builder(this)
+                .atPosition(position + 1)
+                .withLatestError(null)
+                .build();
+    }
+
+    public boolean isFinal(Note note) {
+        return position == notes.length() - 1
+                && note.equals(notes.get(position));
+    }
+
+    public Sequence error() {
+        return new Sequence.Builder(this)
+                .withLatestError(notes.get(position))
+                .build();
+    }
+
+    public List<Note> subList(int start, int end) {
+        return notes.asList().subList(start, end);
+    }
+
     public static class Builder {
 
         private final List<Note> notes = new ArrayList<>();
@@ -55,12 +86,8 @@ public final class Sequence {
 
         private int position = 0;
 
-        public Builder() {
-            this(new ArrayList<Note>());
-        }
-
-        public Builder(Sequence sequence) {
-            this(sequence.notes().asList());
+        Builder(Sequence sequence) {
+            this(sequence.notes.asList());
             this.latestError = sequence.latestError();
             this.position = sequence.position;
         }
@@ -69,22 +96,26 @@ public final class Sequence {
             this.notes.addAll(notes);
         }
 
-        public Builder add(Note note) {
+        Builder() {
+            this(new ArrayList<Note>());
+        }
+
+        Builder add(Note note) {
             notes.add(note);
             return this;
         }
 
-        public Builder withLatestError(@Nullable Note latestError) {
+        Builder withLatestError(@Nullable Note latestError) {
             this.latestError = latestError;
             return this;
         }
 
-        public Builder atPosition(int position) {
+        Builder atPosition(int position) {
             this.position = position;
             return this;
         }
 
-        public Sequence build() {
+        Sequence build() {
             return new Sequence(new Notes(notes), position, latestError);
         }
     }

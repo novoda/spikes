@@ -11,7 +11,7 @@ public class SongPlayer {
 
     public void loadSong(Sequence sequence) {
         this.sequence = sequence;
-        callback.onSongStarted(sequence, currentNote(), nextNote());
+        callback.onSongStarted(sequence);
     }
 
     public void onStartPlayed(Note note) {
@@ -23,43 +23,28 @@ public class SongPlayer {
     }
 
     private void playGameRound(Note note) {
-        int currentPosition = sequence.position();
-        Note expectedNote = sequence.get(currentPosition);
-        if (currentPosition == sequence.length() - 1 && note.equals(expectedNote)) {
+        if (sequence.isFinal(note)) {
             callback.onSongComplete();
             return;
         }
 
-        if (note.equals(expectedNote)) {
-            this.sequence = new Sequence.Builder(sequence)
-                    .withLatestError(null)
-                    .atPosition(currentPosition + 1)
-                    .build();
-            callback.onRoundEnd(sequence, currentNote(), nextNote());
+        if (sequence.currentNoteIs(note)) {
+            this.sequence = sequence.nextPosition();
+            callback.onRoundEnd(sequence);
             callback.onRoundSuccess(sequence);
         } else {
-            Sequence updatedSequence = new Sequence.Builder(sequence)
-                    .withLatestError(note)
-                    .build();
-            callback.onRoundEnd(updatedSequence, currentNote(), nextNote());
+            Sequence updatedSequence = sequence.error();
+            callback.onRoundEnd(updatedSequence);
             callback.onRoundError(updatedSequence);
         }
     }
 
-    private Note currentNote() {
-        return sequence.get(sequence.position());
-    }
-
-    private Note nextNote() {
-        return sequence.get(sequence.position() + 1);
-    }
-
     interface SongGameCallback {
-        void onSongStarted(Sequence sequence, Note currentNote, Note nextNote);
+        void onSongStarted(Sequence sequence);
 
         void onRoundStart(Note note);
 
-        void onRoundEnd(Sequence sequence, Note currentNote, Note nextNote);
+        void onRoundEnd(Sequence sequence);
 
         void onRoundSuccess(Sequence sequence);
 

@@ -99,7 +99,7 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         int endIndexExclusive = startIndexInclusive + numberOfNotesWeHaveSpaceFor;
         int windowStart = startIndexInclusive;
         int windowEnd = endIndexExclusive < sequence.length() ? endIndexExclusive : sequence.length();
-        List<Note> currentWindow = sequence.notes().asList().subList(windowStart, windowEnd);
+        List<Note> currentWindow = sequence.subList(windowStart, windowEnd);
         int positionRelativeToWindow = sequence.position() - startIndexInclusive;
 
         show(currentWindow, positionRelativeToWindow);
