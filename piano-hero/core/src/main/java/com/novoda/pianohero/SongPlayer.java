@@ -29,13 +29,19 @@ public class SongPlayer {
             callback.onSongComplete();
             return;
         }
-        callback.onRoundEnd(sequence, currentNote(), nextNote());
 
         if (note.equals(expectedNote)) {
-            this.sequence = new Sequence.Builder(sequence).withLatestError(null).atPosition(currentPosition + 1).build();
+            this.sequence = new Sequence.Builder(sequence)
+                    .withLatestError(null)
+                    .atPosition(currentPosition + 1)
+                    .build();
+            callback.onRoundEnd(sequence, currentNote(), nextNote());
             callback.onRoundSuccess(sequence);
         } else {
-            Sequence updatedSequence = new Sequence.Builder(sequence).withLatestError(note).build();
+            Sequence updatedSequence = new Sequence.Builder(sequence)
+                    .withLatestError(note)
+                    .build();
+            callback.onRoundEnd(updatedSequence, currentNote(), nextNote());
             callback.onRoundError(updatedSequence);
         }
     }
