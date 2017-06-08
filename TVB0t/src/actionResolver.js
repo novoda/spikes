@@ -21,6 +21,11 @@ export default class ActionResolver {
       const show = await this.tv.show(showName)
       return this.buildShowMessage(show)
     }
+    case 'recommendation.whatsnew': {
+      const homepage = await this.tv.homepage()
+      const recommendations = homepage.sliceGroups[0].slices.find(slice => slice.type === 'RECOMMENDATIONS').sliceItems
+      return this.buildRecommendationMessage(recommendations.slice(0, 3))
+    }
     default:
       return {}
     }
@@ -40,7 +45,7 @@ export default class ActionResolver {
       name: 'show',
       lifespan: 5,
       parameters: {
-        name: show.title,
+        name: show.brand.title,
         tv_channel: show.brand.presentationBrand,
         time: moment(time).fromNow()
       }
@@ -98,6 +103,24 @@ export default class ActionResolver {
       displayText: show.brand.summary,
       contextOut: [this.contextForShow(show, episodes[episodes.length - 1].firstTXDate)],
       data: this.cardsForShow(show, show.brand.summary)
+    }
+  }
+
+  buildRecommendationMessage(recommendations) {
+    const recommendationList = recommendations
+      .map(recommendation => recommendation.title)
+      .reduce((accumulator, currentValue, currentIndex, array) => {
+        if (accumulator.length === 0) {
+          return currentValue
+        }
+        return accumulator + (currentIndex === array.length - 1 ? ' or ' : ', ') + currentValue
+      })
+    const message = 'I recommend you to watch ' + recommendationList
+    return {
+      speech: message,
+      displayText: message,
+      contextOut: [],
+      data: {}
     }
   }
 

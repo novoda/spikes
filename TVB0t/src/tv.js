@@ -47,4 +47,15 @@ export default class TV {
     })
   }
 
+  async homepage() {
+    const token = await this.token()
+    return await request({
+      uri: this.url(this.config.paths.homepage),
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      json: true
+    })
+  }
+
 }
