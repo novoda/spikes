@@ -48,7 +48,11 @@ public final class Sequence {
 
     public Note getNextNote() {
         int nextPosition = this.position + 1;
-        return notes.get(nextPosition);
+        if (notes.hasNoteAt(nextPosition)) {
+            return notes.get(nextPosition);
+        } else {
+            return Note.NONE;
+        }
     }
 
     public boolean currentNoteIs(Note note) {

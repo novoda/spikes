@@ -110,6 +110,9 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
 
         for (int index = 0; index < notes.size(); index++) {
             Note note = notes.get(index);
+            if(note == Note.NONE) {
+                continue;
+            }
             SequenceNote sequenceNote = new SequenceNote(note, index);
             boolean complete = index < indexNextPlayableNote;
             boolean sharp = note.isSharp();

@@ -28,6 +28,10 @@ public class Notes implements Iterable<Note> {
         return notes.get(position);
     }
 
+    public boolean hasNoteAt(int position) {
+        return position < notes.size();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

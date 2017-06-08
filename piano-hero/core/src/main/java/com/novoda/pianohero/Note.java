@@ -2,6 +2,8 @@ package com.novoda.pianohero;
 
 public class Note {
 
+    public static final Note NONE = new Note(-1);
+
     static final Note C4 = new Note(60);
     static final Note C4_S = new Note(61, true);
     static final Note D4 = new Note(62);

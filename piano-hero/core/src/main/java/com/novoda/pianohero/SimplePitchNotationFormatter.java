@@ -9,6 +9,9 @@ public class SimplePitchNotationFormatter {
     private static final List<String> ORDERED_NOTES = Arrays.asList("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B");
 
     public String format(Note note) {
+        if(note == Note.NONE) {
+            return "";
+        }
         int i = note.midi() % NOTES_IN_OCTAVE;
         return ORDERED_NOTES.get(i);
     }
