@@ -14,7 +14,9 @@ export default class TV {
         'Authorization': `Basic ${this.config.token}`
       },
       form: {
-        grant_type: 'client_credentials'
+        grant_type: 'password',
+        username: this.config.email,
+        password: this.config.password
       },
       json: true
     })
