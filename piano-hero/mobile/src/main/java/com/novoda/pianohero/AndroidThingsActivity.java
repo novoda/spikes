@@ -13,6 +13,7 @@ public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.
     private GamePresenter gamePresenter;
     private GameScreen gameScreen;
     private Speaker speaker;
+    private TouchButton touchButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -22,13 +23,14 @@ public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.
 
         speaker = new Speaker(getPackageManager());
         speaker.open();
-
+        touchButton = new TouchButton();
+        touchButton.open();
         SimplePitchNotationFormatter simplePitchNotationFormatter = new SimplePitchNotationFormatter();
         Piano piano = createPiano();
         SongSequenceFactory songSequenceFactory = new SongSequenceFactory();
         ViewModelConverter viewModelConverter = new ViewModelConverter(simplePitchNotationFormatter);
         SongPlayer songPlayer = new SongPlayer();
-        GameModel gameModel = new GameModel(songSequenceFactory, piano, viewModelConverter, songPlayer);
+        GameModel gameModel = new GameModel(songSequenceFactory, piano, touchButton, viewModelConverter, songPlayer);
         gameScreen = (GameScreen) findViewById(R.id.game_screen);
         gamePresenter = new GamePresenter(gameModel, this);
 
@@ -121,6 +123,7 @@ public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.
 
     @Override
     protected void onDestroy() {
+        touchButton.close();
         speaker.close();
         super.onDestroy();
     }
