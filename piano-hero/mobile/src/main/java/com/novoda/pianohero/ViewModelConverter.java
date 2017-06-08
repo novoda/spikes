@@ -17,9 +17,18 @@ class ViewModelConverter {
         String message = "Let's start!";
 
         return new GameStartViewModel(
-            sequence,
-            message
+                sequence,
+                message
         );
+    }
+
+    RoundStartViewModel createRoundStartViewModel(Note note) {
+        double frequency = frequencyFor(note);
+        return new RoundStartViewModel(frequency);
+    }
+
+    private double frequencyFor(Note note) {
+        return 440 * Math.pow(2, (note.midi() - 69) * 1f / 12);
     }
 
     ClockViewModel createClockViewModel(long secondsLeft) {
@@ -28,8 +37,8 @@ class ViewModelConverter {
 
     SongStartViewModel createSongStartViewModel(Note currentNote, Note nextNote) {
         return new SongStartViewModel(
-            currentNoteFormatted(currentNote),
-            nextNoteFormatted(nextNote)
+                currentNoteFormatted(currentNote),
+                nextNoteFormatted(nextNote)
         );
     }
 
@@ -43,16 +52,16 @@ class ViewModelConverter {
     }
 
     RoundEndViewModel createRoundEndViewModel(
-        Sequence sequence,
-        Note currentNote,
-        Note nextNote) {
+            Sequence sequence,
+            Note currentNote,
+            Note nextNote) {
         String successMessage = getSuccessMessage(sequence);
 
         return new RoundEndViewModel(
-            sequence,
-            currentNoteFormatted(currentNote),
-            nextNoteFormatted(nextNote),
-            successMessage
+                sequence,
+                currentNoteFormatted(currentNote),
+                nextNoteFormatted(nextNote),
+                successMessage
         );
     }
 
@@ -75,10 +84,10 @@ class ViewModelConverter {
         boolean isSharpError = pitchNotationFormatter.format(errorNote).endsWith(SHARP_SYMBOL);
 
         return new RoundErrorViewModel(
-            sequence,
-            errorMessage,
-            isSharpError,
-            score
+                sequence,
+                errorMessage,
+                isSharpError,
+                score
         );
     }
 

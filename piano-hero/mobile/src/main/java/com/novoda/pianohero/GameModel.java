@@ -18,10 +18,10 @@ public class GameModel implements GameMvp.Model {
     private int score = START_SCORE; // TODO object
 
     GameModel(
-        SongSequenceFactory songSequenceFactory,
-        Piano piano,
-        ViewModelConverter converter,
-        SongPlayer songPlayer) {
+            SongSequenceFactory songSequenceFactory,
+            Piano piano,
+            ViewModelConverter converter,
+            SongPlayer songPlayer) {
         this.songSequenceFactory = songSequenceFactory;
         this.piano = piano;
         this.converter = converter;
@@ -44,8 +44,8 @@ public class GameModel implements GameMvp.Model {
             }
 
             @Override
-            public void onRoundStart(RoundStartViewModel viewModel) {
-                roundCallback.onRoundStart(viewModel);
+            public void onRoundStart(Note note) {
+                roundCallback.onRoundStart(converter.createRoundStartViewModel(note));
             }
 
             @Override

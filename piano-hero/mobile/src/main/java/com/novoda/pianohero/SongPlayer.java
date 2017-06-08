@@ -15,12 +15,7 @@ public class SongPlayer {
     }
 
     public void onStartPlayed(Note note) {
-        double frequency = frequencyFor(note);
-        callback.onRoundStart(new RoundStartViewModel(frequency));
-    }
-
-    private double frequencyFor(Note note) {
-        return 440 * Math.pow(2, (note.midi() - 69) * 1f / 12);
+        callback.onRoundStart(note);
     }
 
     public void onStopPlaying(Note note) {
@@ -56,7 +51,7 @@ public class SongPlayer {
     interface SongGameCallback {
         void onSongStarted(Sequence sequence, Note currentNote, Note nextNote);
 
-        void onRoundStart(RoundStartViewModel viewModel);
+        void onRoundStart(Note note);
 
         void onRoundEnd(Sequence sequence, Note currentNote, Note nextNote);
 
