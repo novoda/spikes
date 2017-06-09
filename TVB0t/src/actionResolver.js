@@ -17,9 +17,14 @@ export default class ActionResolver {
       return this.buildNowMessage(show)
     }
     case 'show.details': {
-      const showName = this.toWebSafeShowName(parameters['tv-show'])
-      const show = await this.tv.show(showName)
-      return this.buildShowMessage(show)
+      const tvShow = parameters['tv-show'] || this.extractParametersForContext('show', contexts)['name']
+      const showName = this.toWebSafeShowName(tvShow)
+      try {
+        const show = await this.tv.show(showName)
+        return this.buildShowMessage(show)
+      } catch (e) {
+        return this.buildStandardMessage(`Hmm. I don’t know anything about ${tvShow}. Try some other show instead.`)
+      }
     }
     case 'recommendation.whatsnew': {
       const homepage = await this.tv.homepage()
@@ -27,22 +32,13 @@ export default class ActionResolver {
       return this.buildRecommendationMessage(recommendations.slice(0, 3))
     }
     case 'show.time-starting': {
-      const tvShow = parameters['tv-show']
-      let time = this.extractParametersForContext('show', contexts).time
-      if (!time) {
-        const showName = this.toWebSafeShowName(tvShow)
-        const show = await this.tv.show(showName)
-        const episodes = show.brand.episodes
-        time = episodes[episodes.length - 1].firstTXDate
-      }
+      const tvShow = parameters['tv-show'] || this.extractParametersForContext('show', contexts)['name']
+      const showName = this.toWebSafeShowName(tvShow)
+      const show = await this.tv.show(showName)
+      const episodes = show.brand.episodes
+      const time = episodes[episodes.length - 1].firstTXDate
       const message = tvShow + ' starts at ' + moment(time).format('h:mm a dddd, MMMM Do')
-      const context = this.extractContext('show', contexts)
-      context.parameters.time = time
-      return {
-        speech: message,
-        displayText: message,
-        contextOut: [context]
-      }
+      return this.buildStandardMessage(message, this.contextForShow(show, time))
     }
     case 'show.addtomylist': {
       const tvShow = parameters['tv-show'] || this.extractParametersForContext('show', contexts)['name']
@@ -51,22 +47,15 @@ export default class ActionResolver {
       try {
         const response = await this.tv.addToMyList(showName)
         console.log(response)
-        message = tvShow + ' added to your list!'
+        message = tvShow + ' added to your list! Is there anything else I can help you with?'
       } catch (e) {
         console.log(e)
         message = 'Oops, something went wrong while trying to add ' + tvShow + ' to your list'
       }
-      return {
-        speech: message,
-        displayText: message
-      }
+      return this.buildStandardMessage(message)
     }
     default: {
-      const message = 'Oops this is not handled yet!'
-      return {
-        speech: message,
-        displayText: message
-      }
+      return this.buildStandardMessage('Oops this is not handled yet!')
     }
     }
   }
@@ -81,6 +70,14 @@ export default class ActionResolver {
 
   toWebSafeShowName(showName) {
     return showName.toLowerCase().replace(/ /g, '-')
+  }
+
+  buildStandardMessage(message, context) {
+    return {
+      speech: message,
+      displayText: message,
+      contextOut: [context]
+    }
   }
 
   buildNowMessage(show) {
@@ -150,11 +147,12 @@ export default class ActionResolver {
 
   buildShowMessage(show) {
     const episodes = show.brand.episodes
+    const message = 'Here is a summary of ' + show.brand.title + ': ' + show.brand.summary
     return {
-      speech: show.brand.summary,
-      displayText: show.brand.summary,
+      speech: message,
+      displayText: message,
       contextOut: [this.contextForShow(show, episodes[episodes.length - 1].firstTXDate)],
-      data: this.cardsForShow(show, show.brand.summary)
+      data: this.cardsForShow(show, message)
     }
   }
 
@@ -170,9 +168,7 @@ export default class ActionResolver {
     const message = 'I recommend you to watch ' + recommendationList
     return {
       speech: message,
-      displayText: message,
-      contextOut: [],
-      data: {}
+      displayText: message
     }
   }
 
