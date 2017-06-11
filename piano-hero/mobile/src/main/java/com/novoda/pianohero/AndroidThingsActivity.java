@@ -6,13 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import java.util.Arrays;
+
 import static android.view.View.GONE;
 
 public class AndroidThingsActivity extends AppCompatActivity {
 
     private GamePresenter gamePresenter;
-    private Speaker speaker;
-    private TouchButton touchButton;
+    private AndroidThingThings androidThingThings;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -20,10 +21,12 @@ public class AndroidThingsActivity extends AppCompatActivity {
         Log.d("!!!", "I'm running");
         setContentView(R.layout.activity_android_things);
 
-        speaker = new Speaker(getPackageManager());
-        speaker.open();
-        touchButton = new TouchButton();
-        touchButton.open();
+        Speaker speaker = new Speaker(getPackageManager());
+        TouchButton touchButton = new TouchButton();
+
+        androidThingThings = new AndroidThingThings(Arrays.asList(touchButton, speaker));
+        androidThingThings.open();
+
         SimplePitchNotationFormatter simplePitchNotationFormatter = new SimplePitchNotationFormatter();
         Piano piano = createPiano();
         SongSequenceFactory songSequenceFactory = new SongSequenceFactory();
@@ -67,8 +70,8 @@ public class AndroidThingsActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        touchButton.close();
-        speaker.close();
+        androidThingThings.close();
         super.onDestroy();
     }
+
 }

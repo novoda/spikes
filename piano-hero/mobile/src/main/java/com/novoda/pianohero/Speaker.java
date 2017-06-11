@@ -11,7 +11,7 @@ import com.google.android.things.pio.Pwm;
 
 import java.io.IOException;
 
-public class Speaker {
+public class Speaker implements AndroidThing {
 
     private final PackageManager packageManager;
 
@@ -21,6 +21,7 @@ public class Speaker {
         this.packageManager = packageManager;
     }
 
+    @Override
     public void open() {
         if (!isThingsDevice()) {
             return;
@@ -73,6 +74,7 @@ public class Speaker {
         }
     }
 
+    @Override
     public void close() {
         if (!isThingsDevice()) {
             return;

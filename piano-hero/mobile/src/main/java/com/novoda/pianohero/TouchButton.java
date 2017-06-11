@@ -8,7 +8,7 @@ import com.google.android.things.pio.PeripheralManagerService;
 
 import java.io.IOException;
 
-public class TouchButton {
+public class TouchButton implements AndroidThing {
 
     private Listener listener;
     private Gpio buttonBus;
@@ -17,6 +17,7 @@ public class TouchButton {
         this.listener = listener;
     }
 
+    @Override
     public void open() {
         try {
             buttonBus = new PeripheralManagerService().openGpio("GPIO_174");
@@ -44,6 +45,7 @@ public class TouchButton {
         }
     }
 
+    @Override
     public void close() {
         try {
             buttonBus.close();
