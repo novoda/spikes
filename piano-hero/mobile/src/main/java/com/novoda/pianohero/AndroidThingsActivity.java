@@ -11,16 +11,13 @@ import static android.view.View.GONE;
 public class AndroidThingsActivity extends AppCompatActivity {
 
     private GamePresenter gamePresenter;
-    private AndroidThingThings androidThingThings;
+    private AndroidThingThings androidThingThings = new AndroidThingThings();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("!!!", "I'm running");
         setContentView(R.layout.activity_android_things);
-        final GameScreen gameScreen = (GameScreen) findViewById(R.id.game_screen);
-
-        androidThingThings = new AndroidThingThings();
 
         Speaker speaker;
         if (isThingsDevice()) {
@@ -55,9 +52,11 @@ public class AndroidThingsActivity extends AppCompatActivity {
         SimplePitchNotationFormatter simplePitchNotationFormatter = new SimplePitchNotationFormatter();
         Piano piano = createPiano();
         SongSequenceFactory songSequenceFactory = new SongSequenceFactory();
+        GameTimer gameTimer = new GameTimer();
         ViewModelConverter viewModelConverter = new ViewModelConverter(simplePitchNotationFormatter);
         SongPlayer songPlayer = new SongPlayer();
-        GameModel gameModel = new GameModel(songSequenceFactory, piano, startGameClickable, viewModelConverter, songPlayer);
+        GameModel gameModel = new GameModel(songSequenceFactory, piano, startGameClickable, gameTimer, viewModelConverter, songPlayer);
+        GameScreen gameScreen = (GameScreen) findViewById(R.id.game_screen);
         gamePresenter = new GamePresenter(gameModel, new AndroidGameMvpView(gameScreen, speaker));
 
         gamePresenter.onCreate();

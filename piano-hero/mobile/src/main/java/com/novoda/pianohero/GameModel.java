@@ -1,13 +1,12 @@
 package com.novoda.pianohero;
 
 import android.os.CountDownTimer;
+import android.support.annotation.Nullable;
 
 import java.util.concurrent.TimeUnit;
 
 public class GameModel implements GameMvp.Model {
 
-    private static final long GAME_LENGTH = TimeUnit.SECONDS.toMillis(60);
-    private static final long CLOCK_UPDATE_RATE = TimeUnit.SECONDS.toMillis(1);
     private static final int START_SCORE = 500;
 
     private final SongSequenceFactory songSequenceFactory;
@@ -15,6 +14,7 @@ public class GameModel implements GameMvp.Model {
     private final SongPlayer songPlayer;
     private final Clickable startGameClickable;
     private final ViewModelConverter converter;
+    private final GameTimer gameTimer;
 
     private int score = START_SCORE; // TODO object
 
@@ -22,12 +22,13 @@ public class GameModel implements GameMvp.Model {
             SongSequenceFactory songSequenceFactory,
             Piano piano,
             Clickable startGameClickable,
-            ViewModelConverter converter,
+            GameTimer gameTimer, ViewModelConverter converter,
             SongPlayer songPlayer
     ) {
         this.songSequenceFactory = songSequenceFactory;
         this.piano = piano;
         this.startGameClickable = startGameClickable;
+        this.gameTimer = gameTimer;
         this.converter = converter;
         this.songPlayer = songPlayer;
     }
@@ -104,19 +105,18 @@ public class GameModel implements GameMvp.Model {
             }
         });
 
-        CountDownTimer countDownTimer = new CountDownTimer(GAME_LENGTH, CLOCK_UPDATE_RATE) {
+        gameTimer.start(new GameTimer.Callback() {
             @Override
-            public void onTick(long millisUntilFinished) {
-                long secondsLeft = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished);
-                clockCallback.onClockTick(converter.createClockViewModel(secondsLeft));
+            public void onSecondTick(long secondsUntilFinished) {
+                ClockViewModel clockViewModel = converter.createClockViewModel(secondsUntilFinished);
+                clockCallback.onClockTick(clockViewModel);
             }
 
             @Override
             public void onFinish() {
                 gameCompleteCallback.onGameComplete(converter.createGameOverViewModel(score));
             }
-        };
-        countDownTimer.start();
+        });
         Sequence sequence = songSequenceFactory.maryHadALittleLamb();
         songPlayer.loadSong(sequence);
         GameStartViewModel viewModel = converter.createGameStartViewModel(sequence);
