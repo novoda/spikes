@@ -33,7 +33,7 @@ public class SongPlayer {
             callback.onRoundEnd(sequence);
             callback.onRoundSuccess(sequence);
         } else {
-            Sequence updatedSequence = sequence.error();
+            Sequence updatedSequence = sequence.error(note);
             callback.onRoundEnd(updatedSequence);
             callback.onRoundError(updatedSequence);
         }

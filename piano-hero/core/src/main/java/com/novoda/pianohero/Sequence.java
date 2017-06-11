@@ -71,9 +71,9 @@ public final class Sequence {
                 && note.equals(notes.get(position));
     }
 
-    public Sequence error() {
+    public Sequence error(Note error) {
         return new Sequence.Builder(this)
-                .withLatestError(notes.get(position))
+                .withLatestError(error)
                 .build();
     }
 
