@@ -113,7 +113,7 @@ public class GameModel implements GameMvp.Model {
 
             @Override
             public void onFinish() {
-                gameCompleteCallback.onGameComplete(converter.createGameOverViewModel());
+                gameCompleteCallback.onGameComplete(converter.createGameOverViewModel(score));
             }
         };
         countDownTimer.start();

@@ -94,7 +94,7 @@ class ViewModelConverter {
         return String.format(Locale.US, "Ruhroh! The correct note is %s but you played %s.", nextNoteAsText, latestErrorAsText);
     }
 
-    GameOverViewModel createGameOverViewModel() {
-        return new GameOverViewModel("GAME OVER");
+    GameOverViewModel createGameOverViewModel(int score) {
+        return new GameOverViewModel(String.format(Locale.US, "Well done! You scored %d", score));
     }
 }
