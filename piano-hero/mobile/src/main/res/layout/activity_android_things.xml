@@ -3,19 +3,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
+    android:orientation="vertical"
     android:padding="16dp">
 
     <com.novoda.pianohero.GameScreen
         android:id="@+id/game_screen"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="100" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-    <com.novoda.pianohero.C4ToB5ViewPiano
-        android:id="@+id/piano_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_weight="100" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="100">
 
+        <com.novoda.pianohero.C4ToB5ViewPiano
+            android:id="@+id/piano_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/restart_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="Restart"
+            android:visibility="invisible" />
+
+    </FrameLayout>
 </LinearLayout>

@@ -1,7 +1,6 @@
 package com.novoda.pianohero;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 public class GameScreen extends LinearLayoutCompat {
 
     private C4ToB5TrebleStaffWidget trebleStaffWidget;
-    private View restartButton;
     private TextView playNoteTextView;
     private TextView nextNoteTextView;
     private TextView statusTextView;
@@ -26,25 +24,9 @@ public class GameScreen extends LinearLayoutCompat {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_game_screen, this);
         trebleStaffWidget = (C4ToB5TrebleStaffWidget) findViewById(R.id.game_screen_widget_treble_staff);
-        restartButton = findViewById(R.id.game_screen_button_restart);
         playNoteTextView = (TextView) findViewById(R.id.game_screen_text_play_note);
         nextNoteTextView = (TextView) findViewById(R.id.game_screen_text_next_note);
         statusTextView = (TextView) findViewById(R.id.game_screen_text_status);
-    }
-
-    public void setStartGameListener(@Nullable final Clickable.Listener listener) {
-        if (listener == null) {
-            restartButton.setVisibility(INVISIBLE);
-            restartButton.setOnClickListener(null);
-        } else {
-            restartButton.setVisibility(VISIBLE);
-            restartButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onClick();
-                }
-            });
-        }
     }
 
     public void showGameStart(GameStartViewModel viewModel) {

@@ -35,10 +35,17 @@ public class AndroidThingsActivity extends AppCompatActivity {
             startGameClickable = new GpioButtonClickable();
             androidThingThings.add((GpioButtonClickable) startGameClickable);
         } else {
+            final View restartButton = findViewById(R.id.restart_button);
+            restartButton.setVisibility(View.VISIBLE);
             startGameClickable = new Clickable() {
                 @Override
-                public void setListener(Listener listener) {
-                    gameScreen.setStartGameListener(listener);
+                public void setListener(final Listener listener) {
+                    restartButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            listener.onClick();
+                        }
+                    });
                 }
             };
         }
