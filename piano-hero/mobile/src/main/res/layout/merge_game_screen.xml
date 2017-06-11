@@ -51,25 +51,12 @@
         android:textSize="20sp"
         tools:text="Excellent, you're doing well!" />
 
-    <!-- TODO: invisible until the buttons are hooked up-->
-    <FrameLayout
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/game_screen_button_restart"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible">
-
-        <Button
-            android:id="@+id/game_screen_button_main_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Main menu" />
-
-        <Button
-            android:id="@+id/game_screen_button_restart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="Restart" />
-
-    </FrameLayout>
+        android:layout_gravity="right"
+        android:text="Restart"
+        android:visibility="invisible" />
 
 </merge>

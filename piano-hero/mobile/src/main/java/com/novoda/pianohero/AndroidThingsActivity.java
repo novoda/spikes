@@ -18,6 +18,7 @@ public class AndroidThingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d("!!!", "I'm running");
         setContentView(R.layout.activity_android_things);
+        final GameScreen gameScreen = (GameScreen) findViewById(R.id.game_screen);
 
         androidThingThings = new AndroidThingThings();
 
@@ -29,8 +30,19 @@ public class AndroidThingsActivity extends AppCompatActivity {
             speaker = new AndroidSynthSpeaker();
         }
 
-        TouchButton touchButton = new TouchButton();
-        androidThingThings.add(touchButton);
+        Clickable startGameClickable;
+        if (isThingsDevice()) {
+            startGameClickable = new GpioButtonClickable();
+            androidThingThings.add((GpioButtonClickable) startGameClickable);
+        } else {
+            startGameClickable = new Clickable() {
+                @Override
+                public void setListener(Listener listener) {
+                    gameScreen.setStartGameListener(listener);
+                }
+            };
+        }
+
         androidThingThings.open();
 
         SimplePitchNotationFormatter simplePitchNotationFormatter = new SimplePitchNotationFormatter();
@@ -38,8 +50,7 @@ public class AndroidThingsActivity extends AppCompatActivity {
         SongSequenceFactory songSequenceFactory = new SongSequenceFactory();
         ViewModelConverter viewModelConverter = new ViewModelConverter(simplePitchNotationFormatter);
         SongPlayer songPlayer = new SongPlayer();
-        GameModel gameModel = new GameModel(songSequenceFactory, piano, touchButton, viewModelConverter, songPlayer);
-        GameScreen gameScreen = (GameScreen) findViewById(R.id.game_screen);
+        GameModel gameModel = new GameModel(songSequenceFactory, piano, startGameClickable, viewModelConverter, songPlayer);
         gamePresenter = new GamePresenter(gameModel, new AndroidGameMvpView(gameScreen, speaker));
 
         gamePresenter.onCreate();

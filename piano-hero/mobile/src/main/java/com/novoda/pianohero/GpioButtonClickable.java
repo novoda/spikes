@@ -1,21 +1,15 @@
 package com.novoda.pianohero;
 
-import android.util.Log;
-
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.GpioCallback;
 import com.google.android.things.pio.PeripheralManagerService;
 
 import java.io.IOException;
 
-public class TouchButton implements AndroidThing {
+public class GpioButtonClickable implements AndroidThing, Clickable {
 
     private Listener listener;
     private Gpio buttonBus;
-
-    public void setListener(Listener listener) {
-        this.listener = listener;
-    }
 
     @Override
     public void open() {
@@ -24,25 +18,32 @@ public class TouchButton implements AndroidThing {
             buttonBus.setDirection(Gpio.DIRECTION_IN);
             buttonBus.setActiveType(Gpio.ACTIVE_HIGH);
             buttonBus.setEdgeTriggerType(Gpio.EDGE_RISING);
-            buttonBus.registerGpioCallback(new GpioCallback() {
-                @Override
-                public boolean onGpioEdge(Gpio gpio) {
-                    Log.d("!!", "TEST");
-                    if (listener == null) {
-                        return true;
-                    }
-                    listener.onTouch();
-                    return true;
-                }
-
-                @Override
-                public void onGpioError(Gpio gpio, int error) {
-                    // do nothing
-                }
-            });
+            buttonBus.registerGpioCallback(gpioCallback);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    private final GpioCallback gpioCallback = new GpioCallback() {
+        @Override
+        public boolean onGpioEdge(Gpio gpio) {
+            if (listener != null) {
+                listener.onClick();
+                return true;
+            } else {
+                return true; // TODO: should this return false?
+            }
+        }
+
+        @Override
+        public void onGpioError(Gpio gpio, int error) {
+            // do nothing - TODO do we need to implement this? what's the default impl on AndroidThings?
+        }
+    };
+
+    @Override
+    public void setListener(Listener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -54,7 +55,4 @@ public class TouchButton implements AndroidThing {
         }
     }
 
-    interface Listener {
-        void onTouch();
-    }
 }

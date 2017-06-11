@@ -13,7 +13,7 @@ public class GameModel implements GameMvp.Model {
     private final SongSequenceFactory songSequenceFactory;
     private final Piano piano;
     private final SongPlayer songPlayer;
-    private final TouchButton touchButton;
+    private final Clickable startGameClickable;
     private final ViewModelConverter converter;
 
     private int score = START_SCORE; // TODO object
@@ -21,12 +21,13 @@ public class GameModel implements GameMvp.Model {
     GameModel(
             SongSequenceFactory songSequenceFactory,
             Piano piano,
-            TouchButton touchButton,
+            Clickable startGameClickable,
             ViewModelConverter converter,
-            SongPlayer songPlayer) {
+            SongPlayer songPlayer
+    ) {
         this.songSequenceFactory = songSequenceFactory;
         this.piano = piano;
-        this.touchButton = touchButton;
+        this.startGameClickable = startGameClickable;
         this.converter = converter;
         this.songPlayer = songPlayer;
     }
@@ -40,15 +41,17 @@ public class GameModel implements GameMvp.Model {
                           final GameCompleteCallback gameCompleteCallback) {
         score = START_SCORE;
 
-        touchButton.setListener(new TouchButton.Listener() {
+        startGameClickable.setListener(new Clickable.Listener() {
             @Override
-            public void onTouch() {
-                startGame(callback,
-                          songStartCallback,
-                          clockCallback,
-                          roundCallback,
-                          songCompleteCallback,
-                          gameCompleteCallback);
+            public void onClick() {
+                startGame(
+                        callback,
+                        songStartCallback,
+                        clockCallback,
+                        roundCallback,
+                        songCompleteCallback,
+                        gameCompleteCallback
+                );
             }
         });
 
