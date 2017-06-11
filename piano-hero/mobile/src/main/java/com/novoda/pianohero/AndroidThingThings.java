@@ -1,13 +1,14 @@
 package com.novoda.pianohero;
 
+import java.util.ArrayList;
 import java.util.List;
 
 class AndroidThingThings {
 
-    private final List<AndroidThing> androidThings;
+    private final List<AndroidThing> androidThings = new ArrayList<>();
 
-    AndroidThingThings(List<AndroidThing> androidThings) {
-        this.androidThings = androidThings;
+    public void add(AndroidThing androidThing) {
+        androidThings.add(androidThing);
     }
 
     public void open() {
@@ -21,5 +22,4 @@ class AndroidThingThings {
             androidThing.close();
         }
     }
-
 }

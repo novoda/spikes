@@ -6,8 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import java.util.Arrays;
-
 import static android.view.View.GONE;
 
 public class AndroidThingsActivity extends AppCompatActivity {
@@ -21,10 +19,18 @@ public class AndroidThingsActivity extends AppCompatActivity {
         Log.d("!!!", "I'm running");
         setContentView(R.layout.activity_android_things);
 
-        Speaker speaker = new Speaker(getPackageManager());
-        TouchButton touchButton = new TouchButton();
+        androidThingThings = new AndroidThingThings();
 
-        androidThingThings = new AndroidThingThings(Arrays.asList(touchButton, speaker));
+        Speaker speaker;
+        if (isThingsDevice()) {
+            speaker = new PwmPiSpeaker();
+            androidThingThings.add((PwmPiSpeaker) speaker);
+        } else {
+            speaker = new AndroidSynthSpeaker();
+        }
+
+        TouchButton touchButton = new TouchButton();
+        androidThingThings.add(touchButton);
         androidThingThings.open();
 
         SimplePitchNotationFormatter simplePitchNotationFormatter = new SimplePitchNotationFormatter();
@@ -39,6 +45,11 @@ public class AndroidThingsActivity extends AppCompatActivity {
         gamePresenter.onCreate();
     }
 
+    private boolean isThingsDevice() {
+        // TODO once targeting 'O' use constant `PackageManager.FEATURE_EMBEDDED`
+        return getPackageManager().hasSystemFeature("android.hardware.type.embedded");
+    }
+
     private Piano createPiano() {
         C4ToB5ViewPiano virtualPianoView = (C4ToB5ViewPiano) findViewById(R.id.piano_view);
         if (isThingsDevice()) {
@@ -48,12 +59,6 @@ public class AndroidThingsActivity extends AppCompatActivity {
             virtualPianoView.setVisibility(View.VISIBLE);
             return new CompositePiano(virtualPianoView, new KeyStationMini32Piano(this));
         }
-    }
-
-    private boolean isThingsDevice() {
-        return getPackageManager().hasSystemFeature("android.hardware.type.embedded");
-        // TODO once targeting 'O' use constant
-        // PackageManager.FEATURE_EMBEDDED
     }
 
     @Override
