@@ -1,10 +1,5 @@
 package com.novoda.pianohero;
 
-import android.os.CountDownTimer;
-import android.support.annotation.Nullable;
-
-import java.util.concurrent.TimeUnit;
-
 public class GameModel implements GameMvp.Model {
 
     private static final int START_SCORE = 500;
@@ -64,25 +59,33 @@ public class GameModel implements GameMvp.Model {
 
             @Override
             public void onRoundStart(Note note) {
-                roundCallback.onRoundStart(converter.createRoundStartViewModel(note));
+                if (gameTimer.gameInProgress()) {
+                    roundCallback.onRoundStart(converter.createRoundStartViewModel(note));
+                }
             }
 
             @Override
             public void onRoundEnd(Sequence sequence) {
-                RoundEndViewModel viewModel = converter.createRoundEndViewModel(sequence);
-                roundCallback.onRoundEnd(viewModel);
+                if (gameTimer.gameInProgress()) {
+                    RoundEndViewModel viewModel = converter.createRoundEndViewModel(sequence);
+                    roundCallback.onRoundEnd(viewModel);
+                }
             }
 
             @Override
             public void onRoundSuccess(Sequence sequence) {
-                score += 7;
-                roundCallback.onRoundSuccess(converter.createSuccessViewModel(score));
+                if (gameTimer.gameInProgress()) {
+                    score += 7;
+                    roundCallback.onRoundSuccess(converter.createSuccessViewModel(score));
+                }
             }
 
             @Override
             public void onRoundError(Sequence sequence) {
-                score -= 3;
-                roundCallback.onRoundError(converter.createErrorViewModel(sequence, score));
+                if (gameTimer.gameInProgress()) {
+                    score -= 3;
+                    roundCallback.onRoundError(converter.createErrorViewModel(sequence, score));
+                }
             }
 
             @Override
