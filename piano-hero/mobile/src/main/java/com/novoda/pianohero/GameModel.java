@@ -2,7 +2,7 @@ package com.novoda.pianohero;
 
 public class GameModel implements GameMvp.Model {
 
-    private static final int START_SCORE = 500;
+    private static final Score START_SCORE = new Score(500);
 
     private final SongSequenceFactory songSequenceFactory;
     private final Piano piano;
@@ -11,7 +11,7 @@ public class GameModel implements GameMvp.Model {
     private final ViewModelConverter converter;
     private final GameTimer gameTimer;
 
-    private int score = START_SCORE; // TODO object
+    private Score score = START_SCORE;
 
     GameModel(
             SongSequenceFactory songSequenceFactory,
@@ -75,7 +75,7 @@ public class GameModel implements GameMvp.Model {
             @Override
             public void onRoundSuccess(Sequence sequence) {
                 if (gameTimer.gameInProgress()) {
-                    score += 7;
+                    score = score.add(7);
                     roundCallback.onRoundSuccess(converter.createSuccessViewModel(score));
                 }
             }
@@ -83,7 +83,7 @@ public class GameModel implements GameMvp.Model {
             @Override
             public void onRoundError(Sequence sequence) {
                 if (gameTimer.gameInProgress()) {
-                    score -= 3;
+                    score = score.minus(3);
                     roundCallback.onRoundError(converter.createErrorViewModel(sequence, score));
                 }
             }

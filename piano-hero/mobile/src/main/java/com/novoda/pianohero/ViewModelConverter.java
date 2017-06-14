@@ -70,11 +70,11 @@ class ViewModelConverter {
         }
     }
 
-    RoundSuccessViewModel createSuccessViewModel(int score) {
-        return new RoundSuccessViewModel(score);
+    RoundSuccessViewModel createSuccessViewModel(Score score) {
+        return new RoundSuccessViewModel(score.points());
     }
 
-    RoundErrorViewModel createErrorViewModel(Sequence sequence, int score) {
+    RoundErrorViewModel createErrorViewModel(Sequence sequence, Score score) {
         String errorMessage = getErrorMessage(sequence);
 
         Note errorNote = sequence.latestError();
@@ -84,7 +84,7 @@ class ViewModelConverter {
                 sequence,
                 errorMessage,
                 isSharpError,
-                score
+                score.points()
         );
     }
 
@@ -94,7 +94,7 @@ class ViewModelConverter {
         return String.format(Locale.US, "Ruhroh! The correct note is %s but you played %s.", nextNoteAsText, latestErrorAsText);
     }
 
-    GameOverViewModel createGameOverViewModel(int score) {
-        return new GameOverViewModel(String.format(Locale.US, "Well done! You scored %d", score));
+    GameOverViewModel createGameOverViewModel(Score score) {
+        return new GameOverViewModel(String.format(Locale.US, "Well done! You scored %d", score.points()));
     }
 }
