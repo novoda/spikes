@@ -1,5 +1,6 @@
 package com.novoda.movies;
 
+import android.support.test.espresso.Espresso;
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -18,9 +19,7 @@ import org.mockito.junit.MockitoRule;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.novoda.espresso.AccessibilityViewMatchers.withUsageHintOnClick;
 import static com.novoda.espresso.AccessibilityViewMatchers.withUsageHintOnLongClick;
 import static org.hamcrest.CoreMatchers.is;
@@ -42,6 +41,7 @@ public class MovieItemViewTalkBackTest {
 
     @Before
     public void setUp() {
+        Espresso.registerIdlingResources(viewTestRule);
         MovieItemView view = viewTestRule.getView();
 
         view.attachListener(movieItemListener);
@@ -52,6 +52,7 @@ public class MovieItemViewTalkBackTest {
     @After
     public void tearDown() {
         viewTestRule.getView().detachListeners();
+        Espresso.unregisterIdlingResources(viewTestRule);
     }
 
     @Test
