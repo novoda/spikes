@@ -45,7 +45,7 @@ public class ViewTestRule<T extends View> extends ActivityTestRule<ViewActivity>
 
     @Override
     public String getName() {
-        return "IdlingResourceName";
+        return ViewTestRule.class.getSimpleName() + "::IdlingResource";
     }
 
     @Override
