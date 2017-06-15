@@ -8,6 +8,6 @@ class RoundSuccessViewModel {
     }
 
     public String getScoreFormatted() {
-        return "Score: " + score + " :-)";
+        return String.valueOf(score);
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
@@ -11,16 +12,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:layout_weight="100">
+        android:layout_weight="100"
+        android:orientation="vertical">
 
         <com.novoda.pianohero.C4ToB5ViewPiano
             android:id="@+id/piano_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="100" />
+
+        <TextView
+            android:id="@+id/score_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="24sp"
+            tools:text="Hello" />
 
         <Button
             android:id="@+id/restart_button"
@@ -30,5 +45,5 @@
             android:text="Restart"
             android:visibility="invisible" />
 
-    </FrameLayout>
+    </LinearLayout>
 </LinearLayout>

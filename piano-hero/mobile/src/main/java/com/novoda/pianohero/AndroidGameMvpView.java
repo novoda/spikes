@@ -6,10 +6,12 @@ class AndroidGameMvpView implements GameMvp.View {
 
     private final GameScreen gameScreen;
     private final Speaker speaker;
+    private final ScoreDisplayer scoreDisplayer;
 
-    AndroidGameMvpView(GameScreen gameScreen, Speaker speaker) {
+    AndroidGameMvpView(GameScreen gameScreen, Speaker speaker, ScoreDisplayer scoreDisplayer) {
         this.gameScreen = gameScreen;
         this.speaker = speaker;
+        this.scoreDisplayer = scoreDisplayer;
     }
 
     @Override
@@ -59,12 +61,13 @@ class AndroidGameMvpView implements GameMvp.View {
 
     @Override
     public void showScore(String score) {
-        Log.d("!!", "Update " + score);
+        scoreDisplayer.display(score);
     }
 
     @Override
     public void showGameComplete(GameOverViewModel viewModel) {
         gameScreen.showGameComplete(viewModel);
+        scoreDisplayer.clearScore();
     }
 
 }

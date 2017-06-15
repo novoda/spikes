@@ -1,10 +1,14 @@
 package com.novoda.pianohero;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatTextView;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import static android.view.View.GONE;
 
@@ -47,6 +51,26 @@ public class AndroidThingsActivity extends AppCompatActivity {
             };
         }
 
+        ScoreDisplayer scoreDisplayer;
+        if (isThingsDevice()) {
+            scoreDisplayer = new RainbowHatScoreDisplayer();
+            androidThingThings.add(((RainbowHatScoreDisplayer) scoreDisplayer));
+        } else {
+            final TextView scoreTextView = ((TextView) findViewById(R.id.score_text_view));
+            scoreTextView.setVisibility(View.VISIBLE);
+            scoreDisplayer = new ScoreDisplayer() {
+                @Override
+                public void display(CharSequence score) {
+                    scoreTextView.setText(score);
+                }
+
+                @Override
+                public void clearScore() {
+                    scoreTextView.setText(null);
+                }
+            };
+        }
+
         androidThingThings.open();
 
         SimplePitchNotationFormatter simplePitchNotationFormatter = new SimplePitchNotationFormatter();
@@ -57,7 +81,7 @@ public class AndroidThingsActivity extends AppCompatActivity {
         SongPlayer songPlayer = new SongPlayer();
         GameModel gameModel = new GameModel(songSequenceFactory, piano, startGameClickable, gameTimer, viewModelConverter, songPlayer);
         GameScreen gameScreen = (GameScreen) findViewById(R.id.game_screen);
-        gamePresenter = new GamePresenter(gameModel, new AndroidGameMvpView(gameScreen, speaker));
+        gamePresenter = new GamePresenter(gameModel, new AndroidGameMvpView(gameScreen, speaker, scoreDisplayer));
 
         gamePresenter.onCreate();
     }
