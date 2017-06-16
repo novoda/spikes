@@ -11,15 +11,20 @@ class GamePresenter implements GameMvp.Presenter {
     }
 
     @Override
-    public void onCreate() {
+    public void startPresenting() {
         gameModel.startGame(
-            gameStartCallback,
-            songStartedCallback,
-            gameClockCallback,
-            roundCallback,
-            songCompleteCallback,
-            gameCompleteCallback
+                gameStartCallback,
+                songStartedCallback,
+                gameClockCallback,
+                gameProgressCallback,
+                songCompleteCallback,
+                gameCompleteCallback
         );
+    }
+
+    @Override
+    public void stopPresenting() {
+        gameModel.stopGame();
     }
 
     private final GameMvp.Model.GameStartCallback gameStartCallback = new GameMvp.Model.GameStartCallback() {
@@ -43,39 +48,18 @@ class GamePresenter implements GameMvp.Presenter {
         }
     };
 
-    private final GameMvp.Model.RoundCallback roundCallback = new GameMvp.Model.RoundCallback() {
+    private final GameMvp.Model.GameProgressCallback gameProgressCallback = new GameMvp.Model.GameProgressCallback() {
         @Override
-        public void onRoundStart(RoundStartViewModel viewModel) {
-            view.startSound(viewModel.getNoteFrequency());
-        }
-
-        @Override
-        public void onRoundEnd(RoundEndViewModel viewModel) {
-            view.stopSound();
-            view.showRound(viewModel);
-        }
-
-        @Override
-        public void onRoundSuccess(RoundSuccessViewModel viewModel) {
-            view.showScore(viewModel.getScoreFormatted());
-        }
-
-        @Override
-        public void onRoundError(RoundErrorViewModel viewModel) {
-            view.showScore(viewModel.getScoreFormatted());
-
-            if (viewModel.isSharpError()) {
-                view.showSharpError(viewModel);
-            } else {
-                view.showError(viewModel);
-            }
+        public void onGameProgressing(GameInProgressViewModel viewModel) {
+            view.play(viewModel.getSound());
+            view.show(viewModel);
         }
     };
 
     private final GameMvp.Model.SongCompleteCallback songCompleteCallback = new GameMvp.Model.SongCompleteCallback() {
         @Override
         public void onSongComplete() {
-            view.showSongComplete(new SongCompleteViewModel("Nice, Song complete!"));
+            view.showSongComplete(new SongCompleteViewModel("Nice, song complete!"));
         }
     };
 
@@ -85,5 +69,4 @@ class GamePresenter implements GameMvp.Presenter {
             view.showGameComplete(viewModel);
         }
     };
-
 }

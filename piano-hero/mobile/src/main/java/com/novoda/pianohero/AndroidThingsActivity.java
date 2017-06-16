@@ -12,6 +12,7 @@ import static android.view.View.GONE;
 public class AndroidThingsActivity extends AppCompatActivity {
 
     private AndroidThingThings androidThingThings = new AndroidThingThings();
+    private GameMvp.Presenter gameMvpPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -21,18 +22,21 @@ public class AndroidThingsActivity extends AppCompatActivity {
 
         GameMvp.Model gameMvpModel = createGameMvpModel();
         GameMvp.View gameMvpView = createGameMvpView();
-        GameMvp.Presenter gameMvpPresenter = new GamePresenter(gameMvpModel, gameMvpView);
-
-        androidThingThings.open();
-        gameMvpPresenter.onCreate();
+        gameMvpPresenter = new GamePresenter(gameMvpModel, gameMvpView);
     }
 
-    private GameMvp.View createGameMvpView() {
-        return new AndroidGameMvpView(
-                (GameScreen) findViewById(R.id.game_screen),
-                createSpeaker(),
-                createScoreDisplayer()
-        );
+    @Override
+    protected void onResume() {
+        super.onResume();
+        androidThingThings.open();
+        gameMvpPresenter.startPresenting();
+    }
+
+    @Override
+    protected void onPause() {
+        gameMvpPresenter.stopPresenting();
+        androidThingThings.close();
+        super.onPause();
     }
 
     private GameMvp.Model createGameMvpModel() {
@@ -44,21 +48,6 @@ public class AndroidThingsActivity extends AppCompatActivity {
                 new ViewModelConverter(new SimplePitchNotationFormatter()),
                 new SongPlayer()
         );
-    }
-
-    private boolean isThingsDevice() {
-        // TODO once targeting 'O' use constant `PackageManager.FEATURE_EMBEDDED`
-        return getPackageManager().hasSystemFeature("android.hardware.type.embedded");
-    }
-
-    private Speaker createSpeaker() {
-        if (isThingsDevice()) {
-            PwmPiSpeaker pwmPiSpeaker = new PwmPiSpeaker();
-            androidThingThings.add(pwmPiSpeaker);
-            return pwmPiSpeaker;
-        } else {
-            return new AndroidSynthSpeaker();
-        }
     }
 
     private Piano createPiano() {
@@ -97,6 +86,24 @@ public class AndroidThingsActivity extends AppCompatActivity {
         }
     }
 
+    private GameMvp.View createGameMvpView() {
+        return new AndroidGameMvpView(
+                (GameScreen) findViewById(R.id.game_screen),
+                createSpeaker(),
+                createScoreDisplayer()
+        );
+    }
+
+    private Speaker createSpeaker() {
+        if (isThingsDevice()) {
+            PwmPiSpeaker pwmPiSpeaker = new PwmPiSpeaker();
+            androidThingThings.add(pwmPiSpeaker);
+            return pwmPiSpeaker;
+        } else {
+            return new AndroidSynthSpeaker();
+        }
+    }
+
     private ScoreDisplayer createScoreDisplayer() {
         if (isThingsDevice()) {
             RainbowHatScoreDisplayer rainbowHatScoreDisplayer = new RainbowHatScoreDisplayer();
@@ -119,9 +126,8 @@ public class AndroidThingsActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        androidThingThings.close();
-        super.onDestroy();
+    private boolean isThingsDevice() {
+        // TODO once targeting 'O' use constant `PackageManager.FEATURE_EMBEDDED`
+        return getPackageManager().hasSystemFeature("android.hardware.type.embedded");
     }
 }

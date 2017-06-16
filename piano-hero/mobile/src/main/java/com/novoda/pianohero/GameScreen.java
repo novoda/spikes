@@ -29,6 +29,13 @@ public class GameScreen extends LinearLayoutCompat {
         statusTextView = (TextView) findViewById(R.id.game_screen_text_status);
     }
 
+    public void show(GameInProgressViewModel viewModel) {
+        statusTextView.setText(viewModel.getMessage());
+        trebleStaffWidget.showProgress(viewModel.getSequence());
+        playNoteTextView.setText(viewModel.getCurrentNote());
+        nextNoteTextView.setText(viewModel.getUpcomingNote());
+    }
+
     public void showGameStart(GameStartViewModel viewModel) {
         statusTextView.setText(viewModel.getStartMessage());
 
@@ -41,27 +48,8 @@ public class GameScreen extends LinearLayoutCompat {
         nextNoteTextView.setText(viewModel.getNextNoteFormatted());
     }
 
-    public void showSuccess(RoundEndViewModel viewModel) {
-        statusTextView.setText(viewModel.getSuccessMessage());
-
-        playNoteTextView.setText(viewModel.getCurrentNoteFormatted());
-        nextNoteTextView.setText(viewModel.getNextNoteFormatted());
-
-        trebleStaffWidget.showProgress(viewModel.getSequence());
-    }
-
     public void showSongComplete(SongCompleteViewModel viewModel) {
         statusTextView.setText(viewModel.getMessage());
-    }
-
-    public void showError(RoundErrorViewModel viewModel) {
-        statusTextView.setText(viewModel.getErrorMessage());
-        trebleStaffWidget.showError(viewModel);
-    }
-
-    public void showSharpError(RoundErrorViewModel viewModel) {
-        statusTextView.setText(viewModel.getErrorMessage());
-        trebleStaffWidget.showSharpError(viewModel);
     }
 
     public void showGameComplete(GameOverViewModel viewModel) {
@@ -70,7 +58,6 @@ public class GameScreen extends LinearLayoutCompat {
     }
 
     public void showClock(ClockViewModel viewModel) {
-//        statusTextView.setText(viewModel.getTimeLeftFormatted());
         // TODO View stuff @ataulm
         Log.d("!!", viewModel.getTimeLeftFormatted() + " tick.");
     }

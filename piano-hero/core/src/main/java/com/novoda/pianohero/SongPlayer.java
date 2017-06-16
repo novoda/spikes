@@ -14,42 +14,34 @@ public class SongPlayer {
         callback.onSongStarted(sequence);
     }
 
-    public void onStartPlayed(Note note) {
-        callback.onRoundStart(note);
+    public void onStartPlaying(Note note) {
+        callback.onStartPlayingNote(note, sequence);
     }
 
     public void onStopPlaying(Note note) {
-        playGameRound(note);
-    }
-
-    private void playGameRound(Note note) {
         if (sequence.isFinal(note)) {
-            callback.onSongComplete();
+            callback.onFinalNoteInSequencePlayedSuccessfully();
             return;
         }
 
         if (sequence.currentNoteIs(note)) {
             this.sequence = sequence.nextPosition();
-            callback.onRoundEnd(sequence);
-            callback.onRoundSuccess(sequence);
+            callback.onCorrectNotePlayed(sequence);
         } else {
             Sequence updatedSequence = sequence.error(note);
-            callback.onRoundEnd(updatedSequence);
-            callback.onRoundError(updatedSequence);
+            callback.onIncorrectNotePlayed(updatedSequence);
         }
     }
 
     interface SongGameCallback {
         void onSongStarted(Sequence sequence);
 
-        void onRoundStart(Note note);
+        void onStartPlayingNote(Note note, Sequence sequence);
 
-        void onRoundEnd(Sequence sequence);
+        void onCorrectNotePlayed(Sequence sequence);
 
-        void onRoundSuccess(Sequence sequence);
+        void onIncorrectNotePlayed(Sequence sequence);
 
-        void onRoundError(Sequence sequence);
-
-        void onSongComplete();
+        void onFinalNoteInSequencePlayedSuccessfully();
     }
 }

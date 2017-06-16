@@ -30,10 +30,15 @@ public class GameModel implements GameMvp.Model {
     }
 
     @Override
+    public void startGame(GameCallback gameCallback) {
+//        sendInitialGameState(gameCallback); TODO this should be like initial sequence with initial score
+    }
+
+    @Override
     public void startGame(final GameStartCallback callback,
                           final SongStartCallback songStartCallback,
                           final GameClockCallback clockCallback,
-                          final RoundCallback roundCallback,
+                          final GameProgressCallback gameProgressCallback,
                           final SongCompleteCallback songCompleteCallback,
                           final GameCompleteCallback gameCompleteCallback) {
         score = START_SCORE;
@@ -45,7 +50,7 @@ public class GameModel implements GameMvp.Model {
                         callback,
                         songStartCallback,
                         clockCallback,
-                        roundCallback,
+                        gameProgressCallback,
                         songCompleteCallback,
                         gameCompleteCallback
                 );
@@ -59,38 +64,33 @@ public class GameModel implements GameMvp.Model {
             }
 
             @Override
-            public void onRoundStart(Note note) {
+            public void onStartPlayingNote(Note note, Sequence sequence) {
                 if (gameTimer.gameInProgress()) {
-                    roundCallback.onRoundStart(converter.createRoundStartViewModel(note));
+                    GameInProgressViewModel gameInProgressViewModel = converter.createCurrentlyPressingNoteGameInProgressViewModel(note, sequence, score);
+                    gameProgressCallback.onGameProgressing(gameInProgressViewModel);
                 }
             }
 
             @Override
-            public void onRoundEnd(Sequence sequence) {
-                if (gameTimer.gameInProgress()) {
-                    RoundEndViewModel viewModel = converter.createRoundEndViewModel(sequence);
-                    roundCallback.onRoundEnd(viewModel);
-                }
-            }
-
-            @Override
-            public void onRoundSuccess(Sequence sequence) {
+            public void onCorrectNotePlayed(Sequence sequence) {
                 if (gameTimer.gameInProgress()) {
                     score = score.add(7);
-                    roundCallback.onRoundSuccess(converter.createSuccessViewModel(score));
+                    GameInProgressViewModel gameInProgressViewModel = converter.createCorrectNotePressedGameInProgressViewModel(sequence, score);
+                    gameProgressCallback.onGameProgressing(gameInProgressViewModel);
                 }
             }
 
             @Override
-            public void onRoundError(Sequence sequence) {
+            public void onIncorrectNotePlayed(Sequence sequence) {
                 if (gameTimer.gameInProgress()) {
                     score = score.minus(3);
-                    roundCallback.onRoundError(converter.createErrorViewModel(sequence, score));
+                    GameInProgressViewModel gameInProgressViewModel = converter.createIncorrectNotePressedGameInProgressViewModel(sequence, score);
+                    gameProgressCallback.onGameProgressing(gameInProgressViewModel);
                 }
             }
 
             @Override
-            public void onSongComplete() {
+            public void onFinalNoteInSequencePlayedSuccessfully() {
                 songCompleteCallback.onSongComplete();
                 startNextSong();
             }
@@ -100,7 +100,7 @@ public class GameModel implements GameMvp.Model {
         piano.attachListener(new Piano.NoteListener() {
             @Override
             public void onStart(Note note) {
-                songPlayer.onStartPlayed(note);
+                songPlayer.onStartPlaying(note);
             }
 
             @Override
@@ -125,6 +125,11 @@ public class GameModel implements GameMvp.Model {
         songPlayer.loadSong(sequence);
         GameStartViewModel viewModel = converter.createGameStartViewModel(sequence);
         callback.onGameStarted(viewModel);
+    }
+
+    @Override
+    public void stopGame() {
+        gameTimer.stop();
     }
 
     private void startNextSong() {

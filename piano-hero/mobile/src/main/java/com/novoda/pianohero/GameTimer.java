@@ -32,6 +32,14 @@ class GameTimer {
         countDownTimer.start();
     }
 
+    public void stop() {
+        if (countDownTimer == null) {
+            return;
+        }
+        gameInProgress = false;
+        countDownTimer.cancel();
+    }
+
     public boolean gameInProgress() {
         return countDownTimer != null && gameInProgress;
     }

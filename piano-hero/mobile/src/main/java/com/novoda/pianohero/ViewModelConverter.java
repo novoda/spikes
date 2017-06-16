@@ -5,7 +5,6 @@ import java.util.Locale;
 class ViewModelConverter {
 
     private static final String NEXT_NOTE_HINT_FORMAT = "Next: %s";
-    private static final String SHARP_SYMBOL = "#";
 
     private final SimplePitchNotationFormatter pitchNotationFormatter;
 
@@ -20,11 +19,6 @@ class ViewModelConverter {
                 sequence,
                 message
         );
-    }
-
-    RoundStartViewModel createRoundStartViewModel(Note note) {
-        double frequency = frequencyFor(note);
-        return new RoundStartViewModel(frequency);
     }
 
     private double frequencyFor(Note note) {
@@ -51,17 +45,6 @@ class ViewModelConverter {
         return String.format(Locale.US, NEXT_NOTE_HINT_FORMAT, nextNote);
     }
 
-    RoundEndViewModel createRoundEndViewModel(Sequence sequence) {
-        String successMessage = getSuccessMessage(sequence);
-
-        return new RoundEndViewModel(
-                sequence,
-                currentNoteFormatted(sequence.getCurrentNote()),
-                nextNoteFormatted(sequence.getNextNote()),
-                successMessage
-        );
-    }
-
     private String getSuccessMessage(Sequence sequence) {
         if (sequence.position() > 0) {
             return String.format(Locale.US, "Woo! Keep going! (%d/%d)", sequence.position() + 1, sequence.length());
@@ -70,31 +53,46 @@ class ViewModelConverter {
         }
     }
 
-    RoundSuccessViewModel createSuccessViewModel(Score score) {
-        return new RoundSuccessViewModel(score.points());
-    }
-
-    RoundErrorViewModel createErrorViewModel(Sequence sequence, Score score) {
-        String errorMessage = getErrorMessage(sequence);
-
-        Note errorNote = sequence.latestError();
-        boolean isSharpError = pitchNotationFormatter.format(errorNote).endsWith(SHARP_SYMBOL);
-
-        return new RoundErrorViewModel(
-                sequence,
-                errorMessage,
-                isSharpError,
-                score.points()
-        );
-    }
-
     private String getErrorMessage(Sequence sequence) {
-        String nextNoteAsText = pitchNotationFormatter.format(sequence.get(sequence.position()));
+        String currentNoteAsText = currentNoteFormatted(sequence.getNextNote());
         String latestErrorAsText = pitchNotationFormatter.format(sequence.latestError());
-        return String.format(Locale.US, "Ruhroh! The correct note is %s but you played %s.", nextNoteAsText, latestErrorAsText);
+        return String.format(Locale.US, "Ruhroh! The correct note is %s but you played %s.", currentNoteAsText, latestErrorAsText);
     }
 
     GameOverViewModel createGameOverViewModel(Score score) {
         return new GameOverViewModel(String.format(Locale.US, "Well done! You scored %d", score.points()));
+    }
+
+    public GameInProgressViewModel createCurrentlyPressingNoteGameInProgressViewModel(Note note, Sequence sequence, Score score) {
+        return new GameInProgressViewModel(
+                Sound.atFrequency(frequencyFor(note)),
+                sequence,
+                "",
+                currentNoteFormatted(sequence.getCurrentNote()),
+                nextNoteFormatted(sequence.getNextNote()),
+                String.valueOf(score.points())
+        );
+    }
+
+    public GameInProgressViewModel createCorrectNotePressedGameInProgressViewModel(Sequence sequence, Score score) {
+        return new GameInProgressViewModel(
+                Sound.ofSilence(),
+                sequence,
+                getSuccessMessage(sequence),
+                currentNoteFormatted(sequence.getCurrentNote()),
+                nextNoteFormatted(sequence.getNextNote()),
+                String.valueOf(score.points())
+        );
+    }
+
+    public GameInProgressViewModel createIncorrectNotePressedGameInProgressViewModel(Sequence sequence, Score score) {
+        return new GameInProgressViewModel(
+                Sound.ofSilence(),
+                sequence,
+                getErrorMessage(sequence),
+                currentNoteFormatted(sequence.getCurrentNote()),
+                nextNoteFormatted(sequence.getNextNote()),
+                String.valueOf(score.points())
+        );
     }
 }

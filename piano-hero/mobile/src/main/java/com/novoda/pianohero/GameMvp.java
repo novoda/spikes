@@ -4,12 +4,19 @@ interface GameMvp {
 
     interface Model {
 
-        void startGame(GameStartCallback callback,
-                       SongStartCallback ssCallback,
-                       GameClockCallback cCallback,
-                       RoundCallback rCallback,
-                       SongCompleteCallback sCallback,
-                       GameCompleteCallback gCallback);
+        void startGame(
+                GameStartCallback callback,
+                SongStartCallback ssCallback,
+                GameClockCallback cCallback,
+                GameProgressCallback rCallback,
+                SongCompleteCallback sCallback,
+                GameCompleteCallback gCallback
+        );
+
+        void stopGame();
+
+        interface GameCallback extends GameStartCallback, SongStartCallback, GameClockCallback, GameProgressCallback, SongCompleteCallback, GameCompleteCallback {
+        }
 
         interface GameStartCallback {
             void onGameStarted(GameStartViewModel viewModel);
@@ -23,14 +30,8 @@ interface GameMvp {
             void onClockTick(ClockViewModel viewModel);
         }
 
-        interface RoundCallback {
-            void onRoundStart(RoundStartViewModel viewModel);
-
-            void onRoundEnd(RoundEndViewModel viewModel);
-
-            void onRoundSuccess(RoundSuccessViewModel viewModel);
-
-            void onRoundError(RoundErrorViewModel viewModel);
+        interface GameProgressCallback {
+            void onGameProgressing(GameInProgressViewModel viewModel);
         }
 
         interface SongCompleteCallback {
@@ -44,9 +45,9 @@ interface GameMvp {
 
     interface View {
 
-        void startSound(double midi);
+        void play(Sound sound);
 
-        void stopSound();
+        void show(GameInProgressViewModel viewModel);
 
         void showClock(ClockViewModel viewModel);
 
@@ -54,21 +55,15 @@ interface GameMvp {
 
         void showSong(SongStartViewModel viewModel);
 
-        void showRound(RoundEndViewModel viewModel);
-
         void showSongComplete(SongCompleteViewModel viewModel);
 
         void showGameComplete(GameOverViewModel viewModel);
-
-        void showError(RoundErrorViewModel viewModel);
-
-        void showSharpError(RoundErrorViewModel viewModel);
-
-        void showScore(String score);
     }
 
     interface Presenter {
 
-        void onCreate();
+        void startPresenting();
+
+        void stopPresenting();
     }
 }

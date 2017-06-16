@@ -103,6 +103,19 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         int positionRelativeToWindow = sequence.position() - startIndexInclusive;
 
         show(currentWindow, positionRelativeToWindow);
+
+        if (sequence.hasError()) {
+            SequenceNote sequenceNote = new SequenceNote(sequence.latestError(), positionRelativeToWindow);
+            showError(sequenceNote);
+        }
+    }
+
+    private void showError(SequenceNote sequenceNote) {
+        if (new SimplePitchNotationFormatter().format(sequenceNote.note).endsWith("#")) {
+            addSharpNoteWidget(sequenceNote, errorNoteDrawable, errorSharpDrawable);
+        } else {
+            addNoteWidget(sequenceNote, errorNoteDrawable);
+        }
     }
 
     private void show(List<Note> notes, int indexNextPlayableNote) {
@@ -110,7 +123,7 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
 
         for (int index = 0; index < notes.size(); index++) {
             Note note = notes.get(index);
-            if(note == Note.NONE) {
+            if (note == Note.NONE) {
                 continue;
             }
             SequenceNote sequenceNote = new SequenceNote(note, index);
@@ -220,31 +233,6 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         canvas.drawLine(noteWidget.getLeft() - extra, y, noteWidget.getRight() + extra, y, linesPaint);
     }
 
-    public void showError(RoundErrorViewModel viewModel) {
-        Sequence sequence = viewModel.getSequence();
-        int positionRelativeToWindow = getPositionRelativeToWindow(sequence.position());
-
-        SequenceNote sequenceNote = new SequenceNote(sequence.latestError(), positionRelativeToWindow);
-        addNoteWidget(sequenceNote, errorNoteDrawable);
-    }
-
-    public void showSharpError(RoundErrorViewModel viewModel) {
-        Sequence sequence = viewModel.getSequence();
-        int positionRelativeToWindow = getPositionRelativeToWindow(sequence.position());
-
-        SequenceNote sequenceNote = new SequenceNote(sequence.latestError(), positionRelativeToWindow);
-        addSharpNoteWidget(sequenceNote, errorNoteDrawable, errorSharpDrawable);
-    }
-
-    private int getPositionRelativeToWindow(int currentPosition) {
-        int spaceRequiredForTrebleClef = notesOffsetToAllowSpaceForTrebleClef();
-        int eachNoteWidth = widthForNoteWidgetIncludingSharpAndLeftMargin();
-        int numberOfNotesWeHaveSpaceFor = (getMeasuredWidth() - spaceRequiredForTrebleClef) / eachNoteWidth;
-
-        int startIndexInclusive = (currentPosition / numberOfNotesWeHaveSpaceFor) * numberOfNotesWeHaveSpaceFor;
-        return currentPosition - startIndexInclusive;
-    }
-
     private static class SequenceNote {
         final Note note;
         final int positionInSequence;
@@ -262,5 +250,4 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
             return Note.C4.equals(note) || Note.C4_S.equals(note);
         }
     }
-
 }

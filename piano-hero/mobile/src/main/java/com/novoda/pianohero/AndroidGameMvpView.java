@@ -1,7 +1,5 @@
 package com.novoda.pianohero;
 
-import android.util.Log;
-
 class AndroidGameMvpView implements GameMvp.View {
 
     private final GameScreen gameScreen;
@@ -15,13 +13,21 @@ class AndroidGameMvpView implements GameMvp.View {
     }
 
     @Override
-    public void startSound(double midi) {
-        speaker.start(midi);
+    public void play(Sound sound) {
+        if (sound.isOfSilence()) {
+            stopSound();
+        } else {
+            startSound(sound.frequency());
+        }
     }
 
-    @Override
-    public void stopSound() {
+    private void stopSound() {
         speaker.stop();
+    }
+
+    private void startSound(double midi) {
+        speaker.stop();
+        speaker.start(midi);
     }
 
     @Override
@@ -35,13 +41,14 @@ class AndroidGameMvpView implements GameMvp.View {
     }
 
     @Override
-    public void showSong(SongStartViewModel viewModel) {
-        gameScreen.showSongStart(viewModel);
+    public void show(GameInProgressViewModel viewModel) {
+        gameScreen.show(viewModel);
+        scoreDisplayer.display(viewModel.getScore());
     }
 
     @Override
-    public void showRound(RoundEndViewModel viewModel) {
-        gameScreen.showSuccess(viewModel);
+    public void showSong(SongStartViewModel viewModel) {
+        gameScreen.showSongStart(viewModel);
     }
 
     @Override
@@ -50,24 +57,8 @@ class AndroidGameMvpView implements GameMvp.View {
     }
 
     @Override
-    public void showError(RoundErrorViewModel viewModel) {
-        gameScreen.showError(viewModel);
-    }
-
-    @Override
-    public void showSharpError(RoundErrorViewModel viewModel) {
-        gameScreen.showSharpError(viewModel);
-    }
-
-    @Override
-    public void showScore(String score) {
-        scoreDisplayer.display(score);
-    }
-
-    @Override
     public void showGameComplete(GameOverViewModel viewModel) {
         gameScreen.showGameComplete(viewModel);
         scoreDisplayer.clearScore();
     }
-
 }
