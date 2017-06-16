@@ -17,7 +17,8 @@ public class GameModel implements GameMvp.Model {
             SongSequenceFactory songSequenceFactory,
             Piano piano,
             Clickable startGameClickable,
-            GameTimer gameTimer, ViewModelConverter converter,
+            GameTimer gameTimer,
+            ViewModelConverter converter,
             SongPlayer songPlayer
     ) {
         this.songSequenceFactory = songSequenceFactory;
@@ -126,18 +127,8 @@ public class GameModel implements GameMvp.Model {
         callback.onGameStarted(viewModel);
     }
 
-    @Override
-    public void startup() {
-        piano.open();
-    }
-
     private void startNextSong() {
         Sequence sequence = songSequenceFactory.maryHadALittleLamb();
         songPlayer.loadSong(sequence);
-    }
-
-    @Override
-    public void shutdown() {
-        piano.close();
     }
 }

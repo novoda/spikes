@@ -6,7 +6,7 @@ import android.os.Looper;
 
 import jp.kshoji.driver.midi.device.MidiInputDevice;
 
-class KeyStationMini32Piano extends SimpleUsbMidiDriver implements Piano {
+class KeyStationMini32Piano extends SimpleUsbMidiDriver implements Piano, AndroidThing {
 
     private NoteListener noteListener;
     private Handler handler;
@@ -55,5 +55,4 @@ class KeyStationMini32Piano extends SimpleUsbMidiDriver implements Piano {
             }
         });
     }
-
 }

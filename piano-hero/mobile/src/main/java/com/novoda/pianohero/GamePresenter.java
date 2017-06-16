@@ -22,11 +22,6 @@ class GamePresenter implements GameMvp.Presenter {
         );
     }
 
-    @Override
-    public void onResume() {
-        gameModel.startup();
-    }
-
     private final GameMvp.Model.GameStartCallback gameStartCallback = new GameMvp.Model.GameStartCallback() {
         @Override
         public void onGameStarted(GameStartViewModel viewModel) {
@@ -90,10 +85,5 @@ class GamePresenter implements GameMvp.Presenter {
             view.showGameComplete(viewModel);
         }
     };
-
-    @Override
-    public void onPause() {
-        gameModel.shutdown();
-    }
 
 }

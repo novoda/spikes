@@ -11,10 +11,6 @@ interface GameMvp {
                        SongCompleteCallback sCallback,
                        GameCompleteCallback gCallback);
 
-        void startup();
-
-        void shutdown();
-
         interface GameStartCallback {
             void onGameStarted(GameStartViewModel viewModel);
         }
@@ -74,10 +70,5 @@ interface GameMvp {
     interface Presenter {
 
         void onCreate();
-
-        void onResume();
-
-        void onPause();
     }
-
 }
