@@ -1,5 +1,6 @@
 package com.novoda.movies;
 
+import android.support.test.espresso.Espresso;
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -41,6 +42,8 @@ public class MovieItemViewTest {
 
     @Before
     public void setUp() {
+        Espresso.registerIdlingResources(viewTestRule);
+
         MovieItemView view = viewTestRule.getView();
 
         view.attachListener(movieItemListener);
@@ -51,6 +54,7 @@ public class MovieItemViewTest {
     @After
     public void tearDown() {
         viewTestRule.getView().detachListeners();
+        Espresso.unregisterIdlingResources(viewTestRule);
     }
 
     @Test

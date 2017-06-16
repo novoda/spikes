@@ -20,7 +20,9 @@ public class DropCapActivity extends Activity {
     private TextColorDialogDisplayer copyTextColorDialogDisplayer;
     private TypefaceDialogDisplayer dropCapTypefaceDialogDisplayer;
     private TypefaceDialogDisplayer copyTypefaceDialogDisplayer;
+    private DropCapNumberDialogDisplayer dropCapNumberDialogDisplayer;
 
+    private int numberOfDropCaps = 1;
     private FontType dropCapFontType;
     private FontType copyFontType;
 
@@ -34,6 +36,7 @@ public class DropCapActivity extends Activity {
         createTextColorDialogDisplayers();
         createTypefaceDialogDisplayers();
         createTextUpdater();
+        createDropCapNumberUpdater();
     }
 
     private void createTextSizeDialogDisplayers() {
@@ -54,7 +57,6 @@ public class DropCapActivity extends Activity {
 
         Button copyTextSizeButton = (Button) findViewById(R.id.copy_size);
         copyTextSizeButton.setOnClickListener(onClickDisplayCopyTextSizeDialog);
-
     }
 
     private final OnTextSizeChangeListener onDropCapTextSizeChanged = new OnTextSizeChangeListener() {
@@ -183,6 +185,32 @@ public class DropCapActivity extends Activity {
         @Override
         public void onClick(View v) {
             copyTypefaceDialogDisplayer.showTypefaceDialog(copyFontType);
+        }
+    };
+
+    private void createDropCapNumberUpdater() {
+        dropCapNumberDialogDisplayer = new DropCapNumberDialogDisplayer(
+                getFragmentManager(),
+                getResources(),
+                onDropCapNumberChangeListener
+        );
+
+        Button numberOfDropCapsButton = (Button) findViewById(R.id.drop_cap_number);
+        numberOfDropCapsButton.setOnClickListener(onClickDisplayNumberOfDropCapsDialog);
+    }
+
+    private final OnDropCapNumberChangeListener onDropCapNumberChangeListener = new OnDropCapNumberChangeListener() {
+        @Override
+        public void onDropCapNumberChanged(int newNumberOfDropCaps) {
+            dropCapView.setNumberOfDropCaps(newNumberOfDropCaps);
+            numberOfDropCaps = newNumberOfDropCaps;
+        }
+    };
+
+    private final View.OnClickListener onClickDisplayNumberOfDropCapsDialog = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            dropCapNumberDialogDisplayer.showDropCapNumberDialog(numberOfDropCaps);
         }
     };
 
