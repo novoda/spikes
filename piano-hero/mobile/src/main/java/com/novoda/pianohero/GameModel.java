@@ -60,28 +60,22 @@ public class GameModel implements GameMvp.Model {
 
             @Override
             public void onStartPlayingNote(Note note, Sequence sequence) {
-                if (gameTimer.gameInProgress()) {
-                    GameInProgressViewModel gameInProgressViewModel = converter.createCurrentlyPressingNoteGameInProgressViewModel(note, sequence, score);
-                    gameProgressCallback.onGameProgressing(gameInProgressViewModel);
-                }
+                GameInProgressViewModel gameInProgressViewModel = converter.createCurrentlyPressingNoteGameInProgressViewModel(note, sequence, score);
+                gameProgressCallback.onGameProgressing(gameInProgressViewModel);
             }
 
             @Override
             public void onCorrectNotePlayed(Sequence sequence) {
-                if (gameTimer.gameInProgress()) {
-                    score = score.add(7);
-                    GameInProgressViewModel gameInProgressViewModel = converter.createCorrectNotePressedGameInProgressViewModel(sequence, score);
-                    gameProgressCallback.onGameProgressing(gameInProgressViewModel);
-                }
+                score = score.add(7);
+                GameInProgressViewModel gameInProgressViewModel = converter.createCorrectNotePressedGameInProgressViewModel(sequence, score);
+                gameProgressCallback.onGameProgressing(gameInProgressViewModel);
             }
 
             @Override
             public void onIncorrectNotePlayed(Sequence sequence) {
-                if (gameTimer.gameInProgress()) {
-                    score = score.minus(3);
-                    GameInProgressViewModel gameInProgressViewModel = converter.createIncorrectNotePressedGameInProgressViewModel(sequence, score);
-                    gameProgressCallback.onGameProgressing(gameInProgressViewModel);
-                }
+                score = score.minus(3);
+                GameInProgressViewModel gameInProgressViewModel = converter.createIncorrectNotePressedGameInProgressViewModel(sequence, score);
+                gameProgressCallback.onGameProgressing(gameInProgressViewModel);
             }
 
             @Override
@@ -92,17 +86,7 @@ public class GameModel implements GameMvp.Model {
 
         });
 
-        piano.attachListener(new Piano.NoteListener() {
-            @Override
-            public void onStart(Note note) {
-                songPlayer.onStartPlaying(note);
-            }
-
-            @Override
-            public void onStop(Note note) {
-                songPlayer.onStopPlaying(note);
-            }
-        });
+        piano.attachListener(songPlayingNoteListener);
 
         gameTimer.start(new GameTimer.Callback() {
             @Override
@@ -117,10 +101,27 @@ public class GameModel implements GameMvp.Model {
             }
         });
         Sequence sequence = songSequenceFactory.maryHadALittleLamb();
+
         songPlayer.loadSong(sequence);
         GameStartViewModel viewModel = converter.createGameStartViewModel(sequence);
         callback.onGameStarted(viewModel);
     }
+
+    private final Piano.NoteListener songPlayingNoteListener = new Piano.NoteListener() {
+        @Override
+        public void onStart(Note note) {
+            if (gameTimer.gameInProgress()) {
+                songPlayer.onStartPlaying(note);
+            }
+        }
+
+        @Override
+        public void onStop(Note note) {
+            if (gameTimer.gameInProgress()) {
+                songPlayer.onStopPlaying(note);
+            }
+        }
+    };
 
     @Override
     public void stopGame() {
