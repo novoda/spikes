@@ -30,11 +30,6 @@ public class GameModel implements GameMvp.Model {
     }
 
     @Override
-    public void startGame(GameCallback gameCallback) {
-//        sendInitialGameState(gameCallback); TODO this should be like initial sequence with initial score
-    }
-
-    @Override
     public void startGame(final GameStartCallback callback,
                           final SongStartCallback songStartCallback,
                           final GameClockCallback clockCallback,
