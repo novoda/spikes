@@ -5,7 +5,6 @@ interface GameMvp {
     interface Model {
 
         void startGame(
-                GameStartCallback callback,
                 SongStartCallback ssCallback,
                 GameClockCallback cCallback,
                 GameProgressCallback rCallback,
@@ -15,11 +14,7 @@ interface GameMvp {
 
         void stopGame();
 
-        interface GameCallback extends GameStartCallback, SongStartCallback, GameClockCallback, GameProgressCallback, SongCompleteCallback, GameCompleteCallback {
-        }
-
-        interface GameStartCallback {
-            void onGameStarted(GameStartViewModel viewModel);
+        interface GameCallback extends SongStartCallback, GameClockCallback, GameProgressCallback, SongCompleteCallback, GameCompleteCallback {
         }
 
         interface SongStartCallback {

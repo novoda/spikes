@@ -30,8 +30,7 @@ public class GameModel implements GameMvp.Model {
     }
 
     @Override
-    public void startGame(final GameStartCallback callback,
-                          final SongStartCallback songStartCallback,
+    public void startGame(final SongStartCallback songStartCallback,
                           final GameClockCallback clockCallback,
                           final GameProgressCallback gameProgressCallback,
                           final SongCompleteCallback songCompleteCallback,
@@ -42,7 +41,6 @@ public class GameModel implements GameMvp.Model {
             @Override
             public void onClick() {
                 startGame(
-                        callback,
                         songStartCallback,
                         clockCallback,
                         gameProgressCallback,
@@ -103,8 +101,8 @@ public class GameModel implements GameMvp.Model {
         Sequence sequence = songSequenceFactory.maryHadALittleLamb();
 
         songPlayer.loadSong(sequence);
-        GameStartViewModel viewModel = converter.createGameStartViewModel(sequence);
-        callback.onGameStarted(viewModel);
+        GameInProgressViewModel viewModel = converter.createStartGameInProgressViewModel(sequence, score);
+        gameProgressCallback.onGameProgressing(viewModel);
     }
 
     private final Piano.NoteListener songPlayingNoteListener = new Piano.NoteListener() {

@@ -13,7 +13,6 @@ class GamePresenter implements GameMvp.Presenter {
     @Override
     public void startPresenting() {
         gameModel.startGame(
-                gameStartCallback,
                 songStartedCallback,
                 gameClockCallback,
                 gameProgressCallback,
@@ -26,13 +25,6 @@ class GamePresenter implements GameMvp.Presenter {
     public void stopPresenting() {
         gameModel.stopGame();
     }
-
-    private final GameMvp.Model.GameStartCallback gameStartCallback = new GameMvp.Model.GameStartCallback() {
-        @Override
-        public void onGameStarted(GameStartViewModel viewModel) {
-            view.showGameStarted(viewModel);
-        }
-    };
 
     private final GameMvp.Model.SongStartCallback songStartedCallback = new GameMvp.Model.SongStartCallback() {
         @Override

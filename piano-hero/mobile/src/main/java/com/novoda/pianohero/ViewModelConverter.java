@@ -12,15 +12,6 @@ class ViewModelConverter {
         this.pitchNotationFormatter = pitchNotationFormatter;
     }
 
-    GameStartViewModel createGameStartViewModel(Sequence sequence) {
-        String message = "Let's start!";
-
-        return new GameStartViewModel(
-                sequence,
-                message
-        );
-    }
-
     private double frequencyFor(Note note) {
         return 440 * Math.pow(2, (note.midi() - 69) * 1f / 12);
     }
@@ -61,6 +52,19 @@ class ViewModelConverter {
 
     GameOverViewModel createGameOverViewModel(Score score) {
         return new GameOverViewModel(String.format(Locale.US, "Well done! You scored %d", score.points()));
+    }
+
+    GameInProgressViewModel createStartGameInProgressViewModel(Sequence sequence, Score score) {
+        String message = "Let's start!";
+
+        return new GameInProgressViewModel(
+                Sound.ofSilence(),
+                sequence,
+                message,
+                currentNoteFormatted(sequence.getCurrentNote()),
+                nextNoteFormatted(sequence.getCurrentNote()),
+                String.valueOf(score.points())
+        );
     }
 
     public GameInProgressViewModel createCurrentlyPressingNoteGameInProgressViewModel(Note note, Sequence sequence, Score score) {
