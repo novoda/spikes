@@ -88,9 +88,12 @@ public class AndroidThingsActivity extends AppCompatActivity {
 
     private GameMvp.View createGameMvpView() {
         return new AndroidGameMvpView(
-                (GameScreen) findViewById(R.id.game_screen),
                 createSpeaker(),
-                createScoreDisplayer()
+                createScoreDisplayer(),
+                (C4ToB5TrebleStaffWidget) findViewById(R.id.game_widget_treble_staff),
+                (TextView) findViewById(R.id.game_text_play_note),
+                (TextView) findViewById(R.id.game_text_next_note),
+                (TextView) findViewById(R.id.game_text_status)
         );
     }
 

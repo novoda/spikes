@@ -7,10 +7,56 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <com.novoda.pianohero.GameScreen
-        android:id="@+id/game_screen"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/game_text_play_note"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="36sp"
+                tools:text="C4" />
+
+            <TextView
+                android:id="@+id/game_text_next_note"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:textSize="20sp"
+                tools:text="Next up: D4" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="100">
+
+            <com.novoda.pianohero.C4ToB5TrebleStaffWidget
+                android:id="@+id/game_widget_treble_staff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/game_text_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="20sp"
+            tools:text="Excellent, you're doing well!" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,4 +92,5 @@
             android:visibility="invisible" />
 
     </LinearLayout>
+
 </LinearLayout>
