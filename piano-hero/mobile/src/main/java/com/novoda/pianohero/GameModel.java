@@ -12,6 +12,7 @@ public class GameModel implements GameMvp.Model {
     private final GameTimer gameTimer;
 
     private Score score = START_SCORE;
+    private GameCallback gameCallback;
 
     GameModel(
             SongSequenceFactory songSequenceFactory,
@@ -30,79 +31,74 @@ public class GameModel implements GameMvp.Model {
     }
 
     @Override
-    public void startGame(final SongStartCallback songStartCallback,
-                          final GameClockCallback clockCallback,
-                          final GameProgressCallback gameProgressCallback,
-                          final SongCompleteCallback songCompleteCallback,
-                          final GameCompleteCallback gameCompleteCallback) {
-        score = START_SCORE;
+    public void startGame(final GameCallback gameCallback) {
+        this.gameCallback = gameCallback;
 
         startGameClickable.setListener(new Clickable.Listener() {
             @Override
             public void onClick() {
-                startGame(
-                        songStartCallback,
-                        clockCallback,
-                        gameProgressCallback,
-                        songCompleteCallback,
-                        gameCompleteCallback
-                );
+                emitInitialGameState(gameCallback);
             }
         });
 
         songPlayer.attachListeners(new SongPlayer.SongGameCallback() {
             @Override
             public void onSongStarted(Sequence sequence) {
-                songStartCallback.onSongStarted(converter.createSongStartViewModel(sequence));
+                gameCallback.onSongStarted(converter.createSongStartViewModel(sequence));
             }
 
             @Override
             public void onStartPlayingNote(Note note, Sequence sequence) {
                 GameInProgressViewModel gameInProgressViewModel = converter.createCurrentlyPressingNoteGameInProgressViewModel(note, sequence, score);
-                gameProgressCallback.onGameProgressing(gameInProgressViewModel);
+                gameCallback.onGameProgressing(gameInProgressViewModel);
             }
 
             @Override
             public void onCorrectNotePlayed(Sequence sequence) {
                 score = score.add(7);
                 GameInProgressViewModel gameInProgressViewModel = converter.createCorrectNotePressedGameInProgressViewModel(sequence, score);
-                gameProgressCallback.onGameProgressing(gameInProgressViewModel);
+                gameCallback.onGameProgressing(gameInProgressViewModel);
             }
 
             @Override
             public void onIncorrectNotePlayed(Sequence sequence) {
                 score = score.minus(3);
                 GameInProgressViewModel gameInProgressViewModel = converter.createIncorrectNotePressedGameInProgressViewModel(sequence, score);
-                gameProgressCallback.onGameProgressing(gameInProgressViewModel);
+                gameCallback.onGameProgressing(gameInProgressViewModel);
             }
 
             @Override
             public void onFinalNoteInSequencePlayedSuccessfully() {
-                songCompleteCallback.onSongComplete();
+                gameCallback.onSongComplete();
                 startNextSong();
             }
 
         });
-
         piano.attachListener(songPlayingNoteListener);
 
         gameTimer.start(new GameTimer.Callback() {
             @Override
             public void onSecondTick(long secondsUntilFinished) {
                 ClockViewModel clockViewModel = converter.createClockViewModel(secondsUntilFinished);
-                clockCallback.onClockTick(clockViewModel);
+                gameCallback.onClockTick(clockViewModel);
             }
 
             @Override
             public void onFinish() {
-                gameCompleteCallback.onGameComplete(converter.createGameOverViewModel(score));
+                gameCallback.onGameComplete(converter.createGameOverViewModel(score));
             }
         });
-        Sequence sequence = songSequenceFactory.maryHadALittleLamb();
 
+        emitInitialGameState(gameCallback);
+    }
+
+    private void emitInitialGameState(GameCallback gameCallback) {
+        this.score = START_SCORE;
+
+        Sequence sequence = songSequenceFactory.maryHadALittleLamb();// TODO: the factory should be like an infinite playlist (with first() and next())
         songPlayer.loadSong(sequence);
-        GameInProgressViewModel viewModel = converter.createStartGameInProgressViewModel(sequence, score);
-        gameProgressCallback.onGameProgressing(viewModel);
+        GameInProgressViewModel gameInProgressViewModel = converter.createStartGameInProgressViewModel(sequence, score);
+        gameCallback.onGameProgressing(gameInProgressViewModel);
     }
 
     private final Piano.NoteListener songPlayingNoteListener = new Piano.NoteListener() {

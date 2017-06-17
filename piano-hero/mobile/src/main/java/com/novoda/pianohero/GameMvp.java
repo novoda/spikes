@@ -4,36 +4,20 @@ interface GameMvp {
 
     interface Model {
 
-        void startGame(
-                SongStartCallback ssCallback,
-                GameClockCallback cCallback,
-                GameProgressCallback rCallback,
-                SongCompleteCallback sCallback,
-                GameCompleteCallback gCallback
-        );
+        void startGame(GameCallback gameCallback);
 
         void stopGame();
 
-        interface GameCallback extends SongStartCallback, GameClockCallback, GameProgressCallback, SongCompleteCallback, GameCompleteCallback {
-        }
+        interface GameCallback {
 
-        interface SongStartCallback {
             void onSongStarted(SongStartViewModel viewModel);
-        }
 
-        interface GameClockCallback {
-            void onClockTick(ClockViewModel viewModel);
-        }
-
-        interface GameProgressCallback {
-            void onGameProgressing(GameInProgressViewModel viewModel);
-        }
-
-        interface SongCompleteCallback {
             void onSongComplete();
-        }
 
-        interface GameCompleteCallback {
+            void onClockTick(ClockViewModel viewModel);
+
+            void onGameProgressing(GameInProgressViewModel viewModel);
+
             void onGameComplete(GameOverViewModel viewModel);
         }
     }

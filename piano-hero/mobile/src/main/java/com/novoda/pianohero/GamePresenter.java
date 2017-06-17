@@ -12,53 +12,40 @@ class GamePresenter implements GameMvp.Presenter {
 
     @Override
     public void startPresenting() {
-        gameModel.startGame(
-                songStartedCallback,
-                gameClockCallback,
-                gameProgressCallback,
-                songCompleteCallback,
-                gameCompleteCallback
-        );
+        gameModel.startGame(gameCallback);
     }
 
-    @Override
-    public void stopPresenting() {
-        gameModel.stopGame();
-    }
+    private final GameMvp.Model.GameCallback gameCallback = new GameMvp.Model.GameCallback() {
+        @Override
+        public void onClockTick(ClockViewModel viewModel) {
+            view.showClock(viewModel);
+        }
 
-    private final GameMvp.Model.SongStartCallback songStartedCallback = new GameMvp.Model.SongStartCallback() {
+        @Override
+        public void onGameComplete(GameOverViewModel viewModel) {
+            view.showGameComplete(viewModel);
+        }
+
+        @Override
+        public void onGameProgressing(GameInProgressViewModel viewModel) {
+            view.play(viewModel.getSound());
+            view.show(viewModel);
+        }
+
+        @Override
+        public void onSongComplete() {
+            view.showSongComplete(new SongCompleteViewModel("Nice, song complete!"));
+        }
+
         @Override
         public void onSongStarted(SongStartViewModel viewModel) {
             view.showSong(viewModel);
         }
     };
 
-    private final GameMvp.Model.GameClockCallback gameClockCallback = new GameMvp.Model.GameClockCallback() {
-        @Override
-        public void onClockTick(ClockViewModel viewModel) {
-            view.showClock(viewModel);
-        }
-    };
+    @Override
+    public void stopPresenting() {
+        gameModel.stopGame();
+    }
 
-    private final GameMvp.Model.GameProgressCallback gameProgressCallback = new GameMvp.Model.GameProgressCallback() {
-        @Override
-        public void onGameProgressing(GameInProgressViewModel viewModel) {
-            view.play(viewModel.getSound());
-            view.show(viewModel);
-        }
-    };
-
-    private final GameMvp.Model.SongCompleteCallback songCompleteCallback = new GameMvp.Model.SongCompleteCallback() {
-        @Override
-        public void onSongComplete() {
-            view.showSongComplete(new SongCompleteViewModel("Nice, song complete!"));
-        }
-    };
-
-    private final GameMvp.Model.GameCompleteCallback gameCompleteCallback = new GameMvp.Model.GameCompleteCallback() {
-        @Override
-        public void onGameComplete(GameOverViewModel viewModel) {
-            view.showGameComplete(viewModel);
-        }
-    };
 }
