@@ -2,8 +2,6 @@ package com.novoda.pianohero;
 
 public class GameModel implements GameMvp.Model {
 
-    private static final Score START_SCORE = new Score(500);
-
     private final SongSequenceFactory songSequenceFactory;
     private final Piano piano;
     private final SongPlayer songPlayer;
@@ -11,7 +9,7 @@ public class GameModel implements GameMvp.Model {
     private final ViewModelConverter converter;
     private final GameTimer gameTimer;
 
-    private Score score = START_SCORE;
+    private Score score = Score.initial();
 
     GameModel(
             SongSequenceFactory songSequenceFactory,
@@ -53,14 +51,14 @@ public class GameModel implements GameMvp.Model {
 
             @Override
             public void onCorrectNotePlayed(Sequence sequence) {
-                score = score.add(7);
+                score = score.increment();
                 GameInProgressViewModel gameInProgressViewModel = converter.createCorrectNotePressedGameInProgressViewModel(sequence, score);
                 gameCallback.onGameProgressing(gameInProgressViewModel);
             }
 
             @Override
             public void onIncorrectNotePlayed(Sequence sequence) {
-                score = score.minus(3);
+                score = score.decrement();
                 GameInProgressViewModel gameInProgressViewModel = converter.createIncorrectNotePressedGameInProgressViewModel(sequence, score);
                 gameCallback.onGameProgressing(gameInProgressViewModel);
             }
@@ -91,7 +89,7 @@ public class GameModel implements GameMvp.Model {
     }
 
     private void emitInitialGameState(GameCallback gameCallback) {
-        this.score = START_SCORE;
+        this.score = Score.initial();
 
         Sequence sequence = songSequenceFactory.maryHadALittleLamb();// TODO: the factory should be like an infinite playlist (with first() and next())
         songPlayer.loadSong(sequence);
