@@ -46,17 +46,10 @@ class AndroidGameMvpView implements GameMvp.View {
     }
 
     @Override
-    public void showGameStarted(GameStartViewModel viewModel) {
-        statusTextView.setText(viewModel.getStartMessage());
-
-        trebleStaffWidget.showProgress(viewModel.getSequence());
-        trebleStaffWidget.setVisibility(View.VISIBLE);
-    }
-
-    @Override
     public void show(GameInProgressViewModel viewModel) {
         statusTextView.setText(viewModel.getMessage());
         trebleStaffWidget.showProgress(viewModel.getSequence());
+        trebleStaffWidget.setVisibility(View.VISIBLE);
         playNoteTextView.setText(viewModel.getCurrentNote());
         nextNoteTextView.setText(viewModel.getUpcomingNote());
         scoreDisplayer.display(viewModel.getScore());

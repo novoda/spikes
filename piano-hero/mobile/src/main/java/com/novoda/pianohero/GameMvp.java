@@ -30,8 +30,6 @@ interface GameMvp {
 
         void showClock(ClockViewModel viewModel);
 
-        void showGameStarted(GameStartViewModel viewModel);
-
         void showSong(SongStartViewModel viewModel);
 
         void showSongComplete(SongCompleteViewModel viewModel);

@@ -66,7 +66,9 @@ public class GameModel implements GameMvp.Model {
             @Override
             public void onFinalNoteInSequencePlayedSuccessfully() {
                 gameCallback.onSongComplete();
-                startNextSong();
+
+                Sequence sequence = songSequenceFactory.maryHadALittleLamb();
+                songPlayer.loadSong(sequence);
             }
 
         });
@@ -90,9 +92,9 @@ public class GameModel implements GameMvp.Model {
 
     private void emitInitialGameState(GameCallback gameCallback) {
         this.score = Score.initial();
-
-        Sequence sequence = songSequenceFactory.maryHadALittleLamb();// TODO: the factory should be like an infinite playlist (with first() and next())
+        Sequence sequence = songSequenceFactory.maryHadALittleLamb();
         songPlayer.loadSong(sequence);
+
         GameInProgressViewModel gameInProgressViewModel = converter.createStartGameInProgressViewModel(sequence, score);
         gameCallback.onGameProgressing(gameInProgressViewModel);
     }
@@ -118,8 +120,4 @@ public class GameModel implements GameMvp.Model {
         gameTimer.stop();
     }
 
-    private void startNextSong() {
-        Sequence sequence = songSequenceFactory.maryHadALittleLamb();
-        songPlayer.loadSong(sequence);
-    }
 }
