@@ -11,7 +11,6 @@ public class SongPlayer {
 
     public void loadSong(Sequence sequence) {
         this.sequence = sequence;
-        callback.onSongStarted(sequence);
     }
 
     public void onStartPlaying(Note note) {
@@ -34,7 +33,6 @@ public class SongPlayer {
     }
 
     interface SongGameCallback {
-        void onSongStarted(Sequence sequence);
 
         void onStartPlayingNote(Note note, Sequence sequence);
 

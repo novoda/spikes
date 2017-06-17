@@ -38,12 +38,6 @@ public class GameModel implements GameMvp.Model {
 
         songPlayer.attachListeners(new SongPlayer.SongGameCallback() {
             @Override
-            public void onSongStarted(Sequence sequence) {
-                SongStartViewModel songStartViewModel = converter.createSongStartViewModel(sequence);
-                gameCallback.onSongStarted(songStartViewModel);
-            }
-
-            @Override
             public void onStartPlayingNote(Note note, Sequence sequence) {
                 GameInProgressViewModel gameInProgressViewModel = converter.createCurrentlyPressingNoteGameInProgressViewModel(note, sequence, score);
                 gameCallback.onGameProgressing(gameInProgressViewModel);

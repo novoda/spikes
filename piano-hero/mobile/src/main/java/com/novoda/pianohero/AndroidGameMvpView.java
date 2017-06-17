@@ -56,12 +56,6 @@ class AndroidGameMvpView implements GameMvp.View {
     }
 
     @Override
-    public void showSong(SongStartViewModel viewModel) {
-        playNoteTextView.setText(viewModel.getCurrentNoteFormatted());
-        nextNoteTextView.setText(viewModel.getNextNoteFormatted());
-    }
-
-    @Override
     public void showSongComplete(SongCompleteViewModel viewModel) {
         statusTextView.setText(viewModel.getMessage());
     }

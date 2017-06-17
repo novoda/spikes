@@ -10,8 +10,6 @@ interface GameMvp {
 
         interface GameCallback {
 
-            void onSongStarted(SongStartViewModel viewModel);
-
             void onSongComplete();
 
             void onClockTick(ClockViewModel viewModel);
@@ -29,8 +27,6 @@ interface GameMvp {
         void show(GameInProgressViewModel viewModel);
 
         void showClock(ClockViewModel viewModel);
-
-        void showSong(SongStartViewModel viewModel);
 
         void showSongComplete(SongCompleteViewModel viewModel);
 

@@ -36,11 +36,6 @@ class GamePresenter implements GameMvp.Presenter {
         public void onSongComplete() {
             view.showSongComplete(new SongCompleteViewModel("Nice, song complete!"));
         }
-
-        @Override
-        public void onSongStarted(SongStartViewModel viewModel) {
-            view.showSong(viewModel);
-        }
     };
 
     @Override
