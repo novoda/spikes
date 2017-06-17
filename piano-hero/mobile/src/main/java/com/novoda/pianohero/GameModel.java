@@ -10,6 +10,7 @@ public class GameModel implements GameMvp.Model {
     private final GameTimer gameTimer;
 
     private Score score = Score.initial();
+    private GameCallback gameCallback;
 
     GameModel(
             SongSequenceFactory songSequenceFactory,
@@ -29,10 +30,11 @@ public class GameModel implements GameMvp.Model {
 
     @Override
     public void startGame(final GameCallback gameCallback) {
+        this.gameCallback = gameCallback;
         startGameClickable.setListener(new Clickable.Listener() {
             @Override
             public void onClick() {
-                emitInitialGameState(gameCallback);
+                startNewGame();
             }
         });
 
@@ -68,21 +70,29 @@ public class GameModel implements GameMvp.Model {
         });
         piano.attachListener(songPlayingNoteListener);
 
-        gameTimer.start(new GameTimer.Callback() {
-            @Override
-            public void onSecondTick(long secondsUntilFinished) {
-                ClockViewModel clockViewModel = converter.createClockViewModel(secondsUntilFinished);
-                gameCallback.onClockTick(clockViewModel);
-            }
-
-            @Override
-            public void onFinish() {
-                gameCallback.onGameComplete(converter.createGameOverViewModel(score));
-            }
-        });
-
-        emitInitialGameState(gameCallback);
+        startNewGame();
     }
+
+    private void startNewGame() {
+        if (gameCallback == null) {
+            throw new IllegalStateException("how you startin' a new game without calling startGame(GameCallback)");
+        }
+        emitInitialGameState(gameCallback);
+        gameTimer.start(gameTimerCallback);
+    }
+
+    private final GameTimer.Callback gameTimerCallback = new GameTimer.Callback() {
+        @Override
+        public void onSecondTick(long secondsUntilFinished) {
+            ClockViewModel clockViewModel = converter.createClockViewModel(secondsUntilFinished);
+            gameCallback.onClockTick(clockViewModel);
+        }
+
+        @Override
+        public void onFinish() {
+            gameCallback.onGameComplete(converter.createGameOverViewModel(score));
+        }
+    };
 
     private void emitInitialGameState(GameCallback gameCallback) {
         this.score = Score.initial();
