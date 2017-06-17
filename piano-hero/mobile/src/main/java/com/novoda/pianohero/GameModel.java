@@ -68,10 +68,26 @@ public class GameModel implements GameMvp.Model {
             }
 
         });
-        piano.attachListener(songPlayingNoteListener);
 
+        piano.attachListener(songPlayingNoteListener);
         startNewGame();
     }
+
+    private final Piano.NoteListener songPlayingNoteListener = new Piano.NoteListener() {
+        @Override
+        public void onStart(Note note) {
+            if (gameTimer.gameInProgress()) {
+                songPlayer.onStartPlaying(note);
+            }
+        }
+
+        @Override
+        public void onStop(Note note) {
+            if (gameTimer.gameInProgress()) {
+                songPlayer.onStopPlaying(note);
+            }
+        }
+    };
 
     private void startNewGame() {
         if (gameCallback == null) {
@@ -102,22 +118,6 @@ public class GameModel implements GameMvp.Model {
         GameInProgressViewModel gameInProgressViewModel = converter.createStartGameInProgressViewModel(sequence, score);
         gameCallback.onGameProgressing(gameInProgressViewModel);
     }
-
-    private final Piano.NoteListener songPlayingNoteListener = new Piano.NoteListener() {
-        @Override
-        public void onStart(Note note) {
-            if (gameTimer.gameInProgress()) {
-                songPlayer.onStartPlaying(note);
-            }
-        }
-
-        @Override
-        public void onStop(Note note) {
-            if (gameTimer.gameInProgress()) {
-                songPlayer.onStopPlaying(note);
-            }
-        }
-    };
 
     @Override
     public void stopGame() {
