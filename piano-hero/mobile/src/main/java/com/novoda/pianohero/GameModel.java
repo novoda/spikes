@@ -12,7 +12,6 @@ public class GameModel implements GameMvp.Model {
     private final GameTimer gameTimer;
 
     private Score score = START_SCORE;
-    private GameCallback gameCallback;
 
     GameModel(
             SongSequenceFactory songSequenceFactory,
@@ -32,8 +31,6 @@ public class GameModel implements GameMvp.Model {
 
     @Override
     public void startGame(final GameCallback gameCallback) {
-        this.gameCallback = gameCallback;
-
         startGameClickable.setListener(new Clickable.Listener() {
             @Override
             public void onClick() {
@@ -44,7 +41,8 @@ public class GameModel implements GameMvp.Model {
         songPlayer.attachListeners(new SongPlayer.SongGameCallback() {
             @Override
             public void onSongStarted(Sequence sequence) {
-                gameCallback.onSongStarted(converter.createSongStartViewModel(sequence));
+                SongStartViewModel songStartViewModel = converter.createSongStartViewModel(sequence);
+                gameCallback.onSongStarted(songStartViewModel);
             }
 
             @Override
