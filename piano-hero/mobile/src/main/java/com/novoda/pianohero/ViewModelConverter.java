@@ -20,13 +20,6 @@ class ViewModelConverter {
         return new ClockViewModel(secondsLeft + "s");
     }
 
-    SongStartViewModel createSongStartViewModel(Sequence sequence) {
-        return new SongStartViewModel(
-                currentNoteFormatted(sequence.getCurrentNote()),
-                nextNoteFormatted(sequence.getNextNote())
-        );
-    }
-
     private String currentNoteFormatted(Note note) {
         return pitchNotationFormatter.format(note);
     }
