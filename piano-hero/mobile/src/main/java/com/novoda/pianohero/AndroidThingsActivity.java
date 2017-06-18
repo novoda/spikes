@@ -47,7 +47,7 @@ public class AndroidThingsActivity extends AppCompatActivity {
                 createRestartGameClickable(),
                 new GameTimer(),
                 new ViewModelConverter(pitchNotationFormatter),
-                new SongPlayer(),
+                new PlayAttemptGrader(),
                 pitchNotationFormatter
         );
     }

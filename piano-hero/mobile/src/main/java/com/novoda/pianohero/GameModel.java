@@ -6,7 +6,7 @@ public class GameModel implements GameMvp.Model {
 
     private final SongSequenceFactory songSequenceFactory;
     private final Piano piano;
-    private final SongPlayer songPlayer;
+    private final PlayAttemptGrader playAttemptGrader;
     private final Clickable startGameClickable;
     private final ViewModelConverter converter;
     private final GameTimer gameTimer;
@@ -21,14 +21,15 @@ public class GameModel implements GameMvp.Model {
             Clickable startGameClickable,
             GameTimer gameTimer,
             ViewModelConverter converter,
-            SongPlayer songPlayer,
-            SimplePitchNotationFormatter pitchNotationFormatter) {
+            PlayAttemptGrader playAttemptGrader,
+            SimplePitchNotationFormatter pitchNotationFormatter
+    ) {
         this.songSequenceFactory = songSequenceFactory;
         this.piano = piano;
         this.startGameClickable = startGameClickable;
         this.gameTimer = gameTimer;
         this.converter = converter;
-        this.songPlayer = songPlayer;
+        this.playAttemptGrader = playAttemptGrader;
         this.pitchNotationFormatter = pitchNotationFormatter;
     }
 
@@ -42,18 +43,32 @@ public class GameModel implements GameMvp.Model {
             }
         });
 
-        songPlayer.attachListeners(new SongPlayer.SongGameCallback() {
-            @Override
-            public void onStartPlayingNote(Note note, Sequence sequence) {
-                gameState = gameState.update(sequence)
-                        .update(Sound.of(note))
+        piano.attachListener(songPlayingNoteListener);
+        startNewGame();
+    }
+
+    private final Piano.NoteListener songPlayingNoteListener = new Piano.NoteListener() {
+
+        @Override
+        public void onStart(Note note) {
+            if (gameTimer.gameInProgress()) {
+                gameState = gameState.update(Sound.of(note))
                         .update(gameTimer.secondsRemaining())
                         .update(Message.empty());
 
                 GameInProgressViewModel gameInProgressViewModel = converter.createGameInProgressViewModel(gameState);
                 gameCallback.onGameProgressing(gameInProgressViewModel);
             }
+        }
 
+        @Override
+        public void onStop(Note note) {
+            if (gameTimer.gameInProgress()) {
+                playAttemptGrader.grade(note, gameState.getSequence(), onPlayAttemptGradedCallback);
+            }
+        }
+
+        private final PlayAttemptGrader.Callback onPlayAttemptGradedCallback = new PlayAttemptGrader.Callback() {
             @Override
             public void onCorrectNotePlayed(Sequence sequence) {
                 gameState = gameState.update(gameState.getScore().increment())
@@ -100,30 +115,12 @@ public class GameModel implements GameMvp.Model {
             public void onFinalNoteInSequencePlayedSuccessfully() {
                 gameCallback.onSongComplete();
 
-                Sequence sequence = songSequenceFactory.maryHadALittleLamb();
-                songPlayer.loadSong(sequence);
+                Sequence sequence = songSequenceFactory.maryHadALittleLamb(); // TODO: pick next song in playlist
+                gameState = gameState.update(sequence)
+                        .update(new Message("nice! next song!"));
             }
+        };
 
-        });
-
-        piano.attachListener(songPlayingNoteListener);
-        startNewGame();
-    }
-
-    private final Piano.NoteListener songPlayingNoteListener = new Piano.NoteListener() {
-        @Override
-        public void onStart(Note note) {
-            if (gameTimer.gameInProgress()) {
-                songPlayer.onStartPlaying(note);
-            }
-        }
-
-        @Override
-        public void onStop(Note note) {
-            if (gameTimer.gameInProgress()) {
-                songPlayer.onStopPlaying(note);
-            }
-        }
     };
 
     private void startNewGame() {
@@ -151,9 +148,7 @@ public class GameModel implements GameMvp.Model {
 
     private void emitInitialGameState(GameCallback gameCallback) {
         Sequence sequence = songSequenceFactory.maryHadALittleLamb();
-        // TODO: Sequence state kept in State and SongPlayer - should only be in one place (State)
         this.gameState = State.empty().update(sequence);
-        songPlayer.loadSong(gameState.getSequence());
 
         GameInProgressViewModel viewModel = converter.createGameInProgressViewModel(gameState);
         gameCallback.onGameProgressing(viewModel);
