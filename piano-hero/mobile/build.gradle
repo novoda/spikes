@@ -41,6 +41,7 @@ dependencies {
     compile libraries.percent
     compile libraries.supportAppCompatV7
     compile libraries.androidThingsContribDriverHt16k33
+    compile libraries.progressRingView
 
     provided 'com.google.android.things:androidthings:0.3-devpreview'
 

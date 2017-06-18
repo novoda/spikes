@@ -1,6 +1,7 @@
 package com.novoda.pianohero;
 
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 class ViewModelConverter {
 
@@ -8,9 +9,11 @@ class ViewModelConverter {
     private static final String GAME_OVER_MESSAGE_FORMAT = "Brilliant, you scored %d!";
 
     private final SimplePitchNotationFormatter pitchNotationFormatter;
+    private final long gameLengthMillis;
 
-    ViewModelConverter(SimplePitchNotationFormatter pitchNotationFormatter) {
+    ViewModelConverter(SimplePitchNotationFormatter pitchNotationFormatter, long gameLengthMillis) {
         this.pitchNotationFormatter = pitchNotationFormatter;
+        this.gameLengthMillis = gameLengthMillis;
     }
 
     GameOverViewModel createGameOverViewModel(State state) {
@@ -26,8 +29,14 @@ class ViewModelConverter {
                 currentNoteFormatted(sequence.getCurrentNote()),
                 nextNoteFormatted(sequence.getNextNote()),
                 String.valueOf(state.getScore().points()),
-                secondsRemainingFormatted(state.getSecondsRemaining())
+                createTimeRemainingViewModel(state.getMillisRemaining())
         );
+    }
+
+    private TimeRemainingViewModel createTimeRemainingViewModel(long millisRemaining) {
+        float progress = 1 - (1f * millisRemaining / gameLengthMillis);
+        CharSequence remainingText = secondsRemainingFormatted(millisRemaining);
+        return new TimeRemainingViewModel(progress, remainingText);
     }
 
     private String currentNoteFormatted(Note note) {
@@ -39,8 +48,7 @@ class ViewModelConverter {
         return String.format(Locale.US, NEXT_NOTE_HINT_FORMAT, nextNote);
     }
 
-    private CharSequence secondsRemainingFormatted(long secondsRemaining) {
-        return secondsRemaining + "s";
+    private CharSequence secondsRemainingFormatted(long millisRemaining) {
+        return TimeUnit.MILLISECONDS.toSeconds(millisRemaining) + "s";
     }
-
 }

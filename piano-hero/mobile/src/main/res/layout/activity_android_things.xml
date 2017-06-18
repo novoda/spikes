@@ -70,13 +70,11 @@
                 android:textSize="24sp"
                 tools:text="500" />
 
-            <TextView
-                android:id="@+id/game_text_timer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:textSize="24sp"
-                tools:text="15s" />
+            <com.novoda.pianohero.TimerWidget
+                android:id="@+id/game_timer_widget"
+                android:layout_width="@dimen/timer_widget"
+                android:layout_height="@dimen/timer_widget"
+                android:layout_gravity="right" />
 
         </FrameLayout>
 

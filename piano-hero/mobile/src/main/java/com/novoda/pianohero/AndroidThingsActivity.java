@@ -7,9 +7,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.concurrent.TimeUnit;
+
 import static android.view.View.GONE;
 
 public class AndroidThingsActivity extends AppCompatActivity {
+
+    private static final long GAME_DURATION_MILLIS = TimeUnit.SECONDS.toMillis(15);
 
     private AndroidThingThings androidThingThings = new AndroidThingThings();
     private GameMvp.Presenter gameMvpPresenter;
@@ -44,8 +48,8 @@ public class AndroidThingsActivity extends AppCompatActivity {
                 new SongSequenceFactory(),
                 createPiano(),
                 createRestartGameClickable(),
-                new GameTimer(),
-                new ViewModelConverter(new SimplePitchNotationFormatter()),
+                new GameTimer(GAME_DURATION_MILLIS),
+                new ViewModelConverter(new SimplePitchNotationFormatter(), GAME_DURATION_MILLIS),
                 new PlayAttemptGrader()
         );
     }
@@ -95,7 +99,7 @@ public class AndroidThingsActivity extends AppCompatActivity {
                 (TextView) findViewById(R.id.game_text_play_note),
                 (TextView) findViewById(R.id.game_text_next_note),
                 (TextView) findViewById(R.id.game_text_status),
-                (TextView) findViewById(R.id.game_text_timer)
+                (TimerWidget) findViewById(R.id.game_timer_widget)
         );
     }
 

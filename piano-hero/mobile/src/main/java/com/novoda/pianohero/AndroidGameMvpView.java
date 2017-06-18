@@ -12,9 +12,9 @@ class AndroidGameMvpView implements GameMvp.View {
     private final TextView playNoteTextView;
     private final TextView nextNoteTextView;
     private final TextView statusTextView;
-    private final TextView timerTextView;
+    private final TimerWidget timerWidget;
 
-    AndroidGameMvpView(Speaker speaker, ScoreDisplayer scoreDisplayer, C4ToB5TrebleStaffWidget trebleStaffWidget, View trebleStaffContainerView, TextView playNoteTextView, TextView nextNoteTextView, TextView statusTextView, TextView timerTextView) {
+    AndroidGameMvpView(Speaker speaker, ScoreDisplayer scoreDisplayer, C4ToB5TrebleStaffWidget trebleStaffWidget, View trebleStaffContainerView, TextView playNoteTextView, TextView nextNoteTextView, TextView statusTextView, TimerWidget timerWidget) {
         this.speaker = speaker;
         this.scoreDisplayer = scoreDisplayer;
         this.trebleStaffWidget = trebleStaffWidget;
@@ -22,7 +22,7 @@ class AndroidGameMvpView implements GameMvp.View {
         this.playNoteTextView = playNoteTextView;
         this.nextNoteTextView = nextNoteTextView;
         this.statusTextView = statusTextView;
-        this.timerTextView = timerTextView;
+        this.timerWidget = timerWidget;
     }
 
     @Override
@@ -32,10 +32,11 @@ class AndroidGameMvpView implements GameMvp.View {
         playNoteTextView.setText(viewModel.getCurrentNote());
         nextNoteTextView.setText(viewModel.getUpcomingNote());
         scoreDisplayer.display(viewModel.getScore());
-        timerTextView.setText(viewModel.getTimeRemaining());
+        timerWidget.setText(viewModel.getTimeRemaining().getRemainingText());
+        timerWidget.setProgress(viewModel.getTimeRemaining().getProgress());
 
         trebleStaffContainerView.setVisibility(View.VISIBLE);
-        timerTextView.setVisibility(View.VISIBLE);
+        timerWidget.setVisibility(View.VISIBLE);
         playNoteTextView.setVisibility(View.VISIBLE);
         nextNoteTextView.setVisibility(View.VISIBLE);
 
@@ -66,7 +67,7 @@ class AndroidGameMvpView implements GameMvp.View {
         playNoteTextView.setVisibility(View.GONE);
         nextNoteTextView.setVisibility(View.GONE);
         trebleStaffContainerView.setVisibility(View.GONE);
-        timerTextView.setVisibility(View.GONE);
+        timerWidget.setVisibility(View.GONE);
         scoreDisplayer.hide();
         stopSound();
     }

@@ -52,7 +52,7 @@ public class GameModel implements GameMvp.Model {
             }
 
             gameState = gameState.update(Sound.of(note))
-                    .update(gameTimer.secondsRemaining())
+                    .update(gameTimer.millisRemaining())
                     .update(Message.empty());
 
             GameInProgressViewModel gameInProgressViewModel = converter.createGameInProgressViewModel(gameState);
@@ -74,7 +74,7 @@ public class GameModel implements GameMvp.Model {
                 gameState = gameState.update(gameState.getScore().increment())
                         .update(sequence)
                         .update(Sound.ofSilence())
-                        .update(gameTimer.secondsRemaining())
+                        .update(gameTimer.millisRemaining())
                         .update(getSuccessMessage(sequence));
 
                 GameInProgressViewModel gameInProgressViewModel = converter.createGameInProgressViewModel(gameState);
@@ -94,7 +94,7 @@ public class GameModel implements GameMvp.Model {
                 gameState = gameState.update(gameState.getScore().decrement())
                         .update(sequence)
                         .update(Sound.ofSilence())
-                        .update(gameTimer.secondsRemaining())
+                        .update(gameTimer.millisRemaining())
                         .update(new Message("Uh-oh, try again!"));
 
                 GameInProgressViewModel gameInProgressViewModel = converter.createGameInProgressViewModel(gameState);
@@ -125,8 +125,8 @@ public class GameModel implements GameMvp.Model {
 
     private final GameTimer.Callback gameTimerCallback = new GameTimer.Callback() {
         @Override
-        public void onSecondTick(long secondsUntilFinished) {
-            gameState = gameState.update(secondsUntilFinished);
+        public void onSecondTick(long millisUntilFinished) {
+            gameState = gameState.update(millisUntilFinished);
 
             GameInProgressViewModel viewModel = converter.createGameInProgressViewModel(gameState);
             gameCallback.onGameProgressing(viewModel);

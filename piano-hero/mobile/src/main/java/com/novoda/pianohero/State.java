@@ -6,7 +6,7 @@ class State {
     private final Sequence sequence;
     private final Sound sound;
     private final Message message;
-    private final long secondsRemaining;
+    private final long millisRemaining;
 
     static State empty() {
         return new State(Score.initial(), new Sequence.Builder().build(), Sound.ofSilence(), Message.empty(), 0);
@@ -16,12 +16,12 @@ class State {
         return new State(Score.initial(), sequence, Sound.ofSilence(), Message.empty(), 0);
     }
 
-    State(Score score, Sequence sequence, Sound sound, Message message, long secondsRemaining) {
+    State(Score score, Sequence sequence, Sound sound, Message message, long millisRemaining) {
         this.score = score;
         this.sequence = sequence;
         this.sound = sound;
         this.message = message;
-        this.secondsRemaining = secondsRemaining;
+        this.millisRemaining = millisRemaining;
     }
 
     Score getScore() {
@@ -40,27 +40,27 @@ class State {
         return message;
     }
 
-    long getSecondsRemaining() {
-        return secondsRemaining;
+    long getMillisRemaining() {
+        return millisRemaining;
     }
 
     State update(Score score) {
-        return new State(score, getSequence(), getSound(), getMessage(), getSecondsRemaining());
+        return new State(score, getSequence(), getSound(), getMessage(), getMillisRemaining());
     }
 
     State update(Sequence sequence) {
-        return new State(getScore(), sequence, getSound(), getMessage(), getSecondsRemaining());
+        return new State(getScore(), sequence, getSound(), getMessage(), getMillisRemaining());
     }
 
     State update(Sound sound) {
-        return new State(getScore(), getSequence(), sound, getMessage(), getSecondsRemaining());
+        return new State(getScore(), getSequence(), sound, getMessage(), getMillisRemaining());
     }
 
     State update(Message message) {
-        return new State(getScore(), getSequence(), getSound(), message, getSecondsRemaining());
+        return new State(getScore(), getSequence(), getSound(), message, getMillisRemaining());
     }
 
-    State update(long secondsRemaining) {
-        return new State(getScore(), getSequence(), getSound(), getMessage(), secondsRemaining);
+    State update(long millisRemaining) {
+        return new State(getScore(), getSequence(), getSound(), getMessage(), millisRemaining);
     }
 }

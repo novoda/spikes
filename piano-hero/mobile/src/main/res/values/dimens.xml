@@ -7,4 +7,5 @@
     <dimen name="note_height">40sp</dimen>
     <dimen name="sharp_width">36sp</dimen>
     <dimen name="sharp_height">112sp</dimen>
+    <dimen name="timer_widget">100sp</dimen>
 </resources>

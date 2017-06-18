@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:layout_height="@dimen/timer_widget"
+    tools:layout_width="@dimen/timer_widget"
+    tools:parentTag="FrameLayout">
+
+    <TextView
+        android:id="@+id/timer_widget_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="40sp"
+        tools:text="5s" />
+
+    <flepsik.github.com.progress_ring.ProgressRingView
+        android:id="@+id/timer_widget_progress_ring"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:animated="true" />
+
+</merge>

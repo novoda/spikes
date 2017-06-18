@@ -7,22 +7,27 @@ import java.util.concurrent.TimeUnit;
 
 class GameTimer {
 
-    private static final long GAME_DURATION_MILLIS = TimeUnit.SECONDS.toMillis(15);
-    private static final long GAME_DURATION_SECONDS = TimeUnit.MILLISECONDS.toSeconds(GAME_DURATION_MILLIS);
     private static final long TIMER_UPDATE_FREQUENCY_MILLIS = TimeUnit.SECONDS.toMillis(1);
+
+    private final long gameDurationMillis;
 
     @Nullable
     private CountDownTimer countDownTimer;
     private boolean gameInProgress;
-    private long secondsLeft = GAME_DURATION_SECONDS;
+    private long millisUntilFinished;
+
+    GameTimer(long gameDurationMillis) {
+        this.gameDurationMillis = gameDurationMillis;
+        this.millisUntilFinished = gameDurationMillis;
+    }
 
     public void start(final Callback callback) {
         gameInProgress = true;
-        countDownTimer = new CountDownTimer(GAME_DURATION_MILLIS, TIMER_UPDATE_FREQUENCY_MILLIS) {
+        countDownTimer = new CountDownTimer(gameDurationMillis, TIMER_UPDATE_FREQUENCY_MILLIS) {
             @Override
             public void onTick(long millisUntilFinished) {
-                secondsLeft = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished);
-                callback.onSecondTick(secondsLeft);
+                GameTimer.this.millisUntilFinished = millisUntilFinished;
+                callback.onSecondTick(millisUntilFinished);
             }
 
             @Override
@@ -34,8 +39,8 @@ class GameTimer {
         countDownTimer.start();
     }
 
-    public long secondsRemaining() {
-        return secondsLeft;
+    public long millisRemaining() {
+        return millisUntilFinished;
     }
 
     public void stop() {
@@ -43,7 +48,7 @@ class GameTimer {
             return;
         }
         gameInProgress = false;
-        secondsLeft = GAME_DURATION_SECONDS;
+        millisUntilFinished = gameDurationMillis;
         countDownTimer.cancel();
     }
 
@@ -53,7 +58,7 @@ class GameTimer {
 
     public interface Callback {
 
-        void onSecondTick(long secondsUntilFinished);
+        void onSecondTick(long millisUntilFinished);
 
         void onFinish();
     }
