@@ -1,6 +1,5 @@
 package com.novoda.pianohero;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -12,14 +11,16 @@ class AndroidGameMvpView implements GameMvp.View {
     private final TextView playNoteTextView;
     private final TextView nextNoteTextView;
     private final TextView statusTextView;
+    private final TextView timerTextView;
 
-    AndroidGameMvpView(Speaker speaker, ScoreDisplayer scoreDisplayer, C4ToB5TrebleStaffWidget trebleStaffWidget, TextView playNoteTextView, TextView nextNoteTextView, TextView statusTextView) {
+    AndroidGameMvpView(Speaker speaker, ScoreDisplayer scoreDisplayer, C4ToB5TrebleStaffWidget trebleStaffWidget, TextView playNoteTextView, TextView nextNoteTextView, TextView statusTextView, TextView timerTextView) {
         this.speaker = speaker;
         this.scoreDisplayer = scoreDisplayer;
         this.trebleStaffWidget = trebleStaffWidget;
         this.playNoteTextView = playNoteTextView;
         this.nextNoteTextView = nextNoteTextView;
         this.statusTextView = statusTextView;
+        this.timerTextView = timerTextView;
     }
 
     @Override
@@ -30,10 +31,9 @@ class AndroidGameMvpView implements GameMvp.View {
         playNoteTextView.setText(viewModel.getCurrentNote());
         nextNoteTextView.setText(viewModel.getUpcomingNote());
         scoreDisplayer.display(viewModel.getScore());
-        play(viewModel.getSound());
+        timerTextView.setText(viewModel.getTimeRemaining());
 
-        // TODO: update timer on screen
-        Log.d("!!", viewModel.getTimeRemaining() + " tick.");
+        play(viewModel.getSound());
     }
 
     private void play(Sound sound) {
