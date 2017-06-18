@@ -105,6 +105,7 @@ public class GameModel implements GameMvp.Model {
             public void onFinalNoteInSequencePlayedSuccessfully() {
                 Sequence sequence = songSequenceFactory.maryHadALittleLamb(); // TODO: pick next song in playlist
                 gameState = gameState.update(sequence)
+                        .update(gameState.getScore().increment())
                         .update(Sound.ofSilence())
                         .update(new Message("Excellent, next song!"));
 
