@@ -14,7 +14,7 @@ public class GpioButtonClickable implements AndroidThing, Clickable {
     @Override
     public void open() {
         try {
-            buttonBus = new PeripheralManagerService().openGpio("GPIO_174");
+            buttonBus = new PeripheralManagerService().openGpio("BCM21");
             buttonBus.setDirection(Gpio.DIRECTION_IN);
             buttonBus.setActiveType(Gpio.ACTIVE_HIGH);
             buttonBus.setEdgeTriggerType(Gpio.EDGE_RISING);
