@@ -10,8 +10,6 @@ interface GameMvp {
 
         interface GameCallback {
 
-            void onSongComplete();
-
             void onGameProgressing(GameInProgressViewModel viewModel);
 
             void onGameComplete(GameOverViewModel viewModel);
@@ -20,13 +18,9 @@ interface GameMvp {
 
     interface View {
 
-        void play(Sound sound);
-
         void show(GameInProgressViewModel viewModel);
 
-        void showSongComplete(SongCompleteViewModel viewModel);
-
-        void showGameComplete(GameOverViewModel viewModel);
+        void show(GameOverViewModel viewModel);
     }
 
     interface Presenter {

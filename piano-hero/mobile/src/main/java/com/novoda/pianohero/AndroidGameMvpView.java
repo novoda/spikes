@@ -23,7 +23,20 @@ class AndroidGameMvpView implements GameMvp.View {
     }
 
     @Override
-    public void play(Sound sound) {
+    public void show(GameInProgressViewModel viewModel) {
+        statusTextView.setText(viewModel.getMessage());
+        trebleStaffWidget.showProgress(viewModel.getSequence());
+        trebleStaffWidget.setVisibility(View.VISIBLE);
+        playNoteTextView.setText(viewModel.getCurrentNote());
+        nextNoteTextView.setText(viewModel.getUpcomingNote());
+        scoreDisplayer.display(viewModel.getScore());
+        play(viewModel.getSound());
+
+        // TODO: update timer on screen
+        Log.d("!!", viewModel.getTimeRemaining() + " tick.");
+    }
+
+    private void play(Sound sound) {
         if (sound.isOfSilence()) {
             stopSound();
         } else {
@@ -41,23 +54,7 @@ class AndroidGameMvpView implements GameMvp.View {
     }
 
     @Override
-    public void show(GameInProgressViewModel viewModel) {
-        statusTextView.setText(viewModel.getMessage());
-        trebleStaffWidget.showProgress(viewModel.getSequence());
-        trebleStaffWidget.setVisibility(View.VISIBLE);
-        playNoteTextView.setText(viewModel.getCurrentNote());
-        nextNoteTextView.setText(viewModel.getUpcomingNote());
-        scoreDisplayer.display(viewModel.getScore());
-        Log.d("!!", viewModel.getTimeRemaining() + " tick.");
-    }
-
-    @Override
-    public void showSongComplete(SongCompleteViewModel viewModel) {
-        statusTextView.setText(viewModel.getMessage());
-    }
-
-    @Override
-    public void showGameComplete(GameOverViewModel viewModel) {
+    public void show(GameOverViewModel viewModel) {
         statusTextView.setText(viewModel.getMessage());
         trebleStaffWidget.setVisibility(View.GONE);
         scoreDisplayer.clearScore();

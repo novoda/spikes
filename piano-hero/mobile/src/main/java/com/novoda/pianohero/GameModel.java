@@ -103,8 +103,6 @@ public class GameModel implements GameMvp.Model {
 
             @Override
             public void onFinalNoteInSequencePlayedSuccessfully() {
-                gameCallback.onSongComplete();
-
                 Sequence sequence = songSequenceFactory.maryHadALittleLamb(); // TODO: pick next song in playlist
                 gameState = gameState.update(sequence)
                         .update(Sound.ofSilence())
@@ -114,7 +112,6 @@ public class GameModel implements GameMvp.Model {
                 gameCallback.onGameProgressing(gameInProgressViewModel);
             }
         };
-
     };
 
     private void startNewGame() {
