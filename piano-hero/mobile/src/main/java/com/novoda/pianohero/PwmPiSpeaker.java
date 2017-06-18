@@ -46,7 +46,7 @@ public class PwmPiSpeaker implements AndroidThing, Speaker {
         try {
             bus.close();
         } catch (IOException e) {
-            Log.e("!!!", "not much we can do", e);
+            Log.e("!!!", "couldn't close buzzer bus", e);
         }
     }
 

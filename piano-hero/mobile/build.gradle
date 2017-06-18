@@ -40,6 +40,7 @@ dependencies {
     compile project(':core')
     compile libraries.percent
     compile libraries.supportAppCompatV7
+    compile libraries.androidThingsContribDriverHt16k33
 
     provided 'com.google.android.things:androidthings:0.3-devpreview'
 

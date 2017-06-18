@@ -12,7 +12,8 @@
 
         <uses-library
             android:name="com.google.android.things"
-            android:required="false" />
+            android:required="false"
+            tools:replace="android:required" />
 
         <activity android:name=".AndroidThingsActivity" />
 
