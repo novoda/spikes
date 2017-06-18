@@ -4,6 +4,6 @@ public interface ScoreDisplayer {
 
     void display(CharSequence score);
 
-    void clearScore();
+    void hide();
 
 }

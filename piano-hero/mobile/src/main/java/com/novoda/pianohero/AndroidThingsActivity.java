@@ -91,6 +91,7 @@ public class AndroidThingsActivity extends AppCompatActivity {
                 createSpeaker(),
                 createScoreDisplayer(),
                 (C4ToB5TrebleStaffWidget) findViewById(R.id.game_widget_treble_staff),
+                findViewById(R.id.game_widget_treble_staff_container),
                 (TextView) findViewById(R.id.game_text_play_note),
                 (TextView) findViewById(R.id.game_text_next_note),
                 (TextView) findViewById(R.id.game_text_status),
@@ -123,8 +124,8 @@ public class AndroidThingsActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void clearScore() {
-                    scoreTextView.setText(null);
+                public void hide() {
+                    scoreTextView.setVisibility(View.GONE);
                 }
             };
         }

@@ -18,7 +18,7 @@ class RainbowHatScoreDisplayer implements ScoreDisplayer, AndroidThing {
     }
 
     @Override
-    public void clearScore() {
+    public void hide() {
         // TODO: clear LCD display
     }
 
