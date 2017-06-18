@@ -117,7 +117,11 @@ public class GameModel implements GameMvp.Model {
 
                 Sequence sequence = songSequenceFactory.maryHadALittleLamb(); // TODO: pick next song in playlist
                 gameState = gameState.update(sequence)
+                        .update(Sound.ofSilence())
                         .update(new Message("nice! next song!"));
+
+                GameInProgressViewModel gameInProgressViewModel = converter.createGameInProgressViewModel(gameState);
+                gameCallback.onGameProgressing(gameInProgressViewModel);
             }
         };
 
