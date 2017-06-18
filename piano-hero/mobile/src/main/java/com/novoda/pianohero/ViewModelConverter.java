@@ -34,7 +34,7 @@ class ViewModelConverter {
     }
 
     private TimeRemainingViewModel createTimeRemainingViewModel(long millisRemaining) {
-        float progress = 1 - (1f * millisRemaining / gameLengthMillis);
+        float progress = 1f * millisRemaining / gameLengthMillis;
         CharSequence remainingText = secondsRemainingFormatted(millisRemaining);
         return new TimeRemainingViewModel(progress, remainingText);
     }
