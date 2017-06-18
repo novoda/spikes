@@ -32,6 +32,10 @@ public class SongPlayer {
         }
     }
 
+    public Sequence getSequence() {
+        return sequence;
+    }
+
     interface SongGameCallback {
 
         void onStartPlayingNote(Note note, Sequence sequence);

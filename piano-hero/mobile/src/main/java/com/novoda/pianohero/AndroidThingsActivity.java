@@ -40,13 +40,15 @@ public class AndroidThingsActivity extends AppCompatActivity {
     }
 
     private GameMvp.Model createGameMvpModel() {
+        SimplePitchNotationFormatter pitchNotationFormatter = new SimplePitchNotationFormatter();
         return new GameModel(
                 new SongSequenceFactory(),
                 createPiano(),
                 createRestartGameClickable(),
                 new GameTimer(),
-                new ViewModelConverter(new SimplePitchNotationFormatter()),
-                new SongPlayer()
+                new ViewModelConverter(pitchNotationFormatter),
+                new SongPlayer(),
+                pitchNotationFormatter
         );
     }
 

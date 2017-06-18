@@ -8,18 +8,20 @@ import java.util.concurrent.TimeUnit;
 class GameTimer {
 
     private static final long GAME_DURATION_MILLIS = TimeUnit.SECONDS.toMillis(15);
+    private static final long GAME_DURATION_SECONDS = TimeUnit.MILLISECONDS.toSeconds(GAME_DURATION_MILLIS);
     private static final long TIMER_UPDATE_FREQUENCY_MILLIS = TimeUnit.SECONDS.toMillis(1);
 
     @Nullable
     private CountDownTimer countDownTimer;
     private boolean gameInProgress;
+    private long secondsLeft = GAME_DURATION_SECONDS;
 
     public void start(final Callback callback) {
         gameInProgress = true;
         countDownTimer = new CountDownTimer(GAME_DURATION_MILLIS, TIMER_UPDATE_FREQUENCY_MILLIS) {
             @Override
             public void onTick(long millisUntilFinished) {
-                long secondsLeft = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished);
+                secondsLeft = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished);
                 callback.onSecondTick(secondsLeft);
             }
 
@@ -32,11 +34,16 @@ class GameTimer {
         countDownTimer.start();
     }
 
+    public long secondsRemaining() {
+        return secondsLeft;
+    }
+
     public void stop() {
         if (countDownTimer == null) {
             return;
         }
         gameInProgress = false;
+        secondsLeft = GAME_DURATION_SECONDS;
         countDownTimer.cancel();
     }
 
@@ -49,7 +56,5 @@ class GameTimer {
         void onSecondTick(long secondsUntilFinished);
 
         void onFinish();
-
     }
-
 }

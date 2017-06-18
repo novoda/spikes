@@ -10,6 +10,10 @@ class Sound {
         return new Sound(null);
     }
 
+    public static Sound of(Note note) {
+        return atFrequency(440 * Math.pow(2, (note.midi() - 69) * 1f / 12));
+    }
+
     public static Sound atFrequency(double frequency) {
         return new Sound(frequency);
     }

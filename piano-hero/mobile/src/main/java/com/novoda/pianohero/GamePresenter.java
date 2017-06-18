@@ -17,11 +17,6 @@ class GamePresenter implements GameMvp.Presenter {
 
     private final GameMvp.Model.GameCallback gameCallback = new GameMvp.Model.GameCallback() {
         @Override
-        public void onClockTick(ClockViewModel viewModel) {
-            view.showClock(viewModel);
-        }
-
-        @Override
         public void onGameComplete(GameOverViewModel viewModel) {
             view.showGameComplete(viewModel);
         }

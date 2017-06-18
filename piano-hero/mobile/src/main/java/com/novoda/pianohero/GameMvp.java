@@ -12,8 +12,6 @@ interface GameMvp {
 
             void onSongComplete();
 
-            void onClockTick(ClockViewModel viewModel);
-
             void onGameProgressing(GameInProgressViewModel viewModel);
 
             void onGameComplete(GameOverViewModel viewModel);
@@ -25,8 +23,6 @@ interface GameMvp {
         void play(Sound sound);
 
         void show(GameInProgressViewModel viewModel);
-
-        void showClock(ClockViewModel viewModel);
 
         void showSongComplete(SongCompleteViewModel viewModel);
 

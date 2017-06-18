@@ -41,11 +41,6 @@ class AndroidGameMvpView implements GameMvp.View {
     }
 
     @Override
-    public void showClock(ClockViewModel viewModel) {
-        Log.d("!!", viewModel.getTimeLeftFormatted() + " tick.");
-    }
-
-    @Override
     public void show(GameInProgressViewModel viewModel) {
         statusTextView.setText(viewModel.getMessage());
         trebleStaffWidget.showProgress(viewModel.getSequence());
@@ -53,6 +48,7 @@ class AndroidGameMvpView implements GameMvp.View {
         playNoteTextView.setText(viewModel.getCurrentNote());
         nextNoteTextView.setText(viewModel.getUpcomingNote());
         scoreDisplayer.display(viewModel.getScore());
+        Log.d("!!", viewModel.getTimeRemaining() + " tick.");
     }
 
     @Override
