@@ -13,7 +13,7 @@ import static android.view.View.GONE;
 
 public class AndroidThingsActivity extends AppCompatActivity {
 
-    private static final long GAME_DURATION_MILLIS = TimeUnit.SECONDS.toMillis(15);
+    private static final long GAME_DURATION_MILLIS = TimeUnit.SECONDS.toMillis(60);
 
     private AndroidThingThings androidThingThings = new AndroidThingThings();
     private GameMvp.Presenter gameMvpPresenter;
