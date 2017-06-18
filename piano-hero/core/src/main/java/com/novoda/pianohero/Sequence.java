@@ -6,12 +6,14 @@ import java.util.List;
 
 public final class Sequence {
 
+    private final CharSequence title;
     private final Notes notes;
     private final int position;
     @Nullable
     private final Note latestError;
 
-    private Sequence(Notes notes, int position, @Nullable Note latestError) {
+    private Sequence(CharSequence title, Notes notes, int position, @Nullable Note latestError) {
+        this.title = title;
         this.notes = notes;
         this.position = position;
         this.latestError = latestError;
@@ -19,6 +21,10 @@ public final class Sequence {
 
     public Note get(int position) {
         return notes.get(position);
+    }
+
+    public CharSequence title() {
+        return title;
     }
 
     public int position() {
@@ -61,6 +67,7 @@ public final class Sequence {
 
     public Sequence nextPosition() {
         return new Sequence.Builder(this)
+
                 .atPosition(position + 1)
                 .withLatestError(null)
                 .build();
@@ -88,20 +95,27 @@ public final class Sequence {
         @Nullable
         private Note latestError;
 
+        private CharSequence title;
         private int position = 0;
 
         Builder(Sequence sequence) {
-            this(sequence.notes.asList());
+            this(sequence.title(), sequence.notes.asList());
             this.latestError = sequence.latestError();
             this.position = sequence.position;
         }
 
-        private Builder(List<Note> notes) {
+        private Builder(CharSequence title, List<Note> notes) {
+            this.title = title;
             this.notes.addAll(notes);
         }
 
         Builder() {
-            this(new ArrayList<Note>());
+            this("Unnamed", new ArrayList<Note>());
+        }
+
+        Builder withTitle(CharSequence title) {
+            this.title = title;
+            return this;
         }
 
         Builder add(Note note) {
@@ -120,7 +134,7 @@ public final class Sequence {
         }
 
         Sequence build() {
-            return new Sequence(new Notes(notes), position, latestError);
+            return new Sequence(title, new Notes(notes), position, latestError);
         }
     }
 }

@@ -2,7 +2,7 @@ package com.novoda.pianohero;
 
 public class GameModel implements GameMvp.Model {
 
-    private final SongSequenceFactory songSequenceFactory;
+    private final SongSequencePlaylist songSequencePlaylist;
     private final Piano piano;
     private final PlayAttemptGrader playAttemptGrader;
     private final Clickable startGameClickable;
@@ -13,14 +13,14 @@ public class GameModel implements GameMvp.Model {
     private GameCallback gameCallback;
 
     GameModel(
-            SongSequenceFactory songSequenceFactory,
+            SongSequencePlaylist songSequencePlaylist,
             Piano piano,
             Clickable startGameClickable,
             GameTimer gameTimer,
             ViewModelConverter converter,
             PlayAttemptGrader playAttemptGrader
     ) {
-        this.songSequenceFactory = songSequenceFactory;
+        this.songSequencePlaylist = songSequencePlaylist;
         this.piano = piano;
         this.startGameClickable = startGameClickable;
         this.gameTimer = gameTimer;
@@ -103,7 +103,7 @@ public class GameModel implements GameMvp.Model {
 
             @Override
             public void onFinalNoteInSequencePlayedSuccessfully() {
-                Sequence sequence = songSequenceFactory.maryHadALittleLamb(); // TODO: pick next song in playlist
+                Sequence sequence = getNextSongInPlaylist();
                 gameState = gameState.update(sequence)
                         .update(gameState.getScore().increment())
                         .update(Sound.ofSilence())
@@ -114,6 +114,10 @@ public class GameModel implements GameMvp.Model {
             }
         };
     };
+
+    private Sequence getNextSongInPlaylist() {
+        return songSequencePlaylist.nextSong();
+    }
 
     private void startNewGame() {
         if (gameCallback == null) {
@@ -139,7 +143,7 @@ public class GameModel implements GameMvp.Model {
     };
 
     private void emitInitialGameState(GameCallback gameCallback) {
-        Sequence sequence = songSequenceFactory.maryHadALittleLamb();
+        Sequence sequence = getNextSongInPlaylist();
         gameState = State.initial(sequence);
 
         GameInProgressViewModel viewModel = converter.createGameInProgressViewModel(gameState);

@@ -45,7 +45,7 @@ public class AndroidThingsActivity extends AppCompatActivity {
 
     private GameMvp.Model createGameMvpModel() {
         return new GameModel(
-                new SongSequenceFactory(),
+                new SongSequencePlaylist(),
                 createPiano(),
                 createRestartGameClickable(),
                 new GameTimer(GAME_DURATION_MILLIS),
