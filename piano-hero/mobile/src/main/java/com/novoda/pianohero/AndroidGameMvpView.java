@@ -58,5 +58,6 @@ class AndroidGameMvpView implements GameMvp.View {
         statusTextView.setText(viewModel.getMessage());
         trebleStaffWidget.setVisibility(View.GONE);
         scoreDisplayer.clearScore();
+        stopSound();
     }
 }
