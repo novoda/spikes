@@ -1,7 +1,5 @@
 package com.novoda.pianohero;
 
-import java.util.Locale;
-
 public class GameModel implements GameMvp.Model {
 
     private final SongSequenceFactory songSequenceFactory;
@@ -10,7 +8,6 @@ public class GameModel implements GameMvp.Model {
     private final Clickable startGameClickable;
     private final ViewModelConverter converter;
     private final GameTimer gameTimer;
-    private final SimplePitchNotationFormatter pitchNotationFormatter;
 
     private State gameState = State.empty();
     private GameCallback gameCallback;
@@ -21,8 +18,7 @@ public class GameModel implements GameMvp.Model {
             Clickable startGameClickable,
             GameTimer gameTimer,
             ViewModelConverter converter,
-            PlayAttemptGrader playAttemptGrader,
-            SimplePitchNotationFormatter pitchNotationFormatter
+            PlayAttemptGrader playAttemptGrader
     ) {
         this.songSequenceFactory = songSequenceFactory;
         this.piano = piano;
@@ -30,12 +26,12 @@ public class GameModel implements GameMvp.Model {
         this.gameTimer = gameTimer;
         this.converter = converter;
         this.playAttemptGrader = playAttemptGrader;
-        this.pitchNotationFormatter = pitchNotationFormatter;
     }
 
     @Override
-    public void startGame(final GameCallback gameCallback) {
+    public void startGame(GameCallback gameCallback) {
         this.gameCallback = gameCallback;
+
         startGameClickable.setListener(new Clickable.Listener() {
             @Override
             public void onClick() {
@@ -43,29 +39,33 @@ public class GameModel implements GameMvp.Model {
             }
         });
 
-        piano.attachListener(songPlayingNoteListener);
+        piano.attachListener(onNotePlayedListener);
         startNewGame();
     }
 
-    private final Piano.NoteListener songPlayingNoteListener = new Piano.NoteListener() {
+    private final Piano.NoteListener onNotePlayedListener = new Piano.NoteListener() {
 
         @Override
         public void onStart(Note note) {
-            if (gameTimer.gameInProgress()) {
-                gameState = gameState.update(Sound.of(note))
-                        .update(gameTimer.secondsRemaining())
-                        .update(Message.empty());
-
-                GameInProgressViewModel gameInProgressViewModel = converter.createGameInProgressViewModel(gameState);
-                gameCallback.onGameProgressing(gameInProgressViewModel);
+            if (gameTimer.gameHasEnded()) {
+                return;
             }
+
+            gameState = gameState.update(Sound.of(note))
+                    .update(gameTimer.secondsRemaining())
+                    .update(Message.empty());
+
+            GameInProgressViewModel gameInProgressViewModel = converter.createGameInProgressViewModel(gameState);
+            gameCallback.onGameProgressing(gameInProgressViewModel);
         }
 
         @Override
         public void onStop(Note note) {
-            if (gameTimer.gameInProgress()) {
-                playAttemptGrader.grade(note, gameState.getSequence(), onPlayAttemptGradedCallback);
+            if (gameTimer.gameHasEnded()) {
+                return;
             }
+
+            playAttemptGrader.grade(note, gameState.getSequence(), onPlayAttemptGradedCallback);
         }
 
         private final PlayAttemptGrader.Callback onPlayAttemptGradedCallback = new PlayAttemptGrader.Callback() {
@@ -83,7 +83,7 @@ public class GameModel implements GameMvp.Model {
 
             private Message getSuccessMessage(Sequence sequence) {
                 if (sequence.position() > 0) {
-                    return new Message(String.format(Locale.US, "Woo! Keep going! (%d/%d)", sequence.position() + 1, sequence.length()));
+                    return new Message("Fantastic, keep going!");
                 } else {
                     return Message.empty();
                 }
@@ -95,20 +95,10 @@ public class GameModel implements GameMvp.Model {
                         .update(sequence)
                         .update(Sound.ofSilence())
                         .update(gameTimer.secondsRemaining())
-                        .update(getErrorMessage(sequence));
+                        .update(new Message("Uh-oh, try again!"));
 
                 GameInProgressViewModel gameInProgressViewModel = converter.createGameInProgressViewModel(gameState);
                 gameCallback.onGameProgressing(gameInProgressViewModel);
-            }
-
-            private Message getErrorMessage(Sequence sequence) {
-                String currentNoteAsText = currentNoteFormatted(sequence.getNextNote());
-                String latestErrorAsText = pitchNotationFormatter.format(sequence.latestError());
-                return new Message(String.format(Locale.US, "Ruhroh! The correct note is %s but you played %s.", currentNoteAsText, latestErrorAsText));
-            }
-
-            private String currentNoteFormatted(Note note) {
-                return pitchNotationFormatter.format(note);
             }
 
             @Override
@@ -118,7 +108,7 @@ public class GameModel implements GameMvp.Model {
                 Sequence sequence = songSequenceFactory.maryHadALittleLamb(); // TODO: pick next song in playlist
                 gameState = gameState.update(sequence)
                         .update(Sound.ofSilence())
-                        .update(new Message("nice! next song!"));
+                        .update(new Message("Excellent, next song!"));
 
                 GameInProgressViewModel gameInProgressViewModel = converter.createGameInProgressViewModel(gameState);
                 gameCallback.onGameProgressing(gameInProgressViewModel);
@@ -152,7 +142,7 @@ public class GameModel implements GameMvp.Model {
 
     private void emitInitialGameState(GameCallback gameCallback) {
         Sequence sequence = songSequenceFactory.maryHadALittleLamb();
-        this.gameState = State.empty().update(sequence);
+        gameState = State.initial(sequence);
 
         GameInProgressViewModel viewModel = converter.createGameInProgressViewModel(gameState);
         gameCallback.onGameProgressing(viewModel);
@@ -162,5 +152,4 @@ public class GameModel implements GameMvp.Model {
     public void stopGame() {
         gameTimer.stop();
     }
-
 }

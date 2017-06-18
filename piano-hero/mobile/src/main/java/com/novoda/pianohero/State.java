@@ -12,6 +12,10 @@ class State {
         return new State(Score.initial(), new Sequence.Builder().build(), Sound.ofSilence(), Message.empty(), 0);
     }
 
+    static State initial(Sequence sequence) {
+        return new State(Score.initial(), sequence, Sound.ofSilence(), Message.empty(), 0);
+    }
+
     State(Score score, Sequence sequence, Sound sound, Message message, long secondsRemaining) {
         this.score = score;
         this.sequence = sequence;

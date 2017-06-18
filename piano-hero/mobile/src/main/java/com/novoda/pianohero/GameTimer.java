@@ -47,8 +47,8 @@ class GameTimer {
         countDownTimer.cancel();
     }
 
-    public boolean gameInProgress() {
-        return countDownTimer != null && gameInProgress;
+    boolean gameHasEnded() {
+        return countDownTimer == null || !gameInProgress;
     }
 
     public interface Callback {

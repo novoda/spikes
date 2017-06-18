@@ -5,7 +5,7 @@ import java.util.Locale;
 class ViewModelConverter {
 
     private static final String NEXT_NOTE_HINT_FORMAT = "Next: %s";
-    private static final String GAME_OVER_MESSAGE_FORMAT = "Well done! You scored %d";
+    private static final String GAME_OVER_MESSAGE_FORMAT = "Brilliant, you scored %d!";
 
     private final SimplePitchNotationFormatter pitchNotationFormatter;
 
