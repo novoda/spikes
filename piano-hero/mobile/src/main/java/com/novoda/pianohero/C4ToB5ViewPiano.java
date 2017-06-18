@@ -122,8 +122,7 @@ public class C4ToB5ViewPiano extends PercentRelativeLayout implements Piano {
         a5sView.layout(a5View.getRight() - halfBlackKeyWidth, 0, a5View.getRight() + halfBlackKeyWidth, blackKeyHeight);
     }
 
-    private void bindKey(final View keyView, final Note note, final View... adjacentBlackKeys) {
-        // TODO: Allow user to drag across view to play notes - https://developer.android.com/training/gestures/viewgroup.html
+    private void bindKey(View keyView, Note note, View... adjacentBlackKeys) {
         KeyTouchListener touchListener = new KeyTouchListener(noteListener, note, adjacentBlackKeys);
         keyView.setOnTouchListener(touchListener);
     }
