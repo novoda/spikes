@@ -160,16 +160,6 @@ public class C4ToB5ViewPiano extends PercentRelativeLayout implements Piano {
         bindKey(a5sView, Note.A5_S);
     }
 
-    @Override
-    public void open() {
-        setEnabled(true);
-    }
-
-    @Override
-    public void close() {
-        setEnabled(false);
-    }
-
     private static class KeyTouchListener implements OnTouchListener {
 
         private final NoteListener noteListener;

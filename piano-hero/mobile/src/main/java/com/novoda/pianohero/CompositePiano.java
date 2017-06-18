@@ -17,19 +17,4 @@ class CompositePiano implements Piano {
             piano.attachListener(noteListener);
         }
     }
-
-    @Override
-    public void open() {
-        for (Piano piano : pianos) {
-            piano.open();
-        }
-    }
-
-    @Override
-    public void close() {
-        for (Piano piano : pianos) {
-            piano.close();
-        }
-    }
-
 }
