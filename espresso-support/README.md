@@ -30,16 +30,6 @@ public ViewTestRule<MovieItemView> rule = new ViewTestRule<>(R.layout.test_movie
 You can write BDD style tests here, highlighting the expected behaviour for your custom views, using a mixture of Espresso ViewActions and Mockito verifies:
 
 ```java
-@Before
-public void setUp() {
-    Espresso.registerIdlingResources(viewTestRule);
-}
-
-@After
-public void tearDown() {
-    Espresso.unregisterIdlingResources(viewTestRule);
-}
-
 @Test
 public void givenViewIsUpdatedWithDifferentMovie_whenClicking_thenListenerDoesNotGetFiredForOriginalMovie() {
     givenMovieItemViewIsBoundTo(EDWARD_SCISSORHANDS);
