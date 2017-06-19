@@ -72,7 +72,7 @@ public class MovieItemViewTalkBackTest {
     }
 
     private void givenMovieItemViewIsBoundTo(final Movie movie) {
-        viewTestRule.runOnUiThread(new ViewTestRule.UiThreadAction<MovieItemView>() {
+        viewTestRule.runOnMainSynchronously(new ViewTestRule.Runner<MovieItemView>() {
             @Override
             public void run(MovieItemView view) {
                 view.bind(movie);

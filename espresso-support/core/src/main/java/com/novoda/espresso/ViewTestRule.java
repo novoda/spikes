@@ -27,12 +27,12 @@ public class ViewTestRule<T extends View> extends ActivityTestRule<ViewActivity>
         return intent;
     }
 
-    public void runOnUiThread(final UiThreadAction<T> uiThreadAction) {
+    public void runOnMainSynchronously(final Runner<T> runner) {
         instrumentation.runOnMainSync(new Runnable() {
             @Override
             public void run() {
                 T view = getView();
-                uiThreadAction.run(view);
+                runner.run(view);
             }
         });
     }
@@ -41,7 +41,7 @@ public class ViewTestRule<T extends View> extends ActivityTestRule<ViewActivity>
         return (T) getActivity().getView();
     }
 
-    public interface UiThreadAction<T> {
+    public interface Runner<T> {
 
         void run(T view);
 
