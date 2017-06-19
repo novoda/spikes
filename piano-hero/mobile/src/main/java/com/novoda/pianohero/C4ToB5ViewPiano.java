@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class C4ToB5ViewPiano extends PercentRelativeLayout implements Piano {
 
     private static final NoteListener LOGGING_KEY_LISTENER = new NoteListener() {
@@ -21,9 +24,9 @@ public class C4ToB5ViewPiano extends PercentRelativeLayout implements Piano {
         public void onStop(Note note) {
             Log.e("!!!", "onStop " + note);
         }
-
     };
 
+    private final Map<Note, View> noteToViewsMap = new HashMap<>();
     private NoteListener noteListener = LOGGING_KEY_LISTENER;
 
     private View c4View;
@@ -63,40 +66,48 @@ public class C4ToB5ViewPiano extends PercentRelativeLayout implements Piano {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_piano_octave, this);
 
-        c4View = findViewById(R.id.piano_octave_c4);
-        d4View = findViewById(R.id.piano_octave_d4);
-        e4View = findViewById(R.id.piano_octave_e4);
-        f4View = findViewById(R.id.piano_octave_f4);
-        g4View = findViewById(R.id.piano_octave_g4);
-        a4View = findViewById(R.id.piano_octave_a4);
-        b4View = findViewById(R.id.piano_octave_b4);
+        noteToViewsMap.put(Note.C4, c4View = findViewById(R.id.piano_octave_c4));
+        noteToViewsMap.put(Note.D4, d4View = findViewById(R.id.piano_octave_d4));
+        noteToViewsMap.put(Note.E4, e4View = findViewById(R.id.piano_octave_e4));
+        noteToViewsMap.put(Note.F4, f4View = findViewById(R.id.piano_octave_f4));
+        noteToViewsMap.put(Note.G4, g4View = findViewById(R.id.piano_octave_g4));
+        noteToViewsMap.put(Note.A4, a4View = findViewById(R.id.piano_octave_a4));
+        noteToViewsMap.put(Note.B4, b4View = findViewById(R.id.piano_octave_b4));
 
-        c4sView = findViewById(R.id.piano_octave_c4_s);
-        d4sView = findViewById(R.id.piano_octave_d4_s);
-        f4sView = findViewById(R.id.piano_octave_f4_s);
-        g4sView = findViewById(R.id.piano_octave_g4_s);
-        a4sView = findViewById(R.id.piano_octave_a4_s);
+        noteToViewsMap.put(Note.C4_S, c4sView = findViewById(R.id.piano_octave_c4_s));
+        noteToViewsMap.put(Note.D4_S, d4sView = findViewById(R.id.piano_octave_d4_s));
+        noteToViewsMap.put(Note.F4_S, f4sView = findViewById(R.id.piano_octave_f4_s));
+        noteToViewsMap.put(Note.G4_S, g4sView = findViewById(R.id.piano_octave_g4_s));
+        noteToViewsMap.put(Note.A4_S, a4sView = findViewById(R.id.piano_octave_a4_s));
 
-        c5View = findViewById(R.id.piano_octave_c5);
-        d5View = findViewById(R.id.piano_octave_d5);
-        e5View = findViewById(R.id.piano_octave_e5);
-        f5View = findViewById(R.id.piano_octave_f5);
-        g5View = findViewById(R.id.piano_octave_g5);
-        a5View = findViewById(R.id.piano_octave_a5);
-        b5View = findViewById(R.id.piano_octave_b5);
+        noteToViewsMap.put(Note.C5, c5View = findViewById(R.id.piano_octave_c5));
+        noteToViewsMap.put(Note.C5, d5View = findViewById(R.id.piano_octave_d5));
+        noteToViewsMap.put(Note.C5, e5View = findViewById(R.id.piano_octave_e5));
+        noteToViewsMap.put(Note.C5, f5View = findViewById(R.id.piano_octave_f5));
+        noteToViewsMap.put(Note.C5, g5View = findViewById(R.id.piano_octave_g5));
+        noteToViewsMap.put(Note.C5, a5View = findViewById(R.id.piano_octave_a5));
+        noteToViewsMap.put(Note.C5, b5View = findViewById(R.id.piano_octave_b5));
 
-        c5sView = findViewById(R.id.piano_octave_c5_s);
-        d5sView = findViewById(R.id.piano_octave_d5_s);
-        f5sView = findViewById(R.id.piano_octave_f5_s);
-        g5sView = findViewById(R.id.piano_octave_g5_s);
-        a5sView = findViewById(R.id.piano_octave_a5_s);
+        noteToViewsMap.put(Note.C5, c5sView = findViewById(R.id.piano_octave_c5_s));
+        noteToViewsMap.put(Note.D5, d5sView = findViewById(R.id.piano_octave_d5_s));
+        noteToViewsMap.put(Note.F5, f5sView = findViewById(R.id.piano_octave_f5_s));
+        noteToViewsMap.put(Note.G5, g5sView = findViewById(R.id.piano_octave_g5_s));
+        noteToViewsMap.put(Note.A5, a5sView = findViewById(R.id.piano_octave_a5_s));
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
-        int desiredHeightMeasureSpec = MeasureSpec.makeMeasureSpec((int) (width / (1f * 329 / 141) + 0.5f), MeasureSpec.EXACTLY);
-        super.onMeasure(widthMeasureSpec, desiredHeightMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
+
+        float ratio = 1f * 329 / 141;
+        if (width * 1f / 329 > height * 1f / 141) {
+            int desiredWidthMeasureSpec = MeasureSpec.makeMeasureSpec((int) (0.5f + (height * ratio)), MeasureSpec.EXACTLY);
+            super.onMeasure(desiredWidthMeasureSpec, heightMeasureSpec);
+        } else {
+            int desiredHeightMeasureSpec = MeasureSpec.makeMeasureSpec((int) (0.5f + (width / ratio)), MeasureSpec.EXACTLY);
+            super.onMeasure(widthMeasureSpec, desiredHeightMeasureSpec);
+        }
     }
 
     @Override
@@ -120,11 +131,6 @@ public class C4ToB5ViewPiano extends PercentRelativeLayout implements Piano {
         f5sView.layout(f5View.getRight() - halfBlackKeyWidth, 0, f5View.getRight() + halfBlackKeyWidth, blackKeyHeight);
         g5sView.layout(g5View.getRight() - halfBlackKeyWidth, 0, g5View.getRight() + halfBlackKeyWidth, blackKeyHeight);
         a5sView.layout(a5View.getRight() - halfBlackKeyWidth, 0, a5View.getRight() + halfBlackKeyWidth, blackKeyHeight);
-    }
-
-    private void bindKey(View keyView, Note note, View... adjacentBlackKeys) {
-        KeyTouchListener touchListener = new KeyTouchListener(noteListener, note, adjacentBlackKeys);
-        keyView.setOnTouchListener(touchListener);
     }
 
     @Override
@@ -158,6 +164,20 @@ public class C4ToB5ViewPiano extends PercentRelativeLayout implements Piano {
         bindKey(f5sView, Note.F5_S);
         bindKey(g5sView, Note.G5_S);
         bindKey(a5sView, Note.A5_S);
+    }
+
+    private void bindKey(View keyView, Note note, View... adjacentBlackKeys) {
+        KeyTouchListener touchListener = new KeyTouchListener(noteListener, note, adjacentBlackKeys);
+        keyView.setOnTouchListener(touchListener);
+    }
+
+    public void display(Sequence sequence) {
+        for (View view : noteToViewsMap.values()) {
+            view.setActivated(false);
+        }
+        if (noteToViewsMap.containsKey(sequence.getCurrentNote())) {
+            noteToViewsMap.get(sequence.getCurrentNote()).setActivated(true);
+        }
     }
 
     private static class KeyTouchListener implements OnTouchListener {

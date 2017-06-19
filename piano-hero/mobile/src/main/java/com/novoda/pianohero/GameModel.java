@@ -144,7 +144,7 @@ public class GameModel implements GameMvp.Model {
 
     private void emitInitialGameState(GameCallback gameCallback) {
         Sequence sequence = getNextSongInPlaylist();
-        gameState = State.initial(sequence);
+        gameState = State.initial(sequence).update(new Message("Let's go!"));
 
         GameInProgressViewModel viewModel = converter.createGameInProgressViewModel(gameState);
         gameCallback.onGameProgressing(viewModel);

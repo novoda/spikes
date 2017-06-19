@@ -20,6 +20,11 @@ public class TimerWidget extends FrameLayout {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(heightMeasureSpec, heightMeasureSpec);
+    }
+
+    @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_timer_widget, this);

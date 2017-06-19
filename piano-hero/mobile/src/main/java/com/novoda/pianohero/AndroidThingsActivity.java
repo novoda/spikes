@@ -9,11 +9,9 @@ import android.widget.TextView;
 
 import java.util.concurrent.TimeUnit;
 
-import static android.view.View.GONE;
-
 public class AndroidThingsActivity extends AppCompatActivity {
 
-    private static final long GAME_DURATION_MILLIS = TimeUnit.SECONDS.toMillis(60);
+    private static final long GAME_DURATION_MILLIS = TimeUnit.SECONDS.toMillis(300);
 
     private AndroidThingThings androidThingThings = new AndroidThingThings();
     private GameMvp.Presenter gameMvpPresenter;
@@ -55,27 +53,35 @@ public class AndroidThingsActivity extends AppCompatActivity {
     }
 
     private Piano createPiano() {
-        C4ToB5ViewPiano virtualPianoView = (C4ToB5ViewPiano) findViewById(R.id.piano_view);
         KeyStationMini32Piano keyStationMini32Piano = new KeyStationMini32Piano(this);
         androidThingThings.add(keyStationMini32Piano);
 
         if (isThingsDevice()) {
-            virtualPianoView.setVisibility(GONE);
             return keyStationMini32Piano;
         } else {
-            virtualPianoView.setVisibility(View.VISIBLE);
+            C4ToB5ViewPiano virtualPianoView = (C4ToB5ViewPiano) findViewById(R.id.piano_view);
             return new CompositePiano(virtualPianoView, keyStationMini32Piano);
         }
     }
 
     private Clickable createRestartGameClickable() {
+        final View restartButton = findViewById(R.id.game_timer_widget);
         if (isThingsDevice()) {
-            GpioButtonClickable gpioButtonClickable = new GpioButtonClickable();
+            final GpioButtonClickable gpioButtonClickable = new GpioButtonClickable();
             androidThingThings.add(gpioButtonClickable);
-            return gpioButtonClickable;
+            return new Clickable() {
+                @Override
+                public void setListener(final Listener listener) {
+                    gpioButtonClickable.setListener(listener);
+                    restartButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            listener.onClick();
+                        }
+                    });
+                }
+            };
         } else {
-            final View restartButton = findViewById(R.id.restart_button);
-            restartButton.setVisibility(View.VISIBLE);
             return new Clickable() {
                 @Override
                 public void setListener(final Listener listener) {
@@ -93,11 +99,9 @@ public class AndroidThingsActivity extends AppCompatActivity {
     private GameMvp.View createGameMvpView() {
         return new AndroidGameMvpView(
                 createSpeaker(),
+                (C4ToB5ViewPiano) findViewById(R.id.piano_view),
                 createScoreDisplayer(),
                 (C4ToB5TrebleStaffWidget) findViewById(R.id.game_widget_treble_staff),
-                findViewById(R.id.game_widget_treble_staff_container),
-                (TextView) findViewById(R.id.game_text_play_note),
-                (TextView) findViewById(R.id.game_text_next_note),
                 (TextView) findViewById(R.id.game_text_status),
                 (TimerWidget) findViewById(R.id.game_timer_widget)
         );
