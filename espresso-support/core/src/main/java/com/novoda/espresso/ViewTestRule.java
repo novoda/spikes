@@ -1,11 +1,15 @@
 package com.novoda.espresso;
 
+import android.app.Instrumentation;
 import android.content.Intent;
 import android.support.annotation.LayoutRes;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.view.View;
 
 public class ViewTestRule<T extends View> extends ActivityTestRule<ViewActivity> {
+
+    private final Instrumentation instrumentation;
 
     @LayoutRes
     private final int id;
@@ -13,6 +17,7 @@ public class ViewTestRule<T extends View> extends ActivityTestRule<ViewActivity>
     public ViewTestRule(@LayoutRes int id) {
         super(ViewActivity.class);
         this.id = id;
+        instrumentation = InstrumentationRegistry.getInstrumentation();
     }
 
     @Override
@@ -23,7 +28,7 @@ public class ViewTestRule<T extends View> extends ActivityTestRule<ViewActivity>
     }
 
     public void runOnUiThread(final UiThreadAction<T> uiThreadAction) {
-        getActivity().runOnUiThread(new Runnable() {
+        instrumentation.runOnMainSync(new Runnable() {
             @Override
             public void run() {
                 T view = getView();
