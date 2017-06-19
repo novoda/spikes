@@ -26,13 +26,13 @@ public class ViewTestRule<T extends View> extends ActivityTestRule<ViewActivity>
         return intent;
     }
 
-    public void bindViewUsing(final Binder<T> binder) {
+    public void runOnUiThread(final UiThreadAction<T> uiThreadAction) {
         isIdle = false;
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 T view = getView();
-                binder.bind(view);
+                uiThreadAction.run(view);
                 callback.onTransitionToIdle();
                 isIdle = true;
             }
@@ -58,9 +58,9 @@ public class ViewTestRule<T extends View> extends ActivityTestRule<ViewActivity>
         this.callback = callback;
     }
 
-    public interface Binder<T> {
+    public interface UiThreadAction<T> {
 
-        void bind(T view);
+        void run(T view);
 
     }
 
