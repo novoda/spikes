@@ -22,6 +22,8 @@ class GameTimer {
     }
 
     public void start(final Callback callback) {
+        stop();
+
         gameInProgress = true;
         countDownTimer = new CountDownTimer(gameDurationMillis, TIMER_UPDATE_FREQUENCY_MILLIS) {
             @Override
@@ -44,12 +46,11 @@ class GameTimer {
     }
 
     public void stop() {
-        if (countDownTimer == null) {
-            return;
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
         }
         gameInProgress = false;
         millisUntilFinished = gameDurationMillis;
-        countDownTimer.cancel();
     }
 
     boolean gameHasEnded() {
