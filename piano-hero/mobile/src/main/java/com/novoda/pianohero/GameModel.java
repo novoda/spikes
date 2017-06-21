@@ -10,6 +10,7 @@ public class GameModel implements GameMvp.Model {
     private final Clickable startGameClickable;
     private final ViewModelConverter converter;
     private final GameTimer gameTimer;
+    private final PhrasesIterator phrasesIterator;
 
     private State gameState = State.empty();
     private GameCallback gameCallback;
@@ -20,14 +21,15 @@ public class GameModel implements GameMvp.Model {
             Clickable startGameClickable,
             GameTimer gameTimer,
             ViewModelConverter converter,
-            PlayAttemptGrader playAttemptGrader
-    ) {
+            PlayAttemptGrader playAttemptGrader,
+            PhrasesIterator phrasesIterator) {
         this.songSequencePlaylist = songSequencePlaylist;
         this.piano = piano;
         this.startGameClickable = startGameClickable;
         this.gameTimer = gameTimer;
         this.converter = converter;
         this.playAttemptGrader = playAttemptGrader;
+        this.phrasesIterator = phrasesIterator;
     }
 
     @Override
@@ -85,7 +87,7 @@ public class GameModel implements GameMvp.Model {
 
             private Message getSuccessMessage(Sequence sequence) {
                 if (sequence.position() > 0) {
-                    return new Message("Fantastic, keep going!");
+                    return new Message(phrasesIterator.nextPlatitude());
                 } else {
                     return Message.empty();
                 }

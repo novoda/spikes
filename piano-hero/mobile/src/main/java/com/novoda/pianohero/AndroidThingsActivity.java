@@ -42,13 +42,15 @@ public class AndroidThingsActivity extends AppCompatActivity {
     }
 
     private GameMvp.Model createGameMvpModel() {
+        PhrasesIterator phrasesIterator = new PhrasesIterator();
         return new GameModel(
                 new SongSequencePlaylist(),
                 createPiano(),
                 createRestartGameClickable(),
                 new GameTimer(GAME_DURATION_MILLIS),
-                new ViewModelConverter(new SimplePitchNotationFormatter(), GAME_DURATION_MILLIS),
-                new PlayAttemptGrader()
+                new ViewModelConverter(phrasesIterator, GAME_DURATION_MILLIS),
+                new PlayAttemptGrader(),
+                phrasesIterator
         );
     }
 
