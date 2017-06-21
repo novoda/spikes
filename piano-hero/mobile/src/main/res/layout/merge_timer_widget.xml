@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:fontFamily="casual"
         android:gravity="center"
+        android:textColor="@color/text"
         android:textSize="40sp"
         tools:text="5s" />
 
@@ -19,6 +20,10 @@
         android:id="@+id/timer_widget_progress_ring"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:animated="true" />
+        app:animated="true"
+        app:background_progress_color="@color/loading_wasted"
+        app:corner_edges="false"
+        app:progress_color="@color/loading_ring"
+        app:ring_width="10dp" />
 
 </merge>

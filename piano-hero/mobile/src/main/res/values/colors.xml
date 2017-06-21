@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#30548E</color>
-    <color name="notation_default">#FFFFFF</color>
-    <color name="notation_completed">#00FF00</color>
-    <color name="notation_error">#FF0000</color>
+    <color name="background">#FFFFFF</color>
+    <color name="notation_default">#000000</color>
+    <color name="notation_completed">#8C8C8C</color>
+    <color name="notation_next">#0099e6</color>
+    <color name="loading_ring">#006699</color>
+    <color name="loading_wasted">#d9d9d9</color>
+    <color name="notation_error">#B32D00</color>
+    <color name="text">#000000</color>
 </resources>

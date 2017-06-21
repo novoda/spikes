@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 public class AndroidThingsActivity extends AppCompatActivity {
 
-    private static final long GAME_DURATION_MILLIS = TimeUnit.SECONDS.toMillis(300);
+    private static final long GAME_DURATION_MILLIS = TimeUnit.SECONDS.toMillis(60);
 
     private AndroidThingThings androidThingThings = new AndroidThingThings();
     private GameMvp.Presenter gameMvpPresenter;

@@ -41,6 +41,7 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
         errorNoteDrawable = noteDrawable(context, R.drawable.note_error);
         errorSharpDrawable = sharpDrawable(context, R.drawable.sharp_error);
         linesPaint = new Paint();
+        linesPaint.setStrokeWidth(2);
         linesPaint.setColor(ContextCompat.getColor(context, R.color.notation_default));
 
         positioner = C4ToB5TrebleStaffPositioner.createPositionerGivenNoteHeight(noteDrawable.getBounds().height());
