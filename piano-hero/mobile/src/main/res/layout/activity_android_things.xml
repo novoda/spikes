@@ -5,56 +5,48 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="@dimen/margin">
 
-    <TextView
-        android:id="@+id/game_text_status"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="48sp"
-        tools:text="Excellent, you're doing well!" />
+        android:layout_height="wrap_content">
+
+        <com.novoda.pianohero.TimerWidget
+            android:id="@+id/game_timer_widget"
+            android:layout_width="@dimen/timer_widget"
+            android:layout_height="@dimen/timer_widget" />
+
+        <TextView
+            android:id="@+id/game_text_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="48sp"
+            tools:text="Excellent, you're doing well!" />
+
+        <TextView
+            android:id="@+id/score_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:gravity="center"
+            android:textSize="48sp"
+            tools:text="500" />
+
+    </FrameLayout>
 
     <com.novoda.pianohero.C4ToB5TrebleStaffWidget
         android:id="@+id/game_widget_treble_staff"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin"
         android:background="@android:color/holo_orange_light" />
 
-    <LinearLayout
+    <com.novoda.pianohero.C4ToB5ViewPiano
+        android:id="@+id/piano_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="16dp"
-        android:background="@android:color/holo_green_light"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/score_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="24sp"
-            tools:text="500" />
-
-        <android.support.v4.widget.Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="100" />
-
-        <com.novoda.pianohero.C4ToB5ViewPiano
-            android:id="@+id/piano_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-
-        <android.support.v4.widget.Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="100" />
-
-        <com.novoda.pianohero.TimerWidget
-            android:id="@+id/game_timer_widget"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
+        android:layout_marginTop="@dimen/margin"
+        android:background="@android:color/holo_green_light" />
 
 </LinearLayout>
