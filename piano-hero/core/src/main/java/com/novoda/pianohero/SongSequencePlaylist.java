@@ -7,7 +7,7 @@ import java.util.List;
 public class SongSequencePlaylist {
 
     private static final List<Sequence> SEQUENCES = Arrays.asList(
-            maryHadALittleLamb(),
+//            maryHadALittleLamb(),
             onceUponADream(),
             whenSheLovedMe(),
             aWholeNewWorld(),

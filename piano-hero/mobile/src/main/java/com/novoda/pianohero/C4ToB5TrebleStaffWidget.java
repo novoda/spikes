@@ -2,7 +2,9 @@ package com.novoda.pianohero;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
@@ -21,6 +23,8 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
     private final Drawable trebleClefDrawable;
     private final Drawable completedNoteDrawable;
     private final Drawable completedSharpDrawable;
+    private final Drawable currentNoteDrawable;
+    private final Drawable currentSharpDrawable;
     private final Drawable noteDrawable;
     private final Drawable sharpDrawable;
     private final Drawable errorNoteDrawable;
@@ -34,12 +38,19 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
 
         trebleClefMarginLeftPx = context.getResources().getDimensionPixelSize(R.dimen.treble_clef_margin_left);
         trebleClefDrawable = trebleClefDrawable(context);
+
         completedNoteDrawable = noteDrawable(context, R.drawable.note_completed);
         completedSharpDrawable = sharpDrawable(context, R.drawable.sharp_completed);
+
         noteDrawable = noteDrawable(context, R.drawable.note);
         sharpDrawable = sharpDrawable(context, R.drawable.sharp);
+
+        currentNoteDrawable = noteDrawable(context, R.drawable.note_current);
+        currentSharpDrawable = sharpDrawable(context, R.drawable.sharp_current);
+
         errorNoteDrawable = noteDrawable(context, R.drawable.note_error);
         errorSharpDrawable = sharpDrawable(context, R.drawable.sharp_error);
+
         linesPaint = new Paint();
         linesPaint.setStrokeWidth(2);
         linesPaint.setColor(ContextCompat.getColor(context, R.color.notation_default));
@@ -128,9 +139,15 @@ public class C4ToB5TrebleStaffWidget extends FrameLayout {
                 continue;
             }
             SequenceNote sequenceNote = new SequenceNote(note, index);
-            boolean complete = index < indexNextPlayableNote;
             boolean sharp = note.isSharp();
-            if (complete) {
+
+            if (index == indexNextPlayableNote) {
+                if (sharp) {
+                    addSharpNoteWidget(sequenceNote, currentNoteDrawable, currentSharpDrawable);
+                } else {
+                    addNoteWidget(sequenceNote, currentNoteDrawable);
+                }
+            } else if (index < indexNextPlayableNote) {
                 if (sharp) {
                     addSharpNoteWidget(sequenceNote, completedNoteDrawable, completedSharpDrawable);
                 } else {
