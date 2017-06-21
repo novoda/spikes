@@ -103,7 +103,7 @@ public class GameModel implements GameMvp.Model {
 
             @Override
             public void onFinalNoteInSequencePlayedSuccessfully() {
-                Sequence sequence = getNextSongInPlaylist();
+                Sequence sequence = songSequencePlaylist.nextSong();
                 gameState = gameState.update(sequence)
                         .update(gameState.getScore().increment())
                         .update(Sound.ofSilence())
@@ -114,10 +114,6 @@ public class GameModel implements GameMvp.Model {
             }
         };
     };
-
-    private Sequence getNextSongInPlaylist() {
-        return songSequencePlaylist.nextSong();
-    }
 
     private void startNewGame() {
         if (gameCallback == null) {
@@ -143,7 +139,7 @@ public class GameModel implements GameMvp.Model {
     };
 
     private void emitInitialGameState(GameCallback gameCallback) {
-        Sequence sequence = getNextSongInPlaylist();
+        Sequence sequence = songSequencePlaylist.initial();
         gameState = State.initial(sequence).update(new Message("Let's go!"));
 
         GameInProgressViewModel viewModel = converter.createGameInProgressViewModel(gameState);

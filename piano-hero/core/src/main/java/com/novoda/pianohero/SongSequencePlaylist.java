@@ -17,6 +17,11 @@ public class SongSequencePlaylist {
 
     private Iterator<Sequence> iterator = SEQUENCES.iterator();
 
+    public Sequence initial() {
+        iterator = SEQUENCES.iterator();
+        return nextSong();
+    }
+
     public Sequence nextSong() {
         if (!iterator.hasNext()) {
             iterator = SEQUENCES.iterator();
