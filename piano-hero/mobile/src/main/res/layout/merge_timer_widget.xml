@@ -10,6 +10,7 @@
         android:id="@+id/timer_widget_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fontFamily="casual"
         android:gravity="center"
         android:textSize="40sp"
         tools:text="5s" />

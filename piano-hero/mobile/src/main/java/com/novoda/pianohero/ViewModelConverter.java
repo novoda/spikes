@@ -28,7 +28,7 @@ class ViewModelConverter {
                 state.getMessage().getValue(),
                 currentNoteFormatted(sequence.getCurrentNote()),
                 nextNoteFormatted(sequence.getNextNote()),
-                String.valueOf(state.getScore().points()),
+                "Score: " + String.valueOf(state.getScore().points()),
                 createTimeRemainingViewModel(state.getMillisRemaining())
         );
     }
