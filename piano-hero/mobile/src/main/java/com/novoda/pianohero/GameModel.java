@@ -1,5 +1,7 @@
 package com.novoda.pianohero;
 
+import java.util.Locale;
+
 public class GameModel implements GameMvp.Model {
 
     private final SongSequencePlaylist songSequencePlaylist;
@@ -107,7 +109,7 @@ public class GameModel implements GameMvp.Model {
                 gameState = gameState.update(sequence)
                         .update(gameState.getScore().increment())
                         .update(Sound.ofSilence())
-                        .update(new Message("Excellent, next song!"));
+                        .update(new Message(String.format(Locale.US, "Next Song! \"%s\"", sequence.title())));
 
                 GameInProgressViewModel gameInProgressViewModel = converter.createGameInProgressViewModel(gameState);
                 gameCallback.onGameProgressing(gameInProgressViewModel);
@@ -140,7 +142,7 @@ public class GameModel implements GameMvp.Model {
 
     private void emitInitialGameState(GameCallback gameCallback) {
         Sequence sequence = songSequencePlaylist.initial();
-        gameState = State.initial(sequence).update(new Message("Let's go!"));
+        gameState = State.initial(sequence).update(new Message(String.format(Locale.US, "Let's start with \"%s\"!", sequence.title())));
 
         GameInProgressViewModel viewModel = converter.createGameInProgressViewModel(gameState);
         gameCallback.onGameProgressing(viewModel);

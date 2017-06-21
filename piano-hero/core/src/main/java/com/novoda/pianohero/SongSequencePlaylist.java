@@ -7,7 +7,7 @@ import java.util.List;
 public class SongSequencePlaylist {
 
     private static final List<Sequence> SEQUENCES = Arrays.asList(
-//            maryHadALittleLamb(),
+            maryHadALittleLamb(),
             onceUponADream(),
             whenSheLovedMe(),
             aWholeNewWorld(),
@@ -41,7 +41,7 @@ public class SongSequencePlaylist {
 
     private static Sequence theBareNecessities() {
         return new Sequence.Builder()
-                .withTitle("The Jungle Book - The Bare Necessities")
+                .withTitle("The Bare Necessities (The Jungle Book)")
                 .add(Note.D4).add(Note.E4).add(Note.G4)
                 .add(Note.B4).add(Note.A4_S).add(Note.B4).add(Note.A4).add(Note.G4)
                 .add(Note.G4).add(Note.A4).add(Note.G4).add(Note.A4).add(Note.G4).add(Note.A4).add(Note.G4).add(Note.E4)
@@ -50,7 +50,7 @@ public class SongSequencePlaylist {
 
     private static Sequence onceUponADream() {
         return new Sequence.Builder()
-                .withTitle("Sleeping Beauty - Once Upon A Dream")
+                .withTitle("Once Upon A Dream (Sleeping Beauty)")
                 .add(Note.G4).add(Note.F4_S).add(Note.G4).add(Note.E4).add(Note.F4_S).add(Note.G4).add(Note.E4)
                 .add(Note.F4_S).add(Note.A4).add(Note.B4).add(Note.G4_S).add(Note.A4)
                 .build();
@@ -58,7 +58,7 @@ public class SongSequencePlaylist {
 
     private static Sequence whenSheLovedMe() {
         return new Sequence.Builder()
-                .withTitle("Toy Story - When She Loved Me")
+                .withTitle("When She Loved Me (Toy Story)")
                 .add(Note.D4).add(Note.G4).add(Note.G4).add(Note.F4_S).add(Note.G4).add(Note.D4)
                 .add(Note.E4).add(Note.G4).add(Note.G4).add(Note.B4).add(Note.A4).add(Note.G4).add(Note.A4)
                 .add(Note.F4_S).add(Note.A4).add(Note.B4).add(Note.A4).add(Note.G4).add(Note.A4).add(Note.B4).add(Note.D5)
@@ -68,7 +68,7 @@ public class SongSequencePlaylist {
 
     private static Sequence aWholeNewWorld() {
         return new Sequence.Builder()
-                .withTitle("Aladdin - A Whole New World")
+                .withTitle("A Whole New World (Aladdin)")
                 .add(Note.G4_S).add(Note.F4_S).add(Note.A4).add(Note.G4_S).add(Note.E4).add(Note.B4)
                 .add(Note.G4_S).add(Note.F4_S).add(Note.A4).add(Note.G4_S).add(Note.E4).add(Note.G4_S).add(Note.F4_S)
                 .add(Note.F4_S).add(Note.E4).add(Note.G4_S).add(Note.F4_S).add(Note.D4_S).add(Note.F4_S).add(Note.E4).add(Note.D4).add(Note.E4)

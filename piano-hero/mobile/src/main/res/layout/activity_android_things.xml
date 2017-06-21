@@ -23,7 +23,7 @@
             android:layout_gravity="center"
             android:fontFamily="casual"
             android:textColor="@color/text"
-            android:textSize="56sp"
+            android:textSize="48sp"
             tools:text="Excellent, you're doing well!" />
 
         <TextView
