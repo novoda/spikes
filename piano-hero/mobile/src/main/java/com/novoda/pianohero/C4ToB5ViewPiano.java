@@ -81,18 +81,18 @@ public class C4ToB5ViewPiano extends PercentRelativeLayout implements Piano {
         noteToViewsMap.put(Note.A4_S, a4sView = findViewById(R.id.piano_octave_a4_s));
 
         noteToViewsMap.put(Note.C5, c5View = findViewById(R.id.piano_octave_c5));
-        noteToViewsMap.put(Note.C5, d5View = findViewById(R.id.piano_octave_d5));
-        noteToViewsMap.put(Note.C5, e5View = findViewById(R.id.piano_octave_e5));
-        noteToViewsMap.put(Note.C5, f5View = findViewById(R.id.piano_octave_f5));
-        noteToViewsMap.put(Note.C5, g5View = findViewById(R.id.piano_octave_g5));
-        noteToViewsMap.put(Note.C5, a5View = findViewById(R.id.piano_octave_a5));
-        noteToViewsMap.put(Note.C5, b5View = findViewById(R.id.piano_octave_b5));
+        noteToViewsMap.put(Note.D5, d5View = findViewById(R.id.piano_octave_d5));
+        noteToViewsMap.put(Note.E5, e5View = findViewById(R.id.piano_octave_e5));
+        noteToViewsMap.put(Note.F5, f5View = findViewById(R.id.piano_octave_f5));
+        noteToViewsMap.put(Note.G5, g5View = findViewById(R.id.piano_octave_g5));
+        noteToViewsMap.put(Note.A5, a5View = findViewById(R.id.piano_octave_a5));
+        noteToViewsMap.put(Note.B5, b5View = findViewById(R.id.piano_octave_b5));
 
-        noteToViewsMap.put(Note.C5, c5sView = findViewById(R.id.piano_octave_c5_s));
-        noteToViewsMap.put(Note.D5, d5sView = findViewById(R.id.piano_octave_d5_s));
-        noteToViewsMap.put(Note.F5, f5sView = findViewById(R.id.piano_octave_f5_s));
-        noteToViewsMap.put(Note.G5, g5sView = findViewById(R.id.piano_octave_g5_s));
-        noteToViewsMap.put(Note.A5, a5sView = findViewById(R.id.piano_octave_a5_s));
+        noteToViewsMap.put(Note.C5_S, c5sView = findViewById(R.id.piano_octave_c5_s));
+        noteToViewsMap.put(Note.D5_S, d5sView = findViewById(R.id.piano_octave_d5_s));
+        noteToViewsMap.put(Note.F5_S, f5sView = findViewById(R.id.piano_octave_f5_s));
+        noteToViewsMap.put(Note.G5_S, g5sView = findViewById(R.id.piano_octave_g5_s));
+        noteToViewsMap.put(Note.A5_S, a5sView = findViewById(R.id.piano_octave_a5_s));
     }
 
     @Override
