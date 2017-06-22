@@ -68,6 +68,7 @@ public class AndroidThingsActivity extends AppCompatActivity {
 
     private Clickable createRestartGameClickable() {
         final View restartButton = findViewById(R.id.game_timer_widget);
+        final View gameStatus = findViewById(R.id.game_text_status);
         if (isThingsDevice()) {
             final GpioButtonClickable gpioButtonClickable = new GpioButtonClickable();
             androidThingThings.add(gpioButtonClickable);
@@ -87,6 +88,15 @@ public class AndroidThingsActivity extends AppCompatActivity {
             return new Clickable() {
                 @Override
                 public void setListener(final Listener listener) {
+                    gameStatus.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (restartButton.getVisibility() == View.VISIBLE) {
+                                return;
+                            }
+                            listener.onClick();
+                        }
+                    });
                     restartButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
