@@ -19,7 +19,6 @@ class AndroidSynthSpeaker implements Speaker {
     public void start(double frequency) {
         byte[] sound = generateTone(frequency);
 
-        // TODO: need to create each time? or can we keep in memory as a final (non-static) field?
         audioTrack = new AudioTrack(
                 AudioManager.STREAM_MUSIC,
                 sampleRate,
@@ -57,7 +56,8 @@ class AndroidSynthSpeaker implements Speaker {
     @Override
     public void stop() {
         if (audioTrack != null) {
-            audioTrack.stop();
+            audioTrack.release();
+            audioTrack = null;
         }
     }
 
