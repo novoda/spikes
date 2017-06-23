@@ -141,6 +141,7 @@ public class AndroidThingsActivity extends AppCompatActivity {
                 @Override
                 public void display(CharSequence score) {
                     scoreTextView.setText(score);
+                    scoreTextView.setVisibility(View.VISIBLE);
                 }
 
                 @Override
