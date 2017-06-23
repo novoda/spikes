@@ -8,10 +8,10 @@ public class SongSequencePlaylist {
 
     private static final List<Sequence> SEQUENCES = Arrays.asList(
             maryHadALittleLamb(),
+            theBareNecessities(),
             onceUponADream(),
             whenSheLovedMe(),
             aWholeNewWorld(),
-            theBareNecessities(),
             beautyAndTheBeast()
     );
 
