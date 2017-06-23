@@ -14,11 +14,9 @@ class GameTimer {
     @Nullable
     private CountDownTimer countDownTimer;
     private boolean gameInProgress;
-    private long millisUntilFinished;
 
     GameTimer(long gameDurationMillis) {
         this.gameDurationMillis = gameDurationMillis;
-        this.millisUntilFinished = gameDurationMillis;
     }
 
     public void start(final Callback callback) {
@@ -28,7 +26,6 @@ class GameTimer {
         countDownTimer = new CountDownTimer(gameDurationMillis, TIMER_UPDATE_FREQUENCY_MILLIS) {
             @Override
             public void onTick(long millisUntilFinished) {
-                GameTimer.this.millisUntilFinished = millisUntilFinished;
                 callback.onSecondTick(millisUntilFinished);
             }
 
@@ -41,16 +38,11 @@ class GameTimer {
         countDownTimer.start();
     }
 
-    public long millisRemaining() {
-        return millisUntilFinished;
-    }
-
     public void stop() {
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
         gameInProgress = false;
-        millisUntilFinished = gameDurationMillis;
     }
 
     boolean gameHasEnded() {

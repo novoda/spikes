@@ -55,9 +55,7 @@ public class GameModel implements GameMvp.Model {
                 return;
             }
 
-            gameState = gameState.update(Sound.of(note))
-                    .update(gameTimer.millisRemaining());
-
+            gameState = gameState.update(Sound.of(note));
             GameInProgressViewModel gameInProgressViewModel = converter.createGameInProgressViewModel(gameState);
             gameCallback.onGameProgressing(gameInProgressViewModel);
 
@@ -70,8 +68,7 @@ public class GameModel implements GameMvp.Model {
                 return;
             }
 
-            gameState = gameState.update(Sound.ofSilence())
-                    .update(gameTimer.millisRemaining());
+            gameState = gameState.update(Sound.ofSilence());
 
             GameInProgressViewModel gameInProgressViewModel = converter.createGameInProgressViewModel(gameState);
             gameCallback.onGameProgressing(gameInProgressViewModel);
@@ -82,7 +79,6 @@ public class GameModel implements GameMvp.Model {
             public void onCorrectNotePlayed(Sequence sequence) {
                 gameState = gameState.update(gameState.getScore().increment())
                         .update(sequence)
-                        .update(gameTimer.millisRemaining())
                         .update(getSuccessMessage(sequence));
 
                 GameInProgressViewModel gameInProgressViewModel = converter.createGameInProgressViewModel(gameState);
@@ -101,7 +97,6 @@ public class GameModel implements GameMvp.Model {
             public void onIncorrectNotePlayed(Sequence sequence) {
                 gameState = gameState.update(gameState.getScore().decrement())
                         .update(sequence)
-                        .update(gameTimer.millisRemaining())
                         .update(new Message("Uh-oh, try again!"));
 
                 GameInProgressViewModel gameInProgressViewModel = converter.createGameInProgressViewModel(gameState);
