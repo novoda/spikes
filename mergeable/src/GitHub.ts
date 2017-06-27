@@ -1,5 +1,3 @@
-import * as GitHubApi from 'github-api'
-
 const OPEN_PRS = { state: 'open' }
 
 const fetchOpenPullRequests = (gitHubApi: GitHubApi.Instance) => async (githubSecrets: GitHubSecrets): Promise<any> => {
@@ -11,8 +9,6 @@ const fetchOpenPullRequests = (gitHubApi: GitHubApi.Instance) => async (githubSe
 }
 
 const createRepo = (gitHubApi: GitHubApi.Instance) => (githubSecrets: GitHubSecrets): GitHubApi.Repository => {
-
-    // const github: GitHubApi.Instance = new GitHubApi(options)
     return gitHubApi.getRepo(githubSecrets.repoOwner, githubSecrets.repoName)
 }
 

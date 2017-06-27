@@ -47,7 +47,7 @@ declare module "github-api" {
 }
 
 interface GitHub {
-    fetchOpenPullRequests: (gitHubApi: GitHubApi.Instance) => (githubSecrets: GitHubSecrets) => Promise<any>;
+    fetchOpenPullRequests: (githubSecrets: GitHubSecrets) => Promise<any>;
 }
 
 interface Slack {

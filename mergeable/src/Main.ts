@@ -1,17 +1,24 @@
 import * as rawSecrets from '../secrets.json'
 import { checkMergeability } from './Mergeable'
-import { GitHub as gitHub } from './GitHub'
+import { GitHub } from './GitHub'
+import * as GitHubApi from 'github-api'
 import { WebClient as SlackClient } from '@slack/client'
 import { Slack } from './Slack'
 
-const secrets: Secrets = (<any>rawSecrets)
-const slackClient: any = new SlackClient(secrets.slack.token)
-const slackPoster = Slack(slackClient)
-
-const options: GitHubApi.Options = {
-    token: secrets.gitHub.token
+const createGitHub = (secrets: GitHubSecrets): GitHub => {
+    const options: GitHubApi.Options = {
+        token: secrets.token
+    }
+    return GitHub(new GitHubApi(options))
 }
 
-const gitHub = 
+const createSlack = (secrets: SlackSecrets): Slack => {
+    const slackClient: any = new SlackClient(secrets.token)
+    return Slack(slackClient)
+}
+
+const secrets: Secrets = (<any>rawSecrets)
+const slackPoster = createSlack(secrets.slack)
+const gitHub = createGitHub(secrets.gitHub)
 
 checkMergeability(slackPoster, gitHub, secrets).then(console.log).catch(console.log)
