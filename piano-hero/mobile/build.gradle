@@ -1,0 +1,53 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath libraries.build.androidGradle
+    }
+}
+
+repositories {
+    maven {
+        url 'https://github.com/kshoji/USB-MIDI-Driver/raw/master/MIDIDriver/snapshots'
+    }
+    mavenCentral()
+}
+
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion versions.androidSdk.compile
+    buildToolsVersion versions.androidSdk.buildTools
+
+    defaultConfig {
+        applicationId "com.novoda.pianohero"
+        minSdkVersion versions.androidSdk.min
+        targetSdkVersion versions.androidSdk.target
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
+        }
+    }
+}
+
+dependencies {
+    compile project(':core')
+    compile libraries.percent
+    compile libraries.supportAppCompatV7
+    compile libraries.androidThingsContribDriverHt16k33
+    compile libraries.progressRingView
+
+    provided 'com.google.android.things:androidthings:0.3-devpreview'
+
+    testCompile libraries.jUnit
+    testCompile libraries.festAssertCore
+    testCompile libraries.mockitoCore
+
+    compile 'jp.kshoji:midi-driver:0.1.4:@aar'
+}
