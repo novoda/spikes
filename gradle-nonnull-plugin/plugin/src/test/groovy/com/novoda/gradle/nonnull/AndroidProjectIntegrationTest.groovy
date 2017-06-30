@@ -68,7 +68,7 @@ public class AndroidProjectIntegrationTest {
     }
 
     @Test
-    public void shouldNotGeneratePackInfoWhenItsAlreadyPartOfSources() {
+    public void shouldNotGeneratePackageInfoWhenItsAlreadyPartOfSources() {
         def tempClass = new File(PROJECT.tempDir, 'package-info.java')
         tempClass.createNewFile()
         tempClass.write ''' @ParametersAreNonnullByDefault
