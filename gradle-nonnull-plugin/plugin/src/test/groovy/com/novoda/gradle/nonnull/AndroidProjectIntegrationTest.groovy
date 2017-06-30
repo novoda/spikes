@@ -57,8 +57,8 @@ public class AndroidProjectIntegrationTest {
 
     @Test
     public void shouldRunTaskAgainWhenFilesInNewPackageCreated() {
-        def tempClass = new File(PROJECT.tempDir, 'Temp.java')
-        tempClass.write ''' package com.novoda.gradle.nonnull.temp;
+        def temporaryClass = new File(PROJECT.tempDir, 'Temp.java')
+        temporaryClass.write ''' package com.novoda.gradle.nonnull.temp;
                             public class Temp {}'''
 
         def buildResult = PROJECT.runner.withArguments('core:assemble').build()
@@ -69,9 +69,9 @@ public class AndroidProjectIntegrationTest {
 
     @Test
     public void shouldNotGeneratePackageInfoWhenItsAlreadyPartOfSources() {
-        def tempClass = new File(PROJECT.tempDir, 'package-info.java')
-        tempClass.createNewFile()
-        tempClass.write ''' @ParametersAreNonnullByDefault
+        def temporaryClass = new File(PROJECT.tempDir, 'package-info.java')
+        temporaryClass.createNewFile()
+        temporaryClass.write ''' @ParametersAreNonnullByDefault
 package com.novoda.gradle.nonnull.temp;
 
 import javax.annotation.ParametersAreNonnullByDefault;

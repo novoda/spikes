@@ -12,18 +12,18 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
     Set<String> packages;
 
     @OutputDirectory
-    File outputDir
+    File outputDirectory
 
     def sourceSets
 
     @TaskAction
     void generatePackageAnnotations() {
         description = "Annotates the source packages with @ParametersAreNonnullByDefault"
-        outputDir.deleteDir()
+        outputDirectory.deleteDir()
 
         Set<String> packages = getPackages()
         packages.each { packagePath ->
-            def dir = new File(outputDir, packagePath)
+            def dir = new File(outputDirectory, packagePath)
             dir.mkdirs()
 
             def file = new File(dir, 'package-info.java')
