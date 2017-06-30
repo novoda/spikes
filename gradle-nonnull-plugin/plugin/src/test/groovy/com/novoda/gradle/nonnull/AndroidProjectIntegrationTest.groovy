@@ -9,9 +9,8 @@ import org.gradle.tooling.model.idea.IdeaModule
 import org.gradle.tooling.model.idea.IdeaProject
 import org.junit.ClassRule
 import org.junit.Test
-import org.junit.rules.TestWatcher;
+import org.junit.rules.TestWatcher
 import org.junit.runner.Description
-import org.junit.runners.model.Statement
 
 import static com.google.common.truth.Truth.assertThat
 
@@ -58,14 +57,32 @@ public class AndroidProjectIntegrationTest {
 
     @Test
     public void shouldRunTaskAgainWhenFilesInNewPackageCreated() {
-        def tempClass = new File(PROJECT.tempDir, 'Temp.java')
-        tempClass.write ''' package com.novoda.gradle.nonnull.temp;
+        def temporaryClass = new File(PROJECT.tempDir, 'Temp.java')
+        temporaryClass.write ''' package com.novoda.gradle.nonnull.temp;
                             public class Temp {}'''
 
         def buildResult = PROJECT.runner.withArguments('core:assemble').build()
         def task = buildResult.task(':core:generateNonNullAnnotations')
 
         assertThat(task.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    }
+
+    @Test
+    public void shouldNotGeneratePackageInfoWhenItsAlreadyPartOfSources() {
+        def temporaryClass = new File(PROJECT.tempDir, 'package-info.java')
+        temporaryClass.createNewFile()
+        temporaryClass.write ''' @ParametersAreNonnullByDefault
+package com.novoda.gradle.nonnull.temp;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+'''
+
+        try {
+            PROJECT.runner.withArguments('core:assemble').build()
+        } catch (Exception ignored) {
+        }
+
+        assertThat(new File(PROJECT.projectDir, 'core/build/generated/source/nonNull/main/com/novoda/gradle/nonnull/temp/').exists()).isFalse()
     }
 
     private static String projectFilePath(String path) {
