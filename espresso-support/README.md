@@ -41,9 +41,9 @@ public void givenViewIsUpdatedWithDifferentMovie_whenClicking_thenListenerDoesNo
 }
 
 private void givenMovieItemViewIsBoundTo(final Movie movie) {
-    viewTestRule.bindViewUsing(new ViewTestRule.Binder<MovieItemView>() {
+    viewTestRule.runOnUiThread(new ViewTestRule.UiThreadAction<MovieItemView>() {
         @Override
-        public void bind(MovieItemView view) {
+        public void run(MovieItemView view) {
             view.bind(movie);
         }
     });

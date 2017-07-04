@@ -1,101 +1,154 @@
 package com.novoda.pianohero;
 
-import android.support.annotation.NonNull;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class GameModel implements GameMvp.Model {
 
-    private final SongSequenceFactory songSequenceFactory;
-    private final SimplePitchNotationFormatter pitchNotationFormatter;
+    private final SongSequencePlaylist songSequencePlaylist;
+    private final Piano piano;
+    private final PlayAttemptGrader playAttemptGrader;
+    private final Clickable startGameClickable;
+    private final ViewModelConverter converter;
+    private final GameTimer gameTimer;
+    private final PhrasesIterator phrasesIterator;
 
-    private Sequence sequence;
+    private State gameState = State.empty();
+    private GameCallback gameCallback;
 
     GameModel(
-        SongSequenceFactory songSequenceFactory,
-        SimplePitchNotationFormatter pitchNotationFormatter) {
-        this.songSequenceFactory = songSequenceFactory;
-        this.pitchNotationFormatter = pitchNotationFormatter;
+            SongSequencePlaylist songSequencePlaylist,
+            Piano piano,
+            Clickable startGameClickable,
+            GameTimer gameTimer,
+            ViewModelConverter converter,
+            PlayAttemptGrader playAttemptGrader,
+            PhrasesIterator phrasesIterator) {
+        this.songSequencePlaylist = songSequencePlaylist;
+        this.piano = piano;
+        this.startGameClickable = startGameClickable;
+        this.gameTimer = gameTimer;
+        this.converter = converter;
+        this.playAttemptGrader = playAttemptGrader;
+        this.phrasesIterator = phrasesIterator;
     }
 
     @Override
-    public void startGame(StartCallback callback) {
-        sequence = songSequenceFactory.maryHadALittleLamb();
+    public void startGame(GameCallback gameCallback) {
+        this.gameCallback = gameCallback;
 
-        checkSequenceIsSimpleElseThrow(sequence);
+        startGameClickable.setListener(new Clickable.Listener() {
+            @Override
+            public void onClick() {
+                startNewGame();
+            }
+        });
 
-        callback.onGameStarted(createViewModel(sequence));
+        piano.attachListener(onNotePlayedListener);
+        startNewGame();
     }
 
-    private void checkSequenceIsSimpleElseThrow(Sequence sequence) {
-        for (int i = 0; i < sequence.length(); i++) {
-            Notes notes = sequence.get(i);
-            if (notes.count() > 1) {
-                throw new IllegalArgumentException("Sequence contains chords, that's not simple enough");
+    private final Piano.NoteListener onNotePlayedListener = new Piano.NoteListener() {
+
+        @Override
+        public void onStart(Note note) {
+            if (gameTimer.gameHasEnded()) {
+                return;
             }
-            for (Note note : notes.notes()) {
-                if (pitchNotationFormatter.format(note).endsWith("#")) {
-                    throw new IllegalArgumentException("Sequence contains sharps, that's not simple enough");
+
+            gameState = gameState.update(Sound.of(note));
+            GameInProgressViewModel gameInProgressViewModel = converter.createGameInProgressViewModel(gameState);
+            gameCallback.onGameProgressing(gameInProgressViewModel);
+
+            playAttemptGrader.grade(note, gameState.getSequence(), onPlayAttemptGradedCallback);
+        }
+
+        @Override
+        public void onStop(Note note) {
+            if (gameTimer.gameHasEnded()) {
+                return;
+            }
+
+            gameState = gameState.update(Sound.ofSilence());
+
+            GameInProgressViewModel gameInProgressViewModel = converter.createGameInProgressViewModel(gameState);
+            gameCallback.onGameProgressing(gameInProgressViewModel);
+        }
+
+        private final PlayAttemptGrader.Callback onPlayAttemptGradedCallback = new PlayAttemptGrader.Callback() {
+            @Override
+            public void onCorrectNotePlayed(Sequence sequence) {
+                gameState = gameState.update(gameState.getScore().increment())
+                        .update(sequence)
+                        .update(getSuccessMessage(sequence));
+
+                GameInProgressViewModel gameInProgressViewModel = converter.createGameInProgressViewModel(gameState);
+                gameCallback.onGameProgressing(gameInProgressViewModel);
+            }
+
+            private Message getSuccessMessage(Sequence sequence) {
+                if (sequence.position() > 0) {
+                    return new Message(phrasesIterator.nextPlatitude());
+                } else {
+                    return Message.empty();
                 }
             }
-        }
-    }
 
-    @NonNull
-    private RoundViewModel createViewModel(Sequence updatedSequence) {
-        int nextNotesPosition = updatedSequence.position();
-        List<String> notations = getNotations(nextNotesPosition);
-        String statusMessage = getStatusMessage(updatedSequence);
-        return new RoundViewModel(notations, statusMessage);
-    }
+            @Override
+            public void onIncorrectNotePlayed(Sequence sequence) {
+                gameState = gameState.update(gameState.getScore().decrement())
+                        .update(sequence)
+                        .update(new Message("Uh-oh, try again!"));
 
-    private List<String> getNotations(int position) {
-        List<String> notations = new ArrayList<>();
-        for (Note note : sequence.get(position)) {
-            String simpleNotation = pitchNotationFormatter.format(note);
-            notations.add(simpleNotation);
-        }
-        return notations;
-    }
-
-    private String getStatusMessage(Sequence sequence) {
-        if (sequence.latestError().count() == 0) {
-            if (sequence.position() > 0) {
-                return String.format(Locale.US, "Woo! Keep going! (%d/%d)", sequence.position() + 1, sequence.length());
-            } else {
-                return "";
+                GameInProgressViewModel gameInProgressViewModel = converter.createGameInProgressViewModel(gameState);
+                gameCallback.onGameProgressing(gameInProgressViewModel);
             }
-        } else {
-            return "Ruhroh, try again!";
+
+            @Override
+            public void onFinalNoteInSequencePlayedSuccessfully() {
+                Sequence sequence = songSequencePlaylist.nextSong();
+                gameState = gameState.update(sequence)
+                        .update(gameState.getScore().increment())
+                        .update(new Message(String.format(Locale.US, "Next Song! \"%s\"", sequence.title())));
+
+                GameInProgressViewModel gameInProgressViewModel = converter.createGameInProgressViewModel(gameState);
+                gameCallback.onGameProgressing(gameInProgressViewModel);
+            }
+        };
+    };
+
+    private void startNewGame() {
+        if (gameCallback == null) {
+            throw new IllegalStateException("how you startin' a new game without calling startGame(GameCallback)");
         }
+        emitInitialGameState(gameCallback);
+        gameTimer.start(gameTimerCallback);
+    }
+
+    private final GameTimer.Callback gameTimerCallback = new GameTimer.Callback() {
+        @Override
+        public void onSecondTick(long millisUntilFinished) {
+            gameState = gameState.update(millisUntilFinished);
+
+            GameInProgressViewModel viewModel = converter.createGameInProgressViewModel(gameState);
+            gameCallback.onGameProgressing(viewModel);
+        }
+
+        @Override
+        public void onFinish() {
+            gameCallback.onGameComplete(converter.createGameOverViewModel(gameState));
+        }
+    };
+
+    private void emitInitialGameState(GameCallback gameCallback) {
+        Sequence sequence = songSequencePlaylist.initial();
+        gameState = State.initial(sequence).update(new Message(String.format(Locale.US, "Let's start with \"%s\"!", sequence.title())));
+
+        GameInProgressViewModel viewModel = converter.createGameInProgressViewModel(gameState);
+        gameCallback.onGameProgressing(viewModel);
     }
 
     @Override
-    public void playGameRound(
-        RoundCallback roundCallback,
-        CompletionCallback completionCallback,
-        Note... notesCollection) {
-        Notes notes = new Notes(notesCollection);
-        playGameRound(roundCallback, completionCallback, notes);
+    public void stopGame() {
+        gameTimer.stop();
     }
-
-    private void playGameRound(RoundCallback roundCallback, CompletionCallback completionCallback, Notes notes) {
-        int currentPosition = sequence.position();
-        Notes expectedNotes = sequence.get(currentPosition);
-        if (currentPosition == sequence.length() - 1 && notes.equals(expectedNotes)) {
-            completionCallback.onGameComplete();
-            return;
-        }
-
-        if (notes.equals(expectedNotes)) {
-            this.sequence = new Sequence.Builder(sequence).atPosition(currentPosition + 1).build();
-            roundCallback.onRoundUpdate(createViewModel(sequence));
-        } else {
-            Sequence updatedSequence = new Sequence.Builder(sequence).withLatestError(notes).build();
-            roundCallback.onRoundUpdate(createViewModel(updatedSequence));
-        }
-    }
-
 }

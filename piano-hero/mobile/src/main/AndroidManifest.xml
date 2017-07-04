@@ -2,39 +2,39 @@
   xmlns:tools="http://schemas.android.com/tools"
   package="com.novoda.pianohero">
 
-  <application
-    android:name=".PianoHeroApplication"
-    android:allowBackup="false"
-    android:icon="@drawable/ic_launcher"
-    android:label="@string/app_name"
-    android:theme="@style/AppTheme"
-    tools:ignore="GoogleAppIndexingWarning">
+    <application
+        android:name=".PianoHeroApplication"
+        android:allowBackup="false"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme"
+        tools:replace="android:allowBackup"
+        tools:ignore="GoogleAppIndexingWarning">
 
-    <uses-library
-      android:name="com.google.android.things"
-      android:required="false" />
+        <uses-library
+            android:name="com.google.android.things"
+            android:required="false"
+            tools:replace="android:required" />
 
-    <activity android:name=".SimpleEndToEndActivity" />
-    <activity android:name=".PianoC4ToB5Activity" />
-    <activity android:name=".AndroidThingsActivity">
+        <activity android:name=".AndroidThingsActivity" />
 
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
+        <activity-alias
+            android:name=".ThingsLauncher"
+            android:targetActivity=".AndroidThingsActivity">
 
-        <category android:name="android.intent.category.IOT_LAUNCHER" />
-        <category android:name="android.intent.category.DEFAULT" />
-      </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-    </activity>
+                <category android:name="android.intent.category.IOT_LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
 
-    <activity-alias
-      android:name=".launcher"
-      android:targetActivity=".SimpleEndToEndActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-    </activity-alias>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity-alias>
 
   </application>
 

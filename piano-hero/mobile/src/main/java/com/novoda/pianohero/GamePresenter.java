@@ -2,49 +2,33 @@ package com.novoda.pianohero;
 
 class GamePresenter implements GameMvp.Presenter {
 
-    private final GameMvp.Model gameModel;
+    private final GameMvp.Model model;
     private final GameMvp.View view;
 
-    GamePresenter(GameMvp.Model gameModel, GameMvp.View view) {
-        this.gameModel = gameModel;
+    GamePresenter(GameMvp.Model model, GameMvp.View view) {
+        this.model = model;
         this.view = view;
     }
 
     @Override
-    public void onCreate() {
-        gameModel.startGame(andInformView);
+    public void startPresenting() {
+        model.startGame(gameCallback);
     }
 
-    private final GameMvp.Model.StartCallback andInformView = new GameMvp.Model.StartCallback() {
+    private final GameMvp.Model.GameCallback gameCallback = new GameMvp.Model.GameCallback() {
         @Override
-        public void onGameStarted(RoundViewModel viewModel) {
-            view.showRound(viewModel);
+        public void onGameProgressing(GameInProgressViewModel viewModel) {
+            view.show(viewModel);
+        }
+
+        @Override
+        public void onGameComplete(GameOverViewModel viewModel) {
+            view.show(viewModel);
         }
     };
 
     @Override
-    public void onNotesPlayed(Note... notes) {
-        gameModel.playGameRound(
-            new GameMvp.Model.RoundCallback() {
-                @Override
-                public void onRoundUpdate(RoundViewModel viewModel) {
-                    view.showRound(viewModel);
-                }
-            },
-            new GameMvp.Model.CompletionCallback() {
-                @Override
-                public void onGameComplete() {
-                    view.showGameComplete(new GameOverViewModel("game complete, another!`"));
-                    gameModel.startGame(andInformView);
-                }
-            },
-            notes
-        );
+    public void stopPresenting() {
+        model.stopGame();
     }
-
-    @Override
-    public void onRestartGameSelected() {
-        gameModel.startGame(andInformView);
-    }
-
 }

@@ -18,9 +18,7 @@ import org.mockito.junit.MockitoRule;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.novoda.espresso.AccessibilityViewMatchers.withUsageHintOnClick;
 import static com.novoda.espresso.AccessibilityViewMatchers.withUsageHintOnLongClick;
 import static org.hamcrest.CoreMatchers.is;
@@ -74,9 +72,9 @@ public class MovieItemViewTalkBackTest {
     }
 
     private void givenMovieItemViewIsBoundTo(final Movie movie) {
-        viewTestRule.bindViewUsing(new ViewTestRule.Binder<MovieItemView>() {
+        viewTestRule.runOnMainSynchronously(new ViewTestRule.Runner<MovieItemView>() {
             @Override
-            public void bind(MovieItemView view) {
+            public void run(MovieItemView view) {
                 view.bind(movie);
             }
         });

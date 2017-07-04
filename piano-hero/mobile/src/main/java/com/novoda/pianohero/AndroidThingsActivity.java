@@ -1,223 +1,159 @@
 package com.novoda.pianohero;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
-import com.novoda.pianohero.hax.GpioProxy;
-import com.novoda.pianohero.hax.RGBmatrixPanel;
+import java.util.concurrent.TimeUnit;
 
-public class AndroidThingsActivity extends AppCompatActivity implements GameMvp.View {
+public class AndroidThingsActivity extends AppCompatActivity {
 
-    //    private GameMvp.Presenter presenter;
-//    private UartDevice bus;
-//    private MidiManager midiManager;
-    private Handler handler;
-    private RGBmatrixPanel rgbMatrixPanel;
+    private static final long GAME_DURATION_MILLIS = TimeUnit.SECONDS.toMillis(60);
+
+    private AndroidThingThings androidThingThings = new AndroidThingThings();
+    private GameMvp.Presenter gameMvpPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("!!!", "I'm running");
+        setContentView(R.layout.activity_android_things);
 
-//        midiManager = (MidiManager) getSystemService(Context.MIDI_SERVICE);
-//        PeripheralManagerService service = new PeripheralManagerService();
-//        try {
-//            bus = service.openUartDevice("UART0");
-//        } catch (IOException e) {
-//            throw new IllegalStateException("Cannot open bus to input peripheral.", e);
-//        }
-
-        HandlerThread thread = new HandlerThread("BackgroundThread");
-        thread.start();
-        handler = new Handler(thread.getLooper());
-
-        rgbMatrixPanel = new RGBmatrixPanel(new GpioProxy());
-        rgbMatrixPanel.clearDisplay();
-        handler.post(hax);
-
-//        rgbMatrixPanel.drawPixel(3, 3, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(4, 3, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(5, 3, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(6, 3, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(7, 3, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(8, 3, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(9, 3, Color.YELLOW);
-//
-//        rgbMatrixPanel.drawPixel(3, 3, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(3, 4, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(3, 5, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(3, 6, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(3, 7, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(3, 8, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(3, 9, Color.YELLOW);
-//
-//        rgbMatrixPanel.drawPixel(9, 3, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(9, 4, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(9, 5, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(9, 6, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(9, 7, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(9, 8, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(9, 9, Color.YELLOW);
-//
-//        rgbMatrixPanel.drawPixel(3, 9, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(4, 9, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(5, 9, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(6, 9, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(7, 9, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(8, 9, Color.YELLOW);
-//        rgbMatrixPanel.drawPixel(9, 9, Color.YELLOW);
-
-        rgbMatrixPanel.setFontColor(Color.YELLOW);
-        rgbMatrixPanel.writeText("Hello?");
-
-//        GameMvp.Model gameModel = new GameModel(new SongSequenceFactory(), new SimplePitchNotationFormatter());
-//        presenter = new GamePresenter(gameModel, this);
-//        presenter.onCreate();
+        GameMvp.Model gameMvpModel = createGameMvpModel();
+        GameMvp.View gameMvpView = createGameMvpView();
+        gameMvpPresenter = new GamePresenter(gameMvpModel, gameMvpView);
     }
-
-    private final Runnable hax = new Runnable() {
-        @Override
-        public void run() {
-            rgbMatrixPanel.updateDisplay();
-            handler.post(this);
-        }
-    };
 
     @Override
     protected void onResume() {
         super.onResume();
-
-//        try {
-//            bus.setBaudrate(31250);
-//            bus.setDataSize(8);
-//            bus.setParity(UartDevice.PARITY_NONE);
-//            bus.setStopBits(1);
-//        } catch (IOException e) {
-//            throw new IllegalStateException("Cannot configure peripheral", e);
-//        }
-//
-//        try {
-//            bus.registerUartDeviceCallback(callback);
-//            Log.d("!!!", "Awaiting data");
-//        } catch (IOException e) {
-//            throw new IllegalStateException("Cannot register for data from peripheral", e);
-//        }
-//
-//        midiManager.registerDeviceCallback(deviceCallback, handler);
-//
-//        handler.post(mockInput);
+        androidThingThings.open();
+        gameMvpPresenter.startPresenting();
     }
-//
-//    private final MidiManager.DeviceCallback deviceCallback = new MidiManager.DeviceCallback() {
-//        @Override
-//        public void onDeviceAdded(MidiDeviceInfo device) {
-//            Bundle properties = device.getProperties();
-//            String name = properties.getString(MidiDeviceInfo.PROPERTY_NAME);
-//            Log.d("TUT", "onDeviceAdded: " + name);
-//            midiManager.openDevice(
-//                    device,
-//                    new MidiManager.OnDeviceOpenedListener() {
-//                        @Override
-//                        public void onDeviceOpened(MidiDevice device) {
-//                            MidiOutputPort port = device.openOutputPort(0);
-//                            port.onConnect(new MidiReceiver() {
-//                                @Override
-//                                public void onSend(byte[] msg, int offset, int count, long timestamp) throws IOException {
-//                                    Log.d("TUT", "wut" + msg);
-//                                }
-//                            });
-//                        }
-//                    },
-//                    handler
-//            );
-//        }
-//    };
-//
-//    private final UartDeviceCallback callback = new UartDeviceCallback() {
-//        @Override
-//        public boolean onUartDeviceDataAvailable(UartDevice uart) {
-//            try {
-//                Log.d("!!!", "got data!");
-//                final int maxCount = 16;
-//                byte[] buffer = new byte[maxCount];
-//
-//                int count;
-//                while ((count = uart.read(buffer, buffer.length)) > 0) {
-//                    Log.d("!!!", "Read " + count + " bytes from peripheral");
-//                }
-//                for (byte b : buffer) {
-//                    Log.d("!!!", "byte " + b);
-//                }
-//                Log.d("!!!", "wtf string " + Arrays.asList(new String(buffer)));
-//                Log.d("!!!", "wtf array " + Arrays.asList(buffer));
-//                Log.d("!!!", "wtf raw " + buffer);
-//
-//            } catch (IOException e) {
-//                throw new IllegalStateException("Fubar", e);
-//            }
-//            return true;
-//        }
-//    };
-//
-//    private final Runnable mockInput = new Runnable() {
-//        @Override
-//        public void run() {
-//            Log.d("!!!", "X Fake input");
-//
-//            presenter.onNotesPlayed(new Note(new Random().nextInt(127)));
-//            final int maxCount = 16;
-//            byte[] buffer = new byte[maxCount];
-//            int count;
-//            try {
-//                while ((count = bus.read(buffer, buffer.length)) > 0) {
-//                    Log.d("!!!", "X Read " + count + " bytes from peripheral");
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            for (byte b : buffer) {
-//                Log.d("!!!", "byte " + b);
-//            }
-//            Log.d("!!!", "wtf " + Arrays.asList(buffer));
-//
-//            handler.postDelayed(mockInput, SECONDS.toMillis(3));
-//        }
-//    };
 
     @Override
-    public void showRound(RoundViewModel viewModel) {
-        Log.d("!!!", viewModel.getStatusMessage());
-        for (String notation : viewModel) {
-            Log.d("!!!", "Note: " + notation);
+    protected void onPause() {
+        gameMvpPresenter.stopPresenting();
+        androidThingThings.close();
+        super.onPause();
+    }
+
+    private GameMvp.Model createGameMvpModel() {
+        PhrasesIterator phrasesIterator = new PhrasesIterator();
+        return new GameModel(
+                new SongSequencePlaylist(),
+                createPiano(),
+                createRestartGameClickable(),
+                new GameTimer(GAME_DURATION_MILLIS),
+                new ViewModelConverter(phrasesIterator, GAME_DURATION_MILLIS),
+                new PlayAttemptGrader(),
+                phrasesIterator
+        );
+    }
+
+    private Piano createPiano() {
+        KeyStationMini32Piano keyStationMini32Piano = new KeyStationMini32Piano(this);
+        androidThingThings.add(keyStationMini32Piano);
+
+        if (isThingsDevice()) {
+            return keyStationMini32Piano;
+        } else {
+            C4ToB5ViewPiano virtualPianoView = (C4ToB5ViewPiano) findViewById(R.id.piano_view);
+            return new CompositePiano(virtualPianoView, keyStationMini32Piano);
         }
     }
 
-    @Override
-    public void showGameComplete(GameOverViewModel viewModel) {
-        Log.d("!!!", viewModel.getMessage());
+    private Clickable createRestartGameClickable() {
+        final View restartButton = findViewById(R.id.game_timer_widget);
+        final View gameStatus = findViewById(R.id.game_text_status);
+        if (isThingsDevice()) {
+            final GpioButtonClickable gpioButtonClickable = new GpioButtonClickable();
+            androidThingThings.add(gpioButtonClickable);
+            return new Clickable() {
+                @Override
+                public void setListener(final Listener listener) {
+                    gpioButtonClickable.setListener(listener);
+                    restartButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            listener.onClick();
+                        }
+                    });
+                }
+            };
+        } else {
+            return new Clickable() {
+                @Override
+                public void setListener(final Listener listener) {
+                    gameStatus.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (restartButton.getVisibility() == View.VISIBLE) {
+                                return;
+                            }
+                            listener.onClick();
+                        }
+                    });
+                    restartButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            listener.onClick();
+                        }
+                    });
+                }
+            };
+        }
     }
 
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        bus.unregisterUartDeviceCallback(callback);
-//        midiManager.unregisterDeviceCallback(deviceCallback);
-//        handler.removeCallbacks(mockInput);
-//    }
+    private GameMvp.View createGameMvpView() {
+        return new AndroidGameMvpView(
+                createSpeaker(),
+                (C4ToB5ViewPiano) findViewById(R.id.piano_view),
+                createScoreDisplayer(),
+                (C4ToB5TrebleStaffWidget) findViewById(R.id.game_widget_treble_staff),
+                (TextView) findViewById(R.id.game_text_status),
+                (TimerWidget) findViewById(R.id.game_timer_widget)
+        );
+    }
 
-    @Override
-    protected void onDestroy() {
-        handler.removeCallbacks(hax);
-//        try {
-//            bus.close();
-//        } catch (IOException e) {
-//            Log.e("!!!", "Cannot close peripheral bus, might encounter strange behaviour on next app start.");
-//        }
-        super.onDestroy();
+    private Speaker createSpeaker() {
+        if (isThingsDevice()) {
+            PwmPiSpeaker pwmPiSpeaker = new PwmPiSpeaker();
+            androidThingThings.add(pwmPiSpeaker);
+            return pwmPiSpeaker;
+        } else {
+            return new AndroidSynthSpeaker();
+        }
+    }
+
+    private ScoreDisplayer createScoreDisplayer() {
+        if (isThingsDevice()) {
+            RainbowHatScoreDisplayer rainbowHatScoreDisplayer = new RainbowHatScoreDisplayer();
+            androidThingThings.add((rainbowHatScoreDisplayer));
+            return rainbowHatScoreDisplayer;
+        } else {
+            final TextView scoreTextView = ((TextView) findViewById(R.id.score_text_view));
+            scoreTextView.setVisibility(View.VISIBLE);
+            return new ScoreDisplayer() {
+                @Override
+                public void display(CharSequence score) {
+                    scoreTextView.setText(score);
+                    scoreTextView.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void hide() {
+                    scoreTextView.setVisibility(View.GONE);
+                }
+            };
+        }
+    }
+
+    private boolean isThingsDevice() {
+        // TODO once targeting 'O' use constant `PackageManager.FEATURE_EMBEDDED`
+        return getPackageManager().hasSystemFeature("android.hardware.type.embedded");
     }
 }

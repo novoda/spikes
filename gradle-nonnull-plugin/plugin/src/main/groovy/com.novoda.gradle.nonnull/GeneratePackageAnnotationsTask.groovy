@@ -2,7 +2,6 @@ package com.novoda.gradle.nonnull
 
 import groovy.transform.Memoized
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.FileVisitDetails
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
@@ -13,17 +12,18 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
     Set<String> packages;
 
     @OutputDirectory
-    def outputDir
+    File outputDirectory
 
     def sourceSets
 
     @TaskAction
     void generatePackageAnnotations() {
         description = "Annotates the source packages with @ParametersAreNonnullByDefault"
+        outputDirectory.deleteDir()
 
         Set<String> packages = getPackages()
         packages.each { packagePath ->
-            def dir = new File(outputDir, packagePath)
+            def dir = new File(outputDirectory, packagePath)
             dir.mkdirs()
 
             def file = new File(dir, 'package-info.java')
@@ -42,16 +42,20 @@ class GeneratePackageAnnotationsTask extends DefaultTask {
             sourceSet.java.srcDirs.findAll {
                 it.exists()
             }.each { File srcDir ->
-                project.fileTree(srcDir).visit { FileVisitDetails details ->
-                    def file = details.file
-                    if (file.file) {
-                        def packagePath = srcDir.toPath().relativize(file.parentFile.toPath()).toString()
+                project.file(srcDir).eachDirRecurse { dir ->
+                    def packageInfo = new File(dir, 'package-info.java')
+                    if (isEmptyDir(dir) && !packageInfo.isFile()) {
+                        def packagePath = srcDir.toPath().relativize(dir.toPath()).toString()
                         packages << packagePath
                     }
                 }
             }
         }
         packages
+    }
+
+    static isEmptyDir(File dir) {
+        dir.list().length > 0
     }
 
     static def createAnnotationDefinition(packageName) {
