@@ -1,0 +1,50 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion versions.androidSdk.compile
+    buildToolsVersion versions.androidSdk.buildTools
+
+    defaultConfig {
+        applicationId "com.example.videoplayer"
+        minSdkVersion versions.androidSdk.min
+        targetSdkVersion versions.androidSdk.target
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile libraries.supportAppCompatV7
+    compile libraries.supportDesign
+    compile libraries.supportRecyclerView
+    compile libraries.supportV13
+
+    compile libraries.butterknife
+    annotationProcessor libraries.butterknifeCompiler
+
+    // Android runner and rules support
+    androidTestCompile(libraries.androidTestRunner) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
+    androidTestCompile(libraries.androidTestRules) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
+    // Espresso support
+    androidTestCompile(libraries.espressoCore) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
+    testCompile libraries.jUnit
+    testCompile libraries.mockitoCore
+    testCompile libraries.festAssertCore
+}

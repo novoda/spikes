@@ -1,0 +1,16 @@
+buildscript {
+    apply from: 'dependencies.gradle'
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath libraries.build.androidApt
+        classpath libraries.build.androidGradle
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}

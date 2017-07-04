@@ -1,0 +1,31 @@
+ext {
+    versions = [
+            androidSdk: [
+                    buildTools: '25.0.2',
+                    compile   : 25,
+                    min       : 16,
+                    target    : 25
+            ],
+            support   : '25.2.0'
+    ]
+
+    libraries = [
+            build              : [
+                    androidApt   : 'com.neenbedankt.gradle.plugins:android-apt:1.8',
+                    androidGradle: 'com.android.tools.build:gradle:2.3.2'
+            ],
+            androidTestRules   : 'com.android.support.test:rules:0.5',
+            androidTestRunner  : 'com.android.support.test:runner:0.5',
+            butterknife        : 'com.jakewharton:butterknife:8.0.1',
+            butterknifeCompiler: 'com.jakewharton:butterknife-compiler:8.0.1',
+            espressoCore       : 'com.android.support.test.espresso:espresso-core:2.2.2',
+            festAssertCore     : 'org.easytesting:fest-assert-core:2.0M10',
+            jUnit              : 'junit:junit:4.12',
+            jsr305             : 'com.google.code.findbugs:jsr305:2.0.1',
+            mockitoCore        : 'org.mockito:mockito-core:1.10.19',
+            supportAppCompatV7 : "com.android.support:appcompat-v7:${versions.support}",
+            supportDesign      : "com.android.support:design:${versions.support}",
+            supportRecyclerView: "com.android.support:recyclerview-v7:${versions.support}",
+            supportV13         : "com.android.support:support-v13:${versions.support}"
+    ]
+}
