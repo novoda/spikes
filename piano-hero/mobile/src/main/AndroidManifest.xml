@@ -17,10 +17,11 @@
             tools:replace="android:required" />
 
         <activity android:name=".AndroidThingsActivity" />
+        <activity android:name=".hax.HaxActivity" />
 
         <activity-alias
             android:name=".ThingsLauncher"
-            android:targetActivity=".AndroidThingsActivity">
+            android:targetActivity=".hax.HaxActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
