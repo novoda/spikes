@@ -1,4 +1,4 @@
-`Nodejs` app written in `TypeScript` to check the open PRs of a github repository and ping slack if they're deemed unmergable.
+`Node.js` app written in `TypeScript` to check the open PRs of a github repository and ping slack if they're deemed unmergable.
 
 
 ## Usage
