@@ -13,7 +13,7 @@ const createGitHub = (secrets: GitHubSecrets): GitHub => {
 }
 
 const createSlack = (secrets: SlackSecrets): Slack => {
-    const slackClient: any = new SlackClient(secrets.token)
+    const slackClient = new SlackClient(secrets.token)
     return Slack.create(slackClient)
 }
 

@@ -1,6 +1,6 @@
 export async function checkMergeability(slack: Slack, gitHub: GitHub, secrets: Secrets): Promise<any> {
-    const result: Result = await fetchGitHubMergeability(gitHub, secrets.gitHub)
-    const recipient: string = secrets.slack.recipient
+    const result = await fetchGitHubMergeability(gitHub, secrets.gitHub)
+    const recipient = secrets.slack.recipient
     return await notifySlack(slack)(recipient)(result)
 }
 
