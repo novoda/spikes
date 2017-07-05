@@ -3,9 +3,9 @@ const OPEN_PRS = { state: 'open' }
 const fetchOpenPullRequests = (gitHubApi: GitHubApi.Instance) => async (githubSecrets: GitHubSecrets): Promise<any> => {
     const repo: GitHubApi.Repository = createRepo(gitHubApi)(githubSecrets)
     const prSummaries = await repo.listPullRequests(OPEN_PRS)
-    const prDetailsPromise = prSummaries.data.map(pr => pr.number)
+    const prDetailsPromises = prSummaries.data.map(pr => pr.number)
         .map(prNumber => repo.getPullRequest(prNumber))
-    return Promise.all(prDetailsPromise)
+    return Promise.all(prDetailsPromises)
 }
 
 const createRepo = (gitHubApi: GitHubApi.Instance) => (githubSecrets: GitHubSecrets): GitHubApi.Repository => {
