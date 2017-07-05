@@ -6,8 +6,10 @@ const post = (slackClient: any) => (recipient: string) => (message: string): Pro
     return slackClient.chat.postMessage(recipient, message, OPTIONS)
 }
 
-export const Slack = (slackClient: any): Slack => {
-    return {
-        post: post(slackClient)
+export const Slack = {
+    create: (slackClient: any): Slack => {
+        return {
+            post: post(slackClient)
+        }
     }
 }

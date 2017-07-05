@@ -12,8 +12,10 @@ const createRepo = (gitHubApi: GitHubApi.Instance) => (githubSecrets: GitHubSecr
     return gitHubApi.getRepo(githubSecrets.repoOwner, githubSecrets.repoName)
 }
 
-export const GitHub = (gitHubApi: GitHubApi.Instance): GitHub => {
-    return {
-        fetchOpenPullRequests: fetchOpenPullRequests(gitHubApi)
+export const GitHub = {
+    create: (gitHubApi: GitHubApi.Instance): GitHub => {
+        return {
+            fetchOpenPullRequests: fetchOpenPullRequests(gitHubApi)
+        }
     }
 }
