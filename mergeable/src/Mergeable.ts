@@ -7,11 +7,15 @@ export async function checkMergeability(slack: Slack, gitHub: GitHub, secrets: S
 async function fetchGitHubMergeability(gitHub: GitHub, secrets: GitHubSecrets): Promise<Result> {
     const prs = await gitHub.fetchOpenPullRequests(secrets)
     const unmergeablePrs = prs.map((pr: any) => pr.data).filter((pr: any) => !pr.mergeable)
-    const isCalculating: boolean = prs.filter((pr: any) => pr.data.mergeable === null).length > 0
+    const isCalculating = prs.some(hasNullMergeableState)
     return {
         prs: unmergeablePrs,
         isCalculating,
     }
+}
+
+const hasNullMergeableState = (pr: any): boolean => {
+    return pr.data.mergeable === null;
 }
 
 const notifySlack = (slack: Slack) => (recipient: string) => (result: Result): Promise<any> => {
