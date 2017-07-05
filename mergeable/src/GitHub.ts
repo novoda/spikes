@@ -1,6 +1,6 @@
 const OPEN_PRS = { state: 'open' }
 
-const fetchOpenPullRequests = (gitHubApi: GitHubApi.Instance) => async (githubSecrets: GitHubSecrets): Promise<any> => {
+const fetchOpenPullRequests = (gitHubApi: GitHubApi.Instance) => async (githubSecrets: GitHubSecrets): Promise<any[]> => {
     const repo = createRepo(gitHubApi)(githubSecrets)
     const prSummaries = await repo.listPullRequests(OPEN_PRS)
     const prDetailsPromises = prSummaries.data.map(pr => pr.number)
