@@ -1,16 +1,14 @@
-Nodejs app to check the open PRs of a github repository and ping slack if they're deemed unmergable.
+`Nodejs` app written in `TypeScript` to check the open PRs of a github repository and ping slack if they're deemed unmergable.
 
 
 ## Usage
 
-Create a secrets.json with the following structure:
+Create a secrets.json in the root with the following structure:
 
 ```json
 {
   "gitHub": {
-    "credentials": {
-      "token": ""
-    },
+    "token": "",
     "repoOwner": "",
     "repoName": ""
   },
@@ -23,7 +21,7 @@ Create a secrets.json with the following structure:
 
 ```
 npm install
-node index.js
+npm run build_run
 ```
 
 EZ PZ
