@@ -1,4 +1,5 @@
 var intervalId;
+var socket = io();
 
 $(document).ready(function(){
 
@@ -11,7 +12,6 @@ $(document).ready(function(){
     });
 
     function sendMessage(message) {
-        var socket = io();
         socket.emit('chat message', message);
         $('#messages').append($('<li>').text(message));
     }
