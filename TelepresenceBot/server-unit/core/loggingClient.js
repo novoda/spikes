@@ -1,4 +1,4 @@
-var debug = require('debug')('loggingClient'),
+var debug = require('debug')('loggingClient');
 
 function LoggingClient(client) {
     this.client = client;
