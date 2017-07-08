@@ -28,7 +28,6 @@ io.use(function(client, next){
             }
         default:
             return next(new Error('Unrecognised clientType: ' + rawClientType));
-
     }
 
 });

@@ -1,5 +1,12 @@
 var intervalId;
-var socket = io();
+
+var socketOptions ={
+    transports: ['websocket'],
+    'force new connection': true,
+    query: 'clientType=human&room=London'
+};
+
+var socket = io(socketOptions);
 
 $(document).ready(function(){
 
