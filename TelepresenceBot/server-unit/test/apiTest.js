@@ -1,6 +1,6 @@
 var mocha = require('mocha'),
     request = require('supertest'),
-    debug = require('debug')('test'),
+    debug = require('debug')('apiTest'),
     expect = require('chai').expect,
     fs = require('fs')
 

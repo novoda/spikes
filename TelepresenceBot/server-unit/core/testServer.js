@@ -1,14 +1,12 @@
 var express = require('express');
-var http = require('http');
+var app = express();
+var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var path = require('path');
 var debug = require('debug')('server');
 
-var app = express();
-var server = http.createServer(app);
-
 var server = server.listen(4200, function() {
-    debug("Express server listening on port " + 4200);
+    debug("Express server listening on port %s", 4200);
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -29,7 +27,7 @@ io.sockets.on("connection", function (socket) {
     });
 
     socket.on('chat message', function(message){
-        debug('message: ', message);
+        debug('message: %s', message);
     });
 
     socket.on("echo", function (msg, callback) {
