@@ -35,11 +35,23 @@ describe("TelepresenceBot Server: Routing Test", function () {
         });
     });
 
-    it("Should emit connected response when connecting a supported client type.", function (done) {
+    it("Should emit 'connect' when connecting a supported client type.", function (done) {
         var client = io.connect(socketUrl, supportedClientTypeOptions);
 
         client.once("connect", function () {
             client.disconnect();
+            done();
+        });
+    });
+
+    it("Should emit 'disconnect' when disconnecting an already connected client.", function (done) {
+        var client = io.connect(socketUrl, supportedClientTypeOptions);
+
+        client.once("connect", function () {
+            client.disconnect();
+        });
+
+        client.once("disconnect", function(){
             done();
         });
     });
