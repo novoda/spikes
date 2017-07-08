@@ -1,8 +1,8 @@
 var mocha = require('mocha'),
     request = require('supertest'),
     debug = require('debug')('test'),
-    fs = require('fs'),
-    expect = require('chai').expect;
+    expect = require('chai').expect,
+    fs = require('fs')
 
 var io = require('socket.io-client');
 
@@ -25,7 +25,7 @@ describe("Performing GET request", function () {
         debug('server closes');
     });
 
-    it("responds to /", function (done) {
+    it("Should serve index.html in response to / call.", function (done) {
         request(server)
             .get('/')
             .type('html')
@@ -37,7 +37,19 @@ describe("Performing GET request", function () {
             });
     });
 
-    it('404 everything else', function testPath(done) {
+        it("Should serve rooms.json in response to /rooms call.", function (done) {
+            request(server)
+                .get('/rooms')
+                .type('json')
+                .expect(200)
+                .end(function(error, response) {
+                    var file = fs.readFileSync("../core/json/rooms.json", "utf8");
+                    expect(response.text).to.equal(file);
+                    done();
+                });
+        });
+
+    it('Should respond with 404 for an invalid endpoint.', function testPath(done) {
         request(server)
             .get('/foo/bar')
             .expect(404, done);
