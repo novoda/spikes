@@ -1,6 +1,8 @@
 var mocha = require('mocha'),
     request = require('supertest'),
-    debug = require('debug')('test');
+    debug = require('debug')('test'),
+    fs = require('fs'),
+    expect = require('chai').expect;
 
 var io = require('socket.io-client');
 
@@ -26,7 +28,13 @@ describe("Performing GET request", function () {
     it("responds to /", function (done) {
         request(server)
             .get('/')
-            .expect(200, done);
+            .type('html')
+            .expect(200)
+            .end(function(error, response) {
+                var file = fs.readFileSync("../core/html/index.html", "utf8");
+                expect(response.text).to.equal(file);
+                done();
+            });
     });
 
     it('404 everything else', function testPath(done) {
