@@ -25,7 +25,7 @@ describe("Performing GET request", function () {
         debug('server closes');
     });
 
-    it("Should serve index.html in response to / call.", function (done) {
+    it("Should serve index.html in response to '/' call.", function (done) {
         request(server)
             .get('/')
             .type('html')
@@ -37,7 +37,7 @@ describe("Performing GET request", function () {
             });
     });
 
-        it("Should serve rooms.json in response to /rooms call.", function (done) {
+        it("Should serve rooms.json in response to '/rooms' call.", function (done) {
             request(server)
                 .get('/rooms')
                 .type('json')
