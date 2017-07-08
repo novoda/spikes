@@ -37,17 +37,17 @@ describe("Performing GET request", function () {
             });
     });
 
-        it("Should serve rooms.json in response to '/rooms' call.", function (done) {
-            request(server)
-                .get('/rooms')
-                .type('json')
-                .expect(200)
-                .end(function(error, response) {
-                    var file = fs.readFileSync("../core/json/rooms.json", "utf8");
-                    expect(response.text).to.equal(file);
-                    done();
-                });
-        });
+    it("Should serve rooms.json in response to '/rooms' call.", function (done) {
+        request(server)
+            .get('/rooms')
+            .type('json')
+            .expect(200)
+            .end(function(error, response) {
+                var file = fs.readFileSync("../core/json/rooms.json", "utf8");
+                expect(response.text).to.equal(file);
+                done();
+            });
+    });
 
     it('Should respond with 404 for an invalid endpoint.', function testPath(done) {
         request(server)
