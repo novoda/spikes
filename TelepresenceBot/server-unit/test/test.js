@@ -1,6 +1,5 @@
-var chai = require('chai'),
-    mocha = require('mocha'),
-    should = chai.should();
+var mocha = require('mocha'),
+    request = require('supertest');
 
 var io = require('socket.io-client');
 
@@ -9,26 +8,30 @@ var server, options = {
     'force new connection': true
 };
 
-describe("echo", function () {
+describe("Performing GET request", function () {
 
     beforeEach(function (done) {
+        delete require.cache[require.resolve('../core/testServer')];
         server = require('../core/testServer').server;
         done();
+        console.log('server starts');
     });
 
-    it("echos message", function (done) {
-        var client = io.connect("http://localhost:4200", options);
+    afterEach(function(done) {
+        server.close(done);
+        console.log('server closes');
+    });
 
-        client.once("connect", function () {
-            client.once("echo", function (message) {
-                message.should.equal("Hello World");
+    it("responds to /", function (done) {
+        request(server)
+            .get('/')
+            .expect(200, done);
+    });
 
-                client.disconnect();
-                done();
-            });
-
-            client.emit("echo", "Hello World");
-        });
+    it('404 everything else', function testPath(done) {
+        request(server)
+            .get('/foo/bar')
+            .expect(404, done);
     });
 
 });

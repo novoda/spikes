@@ -18,8 +18,6 @@ app.get('/rooms', function(req, res) {
     res.sendFile(__dirname + '/json/rooms.json');
 });
 
-io.set("log level", 0);
-
 io.sockets.on("connection", function (socket) {
     console.log('a user connected');
 
