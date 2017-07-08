@@ -1,5 +1,6 @@
 var mocha = require('mocha'),
-    request = require('supertest');
+    request = require('supertest'),
+    debug = require('debug')('test');
 
 var io = require('socket.io-client');
 
@@ -13,13 +14,13 @@ describe("Performing GET request", function () {
     beforeEach(function (done) {
         delete require.cache[require.resolve('../core/testServer')];
         server = require('../core/testServer').server;
+        debug('server starts');
         done();
-        console.log('server starts');
     });
 
     afterEach(function(done) {
         server.close(done);
-        console.log('server closes');
+        debug('server closes');
     });
 
     it("responds to /", function (done) {
