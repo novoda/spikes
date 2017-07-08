@@ -1,10 +1,10 @@
-var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
-var path = require('path');
-var debug = require('debug')('server');
-var ClientType = require("./clientType.js");
+var express = require('express'),
+    app = express(),
+    server = require('http').createServer(app),
+    io = require('socket.io')(server),
+    path = require('path'),
+    debug = require('debug')('server'),
+    ClientType = require("./clientType.js");
 
 var server = server.listen(4200, function() {
     debug("Express server listening on port %s", 4200);
