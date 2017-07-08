@@ -4,11 +4,14 @@ var express = require('express'),
     io = require('socket.io')(server),
     path = require('path'),
     debug = require('debug')('server'),
-    ClientType = require("./clientType.js");
+    ClientType = require("./clientType.js"),
+    BotLocator = require("./botLocator.js");
 
 var server = server.listen(4200, function() {
     debug("Express server listening on port %s", 4200);
 });
+
+var botLocator = new BotLocator(io.sockets.adapter.rooms);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -24,13 +27,25 @@ io.use(function(client, next){
     var roomName = client.handshake.query.room;
     var rawClientType = client.handshake.query.clientType;
     var clientType = ClientType.from(rawClientType);
+    debug(clientType);
 
     switch(clientType) {
         case ClientType.TEST:
-        case ClientType.BOT:
-        case ClientType.HUMAN:
-            debug(clientType);
+            var StaticBotLocator = require("../test/support/staticBotLocator.js");
+            botLocator = new StaticBotLocator(io.sockets.adapter.rooms);
             return next();
+        case ClientType.BOT:
+            return next();
+        case ClientType.HUMAN:
+            var availableBot = botLocator.locateFirstAvailableBotIn(roomName);
+
+            if(availableBot) {
+                client.handshake.query.room = availableBot;
+                return next();
+            } else {
+                return next(new Error('No bots available'));
+            }
+
         default:
             return next(new Error('Unrecognised clientType: ' + rawClientType));
     }
