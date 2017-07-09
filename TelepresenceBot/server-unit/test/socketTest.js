@@ -9,21 +9,10 @@ var io = require('socket.io-client');
 
 var socketUrl = 'http://localhost:4200';
 
-unsupportedClientTypeOptions = {
-    transports: ['websocket'],
-    'force new connection': true
-};
-
-humanClientTypeOptions = {
+options = {
     transports: ['websocket'],
     'force new connection': true,
     query: 'clientType=human'
-};
-
-var testClientTypeOptions ={
-    transports: ['websocket'],
-    'force new connection': true,
-    query: 'clientType=test'
 };
 
 describe("TelepresenceBot Server: Routing Test", function () {
@@ -43,7 +32,7 @@ describe("TelepresenceBot Server: Routing Test", function () {
 
     it("Should throw an error when Routing is unsuccessful.", function (done) {
         testRouter.willNotRoute();
-        var unsupportedClient = io.connect(socketUrl, unsupportedClientTypeOptions);
+        var unsupportedClient = io.connect(socketUrl, options);
 
         unsupportedClient.on('error', function(errorMessage){
             expect(errorMessage).to.equal("Will not route");
@@ -53,34 +42,26 @@ describe("TelepresenceBot Server: Routing Test", function () {
 
     it("Should emit 'connect' when Routing is successful", function (done) {
         testRouter.willRoute();
-        var testClient = io.connect(socketUrl, testClientTypeOptions);
 
-        testClient.once("connect", function() {
-            var client = io.connect(socketUrl, humanClientTypeOptions);
+        var client = io.connect(socketUrl, options);
 
-            client.once("connect", function () {
-                testClient.disconnect();
-                client.disconnect();
-                done();
-            });
+        client.once("connect", function () {
+            client.disconnect();
+            done();
         });
     });
 
     it("Should emit 'disconnect' when disconnecting an already connected client.", function (done) {
         testRouter.willRoute();
-        var testClient = io.connect(socketUrl, testClientTypeOptions);
 
-        testClient.once("connect", function() {
-            var client = io.connect(socketUrl, humanClientTypeOptions);
+        var client = io.connect(socketUrl, options);
 
-            client.once("connect", function () {
-                client.disconnect();
-                testClient.disconnect();
-            });
+        client.once("connect", function () {
+            client.disconnect();
+        });
 
-            client.once("disconnect", function(){
-                done();
-            });
+        client.once("disconnect", function(){
+            done();
         });
     });
 
