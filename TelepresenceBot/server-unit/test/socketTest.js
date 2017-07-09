@@ -12,7 +12,7 @@ var socketUrl = 'http://localhost:4200';
 options = {
     transports: ['websocket'],
     'force new connection': true,
-    query: 'clientType=human'
+    query: 'clientType=human&room=London'
 };
 
 describe("TelepresenceBot Server: Routing Test", function () {
@@ -40,14 +40,17 @@ describe("TelepresenceBot Server: Routing Test", function () {
         });
     });
 
-    it("Should emit 'connect' when Routing is successful", function (done) {
+    it("Should emit 'joined_room' when Routing is successful", function (done) {
         testRouter.willRoute();
 
         var client = io.connect(socketUrl, options);
 
         client.once("connect", function () {
-            client.disconnect();
-            done();
+            client.once("joined_room", function(room) {
+                expect(room).to.equal("London");
+                client.disconnect();
+                done();
+            });
         });
     });
 
