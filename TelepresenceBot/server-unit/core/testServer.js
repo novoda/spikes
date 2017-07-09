@@ -1,4 +1,6 @@
-var ServerCreator = require('./serverCreator');
+var ServerCreator = require('./serverCreator'),
+    BotLocator = require('./botLocator.js');
 
-var serverCreator = new ServerCreator();
+var botLocator = new BotLocator(io.sockets.adapter.rooms);
+var serverCreator = new ServerCreator(botLocator);
 serverCreator.create();
