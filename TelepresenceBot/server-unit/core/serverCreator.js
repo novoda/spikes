@@ -30,10 +30,15 @@ function ServerCreator(router) {
     });
 
     io.sockets.on("connection", function (socket) {
-        debug('a user connected: %s', socket.id);
+        var roomName = socket.handshake.query.room;
+
+        socket.join(roomName);
+        socket.emit('joined_room', socket.room)
+
+        debug('a user connected: %s and joined room: %s', socket.id, roomName);
 
         socket.on('disconnect', function(){
-            debug('a user disconnected: %s', socket.id);
+            debug('a user disconnected: %s and left room: %s', socket.id, roomName);
         });
     });
 }
