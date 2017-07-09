@@ -3,7 +3,7 @@ var chai = require('chai'),
     expect = chai.expect,
     debug = require('debug')('socketTest'),
     ServerCreator = require('../core/serverCreator.js')
-    BotLocator = require('./support/staticBotLocator.js');
+    TestRouter = require('./support/testRouter.js');
 
 var io = require('socket.io-client');
 
@@ -29,9 +29,8 @@ var testClientTypeOptions ={
 describe("TelepresenceBot Server: Routing Test", function () {
 
     beforeEach(function (done) {
-        var botLocator = new BotLocator(true);
-        debug(botLocator);
-        server = new ServerCreator(botLocator).create();
+        testRouter = new TestRouter();
+        server = new ServerCreator(testRouter).create();
         debug('server starts');
         done();
     });
@@ -42,28 +41,18 @@ describe("TelepresenceBot Server: Routing Test", function () {
         done();
     });
 
-    it("Should throw an error when attempting to connect an unsupported client type.", function (done) {
+    it("Should throw an error when Routing is unsuccessful.", function (done) {
+        testRouter.willNotRoute();
         var unsupportedClient = io.connect(socketUrl, unsupportedClientTypeOptions);
 
         unsupportedClient.on('error', function(errorMessage){
-            expect(errorMessage).to.equal("Unrecognised clientType: undefined");
+            expect(errorMessage).to.equal("Will not route");
             done();
         });
     });
 
-    it('Should refuse connection when a bot is not available', function(done){
-        var botLocator = new BotLocator(false);
-        debug(botLocator);
-        server = new ServerCreator(botLocator).create();
-        var human = io.connect(socketUrl, humanClientTypeOptions);
-
-        human.on('error', function(errorMessage){
-            expect(errorMessage).to.equal("No bots available");
-            done();
-        });
-    });
-
-    it("Should emit 'connect' when connecting a supported client type.", function (done) {
+    it("Should emit 'connect' when Routing is successful", function (done) {
+        testRouter.willRoute();
         var testClient = io.connect(socketUrl, testClientTypeOptions);
 
         testClient.once("connect", function() {
@@ -78,6 +67,7 @@ describe("TelepresenceBot Server: Routing Test", function () {
     });
 
     it("Should emit 'disconnect' when disconnecting an already connected client.", function (done) {
+        testRouter.willRoute();
         var testClient = io.connect(socketUrl, testClientTypeOptions);
 
         testClient.once("connect", function() {

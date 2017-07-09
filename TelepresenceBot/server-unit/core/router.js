@@ -13,8 +13,6 @@ Router.prototype.route = function(client, next) {
 
     switch(clientType) {
         case ClientType.TEST:
-            var StaticBotLocator = require("../test/support/staticBotLocator.js");
-            this.botLocator = new StaticBotLocator(this.rooms);
             return next();
         case ClientType.BOT:
             return next();

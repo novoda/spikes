@@ -7,9 +7,8 @@ var express = require('express'),
     Router = require('./router.js');
 
 
-function ServerCreator(botLocator) {
-    var botLocator = botLocator;
-    var router = new Router(io.sockets.adapter.rooms, botLocator);
+function ServerCreator(router) {
+    var router = router;
 
     app.use(express.static(path.join(__dirname, 'public')));
 
