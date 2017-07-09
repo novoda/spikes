@@ -29,7 +29,7 @@ var testClientTypeOptions ={
 describe("TelepresenceBot Server: Routing Test", function () {
 
     beforeEach(function (done) {
-        var botLocator = new BotLocator();
+        var botLocator = new BotLocator(true);
         debug(botLocator);
         server = new ServerCreator(botLocator).create();
         debug('server starts');
@@ -52,6 +52,9 @@ describe("TelepresenceBot Server: Routing Test", function () {
     });
 
     it('Should refuse connection when a bot is not available', function(done){
+        var botLocator = new BotLocator(false);
+        debug(botLocator);
+        server = new ServerCreator(botLocator).create();
         var human = io.connect(socketUrl, humanClientTypeOptions);
 
         human.on('error', function(errorMessage){

@@ -1,9 +1,13 @@
-function StaticBotLocator(rooms) {
-    this.rooms = rooms;
+function StaticBotLocator(shouldLocateBot) {
+    this.shouldLocateBot = shouldLocateBot;
 }
 
 StaticBotLocator.prototype.locateFirstAvailableBotIn = function(room) {
-    return "dummy_id_for_bot";
+    if(this.shouldLocateBot) {
+        return "dummy_id_for_bot";
+    } else {
+        return;
+    }
 }
 
 module.exports = StaticBotLocator;
