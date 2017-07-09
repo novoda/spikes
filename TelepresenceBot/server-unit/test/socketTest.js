@@ -44,8 +44,6 @@ describe("TelepresenceBot Server: Routing Test", function () {
 
         unsupportedClient.on('error', function(errorMessage){
             expect(errorMessage).to.equal("Unrecognised clientType: undefined");
-
-            unsupportedClient.disconnect();
             done();
         });
     });
@@ -55,8 +53,6 @@ describe("TelepresenceBot Server: Routing Test", function () {
 
         human.on('error', function(errorMessage){
             expect(errorMessage).to.equal("No bots available");
-
-            human.disconnect();
             done();
         });
     });
@@ -68,6 +64,7 @@ describe("TelepresenceBot Server: Routing Test", function () {
             var client = io.connect(socketUrl, humanClientTypeOptions);
 
             client.once("connect", function () {
+                testClient.disconnect();
                 client.disconnect();
                 done();
             });
@@ -82,6 +79,7 @@ describe("TelepresenceBot Server: Routing Test", function () {
 
             client.once("connect", function () {
                 client.disconnect();
+                testClient.disconnect();
             });
 
             client.once("disconnect", function(){
