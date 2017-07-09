@@ -2,7 +2,8 @@ var mocha = require('mocha'),
     request = require('supertest'),
     debug = require('debug')('apiTest'),
     expect = require('chai').expect,
-    fs = require('fs')
+    fs = require('fs'),
+    ServerCreator = require('../core/serverCreator.js');
 
 var io = require('socket.io-client');
 
@@ -14,8 +15,7 @@ var server, options = {
 describe("Performing GET request", function () {
 
     beforeEach(function (done) {
-        delete require.cache[require.resolve('../core/testServer')];
-        server = require('../core/testServer').server;
+        server = new ServerCreator().create();
         debug('server starts');
         done();
     });

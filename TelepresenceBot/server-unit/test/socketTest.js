@@ -1,7 +1,8 @@
 var chai = require('chai'),
     mocha = require('mocha'),
     expect = chai.expect,
-    debug = require('debug')('socketTest');
+    debug = require('debug')('socketTest'),
+    ServerCreator = require('../core/serverCreator.js');
 
 var io = require('socket.io-client');
 
@@ -27,8 +28,7 @@ var testClientTypeOptions ={
 describe("TelepresenceBot Server: Routing Test", function () {
 
     beforeEach(function (done) {
-        delete require.cache[require.resolve('../core/testServer')];
-        server = require('../core/testServer').server;
+        server = new ServerCreator().create();
         debug('server starts');
         done();
     });
