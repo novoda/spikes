@@ -4,8 +4,15 @@ var express = require('express'),
     io = require('socket.io')(httpServer),
     path = require('path'),
     debug = require('debug')('serverCreator'),
+    BotLocator = require('./botLocator.js'),
     Router = require('./router.js');
 
+function ServerCreator() {
+    var botLocator = new BotLocator(io.sockets.adapter.rooms);
+    var router = new Router(io.sockets.adapter.rooms, botLocator);
+
+    ServerCreator.call(this, router);
+}
 
 function ServerCreator(router) {
     var router = router;
