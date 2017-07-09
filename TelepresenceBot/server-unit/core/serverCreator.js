@@ -1,19 +1,18 @@
+var express = require('express'),
+    app = express(),
+    httpServer = require('http').createServer(app),
+    io = require('socket.io')(httpServer),
+    path = require('path'),
+    debug = require('debug')('serverCreator'),
+    BotLocator = require('./botLocator.js'),
+    Router = require('./router.js');
+
 function ServerCreator() {
 
 }
 
 ServerCreator.prototype.create = function() {
-    var express = require('express'),
-        app = express(),
-        server = require('http').createServer(app),
-        io = require('socket.io')(server),
-        path = require('path'),
-        debug = require('debug')('serverCreator'),
-        ClientType = require('./clientType.js'),
-        BotLocator = require('./botLocator.js'),
-        Router = require('./router.js');
-
-    var server = server.listen(4200, function() {
+    var server = httpServer.listen(4200, function() {
         debug("Express server listening on port %s", 4200);
     });
 
