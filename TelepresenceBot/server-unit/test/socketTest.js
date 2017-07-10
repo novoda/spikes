@@ -3,7 +3,8 @@ var chai = require('chai'),
     expect = chai.expect,
     debug = require('debug')('socketTest'),
     ServerCreator = require('../core/serverCreator.js')
-    TestRouter = require('./support/testRouter.js');
+    TestRouter = require('./support/testRouter.js'),
+    TestDisconnector = require('./support/testDisconnector.js');
 
 var io = require('socket.io-client');
 
@@ -19,7 +20,8 @@ describe("TelepresenceBot Server: Routing Test", function () {
 
     beforeEach(function (done) {
         testRouter = new TestRouter();
-        server = new ServerCreator(testRouter).create();
+        testDisconnector = new TestDisconnector();
+        server = new ServerCreator(testRouter, testDisconnector).create();
         debug('server starts');
         done();
     });
@@ -48,16 +50,31 @@ describe("TelepresenceBot Server: Routing Test", function () {
         client.once("connect", function () {
             client.once("joined_room", function(room) {
                 expect(room).to.equal("London");
-                client.disconnect();
                 done();
             });
         });
     });
 
     it("Should emit 'disconnect' when disconnecting an already connected client.", function (done) {
-        testRouter.willRoute();
-
         var client = io.connect(socketUrl, options);
+
+        testRouter.willRoute();
+        testDisconnector.willDisconnect(client);
+
+        client.once("connect", function () {
+            client.disconnect();
+        });
+
+        client.once("disconnect", function(){
+            done();
+        });
+    });
+
+    it("Should emit 'disconnect' when disconnecting an already connected client.", function (done) {
+        var client = io.connect(socketUrl, options);
+
+        testRouter.willRoute();
+        testDisconnector.willDisconnect(client);
 
         client.once("connect", function () {
             client.disconnect();
