@@ -2,6 +2,7 @@ package com.novoda.simonsaysandroidthings.game;
 
 import com.novoda.simonsaysandroidthings.hw.io.Group;
 
+import java.util.Collections;
 import java.util.List;
 
 class InputVerifier {
@@ -33,7 +34,7 @@ class InputVerifier {
     private final Group.OnGroupButtonPressedListener groupButtonPressedListener = new Group.OnGroupButtonPressedListener() {
         @Override
         public void onGroupButtonPressed(Group group) {
-            if (sequenceToVerify.get(currentIndex) != group) {
+            if (currentIndex < sequenceToVerify.size() && sequenceToVerify.get(currentIndex) != group) {
                 inputVerificationListener.onWrongInput();
                 stop();
                 return;
@@ -54,7 +55,7 @@ class InputVerifier {
     void stop() {
         listening = false;
         currentIndex = 0;
-        sequenceToVerify = null;
+        sequenceToVerify = Collections.emptyList();
         inputVerificationListener = null;
     }
 

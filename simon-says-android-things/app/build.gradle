@@ -22,4 +22,7 @@ android {
 dependencies {
     provided 'com.google.android.things:androidthings:0.4-devpreview'
     testCompile 'junit:junit:4.12'
+    implementation 'com.google.firebase:firebase-database:11.0.1'
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -16,29 +16,28 @@ public class SimonSays implements AutoCloseable {
 
     private static final String TAG = "SimonSays";
 
-    private static final int GROUP_ON_DURATION_MS = 500;
-    private static final int GROUP_OFF_DURATION_MS = 200;
-
     private enum State { IDLE, PLAYING}
 
     private final List<Group> groups;
-    private final Highscore highscore;
+    private final Score score;
     private final Buzzer buzzer;
     private final Sequencer sequencer;
     private final InputVerifier inputVerifier;
     private final List<Group> sequence;
+    private final SequenceDuration sequenceDuration;
     private final Random random;
 
     private int round;
     private State state = State.IDLE;
 
-    public SimonSays(List<Group> groups, Highscore highscore, Buzzer buzzer) {
+    public SimonSays(List<Group> groups, Score score, Buzzer buzzer) {
         this.groups = Collections.unmodifiableList(groups);
-        this.highscore = highscore;
+        this.score = score;
         this.buzzer = buzzer;
         sequence = new ArrayList<>();
         random = new Random();
         sequencer = new Sequencer();
+        sequenceDuration = new SequenceDuration();
         inputVerifier = new InputVerifier(groups);
     }
 
@@ -55,12 +54,18 @@ public class SimonSays implements AutoCloseable {
         playSequence();
     }
 
-    private boolean expandSequence() {
-        return sequence.add(groups.get(random.nextInt(groups.size())));
+    private void expandSequence() {
+        sequence.add(groups.get(random.nextInt(groups.size())));
     }
 
     private void playSequence() {
-        sequencer.playRoundSequence(sequence, GROUP_ON_DURATION_MS, GROUP_OFF_DURATION_MS, onRoundSequenceFinishedListener);
+        score.setCurrentScore(round);
+        sequencer.playRoundSequence(
+                sequence,
+                sequenceDuration.onDuration(round),
+                sequenceDuration.offDuration(round),
+                onRoundSequenceFinishedListener
+        );
     }
 
     private final OnSequenceFinishedListener onRoundSequenceFinishedListener = new OnSequenceFinishedListener() {
@@ -84,8 +89,8 @@ public class SimonSays implements AutoCloseable {
         public void onSequenceFinished() {
             Log.d(TAG, "onSequenceFinished() called");
             int score = round - 1;
-            if (score > highscore.current()) {
-                highscore.setNew(score);
+            if (score > SimonSays.this.score.currentHighscore()) {
+                SimonSays.this.score.setNewHighscore(score);
                 sequencer.playHighscoreSequence(groups, onHighscoreSequenceFinishedListener);
             } else {
                 stop();
@@ -117,7 +122,7 @@ public class SimonSays implements AutoCloseable {
 
     @Override
     public void close() throws Exception {
-        for(Group group : groups) {
+        for (Group group : groups) {
             group.close();
         }
         buzzer.close();
