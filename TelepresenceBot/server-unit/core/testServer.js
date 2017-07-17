@@ -2,10 +2,11 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-var path = require('path')
+var path = require('path');
+var debug = require('debug')('server');
 
 var server = server.listen(4200, function() {
-    console.log("Express server listening on port " + 4200);
+    debug("Express server listening on port %s", 4200);
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -18,17 +19,15 @@ app.get('/rooms', function(req, res) {
     res.sendFile(__dirname + '/json/rooms.json');
 });
 
-io.set("log level", 0);
-
 io.sockets.on("connection", function (socket) {
-    console.log('a user connected');
+    debug('a user connected');
 
     socket.on('disconnect', function(){
-        console.log('user disconnected');
+        debug('user disconnected');
     });
 
     socket.on('chat message', function(message){
-        console.log('message: ', message);
+        debug('message: %s', message);
     });
 
     socket.on("echo", function (msg, callback) {
@@ -36,7 +35,7 @@ io.sockets.on("connection", function (socket) {
 
         socket.emit("echo", msg);
 
-        console.log("on Connection");
+        debug("on Connection");
 
         callback(null, "Done.");
     });

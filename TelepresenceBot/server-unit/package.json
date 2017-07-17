@@ -16,14 +16,17 @@
   "author": "Novoda",
   "license": "MIT",
   "dependencies": {
-    "chai": "^3.5.0",
-    "express": "^4.15.2",
+    "debug": "^2.6.8",
+    "express": "^4.15.3",
     "path": "^0.12.7",
-    "socket.io": "^1.7.3"
+    "socket.io": "^1.7.4"
   },
   "devDependencies": {
-    "mocha": "^3.2.0",
-    "should": "^11.2.0",
+    "chai": "^3.5.0",
+    "fs": "0.0.1-security",
+    "mocha": "^3.4.2",
+    "should": "^11.2.1",
+    "supertest": "^3.0.0",
     "unit.js": "^2.0.0"
   }
 }
