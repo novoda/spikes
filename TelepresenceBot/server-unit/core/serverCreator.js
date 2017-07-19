@@ -5,11 +5,10 @@ var express = require('express'),
     path = require('path'),
     debug = require('debug')('server'),
     botLocator = require('./botLocator.js')(io.sockets.adapter.rooms),
-    Router = require('./router.js'),
+    router = require('./router.js')(botLocator),
     Disconnector = require('./disconnector.js'),
     Observer = require('./observer.js');
 
-var router = new Router(botLocator);
 var disconnector = new Disconnector(io.sockets.adapter.rooms, io.sockets.connected);
 var observer = new Observer();
 

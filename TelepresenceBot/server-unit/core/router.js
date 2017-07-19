@@ -30,6 +30,8 @@ Router.prototype.route = function(client, next) {
     }
 }
 
-module.exports = Router;
+module.exports = function(botLocator) {
+    return new Router(botLocator);
+};
 
 
