@@ -6,7 +6,7 @@ var express = require('express'),
     debug = require('debug')('server'),
     BotLocator = require('./botLocator.js'),
     Router = require('./router.js'),
-    Disconnector = require('./disconnector.js')
+    Disconnector = require('./disconnector.js'),
     Observer = require('./observer.js');
 
 function ServerCreator() {
@@ -14,7 +14,6 @@ function ServerCreator() {
     var router = new Router(botLocator);
     var disconnector = new Disconnector(io.sockets.adapter.rooms, io.sockets.connected);
     var observer = new Observer();
-
     ServerCreator.call(this, router, disconnector, observer);
 }
 
