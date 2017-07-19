@@ -2,7 +2,7 @@ function Observer() {
 
 }
 
-Observer.prototype.observed = function(eventName, data) {
+Observer.prototype.notify = function(eventName, eventData) {
     return true;
 }
 

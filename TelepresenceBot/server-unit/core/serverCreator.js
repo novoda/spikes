@@ -44,7 +44,7 @@ function ServerCreator(router, disconnector, observer) {
         socket.on('disconnect', function(){
             debug('a user disconnected: %s and left room: %s', socket.id, roomName);
             disconnector.disconnectRoom(socket.id);
-            observer.observed('disconnect', socket.id);
+            observer.notify('disconnect', socket.id);
         });
     });
 }

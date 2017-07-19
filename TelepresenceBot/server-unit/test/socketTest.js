@@ -4,7 +4,7 @@ var sinon = require('sinon'),
     expect = chai.expect,
     debug = require('debug')('socketTest'),
     ServerCreator = require('../core/serverCreator.js')
-    TestRouter = require('./support/testRouter.js'),
+    Router = require('../core/Router.js')
     Disconnector = require('../core/Disconnector.js'),
     Observer = require('../core/Observer.js');
 
@@ -21,13 +21,14 @@ options = {
 describe("TelepresenceBot Server: Routing Test", function () {
 
     beforeEach(function (done) {
+        router = new Router();
         disconnector = new Disconnector();
         observer = new Observer();
-        testRouter = new TestRouter();
 
+        mockRouter = sinon.stub(router, 'route').callsFake(function(client, next){ return next(); });
         mockDisconnector = sinon.stub(disconnector, 'disconnectRoom').callsFake(function() { return true; });
 
-        server = new ServerCreator(testRouter, disconnector, observer).create();
+        server = new ServerCreator(router, disconnector, observer).create();
         debug('server starts');
         done();
     });
@@ -38,19 +39,18 @@ describe("TelepresenceBot Server: Routing Test", function () {
         done();
     });
 
-    it("Should throw an error when Routing is unsuccessful.", function (done) {
-        testRouter.willNotRoute();
-        var unsupportedClient = io.connect(socketUrl, options);
+    it("Should delegate to 'Router' when client is connected.", function (done) {
+        var client = io.connect(socketUrl, options);
 
-        unsupportedClient.on('error', function(errorMessage){
-            expect(errorMessage).to.equal("Will not route");
-            done();
+        client.once("connect", function () {
+            client.once("joined_room", function(room) {
+                expect(mockRouter.called).to.equal(true);
+                done();
+            });
         });
     });
 
-    it("Should emit 'joined_room' when Routing is successful", function (done) {
-        testRouter.willRoute();
-
+    it("Should emit 'joined_room' when client is connected.", function (done) {
         var client = io.connect(socketUrl, options);
 
         client.once("connect", function () {
@@ -61,16 +61,14 @@ describe("TelepresenceBot Server: Routing Test", function () {
         });
     });
 
-    it.only("Should delegate to 'Disconnector' when disconnecting an already connected client.", function (done) {
+    it("Should delegate to 'Disconnector' when disconnecting an already connected client.", function (done) {
         var client = io.connect(socketUrl, options);
-
-        testRouter.willRoute();
 
         client.once("connect", function () {
             client.disconnect();
         });
 
-        observer.observed = function(eventName, data) {
+        observer.notify = function(eventName, data) {
             debug(eventName, data);
             expect(mockDisconnector.called).to.equal(true);
             expect(mockDisconnector.callCount).to.equal(1);
