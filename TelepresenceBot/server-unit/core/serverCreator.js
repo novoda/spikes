@@ -9,15 +9,13 @@ var express = require('express'),
     Disconnector = require('./disconnector.js'),
     Observer = require('./observer.js');
 
-function ServerCreator() {
-    var botLocator = new BotLocator(io.sockets.adapter.rooms);
-    var router = new Router(botLocator);
-    var disconnector = new Disconnector(io.sockets.adapter.rooms, io.sockets.connected);
-    var observer = new Observer();
-    ServerCreator.call(this, router, disconnector, observer);
-}
+var botLocator = new BotLocator(io.sockets.adapter.rooms);
+var router = new Router(botLocator);
+var disconnector = new Disconnector(io.sockets.adapter.rooms, io.sockets.connected);
+var observer = new Observer();
 
-function ServerCreator(router, disconnector, observer) {
+function ServerCreator() {
+    debug("created!")
     app.use(express.static(path.join(__dirname, 'public')));
 
     app.get('/', function(req, res) {
@@ -46,6 +44,18 @@ function ServerCreator(router, disconnector, observer) {
             observer.notify('disconnect', socket.id);
         });
     });
+}
+
+ServerCreator.prototype.withRouter = function(alternativeRouter) {
+    router = alternativeRouter;
+}
+
+ServerCreator.prototype.withDisconnector = function(alternativeDisconnector) {
+    disconnector = alternativeDisconnector;
+}
+
+ServerCreator.prototype.withObserver = function(alternativeObserver) {
+    observer = alternativeObserver;
 }
 
 ServerCreator.prototype.create = function() {
