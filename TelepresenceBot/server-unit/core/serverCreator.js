@@ -9,8 +9,7 @@ var express = require('express'),
     Disconnector = require('./disconnector.js'),
     Observer = require('./observer.js');
 
-var botLocator = new BotLocator(io.sockets.adapter.rooms);
-var router = new Router(botLocator);
+var router = new Router(new BotLocator(io.sockets.adapter.rooms));
 var disconnector = new Disconnector(io.sockets.adapter.rooms, io.sockets.connected);
 var observer = new Observer();
 
