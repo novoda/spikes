@@ -1,8 +1,7 @@
 var debug = require('debug')('router'),
     ClientType = require('./clientType.js')
 
-function Router(rooms, botLocator) {
-    this.rooms = rooms;
+function Router(botLocator) {
     this.botLocator = botLocator;
 }
 

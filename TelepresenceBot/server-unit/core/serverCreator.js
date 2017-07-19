@@ -11,7 +11,7 @@ var express = require('express'),
 
 function ServerCreator() {
     var botLocator = new BotLocator(io.sockets.adapter.rooms);
-    var router = new Router(io.sockets.adapter.rooms, botLocator);
+    var router = new Router(botLocator);
     var disconnector = new Disconnector(io.sockets.adapter.rooms, io.sockets.connected);
     var observer = new Observer();
 
