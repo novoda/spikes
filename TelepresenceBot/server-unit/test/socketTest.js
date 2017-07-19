@@ -1,10 +1,12 @@
-var chai = require('chai'),
+var sinon = require('sinon'),
+    chai = require('chai'),
     mocha = require('mocha'),
     expect = chai.expect,
     debug = require('debug')('socketTest'),
     ServerCreator = require('../core/serverCreator.js')
     TestRouter = require('./support/testRouter.js'),
-    TestDisconnector = require('./support/testDisconnector.js');
+    Disconnector = require('../core/Disconnector.js'),
+    Observer = require('../core/Observer.js');
 
 var io = require('socket.io-client');
 
@@ -19,9 +21,13 @@ options = {
 describe("TelepresenceBot Server: Routing Test", function () {
 
     beforeEach(function (done) {
+        disconnector = new Disconnector();
+        observer = new Observer();
         testRouter = new TestRouter();
-        testDisconnector = new TestDisconnector();
-        server = new ServerCreator(testRouter, testDisconnector).create();
+
+        mockDisconnector = sinon.stub(disconnector, 'disconnectRoom').callsFake(function() { return true; });
+
+        server = new ServerCreator(testRouter, disconnector, observer).create();
         debug('server starts');
         done();
     });
@@ -55,34 +61,21 @@ describe("TelepresenceBot Server: Routing Test", function () {
         });
     });
 
-    it("Should emit 'disconnect' when disconnecting an already connected client.", function (done) {
+    it.only("Should delegate to 'Disconnector' when disconnecting an already connected client.", function (done) {
         var client = io.connect(socketUrl, options);
 
         testRouter.willRoute();
-        testDisconnector.willDisconnect(client);
 
         client.once("connect", function () {
             client.disconnect();
         });
 
-        client.once("disconnect", function(){
+        observer.observed = function(eventName, data) {
+            debug(eventName, data);
+            expect(mockDisconnector.called).to.equal(true);
+            expect(mockDisconnector.callCount).to.equal(1);
             done();
-        });
-    });
-
-    it("Should emit 'disconnect' when disconnecting an already connected client.", function (done) {
-        var client = io.connect(socketUrl, options);
-
-        testRouter.willRoute();
-        testDisconnector.willDisconnect(client);
-
-        client.once("connect", function () {
-            client.disconnect();
-        });
-
-        client.once("disconnect", function(){
-            done();
-        });
+        };
     });
 
 });

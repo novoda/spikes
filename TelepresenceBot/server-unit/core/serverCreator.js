@@ -3,20 +3,22 @@ var express = require('express'),
     httpServer = require('http').createServer(app),
     io = require('socket.io')(httpServer),
     path = require('path'),
-    debug = require('debug')('serverCreator'),
+    debug = require('debug')('server'),
     BotLocator = require('./botLocator.js'),
     Router = require('./router.js'),
-    Disconnector = require('./disconnector.js');
+    Disconnector = require('./disconnector.js')
+    Observer = require('./observer.js');
 
 function ServerCreator() {
     var botLocator = new BotLocator(io.sockets.adapter.rooms);
     var router = new Router(io.sockets.adapter.rooms, botLocator);
     var disconnector = new Disconnector(io.sockets.adapter.rooms, io.sockets.connected);
+    var observer = new Observer();
 
-    ServerCreator.call(this, router, disconnector);
+    ServerCreator.call(this, router, disconnector, observer);
 }
 
-function ServerCreator(router, disconnector) {
+function ServerCreator(router, disconnector, observer) {
     app.use(express.static(path.join(__dirname, 'public')));
 
     app.get('/', function(req, res) {
@@ -40,8 +42,9 @@ function ServerCreator(router, disconnector) {
         debug('a user connected: %s and joined room: %s', socket.id, roomName);
 
         socket.on('disconnect', function(){
-            disconnector.disconnect(socket.id);
             debug('a user disconnected: %s and left room: %s', socket.id, roomName);
+            disconnector.disconnectRoom(socket.id);
+            observer.observed('disconnect', socket.id);
         });
     });
 }
