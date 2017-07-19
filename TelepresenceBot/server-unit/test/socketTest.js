@@ -3,10 +3,10 @@ var sinon = require('sinon'),
     mocha = require('mocha'),
     expect = chai.expect,
     debug = require('debug')('socketTest'),
-    ServerCreator = require('../core/serverCreator.js')
-    Router = require('../core/Router.js')
-    Disconnector = require('../core/Disconnector.js'),
-    Observer = require('../core/Observer.js');
+    router = require('../core/Router.js')(undefined),
+    disconnector = require('../core/Disconnector.js')(undefined, undefined),
+    observer = require('../core/Observer.js'),
+    ServerCreator = require('../core/serverCreator.js');
 
 var io = require('socket.io-client');
 
@@ -20,15 +20,19 @@ options = {
 
 describe("TelepresenceBot Server: Routing Test", function () {
 
-    beforeEach(function (done) {
-        router = new Router();
-        disconnector = new Disconnector();
-        observer = new Observer();
-
+    before(function(done){
         mockRouter = sinon.stub(router, 'route').callsFake(function(client, next){ return next(); });
         mockDisconnector = sinon.stub(disconnector, 'disconnectRoom').callsFake(function() { return true; });
+        done();
+    });
 
-        server = new ServerCreator(router, disconnector, observer).create();
+    beforeEach(function (done) {
+        server = new ServerCreator()
+               .withRouter(router)
+               .withDisconnector(disconnector)
+               .withObserver(observer)
+               .create();
+
         debug('server starts');
         done();
     });

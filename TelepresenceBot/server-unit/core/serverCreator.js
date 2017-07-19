@@ -43,14 +43,17 @@ function ServerCreator() {
 
 ServerCreator.prototype.withRouter = function(alternativeRouter) {
     router = alternativeRouter;
+    return this;
 }
 
 ServerCreator.prototype.withDisconnector = function(alternativeDisconnector) {
     disconnector = alternativeDisconnector;
+    return this;
 }
 
 ServerCreator.prototype.withObserver = function(alternativeObserver) {
     observer = alternativeObserver;
+    return this;
 }
 
 ServerCreator.prototype.create = function() {
