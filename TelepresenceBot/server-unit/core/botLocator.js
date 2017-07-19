@@ -22,4 +22,6 @@ function botNotConnectedToHuman(socketsInBotRoom) {
     return  socketsInBotRoom.length === 1;
 }
 
-module.exports = BotLocator;
+module.exports = function(rooms) {
+    return new BotLocator(rooms);
+};
