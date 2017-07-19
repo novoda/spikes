@@ -24,4 +24,6 @@ Disconnector.prototype.disconnectRoom = function(roomName) {
     return true;
 }
 
-module.exports = Disconnector;
+module.exports = function(rooms, connectedClients) {
+    return new Disconnector(rooms, connectedClients);
+};

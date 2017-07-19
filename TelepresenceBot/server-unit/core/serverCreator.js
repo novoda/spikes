@@ -6,11 +6,8 @@ var express = require('express'),
     debug = require('debug')('server'),
     botLocator = require('./botLocator.js')(io.sockets.adapter.rooms),
     router = require('./router.js')(botLocator),
-    Disconnector = require('./disconnector.js'),
-    Observer = require('./observer.js');
-
-var disconnector = new Disconnector(io.sockets.adapter.rooms, io.sockets.connected);
-var observer = new Observer();
+    disconnector = require('./disconnector.js')(io.sockets.adapter.rooms, io.sockets.connected),
+    observer = require('./observer.js');
 
 function ServerCreator() {
     debug("created!")

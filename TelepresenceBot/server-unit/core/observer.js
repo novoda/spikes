@@ -6,4 +6,4 @@ Observer.prototype.notify = function(eventName, eventData) {
     return true;
 }
 
-module.exports = Observer;
+module.exports = new Observer();
