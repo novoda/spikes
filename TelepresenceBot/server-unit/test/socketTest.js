@@ -3,8 +3,8 @@ var sinon = require('sinon'),
     mocha = require('mocha'),
     expect = chai.expect,
     debug = require('debug')('socketTest'),
-    router = require('../core/Router.js')(undefined),
-    disconnector = require('../core/Disconnector.js')(undefined, undefined),
+    router = require('../core/Router.js')(),
+    disconnector = require('../core/Disconnector.js')(),
     observer = require('../core/Observer.js'),
     ServerCreator = require('../core/serverCreator.js');
 
