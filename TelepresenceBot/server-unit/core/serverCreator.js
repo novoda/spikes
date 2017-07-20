@@ -22,7 +22,8 @@ function ServerCreator() {
     });
 
     io.use(function(client, next) {
-        return router.route(client, next);
+        var query = client.handshake.query;
+        return router.route(query, next);
     });
 
     io.sockets.on("connection", function (socket) {
