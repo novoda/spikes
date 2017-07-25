@@ -27,12 +27,28 @@ describe("Router Test", function () {
         router.route(queryWithHuman, onNext = function(data){
             expect(mockBotLocator.called).to.equal(true);
             expect(queryWithHuman.room).to.equal(firstAvailableBotId);
+            botLocator.locateFirstAvailableBotIn.restore();
             done();
         });
 
     });
 
-    it("Should return Error for unhandled ClientType.", function (done) {
+    it("Should return 'Error' when the are no available 'Bots'.", function (done) {
+        var noAvailableBots = undefined;
+
+        mockBotLocator = sinon.stub(botLocator, 'locateFirstAvailableBotIn')
+                              .callsFake(function(){ return noAvailableBots; });
+
+        router.route(queryWithHuman, onNext = function(data){
+            expect(mockBotLocator.called).to.equal(true);
+            expect(data.message).to.equal('No bots available');
+            botLocator.locateFirstAvailableBotIn.restore();
+            done();
+        });
+
+    });
+
+    it("Should return 'Error' for unhandled 'ClientType'.", function (done) {
         router.route(queryWithUnhandled, onNext = function(data){
             expect(data.message).to.equal('Unrecognised clientType: unhandled');
             done();
