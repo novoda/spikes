@@ -11,6 +11,11 @@ var queryWithHuman = {
     room: 'London',
 };
 
+var queryWithBot = {
+    clientType: 'bot',
+    room: 'London',
+};
+
 var queryWithUnhandled = {
     clientType: 'unhandled',
     room: 'London',
@@ -25,9 +30,19 @@ describe("Router Test", function () {
                               .callsFake(function(){ return firstAvailableBotId; });
 
         router.route(queryWithHuman, onNext = function(data){
+            expect(data).to.equal(undefined);
             expect(mockBotLocator.called).to.equal(true);
             expect(queryWithHuman.room).to.equal(firstAvailableBotId);
             botLocator.locateFirstAvailableBotIn.restore();
+            done();
+        });
+
+    });
+
+
+    it("Should pass through Bot without any checks.", function (done) {
+        router.route(queryWithBot, onNext = function(data){
+            expect(data).to.equal(undefined);
             done();
         });
 
