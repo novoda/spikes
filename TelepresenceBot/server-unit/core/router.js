@@ -11,8 +11,6 @@ Router.prototype.route = function(query, next) {
     var clientType = ClientType.from(rawClientType);
 
     switch(clientType) {
-        case ClientType.TEST:
-            return next();
         case ClientType.BOT:
             return next();
         case ClientType.HUMAN:
