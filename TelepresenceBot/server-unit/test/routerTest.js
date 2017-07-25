@@ -18,10 +18,6 @@ var queryWithUnhandled = {
 
 describe("Router Test", function () {
 
-    before(function(done) {
-        done();
-    });
-
     it("Should replace 'query.room' with first available bot when 'clientType' is 'Human'.", function (done) {
         var firstAvailableBotId = 'ABCDEFGH123';
 
