@@ -13,6 +13,8 @@ import java.io.IOException;
 public class MainActivity extends Activity {
 
     private static final String INKY_PHAT_DISPLAY = "SPI3.1";
+    private static final boolean SPI_COMMAND = false;
+    private static final boolean SPI_DATA = true;
 
     private SpiDevice spiBus;
     private Gpio chipBusyPin;
@@ -55,70 +57,70 @@ public class MainActivity extends Activity {
             busyWait();
 
             // _POWER_SETTING
-            chipCommandPin.setValue(false);
+            chipCommandPin.setValue(SPI_COMMAND);
             byte[] buffer = new byte[]{0x01};
             spiBus.write(buffer, buffer.length);
-            chipCommandPin.setValue(true);
+            chipCommandPin.setValue(SPI_DATA);
             buffer = new byte[]{0x02, 0x00, 0x00, 0x00};
             spiBus.write(buffer, buffer.length);
 
             // _BOOSTER_SOFT_START
-            chipCommandPin.setValue(false);
+            chipCommandPin.setValue(SPI_COMMAND);
             buffer = new byte[]{0x02, 0x00, 0x00, 0x00};
             spiBus.write(buffer, buffer.length);
-            chipCommandPin.setValue(true);
+            chipCommandPin.setValue(SPI_DATA);
             buffer = new byte[]{0x07, 0x07, 0x07};
             spiBus.write(buffer, buffer.length);
 
             // _POWER_ON
-            chipCommandPin.setValue(false);
+            chipCommandPin.setValue(SPI_COMMAND);
             buffer = new byte[]{0x04};
             spiBus.write(buffer, buffer.length);
 
             busyWait();
 
             // _PANEL_SETTING
-            chipCommandPin.setValue(false);
+            chipCommandPin.setValue(SPI_COMMAND);
             buffer = new byte[]{0x00};
             spiBus.write(buffer, buffer.length);
-            chipCommandPin.setValue(true);
+            chipCommandPin.setValue(SPI_DATA);
             buffer = new byte[]{(byte) 0b11001111};
             spiBus.write(buffer, buffer.length);
 
             // _VCOM_DATA_INTERVAL_SETTING
-            chipCommandPin.setValue(false);
+            chipCommandPin.setValue(SPI_COMMAND);
             buffer = new byte[]{0x50};
             spiBus.write(buffer, buffer.length);
-            chipCommandPin.setValue(true);
+            chipCommandPin.setValue(SPI_DATA);
             buffer = new byte[]{(byte) 0b00000111 | 0b00000000}; // Set border to white by default
             spiBus.write(buffer, buffer.length);
 
             // _OSCILLATOR_CONTROL
-            chipCommandPin.setValue(false);
+            chipCommandPin.setValue(SPI_COMMAND);
             buffer = new byte[]{0x30};
             spiBus.write(buffer, buffer.length);
-            chipCommandPin.setValue(true);
+            chipCommandPin.setValue(SPI_DATA);
             buffer = new byte[]{0x29};
             spiBus.write(buffer, buffer.length);
 
             // _RESOLUTION_SETTING
-            chipCommandPin.setValue(false);
+            chipCommandPin.setValue(SPI_COMMAND);
             buffer = new byte[]{0x61};
             spiBus.write(buffer, buffer.length);
-            chipCommandPin.setValue(true);
+            chipCommandPin.setValue(SPI_DATA);
             buffer = new byte[]{0x68, 0x00, (byte) 0xD4};
             spiBus.write(buffer, buffer.length);
 
             // _VCOM_DC_SETTING
-            chipCommandPin.setValue(false);
+            chipCommandPin.setValue(SPI_COMMAND);
             buffer = new byte[]{(byte) 0x82};
             spiBus.write(buffer, buffer.length);
-            chipCommandPin.setValue(true);
+            chipCommandPin.setValue(SPI_DATA);
             buffer = new byte[]{0x0A};
             spiBus.write(buffer, buffer.length);
 
             // _PARTIAL_EXIT
-            chipCommandPin.setValue(false);
+            chipCommandPin.setValue(SPI_COMMAND);
             buffer = new byte[]{(byte) 0x92};
             spiBus.write(buffer, buffer.length);
 
@@ -127,49 +129,49 @@ public class MainActivity extends Activity {
             // start drawing
             // start black data transmission
             // _DATA_START_TRANSMISSION_1
-            chipCommandPin.setValue(false);
+            chipCommandPin.setValue(SPI_COMMAND);
             buffer = new byte[]{0x10};
             spiBus.write(buffer, buffer.length);
             // TODO self._send_data(buf_black)
-            chipCommandPin.setValue(true);
+            chipCommandPin.setValue(SPI_DATA);
             buffer = new byte[]{1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0}; // A guess
             spiBus.write(buffer, buffer.length);
             // stop black data transmission
 
             // start red data transmission
             // _DATA_START_TRANSMISSION_2
-            chipCommandPin.setValue(false);
+            chipCommandPin.setValue(SPI_COMMAND);
             buffer = new byte[]{0x13};
             spiBus.write(buffer, buffer.length);
             // TODO self._send_data(buf_red)
-            chipCommandPin.setValue(true);
+            chipCommandPin.setValue(SPI_DATA);
             buffer = new byte[]{0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1}; // A guess
             spiBus.write(buffer, buffer.length);
             // stop red data transmission
 
             // _DISPLAY_REFRESH
-            chipCommandPin.setValue(false);
+            chipCommandPin.setValue(SPI_COMMAND);
             buffer = new byte[]{0x12};
             spiBus.write(buffer, buffer.length);
             // stop drawing
 
             // turn off display (display_fini)
             // _VCOM_DATA_INTERVAL_SETTING
-            chipCommandPin.setValue(false);
+            chipCommandPin.setValue(SPI_COMMAND);
             buffer = new byte[]{0x50};
             spiBus.write(buffer, buffer.length);
-            chipCommandPin.setValue(true);
+            chipCommandPin.setValue(SPI_DATA);
             buffer = new byte[]{0x00};
             spiBus.write(buffer, buffer.length);
             // _POWER_SETTING
-            chipCommandPin.setValue(false);
+            chipCommandPin.setValue(SPI_COMMAND);
             buffer = new byte[]{0x01};
             spiBus.write(buffer, buffer.length);
-            chipCommandPin.setValue(true);
+            chipCommandPin.setValue(SPI_DATA);
             buffer = new byte[]{0x02, 0x00, 0x00, 0x00};
             spiBus.write(buffer, buffer.length);
             //_POWER_OFF
-            chipCommandPin.setValue(false);
+            chipCommandPin.setValue(SPI_COMMAND);
             buffer = new byte[]{0x02};
             spiBus.write(buffer, buffer.length);
 
