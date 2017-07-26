@@ -191,6 +191,7 @@ public class MainActivity extends Activity {
         while (!chipBusyPin.getValue()) {
             // wait
         }
+        Log.d("TUT", "READY");
     }
 
     @Override
