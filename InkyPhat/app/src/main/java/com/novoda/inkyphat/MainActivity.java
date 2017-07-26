@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class MainActivity extends Activity {
 
-    private static final String INKY_PHAT_DISPLAY = "SPI3.1";
+    private static final String INKY_PHAT_DISPLAY = "SPI0.0";
     private static final boolean SPI_COMMAND = false;
     private static final boolean SPI_DATA = true;
 
