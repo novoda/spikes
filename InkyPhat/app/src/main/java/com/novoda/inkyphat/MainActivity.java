@@ -27,6 +27,11 @@ public class MainActivity extends Activity {
 
         PeripheralManagerService service = new PeripheralManagerService();
         try {
+
+            for (String s : service.getSpiBusList()) {
+                Log.d("TUT", "NAME: " + s);
+            }
+
             spiBus = service.openSpiDevice(INKY_PHAT_DISPLAY);
 
             chipCommandPin = service.openGpio("BCM22");
