@@ -21,6 +21,15 @@ public class MainActivity extends Activity {
     static final int WIDTH = 212;
     static final int HEIGHT = 104;
     private static final int NUMBER_OF_PIXEL_REGIONS = WIDTH * HEIGHT / 8;
+    private static final byte POWER_SETTING = (byte) 0x01;
+    private static final byte BOOSTER_SOFT_START = (byte) 0x06;
+    private static final byte POWER_ON = (byte) 0x04;
+    private static final byte PANEL_SETTING = (byte) 0x00;
+    private static final byte VCOM_DATA_INTERVAL_SETTING = (byte) 0x50;
+    private static final byte OSCILLATOR_CONTROL = (byte) 0x30;
+    private static final byte RESOLUTION_SETTING = (byte) 0x61;
+    private static final byte VCOM_DC_SETTING = (byte) 0x82;
+    private static final byte PARTIAL_EXIT = (byte) 0x92;
 
     private SpiDevice spiBus;
     private Gpio chipBusyPin;
@@ -76,39 +85,22 @@ public class MainActivity extends Activity {
 
 
     private void turnDisplayOn() throws IOException {
-        Log.d("TUT", "start to turn display on");
+        busyWait();
+
+        sendCommand(POWER_SETTING, new byte[]{0x02, 0x00, 0x0A, 0x00}); // TODO XXX
+        sendCommand(BOOSTER_SOFT_START, new byte[]{0x07, 0x07, 0x07});
+        sendCommand(POWER_ON);
 
         busyWait();
 
-        // _POWER_SETTING
-        sendCommand((byte) 0x01, new byte[]{0x02, 0x00, 0x0A, 0x00});
-        byte[] buffer;
-        // _BOOSTER_SOFT_START
-        sendCommand((byte) 0x06, new byte[]{0x07, 0x07, 0x07});
-        // _POWER_ON
-        sendCommand((byte) 0x04);
+        sendCommand(PANEL_SETTING, new byte[]{(byte) 0b11001111});
+        sendCommand(VCOM_DATA_INTERVAL_SETTING, new byte[]{(byte) 0b00000111 | 0b00000000}); // Set border to white by default
 
-        busyWait();
+        sendCommand(OSCILLATOR_CONTROL, new byte[]{0x29});
+        sendCommand(RESOLUTION_SETTING, new byte[]{0x68, 0x00, (byte) 0xD4});
+        sendCommand(VCOM_DC_SETTING, new byte[]{0x0A});
 
-        // _PANEL_SETTING
-        sendCommand((byte) 0x00, new byte[]{(byte) 0b11001111});
-
-        // _VCOM_DATA_INTERVAL_SETTING
-        sendCommand((byte) 0x50, new byte[]{(byte) 0b00000111 | 0b00000000}); // Set border to white by default
-
-        // _OSCILLATOR_CONTROL
-        sendCommand((byte) 0x30, new byte[]{0x29});
-
-        // _RESOLUTION_SETTING
-        sendCommand((byte) 0x61, new byte[]{0x68, 0x00, (byte) 0xD4});
-
-        // _VCOM_DC_SETTING
-        sendCommand((byte) 0x82, new byte[]{0x0A});
-
-        // _PARTIAL_EXIT
-        sendCommand((byte) 0x92);
-
-        Log.d("TUT", "display on");
+        sendCommand(PARTIAL_EXIT);
     }
 
     private void update() throws IOException {
