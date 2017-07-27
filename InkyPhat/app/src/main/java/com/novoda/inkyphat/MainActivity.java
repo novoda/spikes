@@ -213,7 +213,7 @@ public class MainActivity extends Activity {
 
     private void busyWait() throws IOException {
         Log.d("TUT", "Wait for the e-paper driver to be ready to receive commands/data.");
-        while (chipBusyPin.getValue()) {
+        while (!chipBusyPin.getValue()) {
             // wait
             Log.v("TUT", "waiting");
         }
