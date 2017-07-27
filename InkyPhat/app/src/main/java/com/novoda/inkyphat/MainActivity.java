@@ -23,6 +23,7 @@ public class MainActivity extends Activity {
     private Gpio chipBusyPin;
     private Gpio chipResetPin;
     private Gpio chipCommandPin;
+    private static final int NUMBER_OF_PIXEL_REGIONS = WIDTH * HEIGHT / 8;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,9 +145,9 @@ public class MainActivity extends Activity {
             spiBus.write(buffer, buffer.length);
             // TODO self._send_data(buf_black)
             chipCommandPin.setValue(SPI_DATA);
-            buffer = new byte[WIDTH * HEIGHT]; // assumption that it addresses every pixel linearly
-            for (int i = 0; i < WIDTH * HEIGHT; i++) {
-                buffer[i] = 1; // Make every pixel black
+            buffer = new byte[NUMBER_OF_PIXEL_REGIONS]; // assumption that it addresses every pixel linearly
+            for (int i = 0; i < NUMBER_OF_PIXEL_REGIONS; i++) {
+                buffer[i] = (byte) 0b11111111; // Make every pixel black
             }
             spiBus.write(buffer, buffer.length);
             Log.d("TUT", "finish update black pixels");
@@ -160,13 +161,9 @@ public class MainActivity extends Activity {
             // TODO self._send_data(buf_red)
             chipCommandPin.setValue(SPI_DATA);
 
-            buffer = new byte[WIDTH * HEIGHT]; // assumption that it addresses every pixel linearly
-            for (int i = 0; i < WIDTH * HEIGHT; i++) {
-                if (i % 2 == 0) {
-                    buffer[i] = 1; // Make every second pixel red
-                } else {
-                    buffer[i] = 0; // draw nothing
-                }
+            buffer = new byte[NUMBER_OF_PIXEL_REGIONS]; // assumption that it addresses every pixel linearly
+            for (int i = 0; i < NUMBER_OF_PIXEL_REGIONS; i++) {
+                buffer[i] = (byte) 0b10101010; // Make every second pixel red
             }
             spiBus.write(buffer, buffer.length);
             Log.d("TUT", "finish update red pixels");
@@ -205,7 +202,10 @@ public class MainActivity extends Activity {
             buffer = new byte[]{0x02};
             spiBus.write(buffer, buffer.length);
 
-        } catch (IOException e) {
+        } catch (
+                IOException e)
+
+        {
             throw new IllegalStateException("cannot init", e);
         }
 
