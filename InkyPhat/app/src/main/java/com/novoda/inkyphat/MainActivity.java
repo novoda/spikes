@@ -27,6 +27,9 @@ public class MainActivity extends Activity {
     private static final byte POWER_OFF = (byte) 0x02;
     private static final byte POWER_ON = (byte) 0x04;
     private static final byte BOOSTER_SOFT_START = (byte) 0x06;
+    private static final byte DATA_START_TRANSMISSION_1 = (byte) 0x10;
+    private static final byte DATA_START_TRANSMISSION_2 = (byte) 0x13;
+    private static final byte DISPLAY_REFRESH = (byte) 0x12;
     private static final byte OSCILLATOR_CONTROL = (byte) 0x30;
     private static final byte VCOM_DATA_INTERVAL_SETTING = (byte) 0x50;
     private static final byte RESOLUTION_SETTING = (byte) 0x61;
@@ -77,8 +80,11 @@ public class MainActivity extends Activity {
 
         try {
             turnDisplayOn();
+            Log.d("TUT", "display on");
             update();
+            Log.d("TUT", "display refreshed");
             turnOffDisplay();
+            Log.d("TUT", "display off");
         } catch (IOException e) {
             throw new IllegalStateException("cannot init", e);
         }
@@ -106,33 +112,20 @@ public class MainActivity extends Activity {
     }
 
     private void update() throws IOException {
-        byte[] buffer;
 
-        // start black data transmission
-        // _DATA_START_TRANSMISSION_1
-        buffer = new byte[NUMBER_OF_PIXEL_REGIONS]; // assumption that it addresses every pixel linearly
+        byte[] buffer = new byte[NUMBER_OF_PIXEL_REGIONS];
         for (int i = 0; i < NUMBER_OF_PIXEL_REGIONS; i++) {
             buffer[i] = (byte) 0b11111111; // Make every pixel black
         }
-        sendCommand((byte) 0x10, buffer);
-        Log.d("TUT", "finish update black pixels");
-        // stop black data transmission
+        sendCommand(DATA_START_TRANSMISSION_1, buffer);
 
-        // start red data transmission
-        // _DATA_START_TRANSMISSION_2
-
-        buffer = new byte[NUMBER_OF_PIXEL_REGIONS]; // assumption that it addresses every pixel linearly
+        buffer = new byte[NUMBER_OF_PIXEL_REGIONS];
         for (int i = 0; i < NUMBER_OF_PIXEL_REGIONS; i++) {
             buffer[i] = (byte) 0b10101010; // Make every second pixel red
         }
-        sendCommand((byte) 0x13, buffer);
-        Log.d("TUT", "finish update red pixels");
-        // stop red data transmission
+        sendCommand(DATA_START_TRANSMISSION_2, buffer);
 
-        // _DISPLAY_REFRESH
-        Log.d("TUT", "refresh display");
-        sendCommand((byte) 0x12);
-        busyWait();
+        sendCommand(DISPLAY_REFRESH);
     }
 
     private void turnOffDisplay() throws IOException {
