@@ -87,7 +87,7 @@ public class MainActivity extends Activity {
     private void turnDisplayOn() throws IOException {
         busyWait();
 
-        sendCommand(POWER_SETTING, new byte[]{0x02, 0x00, 0x0A, 0x00}); // TODO XXX
+        sendCommand(POWER_SETTING, new byte[]{0x07, 0x00, 0x0A, 0x00});
         sendCommand(BOOSTER_SOFT_START, new byte[]{0x07, 0x07, 0x07});
         sendCommand(POWER_ON);
 
