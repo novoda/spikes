@@ -202,10 +202,7 @@ public class MainActivity extends Activity {
             buffer = new byte[]{0x02};
             spiBus.write(buffer, buffer.length);
 
-        } catch (
-                IOException e)
-
-        {
+        } catch (IOException e) {
             throw new IllegalStateException("cannot init", e);
         }
 
