@@ -21,12 +21,14 @@ public class MainActivity extends Activity {
     static final int WIDTH = 212;
     static final int HEIGHT = 104;
     private static final int NUMBER_OF_PIXEL_REGIONS = WIDTH * HEIGHT / 8;
-    private static final byte POWER_SETTING = (byte) 0x01;
-    private static final byte BOOSTER_SOFT_START = (byte) 0x06;
-    private static final byte POWER_ON = (byte) 0x04;
+
     private static final byte PANEL_SETTING = (byte) 0x00;
-    private static final byte VCOM_DATA_INTERVAL_SETTING = (byte) 0x50;
+    private static final byte POWER_SETTING = (byte) 0x01;
+    private static final byte POWER_OFF = (byte) 0x02;
+    private static final byte POWER_ON = (byte) 0x04;
+    private static final byte BOOSTER_SOFT_START = (byte) 0x06;
     private static final byte OSCILLATOR_CONTROL = (byte) 0x30;
+    private static final byte VCOM_DATA_INTERVAL_SETTING = (byte) 0x50;
     private static final byte RESOLUTION_SETTING = (byte) 0x61;
     private static final byte VCOM_DC_SETTING = (byte) 0x82;
     private static final byte PARTIAL_EXIT = (byte) 0x92;
@@ -134,15 +136,11 @@ public class MainActivity extends Activity {
     }
 
     private void turnOffDisplay() throws IOException {
-        Log.d("TUT", "turn off display");
         busyWait();
 
-        // _VCOM_DATA_INTERVAL_SETTING
-        sendCommand((byte) 0x50, new byte[]{0x00});
-        // _POWER_SETTING
-        sendCommand((byte) 0x01, new byte[]{0x02, 0x00, 0x00, 0x00});
-        //_POWER_OFF
-        sendCommand((byte) 0x02);
+        sendCommand(VCOM_DATA_INTERVAL_SETTING, new byte[]{0x00});
+        sendCommand(POWER_SETTING, new byte[]{0x02, 0x00, 0x00, 0x00});
+        sendCommand(POWER_OFF);
     }
 
     private void sendCommand(byte command) throws IOException {
