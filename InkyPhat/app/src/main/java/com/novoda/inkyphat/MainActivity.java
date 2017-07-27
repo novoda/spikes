@@ -147,7 +147,7 @@ public class MainActivity extends Activity {
             buffer = new byte[WIDTH * HEIGHT]; // assumption that it addresses every pixel linearly
             for (int x = 0; x < WIDTH; x++) {
                 for (int y = 0; y < HEIGHT; y++) {
-                    buffer[x * y] = 1; // MAke the whole thing black
+                    buffer[x * y] = 1; // Make the whole thing black
                 }
             }
             spiBus.write(buffer, buffer.length);
