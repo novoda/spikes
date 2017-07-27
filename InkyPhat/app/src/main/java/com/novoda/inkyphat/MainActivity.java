@@ -145,10 +145,8 @@ public class MainActivity extends Activity {
             // TODO self._send_data(buf_black)
             chipCommandPin.setValue(SPI_DATA);
             buffer = new byte[WIDTH * HEIGHT]; // assumption that it addresses every pixel linearly
-            for (int x = 0; x < WIDTH; x++) {
-                for (int y = 0; y < HEIGHT; y++) {
-                    buffer[x * y] = 1; // Make the whole thing black
-                }
+            for (int i = 0; i < WIDTH * HEIGHT; i++) {
+                buffer[i] = 1; // Make every pixel black
             }
             spiBus.write(buffer, buffer.length);
             Log.d("TUT", "finish update black pixels");
@@ -163,13 +161,11 @@ public class MainActivity extends Activity {
             chipCommandPin.setValue(SPI_DATA);
 
             buffer = new byte[WIDTH * HEIGHT]; // assumption that it addresses every pixel linearly
-            for (int x = 0; x < WIDTH; x++) {
-                for (int y = 0; y < HEIGHT; y++) {
-                    if (y % 2 == 0) {
-                        buffer[x * y] = 1; // Make every second pixel red
-                    } else {
-                        buffer[x * y] = 0; // draw nothing
-                    }
+            for (int i = 0; i < WIDTH * HEIGHT; i++) {
+                if (i % 2 == 0) {
+                    buffer[i] = 1; // Make every second pixel red
+                } else {
+                    buffer[i] = 0; // draw nothing
                 }
             }
             spiBus.write(buffer, buffer.length);
