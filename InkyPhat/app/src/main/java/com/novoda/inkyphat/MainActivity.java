@@ -16,6 +16,9 @@ public class MainActivity extends Activity {
     private static final boolean SPI_COMMAND = false;
     private static final boolean SPI_DATA = true;
 
+    private static final int WIDTH = 212;
+    private static final int HEIGHT = 104;
+
     private SpiDevice spiBus;
     private Gpio chipBusyPin;
     private Gpio chipResetPin;
@@ -139,7 +142,12 @@ public class MainActivity extends Activity {
             spiBus.write(buffer, buffer.length);
             // TODO self._send_data(buf_black)
             chipCommandPin.setValue(SPI_DATA);
-            buffer = new byte[]{1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0}; // A guess
+            buffer = new byte[WIDTH * HEIGHT]; // assumption that it addresses every pixel linearly
+            for (int x = 0; x < WIDTH; x++) {
+                for (int y = 0; y < HEIGHT; y++) {
+                    buffer[x * y] = 1; // MAke the whole thing black
+                }
+            }
             spiBus.write(buffer, buffer.length);
             // stop black data transmission
 
@@ -150,7 +158,17 @@ public class MainActivity extends Activity {
             spiBus.write(buffer, buffer.length);
             // TODO self._send_data(buf_red)
             chipCommandPin.setValue(SPI_DATA);
-            buffer = new byte[]{0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1}; // A guess
+
+            buffer = new byte[WIDTH * HEIGHT]; // assumption that it addresses every pixel linearly
+            for (int x = 0; x < WIDTH; x++) {
+                for (int y = 0; y < HEIGHT; y++) {
+                    if (y % 2 == 0) {
+                        buffer[x * y] = 1; // Make every second pixel red
+                    } else {
+                        buffer[x * y] = 0; // draw nothing
+                    }
+                }
+            }
             spiBus.write(buffer, buffer.length);
             // stop red data transmission
 
