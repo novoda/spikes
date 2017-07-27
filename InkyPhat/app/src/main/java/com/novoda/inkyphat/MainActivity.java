@@ -61,6 +61,7 @@ public class MainActivity extends Activity {
 
         try {
             // Start turn on Display
+            Log.d("TUT", "start to turn display on");
 
             busyWait();
 
@@ -132,6 +133,7 @@ public class MainActivity extends Activity {
             buffer = new byte[]{(byte) 0x92};
             spiBus.write(buffer, buffer.length);
 
+            Log.d("TUT", "display on");
             // stop turn on Display
 
             // start drawing
@@ -149,6 +151,7 @@ public class MainActivity extends Activity {
                 }
             }
             spiBus.write(buffer, buffer.length);
+            Log.d("TUT", "finish update black pixels");
             // stop black data transmission
 
             // start red data transmission
@@ -170,9 +173,11 @@ public class MainActivity extends Activity {
                 }
             }
             spiBus.write(buffer, buffer.length);
+            Log.d("TUT", "finish update red pixels");
             // stop red data transmission
 
             // _DISPLAY_REFRESH
+            Log.d("TUT", "refresh display");
             chipCommandPin.setValue(SPI_COMMAND);
             buffer = new byte[]{0x12};
             spiBus.write(buffer, buffer.length);
@@ -182,6 +187,7 @@ public class MainActivity extends Activity {
 
             // turn off display (display_fini)
 
+            Log.d("TUT", "turn off display");
             busyWait();
 
             // _VCOM_DATA_INTERVAL_SETTING
