@@ -208,11 +208,17 @@ public class MainActivity extends Activity {
 
     }
 
+    private long then = SystemClock.currentThreadTimeMillis();
+
     private void busyWait() throws IOException {
         Log.d("TUT", "Wait for the e-paper driver to be ready to receive commands/data.");
         while (!chipBusyPin.getValue()) {
             // wait
-            Log.v("TUT", "waiting");
+            long now = SystemClock.currentThreadTimeMillis();
+            if (then + TimeUnit.SECONDS.toMillis(1) < now) {
+                Log.v("TUT", "waiting 1 second");
+                then = now;
+            }
         }
         Log.d("TUT", "READY");
     }
