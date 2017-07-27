@@ -161,6 +161,9 @@ public class MainActivity extends Activity {
             // stop drawing
 
             // turn off display (display_fini)
+
+            busyWait();
+
             // _VCOM_DATA_INTERVAL_SETTING
             chipCommandPin.setValue(SPI_COMMAND);
             buffer = new byte[]{0x50};
