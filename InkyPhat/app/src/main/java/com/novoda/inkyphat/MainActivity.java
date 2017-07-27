@@ -110,13 +110,13 @@ public class MainActivity extends Activity {
 
         byte[] buffer = new byte[NUMBER_OF_PIXEL_REGIONS];
         for (int i = 0; i < NUMBER_OF_PIXEL_REGIONS; i++) {
-            buffer[i] = (byte) 0b11111111; // Make every pixel black
+            buffer[i] = (byte) 0b01010101; // Make every other pixel black
         }
         sendCommand(DATA_START_TRANSMISSION_1, buffer);
 
         buffer = new byte[NUMBER_OF_PIXEL_REGIONS];
         for (int i = 0; i < NUMBER_OF_PIXEL_REGIONS; i++) {
-            buffer[i] = (byte) 0b10101010; // Make every second pixel red
+            buffer[i] = (byte) 0b10101010; // Make every other pixel red
         }
         sendCommand(DATA_START_TRANSMISSION_2, buffer);
 
