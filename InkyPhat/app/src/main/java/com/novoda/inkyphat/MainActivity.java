@@ -195,6 +195,7 @@ public class MainActivity extends Activity {
         Log.d("TUT", "Wait for the e-paper driver to be ready to receive commands/data.");
         while (!chipBusyPin.getValue()) {
             // wait
+            Log.v("TUT", "waiting");
         }
         Log.d("TUT", "READY");
     }
