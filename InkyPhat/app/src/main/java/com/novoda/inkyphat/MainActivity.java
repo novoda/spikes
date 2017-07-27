@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
             throw new IllegalStateException(INKY_PHAT_DISPLAY + " connection cannot be opened.", e);
         }
         try {
-            spiBus.setMode(SpiDevice.MODE2);
+            spiBus.setMode(SpiDevice.MODE0);
 //            spiBus.setFrequency(1_000_000); // 1Mhz
 //            spiBus.setBitsPerWord(8);
 
