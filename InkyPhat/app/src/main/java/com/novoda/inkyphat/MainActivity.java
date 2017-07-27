@@ -41,6 +41,11 @@ public class MainActivity extends Activity {
     private Gpio chipResetPin;
     private Gpio chipCommandPin;
 
+    public enum Palette {
+        WHITE, BLACK, RED
+    }
+
+    private Palette[][] pixelBuffer = new Palette[HEIGHT][WIDTH];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +77,7 @@ public class MainActivity extends Activity {
             throw new IllegalStateException(INKY_PHAT_DISPLAY + " cannot be configured.", e);
         }
 
+        Tests.drawThreeSquares(this);
 
         try {
             turnDisplayOn();
@@ -86,6 +92,15 @@ public class MainActivity extends Activity {
 
     }
 
+    void setPixel(int x, int y, Palette color) {
+        if (x > WIDTH) {
+            throw new IllegalStateException(x + " cannot be drawn. Max width is " + WIDTH);
+        }
+        if (y > HEIGHT) {
+            throw new IllegalStateException(y + " cannot be drawn. Max height is " + WIDTH);
+        }
+        pixelBuffer[y][x] = color;
+    }
 
     private void turnDisplayOn() throws IOException {
         busyWait();
@@ -107,6 +122,10 @@ public class MainActivity extends Activity {
     }
 
     private void update() throws IOException {
+        byte[] black = convertPixelBufferToDisplayColor(Palette.BLACK);
+        sendCommand(DATA_START_TRANSMISSION_1, black);
+        byte[] red = convertPixelBufferToDisplayColor(Palette.RED);
+        sendCommand(DATA_START_TRANSMISSION_2, red);
 
         byte[] buffer = new byte[NUMBER_OF_PIXEL_REGIONS];
         for (int i = 0; i < NUMBER_OF_PIXEL_REGIONS; i++) {
@@ -121,6 +140,27 @@ public class MainActivity extends Activity {
         sendCommand(DATA_START_TRANSMISSION_2, buffer);
 
         sendCommand(DISPLAY_REFRESH);
+    }
+
+    private byte[] convertPixelBufferToDisplayColor(Palette color) {
+        byte[] display = new byte[NUMBER_OF_PIXEL_REGIONS];
+        int bytePosition = 1;
+        byte colorByte = 0b00000000;
+        for (int x = 0; x < pixelBuffer.length; x++) {
+            for (int y = 0; y < pixelBuffer.length; y++) {
+                Palette pixelColor = pixelBuffer[y][x];
+                if (pixelColor == color) {
+                    colorByte |= 1 << bytePosition;
+                }
+                bytePosition++;
+
+                if (bytePosition == 8) {
+                    display[x * y] = colorByte;
+                    bytePosition = 0;
+                }
+            }
+        }
+        return display;
     }
 
     private void turnOffDisplay() throws IOException {
