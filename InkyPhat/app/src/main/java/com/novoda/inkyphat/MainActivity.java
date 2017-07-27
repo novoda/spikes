@@ -160,6 +160,8 @@ public class MainActivity extends Activity {
             spiBus.write(buffer, buffer.length);
             // stop drawing
 
+            busyWait();
+
             // turn off display (display_fini)
 
             busyWait();
