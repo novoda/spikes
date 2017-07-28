@@ -130,26 +130,28 @@ public class MainActivity extends Activity {
         sendCommand(DISPLAY_REFRESH);
     }
 
+
     private byte[] convertPixelBufferToDisplayColor(Palette color) {
         byte[] display = new byte[NUMBER_OF_PIXEL_REGIONS];
-        int bytePosition = 1;
-        byte colorByte = 0b00000000;
 
+        byte colorByte = 0b00000000;
+        int bitPosition = 0;
         int displayPosition = 0;
-        for (int x = 0; x < pixelBuffer.length; x++) {
-            for (int y = 0; y < pixelBuffer.length; y++) {
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
 
                 Palette pixelColor = pixelBuffer[y][x];
 
                 if (pixelColor == color) {
-                    colorByte |= 1 << bytePosition;
+                    colorByte |= 1 << bitPosition;
                 }
-                bytePosition++;
+                bitPosition++;
 
-                if (bytePosition == 8) {
+                if (bitPosition == 8) {
                     display[displayPosition] = colorByte;
+                    colorByte = 0b00000000;
+                    bitPosition = 0;
                     displayPosition++;
-                    bytePosition = 0;
                 }
             }
         }
