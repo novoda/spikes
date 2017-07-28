@@ -84,7 +84,7 @@ public class MainActivity extends Activity {
             Log.d("TUT", "display on");
             update();
             Log.d("TUT", "display refreshed");
-            turnOffDisplay();
+            turnDisplayOff();
             Log.d("TUT", "display off");
         } catch (IOException e) {
             throw new IllegalStateException("cannot init", e);
@@ -156,7 +156,7 @@ public class MainActivity extends Activity {
         return display;
     }
 
-    private void turnOffDisplay() throws IOException {
+    private void turnDisplayOff() throws IOException {
         busyWait();
 
         sendCommand(VCOM_DATA_INTERVAL_SETTING, new byte[]{0x00});
