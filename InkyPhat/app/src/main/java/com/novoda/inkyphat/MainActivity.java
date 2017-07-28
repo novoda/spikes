@@ -18,8 +18,8 @@ public class MainActivity extends Activity {
     private static final boolean SPI_COMMAND = false;
     private static final boolean SPI_DATA = true;
 
-    static final int WIDTH = 212;
-    static final int HEIGHT = 104;
+    static final int WIDTH = 104;
+    static final int HEIGHT = 212;
     private static final int NUMBER_OF_PIXEL_REGIONS = WIDTH * HEIGHT / 8;
 
     private static final byte PANEL_SETTING = (byte) 0x00;
@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
         WHITE, BLACK, RED
     }
 
-    private Palette[][] pixelBuffer = new Palette[HEIGHT][WIDTH];
+    private Palette[][] pixelBuffer = new Palette[WIDTH][HEIGHT];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,9 +97,9 @@ public class MainActivity extends Activity {
             throw new IllegalStateException(x + " cannot be drawn. Max width is " + WIDTH);
         }
         if (y > HEIGHT) {
-            throw new IllegalStateException(y + " cannot be drawn. Max height is " + WIDTH);
+            throw new IllegalStateException(y + " cannot be drawn. Max height is " + HEIGHT);
         }
-        pixelBuffer[y][x] = color;
+        pixelBuffer[x][y] = color;
     }
 
     private void turnDisplayOn() throws IOException {
@@ -112,7 +112,7 @@ public class MainActivity extends Activity {
         busyWait();
 
         sendCommand(PANEL_SETTING, new byte[]{(byte) 0b11001111});
-        sendCommand(VCOM_DATA_INTERVAL_SETTING, new byte[]{(byte) 0b00000111 | 0b00000000}); // Set border to white by default
+        sendCommand(VCOM_DATA_INTERVAL_SETTING, new byte[]{(byte) 0b00000111 | (byte) 0b11000000}); // Set border to white by default
 
         sendCommand(OSCILLATOR_CONTROL, new byte[]{0x29});
         sendCommand(RESOLUTION_SETTING, new byte[]{0x68, 0x00, (byte) 0xD4});
@@ -132,27 +132,60 @@ public class MainActivity extends Activity {
 
 
     private byte[] convertPixelBufferToDisplayColor(Palette color) {
+        Palette[] flattenedPaletteArray = flatten(pixelBuffer);
+        return mapPaletteArrayToByteArrayForDisplay(flattenedPaletteArray, color);
+//        byte[] display = new byte[NUMBER_OF_PIXEL_REGIONS];
+//
+//        byte colorByte = 0b00000000;
+//        int bitPosition = 7;
+//        int displayPosition = 0;
+//        for (int x = 0; x < WIDTH; x++) {
+//            for (int y = 0; y < HEIGHT; y++) {
+//
+//                Palette pixelColor = pixelBuffer[y][x];
+//
+//                if (pixelColor == color) {
+//                    colorByte |= 1 << bitPosition;
+//                }
+//                bitPosition--;
+//
+//                if (bitPosition == -1) {
+//                    display[displayPosition] = colorByte;
+//                    colorByte = 0b00000000;
+//                    bitPosition = 0;
+//                    displayPosition++;
+//                }
+//            }
+//        }
+//        return display;
+    }
+
+    private static Palette[] flatten(Palette[][] twoDimensionalPaletteArray) {
+        Palette[] flattenedArray = new Palette[WIDTH * HEIGHT];
+        int index = 0;
+        for (int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
+                Palette color = twoDimensionalPaletteArray[x][y];
+                flattenedArray[index++] = color;
+            }
+        }
+        return flattenedArray;
+    }
+
+    private static byte[] mapPaletteArrayToByteArrayForDisplay(Palette[] palettes, Palette choice) {
         byte[] display = new byte[NUMBER_OF_PIXEL_REGIONS];
-
+        int bitPosition = 7;
+        int segment = 0;
         byte colorByte = 0b00000000;
-        int bitPosition = 0;
-        int displayPosition = 0;
-        for (int x = 0; x < WIDTH; x++) {
-            for (int y = 0; y < HEIGHT; y++) {
-
-                Palette pixelColor = pixelBuffer[y][x];
-
-                if (pixelColor == color) {
-                    colorByte |= 1 << bitPosition;
-                }
-                bitPosition++;
-
-                if (bitPosition == 8) {
-                    display[displayPosition] = colorByte;
-                    colorByte = 0b00000000;
-                    bitPosition = 0;
-                    displayPosition++;
-                }
+        for (Palette paletteColor : palettes) {
+            if (paletteColor == choice) {
+                colorByte |= 1 << bitPosition;
+            }
+            bitPosition--;
+            if (bitPosition == -1) {
+                display[segment++] = colorByte;
+                bitPosition = 7;
+                colorByte = 0b00000000;
             }
         }
         return display;

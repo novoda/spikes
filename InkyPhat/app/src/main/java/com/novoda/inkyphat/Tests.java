@@ -14,13 +14,13 @@ public class Tests {
 
     public static void drawThreeSquares(MainActivity activity) {
         // A square
-        activity.setPixel(3, 3, Palette.BLACK);
+        activity.setPixel(3, 3, Palette.RED);
         activity.setPixel(4, 3, Palette.BLACK);
         activity.setPixel(5, 3, Palette.BLACK);
         activity.setPixel(6, 3, Palette.BLACK);
         activity.setPixel(7, 3, Palette.BLACK);
         activity.setPixel(8, 3, Palette.BLACK);
-        activity.setPixel(9, 3, Palette.BLACK);
+        activity.setPixel(9, 3, Palette.RED);
 
         activity.setPixel(3, 3, Palette.BLACK);
         activity.setPixel(3, 4, Palette.BLACK);
@@ -45,39 +45,39 @@ public class Tests {
         activity.setPixel(7, 9, Palette.BLACK);
         activity.setPixel(8, 9, Palette.BLACK);
         activity.setPixel(9, 9, Palette.BLACK);
-
+//
 //        // A square
-//        activity.setPixel(23, 23, Palette.RED);
-//        activity.setPixel(24, 23, Palette.RED);
-//        activity.setPixel(25, 23, Palette.RED);
-//        activity.setPixel(26, 23, Palette.RED);
-//        activity.setPixel(27, 23, Palette.RED);
-//        activity.setPixel(28, 23, Palette.RED);
-//        activity.setPixel(29, 23, Palette.RED);
-//
-//        activity.setPixel(23, 23, Palette.RED);
-//        activity.setPixel(23, 24, Palette.RED);
-//        activity.setPixel(23, 25, Palette.RED);
-//        activity.setPixel(23, 26, Palette.RED);
-//        activity.setPixel(23, 27, Palette.RED);
-//        activity.setPixel(23, 28, Palette.RED);
-//        activity.setPixel(23, 29, Palette.RED);
-//
-//        activity.setPixel(29, 23, Palette.RED);
-//        activity.setPixel(29, 24, Palette.RED);
-//        activity.setPixel(29, 25, Palette.RED);
-//        activity.setPixel(29, 26, Palette.RED);
-//        activity.setPixel(29, 27, Palette.RED);
-//        activity.setPixel(29, 28, Palette.RED);
-//        activity.setPixel(29, 29, Palette.RED);
-//
-//        activity.setPixel(23, 29, Palette.RED);
-//        activity.setPixel(24, 29, Palette.RED);
-//        activity.setPixel(25, 29, Palette.RED);
-//        activity.setPixel(26, 29, Palette.RED);
-//        activity.setPixel(27, 29, Palette.RED);
-//        activity.setPixel(28, 29, Palette.RED);
-//        activity.setPixel(29, 29, Palette.RED);
+        activity.setPixel(23, 23, Palette.RED);
+        activity.setPixel(24, 23, Palette.RED);
+        activity.setPixel(25, 23, Palette.RED);
+        activity.setPixel(26, 23, Palette.RED);
+        activity.setPixel(27, 23, Palette.RED);
+        activity.setPixel(28, 23, Palette.RED);
+        activity.setPixel(29, 23, Palette.RED);
+
+        activity.setPixel(23, 23, Palette.RED);
+        activity.setPixel(23, 24, Palette.RED);
+        activity.setPixel(23, 25, Palette.RED);
+        activity.setPixel(23, 26, Palette.RED);
+        activity.setPixel(23, 27, Palette.RED);
+        activity.setPixel(23, 28, Palette.RED);
+        activity.setPixel(23, 29, Palette.RED);
+
+        activity.setPixel(29, 23, Palette.RED);
+        activity.setPixel(29, 24, Palette.RED);
+        activity.setPixel(29, 25, Palette.RED);
+        activity.setPixel(29, 26, Palette.RED);
+        activity.setPixel(29, 27, Palette.RED);
+        activity.setPixel(29, 28, Palette.RED);
+        activity.setPixel(29, 29, Palette.RED);
+
+        activity.setPixel(23, 29, Palette.RED);
+        activity.setPixel(24, 29, Palette.RED);
+        activity.setPixel(25, 29, Palette.RED);
+        activity.setPixel(26, 29, Palette.RED);
+        activity.setPixel(27, 29, Palette.RED);
+        activity.setPixel(28, 29, Palette.RED);
+        activity.setPixel(29, 29, Palette.RED);
     }
 
 }
