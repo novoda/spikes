@@ -134,16 +134,21 @@ public class MainActivity extends Activity {
         byte[] display = new byte[NUMBER_OF_PIXEL_REGIONS];
         int bytePosition = 1;
         byte colorByte = 0b00000000;
+
+        int displayPosition = 0;
         for (int x = 0; x < pixelBuffer.length; x++) {
             for (int y = 0; y < pixelBuffer.length; y++) {
+
                 Palette pixelColor = pixelBuffer[y][x];
+
                 if (pixelColor == color) {
                     colorByte |= 1 << bytePosition;
                 }
                 bytePosition++;
 
                 if (bytePosition == 8) {
-                    display[x * y] = colorByte;
+                    display[displayPosition] = colorByte;
+                    displayPosition++;
                     bytePosition = 0;
                 }
             }
