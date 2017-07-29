@@ -18,7 +18,7 @@ options = {
     query: 'clientType=human&room=London'
 };
 
-describe("TelepresenceBot Server: Routing Test", function () {
+describe("ServerCreator Test", function () {
 
     before(function(done){
         mockRouter = sinon.stub(router, 'route').callsFake(function(client, next){ return next(); });

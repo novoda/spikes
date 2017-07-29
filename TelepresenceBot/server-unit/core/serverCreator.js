@@ -30,7 +30,7 @@ function ServerCreator() {
         var roomName = socket.handshake.query.room;
 
         socket.join(roomName);
-        socket.emit('joined_room', roomName)
+        socket.emit('joined_room', roomName);
 
         debug('a user connected: %s and joined room: %s', socket.id, roomName);
 
