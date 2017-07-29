@@ -23,7 +23,7 @@ var connectedClients = {
 
 var noConnectedClients = {};
 
-describe("Disconnector",function() {
+describe("Disconnector Test",function() {
 
     it('Should return false when cannot locate room in list of rooms.', function(done){
         var disconnector = new Disconnector(rooms, connectedClients);
@@ -31,17 +31,6 @@ describe("Disconnector",function() {
         var disconnected = disconnector.disconnectRoom('Room not present');
 
         expect(disconnected).to.equal(false);
-
-        done();
-    });
-
-    it('Should return true when disconnecting all clients in room.', function(done){
-        var disconnector = new Disconnector(rooms, connectedClients);
-
-        var disconnected = disconnector.disconnectRoom('London');
-
-        expect(disconnected).to.equal(true);
-
         done();
     });
 
@@ -51,8 +40,28 @@ describe("Disconnector",function() {
         var disconnected = disconnector.disconnectRoom('London');
 
         expect(disconnected).to.equal(false);
-
         done();
+    });
+
+    it('Should return true when disconnecting all clients in room.', function(done){
+        var disconnector = new Disconnector(rooms, connectedClients);
+
+        var disconnected = disconnector.disconnectRoom('London');
+
+        expect(disconnected).to.equal(true);
+        done();
+    });
+
+    it('Should call disconnect on connected client when disconnecting all clients in room.', function(done){
+        var disconnector = new Disconnector(rooms, {
+            'botId': {
+                disconnect: function() {
+                    done();
+                }
+            }
+        });
+
+        disconnector.disconnectRoom('London');
     });
 
 });
