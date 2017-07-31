@@ -39,6 +39,13 @@ function ServerCreator() {
             disconnector.disconnectRoom(socket.id);
             observer.notify('disconnect', socket.id);
         });
+
+        socket.on('move_in', function(direction) {
+            var roomsClientIsIn = Object.keys(io.sockets.adapter.sids[client.id]);
+            for(var i = 0; i < roomsClientIsIn.length; i++) {
+                io.to(roomsClientIsIn[i]).emit('direction', direction);
+            }
+        });
     });
 }
 
