@@ -11,8 +11,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.Log;
 
-import java.nio.ByteBuffer;
-
 import static com.novoda.inkyphat.InkyPhat.HEIGHT;
 
 public class ImageDrawer {
@@ -27,7 +25,7 @@ public class ImageDrawer {
         return convertImage(bitmaps[bitmaps.length - 1]);
     }
 
-    public InkyPhat.PaletteImage convertImage(Bitmap output) {
+    InkyPhat.PaletteImage convertImage(Bitmap output) {
         int width = output.getWidth();
         int height = output.getHeight();
         int[] pixels = new int[width * height];
@@ -58,14 +56,11 @@ public class ImageDrawer {
         return new InkyPhat.PaletteImage(onOrOff, width);
     }
 
-    public Bitmap[] filterImage(Bitmap sourceBitmap) {
+    Bitmap[] filterImage(Bitmap sourceBitmap) {
         Bitmap scaled = scaleToInkyPhatBounds(sourceBitmap);
         Bitmap filteredMono = filterToMonoChrome(scaled);
         Bitmap transparent = mapWhiteToTransparent(filteredMono);
         Bitmap filteredBlackWhite = filterToBlackAndWhite(transparent);
-        Log.d("TUT", "filteredBlackWhite");
-        logOut(filteredBlackWhite);
-
         return new Bitmap[]{sourceBitmap, scaled, filteredMono, transparent, filteredBlackWhite};
     }
 
@@ -85,26 +80,6 @@ public class ImageDrawer {
         output.setPixels(allPixels, 0, output.getWidth(), 0, 0, output.getWidth(), output.getHeight());
 
         return output;
-    }
-
-    private void logOut(Bitmap sourceBitmap) {
-        byte[] bytes = mapToBytes(sourceBitmap);
-        String concat = " ";
-        int total = 0;
-        for (byte aByte : bytes) {
-            if (aByte != 0 && total < 20) {
-                concat += "," + aByte;
-                total++;
-            }
-        }
-        Log.d("TUT", "A: " + concat);
-    }
-
-    private byte[] mapToBytes(Bitmap bitmap) {
-        int byteCount = bitmap.getByteCount();
-        ByteBuffer byteBuffer = ByteBuffer.allocate(byteCount);
-        bitmap.copyPixelsToBuffer(byteBuffer);
-        return byteBuffer.array();
     }
 
     private Bitmap scaleToInkyPhatBounds(Bitmap sourceBitmap) {
