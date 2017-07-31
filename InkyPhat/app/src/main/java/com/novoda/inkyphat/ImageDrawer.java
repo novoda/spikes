@@ -1,6 +1,8 @@
 package com.novoda.inkyphat;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
@@ -15,14 +17,17 @@ import static com.novoda.inkyphat.InkyPhat.HEIGHT;
 
 public class ImageDrawer {
 
-    private static final Bitmap.Config ALPHA_8 = Bitmap.Config.ALPHA_8;
+    public InkyPhat.PaletteImage drawImage(Resources resources, int resourceId) {
+        Bitmap bitmap = BitmapFactory.decodeResource(resources, resourceId);
+        return drawImage(bitmap);
+    }
 
-    public InkyPhat.Palette[] drawImage(Bitmap input) {
+    public InkyPhat.PaletteImage drawImage(Bitmap input) {
         Bitmap[] bitmaps = filterImage(input);
         return convertImage(bitmaps[bitmaps.length - 1]);
     }
 
-    public InkyPhat.Palette[] convertImage(Bitmap output) {
+    public InkyPhat.PaletteImage convertImage(Bitmap output) {
         int width = output.getWidth();
         int height = output.getHeight();
         int[] pixels = new int[width * height];
@@ -50,7 +55,7 @@ public class ImageDrawer {
                 pixelCount = 0;
             }
         }
-        return onOrOff;
+        return new InkyPhat.PaletteImage(onOrOff, width);
     }
 
     public Bitmap[] filterImage(Bitmap sourceBitmap) {
@@ -110,7 +115,7 @@ public class ImageDrawer {
             //noinspection SuspiciousNameCombination
             bitmap = scaleBitmap(sourceBitmap, InkyPhat.HEIGHT, InkyPhat.WIDTH);
         } else {
-            bitmap = sourceBitmap.copy(ALPHA_8, true);
+            bitmap = sourceBitmap.copy(Bitmap.Config.ALPHA_8, true);
         }
         return bitmap;
     }
@@ -138,7 +143,7 @@ public class ImageDrawer {
     }
 
     private Bitmap filterToBlackAndWhite(Bitmap sourceBitmap) {
-        return sourceBitmap.copy(ALPHA_8, true);
+        return sourceBitmap.copy(Bitmap.Config.ALPHA_8, true);
     }
 
 }

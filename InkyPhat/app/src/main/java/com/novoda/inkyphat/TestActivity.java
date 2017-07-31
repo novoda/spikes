@@ -5,12 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
-import java.util.Arrays;
 
 public class TestActivity extends Activity {
 
@@ -18,15 +15,11 @@ public class TestActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_activity);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_test_1);
-        ImageDrawer imageDrawer = new ImageDrawer();
-        Bitmap[] foo = imageDrawer.filterImage(bitmap);
-        InkyPhat.Palette[] output = imageDrawer.convertImage(foo[foo.length - 1]);
-
-        Log.d("TUT", "Done: " + Arrays.toString(output));
 
         LinearLayout root = (LinearLayout) findViewById(R.id.root);
-
+        ImageDrawer imageDrawer = new ImageDrawer();
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_test_1);
+        Bitmap[] foo = imageDrawer.filterImage(bitmap);
         for (Bitmap image : foo) {
             ImageView imageview = new ImageView(this);
             imageview.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -35,5 +28,8 @@ public class TestActivity extends Activity {
             imageview.setPadding(20, 20, 20, 20);
             root.addView(imageview);
         }
+
+        InkyPhat.PaletteImage output = imageDrawer.convertImage(foo[foo.length - 1]);
+
     }
 }

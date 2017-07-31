@@ -37,16 +37,50 @@ public class InkyPhat implements AutoCloseable {
     private static final byte VCOM_DC_SETTING = (byte) 0x82;
     private static final byte PARTIAL_EXIT = (byte) 0x92;
 
-    private SpiDevice spiBus;
-    private Gpio chipBusyPin;
-    private Gpio chipResetPin;
-    private Gpio chipCommandPin;
+    private final Palette[][] pixelBuffer = new Palette[WIDTH][HEIGHT];
+
+    private final SpiDevice spiBus;
+    private final Gpio chipBusyPin;
+    private final Gpio chipResetPin;
+    private final Gpio chipCommandPin;
 
     public enum Palette {
         BLACK, RED, WHITE
     }
 
-    private final Palette[][] pixelBuffer = new Palette[WIDTH][HEIGHT];
+    public static final class PaletteImage {
+
+        private final Palette[] colors;
+        private final int width;
+
+        PaletteImage(Palette[] colors, int width) {
+            this.colors = colors;
+            this.width = width;
+        }
+
+        public void drawAt(InkyPhat inkyPhat, int x, int y) {
+            int rowCount = 0;
+            int pixelCount = 0;
+            for (int i = 0; i < colors.length; i++) {
+                int localX = x + i;
+                int localY = y + i + rowCount;
+
+                if (localX > InkyPhat.WIDTH || localY > InkyPhat.HEIGHT) {
+                    return;
+                }
+
+                Palette color = colors[i];
+                inkyPhat.setPixel(localX, localY, color);
+
+                pixelCount++;
+                if (pixelCount == width) {
+                    rowCount++;
+                    pixelCount = 0;
+                }
+            }
+        }
+
+    }
 
     public static InkyPhat create(String spiBus, String gpioBusyPin, String gpioResetPin, String gpioCommandPin) {
         PeripheralManagerService service = new PeripheralManagerService();

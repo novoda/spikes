@@ -1,5 +1,7 @@
 package com.novoda.inkyphat;
 
+import android.content.res.Resources;
+
 import com.novoda.inkyphat.InkyPhat.Palette;
 
 class Tests {
@@ -80,4 +82,9 @@ class Tests {
         inkyPhat.setPixel(29, 29, Palette.RED);
     }
 
+    public static void drawImage(InkyPhat inkyPhat, Resources resources) {
+        ImageDrawer imageDrawer = new ImageDrawer();
+        InkyPhat.PaletteImage paletteImage = imageDrawer.drawImage(resources, R.drawable.ic_test_1);
+        paletteImage.drawAt(inkyPhat, 0, 0);
+    }
 }
