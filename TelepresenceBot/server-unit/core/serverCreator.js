@@ -7,6 +7,7 @@ var express = require('express'),
     botLocator = require('./botLocator.js')(io.sockets.adapter.rooms),
     router = require('./router.js')(botLocator),
     disconnector = require('./disconnector.js')(io.sockets.adapter.rooms, io.sockets.connected),
+    mover = require('./mover.js')(io.sockets.adapter.sids, io),
     observer = require('./observer.js');
 
 function ServerCreator() {
@@ -41,10 +42,7 @@ function ServerCreator() {
         });
 
         socket.on('move_in', function(direction) {
-            var roomsClientIsIn = Object.keys(io.sockets.adapter.sids[client.id]);
-            for(var i = 0; i < roomsClientIsIn.length; i++) {
-                io.to(roomsClientIsIn[i]).emit('direction', direction);
-            }
+            mover.moveIn(client, direction);
         });
     });
 }
