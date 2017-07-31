@@ -48,6 +48,10 @@ public class InkyPhat implements AutoCloseable {
         BLACK, RED, WHITE
     }
 
+    public enum Orientation {
+        LANDSCAPE, PORTRAIT
+    }
+
     public static final class PaletteImage {
 
         private final Palette[] colors;

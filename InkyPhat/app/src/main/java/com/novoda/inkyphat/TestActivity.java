@@ -17,7 +17,7 @@ public class TestActivity extends Activity {
         setContentView(R.layout.test_activity);
 
         LinearLayout root = (LinearLayout) findViewById(R.id.root);
-        ImageDrawer imageDrawer = new ImageDrawer();
+        ImageDrawer imageDrawer = new ImageDrawer(InkyPhat.Orientation.LANDSCAPE);
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_test_1);
         Bitmap[] foo = imageDrawer.filterImage(bitmap);
         for (Bitmap image : foo) {

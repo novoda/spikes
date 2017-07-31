@@ -10,7 +10,8 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 
-import static com.novoda.inkyphat.InkyPhat.HEIGHT;
+import static com.novoda.inkyphat.InkyPhat.Orientation.LANDSCAPE;
+import static com.novoda.inkyphat.InkyPhat.Orientation.PORTRAIT;
 
 public class ImageDrawer {
 
@@ -22,6 +23,12 @@ public class ImageDrawer {
      * range is 0-255
      */
     private static final int THRESHOLD_RED = 40;
+
+    private final InkyPhat.Orientation orientation;
+
+    public ImageDrawer(InkyPhat.Orientation orientation) {
+        this.orientation = orientation;
+    }
 
     public InkyPhat.PaletteImage drawImage(Resources resources, int resourceId) {
         Bitmap bitmap = BitmapFactory.decodeResource(resources, resourceId);
@@ -88,13 +95,19 @@ public class ImageDrawer {
         Bitmap bitmap;
         int bitmapWidth = sourceBitmap.getWidth();
         int bitmapHeight = sourceBitmap.getHeight();
-        if (bitmapWidth > InkyPhat.WIDTH || bitmapHeight > HEIGHT) { // TODO add a param for orientation
+        if (isIn(PORTRAIT) && (bitmapWidth > InkyPhat.WIDTH || bitmapHeight > InkyPhat.HEIGHT)) {
+            bitmap = scaleBitmap(sourceBitmap, InkyPhat.WIDTH, InkyPhat.HEIGHT);
+        } else if (isIn(LANDSCAPE) && (bitmapWidth > InkyPhat.HEIGHT || bitmapHeight > InkyPhat.WIDTH)) {
             //noinspection SuspiciousNameCombination
             bitmap = scaleBitmap(sourceBitmap, InkyPhat.HEIGHT, InkyPhat.WIDTH);
         } else {
             bitmap = sourceBitmap.copy(Bitmap.Config.ALPHA_8, true);
         }
         return bitmap;
+    }
+
+    private boolean isIn(InkyPhat.Orientation orientation) {
+        return this.orientation == orientation;
     }
 
     private Bitmap scaleBitmap(Bitmap bitmap, int wantedWidth, int wantedHeight) {

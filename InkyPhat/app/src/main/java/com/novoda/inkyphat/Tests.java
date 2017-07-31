@@ -83,7 +83,7 @@ class Tests {
     }
 
     public static void drawImage(InkyPhat inkyPhat, Resources resources) {
-        ImageDrawer imageDrawer = new ImageDrawer();
+        ImageDrawer imageDrawer = new ImageDrawer(InkyPhat.Orientation.LANDSCAPE);
         InkyPhat.PaletteImage paletteImage = imageDrawer.drawImage(resources, R.drawable.ic_test_1);
         paletteImage.drawAt(inkyPhat, 0, 0);
     }
