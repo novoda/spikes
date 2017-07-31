@@ -1,5 +1,5 @@
 import * as spi from 'spi-device'
-import * as rpio from 'rpio'
+import * as rpio from 'rpi-gpio'
 
 enum Palette {
     BLACK,
@@ -14,6 +14,16 @@ enum Palette {
 
 class Pin {
 
+    private bcm: number
+
+    constructor(bcm: number) {
+        this.bcm = bcm
+    }
+
+}
+
+class Payload {
+
 }
 
 
@@ -21,16 +31,20 @@ const SPI_BUS = 0
 const SPI_DEVICE = 0
 const MODE_0 = 0
 
-
-let commandPin: Pin
-let busyPin: Pin
-let resetPin: Pin
+const busyPin: Pin = new Pin(17)
+const commandPin: Pin = new Pin(22)
+const resetPin: Pin = new Pin(27)
 
 
 
 const init = () => {
-    rpio.init({ mapping: 'gpio' })
     const spiDevice = spi.openSync(SPI_BUS, SPI_DEVICE, { mode: MODE_0 })
-    rpio.open()
 }
 
+
+
+const writeData = (payload: number[]) => {
+    // commandPin set -> high
+    // spi transfer payload
+    spi.transferSync(null);
+}
