@@ -9,11 +9,19 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.util.Log;
 
 import static com.novoda.inkyphat.InkyPhat.HEIGHT;
 
 public class ImageDrawer {
+
+    /**
+     * range is 0-255
+     */
+    private static final int THRESHOLD_BLACK = 85;
+    /**
+     * range is 0-255
+     */
+    private static final int THRESHOLD_RED = 40;
 
     public InkyPhat.PaletteImage drawImage(Resources resources, int resourceId) {
         Bitmap bitmap = BitmapFactory.decodeResource(resources, resourceId);
@@ -30,30 +38,24 @@ public class ImageDrawer {
         int height = output.getHeight();
         int[] pixels = new int[width * height];
         output.getPixels(pixels, 0, width, 0, 0, width, height);
-        String line = "";
         int pixelCount = 0;
-        InkyPhat.Palette[] onOrOff = new InkyPhat.Palette[width * height];
+        InkyPhat.Palette[] colors = new InkyPhat.Palette[width * height];
         for (int i = 0, pixelsLength = pixels.length; i < pixelsLength; i++) {
             int pixel = pixels[i];
             int alpha = Color.alpha(pixel);
-            if (alpha > 85) {
-                line += "X";
-                onOrOff[i] = InkyPhat.Palette.BLACK;
-            } else if (alpha > 40) {
-                line += "Y";
-                onOrOff[i] = InkyPhat.Palette.RED;
+            if (alpha > THRESHOLD_BLACK) {
+                colors[i] = InkyPhat.Palette.BLACK;
+            } else if (alpha > THRESHOLD_RED) {
+                colors[i] = InkyPhat.Palette.RED;
             } else {
-                line += "-";
-                onOrOff[i] = InkyPhat.Palette.WHITE;
+                colors[i] = InkyPhat.Palette.WHITE;
             }
             pixelCount++;
             if (pixelCount == width) {
-                Log.d("TUT", line);
-                line = "";
                 pixelCount = 0;
             }
         }
-        return new InkyPhat.PaletteImage(onOrOff, width);
+        return new InkyPhat.PaletteImage(colors, width);
     }
 
     Bitmap[] filterImage(Bitmap sourceBitmap) {
