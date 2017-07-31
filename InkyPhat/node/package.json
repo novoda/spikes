@@ -1,0 +1,17 @@
+{
+  "name": "inkyphat",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -p .",
+    "node": " node build/Main.js",
+    "build_run": "npm run build && npm run node"
+  },
+  "dependencies": {
+    "rpio": "^0.9.17",
+    "spi-device": "^0.2.6"
+  }
+}
