@@ -6,11 +6,15 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.os.Bundle;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 
 public class TestActivity extends Activity {
+
+    private static final InkyPhat.Orientation ORIENTATION = InkyPhat.Orientation.PORTRAIT;
+    private static final int WIDTH = (ORIENTATION == InkyPhat.Orientation.PORTRAIT) ? InkyPhat.WIDTH : InkyPhat.HEIGHT;
+    private static final int HEIGHT = (ORIENTATION == InkyPhat.Orientation.PORTRAIT) ? InkyPhat.HEIGHT : InkyPhat.WIDTH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,17 +22,23 @@ public class TestActivity extends Activity {
         setContentView(R.layout.test_activity);
 
         LinearLayout root = (LinearLayout) findViewById(R.id.root);
-        ImageDrawer imageDrawer = new ImageDrawer(InkyPhat.Orientation.LANDSCAPE, Matrix.ScaleToFit.START);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_test_4);
+        ImageDrawer imageDrawer = new ImageDrawer(ORIENTATION, Matrix.ScaleToFit.START);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_test_3);
         Bitmap[] foo = imageDrawer.filterImage(bitmap);
-        for (Bitmap image : foo) {
+        for (int i = 0; i < foo.length; i++) {
+            Bitmap image = foo[i];
             ImageView imageview = new ImageView(this);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            LayoutParams params;
+            if (i == 0) {
+                params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            } else {
+                params = new LayoutParams(WIDTH, HEIGHT);
+            }
             params.leftMargin = 10;
             params.topMargin = 10;
             params.rightMargin = 10;
             params.bottomMargin = 10;
-            params.gravity = Gravity.CENTER;
+//            params.gravity = Gravity.CENTER;
             imageview.setLayoutParams(params);
             imageview.setImageBitmap(image);
             imageview.setBackgroundColor(Color.BLUE);
@@ -36,6 +46,8 @@ public class TestActivity extends Activity {
         }
 
         InkyPhat.PaletteImage output = imageDrawer.convertImage(foo[foo.length - 1]);
+
+
 
     }
 }
