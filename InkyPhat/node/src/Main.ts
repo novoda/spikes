@@ -35,9 +35,9 @@ const SPI_BUS = 0
 const SPI_DEVICE = 0
 const MODE_0 = 0
 
-const busyPin = new Pin(17)
-const commandPin = new Pin(22)
-const resetPin = new Pin(27)
+const busyPin = new Pin(11)
+const commandPin = new Pin(15)
+const resetPin = new Pin(13)
 
 let spiDevice
 
@@ -47,21 +47,21 @@ const init = async () => {
     spiDevice = spi.openSync(SPI_BUS, SPI_DEVICE, { mode: MODE_0 })
     console.log('spi open')
 
-    gpio.setMode(gpio.MODE_BCM)
+    gpio.setMode(gpio.MODE_RPI)
 
     await gpioSetup(commandPin, gpio.DIR_LOW)
     console.log('command open')
 
     await gpioSetup(resetPin, gpio.DIR_HIGH)
     console.log('reset open')
-    
+
     await gpioSetup(busyPin, gpio.DIR_IN)
     console.log('busy open')
 
     await turnDisplayOff()
 }
 
-const gpioSetup = (pin: Pin, value: any) => {
+const gpioSetup = (pin: Pin, value: string) => {
     return new Promise((resolve, reject) => {
         gpio.setup(busyPin.value(), value, (err) => {
             err ? reject(err) : resolve()
@@ -69,12 +69,8 @@ const gpioSetup = (pin: Pin, value: any) => {
     })
 }
 
-
-
-
 const turnDisplayOff = async () => {
     console.log('turning display off')
-
     await busyWait();
     await sendCommand(0x50, [0x00])
     await sendCommand(0x01, [0x02, 0x00, 0x00, 0x00])
@@ -82,6 +78,8 @@ const turnDisplayOff = async () => {
 }
 
 const sendCommand = (commandData: number, data: number[]) => {
+    console.log('sending command', commandData)
+
     writeData(false, [commandData])
     writeData(true, data)
 }
@@ -96,6 +94,7 @@ const writeData = async (commandType: boolean, data: number[]) => {
 }
 
 const gpioWrite = (pin: Pin, value: boolean): Promise<any> => {
+    console.log('write', pin.value())
     return new Promise((resolve, reject) => {
         gpio.write(pin.value(), value, (err) => {
             err ? reject(err) : resolve()
@@ -113,6 +112,8 @@ const busyWait = async () => {
 }
 
 const gpioRead = (pin: Pin): Promise<boolean> => {
+    console.log('read', pin.value())
+    
     return new Promise((resolve, reject) => {
         gpio.read(pin.value(), (err, result) => {
             err ? reject(err) : resolve(result)
