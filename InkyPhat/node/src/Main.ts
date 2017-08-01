@@ -45,9 +45,16 @@ let spiDevice
 const init = async () => {
     console.log('init')
     spiDevice = spi.openSync(SPI_BUS, SPI_DEVICE, { mode: MODE_0 })
+    console.log('spi open')
+
     await gpioSetup(commandPin, gpio.DIR_LOW)
+    console.log('command open')
+
     await gpioSetup(resetPin, gpio.DIR_HIGH)
+    console.log('reset open')
+    
     await gpioSetup(busyPin, gpio.DIR_IN)
+    console.log('busy open')
 
     await turnDisplayOff()
 }
