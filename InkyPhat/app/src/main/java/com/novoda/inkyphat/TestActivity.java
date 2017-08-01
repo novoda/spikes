@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,6 +28,7 @@ public class TestActivity extends Activity {
             params.topMargin = 10;
             params.rightMargin = 10;
             params.bottomMargin = 10;
+            params.gravity = Gravity.CENTER;
             imageview.setLayoutParams(params);
             imageview.setImageBitmap(image);
             imageview.setBackgroundColor(Color.BLUE);
