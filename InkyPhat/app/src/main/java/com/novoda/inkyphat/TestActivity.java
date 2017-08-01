@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,8 +18,8 @@ public class TestActivity extends Activity {
         setContentView(R.layout.test_activity);
 
         LinearLayout root = (LinearLayout) findViewById(R.id.root);
-        ImageDrawer imageDrawer = new ImageDrawer(InkyPhat.Orientation.LANDSCAPE);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_test_1);
+        ImageDrawer imageDrawer = new ImageDrawer(InkyPhat.Orientation.LANDSCAPE, Matrix.ScaleToFit.START);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_test_4);
         Bitmap[] foo = imageDrawer.filterImage(bitmap);
         for (Bitmap image : foo) {
             ImageView imageview = new ImageView(this);

@@ -25,9 +25,15 @@ public class ImageDrawer {
     private static final int THRESHOLD_RED = 40;
 
     private final InkyPhat.Orientation orientation;
+    private final Matrix.ScaleToFit scaleToFit;
 
     public ImageDrawer(InkyPhat.Orientation orientation) {
+        this(orientation, Matrix.ScaleToFit.FILL);
+    }
+
+    public ImageDrawer(InkyPhat.Orientation orientation, Matrix.ScaleToFit scaleToFit) {
         this.orientation = orientation;
+        this.scaleToFit = scaleToFit;
     }
 
     public InkyPhat.PaletteImage drawImage(Resources resources, int resourceId) {
@@ -92,18 +98,65 @@ public class ImageDrawer {
     }
 
     private Bitmap scaleToInkyPhatBounds(Bitmap sourceBitmap) {
-        Bitmap bitmap;
+        int bitmapWidth = getOrientatedWidth(sourceBitmap);
+        int bitmapHeight = getOrientatedHeight(sourceBitmap);
+        if (bitmapWidth < InkyPhat.WIDTH && bitmapHeight < InkyPhat.HEIGHT) {
+            return sourceBitmap;
+        }
+
+        switch (scaleToFit) {
+            case FILL:
+                return fitXY(sourceBitmap);
+            case START:
+            case CENTER:
+            case END:
+                return fitXorY(sourceBitmap);
+            default:
+                throw new IllegalStateException("Unsupported scale type of " + scaleToFit);
+        }
+    }
+
+    private int getOrientatedWidth(Bitmap sourceBitmap) {
+        return isIn(PORTRAIT) ? sourceBitmap.getWidth() : sourceBitmap.getHeight();
+    }
+
+    private int getOrientatedHeight(Bitmap sourceBitmap) {
+        return isIn(LANDSCAPE) ? sourceBitmap.getHeight() : sourceBitmap.getWidth();
+    }
+
+    private Bitmap fitXY(Bitmap sourceBitmap) {
         int bitmapWidth = sourceBitmap.getWidth();
         int bitmapHeight = sourceBitmap.getHeight();
         if (isIn(PORTRAIT) && (bitmapWidth > InkyPhat.WIDTH || bitmapHeight > InkyPhat.HEIGHT)) {
-            bitmap = scaleBitmap(sourceBitmap, InkyPhat.WIDTH, InkyPhat.HEIGHT);
+            return scaleBitmap(sourceBitmap, InkyPhat.WIDTH, InkyPhat.HEIGHT);
         } else if (isIn(LANDSCAPE) && (bitmapWidth > InkyPhat.HEIGHT || bitmapHeight > InkyPhat.WIDTH)) {
             //noinspection SuspiciousNameCombination
-            bitmap = scaleBitmap(sourceBitmap, InkyPhat.HEIGHT, InkyPhat.WIDTH);
+            return scaleBitmap(sourceBitmap, InkyPhat.HEIGHT, InkyPhat.WIDTH);
         } else {
-            bitmap = sourceBitmap.copy(Bitmap.Config.ALPHA_8, true);
+            return sourceBitmap.copy(Bitmap.Config.ALPHA_8, true);
         }
-        return bitmap;
+    }
+
+    private Bitmap fitXorY(Bitmap sourceBitmap) {
+        int bitmapWidth = sourceBitmap.getWidth();
+        int bitmapHeight = sourceBitmap.getHeight();
+
+        int diffWidth = bitmapWidth - InkyPhat.WIDTH;
+        int diffHeight = bitmapHeight - InkyPhat.HEIGHT;
+
+        if (diffWidth >= diffHeight) {
+            // scale by width
+            double widthScaleVector = InkyPhat.WIDTH / (double) bitmapWidth;
+            int wantedWidth = InkyPhat.WIDTH;
+            int wantedHeight = (int) (bitmapHeight * widthScaleVector);
+            return scaleBitmap(sourceBitmap, wantedWidth, wantedHeight);
+        } else {
+            // scale by height
+            double heightScaleVector = InkyPhat.HEIGHT / (double) bitmapHeight;
+            int wantedWidth = (int) (bitmapWidth * heightScaleVector);
+            int wantedHeight = InkyPhat.HEIGHT;
+            return scaleBitmap(sourceBitmap, wantedWidth, wantedHeight);
+        }
     }
 
     private boolean isIn(InkyPhat.Orientation orientation) {
