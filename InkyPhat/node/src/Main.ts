@@ -63,7 +63,7 @@ const busyPin = new Pin(11)
 const commandPin = new Pin(15)
 const resetPin = new Pin(13)
 
-const display: number[][] = [[]]
+const display = {}
 
 let spiDevice
 
@@ -168,7 +168,15 @@ const gpioRead = (pin: Pin): Promise<boolean> => {
 
 
 const flatten = (input: any) => {
-    return Array.isArray(input) ? [].concat(...input.map(flatten)) : input
+    const output: number[] = new Array[WIDTH * HEIGHT];
+    let index = 0;
+    for (let y = 0; y < HEIGHT; y++) {
+        for (let x = 0; x < WIDTH; x++) {
+            const color = display[`${x}x${y}`];
+            output[index++] = color;
+        }
+    }
+    return output;
 }
 
 const asDisplayArray = (buffer: number[], choice: number): number[] => {
@@ -214,13 +222,13 @@ const setPixel = (x: number, y: number, color: number) => {
     if (y > HEIGHT) {
         throw new Error(`${y} cannot be drawn. Max height is ${HEIGHT}`)
     }
-    display[x][y] = color;
+    display[`${x}x${y}`] = color;
 }
 
 
-
-const foo = [0,1,2,3,4,5,6,7,8,9].forEach(each => {
+const foo = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(each => {
     setPixel(each, 2, 1)
 })
+
 
 init().then(console.log).catch(console.log)
