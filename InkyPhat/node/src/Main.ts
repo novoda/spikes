@@ -47,6 +47,8 @@ const init = async () => {
     spiDevice = spi.openSync(SPI_BUS, SPI_DEVICE, { mode: MODE_0 })
     console.log('spi open')
 
+    gpio.setMode(gpio.MODE_BCM)
+
     await gpioSetup(commandPin, gpio.DIR_LOW)
     console.log('command open')
 
