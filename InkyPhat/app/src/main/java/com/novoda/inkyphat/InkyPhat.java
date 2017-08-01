@@ -69,7 +69,7 @@ public class InkyPhat implements AutoCloseable {
                 int localX = x + i;
                 int localY = y + i + rowCount;
 
-                if (localX > InkyPhat.WIDTH || localY > InkyPhat.HEIGHT) {
+                if (localX > InkyPhat.WIDTH || localY > InkyPhat.HEIGHT) { // TODO check orientation
                     continue;
                 }
 
