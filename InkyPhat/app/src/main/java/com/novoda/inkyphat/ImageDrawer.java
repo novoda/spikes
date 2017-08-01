@@ -56,10 +56,10 @@ public class ImageDrawer {
         for (int i = 0, pixelsLength = pixels.length; i < pixelsLength; i++) {
             int pixel = pixels[i];
             int alpha = Color.alpha(pixel);
-            if (alpha > THRESHOLD_BLACK) {
-                colors[i] = InkyPhat.Palette.BLACK;
-            } else if (alpha > THRESHOLD_RED) {
+            if (alpha > THRESHOLD_RED) {
                 colors[i] = InkyPhat.Palette.RED;
+            } else if (alpha > THRESHOLD_BLACK) {
+                colors[i] = InkyPhat.Palette.BLACK;
             } else {
                 colors[i] = InkyPhat.Palette.WHITE;
             }
