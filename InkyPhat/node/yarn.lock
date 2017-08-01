@@ -49,3 +49,7 @@ spi-device@^0.2.6:
   dependencies:
     bindings "~1.2.1"
     nan "~2.5.0"
+
+typescript@^2.4.2:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.4.2.tgz#f8395f85d459276067c988aa41837a8f82870844"

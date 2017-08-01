@@ -1,5 +1,5 @@
 import * as spi from 'spi-device'
-import * as rpio from 'rpi-gpio'
+import * as gpio from 'rpi-gpio'
 
 enum Palette {
     BLACK,
@@ -8,16 +8,16 @@ enum Palette {
 }
 
 
-
-
-
-
 class Pin {
 
     private bcm: number
 
     constructor(bcm: number) {
         this.bcm = bcm
+    }
+
+    value(): number {
+        return this.bcm
     }
 
 }
@@ -39,18 +39,29 @@ const resetPin = new Pin(27)
 
 
 
-const init = () => {
+
+
+const init = async () => {
     const spiDevice = spi.openSync(SPI_BUS, SPI_DEVICE, { mode: MODE_0 })
+    await gpioSetup(commandPin, gpio.DIR_LOW)
+    await gpioSetup(resetPin, gpio.DIR_HIGH)
+    await gpioSetup(busyPin, gpio.DIR_IN)
 }
 
 
 const writeData = (payload: number[]) => {
-    gpioWrite(commandPin, PIN_HIGH)
+    // gpioSetup(commandPin, PIN_HIGH)
     // spi transfer payload
     spi.transferSync(null);
 }
 
 
-const gpioWrite = (pin: Pin, value: boolean) => {
-
+const gpioSetup = (pin: Pin, value: any) => {
+    return new Promise((resolve, reject) => {
+        gpio.setup(busyPin.value(), value, (err) => {
+            err ? reject(err) : resolve()
+        })
+    })
 }
+
+init().then(console.log)

@@ -13,5 +13,8 @@
   "dependencies": {
     "rpi-gpio": "^0.8.1",
     "spi-device": "^0.2.6"
+  },
+  "devDependencies": {
+    "typescript": "^2.4.2"
   }
 }
