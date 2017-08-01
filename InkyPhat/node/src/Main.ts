@@ -42,6 +42,10 @@ const resetPin = new Pin(13)
 let spiDevice
 
 
+gpio.on('export', (channel) => {
+    console.log('Channel set: ' + channel);
+});
+
 const init = async () => {
     console.log('init')
     spiDevice = spi.openSync(SPI_BUS, SPI_DEVICE, { mode: MODE_0 })
@@ -63,7 +67,7 @@ const init = async () => {
 
 const gpioSetup = (pin: Pin, value: string) => {
     return new Promise((resolve, reject) => {
-        gpio.setup(busyPin.value(), value, (err) => {
+        gpio.setup(pin.value(), value, (err) => {
             err ? reject(err) : resolve()
         })
     })
@@ -77,11 +81,11 @@ const turnDisplayOff = async () => {
     await writeData(false, [0x02])
 }
 
-const sendCommand = (commandData: number, data: number[]) => {
+const sendCommand = async (commandData: number, data: number[]) => {
     console.log('sending command', commandData)
 
-    writeData(false, [commandData])
-    writeData(true, data)
+    await writeData(false, [commandData])
+    await writeData(true, data)
 }
 
 const writeData = async (commandType: boolean, data: number[]) => {
@@ -94,8 +98,8 @@ const writeData = async (commandType: boolean, data: number[]) => {
 }
 
 const gpioWrite = (pin: Pin, value: boolean): Promise<any> => {
-    console.log('write', pin.value())
     return new Promise((resolve, reject) => {
+        console.log('write', pin.value())
         gpio.write(pin.value(), value, (err) => {
             err ? reject(err) : resolve()
         })
@@ -112,9 +116,8 @@ const busyWait = async () => {
 }
 
 const gpioRead = (pin: Pin): Promise<boolean> => {
-    console.log('read', pin.value())
-    
     return new Promise((resolve, reject) => {
+        console.log('read', pin.value())
         gpio.read(pin.value(), (err, result) => {
             err ? reject(err) : resolve(result)
         })
