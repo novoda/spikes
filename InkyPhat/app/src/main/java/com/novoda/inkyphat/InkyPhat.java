@@ -70,7 +70,7 @@ public class InkyPhat implements AutoCloseable {
                 int localY = y + i + rowCount;
 
                 if (localX > InkyPhat.WIDTH || localY > InkyPhat.HEIGHT) {
-                    return;
+                    continue;
                 }
 
                 Palette color = colors[i];
