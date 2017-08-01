@@ -102,7 +102,7 @@ const turnDisplayOn = async () => {
 
     await sendCommand(POWER_SETTING_OFF)
     await sendCommand(BOOSTER_SOFT_START)
-    await writeData(false, [0x04])
+    await writeData(PIN_LOW, [0x04])
 
     await busyWait()
 
@@ -113,7 +113,7 @@ const turnDisplayOn = async () => {
     await sendCommand(RESOLUTION_SETTING);
     await sendCommand(VCOM_DC_SETTING);
 
-    await writeData(false, [0x92])
+    await writeData(PIN_LOW, [0x92])
 }
 
 const turnDisplayOff = async () => {
@@ -121,13 +121,13 @@ const turnDisplayOff = async () => {
     await busyWait();
     await sendCommand(VCOM_DATA_INTERVAL_SETTING_OFF)
     await sendCommand(POWER_SETTING_OFF)
-    await writeData(false, [0x02])
+    await writeData(PIN_LOW, [0x02])
 }
 
 const sendCommand = async (command: Command) => {
     console.log('sending command', command)
-    await writeData(false, [command.type])
-    await writeData(true, command.data)
+    await writeData(PIN_LOW, [command.type])
+    await writeData(PIN_HIGH, command.data)
 }
 
 const writeData = async (commandType: boolean, data: number[]) => {
@@ -200,11 +200,11 @@ const asDisplayArray = (buffer: number[], choice: number): number[] => {
 
 
 const update = async () => {
-    const black = asDisplayArray(flatten(display), 0)
-    sendCommand(new Command(0x10, black))
+    const black = new Array[WIDTH * HEIGHT].fill(0)
+    await sendCommand(new Command(0x10, black))
 
-    const red = asDisplayArray(flatten(display), 1)
-    sendCommand(new Command(0x13, red))
+    // const red = asDisplayArray(flatten(display), 1)
+    // sendCommand(new Command(0x13, red))
 
     await writeData(false, [0x12])
 }
@@ -225,9 +225,13 @@ const setPixel = (x: number, y: number, color: number) => {
     display[`${x}x${y}`] = color;
 }
 
+const emptyX = new Array(WIDTH).fill(0)
+const emptyY = new Array(HEIGHT).fill(0)
 
-const foo = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(each => {
-    setPixel(each, 2, 1)
+emptyX.forEach(x => {
+    emptyY.forEach(y => {
+        setPixel(x, y, 0)
+    })
 })
 
 
