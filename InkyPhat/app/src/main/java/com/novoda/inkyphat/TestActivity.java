@@ -22,10 +22,14 @@ public class TestActivity extends Activity {
         Bitmap[] foo = imageDrawer.filterImage(bitmap);
         for (Bitmap image : foo) {
             ImageView imageview = new ImageView(this);
-            imageview.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.leftMargin = 10;
+            params.topMargin = 10;
+            params.rightMargin = 10;
+            params.bottomMargin = 10;
+            imageview.setLayoutParams(params);
             imageview.setImageBitmap(image);
             imageview.setBackgroundColor(Color.BLUE);
-            imageview.setPadding(20, 20, 20, 20);
             root.addView(imageview);
         }
 
