@@ -1,5 +1,6 @@
-import * as spi from 'pi-spi'
-import * as gpio from 'rpi-gpio'
+import { Spi } from './Spi'
+import { Gpio } from './Gpio'
+import { Pin } from './Pin'
 
 declare const Buffer
 
@@ -9,18 +10,6 @@ enum Palette {
     WHITE
 }
 
-
-
-
-class Pin {
-
-    value: number
-
-    constructor(value: number) {
-        this.value = value
-    }
-
-}
 
 
 class Command {
@@ -65,36 +54,27 @@ const resetPin = new Pin(13)
 
 const display = {}
 
-let spiDevice
+const gpio = new Gpio()
+const spi = new Spi()
 
 const init = async () => {
     console.log('init')
-    spiDevice = spi.initialize('/dev/spiddev0.0')
+    spi.init()
     console.log('spi open')
 
-    gpio.setMode(gpio.MODE_RPI)
-
-    await gpioSetup(commandPin, gpio.DIR_LOW)
-    console.log('command open')
-
-    await gpioSetup(resetPin, gpio.DIR_HIGH)
-    console.log('reset open')
-
-    await gpioSetup(busyPin, gpio.DIR_IN)
-    console.log('busy open')
+    await gpio.open(commandPin, 'low')
+    await gpio.open(resetPin, 'high')
+    await gpio.open(busyPin, 'in')
 
     await refresh()
     return 'finished'
 }
 
-const gpioSetup = (pin: Pin, value: string) => {
-    return new Promise((resolve, reject) => {
-        gpio.setup(pin.value, value, (err) => {
-            err ? reject(err) : resolve()
-        })
-    })
+const refresh = async () => {
+    await turnDisplayOn()
+    await update()
+    await turnDisplayOff()
 }
-
 
 const turnDisplayOn = async () => {
     console.log('turning display on')
@@ -116,6 +96,16 @@ const turnDisplayOn = async () => {
     await writeData(PIN_LOW, [0x92])
 }
 
+const update = async () => {
+    const black = new Array(WIDTH * HEIGHT).fill(0)
+    await sendCommand(new Command(0x10, black))
+
+    // const red = asDisplayArray(flatten(display), 1)
+    // sendCommand(new Command(0x13, red))
+
+    await writeData(false, [0x12])
+}
+
 const turnDisplayOff = async () => {
     console.log('turning display off')
     await busyWait();
@@ -131,100 +121,60 @@ const sendCommand = async (command: Command) => {
 }
 
 const writeData = async (commandType: boolean, data: number[]) => {
-    await gpioWrite(commandPin, commandType)
-    const payload = new Buffer(data)
-    return new Promise((resolve, reject) => {
-        spiDevice.write(payload, (err) => {
-            err ? reject(err) : resolve()
-        })
-    })
-}
-
-const gpioWrite = (pin: Pin, value: boolean): Promise<any> => {
-    return new Promise((resolve, reject) => {
-        console.log('write', pin.value)
-        gpio.write(pin.value, value, (err) => {
-            err ? reject(err) : resolve()
-        })
-    })
+    await gpio.write(commandPin, commandType)
+    await spi.write(data)
 }
 
 const busyWait = async () => {
     while (true) {
-        let result = await gpioRead(busyPin)
+        let result = await gpio.read(busyPin)
         if (result) {
             break
         }
     }
 }
 
-const gpioRead = (pin: Pin): Promise<boolean> => {
-    return new Promise((resolve, reject) => {
-        console.log('read', pin.value)
-        gpio.read(pin.value, (err, result) => {
-            err ? reject(err) : resolve(result)
-        })
-    })
-}
-
-
-const flatten = (input: any) => {
-    const output: number[] = new Array[WIDTH * HEIGHT];
-    let index = 0;
-    for (let y = 0; y < HEIGHT; y++) {
-        for (let x = 0; x < WIDTH; x++) {
-            const color = display[`${x}x${y}`];
-            output[index++] = color;
-        }
-    }
-    return output;
-}
-
-const asDisplayArray = (buffer: number[], choice: number): number[] => {
-    const display = []
-    let bitPosition = 7
-    let segment = 0
-    let colorByte = 0b00000000
-    buffer.forEach(each => {
-        if (each === choice) {
-            colorByte |= 1 << bitPosition;
-        }
-        bitPosition--;
-        if (bitPosition == -1) {
-            display[segment++] = colorByte;
-            bitPosition = 7;
-            colorByte = 0b00000000;
-        }
-    })
-    return display;
-}
-
-
-const update = async () => {
-    const black = new Array[WIDTH * HEIGHT].fill(0)
-    await sendCommand(new Command(0x10, black))
-
-    // const red = asDisplayArray(flatten(display), 1)
-    // sendCommand(new Command(0x13, red))
-
-    await writeData(false, [0x12])
-}
-
-const refresh = async () => {
-    await turnDisplayOn()
-    await update()
-    await turnDisplayOff()
-}
-
-const setPixel = (x: number, y: number, color: number) => {
-    if (x > WIDTH) {
-        throw new Error(`${x} cannot be drawn. Max width is ${WIDTH}`)
-    }
-    if (y > HEIGHT) {
-        throw new Error(`${y} cannot be drawn. Max height is ${HEIGHT}`)
-    }
-    display[`${x}x${y}`] = color;
-}
-
-
 init().then(console.log).catch(console.log)
+
+
+// const setPixel = (x: number, y: number, color: number) => {
+//     if (x > WIDTH) {
+//         throw new Error(`${x} cannot be drawn. Max width is ${WIDTH}`)
+//     }
+//     if (y > HEIGHT) {
+//         throw new Error(`${y} cannot be drawn. Max height is ${HEIGHT}`)
+//     }
+//     display[`${x}x${y}`] = color;
+// }
+
+
+// const flatten = (input: any) => {
+//     const output: number[] = new Array[WIDTH * HEIGHT];
+//     let index = 0;
+//     for (let y = 0; y < HEIGHT; y++) {
+//         for (let x = 0; x < WIDTH; x++) {
+//             const color = display[`${x}x${y}`];
+//             output[index++] = color;
+//         }
+//     }
+//     return output;
+// }
+
+// const asDisplayArray = (buffer: number[], choice: number): number[] => {
+//     const display = []
+//     let bitPosition = 7
+//     let segment = 0
+//     let colorByte = 0b00000000
+//     buffer.forEach(each => {
+//         if (each === choice) {
+//             colorByte |= 1 << bitPosition;
+//         }
+//         bitPosition--;
+//         if (bitPosition == -1) {
+//             display[segment++] = colorByte;
+//             bitPosition = 7;
+//             colorByte = 0b00000000;
+//         }
+//     })
+//     return display;
+// }
