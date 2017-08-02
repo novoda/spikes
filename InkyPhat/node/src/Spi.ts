@@ -12,8 +12,8 @@ export class Spi {
     write = (data: number[]) => {
         const payload = new Buffer(data)
         return new Promise((resolve, reject) => {
-            this.spiDevice.write(payload, (err) => {
-                err ? reject(err) : resolve()
+            this.spiDevice.transfer(payload, payload.length, (err, result) => {
+                err ? reject(err) : resolve(result)
             })
         })
     }

@@ -39,7 +39,7 @@ const POWER_SETTING_OFF = new Command(0x01, [0x02, 0x00, 0x00, 0x00])
 const VCOM_DATA_INTERVAL_SETTING_OFF = new Command(0x50, [0x00])
 
 const POWER_SETTING_ON = new Command(0x01, [0x07, 0x00, 0x0A, 0x00]);
-const BOOSTER_SOFT_START = new Command(0x060, [0x07, 0x07, 0x07]);
+const BOOSTER_SOFT_START = new Command(0x06, [0x07, 0x07, 0x07]);
 const PANEL_SETTING = new Command(0x00, [0b11001111])
 const VCOM_DATA_INTERVAL_SETTING_ON = new Command(0x50, [0b00000111 | 0b00000000]);
 
@@ -122,7 +122,8 @@ const sendCommand = async (command: Command) => {
 
 const writeData = async (commandType: boolean, data: number[]) => {
     await gpio.write(commandPin, commandType)
-    await spi.write(data)
+    const result = await spi.write(data)
+    console.log(result)
 }
 
 const busyWait = async () => {
