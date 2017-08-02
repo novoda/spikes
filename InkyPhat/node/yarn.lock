@@ -27,13 +27,15 @@ ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
 
-nan@~2.5.0:
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/nan/-/nan-2.5.1.tgz#d5b01691253326a97a2bbee9e61c55d8d60351e2"
-
-nan@~2.6.2:
+nan@^2.3.5, nan@~2.6.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.6.2.tgz#e4ff34e6c95fdfb5aecc08de6596f43605a7db45"
+
+pi-spi@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/pi-spi/-/pi-spi-1.0.2.tgz#10619ea2e7e1f8425b885abefb627c2739030dc6"
+  dependencies:
+    nan "^2.3.5"
 
 rpi-gpio@^0.8.1:
   version "0.8.1"
@@ -42,13 +44,6 @@ rpi-gpio@^0.8.1:
     async "1.x"
     debug "2.x"
     epoll "0.1.x"
-
-spi-device@^0.2.6:
-  version "0.2.6"
-  resolved "https://registry.yarnpkg.com/spi-device/-/spi-device-0.2.6.tgz#b66a2c375800b2a80541765422e154e0b9fc6c4f"
-  dependencies:
-    bindings "~1.2.1"
-    nan "~2.5.0"
 
 typescript@^2.4.2:
   version "2.4.2"

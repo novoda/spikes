@@ -1,4 +1,4 @@
-import * as spi from 'spi-device'
+import * as spi from 'pi-spi'
 import * as gpio from 'rpi-gpio'
 
 declare const Buffer
@@ -69,7 +69,7 @@ let spiDevice
 
 const init = async () => {
     console.log('init')
-    spiDevice = spi.openSync(SPI_BUS, SPI_DEVICE, { mode: MODE_0 })
+    spiDevice = spi.initialize('/dev/spiddev0.0')
     console.log('spi open')
 
     gpio.setMode(gpio.MODE_RPI)
@@ -83,7 +83,7 @@ const init = async () => {
     await gpioSetup(busyPin, gpio.DIR_IN)
     console.log('busy open')
 
-    await turnDisplayOff()
+    await refresh()
     return 'finished'
 }
 
@@ -132,11 +132,12 @@ const sendCommand = async (command: Command) => {
 
 const writeData = async (commandType: boolean, data: number[]) => {
     await gpioWrite(commandPin, commandType)
-    var message = [{
-        sendBuffer: new Buffer(data),
-        byteLength: data.length
-    }];
-    spiDevice.transferSync(message)
+    const payload = new Buffer(data)
+    return new Promise((resolve, reject) => {
+        spiDevice.write(payload, (err) => {
+            err ? reject(err) : resolve()
+        })
+    })
 }
 
 const gpioWrite = (pin: Pin, value: boolean): Promise<any> => {
@@ -224,15 +225,6 @@ const setPixel = (x: number, y: number, color: number) => {
     }
     display[`${x}x${y}`] = color;
 }
-
-const emptyX = new Array(WIDTH).fill(0)
-const emptyY = new Array(HEIGHT).fill(0)
-
-emptyX.forEach(x => {
-    emptyY.forEach(y => {
-        setPixel(x, y, 0)
-    })
-})
 
 
 init().then(console.log).catch(console.log)

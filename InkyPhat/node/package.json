@@ -11,8 +11,8 @@
     "build_run": "npm run build && npm run node"
   },
   "dependencies": {
-    "rpi-gpio": "^0.8.1",
-    "spi-device": "^0.2.6"
+    "pi-spi": "^1.0.2",
+    "rpi-gpio": "^0.8.1"
   },
   "devDependencies": {
     "typescript": "^2.4.2"
