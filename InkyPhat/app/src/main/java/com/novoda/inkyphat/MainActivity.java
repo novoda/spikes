@@ -15,7 +15,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        inkyPhat = InkyPhatTriColourDisplay.create(INKY_PHAT_DISPLAY, BUSY_PIN, RESET_PIN, COMMAND_PIN);
+        inkyPhat = InkyPhat.Factory.create(INKY_PHAT_DISPLAY, BUSY_PIN, RESET_PIN, COMMAND_PIN);
 //        Tests.drawTwoSquares(inkyPhat);
         Tests.drawImage(inkyPhat, getResources());
         inkyPhat.refresh();

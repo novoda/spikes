@@ -1,7 +1,6 @@
 package com.novoda.inkyphat;
 
 import com.google.android.things.pio.Gpio;
-import com.google.android.things.pio.PeripheralManagerService;
 import com.google.android.things.pio.SpiDevice;
 
 import java.io.IOException;
@@ -34,21 +33,6 @@ class InkyPhatTriColourDisplay implements InkyPhat {
     private final Gpio chipBusyPin;
     private final Gpio chipResetPin;
     private final Gpio chipCommandPin;
-
-    static InkyPhat create(String spiBus, String gpioBusyPin, String gpioResetPin, String gpioCommandPin) {
-        PeripheralManagerService service = new PeripheralManagerService();
-        try {
-            SpiDevice device = service.openSpiDevice(spiBus);
-
-            Gpio chipBusyPin = service.openGpio(gpioBusyPin);
-            Gpio chipResetPin = service.openGpio(gpioResetPin);
-            Gpio chipCommandPin = service.openGpio(gpioCommandPin);
-
-            return new InkyPhatTriColourDisplay(device, chipBusyPin, chipResetPin, chipCommandPin);
-        } catch (IOException e) {
-            throw new IllegalStateException("InkyPhat connection cannot be opened.", e);
-        }
-    }
 
     InkyPhatTriColourDisplay(SpiDevice spiBus, Gpio chipBusyPin, Gpio chipResetPin, Gpio chipCommandPin) {
         this.spiBus = spiBus;

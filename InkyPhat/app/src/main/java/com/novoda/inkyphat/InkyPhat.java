@@ -1,5 +1,11 @@
 package com.novoda.inkyphat;
 
+import com.google.android.things.pio.Gpio;
+import com.google.android.things.pio.PeripheralManagerService;
+import com.google.android.things.pio.SpiDevice;
+
+import java.io.IOException;
+
 interface InkyPhat extends AutoCloseable {
     /**
      * Width in pixels
@@ -16,6 +22,23 @@ interface InkyPhat extends AutoCloseable {
 
     @Override
     void close();
+
+    class Factory {
+        static InkyPhat create(String spiBus, String gpioBusyPin, String gpioResetPin, String gpioCommandPin) {
+            PeripheralManagerService service = new PeripheralManagerService();
+            try {
+                SpiDevice device = service.openSpiDevice(spiBus);
+
+                Gpio chipBusyPin = service.openGpio(gpioBusyPin);
+                Gpio chipResetPin = service.openGpio(gpioResetPin);
+                Gpio chipCommandPin = service.openGpio(gpioCommandPin);
+
+                return new InkyPhatTriColourDisplay(device, chipBusyPin, chipResetPin, chipCommandPin);
+            } catch (IOException e) {
+                throw new IllegalStateException("InkyPhat connection cannot be opened.", e);
+            }
+        }
+    }
 
     enum Palette {
         BLACK, RED, WHITE
