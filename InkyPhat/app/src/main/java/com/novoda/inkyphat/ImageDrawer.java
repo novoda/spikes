@@ -74,7 +74,7 @@ public class ImageDrawer {
     }
 
     Bitmap[] filterImage(Bitmap sourceBitmap) {
-        Bitmap scaled = scaleToInkyPhatBounds(sourceBitmap);
+        Bitmap scaled = scaleToInkyPhatBounds(sourceBitmap, scaleToFit);
         Bitmap filteredMono = filterToMonoChrome(scaled);
         Bitmap transparent = mapWhiteToTransparent(filteredMono);
         Bitmap filteredBlackWhite = filterToBlackAndWhite(transparent);
@@ -99,14 +99,14 @@ public class ImageDrawer {
         return output;
     }
 
-    private Bitmap scaleToInkyPhatBounds(Bitmap sourceBitmap) {
+    private Bitmap scaleToInkyPhatBounds(Bitmap sourceBitmap, Matrix.ScaleToFit scaleType) {
         int bitmapWidth = sourceBitmap.getWidth();
         int bitmapHeight = sourceBitmap.getHeight();
         if (bitmapWidth < getOrientatedWidth() && bitmapHeight < getOrientatedHeight()) {
             return sourceBitmap;
         }
 
-        switch (scaleToFit) {
+        switch (scaleType) {
             case FILL:
                 return imageScaler.fitXY(sourceBitmap, getOrientatedWidth(), getOrientatedHeight());
             case START:
