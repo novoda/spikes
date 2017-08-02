@@ -98,9 +98,9 @@ public class ImageDrawer {
     }
 
     private Bitmap scaleToInkyPhatBounds(Bitmap sourceBitmap) {
-        int bitmapWidth = getOrientatedWidth(sourceBitmap);
-        int bitmapHeight = getOrientatedHeight(sourceBitmap);
-        if (bitmapWidth < InkyPhat.WIDTH && bitmapHeight < InkyPhat.HEIGHT) {
+        int bitmapWidth = sourceBitmap.getWidth();
+        int bitmapHeight = sourceBitmap.getHeight();
+        if (bitmapWidth < getOrientatedWidth() && bitmapHeight < getOrientatedHeight()) {
             return sourceBitmap;
         }
 
@@ -116,12 +116,12 @@ public class ImageDrawer {
         }
     }
 
-    private int getOrientatedWidth(Bitmap sourceBitmap) {
-        return isIn(PORTRAIT) ? sourceBitmap.getWidth() : sourceBitmap.getHeight();
+    private int getOrientatedWidth() {
+        return isIn(PORTRAIT) ? InkyPhat.WIDTH : InkyPhat.HEIGHT;
     }
 
-    private int getOrientatedHeight(Bitmap sourceBitmap) {
-        return isIn(LANDSCAPE) ? sourceBitmap.getHeight() : sourceBitmap.getWidth();
+    private int getOrientatedHeight() {
+        return isIn(LANDSCAPE) ? InkyPhat.HEIGHT : InkyPhat.WIDTH;
     }
 
     private Bitmap fitXY(Bitmap sourceBitmap) {
