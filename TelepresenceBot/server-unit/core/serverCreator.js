@@ -42,7 +42,8 @@ function ServerCreator() {
         });
 
         socket.on('move_in', function(direction) {
-            mover.moveIn(client, direction);
+            mover.moveIn(socket, direction);
+            observer.notify('move_in', direction)
         });
     });
 }
@@ -59,6 +60,11 @@ ServerCreator.prototype.withDisconnector = function(alternativeDisconnector) {
 
 ServerCreator.prototype.withObserver = function(alternativeObserver) {
     observer = alternativeObserver;
+    return this;
+}
+
+ServerCreator.prototype.withMover = function(alternativeMover) {
+    mover = alternativeMover;
     return this;
 }
 

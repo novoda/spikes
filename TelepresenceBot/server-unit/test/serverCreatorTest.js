@@ -6,6 +6,7 @@ var sinon = require('sinon'),
     router = require('../core/Router.js')(),
     disconnector = require('../core/Disconnector.js')(),
     observer = require('../core/Observer.js'),
+    mover = require('../core/mover.js')(),
     ServerCreator = require('../core/serverCreator.js');
 
 var io = require('socket.io-client');
@@ -22,6 +23,7 @@ describe("ServerCreator Test", function () {
 
     before(function(done){
         mockRouter = sinon.stub(router, 'route').callsFake(function(client, next){ return next(); });
+        mockMover = sinon.stub(mover, 'moveIn').callsFake(function(clientId, direction) { return true; });
         mockDisconnector = sinon.stub(disconnector, 'disconnectRoom').callsFake(function() { return true; });
         done();
     });
@@ -31,6 +33,7 @@ describe("ServerCreator Test", function () {
                .withRouter(router)
                .withDisconnector(disconnector)
                .withObserver(observer)
+               .withMover(mover)
                .create();
 
         debug('server starts');
@@ -65,6 +68,21 @@ describe("ServerCreator Test", function () {
         });
     });
 
+    it("Should delegate to 'Mover' when moving in given direction.", function (done) {
+        var client = io.connect(socketUrl, options);
+
+        client.once("connect", function () {
+            client.emit('move_in', 'forward');
+        });
+
+        observer.notify = function(eventName, data) {
+            expect(mockMover.called).to.equal(true);
+            expect(mockMover.callCount).to.equal(1);
+            expect(data).to.equal('forward');
+            done();
+        };
+    });
+
     it("Should delegate to 'Disconnector' when disconnecting an already connected client.", function (done) {
         var client = io.connect(socketUrl, options);
 
@@ -73,7 +91,6 @@ describe("ServerCreator Test", function () {
         });
 
         observer.notify = function(eventName, data) {
-            debug(eventName, data);
             expect(mockDisconnector.called).to.equal(true);
             expect(mockDisconnector.callCount).to.equal(1);
             done();
