@@ -97,7 +97,7 @@ const turnDisplayOn = async () => {
 }
 
 const update = async () => {
-    const black = new Array(WIDTH * HEIGHT).fill(0)
+    const black = new Array((WIDTH * HEIGHT) / 8).fill(0)
     await sendCommand(new Command(0x10, black))
 
     // const red = asDisplayArray(flatten(display), 1)
