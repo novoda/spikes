@@ -42,7 +42,7 @@ function ServerCreator() {
         });
 
         socket.on('move_in', function(direction) {
-            mover.moveIn(socket, direction);
+            mover.moveIn(socket.id, direction);
             observer.notify('move_in', direction)
         });
     });
