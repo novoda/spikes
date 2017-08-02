@@ -9,11 +9,11 @@ export class Spi {
         this.spiDevice = spi.initialize('/dev/spidev0.0')
     }
 
-    write = (data: number[]) => {
+    write = (data: number[]): Promise<void> => {
         const payload = new Buffer(data)
         return new Promise((resolve, reject) => {
-            this.spiDevice.transfer(payload, payload.length, (err, result) => {
-                err ? reject(err) : resolve(result)
+            this.spiDevice.write(payload, (err) => {
+                err ? reject(err) : resolve()
             })
         })
     }

@@ -122,8 +122,7 @@ const sendCommand = async (command: Command) => {
 
 const writeData = async (commandType: boolean, data: number[]) => {
     await gpio.write(commandPin, commandType)
-    const result = await spi.write(data)
-    console.log(result)
+    await spi.write(data)
 }
 
 const busyWait = async () => {
