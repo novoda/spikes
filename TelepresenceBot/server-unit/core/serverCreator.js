@@ -11,7 +11,6 @@ var express = require('express'),
     observer = require('./observer.js');
 
 function ServerCreator() {
-    debug("created!")
     app.use(express.static(path.join(__dirname, 'public')));
 
     app.get('/', function(req, res) {
@@ -33,47 +32,46 @@ function ServerCreator() {
         socket.join(roomName);
         socket.emit('joined_room', roomName);
 
-        debug('a user connected: %s and joined room: %s', socket.id, roomName);
+        debug('A user connected: %s and joined room: %s', socket.id, roomName);
 
         socket.on('disconnect', function(){
-            debug('a user disconnected: %s and left room: %s', socket.id, roomName);
+            debug('A user disconnected: %s and left room: %s', socket.id, roomName);
             disconnector.disconnectRoom(socket.id);
             observer.notify('disconnect', socket.id);
         });
 
         socket.on('move_in', function(direction) {
+            debug('Moving user: %s in direction: %s', socket.id, direction);
             mover.moveIn(socket.id, direction);
             observer.notify('move_in', direction)
         });
     });
-}
 
-ServerCreator.prototype.withRouter = function(alternativeRouter) {
-    router = alternativeRouter;
-    return this;
-}
+    return {
+        withRouter: function(alternativeRouter) {
+            router = alternativeRouter;
+            return this;
+        },
+        withDisconnector: function(alternativeDisconnector) {
+            disconnector = alternativeDisconnector;
+            return this;
+        },
+        withObserver: function(alternativeObserver) {
+            observer = alternativeObserver;
+            return this;
+        },
+        withMover: function(alternativeMover) {
+            mover = alternativeMover;
+            return this;
+        },
+        create: function() {
+            var server = httpServer.listen(4200, function() {
+                debug("Express server listening on port %s", 4200);
+            });
 
-ServerCreator.prototype.withDisconnector = function(alternativeDisconnector) {
-    disconnector = alternativeDisconnector;
-    return this;
-}
-
-ServerCreator.prototype.withObserver = function(alternativeObserver) {
-    observer = alternativeObserver;
-    return this;
-}
-
-ServerCreator.prototype.withMover = function(alternativeMover) {
-    mover = alternativeMover;
-    return this;
-}
-
-ServerCreator.prototype.create = function() {
-    var server = httpServer.listen(4200, function() {
-        debug("Express server listening on port %s", 4200);
-    });
-
-    return server;
+            return server;
+        }
+    }
 }
 
 module.exports = ServerCreator;
