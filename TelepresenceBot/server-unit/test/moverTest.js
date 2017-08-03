@@ -1,7 +1,4 @@
-var chai = require('chai'),
-    mocha = require('mocha'),
-    expect = chai.expect,
-    debug = require('debug')('moverTest'),
+var expect = require('chai').expect,
     Mover = require('../core/mover.js');
 
 var clientsAndRooms = {
@@ -14,21 +11,21 @@ var clientsAndRooms = {
 }
 
 var emitter = {
-    called: 0,
+    called: false,
     to: function(room) {
         return {
             emit: function(event, valueToEmit) {
                 emitter.room = room;
                 emitter.event = event;
                 emitter.valueToEmit = valueToEmit;
-                emitter.called = 1;
+                emitter.called = true;
             }
         }
     }
 }
 
 afterEach(function(done) {
-    emitter.called = 0;
+    emitter.called = false;
     done();
 });
 
@@ -39,6 +36,7 @@ describe("Mover Test",function() {
 
         mover.moveIn('humanId', 'forward');
 
+        expect(emitter.called).to.be.true;
         expect(emitter.room).to.equal('botId');
         done();
     });
@@ -48,6 +46,7 @@ describe("Mover Test",function() {
 
         mover.moveIn('humanId', 'forward');
 
+        expect(emitter.called).to.be.true;
         expect(emitter.event).to.equal('direction');
         done();
     });
@@ -57,6 +56,7 @@ describe("Mover Test",function() {
 
         mover.moveIn('humanId', 'forward');
 
+        expect(emitter.called).to.be.true;
         expect(emitter.valueToEmit).to.equal('forward');
         done();
     });
@@ -66,7 +66,7 @@ describe("Mover Test",function() {
 
         mover.moveIn('clientId', 'forward');
 
-        expect(emitter.called).to.equal(0);
+        expect(emitter.called).to.be.false;
         done();
     });
 
