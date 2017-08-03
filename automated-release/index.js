@@ -25,7 +25,7 @@ const releaseOptions = {
 const artifacts = [
     {
         name: 'test-file-1234.zip',
-        path: './testfile.zip'
+        path: './artifacts/single-file/testfile.zip'
     }
 ]
 
