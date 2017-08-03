@@ -41,7 +41,7 @@ interface InkyPhat extends AutoCloseable {
                 Gpio chipResetPin = service.openGpio(gpioResetPin);
                 Gpio chipCommandPin = service.openGpio(gpioCommandPin);
 
-                return new InkyPhatTriColourDisplay(device, chipBusyPin, chipResetPin, chipCommandPin);
+                return new InkyPhatTriColourDisplay(device, chipBusyPin, chipResetPin, chipCommandPin, new PixelBuffer());
             } catch (IOException e) {
                 throw new IllegalStateException("InkyPhat connection cannot be opened.", e);
             }

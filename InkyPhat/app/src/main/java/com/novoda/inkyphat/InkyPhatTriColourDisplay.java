@@ -10,9 +10,6 @@ class InkyPhatTriColourDisplay implements InkyPhat {
     private static final boolean SPI_COMMAND = false;
     private static final boolean SPI_DATA = true;
 
-    private static final int PIXELS_PER_REGION = 8;
-    private static final int NUMBER_OF_PIXEL_REGIONS = WIDTH * HEIGHT / PIXELS_PER_REGION;
-
     private static final byte PANEL_SETTING = (byte) 0x00;
     private static final byte POWER_SETTING = (byte) 0x01;
     private static final byte POWER_OFF = (byte) 0x02;
@@ -31,20 +28,20 @@ class InkyPhatTriColourDisplay implements InkyPhat {
     private static final byte BORDER_BLACK = (byte) 0b11000000;
     private static final byte BORDER_RED = (byte) 0b01000000;
 
-    private final Palette[][] pixelBuffer = new Palette[WIDTH][HEIGHT];
-
     private final SpiDevice spiBus;
     private final Gpio chipBusyPin;
     private final Gpio chipResetPin;
     private final Gpio chipCommandPin;
+    private final PixelBuffer pixelBuffer;
 
     private byte border = BORDER_WHITE;
 
-    InkyPhatTriColourDisplay(SpiDevice spiBus, Gpio chipBusyPin, Gpio chipResetPin, Gpio chipCommandPin) {
+    InkyPhatTriColourDisplay(SpiDevice spiBus, Gpio chipBusyPin, Gpio chipResetPin, Gpio chipCommandPin, PixelBuffer pixelBuffer) {
         this.spiBus = spiBus;
         this.chipBusyPin = chipBusyPin;
         this.chipResetPin = chipResetPin;
         this.chipCommandPin = chipCommandPin;
+        this.pixelBuffer = pixelBuffer;
         init();
     }
 
@@ -64,13 +61,7 @@ class InkyPhatTriColourDisplay implements InkyPhat {
 
     @Override
     public void setPixel(int x, int y, Palette color) {
-        if (x > WIDTH) {
-            throw new IllegalStateException(x + " cannot be drawn. Max width is " + WIDTH);
-        }
-        if (y > HEIGHT) {
-            throw new IllegalStateException(y + " cannot be drawn. Max height is " + HEIGHT);
-        }
-        pixelBuffer[x][y] = color;
+        pixelBuffer.setPixel(x, y, color);
     }
 
     @Override
@@ -121,54 +112,9 @@ class InkyPhatTriColourDisplay implements InkyPhat {
     }
 
     private void update() throws IOException {
-        byte[] black = convertPixelBufferToDisplayColor(Palette.BLACK);
-        sendCommand(DATA_START_TRANSMISSION_1, black);
-        byte[] red = convertPixelBufferToDisplayColor(Palette.RED);
-        sendCommand(DATA_START_TRANSMISSION_2, red);
-
+        sendCommand(DATA_START_TRANSMISSION_1, pixelBuffer.getDisplayPixelsForColor(Palette.BLACK));
+        sendCommand(DATA_START_TRANSMISSION_2, pixelBuffer.getDisplayPixelsForColor(Palette.RED));
         sendCommand(DISPLAY_REFRESH);
-    }
-
-    private byte[] convertPixelBufferToDisplayColor(Palette color) {
-        return mapPaletteArrayToDisplayByteArray(flatten(pixelBuffer), color);
-    }
-
-    private static Palette[] flatten(Palette[][] twoDimensionalPaletteArray) {
-        Palette[] flattenedArray = new Palette[WIDTH * HEIGHT];
-        int index = 0;
-        for (int y = 0; y < HEIGHT; y++) {
-            for (int x = 0; x < WIDTH; x++) {
-                Palette color = twoDimensionalPaletteArray[x][y];
-                flattenedArray[index++] = color;
-            }
-        }
-        return flattenedArray;
-    }
-
-    /**
-     * Every 8 pixels of the display is represented by a byte
-     *
-     * @param palette an array colors expecting to be drawn
-     * @param choice  the color we are filtering for
-     * @return a byte array representing the palette of a single color
-     */
-    private static byte[] mapPaletteArrayToDisplayByteArray(Palette[] palette, Palette choice) {
-        byte[] display = new byte[NUMBER_OF_PIXEL_REGIONS];
-        int bitPosition = 7;
-        int segment = 0;
-        byte colorByte = 0b00000000;
-        for (Palette color : palette) {
-            if (color == choice) {
-                colorByte |= 1 << bitPosition;
-            }
-            bitPosition--;
-            if (bitPosition == -1) {
-                display[segment++] = colorByte;
-                bitPosition = 7;
-                colorByte = 0b00000000;
-            }
-        }
-        return display;
     }
 
     private void turnDisplayOff() throws IOException {
