@@ -27,12 +27,18 @@ class InkyPhatTriColourDisplay implements InkyPhat {
     private static final byte VCOM_DC_SETTING = (byte) 0x82;
     private static final byte PARTIAL_EXIT = (byte) 0x92;
 
+    private static final byte BORDER_WHITE = (byte) 0b00000000;
+    private static final byte BORDER_BLACK = (byte) 0b11000000;
+    private static final byte BORDER_RED = (byte) 0b01000000;
+
     private final Palette[][] pixelBuffer = new Palette[WIDTH][HEIGHT];
 
     private final SpiDevice spiBus;
     private final Gpio chipBusyPin;
     private final Gpio chipResetPin;
     private final Gpio chipCommandPin;
+
+    private byte border = BORDER_WHITE;
 
     InkyPhatTriColourDisplay(SpiDevice spiBus, Gpio chipBusyPin, Gpio chipResetPin, Gpio chipCommandPin) {
         this.spiBus = spiBus;
@@ -68,6 +74,23 @@ class InkyPhatTriColourDisplay implements InkyPhat {
     }
 
     @Override
+    public void setBorder(Palette color) {
+        switch (color) {
+            case BLACK:
+                border = BORDER_BLACK;
+                break;
+            case RED:
+                border = BORDER_RED;
+                break;
+            case WHITE:
+                border = BORDER_WHITE;
+                break;
+            default:
+                throw new IllegalStateException(color + " is unsupported as a border");
+        }
+    }
+
+    @Override
     public void refresh() {
         try {
             turnDisplayOn();
@@ -88,7 +111,7 @@ class InkyPhatTriColourDisplay implements InkyPhat {
         busyWait();
 
         sendCommand(PANEL_SETTING, new byte[]{(byte) 0b11001111});
-        sendCommand(VCOM_DATA_INTERVAL_SETTING, new byte[]{(byte) 0b00000111 | (byte) 0b00000000}); // Set border to white by default
+        sendCommand(VCOM_DATA_INTERVAL_SETTING, new byte[]{(byte) (0b00000111 | border)});
 
         sendCommand(OSCILLATOR_CONTROL, new byte[]{0x29});
         sendCommand(RESOLUTION_SETTING, new byte[]{0x68, 0x00, (byte) 0xD4});

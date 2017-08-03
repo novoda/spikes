@@ -18,6 +18,14 @@ interface InkyPhat extends AutoCloseable {
 
     void setPixel(int x, int y, Palette color);
 
+    /**
+     * Set the border color around the InkyPhat this is the 1x1 pixels around each side
+     * You can set the border multiple times it will only update when {@link #refresh()} is called
+     *
+     * @param color the color you want the border to be
+     */
+    void setBorder(Palette color);
+
     void refresh();
 
     @Override
