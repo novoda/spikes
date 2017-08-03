@@ -1,5 +1,4 @@
 function Observer() {
-
 }
 
 Observer.prototype.notify = function(eventName, eventData) {
