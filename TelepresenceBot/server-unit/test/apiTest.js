@@ -1,6 +1,5 @@
 var mocha = require('mocha'),
     request = require('supertest'),
-    debug = require('debug')('apiTest'),
     expect = require('chai').expect,
     fs = require('fs'),
     ServerCreator = require('../core/serverCreator.js');
@@ -16,13 +15,11 @@ describe("Performing GET request", function () {
 
     beforeEach(function (done) {
         server = new ServerCreator().create();
-        debug('server starts');
         done();
     });
 
     afterEach(function(done) {
         server.close(done);
-        debug('server closes');
     });
 
     it("Should serve index.html in response to '/' call.", function (done) {
