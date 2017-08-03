@@ -1,0 +1,12 @@
+{
+  "name": "release",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "github-api": "^3.0.0",
+    "request": "^2.81.0",
+    "request-promise-native": "^1.0.4"
+  }
+}
