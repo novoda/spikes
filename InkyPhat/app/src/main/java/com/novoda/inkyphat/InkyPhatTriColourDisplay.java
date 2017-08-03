@@ -60,6 +60,11 @@ class InkyPhatTriColourDisplay implements InkyPhat {
     }
 
     @Override
+    public void setImage(int x, int y, InkyPhat.PaletteImage image) {
+        pixelBuffer.setImage(x, y, image);
+    }
+
+    @Override
     public void setPixel(int x, int y, Palette color) {
         pixelBuffer.setPixel(x, y, color);
     }

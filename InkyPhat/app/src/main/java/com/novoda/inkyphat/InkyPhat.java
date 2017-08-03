@@ -18,6 +18,8 @@ public interface InkyPhat extends AutoCloseable {
      */
     int HEIGHT = 212;
 
+    void setImage(int x, int y, PaletteImage image);
+
     /**
      * Set any pixel in the InkyPhat this is any pixel between {@link #WIDTH} & {@link #HEIGHT}
      * according to the {@link InkyPhat.Orientation} of your display
@@ -82,27 +84,16 @@ public interface InkyPhat extends AutoCloseable {
             this.width = width;
         }
 
-        public void drawAt(InkyPhat inkyPhat, int x, int y) {
-            int rowCount = 0;
-            int pixelCount = 0;
-            for (int i = 0; i < colors.length; i++) {
-                int localX = x + i;
-                int localY = y + i + rowCount;
-
-                if (localX > InkyPhat.WIDTH || localY > InkyPhat.HEIGHT) { // TODO check orientation
-                    continue;
-                }
-
-                InkyPhat.Palette color = colors[i];
-                inkyPhat.setPixel(localX, localY, color);
-
-                pixelCount++;
-                if (pixelCount == width) {
-                    rowCount++;
-                    pixelCount = 0;
-                }
-            }
+        public Palette getPixel(int position) {
+            return colors[position];
         }
 
+        public int totalPixels() {
+            return colors.length;
+        }
+
+        public int getWidth() {
+            return width;
+        }
     }
 }

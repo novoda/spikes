@@ -9,6 +9,28 @@ class PixelBuffer {
 
     private final Palette[][] pixelBuffer = new Palette[InkyPhat.WIDTH][InkyPhat.HEIGHT];
 
+    void setImage(int x, int y, InkyPhat.PaletteImage image) {
+        int rowCount = 0;
+        int pixelCount = 0;
+        for (int i = 0; i < image.totalPixels(); i++) {
+            int localX = x + i;
+            int localY = y + i + rowCount;
+
+            if (localX > InkyPhat.WIDTH || localY > InkyPhat.HEIGHT) { // TODO check orientation
+                continue;
+            }
+
+            InkyPhat.Palette color = image.getPixel(i);
+            setPixel(localX, localY, color);
+
+            pixelCount++;
+            if (pixelCount == image.getWidth()) {
+                rowCount++;
+                pixelCount = 0;
+            }
+        }
+    }
+
     void setPixel(int x, int y, Palette color) {
         if (x > InkyPhat.WIDTH) {
             throw new IllegalStateException(x + " cannot be drawn. Max width is " + InkyPhat.WIDTH);
