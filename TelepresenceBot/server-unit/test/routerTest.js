@@ -18,7 +18,7 @@ var queryWithUnhandled = {
     room: 'London',
 };
 
-describe('Router Test', function () {
+describe('Router Tests.', function () {
 
     it('Should replace query.room with first available bot when clientType is Human.', function (done) {
         var firstAvailableBotId = 'ABCDEFGH123';

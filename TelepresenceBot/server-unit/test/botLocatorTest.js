@@ -38,7 +38,7 @@ var roomContainingMultipleBotsWhereOneIsConnectedToHuman = {
     }
 };
 
-describe('BotLocator Test',function() {
+describe('BotLocator Tests.', function() {
 
     it('Should give undefined when bot is not found in given room.', function(done){
         var botLocator = new BotLocator(roomWithASingleBot);

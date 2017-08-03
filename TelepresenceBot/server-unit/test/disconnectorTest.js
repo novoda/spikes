@@ -20,7 +20,7 @@ var connectedClients = {
 
 var noConnectedClients = {};
 
-describe('Disconnector Test',function() {
+describe('Disconnector Tests.', function() {
 
     it('Should return false when cannot locate room in list of rooms.', function(done){
         var disconnector = new Disconnector(rooms, connectedClients);

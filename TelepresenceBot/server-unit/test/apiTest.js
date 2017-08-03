@@ -11,7 +11,7 @@ var server, options = {
     'force new connection': true
 };
 
-describe('Performing GET request', function () {
+describe('API Tests - Performing GET requests.', function () {
 
     beforeEach(function (done) {
         server = new ServerCreator().create();

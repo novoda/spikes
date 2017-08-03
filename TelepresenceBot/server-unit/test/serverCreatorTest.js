@@ -16,7 +16,7 @@ options = {
     query: 'clientType=human&room=London'
 };
 
-describe('ServerCreator Test', function () {
+describe('ServerCreator Tests.', function () {
 
     before(function(done){
         mockRouter = sinon.stub(router, 'route').callsFake(function(client, next){ return next(); });

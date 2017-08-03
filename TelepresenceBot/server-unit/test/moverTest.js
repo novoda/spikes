@@ -29,7 +29,7 @@ afterEach(function(done) {
     done();
 });
 
-describe('Mover Test',function() {
+describe('Mover Tests.', function() {
 
     it('Should emit to botId when moving humanId in any direction.', function(done){
         var mover = new Mover(clientsAndRooms, emitter);
