@@ -1,7 +1,4 @@
-var chai = require('chai'),
-    mocha = require('mocha'),
-    expect = chai.expect,
-    debug = require('debug')('disconnectorTest'),
+var expect = require('chai').expect,
     Disconnector = require('../core/disconnector.js');
 
 var rooms = {
@@ -30,7 +27,7 @@ describe("Disconnector Test",function() {
 
         var disconnected = disconnector.disconnectRoom('Room not present');
 
-        expect(disconnected).to.equal(false);
+        expect(disconnected).to.be.false;
         done();
     });
 
@@ -39,7 +36,7 @@ describe("Disconnector Test",function() {
 
         var disconnected = disconnector.disconnectRoom('London');
 
-        expect(disconnected).to.equal(false);
+        expect(disconnected).to.be.false;
         done();
     });
 
@@ -48,7 +45,7 @@ describe("Disconnector Test",function() {
 
         var disconnected = disconnector.disconnectRoom('London');
 
-        expect(disconnected).to.equal(true);
+        expect(disconnected).to.be.true;
         done();
     });
 
