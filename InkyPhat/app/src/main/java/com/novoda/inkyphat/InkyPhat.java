@@ -8,14 +8,27 @@ import java.io.IOException;
 
 public interface InkyPhat extends AutoCloseable {
     /**
-     * Width in pixels
+     * Width in pixels, when in the default orientation of {@link InkyPhat.Orientation#PORTRAIT}
+     * If the {@link InkyPhat.Orientation} is set to {@link InkyPhat.Orientation#LANDSCAPE} this will be the Height
      */
     int WIDTH = 104;
     /**
-     * Height in pixels
+     * Height in pixels, when in the default orientation of {@link InkyPhat.Orientation#PORTRAIT}
+     * If the {@link InkyPhat.Orientation} is set to {@link InkyPhat.Orientation#LANDSCAPE} this will be the Width
      */
     int HEIGHT = 212;
 
+    /**
+     * Set any pixel in the InkyPhat this is any pixel between {@link #WIDTH} & {@link #HEIGHT}
+     * according to the {@link InkyPhat.Orientation} of your display
+     * You can set the border multiple times it will only update when {@link #refresh()} is called
+     * <p>
+     * Note, not calling this method for a pixel will leave that pixel as {@link InkyPhat.Palette#WHITE}
+     *
+     * @param x     the x co-ordinate (or column) to set the pixel on
+     * @param y     the y co-ordinate (or row) to set the pixel on
+     * @param color the color you want the pixel to be
+     */
     void setPixel(int x, int y, Palette color);
 
     /**
@@ -26,6 +39,9 @@ public interface InkyPhat extends AutoCloseable {
      */
     void setBorder(Palette color);
 
+    /**
+     * Draw to the InkyPhat display
+     */
     void refresh();
 
     @Override
