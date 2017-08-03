@@ -6,7 +6,7 @@ import com.google.android.things.pio.SpiDevice;
 
 import java.io.IOException;
 
-interface InkyPhat extends AutoCloseable {
+public interface InkyPhat extends AutoCloseable {
     /**
      * Width in pixels
      */

@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 
-public class ImageScaler {
+class ImageScaler {
 
     /**
      * Scale in width and height independently, so that sourceBitmap matches dst exactly.
@@ -16,7 +16,7 @@ public class ImageScaler {
      * @param maxHeight    the height to scale to
      * @return a copy of the source bitmap scaled
      */
-    public Bitmap fitXY(Bitmap sourceBitmap, int maxWidth, int maxHeight) {
+    Bitmap fitXY(Bitmap sourceBitmap, int maxWidth, int maxHeight) {
         int bitmapWidth = sourceBitmap.getWidth();
         int bitmapHeight = sourceBitmap.getHeight();
         if (bitmapWidth > maxWidth || bitmapHeight > maxHeight) {
@@ -36,7 +36,7 @@ public class ImageScaler {
      * @param maxHeight    the potential max height to scale to
      * @return a copy of the source bitmap scaled
      */
-    public Bitmap fitXorY(Bitmap sourceBitmap, int maxWidth, int maxHeight) {
+    Bitmap fitXorY(Bitmap sourceBitmap, int maxWidth, int maxHeight) {
         int bitmapWidth = sourceBitmap.getWidth();
         int bitmapHeight = sourceBitmap.getHeight();
 
