@@ -1,5 +1,5 @@
 var expect = require('chai').expect
-    BotLocator = require("../core/botLocator.js");
+    BotLocator = require('../core/botLocator.js');
 
 var roomWithASingleBot = {
     'botId': {
@@ -38,12 +38,12 @@ var roomContainingMultipleBotsWhereOneIsConnectedToHuman = {
     }
 };
 
-describe("BotLocator Test",function() {
+describe('BotLocator Test',function() {
 
     it('Should give undefined when bot is not found in given room.', function(done){
         var botLocator = new BotLocator(roomWithASingleBot);
 
-        var bot = botLocator.locateFirstAvailableBotIn("Unexpected Room");
+        var bot = botLocator.locateFirstAvailableBotIn('Unexpected Room');
 
         expect(bot).to.be.undefined;
         done();
@@ -52,16 +52,16 @@ describe("BotLocator Test",function() {
     it('Should give bot id when bot room does not contain other sockets.', function(done){
         var botLocator = new BotLocator(roomWithASingleBot);
 
-        var bot = botLocator.locateFirstAvailableBotIn("London");
+        var bot = botLocator.locateFirstAvailableBotIn('London');
 
-        expect(bot).to.equal("botId");
+        expect(bot).to.equal('botId');
         done();
     });
 
     it('Should give undefined when bot room contains other sockets.', function(done){
         var botLocator = new BotLocator(roomWhereBotIsConnectedToHuman);
 
-        var bot = botLocator.locateFirstAvailableBotIn("London");
+        var bot = botLocator.locateFirstAvailableBotIn('London');
 
         expect(bot).to.be.undefined;
         done();
@@ -70,9 +70,9 @@ describe("BotLocator Test",function() {
     it('Should give first bot in room that contains multiple bots.', function(done){
         var botLocator = new BotLocator(roomContainingMultipleBotsWhereOneIsConnectedToHuman);
 
-        var bot = botLocator.locateFirstAvailableBotIn("London");
+        var bot = botLocator.locateFirstAvailableBotIn('London');
 
-        expect(bot).to.equal("botId02");
+        expect(bot).to.equal('botId02');
         done();
     });
 

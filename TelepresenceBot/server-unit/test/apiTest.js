@@ -11,7 +11,7 @@ var server, options = {
     'force new connection': true
 };
 
-describe("Performing GET request", function () {
+describe('Performing GET request', function () {
 
     beforeEach(function (done) {
         server = new ServerCreator().create();
@@ -22,25 +22,25 @@ describe("Performing GET request", function () {
         server.close(done);
     });
 
-    it("Should serve index.html in response to '/' call.", function (done) {
+    it('Should serve index.html in response to "/" call.', function (done) {
         request(server)
             .get('/')
             .type('html')
             .expect(200)
             .end(function(error, response) {
-                var file = fs.readFileSync("../core/html/index.html", "utf8");
+                var file = fs.readFileSync('../core/html/index.html', 'utf8');
                 expect(response.text).to.equal(file);
                 done();
             });
     });
 
-    it("Should serve rooms.json in response to '/rooms' call.", function (done) {
+    it('Should serve rooms.json in response to "/rooms" call.', function (done) {
         request(server)
             .get('/rooms')
             .type('json')
             .expect(200)
             .end(function(error, response) {
-                var file = fs.readFileSync("../core/json/rooms.json", "utf8");
+                var file = fs.readFileSync('../core/json/rooms.json', 'utf8');
                 expect(response.text).to.equal(file);
                 done();
             });

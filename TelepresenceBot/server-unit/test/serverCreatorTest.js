@@ -16,7 +16,7 @@ options = {
     query: 'clientType=human&room=London'
 };
 
-describe("ServerCreator Test", function () {
+describe('ServerCreator Test', function () {
 
     before(function(done){
         mockRouter = sinon.stub(router, 'route').callsFake(function(client, next){ return next(); });
@@ -41,32 +41,32 @@ describe("ServerCreator Test", function () {
         done();
     });
 
-    it("Should delegate to 'Router' when client is connected.", function (done) {
+    it('Should delegate to Router when client is connected.', function (done) {
         var client = io.connect(socketUrl, options);
 
-        client.once("connect", function () {
-            client.once("joined_room", function(room) {
+        client.once('connect', function () {
+            client.once('joined_room', function(room) {
                 expect(mockRouter.called).to.be.true;
                 done();
             });
         });
     });
 
-    it("Should emit 'joined_room' when client is connected.", function (done) {
+    it('Should emit joined_room when client is connected.', function (done) {
         var client = io.connect(socketUrl, options);
 
-        client.once("connect", function () {
-            client.once("joined_room", function(room) {
-                expect(room).to.equal("London");
+        client.once('connect', function () {
+            client.once('joined_room', function(room) {
+                expect(room).to.equal('London');
                 done();
             });
         });
     });
 
-    it("Should delegate to 'Mover' when moving in given direction.", function (done) {
+    it('Should delegate to Mover when moving in given direction.', function (done) {
         var client = io.connect(socketUrl, options);
 
-        client.once("connect", function () {
+        client.once('connect', function () {
             client.emit('move_in', 'forward');
         });
 
@@ -78,10 +78,10 @@ describe("ServerCreator Test", function () {
         };
     });
 
-    it("Should delegate to 'Disconnector' when disconnecting an already connected client.", function (done) {
+    it('Should delegate to Disconnector when disconnecting an already connected client.', function (done) {
         var client = io.connect(socketUrl, options);
 
-        client.once("connect", function () {
+        client.once('connect', function () {
             client.disconnect();
         });
 

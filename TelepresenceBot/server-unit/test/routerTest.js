@@ -18,9 +18,9 @@ var queryWithUnhandled = {
     room: 'London',
 };
 
-describe("Router Test", function () {
+describe('Router Test', function () {
 
-    it("Should replace 'query.room' with first available bot when 'clientType' is 'Human'.", function (done) {
+    it('Should replace query.room with first available bot when clientType is Human.', function (done) {
         var firstAvailableBotId = 'ABCDEFGH123';
 
         mockBotLocator = sinon.stub(botLocator, 'locateFirstAvailableBotIn')
@@ -37,7 +37,7 @@ describe("Router Test", function () {
     });
 
 
-    it("Should pass through Bot without any checks.", function (done) {
+    it('Should pass through Bot without any checks.', function (done) {
         router.route(queryWithBot, onNext = function(data){
             expect(data).to.be.undefined;
             done();
@@ -45,7 +45,7 @@ describe("Router Test", function () {
 
     });
 
-    it("Should return 'Error' when the are no available 'Bots'.", function (done) {
+    it('Should return Error when the are no available Bots.', function (done) {
         var noAvailableBots = undefined;
 
         mockBotLocator = sinon.stub(botLocator, 'locateFirstAvailableBotIn')
@@ -60,7 +60,7 @@ describe("Router Test", function () {
 
     });
 
-    it("Should return 'Error' for unhandled 'ClientType'.", function (done) {
+    it('Should return Error for unhandled ClientType.', function (done) {
         router.route(queryWithUnhandled, onNext = function(data){
             expect(data.message).to.equal('Unrecognised clientType: unhandled');
             done();

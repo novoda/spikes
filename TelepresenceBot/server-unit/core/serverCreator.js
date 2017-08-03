@@ -26,7 +26,7 @@ function ServerCreator() {
         return router.route(query, next);
     });
 
-    io.sockets.on("connection", function (socket) {
+    io.sockets.on('connection', function (socket) {
         var roomName = socket.handshake.query.room;
 
         socket.join(roomName);
@@ -66,7 +66,7 @@ function ServerCreator() {
         },
         create: function() {
             var server = httpServer.listen(4200, function() {
-                debug("Express server listening on port %s", 4200);
+                debug('Express server listening on port %s', 4200);
             });
 
             return server;

@@ -1,5 +1,3 @@
-var debug = require('debug')('mover');
-
 function Mover(clientsAndRooms, emitter) {
     var hasNoRooms = function(clientId) {
         return !clientsAndRooms[clientId];

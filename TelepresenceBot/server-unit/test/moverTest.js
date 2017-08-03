@@ -29,9 +29,9 @@ afterEach(function(done) {
     done();
 });
 
-describe("Mover Test",function() {
+describe('Mover Test',function() {
 
-    it("Should emit to 'botId' when moving 'humanId' in any direction.", function(done){
+    it('Should emit to botId when moving humanId in any direction.', function(done){
         var mover = new Mover(clientsAndRooms, emitter);
 
         mover.moveIn('humanId', 'forward');
@@ -41,7 +41,7 @@ describe("Mover Test",function() {
         done();
     });
 
-    it("Should emit event of 'direction' when moving 'humanId in any direction.", function(done){
+    it('Should emit event of direction when moving humanId in any direction.', function(done){
         var mover = new Mover(clientsAndRooms, emitter);
 
         mover.moveIn('humanId', 'forward');
@@ -51,7 +51,7 @@ describe("Mover Test",function() {
         done();
     });
 
-    it("Should emit value of 'forward' when moving 'humanId' in a forward direction.", function(done){
+    it('Should emit value of forward when moving humanId in a forward direction.', function(done){
         var mover = new Mover(clientsAndRooms, emitter);
 
         mover.moveIn('humanId', 'forward');
@@ -61,7 +61,7 @@ describe("Mover Test",function() {
         done();
     });
 
-    it("Should do nothing when a given 'clientId' does not belong to any rooms.", function(done){
+    it('Should do nothing when a given clientId does not belong to any rooms.', function(done){
         var mover = new Mover(clientsAndRooms, emitter);
 
         mover.moveIn('clientId', 'forward');
