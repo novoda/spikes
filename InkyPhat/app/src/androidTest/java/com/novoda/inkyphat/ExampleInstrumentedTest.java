@@ -42,7 +42,7 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
         Bitmap bitmap = BitmapFactory.decodeResource(appContext.getResources(), R.drawable.ic_test_1);
 
-        new ImageDrawer(InkyPhat.Orientation.LANDSCAPE).filterImage(bitmap);
+        new ImageConverter(InkyPhat.Orientation.LANDSCAPE).filterImage(bitmap);
 
     }
 }

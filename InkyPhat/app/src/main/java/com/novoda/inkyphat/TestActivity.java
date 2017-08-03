@@ -22,9 +22,9 @@ public class TestActivity extends Activity {
         setContentView(R.layout.test_activity);
 
         LinearLayout root = (LinearLayout) findViewById(R.id.root);
-        ImageDrawer imageDrawer = new ImageDrawer(ORIENTATION, Matrix.ScaleToFit.START);
+        ImageConverter imageConverter = new ImageConverter(ORIENTATION, Matrix.ScaleToFit.START);
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_test_3);
-        Bitmap[] foo = imageDrawer.filterImage(bitmap);
+        Bitmap[] foo = imageConverter.filterImage(bitmap);
         for (int i = 0; i < foo.length; i++) {
             Bitmap image = foo[i];
             ImageView imageview = new ImageView(this);
@@ -45,7 +45,7 @@ public class TestActivity extends Activity {
             root.addView(imageview);
         }
 
-        InkyPhat.PaletteImage output = imageDrawer.convertImage(foo[foo.length - 1]);
+        InkyPhat.PaletteImage output = imageConverter.convertImage(foo[foo.length - 1]);
 
 
 

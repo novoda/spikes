@@ -84,8 +84,8 @@ class Tests {
     }
 
     public static void drawImage(InkyPhat inkyPhat, Resources resources) {
-        ImageDrawer imageDrawer = new ImageDrawer(InkyPhat.Orientation.LANDSCAPE, Matrix.ScaleToFit.START);
-        InkyPhat.PaletteImage paletteImage = imageDrawer.drawImage(resources, R.drawable.ic_test_1);
+        ImageConverter imageConverter = new ImageConverter(InkyPhat.Orientation.LANDSCAPE, Matrix.ScaleToFit.START);
+        InkyPhat.PaletteImage paletteImage = imageConverter.drawImage(resources, R.drawable.ic_test_1);
         inkyPhat.setImage(0, 0, paletteImage);
     }
 }

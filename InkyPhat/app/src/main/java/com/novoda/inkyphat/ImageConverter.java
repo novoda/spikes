@@ -13,7 +13,7 @@ import android.graphics.Paint;
 import static com.novoda.inkyphat.InkyPhat.Orientation.LANDSCAPE;
 import static com.novoda.inkyphat.InkyPhat.Orientation.PORTRAIT;
 
-public class ImageDrawer {
+public class ImageConverter {
 
     /**
      * range is 0-255
@@ -28,11 +28,11 @@ public class ImageDrawer {
     private final Matrix.ScaleToFit scaleToFit;
     private final ImageScaler imageScaler;
 
-    public ImageDrawer(InkyPhat.Orientation orientation) {
+    public ImageConverter(InkyPhat.Orientation orientation) {
         this(orientation, Matrix.ScaleToFit.FILL);
     }
 
-    public ImageDrawer(InkyPhat.Orientation orientation, Matrix.ScaleToFit scaleToFit) {
+    public ImageConverter(InkyPhat.Orientation orientation, Matrix.ScaleToFit scaleToFit) {
         this.orientation = orientation;
         this.scaleToFit = scaleToFit;
         this.imageScaler = new ImageScaler();
