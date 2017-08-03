@@ -24,7 +24,7 @@ function Router(botLocator) {
                     return next(new Error('Unrecognised clientType: ' + rawClientType));
             }
         }
-    }
+    };
 }
 
 module.exports = function(botLocator) {

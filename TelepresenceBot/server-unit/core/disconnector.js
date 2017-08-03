@@ -20,7 +20,7 @@ function Disconnector(rooms, connectedClients) {
             }
             return true;
         }
-    }
+    };
 }
 
 module.exports = function(rooms, connectedClients) {

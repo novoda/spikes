@@ -19,7 +19,7 @@ function BotLocator(rooms) {
                 }
             }
         }
-    }
+    };
 }
 
 module.exports = function(rooms) {

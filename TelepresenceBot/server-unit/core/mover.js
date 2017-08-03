@@ -17,7 +17,7 @@ function Mover(clientsAndRooms, emitter) {
                 emitter.to(roomsClientIsIn[i]).emit('direction', direction);
             }
         }
-    }
+    };
 }
 
 module.exports = function(clientsAndRooms, emitter) {

@@ -71,7 +71,7 @@ function ServerCreator() {
 
             return server;
         }
-    }
+    };
 }
 
 module.exports = ServerCreator;
