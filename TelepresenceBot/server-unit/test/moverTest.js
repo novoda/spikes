@@ -2,11 +2,11 @@ var expect = require('chai').expect,
     Mover = require('../core/mover.js');
 
 var clientsAndRooms = {
-    humanId: {
-        botId: true
+    'humanId': {
+        'botId': true
     },
-    botId: {
-        botId: true, London: true
+    'botId': {
+        'botId': true, 'London': true
     }
 }
 
