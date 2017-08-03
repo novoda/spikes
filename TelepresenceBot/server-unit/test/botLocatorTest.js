@@ -1,6 +1,5 @@
-var should = require('should');
-var test = require('unit.js');
-var BotLocator = require("../core/botLocator.js");
+var expect = require('chai').expect
+    BotLocator = require("../core/botLocator.js");
 
 var roomWithASingleBot = {
     'botId': {
@@ -46,9 +45,7 @@ describe("BotLocator Test",function() {
 
         var bot = botLocator.locateFirstAvailableBotIn("Unexpected Room");
 
-        test.value(bot)
-            .isUndefined();
-
+        expect(bot).to.be.undefined;
         done();
     });
 
@@ -57,9 +54,7 @@ describe("BotLocator Test",function() {
 
         var bot = botLocator.locateFirstAvailableBotIn("London");
 
-        test.string(bot)
-            .is("botId");
-
+        expect(bot).to.equal("botId");
         done();
     });
 
@@ -68,9 +63,7 @@ describe("BotLocator Test",function() {
 
         var bot = botLocator.locateFirstAvailableBotIn("London");
 
-        test.value(bot)
-            .isUndefined();
-
+        expect(bot).to.be.undefined;
         done();
     });
 
@@ -79,9 +72,7 @@ describe("BotLocator Test",function() {
 
         var bot = botLocator.locateFirstAvailableBotIn("London");
 
-        test.string(bot)
-            .is('botId02');
-
+        expect(bot).to.equal("botId02");
         done();
     });
 
