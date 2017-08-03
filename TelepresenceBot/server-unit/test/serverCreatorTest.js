@@ -1,8 +1,5 @@
 var sinon = require('sinon'),
-    chai = require('chai'),
-    mocha = require('mocha'),
-    expect = chai.expect,
-    debug = require('debug')('socketTest'),
+    expect = require('chai').expect,
     router = require('../core/Router.js')(),
     disconnector = require('../core/Disconnector.js')(),
     observer = require('../core/Observer.js'),
@@ -36,13 +33,11 @@ describe("ServerCreator Test", function () {
                .withMover(mover)
                .create();
 
-        debug('server starts');
         done();
     });
 
     afterEach(function(done) {
         server.close();
-        debug('server closes');
         done();
     });
 
@@ -51,7 +46,7 @@ describe("ServerCreator Test", function () {
 
         client.once("connect", function () {
             client.once("joined_room", function(room) {
-                expect(mockRouter.called).to.equal(true);
+                expect(mockRouter.called).to.be.true;
                 done();
             });
         });
@@ -76,7 +71,7 @@ describe("ServerCreator Test", function () {
         });
 
         observer.notify = function(eventName, data) {
-            expect(mockMover.called).to.equal(true);
+            expect(mockMover.called).to.be.true;
             expect(mockMover.callCount).to.equal(1);
             expect(data).to.equal('forward');
             done();
@@ -91,7 +86,7 @@ describe("ServerCreator Test", function () {
         });
 
         observer.notify = function(eventName, data) {
-            expect(mockDisconnector.called).to.equal(true);
+            expect(mockDisconnector.called).to.be.true;
             expect(mockDisconnector.callCount).to.equal(1);
             done();
         };
