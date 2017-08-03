@@ -1,23 +1,22 @@
 var debug = require('debug')('mover');
 
 function Mover(clientsAndRooms, emitter) {
-    this.clientsAndRooms = clientsAndRooms;
-    this.emitter = emitter;
+    var hasNoRooms = function(clientId) {
+        return !clientsAndRooms[clientId];
+    };
 
-    this.hasNoRooms = function(clientId) {
-        return !this.clientsAndRooms[clientId]
-    }
-}
+    return {
+        moveIn: function(clientId, direction) {
+            if(hasNoRooms(clientId)) {
+                return;
+            }
 
-Mover.prototype.moveIn = function(clientId, direction) {
-    if(this.hasNoRooms(clientId)) {
-        return;
-    }
+            var roomsClientIsIn = Object.keys(clientsAndRooms[clientId]);
 
-    var roomsClientIsIn = Object.keys(this.clientsAndRooms[clientId]);
-
-    for(var i = 0; i < roomsClientIsIn.length; i++) {
-        this.emitter.to(roomsClientIsIn[i]).emit('direction', direction);
+            for(var i = 0; i < roomsClientIsIn.length; i++) {
+                emitter.to(roomsClientIsIn[i]).emit('direction', direction);
+            }
+        }
     }
 }
 

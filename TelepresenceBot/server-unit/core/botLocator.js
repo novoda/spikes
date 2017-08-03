@@ -1,4 +1,8 @@
 function BotLocator(rooms) {
+    var botNotConnectedToHuman = function(socketsInBotRoom) {
+        return socketsInBotRoom.length === 1;
+    };
+
     return {
         locateFirstAvailableBotIn: function(room) {
             var botsInRoom = rooms[room];
@@ -16,10 +20,6 @@ function BotLocator(rooms) {
             }
         }
     }
-}
-
-function botNotConnectedToHuman(socketsInBotRoom) {
-    return  socketsInBotRoom.length === 1;
 }
 
 module.exports = function(rooms) {
