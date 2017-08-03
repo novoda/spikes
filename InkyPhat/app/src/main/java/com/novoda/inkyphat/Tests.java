@@ -1,6 +1,8 @@
 package com.novoda.inkyphat;
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 
 import com.novoda.inkyphat.InkyPhat.Palette;
@@ -84,8 +86,7 @@ class Tests {
     }
 
     public static void drawImage(InkyPhat inkyPhat, Resources resources) {
-        ImageConverter imageConverter = new ImageConverter(InkyPhat.Orientation.LANDSCAPE, Matrix.ScaleToFit.START);
-        InkyPhat.PaletteImage paletteImage = imageConverter.drawImage(resources, R.drawable.ic_test_1);
-        inkyPhat.setImage(0, 0, paletteImage);
+        Bitmap bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_test_1);
+        inkyPhat.setImage(0, 0, bitmap, Matrix.ScaleToFit.START);
     }
 }

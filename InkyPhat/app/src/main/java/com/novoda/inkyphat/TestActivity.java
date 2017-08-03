@@ -22,9 +22,13 @@ public class TestActivity extends Activity {
         setContentView(R.layout.test_activity);
 
         LinearLayout root = (LinearLayout) findViewById(R.id.root);
-        ImageConverter imageConverter = new ImageConverter(ORIENTATION, Matrix.ScaleToFit.START);
+        ImageConverter imageConverter = new ImageConverter(ORIENTATION);
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_test_3);
-        Bitmap[] foo = imageConverter.filterImage(bitmap);
+        Bitmap[] foo = imageConverter.filterImage(bitmap, Matrix.ScaleToFit.START);
+        showInDebugView(root, foo);
+    }
+
+    private void showInDebugView(LinearLayout root, Bitmap[] foo) {
         for (int i = 0; i < foo.length; i++) {
             Bitmap image = foo[i];
             ImageView imageview = new ImageView(this);
@@ -44,10 +48,5 @@ public class TestActivity extends Activity {
             imageview.setBackgroundColor(Color.BLUE);
             root.addView(imageview);
         }
-
-        InkyPhat.PaletteImage output = imageConverter.convertImage(foo[foo.length - 1]);
-
-
-
     }
 }

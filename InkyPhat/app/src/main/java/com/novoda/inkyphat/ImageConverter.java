@@ -1,8 +1,6 @@
 package com.novoda.inkyphat;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
@@ -13,7 +11,7 @@ import android.graphics.Paint;
 import static com.novoda.inkyphat.InkyPhat.Orientation.LANDSCAPE;
 import static com.novoda.inkyphat.InkyPhat.Orientation.PORTRAIT;
 
-public class ImageConverter {
+class ImageConverter {
 
     /**
      * range is 0-255
@@ -25,34 +23,23 @@ public class ImageConverter {
     private static final int THRESHOLD_RED = 40;
 
     private final InkyPhat.Orientation orientation;
-    private final Matrix.ScaleToFit scaleToFit;
     private final ImageScaler imageScaler;
 
-    public ImageConverter(InkyPhat.Orientation orientation) {
-        this(orientation, Matrix.ScaleToFit.FILL);
-    }
-
-    public ImageConverter(InkyPhat.Orientation orientation, Matrix.ScaleToFit scaleToFit) {
+    ImageConverter(InkyPhat.Orientation orientation) {
         this.orientation = orientation;
-        this.scaleToFit = scaleToFit;
         this.imageScaler = new ImageScaler();
     }
 
-    public InkyPhat.PaletteImage drawImage(Resources resources, int resourceId) {
-        Bitmap bitmap = BitmapFactory.decodeResource(resources, resourceId);
-        return drawImage(bitmap);
+    InkyPhat.PaletteImage convertImage(Bitmap input, Matrix.ScaleToFit scaleToFit) {
+        Bitmap[] bitmaps = filterImage(input, scaleToFit);
+        return translateImage(bitmaps[bitmaps.length - 1]);
     }
 
-    public InkyPhat.PaletteImage drawImage(Bitmap input) {
-        Bitmap[] bitmaps = filterImage(input);
-        return convertImage(bitmaps[bitmaps.length - 1]);
-    }
-
-    InkyPhat.PaletteImage convertImage(Bitmap output) {
-        int width = output.getWidth();
-        int height = output.getHeight();
+    InkyPhat.PaletteImage translateImage(Bitmap input) {
+        int width = input.getWidth();
+        int height = input.getHeight();
         int[] pixels = new int[width * height];
-        output.getPixels(pixels, 0, width, 0, 0, width, height);
+        input.getPixels(pixels, 0, width, 0, 0, width, height);
         int pixelCount = 0;
         InkyPhat.Palette[] colors = new InkyPhat.Palette[width * height];
         for (int i = 0, pixelsLength = pixels.length; i < pixelsLength; i++) {
@@ -73,7 +60,7 @@ public class ImageConverter {
         return new InkyPhat.PaletteImage(colors, width);
     }
 
-    Bitmap[] filterImage(Bitmap sourceBitmap) {
+    Bitmap[] filterImage(Bitmap sourceBitmap, Matrix.ScaleToFit scaleToFit) {
         Bitmap scaled = scaleToInkyPhatBounds(sourceBitmap, scaleToFit);
         Bitmap filteredMono = filterToMonoChrome(scaled);
         Bitmap transparent = mapWhiteToTransparent(filteredMono);
@@ -114,7 +101,7 @@ public class ImageConverter {
             case END:
                 return imageScaler.fitXorY(sourceBitmap, getOrientatedWidth(), getOrientatedHeight());
             default:
-                throw new IllegalStateException("Unsupported scale type of " + scaleToFit);
+                throw new IllegalStateException("Unsupported scale type of " + scaleType);
         }
     }
 

@@ -1,5 +1,8 @@
 package com.novoda.inkyphat;
 
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.PeripheralManagerService;
 import com.google.android.things.pio.SpiDevice;
@@ -18,7 +21,7 @@ public interface InkyPhat extends AutoCloseable {
      */
     int HEIGHT = 212;
 
-    void setImage(int x, int y, PaletteImage image);
+    void setImage(int x, int y, Bitmap image, Matrix.ScaleToFit scaleToFit);
 
     /**
      * Set any pixel in the InkyPhat this is any pixel between {@link #WIDTH} & {@link #HEIGHT}
@@ -50,7 +53,9 @@ public interface InkyPhat extends AutoCloseable {
     void close();
 
     class Factory {
-        static InkyPhat create(String spiBus, String gpioBusyPin, String gpioResetPin, String gpioCommandPin) {
+        static InkyPhat create(String spiBus,
+                               String gpioBusyPin, String gpioResetPin, String gpioCommandPin,
+                               Orientation orientation) {
             PeripheralManagerService service = new PeripheralManagerService();
             try {
                 SpiDevice device = service.openSpiDevice(spiBus);
@@ -59,7 +64,13 @@ public interface InkyPhat extends AutoCloseable {
                 Gpio chipResetPin = service.openGpio(gpioResetPin);
                 Gpio chipCommandPin = service.openGpio(gpioCommandPin);
 
-                return new InkyPhatTriColourDisplay(device, chipBusyPin, chipResetPin, chipCommandPin, new PixelBuffer());
+                PixelBuffer pixelBuffer = new PixelBuffer();
+                ImageConverter imageConverter = new ImageConverter(orientation);
+                return new InkyPhatTriColourDisplay(device,
+                                                    chipBusyPin, chipResetPin, chipCommandPin,
+                                                    pixelBuffer,
+                                                    imageConverter
+                );
             } catch (IOException e) {
                 throw new IllegalStateException("InkyPhat connection cannot be opened.", e);
             }
@@ -84,15 +95,15 @@ public interface InkyPhat extends AutoCloseable {
             this.width = width;
         }
 
-        public Palette getPixel(int position) {
+        Palette getPixel(int position) {
             return colors[position];
         }
 
-        public int totalPixels() {
+        int totalPixels() {
             return colors.length;
         }
 
-        public int getWidth() {
+        int getWidth() {
             return width;
         }
     }

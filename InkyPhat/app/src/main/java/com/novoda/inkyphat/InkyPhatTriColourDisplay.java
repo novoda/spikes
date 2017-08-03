@@ -1,5 +1,8 @@
 package com.novoda.inkyphat;
 
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.SpiDevice;
 
@@ -33,15 +36,20 @@ class InkyPhatTriColourDisplay implements InkyPhat {
     private final Gpio chipResetPin;
     private final Gpio chipCommandPin;
     private final PixelBuffer pixelBuffer;
+    private final ImageConverter imageConverter;
 
     private byte border = BORDER_WHITE;
 
-    InkyPhatTriColourDisplay(SpiDevice spiBus, Gpio chipBusyPin, Gpio chipResetPin, Gpio chipCommandPin, PixelBuffer pixelBuffer) {
+    InkyPhatTriColourDisplay(SpiDevice spiBus,
+                             Gpio chipBusyPin, Gpio chipResetPin, Gpio chipCommandPin,
+                             PixelBuffer pixelBuffer,
+                             ImageConverter imageConverter) {
         this.spiBus = spiBus;
         this.chipBusyPin = chipBusyPin;
         this.chipResetPin = chipResetPin;
         this.chipCommandPin = chipCommandPin;
         this.pixelBuffer = pixelBuffer;
+        this.imageConverter = imageConverter;
         init();
     }
 
@@ -60,12 +68,12 @@ class InkyPhatTriColourDisplay implements InkyPhat {
     }
 
     @Override
-    public void setImage(int x, int y, InkyPhat.PaletteImage image) {
-        pixelBuffer.setImage(x, y, image);
+    public void setImage(int x, int y, Bitmap image, Matrix.ScaleToFit scaleToFit) {
+        pixelBuffer.setImage(x, y, imageConverter.convertImage(image, scaleToFit));
     }
 
     @Override
-    public void setPixel(int x, int y, Palette color) {
+    public void setPixel(int x, int y, Palette color) { // TODO they could send us any color and we convert it to Palette (matching what we do with bitmaps)
         pixelBuffer.setPixel(x, y, color);
     }
 
