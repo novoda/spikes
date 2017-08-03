@@ -1,8 +1,5 @@
 var sinon = require('sinon'),
-    chai = require('chai'),
-    mocha = require('mocha'),
-    expect = chai.expect,
-    debug = require('debug')('test'),
+    expect = require('chai').expect,
     botLocator = require('../core/BotLocator.js')(),
     router = require('../core/Router.js')(botLocator);
 
@@ -30,8 +27,8 @@ describe("Router Test", function () {
                               .callsFake(function(){ return firstAvailableBotId; });
 
         router.route(queryWithHuman, onNext = function(data){
-            expect(data).to.equal(undefined);
-            expect(mockBotLocator.called).to.equal(true);
+            expect(data).to.be.undefined;
+            expect(mockBotLocator.called).to.be.true;
             expect(queryWithHuman.room).to.equal(firstAvailableBotId);
             botLocator.locateFirstAvailableBotIn.restore();
             done();
@@ -42,7 +39,7 @@ describe("Router Test", function () {
 
     it("Should pass through Bot without any checks.", function (done) {
         router.route(queryWithBot, onNext = function(data){
-            expect(data).to.equal(undefined);
+            expect(data).to.be.undefined;
             done();
         });
 
@@ -55,7 +52,7 @@ describe("Router Test", function () {
                               .callsFake(function(){ return noAvailableBots; });
 
         router.route(queryWithHuman, onNext = function(data){
-            expect(mockBotLocator.called).to.equal(true);
+            expect(mockBotLocator.called).to.be.true;
             expect(data.message).to.equal('No bots available');
             botLocator.locateFirstAvailableBotIn.restore();
             done();
