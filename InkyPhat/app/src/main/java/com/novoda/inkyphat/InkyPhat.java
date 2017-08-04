@@ -25,16 +25,20 @@ public interface InkyPhat extends AutoCloseable {
 
     /**
      * Set any pixel in the InkyPhat this is any pixel between {@link #WIDTH} & {@link #HEIGHT}
-     * according to the {@link InkyPhat.Orientation} of your display
+     * according to the {@link InkyPhat.Orientation} of your display.
+     * <p>
+     * Colors will be converted in regards to how close they are to
+     * {@link InkyPhat.Palette#WHITE}, {@link InkyPhat.Palette#RED}, {@link InkyPhat.Palette#BLACK}
+     * <p>
      * You can set the border multiple times it will only update when {@link #refresh()} is called
      * <p>
      * Note, not calling this method for a pixel will leave that pixel as {@link InkyPhat.Palette#WHITE}
      *
      * @param x     the x co-ordinate (or column) to set the pixel on
      * @param y     the y co-ordinate (or row) to set the pixel on
-     * @param color the color you want the pixel to be
+     * @param color the color you want the pixel to be (you can use {@link android.graphics.Color#parseColor(String)} etc
      */
-    void setPixel(int x, int y, Palette color);
+    void setPixel(int x, int y, int color);
 
     /**
      * Set the border color around the InkyPhat this is the 1x1 pixels around each side
@@ -54,8 +58,8 @@ public interface InkyPhat extends AutoCloseable {
 
     class Factory {
         public static InkyPhat create(String spiBus,
-                               String gpioBusyPin, String gpioResetPin, String gpioCommandPin,
-                               Orientation orientation) {
+                                      String gpioBusyPin, String gpioResetPin, String gpioCommandPin,
+                                      Orientation orientation) {
             PeripheralManagerService service = new PeripheralManagerService();
             try {
                 SpiDevice device = service.openSpiDevice(spiBus);
@@ -69,7 +73,8 @@ public interface InkyPhat extends AutoCloseable {
                 return new InkyPhatTriColourDisplay(device,
                                                     chipBusyPin, chipResetPin, chipCommandPin,
                                                     pixelBuffer,
-                                                    imageConverter
+                                                    imageConverter,
+                                                    new ColorConverter()
                 );
             } catch (IOException e) {
                 throw new IllegalStateException("InkyPhat connection cannot be opened.", e);

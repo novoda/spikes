@@ -37,19 +37,21 @@ class InkyPhatTriColourDisplay implements InkyPhat {
     private final Gpio chipCommandPin;
     private final PixelBuffer pixelBuffer;
     private final ImageConverter imageConverter;
+    private final ColorConverter colorConverter;
 
     private byte border = BORDER_WHITE;
 
     InkyPhatTriColourDisplay(SpiDevice spiBus,
                              Gpio chipBusyPin, Gpio chipResetPin, Gpio chipCommandPin,
                              PixelBuffer pixelBuffer,
-                             ImageConverter imageConverter) {
+                             ImageConverter imageConverter, ColorConverter colorConverter) {
         this.spiBus = spiBus;
         this.chipBusyPin = chipBusyPin;
         this.chipResetPin = chipResetPin;
         this.chipCommandPin = chipCommandPin;
         this.pixelBuffer = pixelBuffer;
         this.imageConverter = imageConverter;
+        this.colorConverter = colorConverter;
         init();
     }
 
@@ -73,8 +75,8 @@ class InkyPhatTriColourDisplay implements InkyPhat {
     }
 
     @Override
-    public void setPixel(int x, int y, Palette color) { // TODO they could send us any color and we convert it to Palette (matching what we do with bitmaps)
-        pixelBuffer.setPixel(x, y, color);
+    public void setPixel(int x, int y, int color) {
+        pixelBuffer.setPixel(x, y, colorConverter.convertColor(color));
     }
 
     @Override
