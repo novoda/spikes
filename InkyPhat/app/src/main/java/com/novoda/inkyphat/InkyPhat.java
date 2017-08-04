@@ -64,7 +64,7 @@ public interface InkyPhat extends AutoCloseable {
                 Gpio chipResetPin = service.openGpio(gpioResetPin);
                 Gpio chipCommandPin = service.openGpio(gpioCommandPin);
 
-                PixelBuffer pixelBuffer = new PixelBuffer();
+                PixelBuffer pixelBuffer = new PixelBuffer(orientation);
                 ImageConverter imageConverter = new ImageConverter(orientation);
                 return new InkyPhatTriColourDisplay(device,
                                                     chipBusyPin, chipResetPin, chipCommandPin,

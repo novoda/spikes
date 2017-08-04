@@ -2,12 +2,33 @@ package com.novoda.inkyphat;
 
 import com.novoda.inkyphat.InkyPhat.Palette;
 
+import static com.novoda.inkyphat.InkyPhat.Orientation.LANDSCAPE;
+import static com.novoda.inkyphat.InkyPhat.Orientation.PORTRAIT;
+
 class PixelBuffer {
 
     private static final int PIXELS_PER_REGION = 8;
     private static final int NUMBER_OF_PIXEL_REGIONS = InkyPhat.WIDTH * InkyPhat.HEIGHT / PIXELS_PER_REGION;
 
-    private final Palette[][] pixelBuffer = new Palette[InkyPhat.WIDTH][InkyPhat.HEIGHT];
+    private final Palette[][] pixelBuffer;
+    private final InkyPhat.Orientation orientation;
+
+    PixelBuffer(InkyPhat.Orientation orientation) {
+        this.orientation = orientation;
+        pixelBuffer = new Palette[getOrientatedWidth()][getOrientatedHeight()];
+    }
+
+    private int getOrientatedWidth() {
+        return isIn(PORTRAIT) ? InkyPhat.WIDTH : InkyPhat.HEIGHT;
+    }
+
+    private int getOrientatedHeight() {
+        return isIn(LANDSCAPE) ? InkyPhat.HEIGHT : InkyPhat.WIDTH;
+    }
+
+    private boolean isIn(InkyPhat.Orientation orientation) {
+        return this.orientation == orientation;
+    }
 
     void setImage(int x, int y, InkyPhat.PaletteImage image) {
         int rowCount = 0;
@@ -16,7 +37,7 @@ class PixelBuffer {
             int localX = x + i;
             int localY = y + i + rowCount;
 
-            if (localX > InkyPhat.WIDTH || localY > InkyPhat.HEIGHT) { // TODO check orientation
+            if (localX > getOrientatedWidth() || localY > getOrientatedHeight()) {
                 continue;
             }
 
@@ -32,11 +53,11 @@ class PixelBuffer {
     }
 
     void setPixel(int x, int y, Palette color) {
-        if (x > InkyPhat.WIDTH) {
-            throw new IllegalStateException(x + " cannot be drawn. Max width is " + InkyPhat.WIDTH);
+        if (x > getOrientatedWidth()) {
+            throw new IllegalStateException(x + " cannot be drawn. Max width is " + getOrientatedWidth());
         }
-        if (y > InkyPhat.HEIGHT) {
-            throw new IllegalStateException(y + " cannot be drawn. Max height is " + InkyPhat.HEIGHT);
+        if (y > getOrientatedHeight()) {
+            throw new IllegalStateException(y + " cannot be drawn. Max height is " + getOrientatedHeight());
         }
         pixelBuffer[x][y] = color;
     }
@@ -45,11 +66,13 @@ class PixelBuffer {
         return mapPaletteArrayToDisplayByteArray(flatten(pixelBuffer), color);
     }
 
-    private static Palette[] flatten(Palette[][] twoDimensionalPaletteArray) {
-        Palette[] flattenedArray = new Palette[InkyPhat.WIDTH * InkyPhat.HEIGHT];
+    private Palette[] flatten(Palette[][] twoDimensionalPaletteArray) {
+        int width = getOrientatedWidth();
+        int height = getOrientatedHeight();
+        Palette[] flattenedArray = new Palette[width * height];
         int index = 0;
-        for (int y = 0; y < InkyPhat.HEIGHT; y++) {
-            for (int x = 0; x < InkyPhat.WIDTH; x++) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 Palette color = twoDimensionalPaletteArray[x][y];
                 flattenedArray[index++] = color;
             }
