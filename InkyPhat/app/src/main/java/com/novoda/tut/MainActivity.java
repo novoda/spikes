@@ -1,7 +1,9 @@
-package com.novoda.inkyphat;
+package com.novoda.tut;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+import com.novoda.inkyphat.InkyPhat;
 
 public class MainActivity extends Activity {
 
