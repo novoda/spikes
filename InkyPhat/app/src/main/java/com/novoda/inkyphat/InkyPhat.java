@@ -53,7 +53,7 @@ public interface InkyPhat extends AutoCloseable {
     void close();
 
     class Factory {
-        static InkyPhat create(String spiBus,
+        public static InkyPhat create(String spiBus,
                                String gpioBusyPin, String gpioResetPin, String gpioCommandPin,
                                Orientation orientation) {
             PeripheralManagerService service = new PeripheralManagerService();
