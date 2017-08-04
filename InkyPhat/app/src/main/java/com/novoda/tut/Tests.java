@@ -89,6 +89,7 @@ class Tests {
 
     static void drawImage(InkyPhat inkyPhat, Resources resources) {
         Bitmap bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_test_1);
+        inkyPhat.setBorder(Palette.RED);
         inkyPhat.setImage(0, 0, bitmap, Matrix.ScaleToFit.START);
     }
 }
