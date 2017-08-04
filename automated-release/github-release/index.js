@@ -24,7 +24,7 @@ module.exports = class GithubRelease {
             head: request.fromBranch,
             base: request.intoBranch
         }
-        return repo.createPullRequest(createOptions).then(result => result.data)
+        return repo.createPullRequest(createOptions).then((result) => result.data)
     }
 
     _createRelease(repo, release) {
@@ -36,7 +36,7 @@ module.exports = class GithubRelease {
             draft: release.isDraft,
             prerelease: release.isPreRelease
         }
-        return repo.createRelease(releaseOptions).then(result => result.data)
+        return repo.createRelease(releaseOptions).then((result) => result.data)
     }
 
     async _uploadAssets(repoOptions, releaseId, artifacts) {
