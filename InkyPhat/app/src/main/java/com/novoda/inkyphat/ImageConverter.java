@@ -13,21 +13,14 @@ import static com.novoda.inkyphat.InkyPhat.Orientation.PORTRAIT;
 
 class ImageConverter {
 
-    /**
-     * range is 0-255
-     */
-    private static final int THRESHOLD_BLACK = 85;
-    /**
-     * range is 0-255
-     */
-    private static final int THRESHOLD_RED = 40;
-
     private final InkyPhat.Orientation orientation;
     private final ImageScaler imageScaler;
+    private final ColorConverter colorConverter;
 
     ImageConverter(InkyPhat.Orientation orientation) {
         this.orientation = orientation;
         this.imageScaler = new ImageScaler();
+        this.colorConverter = new ColorConverter();
     }
 
     InkyPhat.PaletteImage convertImage(Bitmap input, Matrix.ScaleToFit scaleToFit) {
@@ -35,7 +28,7 @@ class ImageConverter {
         return translateImage(bitmaps[bitmaps.length - 1]);
     }
 
-    InkyPhat.PaletteImage translateImage(Bitmap input) {
+    private InkyPhat.PaletteImage translateImage(Bitmap input) {
         int width = input.getWidth();
         int height = input.getHeight();
         int[] pixels = new int[width * height];
@@ -43,15 +36,7 @@ class ImageConverter {
         int pixelCount = 0;
         InkyPhat.Palette[] colors = new InkyPhat.Palette[width * height];
         for (int i = 0, pixelsLength = pixels.length; i < pixelsLength; i++) {
-            int pixel = pixels[i];
-            int alpha = Color.alpha(pixel);
-            if (alpha > THRESHOLD_RED) {
-                colors[i] = InkyPhat.Palette.RED;
-            } else if (alpha > THRESHOLD_BLACK) {
-                colors[i] = InkyPhat.Palette.BLACK;
-            } else {
-                colors[i] = InkyPhat.Palette.WHITE;
-            }
+            colors[i] = colorConverter.convertAlpha8Color(pixels[i]);
             pixelCount++;
             if (pixelCount == width) {
                 pixelCount = 0;
