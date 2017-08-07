@@ -1,4 +1,6 @@
 const Github = require('github-release')
+const Artifacts = require('artifact-collect')
+
 const GITHUB_TOKEN = '1234'
 
 const repoOptions = {
@@ -23,10 +25,8 @@ const releaseOptions = {
 }
 
 const artifacts = [
-    {
-        name: 'test-file-1234.zip',
-        path: './testfile.zip'
-    }
+    Artifacts.collectFile('./artifacts/single-file/testfile.zip', __dirname + '/outputs/', 'test-file-1234.zip'),
+    Artifacts.collectDirectory('./artifacts/mappings', __dirname + '/outputs/', 'mappings.zip')
 ]
 
 const github = new GithubRelease(GITHUB_TOKEN)
