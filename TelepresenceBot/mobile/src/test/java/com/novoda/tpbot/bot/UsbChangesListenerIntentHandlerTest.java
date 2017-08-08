@@ -16,7 +16,7 @@ import org.mockito.junit.MockitoRule;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-public class MovementServiceIntentHandlerTest {
+public class UsbChangesListenerIntentHandlerTest {
 
     private static final String ACTION_USB_PERMISSION = "com.novoda.tpbot.USB_PERMISSION";
 
@@ -28,7 +28,7 @@ public class MovementServiceIntentHandlerTest {
     @Mock
     Bundle bundle;
     @Mock
-    MovementService movementService;
+    UsbChangesListener usbChangesListener;
 
     @Before
     public void setUp() {
@@ -38,44 +38,44 @@ public class MovementServiceIntentHandlerTest {
     @Test
     public void givenPermissionAction_andPermissionIsGranted_whenHandlingIntent_thenGrantsPermission() {
         given(bundle.getBoolean(UsbManager.EXTRA_PERMISSION_GRANTED)).willReturn(true);
-        MovementServiceIntentHandler.IntentHandler handler = MovementServiceIntentHandler.get(ACTION_USB_PERMISSION);
+        UsbChangesListenerIntentHandler.IntentHandler handler = UsbChangesListenerIntentHandler.get(ACTION_USB_PERMISSION);
 
-        handler.handle(intent, movementService);
+        handler.handle(intent, usbChangesListener);
 
-        verify(movementService).onPermissionGranted();
+        verify(usbChangesListener).onPermissionGranted();
     }
 
     @Test
     public void givenPermissionAction_andPermissionIsDenied_whenHandlingIntent_thenDeniesPermission() {
         given(bundle.getBoolean(UsbManager.EXTRA_PERMISSION_GRANTED)).willReturn(false);
-        MovementServiceIntentHandler.IntentHandler handler = MovementServiceIntentHandler.get(ACTION_USB_PERMISSION);
+        UsbChangesListenerIntentHandler.IntentHandler handler = UsbChangesListenerIntentHandler.get(ACTION_USB_PERMISSION);
 
-        handler.handle(intent, movementService);
+        handler.handle(intent, usbChangesListener);
 
-        verify(movementService).onPermissionDenied();
+        verify(usbChangesListener).onPermissionDenied();
     }
 
     @Test
     public void givenDeviceAttachedAction_whenHandlingIntent_thenAttachesDevice() {
-        MovementServiceIntentHandler.IntentHandler handler = MovementServiceIntentHandler.get(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+        UsbChangesListenerIntentHandler.IntentHandler handler = UsbChangesListenerIntentHandler.get(UsbManager.ACTION_USB_DEVICE_ATTACHED);
 
-        handler.handle(intent, movementService);
+        handler.handle(intent, usbChangesListener);
 
-        verify(movementService).onDeviceAttached();
+        verify(usbChangesListener).onDeviceAttached();
     }
 
     @Test
     public void givenDeviceDetachedAction_whenHandlingIntent_thenDetachesDevice() {
-        MovementServiceIntentHandler.IntentHandler handler = MovementServiceIntentHandler.get(UsbManager.ACTION_USB_DEVICE_DETACHED);
+        UsbChangesListenerIntentHandler.IntentHandler handler = UsbChangesListenerIntentHandler.get(UsbManager.ACTION_USB_DEVICE_DETACHED);
 
-        handler.handle(intent, movementService);
+        handler.handle(intent, usbChangesListener);
 
-        verify(movementService).onDeviceDetached();
+        verify(usbChangesListener).onDeviceDetached();
     }
 
     @Test(expected = DeveloperError.class)
     public void whenRetrievingHandler_withUnknownAction_thenThrowsDeveloperError() {
-        MovementServiceIntentHandler.get("unknown action");
+        UsbChangesListenerIntentHandler.get("unknown action");
     }
 
 }

@@ -10,34 +10,34 @@ import java.util.Map;
 
 import static com.novoda.tpbot.bot.AndroidMovementService.ACTION_USB_PERMISSION;
 
-class MovementServiceIntentHandler {
+class UsbChangesListenerIntentHandler {
 
     private static final Map<String, IntentHandler> actionMap = new HashMap<>();
 
     static {
         actionMap.put(ACTION_USB_PERMISSION, new IntentHandler() {
             @Override
-            public void handle(Intent intent, MovementService movementService) {
+            public void handle(Intent intent, UsbChangesListener usbChangesListener) {
                 boolean permissionGranted = intent.getExtras().getBoolean(UsbManager.EXTRA_PERMISSION_GRANTED);
                 if (permissionGranted) {
-                    movementService.onPermissionGranted();
+                    usbChangesListener.onPermissionGranted();
                 } else {
-                    movementService.onPermissionDenied();
+                    usbChangesListener.onPermissionDenied();
                 }
             }
         });
 
         actionMap.put(UsbManager.ACTION_USB_DEVICE_ATTACHED, new IntentHandler() {
             @Override
-            public void handle(Intent intent, MovementService movementService) {
-                movementService.onDeviceAttached();
+            public void handle(Intent intent, UsbChangesListener usbChangesListener) {
+                usbChangesListener.onDeviceAttached();
             }
         });
 
         actionMap.put(UsbManager.ACTION_USB_DEVICE_DETACHED, new IntentHandler() {
             @Override
-            public void handle(Intent intent, MovementService movementService) {
-                movementService.onDeviceDetached();
+            public void handle(Intent intent, UsbChangesListener usbChangesListener) {
+                usbChangesListener.onDeviceDetached();
             }
         });
     }
@@ -51,7 +51,7 @@ class MovementServiceIntentHandler {
     }
 
     interface IntentHandler {
-        void handle(Intent intent, MovementService movementService);
+        void handle(Intent intent, UsbChangesListener usbChangesListener);
     }
 
 }

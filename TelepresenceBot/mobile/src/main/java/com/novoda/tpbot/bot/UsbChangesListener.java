@@ -1,6 +1,6 @@
 package com.novoda.tpbot.bot;
 
-interface MovementService {
+interface UsbChangesListener {
 
     void onPermissionGranted();
 

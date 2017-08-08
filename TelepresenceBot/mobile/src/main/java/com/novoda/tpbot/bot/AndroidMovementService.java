@@ -15,7 +15,7 @@ import com.novoda.notils.logger.simple.Log;
 import com.novoda.notils.logger.toast.Toaster;
 import com.novoda.support.Optional;
 
-public class AndroidMovementService extends Service implements MovementService {
+public class AndroidMovementService extends Service implements UsbChangesListener {
 
     static final String ACTION_USB_PERMISSION = "com.novoda.tpbot.USB_PERMISSION";
 
@@ -55,7 +55,7 @@ public class AndroidMovementService extends Service implements MovementService {
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            MovementServiceIntentHandler.IntentHandler intentHandler = MovementServiceIntentHandler.get(intent.getAction());
+            UsbChangesListenerIntentHandler.IntentHandler intentHandler = UsbChangesListenerIntentHandler.get(intent.getAction());
             intentHandler.handle(intent, AndroidMovementService.this);
         }
     };
