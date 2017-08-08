@@ -17,6 +17,8 @@ class BotServiceBinder {
     private final BotView botView;
     private final String serverAddress;
 
+    private BotServiceConnection botServiceConnection;
+
     BotServiceBinder(Context context, BotView botView, String serverAddress) {
         this.context = context;
         this.botView = botView;
@@ -24,14 +26,17 @@ class BotServiceBinder {
     }
 
     void bind() {
+        if (botServiceConnection == null) {
+            botServiceConnection = new BotServiceConnection();
+        }
         Intent botServiceIntent = new Intent(context, BotService.class);
         context.bindService(botServiceIntent, botServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
-    private final ServiceConnection botServiceConnection = new ServiceConnection() {
+    private class BotServiceConnection implements ServiceConnection {
 
         @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+        public void onServiceConnected(ComponentName name, IBinder service) {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             LastServerPersistence lastServerPersistence = new LastServerPreferences(sharedPreferences);
             BotPresenter botPresenter = new BotPresenter(
@@ -40,20 +45,23 @@ class BotServiceBinder {
                     lastServerPersistence,
                     serverAddress
             );
-            BotService.BotServiceBinder binder = (BotService.BotServiceBinder) iBinder;
+            BotService.BotServiceBinder binder = (BotService.BotServiceBinder) service;
             binder.setBotPresenter(botPresenter);
             binder.onDependenciesBound();
         }
 
         @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-
+        public void onServiceDisconnected(ComponentName name) {
+            // Do nothing.
         }
-    };
+    }
 
     void unbind() {
-        context.unbindService(botServiceConnection);
-        context.stopService(new Intent(context, BotService.class));
+        if (BotService.isBound()) {
+            context.unbindService(botServiceConnection);
+            context.stopService(new Intent(context, BotService.class));
+            botServiceConnection = null;
+        }
     }
 
 }
