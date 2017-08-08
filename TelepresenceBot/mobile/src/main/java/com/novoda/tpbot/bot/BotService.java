@@ -4,25 +4,44 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.annotation.Nullable;
 
 public class BotService extends Service {
 
+    private static boolean isBound;
+
     private final IBinder binder = new BotServiceBinder();
 
+    @Nullable
     private BotPresenter botPresenter;
+
+    public static boolean isBound() {
+        return isBound;
+    }
 
     @Override
     public IBinder onBind(Intent intent) {
+        isBound = true;
         return binder;
     }
 
     private void start() {
+        if (botPresenter == null) {
+            throw new IllegalStateException(BotPresenter.class.getSimpleName() + " must be bound before calling onDependenciesBound()");
+        }
+
         botPresenter.startPresenting();
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-        botPresenter.stopPresenting();
+        isBound = false;
+
+        if (botPresenter != null) {
+            botPresenter.stopPresenting();
+            botPresenter = null;
+        }
+
         return super.onUnbind(intent);
     }
 
