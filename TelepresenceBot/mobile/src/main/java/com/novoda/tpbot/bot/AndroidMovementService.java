@@ -109,6 +109,11 @@ public class AndroidMovementService extends Service implements UsbChangesListene
         closeConnection();
     }
 
+    @Override
+    public void onBotConnectivityChanged(BotConnectivityChangeEvent botConnectivityChangeEvent) {
+        // Do nothing.
+    }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {

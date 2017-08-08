@@ -30,14 +30,16 @@ class UsbChangesListenerIntentHandler {
         actionMap.put(UsbManager.ACTION_USB_DEVICE_ATTACHED, new IntentHandler() {
             @Override
             public void handle(Intent intent, UsbChangesListener usbChangesListener) {
-                usbChangesListener.onDeviceAttached();
+                usbChangesListener.onBotConnectivityChanged(BotConnectivityChangeEvent.connected());
+                usbChangesListener.onDeviceAttached(); // TODO: Remove.
             }
         });
 
         actionMap.put(UsbManager.ACTION_USB_DEVICE_DETACHED, new IntentHandler() {
             @Override
             public void handle(Intent intent, UsbChangesListener usbChangesListener) {
-                usbChangesListener.onDeviceDetached();
+                usbChangesListener.onBotConnectivityChanged(BotConnectivityChangeEvent.notConnected("detached"));
+                usbChangesListener.onDeviceDetached(); // TODO: Remove.
             }
         });
     }

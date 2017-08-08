@@ -10,4 +10,5 @@ interface UsbChangesListener {
 
     void onDeviceDetached();
 
+    void onBotConnectivityChanged(BotConnectivityChangeEvent botConnectivityChangeEvent);
 }
