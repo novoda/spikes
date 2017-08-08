@@ -13,7 +13,7 @@ public class BoundAndroidMovementService extends Service {
     private final IBinder binder = new ServiceBinder();
 
     @Nullable
-    private MovementServiceManager movementServiceManager;
+    private DeviceConnection deviceConnection;
 
     public static boolean isBound() {
         return isBound;
@@ -26,20 +26,20 @@ public class BoundAndroidMovementService extends Service {
     }
 
     private void start() {
-        if (movementServiceManager == null) {
+        if (deviceConnection == null) {
             throw new IllegalStateException(BotPresenter.class.getSimpleName() + " must be bound before calling onDependenciesBound()");
         }
 
-        movementServiceManager.start();
+        deviceConnection.connect();
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
         isBound = false;
 
-        if (movementServiceManager != null) {
-            movementServiceManager.stop();
-            movementServiceManager = null;
+        if (deviceConnection != null) {
+            deviceConnection.disconnect();
+            deviceConnection = null;
         }
 
         return super.onUnbind(intent);
@@ -47,8 +47,8 @@ public class BoundAndroidMovementService extends Service {
 
     class ServiceBinder extends Binder {
 
-        void setBotPresenter(MovementServiceManager movementServiceManager) {
-            BoundAndroidMovementService.this.movementServiceManager = movementServiceManager;
+        void setDeviceConnection(DeviceConnection deviceConnection) {
+            BoundAndroidMovementService.this.deviceConnection = deviceConnection;
         }
 
         void onDependenciesBound() {
