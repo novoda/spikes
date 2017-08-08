@@ -71,13 +71,14 @@ public class AndroidMovementService extends Service implements MovementService {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
             usbManager.requestPermission(supportedUsbDevice.get(), pendingIntent);
         } else {
-            Log.d(getClass().getSimpleName(), "Could not find a supported Usb device.");
+            Log.d(getClass().getSimpleName(), "startConnection: Could not find a supported USB device.");
         }
     }
 
     private final SerialPortMonitor.DataReceiver dataReceiver = new SerialPortMonitor.DataReceiver() {
         @Override
         public void onReceive(String data) {
+            Log.d(getClass().getSimpleName(), "SerialPortMonitor.onReceive: " + data);
             // TODO: forward feedback to the UI.
         }
     };
@@ -89,19 +90,21 @@ public class AndroidMovementService extends Service implements MovementService {
 
     @Override
     public void onPermissionDenied() {
-        Log.d(getClass().getSimpleName(), "Permission not granted");
+        Log.d(getClass().getSimpleName(), "onPermissionDenied");
         toaster.popToast("Permission not granted");
+        closeConnection();
     }
 
     @Override
     public void onDeviceAttached() {
+        Log.d(getClass().getSimpleName(), "onDeviceAttached");
         toaster.popToast("Device connected");
         startConnection();
     }
 
     @Override
     public void onDeviceDetached() {
-        Log.d(getClass().getSimpleName(), "USB device detached");
+        Log.d(getClass().getSimpleName(), "onDeviceDetached");
         toaster.popToast("USB device detached");
         closeConnection();
     }
@@ -121,7 +124,7 @@ public class AndroidMovementService extends Service implements MovementService {
         try {
             unregisterReceiver(broadcastReceiver);
         } catch (IllegalArgumentException e) {
-            Log.e("Trying to unregister a BroadcastReceiver which wasn't registered yet");
+            Log.e(getClass().getSimpleName(), "onDestroy: Trying to unregister a BroadcastReceiver which hasn't been registered");
         }
         closeConnection();
         super.onDestroy();
@@ -129,6 +132,7 @@ public class AndroidMovementService extends Service implements MovementService {
 
     private void closeConnection() {
         serialPortMonitor.stopMonitoring();
+        supportedUsbDevice = Optional.absent();
     }
 
     static class Binder extends android.os.Binder {
