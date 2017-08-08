@@ -1,6 +1,8 @@
 package com.novoda.tpbot.controls;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 public class LastServerPreferences implements LastServerPersistence {
 
@@ -8,7 +10,12 @@ public class LastServerPreferences implements LastServerPersistence {
 
     private final SharedPreferences preferences;
 
-    public LastServerPreferences(SharedPreferences preferences) {
+    public static LastServerPreferences newInstance(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return new LastServerPreferences(sharedPreferences);
+    }
+
+    LastServerPreferences(SharedPreferences preferences) {
         this.preferences = preferences;
     }
 
