@@ -11,19 +11,19 @@ import android.preference.PreferenceManager;
 import com.novoda.tpbot.controls.LastServerPersistence;
 import com.novoda.tpbot.controls.LastServerPreferences;
 
-class BotServiceCreator {
+class BotServiceBinder {
 
     private final Context context;
     private final BotView botView;
     private final String serverAddress;
 
-    BotServiceCreator(Context context, BotView botView, String serverAddress) {
+    BotServiceBinder(Context context, BotView botView, String serverAddress) {
         this.context = context;
         this.botView = botView;
         this.serverAddress = serverAddress;
     }
 
-    void create() {
+    void bind() {
         Intent botServiceIntent = new Intent(context, BotService.class);
         context.bindService(botServiceIntent, botServiceConnection, Context.BIND_AUTO_CREATE);
     }
@@ -51,7 +51,7 @@ class BotServiceCreator {
         }
     };
 
-    void destroy() {
+    void unbind() {
         context.unbindService(botServiceConnection);
         context.stopService(new Intent(context, BotService.class));
     }

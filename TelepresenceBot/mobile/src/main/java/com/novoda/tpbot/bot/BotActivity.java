@@ -43,7 +43,7 @@ public class BotActivity extends AppCompatActivity implements BotView {
     private boolean boundToMovementService;
     private CommandRepeater commandRepeater;
     private AutomationChecker automationChecker;
-    private BotServiceCreator botServiceCreator;
+    private BotServiceBinder botServiceBinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,8 +102,8 @@ public class BotActivity extends AppCompatActivity implements BotView {
         @Override
         public void onConnect(String serverAddress) {
             debugView.showPermanently(getString(R.string.connecting_ellipsis));
-            botServiceCreator = new BotServiceCreator(getApplicationContext(), BotActivity.this, serverAddress);
-            botServiceCreator.create();
+            botServiceBinder = new BotServiceBinder(getApplicationContext(), BotActivity.this, serverAddress);
+            botServiceBinder.bind();
         }
     };
 
@@ -181,8 +181,8 @@ public class BotActivity extends AppCompatActivity implements BotView {
 
     @Override
     protected void onDestroy() {
-        if (botServiceCreator != null) {
-            botServiceCreator.destroy();
+        if (botServiceBinder != null) {
+            botServiceBinder.unbind();
         }
         super.onDestroy();
     }
