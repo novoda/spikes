@@ -64,6 +64,8 @@ public class BotActivity extends AppCompatActivity implements BotView {
 
         AccessibilityManager accessibilityManager = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
         automationChecker = new AutomationChecker(accessibilityManager);
+
+        botServiceBinder = new BotServiceBinder(getApplicationContext());
     }
 
     @Override
@@ -102,8 +104,7 @@ public class BotActivity extends AppCompatActivity implements BotView {
         @Override
         public void onConnect(String serverAddress) {
             debugView.showPermanently(getString(R.string.connecting_ellipsis));
-            botServiceBinder = new BotServiceBinder(getApplicationContext(), BotActivity.this, serverAddress);
-            botServiceBinder.bind();
+            botServiceBinder.bind(BotActivity.this, serverAddress);
         }
     };
 
@@ -183,6 +184,7 @@ public class BotActivity extends AppCompatActivity implements BotView {
     protected void onDestroy() {
         if (botServiceBinder != null) {
             botServiceBinder.unbind();
+            botServiceBinder = null;
         }
         super.onDestroy();
     }

@@ -14,26 +14,30 @@ import com.novoda.tpbot.controls.LastServerPreferences;
 class BotServiceBinder {
 
     private final Context context;
-    private final BotView botView;
-    private final String serverAddress;
 
     private BotServiceConnection botServiceConnection;
 
-    BotServiceBinder(Context context, BotView botView, String serverAddress) {
+    BotServiceBinder(Context context) {
         this.context = context;
-        this.botView = botView;
-        this.serverAddress = serverAddress;
     }
 
-    void bind() {
+    void bind(BotView botView, String serverAddress) {
         if (botServiceConnection == null) {
-            botServiceConnection = new BotServiceConnection();
+            botServiceConnection = new BotServiceConnection(botView, serverAddress);
         }
         Intent botServiceIntent = new Intent(context, BotService.class);
         context.bindService(botServiceIntent, botServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     private class BotServiceConnection implements ServiceConnection {
+
+        private final BotView botView;
+        private final String serverAddress;
+
+        private BotServiceConnection(BotView botView, String serverAddress) {
+            this.botView = botView;
+            this.serverAddress = serverAddress;
+        }
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
