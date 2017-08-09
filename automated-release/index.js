@@ -51,7 +51,7 @@ const pushOptions = {
     }
 }
 
-const doRelease = () => {
+const doRelease = async () => {
     const git = new GitBranch()
     const branchRef = await git.checkout(checkoutOptions)
 
