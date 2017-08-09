@@ -3,42 +3,55 @@ const Artifacts = require('artifact-collect')
 const GitBranch = require('git-branch')
 const fs = require('fs-extra')
 
-const GITHUB_TOKEN = '1234'
 const CLONE_PATH = __dirname + '/tmp/'
 const ARTIFACTS_PATH = __dirname + '/outputs/'
 
-const repoOptions = {
-    owner: 'novoda',
-    name: 'spikes'
+const params = {
+    auth: {
+        gitHubToken: '1234'
+    },
+    repo: {
+        owner: 'novoda',
+        name: 'spikes'
+    },
+    branches: {
+        baseBranch: 'master',
+        releaseBranch: 'release-2.5',
+        endBranch: 'production'
+    },
+    release: {
+        tag: 'v1',
+        title: 'super cool release',
+        body: 'this is the release body wooo'
+    },
+    pr: {
+        title: 'my awesome release PR',
+        body: 'Here\'s all the changes in the release'
+    },
+    artifacts: () => {
+        // build apks
+        return [
+            Artifacts.collectFile('./artifacts/single-file/testfile.zip', ARTIFACTS_PATH, 'test-file-1234.zip'),
+            Artifacts.collectDirectory('./artifacts/mappings', ARTIFACTS_PATH, 'mappings.zip')
+        ]
+    },
+    version: {
+        increment: 50
+    }
 }
 
-const branches = {
-    fromBranch: 'master',
-    intoBranch: 'demo-production'
-}
 
-const prOptions = {
-    title: 'my awesome release PR',
-    body: 'Here\'s all the changes in the release',
-    fromBranch: branches.fromBranch,
-    intoBranch: branches.intoBranch
-}
+release.release(params);
 
-const releaseOptions = {
-    tag: 'v1',
-    target: branches.fromBranch,
-    title: 'super cool release',
-    body: 'this is the release body wooo',
-    isDraft: false,
-    isPreRelease: false
-}
+const git = new GitBranch()
+const github = new GithubRelease(GITHUB_TOKEN)
 
 const checkoutOptions = {
-    baseBranch: branches.fromBranch,
-    newBranch: branches.intoBranch,
-    githubToken: GITHUB_TOKEN,
+    baseBranch: params.branches.fromBranch,
+    newBranch: params.branches.releaseBranch,
+    githubToken: params.auth.gitHubToken,
     path: CLONE_PATH,
-    repoUrl: `https://github.com/${repoOptions.owner}/${repoOptions.name}.git`
+    repoUrl: `https://github.com/${params.repo.owner}/${params.repo.name}.git`
 }
 
 const pushOptions = {
@@ -51,20 +64,36 @@ const pushOptions = {
     }
 }
 
+const repoOptions = {
+    owner: params.repo.owner,
+    name: params.repo.name
+}
+
+const prOptions = {
+    title: params.pr.title,
+    body: params.pr.body,
+    fromBranch: params.branches.releaseBranch,
+    intoBranch: params.branches.endBranch
+}
+
+const releaseOptions = {
+    tag: params.release.tag,
+    target: params.branches.releaseBranch,
+    title: params.release.title,
+    body: params.release.body,
+    isDraft: false,
+    isPreRelease: false
+}
+
 const doRelease = async () => {
-    const git = new GitBranch()
     const branchRef = await git.checkout(checkoutOptions)
 
-    // build artifacts and make modifications
-    const artifacts = [
-        Artifacts.collectFile('./artifacts/single-file/testfile.zip', ARTIFACTS_PATH, 'test-file-1234.zip'),
-        Artifacts.collectDirectory('./artifacts/mappings', ARTIFACTS_PATH, 'mappings.zip')
-    ]
+    // make modifications & build artifacts
     fs.writeFileSync('./tmp/testfile.txt', "hello world, release commit content")
+    const artifacts = params.artifacts()
 
     await git.push(branchRef, pushOptions)
 
-    const github = new GithubRelease(GITHUB_TOKEN)
     github.performRelease(repoOptions, prOptions, releaseOptions, artifacts)
 
     fs.removeSync(CLONE_PATH)
