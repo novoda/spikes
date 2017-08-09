@@ -5,7 +5,9 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "github-release": "file:./github-release",
-    "artifact-collect": "file:./artifact-collect"    
+    "artifact-collect": "file:./artifact-collect",
+    "fs-extra": "^4.0.1",
+    "git-branch": "file:./git-branch",
+    "github-release": "file:./github-release"
   }
 }
