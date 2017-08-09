@@ -4,6 +4,8 @@ const GitBranch = require('git-branch')
 const fs = require('fs-extra')
 
 const GITHUB_TOKEN = '1234'
+const CLONE_PATH = __dirname + '/tmp/'
+const ARTIFACTS_PATH = __dirname + '/outputs/'
 
 const repoOptions = {
     owner: 'novoda',
@@ -35,7 +37,7 @@ const checkoutOptions = {
     baseBranch: branches.fromBranch,
     newBranch: branches.intoBranch,
     githubToken: GITHUB_TOKEN,
-    path: './tmp',
+    path: CLONE_PATH,
     repoUrl: `https://github.com/${repoOptions.owner}/${repoOptions.name}.git`
 }
 
@@ -55,8 +57,8 @@ const doRelease = () => {
 
     // build artifacts and make modifications
     const artifacts = [
-        Artifacts.collectFile('./artifacts/single-file/testfile.zip', __dirname + '/outputs/', 'test-file-1234.zip'),
-        Artifacts.collectDirectory('./artifacts/mappings', __dirname + '/outputs/', 'mappings.zip')
+        Artifacts.collectFile('./artifacts/single-file/testfile.zip', ARTIFACTS_PATH, 'test-file-1234.zip'),
+        Artifacts.collectDirectory('./artifacts/mappings', ARTIFACTS_PATH, 'mappings.zip')
     ]
     fs.writeFileSync('./tmp/testfile.txt', "hello world, release commit content")
 
@@ -65,8 +67,8 @@ const doRelease = () => {
     const github = new GithubRelease(GITHUB_TOKEN)
     github.performRelease(repoOptions, prOptions, releaseOptions, artifacts)
 
-    fs.removeSync('./tmp')
-    fs.removeSync('./output')
+    fs.removeSync(CLONE_PATH)
+    fs.removeSync(ARTIFACTS_PATH)
 }
 
 doRelease.then(console.log).catch(console.log)
