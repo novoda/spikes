@@ -1,17 +1,15 @@
 package com.novoda.tpbot.bot;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,18 +30,17 @@ import com.novoda.tpbot.controls.ServerDeclarationView;
 
 import java.util.HashMap;
 
-public class BotActivity extends AppCompatActivity implements BotView {
+public class BotActivity extends AppCompatActivity implements BotView, DeviceConnection.DeviceConnectionListener {
 
     private static final String HANGOUTS_BASE_URL = "https://hangouts.google.com/hangouts/_/novoda.com/";
 
     private SelfDestructingMessageView debugView;
     private SwitchableView switchableView;
 
-    private AndroidMovementService androidMovementService;
-    private boolean boundToMovementService;
     private CommandRepeater commandRepeater;
     private AutomationChecker automationChecker;
     private BotServiceBinder botServiceBinder;
+    private MovementServiceBinder movementServiceBinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +62,11 @@ public class BotActivity extends AppCompatActivity implements BotView {
         AccessibilityManager accessibilityManager = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
         automationChecker = new AutomationChecker(accessibilityManager);
 
+        DeviceConnection deviceConnection = UsbDeviceConnection.newInstance(getApplicationContext(), this);
+
         botServiceBinder = new BotServiceBinder(getApplicationContext());
+        movementServiceBinder = new MovementServiceBinder(getApplicationContext(), deviceConnection);
+
     }
 
     @Override
@@ -111,17 +112,14 @@ public class BotActivity extends AppCompatActivity implements BotView {
     private CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
         @Override
         public void onCommandRepeated(String command) {
-            if (boundToMovementService) {
-                androidMovementService.sendCommand(command);
-            }
+            // TODO: Send command to the DeviceConnection.
         }
     };
 
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent = new Intent(this, AndroidMovementService.class);
-        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+        movementServiceBinder.bind();
     }
 
     @Override
@@ -172,37 +170,18 @@ public class BotActivity extends AppCompatActivity implements BotView {
     }
 
     @Override
-    protected void onStop() {
-        if (boundToMovementService) {
-            unbindService(serviceConnection);
-            boundToMovementService = false;
-        }
-        super.onStop();
-    }
-
-    @Override
     protected void onDestroy() {
         if (botServiceBinder != null) {
             botServiceBinder.unbind();
             botServiceBinder = null;
         }
+
+        if (movementServiceBinder != null) {
+            movementServiceBinder.unbind();
+            movementServiceBinder = null;
+        }
         super.onDestroy();
     }
-
-    private final ServiceConnection serviceConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            AndroidMovementService.Binder binder = (AndroidMovementService.Binder) iBinder;
-            androidMovementService = binder.getService();
-            boundToMovementService = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            boundToMovementService = false;
-        }
-    };
 
     @Override
     public void onConnect(String room, String serverAddress) {
@@ -237,4 +216,18 @@ public class BotActivity extends AppCompatActivity implements BotView {
         commandRepeatedListener.onCommandRepeated(direction.rawDirection());
     }
 
+    @Override
+    public void onDeviceConnected() {
+        Log.d(getClass().getSimpleName(), "onDeviceConnected");
+    }
+
+    @Override
+    public void onDeviceDisconnected() {
+        Log.d(getClass().getSimpleName(), "onDeviceDisconnected");
+    }
+
+    @Override
+    public void onDataReceived(String data) {
+        Log.d(getClass().getSimpleName(), "onDataReceived");
+    }
 }

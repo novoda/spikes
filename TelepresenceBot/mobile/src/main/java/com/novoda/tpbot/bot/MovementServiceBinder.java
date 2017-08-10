@@ -9,13 +9,16 @@ import android.os.IBinder;
 class MovementServiceBinder {
 
     private final Context context;
+    private final DeviceConnection deviceConnection;
+
     private MovementServiceConnection movementServiceConnection;
 
-    MovementServiceBinder(Context context) {
+    MovementServiceBinder(Context context, DeviceConnection deviceConnection) {
         this.context = context;
+        this.deviceConnection = deviceConnection;
     }
 
-    void bind(DeviceConnection deviceConnection) {
+    void bind() {
         if (movementServiceConnection == null) {
             movementServiceConnection = new MovementServiceConnection(deviceConnection);
         }
