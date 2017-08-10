@@ -18,7 +18,7 @@ class ShapeDrawer {
     /**
      * Clear the inside of the given Rectangle.
      */
-    public void clearRect(int fx, int fy, int fw, int fh, InkyPhat.Palette color) {
+    public void clearRect(int fx, int fy, int fw, int fh, int color) {
         int maxX, maxY;
         maxX = (fx + fw) > width ? width : (fx + fw);
         maxY = (fy + fh) > height ? height : (fy + fh);
@@ -33,7 +33,7 @@ class ShapeDrawer {
     /**
      * Bresenham's Line Algorithm
      */
-    public void drawLine(int col0, int row0, int col1, int row1, InkyPhat.Palette color) {
+    public void drawLine(int col0, int row0, int col1, int row1, int color) {
         boolean steep = Math.abs(row1 - row0) > Math.abs(col1 - col0);
 
         if (steep) {
@@ -84,31 +84,31 @@ class ShapeDrawer {
     }
 
     // Draw a vertical line
-    public void drawVLine(int x, int y, int h, InkyPhat.Palette color) {
+    public void drawVLine(int x, int y, int h, int color) {
         drawLine(x, y, x, y + h - 1, color);
     }
 
     // Draw a horizontal line
-    public void drawHLine(int x, int y, int w, InkyPhat.Palette color) {
+    public void drawHLine(int x, int y, int w, int color) {
         drawLine(x, y, x + w - 1, y, color);
     }
 
     // Draw the outline of a rectangle (no fill)
-    public void drawRect(int x, int y, int w, int h, InkyPhat.Palette color) {
+    public void drawRect(int x, int y, int w, int h, int color) {
         drawHLine(x, y, w, color);
         drawHLine(x, y + h - 1, w, color);
         drawVLine(x, y, h, color);
         drawVLine(x + w - 1, y, h, color);
     }
 
-    public void fillRect(int x, int y, int w, int h, InkyPhat.Palette color) {
+    public void fillRect(int x, int y, int w, int h, int color) {
         for (int i = x; i < x + w; i++) {
             drawVLine(i, y, h, color);
         }
     }
 
     // Draw a rounded rectangle with radius r.
-    public void drawRoundRect(int x, int y, int w, int h, int r, InkyPhat.Palette color) {
+    public void drawRoundRect(int x, int y, int w, int h, int r, int color) {
         drawHLine(x + r, y, w - 2 * r, color);
         drawHLine(x + r, y + h - 1, w - 2 * r, color);
         drawVLine(x, y + r, h - 2 * r, color);
@@ -120,7 +120,7 @@ class ShapeDrawer {
         drawCircleQuadrant(x + r, y + h - r - 1, r, 8, color);
     }
 
-    public void fillRoundRect(int x, int y, int w, int h, int r, InkyPhat.Palette color) {
+    public void fillRoundRect(int x, int y, int w, int h, int r, int color) {
         fillRect(x + r, y, w - 2 * r, h, color);
 
         fillCircleHalf(x + r, y + r, r, 1, h - 2 * r - 1, color);
@@ -128,7 +128,7 @@ class ShapeDrawer {
     }
 
     // Draw the outline of a cirle (no fill) - Midpoint Circle Algorithm
-    public void drawCircle(int x, int y, int r, InkyPhat.Palette color) {
+    public void drawCircle(int x, int y, int r, int color) {
         int f = 1 - r;
         int ddFx = 1;
         int ddFy = -2 * r;
@@ -165,7 +165,7 @@ class ShapeDrawer {
     /**
      * Draw one of the four quadrants of a circle.
      */
-    public void drawCircleQuadrant(int x, int y, int r, int quadrant, InkyPhat.Palette color) {
+    public void drawCircleQuadrant(int x, int y, int r, int quadrant, int color) {
         int f = 1 - r;
         int ddFx = 1;
         int ddFy = -2 * r;
@@ -209,12 +209,12 @@ class ShapeDrawer {
         }
     }
 
-    public void fillCircle(int x, int y, int r, InkyPhat.Palette color) {
+    public void fillCircle(int x, int y, int r, int color) {
         drawVLine(x, y - r, 2 * r + 1, color);
         fillCircleHalf(x, y, r, 3, 0, color);
     }
 
-    public void fillCircleHalf(int x, int y, int r, int half, int stretch, InkyPhat.Palette color) {
+    public void fillCircleHalf(int x, int y, int r, int half, int stretch, int color) {
         int f = 1 - r;
         int ddFx = 1;
         int ddFy = -2 * r;
@@ -249,7 +249,7 @@ class ShapeDrawer {
     // Draw an Arc
     public void drawArc(int x, int y, int r,
                         float startAngle, float endAngle,
-                        InkyPhat.Palette color) {
+                        int color) {
         // Convert degrees to radians
         float degreesPerRadian = (float) (Math.PI / 180);
 
@@ -276,7 +276,7 @@ class ShapeDrawer {
     }
 
     // Draw the outline of a wedge. //TODO: add inner radius
-    public void drawWedge(int x, int y, int r, float startAngle, float endAngle, InkyPhat.Palette color) {
+    public void drawWedge(int x, int y, int r, float startAngle, float endAngle, int color) {
         // Convert degrees to radians
         float degreesPerRadian = (float) (Math.PI / 180);
 
@@ -312,7 +312,7 @@ class ShapeDrawer {
 
     public void drawTriangle(int x1, int y1,
                              int x2, int y2,
-                             int x3, int y3, InkyPhat.Palette color) {
+                             int x3, int y3, int color) {
         drawLine(x1, y1, x2, y2, color);
         drawLine(x2, y2, x3, y3, color);
         drawLine(x3, y3, x1, y1, color);
@@ -320,7 +320,7 @@ class ShapeDrawer {
 
     public void fillTriangle(int x1, int y1,
                              int x2, int y2,
-                             int x3, int y3, InkyPhat.Palette color) {
+                             int x3, int y3, int color) {
         int a, b, y, last;
 
         // Sort coordinates by Y order (y3 >= y2 >= y1)
@@ -420,7 +420,7 @@ class ShapeDrawer {
         }
     }
 
-    public void drawPixel(int row, int col, InkyPhat.Palette color) {
+    public void drawPixel(int row, int col, int color) {
         inkyPhat.setPixel(row, col, color);
     }
 }
