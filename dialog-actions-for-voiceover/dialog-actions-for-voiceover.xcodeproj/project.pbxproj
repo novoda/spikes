@@ -1,0 +1,311 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C09D2D2F1F3C705A00A6FCEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09D2D2E1F3C705A00A6FCEA /* AppDelegate.swift */; };
+		C09D2D311F3C705A00A6FCEA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09D2D301F3C705A00A6FCEA /* ViewController.swift */; };
+		C09D2D341F3C705A00A6FCEA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C09D2D321F3C705A00A6FCEA /* Main.storyboard */; };
+		C09D2D361F3C705A00A6FCEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C09D2D351F3C705A00A6FCEA /* Assets.xcassets */; };
+		C09D2D391F3C705A00A6FCEA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C09D2D371F3C705A00A6FCEA /* LaunchScreen.storyboard */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		C09D2D2B1F3C705A00A6FCEA /* dialog-actions-for-voiceover.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "dialog-actions-for-voiceover.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C09D2D2E1F3C705A00A6FCEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C09D2D301F3C705A00A6FCEA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C09D2D331F3C705A00A6FCEA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C09D2D351F3C705A00A6FCEA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C09D2D381F3C705A00A6FCEA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C09D2D3A1F3C705A00A6FCEA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C09D2D401F3C725400A6FCEA /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C09D2D281F3C705A00A6FCEA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C09D2D221F3C705A00A6FCEA = {
+			isa = PBXGroup;
+			children = (
+				C09D2D401F3C725400A6FCEA /* .gitignore */,
+				C09D2D2D1F3C705A00A6FCEA /* dialog-actions-for-voiceover */,
+				C09D2D2C1F3C705A00A6FCEA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C09D2D2C1F3C705A00A6FCEA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C09D2D2B1F3C705A00A6FCEA /* dialog-actions-for-voiceover.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C09D2D2D1F3C705A00A6FCEA /* dialog-actions-for-voiceover */ = {
+			isa = PBXGroup;
+			children = (
+				C09D2D2E1F3C705A00A6FCEA /* AppDelegate.swift */,
+				C09D2D301F3C705A00A6FCEA /* ViewController.swift */,
+				C09D2D321F3C705A00A6FCEA /* Main.storyboard */,
+				C09D2D351F3C705A00A6FCEA /* Assets.xcassets */,
+				C09D2D371F3C705A00A6FCEA /* LaunchScreen.storyboard */,
+				C09D2D3A1F3C705A00A6FCEA /* Info.plist */,
+			);
+			path = "dialog-actions-for-voiceover";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C09D2D2A1F3C705A00A6FCEA /* dialog-actions-for-voiceover */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C09D2D3D1F3C705A00A6FCEA /* Build configuration list for PBXNativeTarget "dialog-actions-for-voiceover" */;
+			buildPhases = (
+				C09D2D271F3C705A00A6FCEA /* Sources */,
+				C09D2D281F3C705A00A6FCEA /* Frameworks */,
+				C09D2D291F3C705A00A6FCEA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "dialog-actions-for-voiceover";
+			productName = "dialog-actions-for-voiceover";
+			productReference = C09D2D2B1F3C705A00A6FCEA /* dialog-actions-for-voiceover.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C09D2D231F3C705A00A6FCEA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0830;
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = Novoda;
+				TargetAttributes = {
+					C09D2D2A1F3C705A00A6FCEA = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = 5S42YR242U;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = C09D2D261F3C705A00A6FCEA /* Build configuration list for PBXProject "dialog-actions-for-voiceover" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C09D2D221F3C705A00A6FCEA;
+			productRefGroup = C09D2D2C1F3C705A00A6FCEA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C09D2D2A1F3C705A00A6FCEA /* dialog-actions-for-voiceover */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C09D2D291F3C705A00A6FCEA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C09D2D391F3C705A00A6FCEA /* LaunchScreen.storyboard in Resources */,
+				C09D2D361F3C705A00A6FCEA /* Assets.xcassets in Resources */,
+				C09D2D341F3C705A00A6FCEA /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C09D2D271F3C705A00A6FCEA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C09D2D311F3C705A00A6FCEA /* ViewController.swift in Sources */,
+				C09D2D2F1F3C705A00A6FCEA /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		C09D2D321F3C705A00A6FCEA /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C09D2D331F3C705A00A6FCEA /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		C09D2D371F3C705A00A6FCEA /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C09D2D381F3C705A00A6FCEA /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C09D2D3B1F3C705A00A6FCEA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		C09D2D3C1F3C705A00A6FCEA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C09D2D3E1F3C705A00A6FCEA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 5S42YR242U;
+				INFOPLIST_FILE = "dialog-actions-for-voiceover/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.novoda.dialog-actions-for-voiceover";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		C09D2D3F1F3C705A00A6FCEA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 5S42YR242U;
+				INFOPLIST_FILE = "dialog-actions-for-voiceover/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.novoda.dialog-actions-for-voiceover";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C09D2D261F3C705A00A6FCEA /* Build configuration list for PBXProject "dialog-actions-for-voiceover" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C09D2D3B1F3C705A00A6FCEA /* Debug */,
+				C09D2D3C1F3C705A00A6FCEA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C09D2D3D1F3C705A00A6FCEA /* Build configuration list for PBXNativeTarget "dialog-actions-for-voiceover" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C09D2D3E1F3C705A00A6FCEA /* Debug */,
+				C09D2D3F1F3C705A00A6FCEA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C09D2D231F3C705A00A6FCEA /* Project object */;
+}
