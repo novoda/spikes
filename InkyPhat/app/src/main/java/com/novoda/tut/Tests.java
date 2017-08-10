@@ -8,6 +8,7 @@ import android.graphics.Matrix;
 
 import com.novoda.inkyphat.InkyPhat;
 import com.novoda.inkyphat.R;
+import com.novoda.inkyphat.ShapeDrawer;
 
 class Tests {
 
@@ -91,5 +92,20 @@ class Tests {
         Bitmap bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_test_1);
         inkyPhat.setBorder(InkyPhat.Palette.RED);
         inkyPhat.setImage(0, 0, bitmap, Matrix.ScaleToFit.START);
+    }
+
+    static void drawSmiley(InkyPhat inkyPhat) {
+        ShapeDrawer shapeDrawer = new ShapeDrawer(InkyPhat.WIDTH, InkyPhat.HEIGHT, inkyPhat); // TODO invert dependency
+
+        // Left eye
+        shapeDrawer.drawCircle(40, 40, 20, Color.BLACK);
+        shapeDrawer.drawCircle(40, 40, 5, Color.BLACK);
+        // Right eye
+        shapeDrawer.drawCircle(80, 40, 20, Color.BLACK);
+        shapeDrawer.drawCircle(80, 40, 5, Color.BLACK);
+        // Nose
+        shapeDrawer.drawCircle(60, 75, 15, Color.BLACK);
+        // Mouth
+        shapeDrawer.drawArc(60, 90, 25, 0, 180, Color.BLACK);
     }
 }

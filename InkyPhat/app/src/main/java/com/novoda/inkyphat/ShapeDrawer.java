@@ -3,13 +3,13 @@ package com.novoda.inkyphat;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-class ShapeDrawer {
+public class ShapeDrawer {
 
     private final int width;
     private final int height;
     private final InkyPhat inkyPhat;
 
-    ShapeDrawer(int width, int height, InkyPhat inkyPhat) {
+    public ShapeDrawer(int width, int height, InkyPhat inkyPhat) {
         this.width = width;
         this.height = height;
         this.inkyPhat = inkyPhat;
