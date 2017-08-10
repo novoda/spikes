@@ -83,9 +83,14 @@ class UsbDeviceConnection extends DeviceConnection implements UsbChangesListener
     private final SerialPortMonitor.DataReceiver dataReceiver = new SerialPortMonitor.DataReceiver() {
         @Override
         public void onReceive(String data) {
-            // TODO: forward to the activity.
+            deviceConnectionListener().onDataReceived(data);
         }
     };
+
+    @Override
+    protected void send(String data) {
+        // TODO: send data to serial port.
+    }
 
     @Override
     protected void disconnect() {

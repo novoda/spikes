@@ -16,9 +16,14 @@ abstract class DeviceConnection {
 
     protected abstract void disconnect();
 
+    protected abstract void send(String data);
+
     interface DeviceConnectionListener {
         void onDeviceConnected();
 
         void onDeviceDisconnected();
+
+        void onDataReceived(String data);
+
     }
 }
