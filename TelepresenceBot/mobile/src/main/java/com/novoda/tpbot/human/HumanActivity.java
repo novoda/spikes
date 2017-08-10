@@ -1,9 +1,7 @@
 package com.novoda.tpbot.human;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.novoda.notils.caster.Views;
@@ -37,8 +35,7 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
         switchableView = Views.findById(this, R.id.bot_switchable_view);
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        LastServerPersistence lastServerPersistence = new LastServerPreferences(sharedPreferences);
+        LastServerPersistence lastServerPersistence = LastServerPreferences.newInstance(this);
         presenter = new HumanPresenter(SocketIOTelepresenceService.getInstance(), this, lastServerPersistence);
 
         Handler handler = new Handler();
@@ -49,7 +46,6 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
 
         ServerDeclarationView serverDeclarationView = Views.findById(switchableView, R.id.bot_server_declaration_view);
         serverDeclarationView.setServerDeclarationListener(serverDeclarationListener);
-
 
     }
 

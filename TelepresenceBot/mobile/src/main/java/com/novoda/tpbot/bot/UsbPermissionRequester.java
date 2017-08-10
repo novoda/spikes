@@ -16,7 +16,7 @@ class UsbPermissionRequester {
     private final Context context;
     private final UsbManager usbManager;
 
-    private UsbPermissionRequester(Context context, UsbManager usbManager) {
+    UsbPermissionRequester(Context context, UsbManager usbManager) {
         this.context = context;
         this.usbManager = usbManager;
     }

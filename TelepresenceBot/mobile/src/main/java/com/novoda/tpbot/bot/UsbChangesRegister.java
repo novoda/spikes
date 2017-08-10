@@ -13,7 +13,7 @@ class UsbChangesRegister {
     private final Context context;
     private UsbChangesListener usbChangesListener;
 
-    private UsbChangesRegister(Context context) {
+    UsbChangesRegister(Context context) {
         this.context = context;
     }
 
