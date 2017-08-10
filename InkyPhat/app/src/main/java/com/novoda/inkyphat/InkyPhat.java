@@ -21,8 +21,25 @@ public interface InkyPhat extends AutoCloseable {
      */
     int HEIGHT = 212;
 
+    /**
+     * Set an image to draw with {@link #refresh()} later
+     *
+     * @param x          the x co-ordinate (or column) to start drawing the images x=0 at
+     * @param y          the y co-ordinate (or row) to start drawing the images y=0 at
+     * @param image      the bitmap to draw (assumed ARGB888)
+     * @param scaleToFit the scale to use see {@link android.graphics.Matrix.ScaleToFit}
+     */
     void setImage(int x, int y, Bitmap image, Matrix.ScaleToFit scaleToFit);
 
+    /**
+     * Set some text to draw with {@link #refresh()} later
+     * the background will be the inverse of the text color
+     *
+     * @param x     the x co-ordinate (or column) to start writing at
+     * @param y     the y co-ordinate (or row) to start writing at
+     * @param text  the text to write
+     * @param color the color of the written text
+     */
     void setText(int x, int y, String text, int color);
 
     /**
