@@ -72,9 +72,18 @@ public interface InkyPhat extends AutoCloseable {
      */
     void refresh();
 
+    /**
+     * Call close when you have finished with the InkyPhat
+     * <p>
+     * If you call {@link Factory#create} in an Android lifecycle method
+     * remember to call close in the symmetrically matching method
+     */
     @Override
     void close();
 
+    /**
+     * Use this to create an instance of the {@link InkyPhat}
+     */
     class Factory {
         public static InkyPhat create(String spiBus,
                                       String gpioBusyPin, String gpioResetPin, String gpioCommandPin,
