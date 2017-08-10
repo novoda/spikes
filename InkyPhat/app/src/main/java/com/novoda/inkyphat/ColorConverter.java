@@ -32,10 +32,10 @@ class ColorConverter {
     InkyPhat.Palette convertAlpha8Color(int color) {
         int alpha = Color.alpha(color);
         InkyPhat.Palette palette;
-        if (alpha > THRESHOLD_RED) {
-            palette = InkyPhat.Palette.RED;
-        } else if (alpha > THRESHOLD_BLACK) {
+        if (alpha > THRESHOLD_BLACK) {
             palette = InkyPhat.Palette.BLACK;
+        } else if (alpha > THRESHOLD_RED) {
+            palette = InkyPhat.Palette.RED;
         } else {
             palette = InkyPhat.Palette.WHITE;
         }
