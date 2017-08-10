@@ -14,6 +14,7 @@
 		C09D2D441F3C8BF900A6FCEA /* Tweet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09D2D431F3C8BF900A6FCEA /* Tweet.swift */; };
 		C09D2D481F3C8EEC00A6FCEA /* TweetsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09D2D471F3C8EEC00A6FCEA /* TweetsProvider.swift */; };
 		C09D2D4A1F3C913400A6FCEA /* TweetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09D2D491F3C913400A6FCEA /* TweetsViewController.swift */; };
+		C09D2D4C1F3C968D00A6FCEA /* TweetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09D2D4B1F3C968D00A6FCEA /* TweetCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		C09D2D431F3C8BF900A6FCEA /* Tweet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tweet.swift; sourceTree = "<group>"; };
 		C09D2D471F3C8EEC00A6FCEA /* TweetsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetsProvider.swift; sourceTree = "<group>"; };
 		C09D2D491F3C913400A6FCEA /* TweetsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetsViewController.swift; sourceTree = "<group>"; };
+		C09D2D4B1F3C968D00A6FCEA /* TweetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 				C09D2D431F3C8BF900A6FCEA /* Tweet.swift */,
 				C09D2D471F3C8EEC00A6FCEA /* TweetsProvider.swift */,
 				C09D2D491F3C913400A6FCEA /* TweetsViewController.swift */,
+				C09D2D4B1F3C968D00A6FCEA /* TweetCell.swift */,
 			);
 			path = "dialog-actions-for-voiceover";
 			sourceTree = "<group>";
@@ -155,6 +158,7 @@
 			files = (
 				C09D2D4A1F3C913400A6FCEA /* TweetsViewController.swift in Sources */,
 				C09D2D2F1F3C705A00A6FCEA /* AppDelegate.swift in Sources */,
+				C09D2D4C1F3C968D00A6FCEA /* TweetCell.swift in Sources */,
 				C09D2D441F3C8BF900A6FCEA /* Tweet.swift in Sources */,
 				C09D2D481F3C8EEC00A6FCEA /* TweetsProvider.swift in Sources */,
 			);
