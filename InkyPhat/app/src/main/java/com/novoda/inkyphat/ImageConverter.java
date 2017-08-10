@@ -1,12 +1,7 @@
 package com.novoda.inkyphat;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 
 import static com.novoda.inkyphat.InkyPhat.Orientation.PORTRAIT;
 
@@ -35,8 +30,7 @@ class ImageConverter {
         int pixelCount = 0;
         InkyPhat.Palette[] colors = new InkyPhat.Palette[width * height];
         for (int i = 0, pixelsLength = pixels.length; i < pixelsLength; i++) {
-            colors[i] = colorConverter.convertAlpha8Color(pixels[i]);
-//            colors[i] = colorConverter.convertARBG888Color(pixels[i]);
+            colors[i] = colorConverter.convertARBG888Color(pixels[i]);
             pixelCount++;
             if (pixelCount == width) {
                 pixelCount = 0;
@@ -47,28 +41,7 @@ class ImageConverter {
 
     Bitmap[] filterImage(Bitmap sourceBitmap, Matrix.ScaleToFit scaleToFit) {
         Bitmap scaled = scaleToInkyPhatBounds(sourceBitmap, scaleToFit);
-        Bitmap filteredMono = filterToMonoChrome(scaled);
-        Bitmap transparent = mapWhiteToTransparent(filteredMono);
-        Bitmap filteredBlackWhite = filterToBlackAndWhite(transparent);
-        return new Bitmap[]{sourceBitmap, scaled, filteredMono, transparent, filteredBlackWhite};
-    }
-
-    private Bitmap mapWhiteToTransparent(Bitmap sourceBitmap) {
-        Bitmap output = sourceBitmap.copy(Bitmap.Config.ARGB_8888, true);
-
-        int[] allPixels = new int[output.getHeight() * output.getWidth()];
-        output.getPixels(allPixels, 0, output.getWidth(), 0, 0, output.getWidth(), output.getHeight());
-        for (int i = 0; i < allPixels.length; i++) {
-            float[] hsv = new float[3];
-            Color.colorToHSV(allPixels[i], hsv);
-            if (hsv[2] > 0.9f) {
-                allPixels[i] = Color.TRANSPARENT;
-            }
-        }
-
-        output.setPixels(allPixels, 0, output.getWidth(), 0, 0, output.getWidth(), output.getHeight());
-
-        return output;
+        return new Bitmap[]{sourceBitmap, scaled};
     }
 
     private Bitmap scaleToInkyPhatBounds(Bitmap sourceBitmap, Matrix.ScaleToFit scaleType) {
@@ -100,22 +73,6 @@ class ImageConverter {
 
     private boolean isIn(InkyPhat.Orientation orientation) {
         return this.orientation == orientation;
-    }
-
-    private Bitmap filterToMonoChrome(Bitmap sourceBitmap) {
-        Bitmap output = sourceBitmap.copy(Bitmap.Config.ARGB_8888, true);
-        ColorMatrix monochromeMatrix = new ColorMatrix();
-        monochromeMatrix.setSaturation(0);
-        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(monochromeMatrix);
-        Paint paint = new Paint();
-        paint.setColorFilter(filter);
-        Canvas canvas = new Canvas(output);
-        canvas.drawBitmap(output, 0, 0, paint);
-        return output;
-    }
-
-    private Bitmap filterToBlackAndWhite(Bitmap sourceBitmap) {
-        return sourceBitmap.copy(Bitmap.Config.ALPHA_8, true);
     }
 
 }
