@@ -20,14 +20,8 @@ class UsbDeviceConnection extends DeviceConnection implements UsbChangesListener
         UsbChangesRegister usbChangesRegister = new UsbChangesRegister(context);
         UsbManager usbManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
         SupportedDeviceRetriever supportedDeviceRetriever = new SupportedDeviceRetriever(usbManager);
-        SerialPortMonitor.DataReceiver dataReceiver = new SerialPortMonitor.DataReceiver() {
-            @Override
-            public void onReceive(String data) {
-
-            }
-        };
         SerialPortCreator serialPortCreator = new SerialPortCreator();
-        SerialPortMonitor serialPortMonitor = new SerialPortMonitor(usbManager, dataReceiver, serialPortCreator);
+        SerialPortMonitor serialPortMonitor = new SerialPortMonitor(usbManager, serialPortCreator);
         UsbPermissionRequester usbPermissionRequester = new UsbPermissionRequester(context, usbManager);
 
         return new UsbDeviceConnection(
@@ -39,11 +33,11 @@ class UsbDeviceConnection extends DeviceConnection implements UsbChangesListener
         );
     }
 
-    protected UsbDeviceConnection(DeviceConnectionListener deviceConnectionListener,
-                                  UsbChangesRegister usbChangesRegister,
-                                  SupportedDeviceRetriever supportedDeviceRetriever,
-                                  SerialPortMonitor serialPortMonitor,
-                                  UsbPermissionRequester usbPermissionRequester) {
+    private UsbDeviceConnection(DeviceConnectionListener deviceConnectionListener,
+                                UsbChangesRegister usbChangesRegister,
+                                SupportedDeviceRetriever supportedDeviceRetriever,
+                                SerialPortMonitor serialPortMonitor,
+                                UsbPermissionRequester usbPermissionRequester) {
         super(deviceConnectionListener);
         this.usbChangesRegister = usbChangesRegister;
         this.supportedDeviceRetriever = supportedDeviceRetriever;
@@ -77,7 +71,7 @@ class UsbDeviceConnection extends DeviceConnection implements UsbChangesListener
 
     @Override
     public void onPermissionGranted() {
-        boolean canMonitor = serialPortMonitor.tryToMonitorSerialPortFor(supportedUsbDevice.get());
+        boolean canMonitor = serialPortMonitor.tryToMonitorSerialPortFor(supportedUsbDevice.get(), dataReceiver);
 
         if (canMonitor) {
             deviceConnectionListener().onDeviceConnected();
@@ -85,6 +79,13 @@ class UsbDeviceConnection extends DeviceConnection implements UsbChangesListener
             closeConnection();
         }
     }
+
+    private final SerialPortMonitor.DataReceiver dataReceiver = new SerialPortMonitor.DataReceiver() {
+        @Override
+        public void onReceive(String data) {
+            // TODO: forward to the activity.
+        }
+    };
 
     @Override
     protected void disconnect() {

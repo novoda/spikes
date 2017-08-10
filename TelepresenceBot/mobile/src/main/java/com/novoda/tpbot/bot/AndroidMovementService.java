@@ -35,7 +35,7 @@ public class AndroidMovementService extends Service implements UsbChangesListene
         usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
         supportedDeviceRetriever = new SupportedDeviceRetriever(usbManager);
         SerialPortCreator serialPortCreator = new SerialPortCreator();
-        serialPortMonitor = new SerialPortMonitor(usbManager, dataReceiver, serialPortCreator);
+        serialPortMonitor = new SerialPortMonitor(usbManager, serialPortCreator);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class AndroidMovementService extends Service implements UsbChangesListene
 
     @Override
     public void onPermissionGranted() {
-        serialPortMonitor.tryToMonitorSerialPortFor(supportedUsbDevice.get());
+        serialPortMonitor.tryToMonitorSerialPortFor(supportedUsbDevice.get(), dataReceiver);
     }
 
     @Override

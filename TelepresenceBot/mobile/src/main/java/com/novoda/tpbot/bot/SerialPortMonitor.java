@@ -14,19 +14,17 @@ import java.io.UnsupportedEncodingException;
 class SerialPortMonitor {
 
     private final UsbManager usbManager;
-    private final DataReceiver dataReceiver;
     private final SerialPortCreator serialPortCreator;
 
     private UsbSerialDevice serialPort;
     private UsbDeviceConnection deviceConnection;
 
-    SerialPortMonitor(UsbManager usbManager, DataReceiver dataReceiver, SerialPortCreator serialPortCreator) {
+    SerialPortMonitor(UsbManager usbManager, SerialPortCreator serialPortCreator) {
         this.usbManager = usbManager;
-        this.dataReceiver = dataReceiver;
         this.serialPortCreator = serialPortCreator;
     }
 
-    boolean tryToMonitorSerialPortFor(UsbDevice usbDevice) {
+    boolean tryToMonitorSerialPortFor(UsbDevice usbDevice, DataReceiver dataReceiver) {
         deviceConnection = usbManager.openDevice(usbDevice);
         serialPort = serialPortCreator.create(usbDevice, deviceConnection);
 
@@ -41,7 +39,7 @@ class SerialPortMonitor {
             serialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
             serialPort.setParity(UsbSerialInterface.PARITY_NONE);
             serialPort.setFlowControl(UsbSerialInterface.FLOW_CONTROL_OFF);
-            serialPort.read(onDataReceivedListener);
+            serialPort.read(new UsbReadCallbackStringForwarder(dataReceiver));
             return true;
         } else {
             stopMonitoring();
@@ -49,19 +47,6 @@ class SerialPortMonitor {
         }
 
     }
-
-    private UsbSerialInterface.UsbReadCallback onDataReceivedListener = new UsbSerialInterface.UsbReadCallback() {
-        @Override
-        public void onReceivedData(byte[] arg0) {
-            String data;
-            try {
-                data = new String(arg0, "UTF-8");
-                dataReceiver.onReceive(data);
-            } catch (UnsupportedEncodingException e) {
-                throw new DeveloperError("Error receiving data from USB serial.");
-            }
-        }
-    };
 
     boolean tryToSendCommand(String command) {
         if (serialPort == null) {
@@ -85,7 +70,29 @@ class SerialPortMonitor {
         }
     }
 
+    private class UsbReadCallbackStringForwarder implements UsbSerialInterface.UsbReadCallback {
+
+        private final DataReceiver dataReceiver;
+
+        private UsbReadCallbackStringForwarder(DataReceiver dataReceiver) {
+            this.dataReceiver = dataReceiver;
+        }
+
+        @Override
+        public void onReceivedData(byte[] bytes) {
+            String data;
+            try {
+                data = new String(bytes, "UTF-8");
+                dataReceiver.onReceive(data);
+            } catch (UnsupportedEncodingException e) {
+                throw new DeveloperError("Error receiving data from USB serial.");
+            }
+        }
+
+    }
+
     interface DataReceiver {
+
         void onReceive(String data);
     }
 

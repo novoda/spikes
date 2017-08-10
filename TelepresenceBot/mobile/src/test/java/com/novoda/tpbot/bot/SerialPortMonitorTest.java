@@ -48,14 +48,14 @@ public class SerialPortMonitorTest {
     @Before
     public void setUp() {
         Log.setShowLogs(false);
-        serialPortMonitor = new SerialPortMonitor(usbManager, dataReceiver, serialPortCreator);
+        serialPortMonitor = new SerialPortMonitor(usbManager, serialPortCreator);
     }
 
     @Test
     public void givenUnableToOpenDevice_whenTryingToMonitorSerialPort_thenReturnsFalse() {
         given(usbManager.openDevice(any(UsbDevice.class))).willReturn(null);
 
-        boolean monitoring = serialPortMonitor.tryToMonitorSerialPortFor(usbDevice);
+        boolean monitoring = serialPortMonitor.tryToMonitorSerialPortFor(usbDevice, dataReceiver);
 
         assertThat(monitoring).isFalse();
     }
@@ -65,7 +65,7 @@ public class SerialPortMonitorTest {
         given(usbManager.openDevice(any(UsbDevice.class))).willReturn(usbDeviceConnection);
         given(serialPortCreator.create(any(UsbDevice.class), any(UsbDeviceConnection.class))).willReturn(null);
 
-        boolean monitoring = serialPortMonitor.tryToMonitorSerialPortFor(usbDevice);
+        boolean monitoring = serialPortMonitor.tryToMonitorSerialPortFor(usbDevice, dataReceiver);
 
         assertThat(monitoring).isFalse();
     }
@@ -75,7 +75,7 @@ public class SerialPortMonitorTest {
         given(usbManager.openDevice(any(UsbDevice.class))).willReturn(usbDeviceConnection);
         given(serialPortCreator.create(any(UsbDevice.class), any(UsbDeviceConnection.class))).willReturn(null);
 
-        serialPortMonitor.tryToMonitorSerialPortFor(usbDevice);
+        serialPortMonitor.tryToMonitorSerialPortFor(usbDevice, dataReceiver);
 
         verify(usbDeviceConnection).close();
     }
@@ -86,7 +86,7 @@ public class SerialPortMonitorTest {
         given(serialPortCreator.create(any(UsbDevice.class), any(UsbDeviceConnection.class))).willReturn(usbSerialPort);
         given(usbSerialPort.open()).willReturn(false);
 
-        boolean monitoring = serialPortMonitor.tryToMonitorSerialPortFor(usbDevice);
+        boolean monitoring = serialPortMonitor.tryToMonitorSerialPortFor(usbDevice, dataReceiver);
 
         assertThat(monitoring).isFalse();
     }
@@ -97,7 +97,7 @@ public class SerialPortMonitorTest {
         given(serialPortCreator.create(any(UsbDevice.class), any(UsbDeviceConnection.class))).willReturn(usbSerialPort);
         given(usbSerialPort.open()).willReturn(false);
 
-        serialPortMonitor.tryToMonitorSerialPortFor(usbDevice);
+        serialPortMonitor.tryToMonitorSerialPortFor(usbDevice, dataReceiver);
 
         verify(usbDeviceConnection).close();
     }
@@ -108,7 +108,7 @@ public class SerialPortMonitorTest {
         given(serialPortCreator.create(any(UsbDevice.class), any(UsbDeviceConnection.class))).willReturn(usbSerialPort);
         given(usbSerialPort.open()).willReturn(true);
 
-        boolean monitoring = serialPortMonitor.tryToMonitorSerialPortFor(usbDevice);
+        boolean monitoring = serialPortMonitor.tryToMonitorSerialPortFor(usbDevice, dataReceiver);
 
         assertThat(monitoring).isTrue();
     }
@@ -119,7 +119,7 @@ public class SerialPortMonitorTest {
         given(serialPortCreator.create(any(UsbDevice.class), any(UsbDeviceConnection.class))).willReturn(usbSerialPort);
         given(usbSerialPort.open()).willReturn(true);
 
-        serialPortMonitor.tryToMonitorSerialPortFor(usbDevice);
+        serialPortMonitor.tryToMonitorSerialPortFor(usbDevice, dataReceiver);
 
         ArgumentCaptor<UsbSerialInterface.UsbReadCallback> argumentCaptor = ArgumentCaptor.forClass(UsbSerialInterface.UsbReadCallback.class);
         verify(usbSerialPort).read(argumentCaptor.capture());
@@ -133,7 +133,7 @@ public class SerialPortMonitorTest {
         given(serialPortCreator.create(any(UsbDevice.class), any(UsbDeviceConnection.class))).willReturn(usbSerialPort);
         given(usbSerialPort.open()).willReturn(false);
 
-        serialPortMonitor.tryToMonitorSerialPortFor(usbDevice);
+        serialPortMonitor.tryToMonitorSerialPortFor(usbDevice, dataReceiver);
 
         verify(usbSerialPort).close();
     }
@@ -187,6 +187,6 @@ public class SerialPortMonitorTest {
         given(serialPortCreator.create(any(UsbDevice.class), any(UsbDeviceConnection.class))).willReturn(usbSerialPort);
         given(usbSerialPort.open()).willReturn(true);
 
-        serialPortMonitor.tryToMonitorSerialPortFor(usbDevice);
+        serialPortMonitor.tryToMonitorSerialPortFor(usbDevice, dataReceiver);
     }
 }
