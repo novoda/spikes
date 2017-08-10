@@ -23,30 +23,39 @@ public class TestActivity extends Activity {
 
         LinearLayout root = (LinearLayout) findViewById(R.id.root);
         ImageConverter imageConverter = new ImageConverter(ORIENTATION);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_test_3);
-        Bitmap[] foo = imageConverter.filterImage(bitmap, Matrix.ScaleToFit.START);
-        showInDebugView(root, foo);
+        Bitmap input = BitmapFactory.decodeResource(getResources(), R.drawable.ic_test_1);
+        Bitmap result = imageConverter.filterImage(input, Matrix.ScaleToFit.START);
+        showOriginalInDebugView(root, input);
+        showInDebugView(root, result);
     }
 
-    private void showInDebugView(LinearLayout root, Bitmap[] foo) {
-        for (int i = 0; i < foo.length; i++) {
-            Bitmap image = foo[i];
-            ImageView imageview = new ImageView(this);
-            LayoutParams params;
-            if (i == 0) {
-                params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            } else {
-                params = new LayoutParams(WIDTH, HEIGHT);
-            }
-            params.leftMargin = 10;
-            params.topMargin = 10;
-            params.rightMargin = 10;
-            params.bottomMargin = 10;
+    private void showOriginalInDebugView(LinearLayout root, Bitmap image) {
+        ImageView imageview = new ImageView(this);
+        LayoutParams params;
+        params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.leftMargin = 10;
+        params.topMargin = 10;
+        params.rightMargin = 10;
+        params.bottomMargin = 10;
 //            params.gravity = Gravity.CENTER;
-            imageview.setLayoutParams(params);
-            imageview.setImageBitmap(image);
-            imageview.setBackgroundColor(Color.BLUE);
-            root.addView(imageview);
-        }
+        imageview.setLayoutParams(params);
+        imageview.setImageBitmap(image);
+        imageview.setBackgroundColor(Color.BLUE);
+        root.addView(imageview);
+    }
+
+    private void showInDebugView(LinearLayout root, Bitmap image) {
+        ImageView imageview = new ImageView(this);
+        LayoutParams params;
+        params = new LayoutParams(WIDTH, HEIGHT);
+        params.leftMargin = 10;
+        params.topMargin = 10;
+        params.rightMargin = 10;
+        params.bottomMargin = 10;
+//            params.gravity = Gravity.CENTER;
+        imageview.setLayoutParams(params);
+        imageview.setImageBitmap(image);
+        imageview.setBackgroundColor(Color.BLUE);
+        root.addView(imageview);
     }
 }

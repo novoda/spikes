@@ -18,8 +18,7 @@ class ImageConverter {
     }
 
     InkyPhat.PaletteImage convertImage(Bitmap input, Matrix.ScaleToFit scaleToFit) {
-        Bitmap[] bitmaps = filterImage(input, scaleToFit);
-        return translateImage(bitmaps[bitmaps.length - 1]);
+        return translateImage(filterImage(input, scaleToFit));
     }
 
     private InkyPhat.PaletteImage translateImage(Bitmap input) {
@@ -39,9 +38,8 @@ class ImageConverter {
         return new InkyPhat.PaletteImage(colors, width);
     }
 
-    Bitmap[] filterImage(Bitmap sourceBitmap, Matrix.ScaleToFit scaleToFit) {
-        Bitmap scaled = scaleToInkyPhatBounds(sourceBitmap, scaleToFit);
-        return new Bitmap[]{sourceBitmap, scaled};
+    Bitmap filterImage(Bitmap sourceBitmap, Matrix.ScaleToFit scaleToFit) {
+        return scaleToInkyPhatBounds(sourceBitmap, scaleToFit);
     }
 
     private Bitmap scaleToInkyPhatBounds(Bitmap sourceBitmap, Matrix.ScaleToFit scaleType) {
