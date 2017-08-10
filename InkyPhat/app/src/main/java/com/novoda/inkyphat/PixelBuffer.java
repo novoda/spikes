@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.novoda.inkyphat.InkyPhat.Palette;
 
-import static com.novoda.inkyphat.InkyPhat.Orientation.LANDSCAPE;
 import static com.novoda.inkyphat.InkyPhat.Orientation.PORTRAIT;
 
 class PixelBuffer {
@@ -25,7 +24,7 @@ class PixelBuffer {
     }
 
     private int getOrientatedHeight() {
-        return isIn(LANDSCAPE) ? InkyPhat.HEIGHT : InkyPhat.WIDTH;
+        return isIn(PORTRAIT) ? InkyPhat.HEIGHT : InkyPhat.WIDTH;
     }
 
     private boolean isIn(InkyPhat.Orientation orientation) {
@@ -52,11 +51,11 @@ class PixelBuffer {
 
     void setPixel(int x, int y, Palette color) {
         if (x < 0 || x >= getOrientatedWidth()) {
-            Log.v("InkyPhat", "Attempt to draw outside of X bounds (x:" + x + " y:" + y + ")");
+            Log.v("InkyPhat", "Attempt to draw outside of X bounds (x:" + x + " y:" + y + ") Max X is " + getOrientatedWidth());
             return;
         }
         if (y < 0 || y >= getOrientatedHeight()) {
-            Log.v("InkyPhat", "Attempt to draw outside of Y bounds (x:" + x + " y:" + y + ")");
+            Log.v("InkyPhat", "Attempt to draw outside of Y bounds (x:" + x + " y:" + y + ") Max Y is " + getOrientatedHeight());
             return;
         }
         pixelBuffer[x][y] = color;

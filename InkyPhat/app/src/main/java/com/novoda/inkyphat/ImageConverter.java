@@ -8,7 +8,6 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 
-import static com.novoda.inkyphat.InkyPhat.Orientation.LANDSCAPE;
 import static com.novoda.inkyphat.InkyPhat.Orientation.PORTRAIT;
 
 class ImageConverter {
@@ -96,7 +95,7 @@ class ImageConverter {
     }
 
     private int getOrientatedHeight() {
-        return isIn(LANDSCAPE) ? InkyPhat.HEIGHT : InkyPhat.WIDTH;
+        return isIn(PORTRAIT) ? InkyPhat.HEIGHT : InkyPhat.WIDTH;
     }
 
     private boolean isIn(InkyPhat.Orientation orientation) {
