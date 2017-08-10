@@ -8,21 +8,25 @@
 
 /* Begin PBXBuildFile section */
 		C09D2D2F1F3C705A00A6FCEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09D2D2E1F3C705A00A6FCEA /* AppDelegate.swift */; };
-		C09D2D311F3C705A00A6FCEA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09D2D301F3C705A00A6FCEA /* ViewController.swift */; };
 		C09D2D341F3C705A00A6FCEA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C09D2D321F3C705A00A6FCEA /* Main.storyboard */; };
 		C09D2D361F3C705A00A6FCEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C09D2D351F3C705A00A6FCEA /* Assets.xcassets */; };
 		C09D2D391F3C705A00A6FCEA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C09D2D371F3C705A00A6FCEA /* LaunchScreen.storyboard */; };
+		C09D2D441F3C8BF900A6FCEA /* Tweet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09D2D431F3C8BF900A6FCEA /* Tweet.swift */; };
+		C09D2D481F3C8EEC00A6FCEA /* TweetsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09D2D471F3C8EEC00A6FCEA /* TweetsProvider.swift */; };
+		C09D2D4A1F3C913400A6FCEA /* TweetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09D2D491F3C913400A6FCEA /* TweetsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		C09D2D2B1F3C705A00A6FCEA /* dialog-actions-for-voiceover.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "dialog-actions-for-voiceover.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C09D2D2E1F3C705A00A6FCEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C09D2D301F3C705A00A6FCEA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C09D2D331F3C705A00A6FCEA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C09D2D351F3C705A00A6FCEA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C09D2D381F3C705A00A6FCEA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C09D2D3A1F3C705A00A6FCEA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C09D2D401F3C725400A6FCEA /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		C09D2D431F3C8BF900A6FCEA /* Tweet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tweet.swift; sourceTree = "<group>"; };
+		C09D2D471F3C8EEC00A6FCEA /* TweetsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetsProvider.swift; sourceTree = "<group>"; };
+		C09D2D491F3C913400A6FCEA /* TweetsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,14 +60,24 @@
 		C09D2D2D1F3C705A00A6FCEA /* dialog-actions-for-voiceover */ = {
 			isa = PBXGroup;
 			children = (
+				C09D2D411F3C8AC100A6FCEA /* supportingFiles */,
+				C09D2D431F3C8BF900A6FCEA /* Tweet.swift */,
+				C09D2D471F3C8EEC00A6FCEA /* TweetsProvider.swift */,
+				C09D2D491F3C913400A6FCEA /* TweetsViewController.swift */,
+			);
+			path = "dialog-actions-for-voiceover";
+			sourceTree = "<group>";
+		};
+		C09D2D411F3C8AC100A6FCEA /* supportingFiles */ = {
+			isa = PBXGroup;
+			children = (
 				C09D2D2E1F3C705A00A6FCEA /* AppDelegate.swift */,
-				C09D2D301F3C705A00A6FCEA /* ViewController.swift */,
 				C09D2D321F3C705A00A6FCEA /* Main.storyboard */,
 				C09D2D351F3C705A00A6FCEA /* Assets.xcassets */,
 				C09D2D371F3C705A00A6FCEA /* LaunchScreen.storyboard */,
 				C09D2D3A1F3C705A00A6FCEA /* Info.plist */,
 			);
-			path = "dialog-actions-for-voiceover";
+			name = supportingFiles;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,8 +153,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C09D2D311F3C705A00A6FCEA /* ViewController.swift in Sources */,
+				C09D2D4A1F3C913400A6FCEA /* TweetsViewController.swift in Sources */,
 				C09D2D2F1F3C705A00A6FCEA /* AppDelegate.swift in Sources */,
+				C09D2D441F3C8BF900A6FCEA /* Tweet.swift in Sources */,
+				C09D2D481F3C8EEC00A6FCEA /* TweetsProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
