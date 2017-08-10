@@ -37,6 +37,7 @@ class ImageConverter {
         InkyPhat.Palette[] colors = new InkyPhat.Palette[width * height];
         for (int i = 0, pixelsLength = pixels.length; i < pixelsLength; i++) {
             colors[i] = colorConverter.convertAlpha8Color(pixels[i]);
+//            colors[i] = colorConverter.convertARBG888Color(pixels[i]);
             pixelCount++;
             if (pixelCount == width) {
                 pixelCount = 0;
