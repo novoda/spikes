@@ -1,5 +1,7 @@
 package com.novoda.inkyphat;
 
+import android.util.Log;
+
 import com.novoda.inkyphat.InkyPhat.Palette;
 
 import static com.novoda.inkyphat.InkyPhat.Orientation.LANDSCAPE;
@@ -53,11 +55,13 @@ class PixelBuffer {
     }
 
     void setPixel(int x, int y, Palette color) {
-        if (x > getOrientatedWidth()) {
-            throw new IllegalStateException(x + " cannot be drawn. Max width is " + getOrientatedWidth());
+        if (x < 0 || x >= getOrientatedWidth()) {
+            Log.v("InkyPhat", "Attempt to draw outside of X bounds (x:" + x + " y:" + y + ")");
+            return;
         }
-        if (y > getOrientatedHeight()) {
-            throw new IllegalStateException(y + " cannot be drawn. Max height is " + getOrientatedHeight());
+        if (y < 0 || y >= getOrientatedHeight()) {
+            Log.v("InkyPhat", "Attempt to draw outside of Y bounds (x:" + x + " y:" + y + ")");
+            return;
         }
         pixelBuffer[x][y] = color;
     }
