@@ -36,7 +36,7 @@ class PixelBuffer {
         int pixelCount = 0;
         for (int i = 0; i < image.totalPixels(); i++) {
             int localX = x + pixelCount;
-            int localY = y + pixelCount + rowCount;
+            int localY = y + rowCount;
 
             InkyPhat.Palette color = image.getPixel(i);
             setPixel(localX, localY, color);
