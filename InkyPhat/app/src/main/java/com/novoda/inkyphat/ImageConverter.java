@@ -26,14 +26,9 @@ class ImageConverter {
         int height = input.getHeight();
         int[] pixels = new int[width * height];
         input.getPixels(pixels, 0, width, 0, 0, width, height);
-        int pixelCount = 0;
         InkyPhat.Palette[] colors = new InkyPhat.Palette[width * height];
         for (int i = 0, pixelsLength = pixels.length; i < pixelsLength; i++) {
             colors[i] = colorConverter.convertARBG888Color(pixels[i]);
-            pixelCount++;
-            if (pixelCount == width) {
-                pixelCount = 0;
-            }
         }
         return new InkyPhat.PaletteImage(colors, width);
     }
