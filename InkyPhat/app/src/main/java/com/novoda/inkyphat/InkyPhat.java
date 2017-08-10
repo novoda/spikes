@@ -23,6 +23,8 @@ public interface InkyPhat extends AutoCloseable {
 
     void setImage(int x, int y, Bitmap image, Matrix.ScaleToFit scaleToFit);
 
+    void setText(int x, int y, String text, int color);
+
     /**
      * Set any pixel in the InkyPhat this is any pixel between {@link #WIDTH} & {@link #HEIGHT}
      * according to the {@link InkyPhat.Orientation} of your display.

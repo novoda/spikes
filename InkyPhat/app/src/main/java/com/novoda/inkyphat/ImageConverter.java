@@ -1,8 +1,12 @@
 package com.novoda.inkyphat;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 
+import static android.graphics.Paint.ANTI_ALIAS_FLAG;
 import static com.novoda.inkyphat.InkyPhat.Orientation.PORTRAIT;
 
 class ImageConverter {
@@ -68,4 +72,23 @@ class ImageConverter {
         return this.orientation == orientation;
     }
 
+    public InkyPhat.PaletteImage convertText(String text, int color) {
+        return convertImage(textAsBitmap(text, 20, color), Matrix.ScaleToFit.START);
+    }
+
+    private Bitmap textAsBitmap(String text, float textSize, int textColor) {
+        Paint paint = new Paint(ANTI_ALIAS_FLAG);
+        paint.setTextSize(textSize);
+        paint.setColor(textColor);
+        paint.setTextAlign(Paint.Align.LEFT);
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        float baseline = -paint.ascent();
+        int width = (int) (paint.measureText(text) + 0.5f);
+        int height = (int) (baseline + paint.descent() + 0.5f);
+        Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(image);
+        canvas.drawColor(colorConverter.convertToInverse(textColor));
+        canvas.drawText(text, 0, baseline, paint);
+        return image;
+    }
 }

@@ -108,4 +108,15 @@ class Tests {
         // Mouth
         shapeDrawer.drawArc(60, 90, 25, 0, 180, Color.BLACK);
     }
+
+    static void drawHelloWorldText(InkyPhat inkyPhat) {
+      inkyPhat.setText(0, 0, "Hello World", Color.WHITE);
+    }
+
+    static void drawNameBadge(InkyPhat inkyPhat, Resources resources) {
+        Bitmap bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_test_3);
+        inkyPhat.setBorder(InkyPhat.Palette.RED);
+        inkyPhat.setImage(0, 0, bitmap, Matrix.ScaleToFit.START);
+        inkyPhat.setText(50, 65, "Ataul Munim", Color.BLACK);
+    }
 }

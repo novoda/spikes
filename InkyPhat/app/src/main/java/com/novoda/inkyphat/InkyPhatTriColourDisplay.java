@@ -75,6 +75,11 @@ class InkyPhatTriColourDisplay implements InkyPhat {
     }
 
     @Override
+    public void setText(int x, int y, String text, int color) {
+         pixelBuffer.setImage(x, y, imageConverter.convertText(text, color));
+    }
+
+    @Override
     public void setPixel(int x, int y, int color) {
         pixelBuffer.setPixel(x, y, colorConverter.convertARBG888Color(color));
     }
