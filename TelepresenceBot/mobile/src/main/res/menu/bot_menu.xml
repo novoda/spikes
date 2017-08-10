@@ -8,10 +8,4 @@
     android:title="@string/list_connected_devices_menu_item_title"
     app:showAsAction="ifRoom" />
 
-  <item
-    android:id="@+id/bot_only_menu_item"
-    android:icon="@android:drawable/ic_menu_help"
-    android:title="@string/bot_only_menu_item_title"
-    app:showAsAction="ifRoom" />
-
 </menu>

@@ -135,8 +135,6 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
             case R.id.usb_devices_list_menu_item:
                 showConnectedDevices();
                 return true;
-            case R.id.bot_only_menu_item:
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
