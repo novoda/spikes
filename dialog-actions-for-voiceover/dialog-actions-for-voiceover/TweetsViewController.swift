@@ -15,26 +15,29 @@ class TweetsViewController: UIViewController {
     let tweetsProvider = TweetsProvider()
     
     var tableView = UITableView()
+    var tweets: [Tweet] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.frame = view.frame
+        
         tableView.register(TweetCell.self, forCellReuseIdentifier: cellIdentifier)
-        let tableViewAdapter = TweetsTableViewAdapter()
-        tableView.dataSource = tableViewAdapter
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+        view.addSubview(tableView)
         
         tweetsProvider.fetchTweets(completion: { tweets in
-            tableViewAdapter.update(tweets)
+            self.update(tweets)
             self.tableView.reloadData()
         })
     }
 }
 
-class TweetsTableViewAdapter: NSObject, UITableViewDataSource {
-    
-    var tweets: [Tweet] = []
+extension TweetsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: TweetCell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! TweetCell
+        let cell: TweetCell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! TweetCell
         // TODO: bind tweet to view
         return cell
     }

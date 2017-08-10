@@ -15,10 +15,9 @@ class TweetsProvider {
     }
     
     private func createTweets() -> [Tweet] {
-        var tweets = [Tweet]()
-        tweets.append(Tweet(id: "1", username: "u1", body: "sdfsf", avatarUrl: "https://robohash.org/sdfsdfsdf", time: "12:12"))
-        tweets.append(Tweet(id: "2", username: "u2", body: "dsfgdsfgdfsg", avatarUrl: "https://robohash.org/sdfsdfsdfsfdsf", time: "12:12"))
-        return tweets
+        return [
+            Tweet(id: "1", username: "u1", body: "sdfsf", avatarUrl: "https://robohash.org/sdfsdfsdf", time: "12:12"),
+            Tweet(id: "2", username: "u2", body: "dsfgdsfgdfsg", avatarUrl: "https://robohash.org/sdfsdfsdfsfdsf", time: "12:12")
+        ]
     }
-    
 }
