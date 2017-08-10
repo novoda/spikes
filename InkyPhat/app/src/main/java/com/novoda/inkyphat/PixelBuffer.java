@@ -11,24 +11,12 @@ class PixelBuffer {
     private static final int PIXELS_PER_REGION = 8;
     private static final int NUMBER_OF_PIXEL_REGIONS = InkyPhat.WIDTH * InkyPhat.HEIGHT / PIXELS_PER_REGION;
 
-    private final Palette[][] pixelBuffer;
+    private final Palette[][] pixelBuffer = new Palette[InkyPhat.WIDTH][InkyPhat.HEIGHT];
+
     private final InkyPhat.Orientation orientation;
 
     PixelBuffer(InkyPhat.Orientation orientation) {
         this.orientation = orientation;
-        pixelBuffer = new Palette[getOrientatedWidth()][getOrientatedHeight()];
-    }
-
-    private int getOrientatedWidth() {
-        return isIn(PORTRAIT) ? InkyPhat.WIDTH : InkyPhat.HEIGHT;
-    }
-
-    private int getOrientatedHeight() {
-        return isIn(PORTRAIT) ? InkyPhat.HEIGHT : InkyPhat.WIDTH;
-    }
-
-    private boolean isIn(InkyPhat.Orientation orientation) {
-        return this.orientation == orientation;
     }
 
     void setImage(int x, int y, InkyPhat.PaletteImage image) {
@@ -58,7 +46,27 @@ class PixelBuffer {
             Log.v("InkyPhat", "Attempt to draw outside of Y bounds (x:" + x + " y:" + y + ") Max Y is " + getOrientatedHeight());
             return;
         }
-        pixelBuffer[x][y] = color;
+
+        if (isIn(PORTRAIT)) {
+            pixelBuffer[x][y] = color;
+        } else {
+            int localX = (InkyPhat.WIDTH - 1) - y;
+            //noinspection SuspiciousNameCombination, its flipped
+            int localY = x;
+            pixelBuffer[localX][localY] = color;
+        }
+    }
+
+    private int getOrientatedWidth() {
+        return isIn(PORTRAIT) ? InkyPhat.WIDTH : InkyPhat.HEIGHT;
+    }
+
+    private int getOrientatedHeight() {
+        return isIn(PORTRAIT) ? InkyPhat.HEIGHT : InkyPhat.WIDTH;
+    }
+
+    private boolean isIn(InkyPhat.Orientation orientation) {
+        return this.orientation == orientation;
     }
 
     byte[] getDisplayPixelsForColor(Palette color) {
@@ -66,8 +74,8 @@ class PixelBuffer {
     }
 
     private Palette[] flatten(Palette[][] twoDimensionalPaletteArray) {
-        int width = getOrientatedWidth();
-        int height = getOrientatedHeight();
+        int width = InkyPhat.WIDTH;
+        int height = InkyPhat.HEIGHT;
         Palette[] flattenedArray = new Palette[width * height];
         int index = 0;
         for (int y = 0; y < height; y++) {
