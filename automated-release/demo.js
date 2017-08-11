@@ -41,9 +41,6 @@ const config = {
     }
 }
 
-console.log("start")
-
-
 release(config).then(() => {
     fs.removeSync(CLONE_PATH)
     fs.removeSync(ARTIFACTS_OUTPUT_PATH)

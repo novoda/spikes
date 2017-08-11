@@ -4,21 +4,15 @@ const GitBranch = require('git-branch')
 const AndroidProps = require('android-release-properties')
 
 const doRelease = async (config) => {
-    console.log("do release")
-    new AndroidProps().update({
-        path: config.androidVersionProperties.path,
-        increment: config.androidVersionProperties.versionCodeIncrement,
-        versionName: config.androidVersionProperties.versionName
-    })
+    const git = new GitBranch()
+    const branchRef = await checkout(git, config)
 
-    // const git = new GitBranch()
-    // const branchRef = await checkout(git, config)
+    updateVersionProperties(config.androidVersionProperties)
+    const artifacts = await config.generateArtifacts(collector)
 
-    // const artifacts = await config.generateArtifacts(collector)
-
-    // await push(git, branchRef, config)
-    // const github = new Github(config.auth.gitHubToken)
-    // await githubRelease(github, artifacts, config)
+    await push(git, branchRef, config)
+    const github = new Github(config.auth.gitHubToken)
+    await githubRelease(github, artifacts, config)
 }
 
 const checkout = (git, config) => {
@@ -30,6 +24,16 @@ const checkout = (git, config) => {
         repoUrl: `https://github.com/${config.repo.owner}/${config.repo.name}.git`
     }
     return git.checkout(checkoutOptions)
+}
+
+const updateVersionProperties = (androidVersionProperties) => {
+    const androidProps = new AndroidProps()
+    const versionOptions = {
+        path: androidVersionProperties.path,
+        increment: androidVersionProperties.versionCodeIncrement,
+        versionName: androidVersionProperties.versionName
+    }
+    androidProps.update(versionOptions)
 }
 
 const push = (git, branchRef, config) => {
