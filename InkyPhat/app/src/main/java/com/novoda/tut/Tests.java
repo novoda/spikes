@@ -3,12 +3,13 @@ package com.novoda.tut;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 
 import com.novoda.inkyphat.InkyPhat;
 import com.novoda.inkyphat.R;
-import com.novoda.inkyphat.ShapeDrawer;
 
 class Tests {
 
@@ -95,22 +96,28 @@ class Tests {
     }
 
     static void drawSmiley(InkyPhat inkyPhat) {
-        ShapeDrawer shapeDrawer = new ShapeDrawer(inkyPhat); // TODO invert dependency
+        Bitmap image = Bitmap.createBitmap(InkyPhat.WIDTH, InkyPhat.HEIGHT, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(image);
+        canvas.drawColor(0xFFFFFFFF);
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.BLACK);
+        canvas.drawCircle(40, 40, 20, paint);
 
         // Left eye
-        shapeDrawer.drawCircle(40, 40, 20, Color.BLACK);
-        shapeDrawer.drawCircle(40, 40, 5, Color.BLACK);
+        canvas.drawCircle(40, 40, 20, paint);
         // Right eye
-        shapeDrawer.drawCircle(80, 40, 20, Color.BLACK);
-        shapeDrawer.drawCircle(80, 40, 5, Color.BLACK);
+        canvas.drawCircle(80, 40, 20, paint);
         // Nose
-        shapeDrawer.drawCircle(60, 75, 15, Color.BLACK);
+        canvas.drawCircle(60, 75, 15, paint);
         // Mouth
-        shapeDrawer.drawArc(60, 90, 25, 0, 180, Color.BLACK);
+        canvas.drawArc(20, 90, 100, 120, 0, 180, false, paint);
+
+        inkyPhat.setImage(0, 0, image, Matrix.ScaleToFit.START);
     }
 
     static void drawHelloWorldText(InkyPhat inkyPhat) {
-      inkyPhat.setText(0, 0, "Hello World", Color.WHITE);
+        inkyPhat.setText(0, 0, "Hello World", Color.WHITE);
     }
 
     static void drawNameBadge(InkyPhat inkyPhat, Resources resources) {
