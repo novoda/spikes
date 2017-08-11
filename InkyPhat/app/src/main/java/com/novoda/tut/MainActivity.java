@@ -20,9 +20,9 @@ public class MainActivity extends Activity {
         inkyPhat = InkyPhat.Factory.create(INKY_PHAT_DISPLAY, BUSY_PIN, RESET_PIN, COMMAND_PIN, InkyPhat.Orientation.LANDSCAPE);
 //        Tests.drawTwoSquares(inkyPhat);
 //        Tests.drawSmiley(inkyPhat);
-//        Tests.drawImage(inkyPhat, getResources());
+        Tests.drawImage(inkyPhat, getResources());
 //        Tests.drawHelloWorldText(inkyPhat);
-        Tests.drawNameBadge(inkyPhat, getResources());
+//        Tests.drawNameBadge(inkyPhat, getResources());
         inkyPhat.refresh();
     }
 
