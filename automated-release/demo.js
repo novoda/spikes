@@ -34,9 +34,10 @@ const config = {
             collector.collectDirectory('./artifacts/mappings', ARTIFACTS_OUTPUT_PATH, 'mappings.zip')
         ])
     },
-    versionProperties: {
-        increment: 50,
-        path: `${CLONE_PATH}version.properties`
+    androidVersionProperties: {
+        versionCodeIncrement: 50,
+        path: `${CLONE_PATH}version.properties`,
+        name: '1.0.0'
     }
 }
 
