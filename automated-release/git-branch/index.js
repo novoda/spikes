@@ -24,8 +24,9 @@ module.exports = class GitBranch {
         await this._commitAll(repo, pushOptions.commit)
         const remote = await repo.getRemote(pushOptions.remote);
         const currentBranch = await repo.getCurrentBranch()
+        const currentBranchName = currentBranch.name()
         return remote.push(
-            [`refs/heads/${currentBranch.name()}:refs/heads/${currentBranch.name()}`],
+            [`${currentBranchName}:${currentBranchName}`],
             { callbacks: this._createAuth(pushOptions.githubToken) }
         )
     }
