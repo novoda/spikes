@@ -1,33 +1,33 @@
 const Github = require('github-release')
-const Artifacts = require('artifact-collect')
+const collector = require('artifact-collect')
 const GitBranch = require('git-branch')
 
-const doRelease = async (params) => {
+const doRelease = async (config) => {
     const git = new GitBranch()
-    const branchRef = await checkout(git, params)
+    const branchRef = await checkout(git, config)
 
     // writeVersion()
-    const artifacts = params.artifacts()
+    const artifacts = config.generateArtifacts(collector)
 
-    await push(git, branchRef, params)
-    const github = new Github(params.auth.gitHubToken)
-    await githubRelease(github, artifacts, params)
+    await push(git, branchRef, config)
+    const github = new Github(config.auth.gitHubToken)
+    await githubRelease(github, artifacts, config)
 }
 
-const checkout = (git, params) => {
+const checkout = (git, config) => {
     const checkoutOptions = {
-        baseBranch: params.branches.fromBranch,
-        newBranch: params.branches.releaseBranch,
-        githubToken: params.auth.gitHubToken,
-        path: params.repo.localPath,
-        repoUrl: `https://github.com/${params.repo.owner}/${params.repo.name}.git`
+        baseBranch: config.branches.fromBranch,
+        newBranch: config.branches.releaseBranch,
+        githubToken: config.auth.gitHubToken,
+        path: config.repo.localPath,
+        repoUrl: `https://github.com/${config.repo.owner}/${config.repo.name}.git`
     }
     return git.checkout(checkoutOptions)
 }
 
-const push = (git, branchRef, params) => {
+const push = (git, branchRef, config) => {
     const pushOptions = {
-        githubToken: params.auth.githubToken,
+        githubToken: config.auth.githubToken,
         remote: 'origin',
         commit: {
             authorName: 'mario',
@@ -38,24 +38,24 @@ const push = (git, branchRef, params) => {
     return git.push(branchRef, pushOptions)
 }
 
-const githubRelease = (github, artifacts, params) => {
+const githubRelease = (github, artifacts, config) => {
     const repoOptions = {
-        owner: params.repo.owner,
-        name: params.repo.name
+        owner: config.repo.owner,
+        name: config.repo.name
     }
 
     const prOptions = {
-        title: params.pr.title,
-        body: params.pr.body,
-        fromBranch: params.branches.releaseBranch,
-        intoBranch: params.branches.endBranch
+        title: config.pr.title,
+        body: config.pr.body,
+        fromBranch: config.branches.releaseBranch,
+        intoBranch: config.branches.endBranch
     }
 
     const releaseOptions = {
-        tag: params.release.tag,
-        target: params.branches.releaseBranch,
-        title: params.release.title,
-        body: params.release.body,
+        tag: config.release.tag,
+        target: config.branches.releaseBranch,
+        title: config.release.title,
+        body: config.release.body,
         isDraft: false,
         isPreRelease: false
     }

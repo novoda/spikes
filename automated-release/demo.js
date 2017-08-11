@@ -1,10 +1,11 @@
-const release = require('./index')
+const release = require('./index').release
 const fs = require('fs-extra')
 
 const CLONE_PATH = __dirname + '/tmp/'
-const ARTIFACTS_PATH = __dirname + '/outputs/'
+const VERSION_PROPERTIES_PATH = CLONE_PATH + 'version.properties'
+const ARTIFACTS_OUTPUT_PATH = __dirname + '/outputs/'
 
-const params = {
+const config = {
     auth: {
         gitHubToken: '1234'
     },
@@ -27,20 +28,19 @@ const params = {
         title: 'my awesome release PR',
         body: 'Here\'s all the changes in the release'
     },
-    artifacts: () => {
-        // create/read artifacts
+    generateArtifacts: (collector) => {
         return [
-            Artifacts.collectFile('./artifacts/single-file/testfile.zip', ARTIFACTS_PATH, 'test-file-1234.zip'),
-            Artifacts.collectDirectory('./artifacts/mappings', ARTIFACTS_PATH, 'mappings.zip')
+            collector.collectFile('./artifacts/single-file/testfile.zip', ARTIFACTS_OUTPUT_PATH, 'test-file-1234.zip'),
+            collector.collectDirectory('./artifacts/mappings', ARTIFACTS_OUTPUT_PATH, 'mappings.zip')
         ]
     },
-    version: {
+    versionProperties: {
         increment: 50,
         path: `${CLONE_PATH}version.properties`
     }
 }
 
-release.release(params).then(() => {
+release(config).then(() => {
     fs.removeSync(CLONE_PATH)
-    fs.removeSync(ARTIFACTS_PATH)
+    fs.removeSync(ARTIFACTS_OUTPUT_PATH)
 })
