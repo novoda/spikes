@@ -29,10 +29,10 @@ const config = {
         body: 'Here\'s all the changes in the release'
     },
     generateArtifacts: (collector) => {
-        return [
+        return Promise.resolve([
             collector.collectFile('./artifacts/single-file/testfile.zip', ARTIFACTS_OUTPUT_PATH, 'test-file-1234.zip'),
             collector.collectDirectory('./artifacts/mappings', ARTIFACTS_OUTPUT_PATH, 'mappings.zip')
-        ]
+        ])
     },
     versionProperties: {
         increment: 50,

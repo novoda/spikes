@@ -6,8 +6,7 @@ const doRelease = async (config) => {
     const git = new GitBranch()
     const branchRef = await checkout(git, config)
 
-    // writeVersion()
-    const artifacts = config.generateArtifacts(collector)
+    const artifacts = await config.generateArtifacts(collector)
 
     await push(git, branchRef, config)
     const github = new Github(config.auth.gitHubToken)
