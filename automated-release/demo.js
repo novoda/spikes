@@ -11,7 +11,6 @@ const config = {
     },
     repo: {
         owner: 'novoda',
-        name: 'spikes',
         localPath: CLONE_PATH,
         remote: 'origin'
     },

@@ -17,7 +17,7 @@ const doRelease = async (config) => {
 
 const checkout = (git, config) => {
     const checkoutOptions = {
-        baseBranch: config.branches.fromBranch,
+        baseBranch: config.branches.baseBranch,
         newBranch: config.branches.releaseBranch,
         githubToken: config.auth.gitHubToken,
         path: config.repo.localPath,
