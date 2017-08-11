@@ -1,0 +1,10 @@
+{
+  "name": "android-release-properties",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "fs-extra": "^4.0.1"
+  }
+}

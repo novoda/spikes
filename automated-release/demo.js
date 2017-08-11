@@ -37,9 +37,12 @@ const config = {
     androidVersionProperties: {
         versionCodeIncrement: 50,
         path: `${CLONE_PATH}version.properties`,
-        name: '1.0.0'
+        versionName: '1.0.0'
     }
 }
+
+console.log("start")
+
 
 release(config).then(() => {
     fs.removeSync(CLONE_PATH)

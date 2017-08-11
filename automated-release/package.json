@@ -8,6 +8,7 @@
     "artifact-collect": "file:./artifact-collect",
     "fs-extra": "^4.0.1",
     "git-branch": "file:./git-branch",
-    "github-release": "file:./github-release"
+    "github-release": "file:./github-release",
+    "android-release-properties": "file:./android-release-properties"
   }
 }
