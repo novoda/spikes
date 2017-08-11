@@ -70,8 +70,8 @@ class InkyPhatTriColourDisplay implements InkyPhat {
     }
 
     @Override
-    public void setImage(int x, int y, Bitmap image, Matrix.ScaleToFit scaleToFit) {
-        pixelBuffer.setImage(x, y, imageConverter.convertImage(image, scaleToFit));
+    public void setImage(int x, int y, Bitmap image, Scale scale) {
+        pixelBuffer.setImage(x, y, imageConverter.convertImage(image, scale));
     }
 
     @Override

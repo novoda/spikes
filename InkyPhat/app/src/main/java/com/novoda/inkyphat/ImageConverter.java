@@ -2,7 +2,6 @@ package com.novoda.inkyphat;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 
@@ -21,8 +20,8 @@ class ImageConverter {
         this.colorConverter = new ColorConverter();
     }
 
-    InkyPhat.PaletteImage convertImage(Bitmap input, Matrix.ScaleToFit scaleToFit) {
-        return translateImage(filterImage(input, scaleToFit));
+    InkyPhat.PaletteImage convertImage(Bitmap input, InkyPhat.Scale scale) {
+        return translateImage(filterImage(input, scale));
     }
 
     private InkyPhat.PaletteImage translateImage(Bitmap input) {
@@ -37,26 +36,24 @@ class ImageConverter {
         return new InkyPhat.PaletteImage(colors, width);
     }
 
-    Bitmap filterImage(Bitmap sourceBitmap, Matrix.ScaleToFit scaleToFit) {
-        return scaleToInkyPhatBounds(sourceBitmap, scaleToFit);
+    Bitmap filterImage(Bitmap sourceBitmap, InkyPhat.Scale scale) {
+        return scaleToInkyPhatBounds(sourceBitmap, scale);
     }
 
-    private Bitmap scaleToInkyPhatBounds(Bitmap sourceBitmap, Matrix.ScaleToFit scaleType) {
+    private Bitmap scaleToInkyPhatBounds(Bitmap sourceBitmap, InkyPhat.Scale scale) {
         int bitmapWidth = sourceBitmap.getWidth();
         int bitmapHeight = sourceBitmap.getHeight();
         if (bitmapWidth < getOrientatedWidth() && bitmapHeight < getOrientatedHeight()) {
             return sourceBitmap;
         }
 
-        switch (scaleType) {
-            case FILL:
+        switch (scale) {
+            case FIT_XY:
                 return imageScaler.fitXY(sourceBitmap, getOrientatedWidth(), getOrientatedHeight());
-            case START:
-            case CENTER:
-            case END:
+            case FIT_X_OR_Y:
                 return imageScaler.fitXorY(sourceBitmap, getOrientatedWidth(), getOrientatedHeight());
             default:
-                throw new IllegalStateException("Unsupported scale type of " + scaleType);
+                throw new IllegalStateException("Unsupported scale type of " + scale);
         }
     }
 
@@ -73,7 +70,7 @@ class ImageConverter {
     }
 
     public InkyPhat.PaletteImage convertText(String text, int color) {
-        return convertImage(textAsBitmap(text, 20, color), Matrix.ScaleToFit.START);
+        return convertImage(textAsBitmap(text, 20, color), InkyPhat.Scale.FIT_X_OR_Y);
     }
 
     private Bitmap textAsBitmap(String text, float textSize, int textColor) {

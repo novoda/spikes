@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 
 import com.novoda.inkyphat.InkyPhat;
@@ -92,7 +91,7 @@ class Tests {
     static void drawImage(InkyPhat inkyPhat, Resources resources) {
         Bitmap bitmap = BitmapFactory.decodeResource(resources, R.drawable.logo);
         inkyPhat.setBorder(InkyPhat.Palette.RED);
-        inkyPhat.setImage(0, 0, bitmap, Matrix.ScaleToFit.START);
+        inkyPhat.setImage(0, 0, bitmap, InkyPhat.Scale.FIT_X_OR_Y);
     }
 
     static void drawSmiley(InkyPhat inkyPhat) {
@@ -113,7 +112,7 @@ class Tests {
         // Mouth
         canvas.drawArc(20, 90, 100, 120, 0, 180, false, paint);
 
-        inkyPhat.setImage(0, 0, image, Matrix.ScaleToFit.START);
+        inkyPhat.setImage(0, 0, image, InkyPhat.Scale.FIT_X_OR_Y);
     }
 
     static void drawHelloWorldText(InkyPhat inkyPhat) {
@@ -123,7 +122,7 @@ class Tests {
     static void drawNameBadge(InkyPhat inkyPhat, Resources resources) {
         Bitmap bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_test_3);
         inkyPhat.setBorder(InkyPhat.Palette.RED);
-        inkyPhat.setImage(0, 0, bitmap, Matrix.ScaleToFit.START);
+        inkyPhat.setImage(0, 0, bitmap, InkyPhat.Scale.FIT_X_OR_Y);
         inkyPhat.setText(50, 65, "Ataul Munim", Color.BLACK);
     }
 }

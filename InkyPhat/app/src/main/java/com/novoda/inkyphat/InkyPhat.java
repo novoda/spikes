@@ -1,7 +1,6 @@
 package com.novoda.inkyphat;
 
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.PeripheralManagerService;
@@ -24,12 +23,12 @@ public interface InkyPhat extends AutoCloseable {
     /**
      * Set an image to draw with {@link #refresh()} later
      *
-     * @param x          the x co-ordinate (or column) to start drawing the images x=0 at
-     * @param y          the y co-ordinate (or row) to start drawing the images y=0 at
-     * @param image      the bitmap to draw (assumed ARGB888)
-     * @param scaleToFit the scale to use see {@link android.graphics.Matrix.ScaleToFit}
+     * @param x     the x co-ordinate (or column) to start drawing the images x=0 at
+     * @param y     the y co-ordinate (or row) to start drawing the images y=0 at
+     * @param image the bitmap to draw (assumed ARGB888)
+     * @param scale the scale to use see {@link Scale}
      */
-    void setImage(int x, int y, Bitmap image, Matrix.ScaleToFit scaleToFit);
+    void setImage(int x, int y, Bitmap image, Scale scale);
 
     /**
      * Set some text to draw with {@link #refresh()} later
@@ -116,6 +115,20 @@ public interface InkyPhat extends AutoCloseable {
 
     enum Orientation {
         LANDSCAPE, PORTRAIT
+    }
+
+    enum Scale {
+        /**
+         * Scale in width and height independently, so that sourceBitmap matches dst exactly.
+         * This may change the aspect ratio of the sourceBitmap.
+         */
+        FIT_XY,
+        /**
+         * Compute a scale that will maintain the original sourceBitmap aspect ratio,
+         * but will also ensure that sourceBitmap fits entirely inside the maxWidth & maxHeight.
+         * At least one axis (Width or Height) will fit exactly.
+         */
+        FIT_X_OR_Y
     }
 
     final class PaletteImage {
