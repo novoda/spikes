@@ -12,7 +12,8 @@ const config = {
     repo: {
         owner: 'novoda',
         name: 'spikes',
-        localPath: CLONE_PATH
+        localPath: CLONE_PATH,
+        remote: 'origin'
     },
     branches: {
         baseBranch: 'master',
@@ -22,7 +23,12 @@ const config = {
     release: {
         tag: 'v1',
         title: 'super cool release',
-        body: 'this is the release body wooo'
+        body: 'this is the release body wooo',
+        commit: {
+            authorName: 'mario',
+            authorEmail: 'test@novoda.com',
+            message: 'upping versions for release'
+        }
     },
     pr: {
         title: 'my awesome release PR',

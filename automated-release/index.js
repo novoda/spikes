@@ -39,11 +39,11 @@ const updateVersionProperties = (androidVersionProperties) => {
 const push = (git, branchRef, config) => {
     const pushOptions = {
         githubToken: config.auth.githubToken,
-        remote: 'origin',
+        remote: config.repo.remote || 'origin',
         commit: {
-            authorName: 'mario',
-            authorEmail: 'test@novoda.com',
-            message: 'upping versions for release'
+            authorName: config.release.commit.authorName,
+            authorEmail: config.release.commit.authorEmail,
+            message: config.release.commit.message
         }
     }
     return git.push(branchRef, pushOptions)
