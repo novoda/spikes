@@ -5,13 +5,9 @@ import static java.lang.Math.sin;
 
 public class ShapeDrawer {
 
-    private final int width;
-    private final int height;
     private final InkyPhat inkyPhat;
 
-    public ShapeDrawer(int width, int height, InkyPhat inkyPhat) {
-        this.width = width;
-        this.height = height;
+    public ShapeDrawer(InkyPhat inkyPhat) {
         this.inkyPhat = inkyPhat;
     }
 
@@ -20,8 +16,8 @@ public class ShapeDrawer {
      */
     public void clearRect(int fx, int fy, int fw, int fh, int color) {
         int maxX, maxY;
-        maxX = (fx + fw) > width ? width : (fx + fw);
-        maxY = (fy + fh) > height ? height : (fy + fh);
+        maxX = (fx + fw) > InkyPhat.WIDTH ? InkyPhat.WIDTH : (fx + fw);
+        maxY = (fy + fh) > InkyPhat.HEIGHT ? InkyPhat.HEIGHT : (fy + fh);
 
         for (int col = fx; col < maxX; col++) {
             for (int row = fy; row < maxY; row++) {

@@ -95,7 +95,7 @@ class Tests {
     }
 
     static void drawSmiley(InkyPhat inkyPhat) {
-        ShapeDrawer shapeDrawer = new ShapeDrawer(InkyPhat.WIDTH, InkyPhat.HEIGHT, inkyPhat); // TODO invert dependency
+        ShapeDrawer shapeDrawer = new ShapeDrawer(inkyPhat); // TODO invert dependency
 
         // Left eye
         shapeDrawer.drawCircle(40, 40, 20, Color.BLACK);
