@@ -19,13 +19,23 @@ class TweetsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.frame = view.frame
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(tableView)
+        view.backgroundColor = UIColor.white
+        
+        NSLayoutConstraint.activate([
+            topLayoutGuide.bottomAnchor.constraint(equalTo: tableView.topAnchor),
+            bottomLayoutGuide.topAnchor.constraint(equalTo: tableView.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
         
         tableView.register(TweetCell.self, forCellReuseIdentifier: cellIdentifier)
         tableView.dataSource = self
         tableView.delegate = self
         
-        view.addSubview(tableView)
+        
         
         tweetsProvider.fetchTweets(completion: { tweets in
             self.update(tweets)

@@ -26,15 +26,27 @@ class TweetCell: UITableViewCell {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         self.backgroundColor = .blue
         setupHierarchy()
-        setupViews()
+        styleViews()
         layoutViews()
+        
+        avatarImageView.isAccessibilityElement = false
+        timeLabel.isAccessibilityElement = false
+        usernameLabel.isAccessibilityElement = false
+        bodyLabel.isAccessibilityElement = false
+        
+        accessibilityLabel = "foo"
+        
+        
+//        UIAccessibilityVoiceOverStatusChanged
+//        NotificationCenter.default.addObserver(forName: UIAccessibilityVoiceOverStatusChanged., object: <#T##Any?#>, queue: <#T##OperationQueue?#>, using: <#T##(Notification) -> Void#>)
+        UIAccessibilityIsVoiceOverRunning()
     }
     
     private func setupHierarchy() {
         addSubview(avatarImageView)
         addSubview(timeLabel)
         addSubview(usernameLabel)
-//        addSubview(bodyLabel)
+        addSubview(bodyLabel)
         
 //        addSubview(replyButton)
 //        addSubview(retweetButton)
@@ -45,7 +57,7 @@ class TweetCell: UITableViewCell {
         }
     }
     
-    private func setupViews() {
+    private func styleViews() {
         usernameLabel.text = "username"
         bodyLabel.text = "tweet body"
         timeLabel.text = "12:01"
@@ -57,8 +69,9 @@ class TweetCell: UITableViewCell {
         usernameLabel.sizeToFit()
         usernameLabel.numberOfLines = 1
         
-        timeLabel.sizeToFit()
+//        timeLabel.sizeToFit()
         timeLabel.numberOfLines = 1
+        timeLabel.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .horizontal)
         
         bodyLabel.sizeToFit()
         bodyLabel.numberOfLines = 0
@@ -66,30 +79,46 @@ class TweetCell: UITableViewCell {
     }
     
     private func layoutViews() {
-        addConstraints([
-            constrainToTweetCell(attribute: .left, view: avatarImageView),
+        NSLayoutConstraint.activate([
+            constrainToTweetCell(attribute: .leading, view: avatarImageView),
             constrainToTweetCell(attribute: .top, view: avatarImageView),
             constrainToConstant(attribute: .width, value: 40, view: avatarImageView),
             constrainToConstant(attribute: .height, value: 40, view: avatarImageView)
         ])
         
-        addConstraints([
-            constrainToTweetCell(attribute: .right, view: timeLabel),
+        NSLayoutConstraint.activate([
+            constrainToTweetCell(attribute: .trailing, view: timeLabel),
             constrainToTweetCell(attribute: .top, view: timeLabel),
+            constrain(view: timeLabel, attribute: .leading, otherView: usernameLabel, otherAttribute: .trailing),
         ])
         
-        addConstraints([
+        NSLayoutConstraint.activate([
             NSLayoutConstraint(
                 item: usernameLabel,
-                attribute: .right,
+                attribute: .trailing,
                 relatedBy: .lessThanOrEqual,
                 toItem: timeLabel,
-                attribute: .left,
+                attribute: .leading,
                 multiplier: 1,
                 constant: 0
             ),
             constrainToTweetCell(attribute: .top, view: usernameLabel),
-            constrain(view: usernameLabel, attribute: .left, otherView: avatarImageView, otherAttribute: .right),
+            constrain(view: usernameLabel, attribute: .leading, otherView: avatarImageView, otherAttribute: .trailing),
+        ])
+        
+        NSLayoutConstraint.activate([
+            NSLayoutConstraint(
+                item: bodyLabel,
+                attribute: .leading,
+                relatedBy: .equal,
+                toItem: avatarImageView,
+                attribute: .trailing,
+                multiplier: 1,
+                constant: 8
+            ),
+            constrainToTweetCell(attribute: .right, view: bodyLabel),
+            constrain(view: bodyLabel, attribute: .top, otherView: usernameLabel, otherAttribute: .bottom),
+            constrainToTweetCell(attribute: .bottom, view: bodyLabel),
         ])
     }
     
