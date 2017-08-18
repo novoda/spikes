@@ -45,7 +45,7 @@ class SlackHistoryFetcher {
 
     private void appendChannelHistory(ApiPagedResponse apiPagedResponse) {
         Response<ApiPagedChannelHistory> response = fetchApiChannelHistoryResponse(apiPagedResponse.getLastResponseEpochTime());
-        if (response.isSuccess()) {
+        if (response.isSuccessful()) {
             ApiPagedChannelHistory apiPagedChannelHistory = response.body();
             apiPagedResponse.addResponse(apiPagedChannelHistory);
         } else {
