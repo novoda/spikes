@@ -1,5 +1,7 @@
 package com.novoda.enews;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,9 +40,30 @@ class ChannelHistory {
 
     public static class Message {
         private final String text;
+        private final String imageUrl;
 
-        public Message(String text) {
+        public Message(String text, String imageUrl) {
             this.text = text;
+            this.imageUrl = imageUrl;
+        }
+
+        public String getImageUrl() {
+            return imageUrl;
+        }
+
+        public URL toUrl() {
+            int urlStart = text.indexOf("http");
+            int urlEnd = text.indexOf('>', urlStart);
+            String url = text.substring(urlStart, urlEnd);
+            try {
+                return new URL(url);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public String getText() {
+            return text;
         }
 
         @Override

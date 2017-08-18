@@ -21,11 +21,11 @@ public class Scraper {
         return channelHistory
                 .getMessages()
                 .parallelStream()
-                .map(message -> new ChannelHistory.Message(message.toString()
-                        .replace("#C0YNBKANM", "#eNews")
-                        .replace("#C1V389HGB", "#eNews")))
+                .map(message -> new ChannelHistory.Message(message.getText()
+                        .replace("<#C0YNBKANM|enews>", "#eNews")
+                        .replace("<#C1V389HGB|enews>", "#eNews"), message.getImageUrl()))
                 .filter(message -> {
-                    String messageText = message.toString().toLowerCase();
+                    String messageText = message.getText().toLowerCase();
                     return messageText.contains("#enews")
                             &&
                             messageText.contains("http");

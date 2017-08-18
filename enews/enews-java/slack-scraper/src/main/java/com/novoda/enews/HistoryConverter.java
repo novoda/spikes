@@ -20,11 +20,16 @@ class HistoryConverter {
     }
 
     private static ChannelHistory.Message convert(ApiPagedChannelHistory.ApiMessage apiMessage) {
-        if (apiMessage.text != null && (apiMessage.text.contains("#C0YNBKANM") || apiMessage.text.contains("#C1V389HGB"))) {
-            System.out.println("MSG " + apiMessage);
+        List<ApiPagedChannelHistory.ApiAttachment> attachments = apiMessage.attachments;
+        String imageUrl = null;
+        if (attachments != null) {
+            imageUrl = attachments.get(0).imageUrl;
+        }
+        if (imageUrl == null) {
+            imageUrl = "http://www.emmys.com/sites/default/files/The-Missing.jpg";
         }
         String text = apiMessage.text; // Bots send messages with attachments but no text
-        return new ChannelHistory.Message(text == null ? "" : text);
+        return new ChannelHistory.Message(text == null ? "" : text, imageUrl);
     }
 
     private static LocalDateTime getOldestMessageLocalDateTime(ApiPagedChannelHistory apiPagedChannelHistory) {
