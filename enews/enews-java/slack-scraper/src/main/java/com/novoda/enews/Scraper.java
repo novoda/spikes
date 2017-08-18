@@ -21,7 +21,9 @@ public class Scraper {
         return channelHistory
                 .getMessages()
                 .parallelStream()
-                .map(message -> new ChannelHistory.Message(message.toString().replace("#C0YNBKANM", "#eNews")))
+                .map(message -> new ChannelHistory.Message(message.toString()
+                        .replace("#C0YNBKANM", "#eNews")
+                        .replace("#C1V389HGB", "#eNews")))
                 .filter(message -> {
                     String messageText = message.toString().toLowerCase();
                     return messageText.contains("#enews")
