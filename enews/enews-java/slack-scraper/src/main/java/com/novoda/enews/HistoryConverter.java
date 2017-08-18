@@ -20,7 +20,7 @@ class HistoryConverter {
     }
 
     private static ChannelHistory.Message convert(ApiPagedChannelHistory.ApiMessage apiMessage) {
-        if(apiMessage.text != null && apiMessage.text.contains("#C0YNBKANM")) {
+        if (apiMessage.text != null && (apiMessage.text.contains("#C0YNBKANM") || apiMessage.text.contains("#C1V389HGB"))) {
             System.out.println("MSG " + apiMessage);
         }
         String text = apiMessage.text; // Bots send messages with attachments but no text
