@@ -3,26 +3,26 @@ var expect = require('chai').expect,
 
 var rooms = {
     'botId': {
-        sockets: {'botId':true},
-        length:1
+        sockets: { 'botId': true },
+        length: 1
     },
     'London': {
-        sockets: {'botId':true},
-        length:1
+        sockets: { 'botId': true },
+        length: 1
     }
 };
 
 var connectedClients = {
     'botId': {
-        disconnect: function(){}
+        disconnect: function () { }
     }
 };
 
 var noConnectedClients = {};
 
-describe('Disconnector Tests.', function() {
+describe('Disconnector Tests.', function () {
 
-    it('Should return false when cannot locate room in list of rooms.', function(done){
+    it('Should return false when cannot locate room in list of rooms.', function (done) {
         var disconnector = new Disconnector(rooms, connectedClients);
 
         var disconnected = disconnector.disconnectRoom('Room not present');
@@ -31,7 +31,7 @@ describe('Disconnector Tests.', function() {
         done();
     });
 
-    it('Should return false when connected clients do not contain room client.', function(done){
+    it('Should return false when connected clients do not contain room client.', function (done) {
         var disconnector = new Disconnector(rooms, noConnectedClients);
 
         var disconnected = disconnector.disconnectRoom('London');
@@ -40,7 +40,7 @@ describe('Disconnector Tests.', function() {
         done();
     });
 
-    it('Should return true when disconnecting all clients in room.', function(done){
+    it('Should return true when disconnecting all clients in room.', function (done) {
         var disconnector = new Disconnector(rooms, connectedClients);
 
         var disconnected = disconnector.disconnectRoom('London');
@@ -49,10 +49,10 @@ describe('Disconnector Tests.', function() {
         done();
     });
 
-    it('Should call disconnect on connected client when disconnecting all clients in room.', function(done){
+    it('Should call disconnect on connected client when disconnecting all clients in room.', function (done) {
         var disconnector = new Disconnector(rooms, {
             'botId': {
-                disconnect: function() {
+                disconnect: function () {
                     done();
                 }
             }

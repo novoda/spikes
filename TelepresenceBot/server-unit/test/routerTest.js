@@ -24,9 +24,9 @@ describe('Router Tests.', function () {
         var firstAvailableBotId = 'ABCDEFGH123';
 
         mockBotLocator = sinon.stub(botLocator, 'locateFirstAvailableBotIn')
-                              .callsFake(function(){ return firstAvailableBotId; });
+            .callsFake(function () { return firstAvailableBotId; });
 
-        router.route(queryWithHuman, onNext = function(data){
+        router.route(queryWithHuman, onNext = function (data) {
             expect(data).to.be.undefined;
             expect(mockBotLocator.called).to.be.true;
             expect(queryWithHuman.room).to.equal(firstAvailableBotId);
@@ -38,7 +38,7 @@ describe('Router Tests.', function () {
 
 
     it('Should pass through Bot without any checks.', function (done) {
-        router.route(queryWithBot, onNext = function(data){
+        router.route(queryWithBot, onNext = function (data) {
             expect(data).to.be.undefined;
             done();
         });
@@ -49,9 +49,9 @@ describe('Router Tests.', function () {
         var noAvailableBots = undefined;
 
         mockBotLocator = sinon.stub(botLocator, 'locateFirstAvailableBotIn')
-                              .callsFake(function(){ return noAvailableBots; });
+            .callsFake(function () { return noAvailableBots; });
 
-        router.route(queryWithHuman, onNext = function(data){
+        router.route(queryWithHuman, onNext = function (data) {
             expect(mockBotLocator.called).to.be.true;
             expect(data.message).to.equal('No bots available');
             botLocator.locateFirstAvailableBotIn.restore();
@@ -61,7 +61,7 @@ describe('Router Tests.', function () {
     });
 
     it('Should return Error for unhandled ClientType.', function (done) {
-        router.route(queryWithUnhandled, onNext = function(data){
+        router.route(queryWithUnhandled, onNext = function (data) {
             expect(data.message).to.equal('Unrecognised clientType: unhandled');
             done();
         });

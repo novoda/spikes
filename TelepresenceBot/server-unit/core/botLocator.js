@@ -1,20 +1,20 @@
-module.exports = function(rooms) {
-    var botNotConnectedToHuman = function(socketsInBotRoom) {
+module.exports = function (rooms) {
+    var botNotConnectedToHuman = function (socketsInBotRoom) {
         return socketsInBotRoom.length === 1;
     };
 
     return {
-        locateFirstAvailableBotIn: function(room) {
+        locateFirstAvailableBotIn: function (room) {
             var botsInRoom = rooms[room];
 
-            if(!botsInRoom) {
+            if (!botsInRoom) {
                 return;
             }
 
             for (socketId in botsInRoom.sockets) {
                 var socketsInBotRoom = rooms[socketId];
 
-                if(botNotConnectedToHuman(socketsInBotRoom)) {
+                if (botNotConnectedToHuman(socketsInBotRoom)) {
                     return socketId;
                 }
             }
