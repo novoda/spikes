@@ -3,18 +3,18 @@ package com.novoda.enews;
 import retrofit2.Call;
 import retrofit2.http.*;
 
-public interface MailChimpWebService {
+interface MailChimpWebService {
 
     @GET("lists")
-    Call<ApiPagedChannelHistory> getLists();
+    Call<ApiLists> getLists();
 
     @POST("campaigns")
-    Call<ApiPagedChannelHistory> postCampaign(
-            @Body Campaign campaign
+    Call<ApiCampaignResult> postCampaign(
+            @Body CampaignSettings campaignSettings
     );
 
     @PUT("campaigns/{id}/content")
-    Call<ApiPagedChannelHistory> putCampaignContent(
+    Call<ApiCampaignContentResult> putCampaignContent(
             @Path("id") String id,
             @Body CampaignContent campaignContent
     );

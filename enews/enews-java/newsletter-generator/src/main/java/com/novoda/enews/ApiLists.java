@@ -1,5 +1,4 @@
 package com.novoda.enews;
 
-class Campaign {
-
+public class ApiLists {
 }

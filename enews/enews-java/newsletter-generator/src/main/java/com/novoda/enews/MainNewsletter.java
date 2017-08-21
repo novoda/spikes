@@ -26,18 +26,7 @@ public class MainNewsletter {
         String html = new HtmlGenerator().generate(messageStream);
 
         String mailChimpToken = args[1];
-
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .addInterceptor(new AuthHeaderInterceptor(mailChimpToken))
-                .build();
-        Retrofit retrofit = new Retrofit.Builder()
-                .client(okHttpClient)
-                .baseUrl("https://us5.api.mailchimp.com/3.0/")
-                .addConverterFactory(new ConverterFactory())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        MailChimpWebService webService = retrofit.create(MailChimpWebService.class);
-
-        new NewsletterGenerator(webService).generate(html);
+        NewsletterGenerator newsletterGenerator = new NewsletterGenerator.Factory().newInstance(mailChimpToken);
+        newsletterGenerator.generate(html);
     }
 }

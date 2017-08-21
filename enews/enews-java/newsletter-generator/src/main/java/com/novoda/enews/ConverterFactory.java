@@ -1,5 +1,6 @@
 package com.novoda.enews;
 
+import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
@@ -9,7 +10,7 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-public class ConverterFactory extends Converter.Factory {
+class ConverterFactory extends Converter.Factory {
 
     @Override
     public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
@@ -18,7 +19,7 @@ public class ConverterFactory extends Converter.Factory {
 
     @Override
     public Converter<?, RequestBody> requestBodyConverter(Type type, Annotation[] parameterAnnotations, Annotation[] methodAnnotations, Retrofit retrofit) {
-        if (type instanceof Campaign) {
+        if (type instanceof CampaignSettings) {
             return new CampaignConverter();
         } else if (type instanceof CampaignContent) {
             return new CampaignContentConverter();
@@ -27,11 +28,15 @@ public class ConverterFactory extends Converter.Factory {
         }
     }
 
-    private static class CampaignConverter implements Converter<Campaign, RequestBody> {
+    private static class CampaignConverter implements Converter<CampaignSettings, RequestBody> {
 
         @Override
-        public RequestBody convert(Campaign campaign) throws IOException {
-            return null;
+        public RequestBody convert(CampaignSettings campaignSettings) throws IOException {
+            String json =
+                     "{"
+                    +   "listId" + ":" + campaignSettings.getListId() + ""
+                    +"}";
+            return RequestBody.create(MediaType.parse("json/application"), json);
         }
     }
 
@@ -39,7 +44,11 @@ public class ConverterFactory extends Converter.Factory {
 
         @Override
         public RequestBody convert(CampaignContent value) throws IOException {
-            return null;
+            String json =
+                     "{"
+                    +   "html" + ":" + value.getHtml() + ""
+                    +"}";
+            return RequestBody.create(MediaType.parse("json/application"), json);
         }
     }
 

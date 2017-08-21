@@ -6,10 +6,10 @@ import okhttp3.Response;
 
 import java.io.IOException;
 
-public class AuthHeaderInterceptor implements Interceptor {
+class AuthHeaderInterceptor implements Interceptor {
     private final String apiKey;
 
-    public AuthHeaderInterceptor(String apiKey) {
+    AuthHeaderInterceptor(String apiKey) {
         this.apiKey = apiKey;
     }
 
