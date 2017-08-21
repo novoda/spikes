@@ -135,6 +135,11 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
             case R.id.usb_devices_list_menu_item:
                 showConnectedDevices();
                 return true;
+            case R.id.debug_mode_menu_item:
+                item.setIcon(item.isChecked() ? android.R.drawable.checkbox_off_background : android.R.drawable.checkbox_on_background);
+                switchableView.setDisplayedChild(item.isChecked() ? 0 : 1);
+                item.setChecked(!item.isChecked());
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

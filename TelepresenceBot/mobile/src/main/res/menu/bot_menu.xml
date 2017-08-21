@@ -3,6 +3,13 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <item
+    android:id="@+id/debug_mode_menu_item"
+    android:checkable="true"
+    android:icon="@android:drawable/checkbox_off_background"
+    android:title="@string/debug_usb_bot_bridge"
+    app:showAsAction="ifRoom" />
+
+  <item
     android:id="@+id/usb_devices_list_menu_item"
     android:icon="@android:drawable/ic_menu_info_details"
     android:title="@string/list_connected_devices_menu_item_title"

@@ -4,6 +4,7 @@
   <string name="bot">Bot</string>
   <string name="human">Human</string>
   <string name="list_connected_devices_menu_item_title">List connected devices</string>
+  <string name="debug_usb_bot_bridge">Debug USB bot bridge</string>
   <string name="usb_device_name_vendor_product">%1$s, VendorId=%2$d, ProductId=%3$d</string>
   <string name="no_connected_devices">No connected USB devices</string>
   <string name="enter_server_address">Enter server address: </string>
