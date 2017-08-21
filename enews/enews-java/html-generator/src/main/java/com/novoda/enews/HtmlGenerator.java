@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class NewsletterGenerator {
+public class HtmlGenerator {
     public String generate(Stream<ChannelHistory.Message> messageStream) {
         StringWriter writer = new StringWriter();
         new Html(writer) {
