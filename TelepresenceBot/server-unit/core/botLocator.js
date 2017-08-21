@@ -1,4 +1,4 @@
-function BotLocator(rooms) {
+module.exports = function(rooms) {
     var botNotConnectedToHuman = function(socketsInBotRoom) {
         return socketsInBotRoom.length === 1;
     };
@@ -20,8 +20,4 @@ function BotLocator(rooms) {
             }
         }
     };
-}
-
-module.exports = function(rooms) {
-    return new BotLocator(rooms);
 };

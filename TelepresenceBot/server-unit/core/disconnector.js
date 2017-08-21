@@ -1,4 +1,4 @@
-function Disconnector(rooms, connectedClients) {
+module.exports = function Disconnector(rooms, connectedClients) {
     return {
         disconnectRoom: function(roomName) {
             var room = rooms[roomName];
@@ -22,7 +22,3 @@ function Disconnector(rooms, connectedClients) {
         }
     };
 }
-
-module.exports = function(rooms, connectedClients) {
-    return new Disconnector(rooms, connectedClients);
-};

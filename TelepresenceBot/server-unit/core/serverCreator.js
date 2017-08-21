@@ -8,9 +8,9 @@ var express = require('express'),
     router = require('./router.js')(botLocator),
     disconnector = require('./disconnector.js')(io.sockets.adapter.rooms, io.sockets.connected),
     mover = require('./mover.js')(io.sockets.adapter.sids, io),
-    observer = require('./observer.js');
+    observer = require('./observer.js')();
 
-function ServerCreator() {
+module.exports = function ServerCreator() {
     app.use(express.static(path.join(__dirname, 'public')));
 
     app.get('/', function(req, res) {
@@ -73,7 +73,3 @@ function ServerCreator() {
         }
     };
 }
-
-module.exports = ServerCreator;
-
-

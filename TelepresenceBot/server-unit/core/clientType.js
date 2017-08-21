@@ -1,4 +1,4 @@
-ClientType = {
+module.exports = ClientType = {
     BOT : 'bot',
     HUMAN : 'human',
     TEST : 'test',
@@ -11,5 +11,3 @@ ClientType = {
         return undefined;
     }
 }
-
-module.exports = ClientType;

@@ -1,6 +1,6 @@
 var ClientType = require('./clientType.js')
 
-function Router(botLocator) {
+module.exports = function Router(botLocator) {
     return {
         route: function(query, next) {
             var roomName = query.room;
@@ -26,9 +26,3 @@ function Router(botLocator) {
         }
     };
 }
-
-module.exports = function(botLocator) {
-    return new Router(botLocator);
-};
-
-

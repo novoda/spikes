@@ -1,4 +1,4 @@
-function Mover(clientsAndRooms, emitter) {
+module.exports = function Mover(clientsAndRooms, emitter) {
     var hasNoRooms = function(clientId) {
         return !clientsAndRooms[clientId];
     };
@@ -17,7 +17,3 @@ function Mover(clientsAndRooms, emitter) {
         }
     };
 }
-
-module.exports = function(clientsAndRooms, emitter) {
-    return new Mover(clientsAndRooms, emitter);
-};
