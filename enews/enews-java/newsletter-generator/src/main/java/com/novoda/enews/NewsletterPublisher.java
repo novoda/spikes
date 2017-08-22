@@ -9,13 +9,13 @@ import retrofit2.Retrofit;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-class NewsletterGenerator {
+class NewsletterPublisher {
     private final MailChimpWebService webService;
     private final String listId;
     private final NewsletterScheduler newsletterScheduler;
 
     static class Factory {
-        NewsletterGenerator newInstance(String mailChimpToken) {
+        NewsletterPublisher newInstance(String mailChimpToken) {
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(new AuthHeaderInterceptor(mailChimpToken))
                     .build();
@@ -28,17 +28,17 @@ class NewsletterGenerator {
 
             NewsletterScheduler newsletterScheduler = new NewsletterScheduler(webService);
 
-            return new NewsletterGenerator(webService, "187645ff44", newsletterScheduler);
+            return new NewsletterPublisher(webService, "187645ff44", newsletterScheduler);
         }
     }
 
-    NewsletterGenerator(MailChimpWebService webService, String listId, NewsletterScheduler newsletterScheduler) {
+    NewsletterPublisher(MailChimpWebService webService, String listId, NewsletterScheduler newsletterScheduler) {
         this.webService = webService;
         this.listId = listId;
         this.newsletterScheduler = newsletterScheduler;
     }
 
-    void generate(String html) {
+    void publish(String html) {
         Response<ApiCampaignResult> campaignResultResponse = postCampaign();
         if (campaignResultResponse.isSuccessful()) {
             String id = campaignResultResponse.body().id;

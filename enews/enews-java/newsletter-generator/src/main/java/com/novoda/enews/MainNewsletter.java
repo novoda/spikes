@@ -18,12 +18,12 @@ public class MainNewsletter {
         String mailChimpToken = args[1];
         Scraper scraper = new Scraper.Factory().newInstance(slackToken);
         HtmlGenerator htmlGenerator = new HtmlGenerator.Factory().newInstance();
-        NewsletterGenerator newsletterGenerator = new NewsletterGenerator.Factory().newInstance(mailChimpToken);
-        
+        NewsletterPublisher newsletterPublisher = new NewsletterPublisher.Factory().newInstance(mailChimpToken);
+
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = LocalDateTime.now().minusDays(7);
         Stream<ChannelHistory.Message> messageStream = scraper.scrape(start, end);
         String html = htmlGenerator.generate(messageStream);
-        newsletterGenerator.generate(html);
+        newsletterPublisher.publish(html);
     }
 }
