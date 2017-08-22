@@ -16,11 +16,12 @@ public class MainHtml {
         }
         String slackToken = args[0];
         Scraper scraper = new Scraper.Factory().newInstance(slackToken);
+        HtmlGenerator htmlGenerator = new HtmlGenerator.Factory().newInstance();
+
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = LocalDateTime.now().minusDays(7);
         Stream<ChannelHistory.Message> messageStream = scraper.scrape(start, end);
-
-        String html = new HtmlGenerator().generate(messageStream);
+        String html = htmlGenerator.generate(messageStream);
         System.out.println(html);
     }
 }

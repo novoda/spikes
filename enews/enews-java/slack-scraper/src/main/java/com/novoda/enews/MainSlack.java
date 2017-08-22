@@ -1,11 +1,9 @@
 package com.novoda.enews;
 
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.stream.Stream;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MainSlack {
 
@@ -18,19 +16,13 @@ public class MainSlack {
             throw new IllegalStateException("You need to pass a Slack token as the first arg. See https://api.slack.com/web");
         }
         String slackToken = args[0];
+        Scraper scraper = new Scraper.Factory().newInstance(slackToken);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://slack.com/api/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        SlackWebService slackWebService = retrofit.create(SlackWebService.class);
-        SlackHistoryFetcher slackHistoryFetcher = SlackHistoryFetcher.from(slackWebService, slackToken);
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = LocalDateTime.now().minusDays(7);
-        Scraper scraper = new Scraper(slackHistoryFetcher);
-
-        scraper.scrape(start, end)
-                .forEach(System.out::println);
+        List<ChannelHistory.Message> messages = scraper.scrape(start, end).collect(Collectors.toList());
+        messages.forEach(System.out::println);
+        System.out.println("Total was: " + messages.size());
     }
 
 }

@@ -36,4 +36,12 @@ public class HtmlGenerator {
         };
         return writer.toString();
     }
+
+    public static class Factory {
+
+        public HtmlGenerator newInstance() {
+            return new HtmlGenerator();
+        }
+
+    }
 }
