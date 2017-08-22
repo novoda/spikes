@@ -7,10 +7,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 class NewsletterGenerator {
     private final MailChimpWebService webService;
     private final String listId;
+    private final NewsletterScheduler newsletterScheduler;
 
     static class Factory {
         NewsletterGenerator newInstance(String mailChimpToken) {
@@ -24,19 +26,24 @@ class NewsletterGenerator {
                     .build();
             MailChimpWebService webService = retrofit.create(MailChimpWebService.class);
 
-            return new NewsletterGenerator(webService, "187645ff44");
+            NewsletterScheduler newsletterScheduler = new NewsletterScheduler(webService);
+
+            return new NewsletterGenerator(webService, "187645ff44", newsletterScheduler);
         }
     }
 
-    NewsletterGenerator(MailChimpWebService webService, String listId) {
+    NewsletterGenerator(MailChimpWebService webService, String listId, NewsletterScheduler newsletterScheduler) {
         this.webService = webService;
         this.listId = listId;
+        this.newsletterScheduler = newsletterScheduler;
     }
 
     void generate(String html) {
         Response<ApiCampaignResult> campaignResultResponse = postCampaign();
         if (campaignResultResponse.isSuccessful()) {
-            putCampaignContent(campaignResultResponse.body().id, html);
+            String id = campaignResultResponse.body().id;
+            putCampaignContent(id, html);
+            publishNewsletter(id);
         } else {
             ResponseBody responseBody = campaignResultResponse.errorBody();
             try {
@@ -65,5 +72,12 @@ class NewsletterGenerator {
         } catch (IOException e) {
             throw new IllegalStateException("FooBar ", e);
         }
+    }
+
+    private void publishNewsletter(String id) {
+        newsletterScheduler.schedule(id, LocalDateTime.now().plusDays(1).plusHours(1));
+        // Time warp campaigns have to be 24 hours in the future
+        // The scheduling is completely hidden here and is a TODO
+        // - because if someone set up a cron job they cannot *fully* control the time right now
     }
 }

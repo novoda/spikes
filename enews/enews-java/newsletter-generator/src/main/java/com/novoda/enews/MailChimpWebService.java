@@ -18,4 +18,10 @@ interface MailChimpWebService {
             @Path("id") String id,
             @Body CampaignContent campaignContent
     );
+
+    @POST("campaigns/{id}/actions/schedule")
+    Call<Void> postCampaignSchedule(
+            @Path("id") String id,
+            @Body CampaignSchedule campaignSchedule
+    );
 }

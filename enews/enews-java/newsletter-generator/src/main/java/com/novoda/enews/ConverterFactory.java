@@ -12,6 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.time.format.DateTimeFormatter;
 
 class ConverterFactory extends Converter.Factory {
 
@@ -28,6 +29,8 @@ class ConverterFactory extends Converter.Factory {
             return new CampaignConverter();
         } else if (type.getTypeName().equals(CampaignContent.class.getCanonicalName())) {
             return new CampaignContentConverter();
+        } else if (type.getTypeName().equals(CampaignSchedule.class.getCanonicalName())) {
+            return new CampaignScheduleConverter();
         } else {
             return chainedConverter.requestBodyConverter(type, parameterAnnotations, methodAnnotations, retrofit);
         }
@@ -64,6 +67,17 @@ class ConverterFactory extends Converter.Factory {
         public RequestBody convert(CampaignContent value) throws IOException {
             JsonObject obj = new JsonObject();
             obj.add("html", new JsonPrimitive(value.getHtml()));
+            return RequestBody.create(MediaType.parse("application/json"), obj.getAsJsonObject().toString());
+        }
+    }
+
+    private static class CampaignScheduleConverter implements Converter<CampaignSchedule, RequestBody> {
+
+        @Override
+        public RequestBody convert(CampaignSchedule value) throws IOException {
+            JsonObject obj = new JsonObject();
+            obj.add("schedule_time", new JsonPrimitive(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:00+00:00").format(value.getScheduleDateTime())));
+            obj.add("timewarp", new JsonPrimitive(value.isScheduleAsTimezoneLocal()));
             return RequestBody.create(MediaType.parse("application/json"), obj.getAsJsonObject().toString());
         }
     }
