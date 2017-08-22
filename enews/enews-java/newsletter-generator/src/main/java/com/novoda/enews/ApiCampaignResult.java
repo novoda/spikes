@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 class ApiCampaignResult {
 
-    @SerializedName("text")
+    @SerializedName("id")
     public String id;
 
     @Override
