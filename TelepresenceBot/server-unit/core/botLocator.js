@@ -17,20 +17,25 @@ module.exports = function (locationRooms) {
     var roomsThatAreNotAlreadyConnectedToOtherSockets = function () {
         return function (roomName) {
             return locationRooms[roomName].length == 1;
-        }
+        };
+    }
+
+    var asEmptyBotRoom = function () {
+        return function (locationRoom) {
+            return Object.keys(locationRooms[locationRoom].sockets)
+                .filter(roomsThatContainProperty('length'))
+                .filter(roomsThatAreNotAlreadyConnectedToOtherSockets())
+                .pop();
+        };
     }
 
     return {
-        locateFirstAvailableBotIn: function (locationRoomToFind) {
+        locateFirstAvailableBotIn: function (locationRoom) {
             return Object.keys(locationRooms)
-                .filter(roomsThatMatch(locationRoomToFind))
+                .filter(roomsThatMatch(locationRoom))
                 .filter(roomsThatContainProperty('sockets'))
-                .map(function (roomName) {
-                    return Object.keys(locationRooms[roomName].sockets)
-                        .filter(roomsThatContainProperty('length'))
-                        .filter(roomsThatAreNotAlreadyConnectedToOtherSockets())
-                        .pop();
-                }).pop();
+                .map(asEmptyBotRoom())
+                .pop();
         }
     };
 };
