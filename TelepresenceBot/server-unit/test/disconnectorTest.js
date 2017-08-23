@@ -13,52 +13,54 @@ var rooms = {
 };
 
 var connectedClients = {
+    called: false,
     'botId': {
-        disconnect: function () { }
+        disconnect: function () {
+            connectedClients.called = true;
+        }
     }
 };
 
-var noConnectedClients = {};
+var noConnectedClients = {
+    called: false,
+    disconnect: function () {
+        noConnectedClients.called = true;
+    }
+};
+
+afterEach(function (done) {
+    connectedClients.called = false;
+    noConnectedClients.called = false;
+    done();
+});
 
 describe('Disconnector Tests.', function () {
 
-    it('Should return false when cannot locate room in list of rooms.', function (done) {
+    it('Should do nothing when cannot locate room in list of rooms.', function (done) {
         var disconnector = new Disconnector(rooms, connectedClients);
 
-        var disconnected = disconnector.disconnectRoom('Room not present');
+        disconnector.disconnectRoom('Room not present');
 
-        expect(disconnected).to.be.false;
+        expect(connectedClients.called).to.be.false;
         done();
     });
 
-    it('Should return false when connected clients do not contain room client.', function (done) {
+    it('Should do nothing when connected clients does contain any clients.', function (done) {
         var disconnector = new Disconnector(rooms, noConnectedClients);
 
-        var disconnected = disconnector.disconnectRoom('London');
+        disconnector.disconnectRoom('London');
 
-        expect(disconnected).to.be.false;
+        expect(noConnectedClients.called).to.be.false;
         done();
     });
 
-    it('Should return true when disconnecting all clients in room.', function (done) {
+    it('Should call disconnect when disconnecting all clients in room.', function (done) {
         var disconnector = new Disconnector(rooms, connectedClients);
 
-        var disconnected = disconnector.disconnectRoom('London');
-
-        expect(disconnected).to.be.true;
-        done();
-    });
-
-    it('Should call disconnect on connected client when disconnecting all clients in room.', function (done) {
-        var disconnector = new Disconnector(rooms, {
-            'botId': {
-                disconnect: function () {
-                    done();
-                }
-            }
-        });
-
         disconnector.disconnectRoom('London');
+
+        expect(connectedClients.called).to.be.true;
+        done();
     });
 
 });
