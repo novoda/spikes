@@ -1,23 +1,17 @@
-function Mover(clientsAndRooms, emitter) {
-    var hasNoRooms = function(clientId) {
-        return !clientsAndRooms[clientId];
-    };
+module.exports = function Mover(clientsAndRooms, emitter) {
+
+    var emitToRoom = function (direction) {
+        return function (room) {
+            emitter.to(room).emit('direction', direction);
+        }
+    }
 
     return {
-        moveIn: function(clientId, direction) {
-            if(hasNoRooms(clientId)) {
-                return;
-            }
+        moveIn: function (clientId, direction) {
+            var rooms = clientsAndRooms[clientId];
 
-            var roomsClientIsIn = Object.keys(clientsAndRooms[clientId]);
-
-            for(var i = 0; i < roomsClientIsIn.length; i++) {
-                emitter.to(roomsClientIsIn[i]).emit('direction', direction);
-            }
+            Object.keys(rooms || {})
+                .every(emitToRoom(direction));
         }
     };
 }
-
-module.exports = function(clientsAndRooms, emitter) {
-    return new Mover(clientsAndRooms, emitter);
-};

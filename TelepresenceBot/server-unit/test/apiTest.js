@@ -18,7 +18,7 @@ describe('API Tests - Performing GET requests.', function () {
         done();
     });
 
-    afterEach(function(done) {
+    afterEach(function (done) {
         server.close(done);
     });
 
@@ -27,7 +27,7 @@ describe('API Tests - Performing GET requests.', function () {
             .get('/')
             .type('html')
             .expect(200)
-            .end(function(error, response) {
+            .end(function (error, response) {
                 var file = fs.readFileSync('../core/html/index.html', 'utf8');
                 expect(response.text).to.equal(file);
                 done();
@@ -39,7 +39,7 @@ describe('API Tests - Performing GET requests.', function () {
             .get('/rooms')
             .type('json')
             .expect(200)
-            .end(function(error, response) {
+            .end(function (error, response) {
                 var file = fs.readFileSync('../core/json/rooms.json', 'utf8');
                 expect(response.text).to.equal(file);
                 done();

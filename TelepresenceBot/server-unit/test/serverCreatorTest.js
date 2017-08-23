@@ -18,25 +18,25 @@ options = {
 
 describe('ServerCreator Tests.', function () {
 
-    before(function(done){
-        mockRouter = sinon.stub(router, 'route').callsFake(function(client, next){ return next(); });
-        mockMover = sinon.stub(mover, 'moveIn').callsFake(function(clientId, direction) { return true; });
-        mockDisconnector = sinon.stub(disconnector, 'disconnectRoom').callsFake(function() { return true; });
+    before(function (done) {
+        mockRouter = sinon.stub(router, 'route').callsFake(function (client, next) { return next(); });
+        mockMover = sinon.stub(mover, 'moveIn').callsFake(function (clientId, direction) { return true; });
+        mockDisconnector = sinon.stub(disconnector, 'disconnectRoom').callsFake(function () { return true; });
         done();
     });
 
     beforeEach(function (done) {
         server = new ServerCreator()
-               .withRouter(router)
-               .withDisconnector(disconnector)
-               .withObserver(observer)
-               .withMover(mover)
-               .create();
+            .withRouter(router)
+            .withDisconnector(disconnector)
+            .withObserver(observer)
+            .withMover(mover)
+            .create();
 
         done();
     });
 
-    afterEach(function(done) {
+    afterEach(function (done) {
         server.close();
         done();
     });
@@ -45,7 +45,7 @@ describe('ServerCreator Tests.', function () {
         var client = io.connect(socketUrl, options);
 
         client.once('connect', function () {
-            client.once('joined_room', function(room) {
+            client.once('joined_room', function (room) {
                 expect(mockRouter.called).to.be.true;
                 done();
             });
@@ -56,7 +56,7 @@ describe('ServerCreator Tests.', function () {
         var client = io.connect(socketUrl, options);
 
         client.once('connect', function () {
-            client.once('joined_room', function(room) {
+            client.once('joined_room', function (room) {
                 expect(room).to.equal('London');
                 done();
             });
@@ -70,7 +70,7 @@ describe('ServerCreator Tests.', function () {
             client.emit('move_in', 'forward');
         });
 
-        observer.notify = function(eventName, data) {
+        observer.notify = function (eventName, data) {
             expect(mockMover.called).to.be.true;
             expect(mockMover.callCount).to.equal(1);
             expect(data).to.equal('forward');
@@ -85,7 +85,7 @@ describe('ServerCreator Tests.', function () {
             client.disconnect();
         });
 
-        observer.notify = function(eventName, data) {
+        observer.notify = function (eventName, data) {
             expect(mockDisconnector.called).to.be.true;
             expect(mockDisconnector.callCount).to.equal(1);
             done();

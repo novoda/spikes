@@ -12,9 +12,9 @@ var clientsAndRooms = {
 
 var emitter = {
     called: false,
-    to: function(room) {
+    to: function (room) {
         return {
-            emit: function(event, valueToEmit) {
+            emit: function (event, valueToEmit) {
                 emitter.room = room;
                 emitter.event = event;
                 emitter.valueToEmit = valueToEmit;
@@ -24,14 +24,14 @@ var emitter = {
     }
 }
 
-afterEach(function(done) {
+afterEach(function (done) {
     emitter.called = false;
     done();
 });
 
-describe('Mover Tests.', function() {
+describe('Mover Tests.', function () {
 
-    it('Should emit to botId when moving humanId in any direction.', function(done){
+    it('Should emit to botId when moving humanId in any direction.', function (done) {
         var mover = new Mover(clientsAndRooms, emitter);
 
         mover.moveIn('humanId', 'forward');
@@ -41,7 +41,7 @@ describe('Mover Tests.', function() {
         done();
     });
 
-    it('Should emit event of direction when moving humanId in any direction.', function(done){
+    it('Should emit event of direction when moving humanId in any direction.', function (done) {
         var mover = new Mover(clientsAndRooms, emitter);
 
         mover.moveIn('humanId', 'forward');
@@ -51,7 +51,7 @@ describe('Mover Tests.', function() {
         done();
     });
 
-    it('Should emit value of forward when moving humanId in a forward direction.', function(done){
+    it('Should emit value of forward when moving humanId in a forward direction.', function (done) {
         var mover = new Mover(clientsAndRooms, emitter);
 
         mover.moveIn('humanId', 'forward');
@@ -61,7 +61,7 @@ describe('Mover Tests.', function() {
         done();
     });
 
-    it('Should do nothing when a given clientId does not belong to any rooms.', function(done){
+    it('Should do nothing when a given clientId does not belong to any rooms.', function (done) {
         var mover = new Mover(clientsAndRooms, emitter);
 
         mover.moveIn('clientId', 'forward');
