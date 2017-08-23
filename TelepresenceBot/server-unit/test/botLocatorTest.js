@@ -1,7 +1,7 @@
-var expect = require('chai').expect
+const expect = require('chai').expect
 BotLocator = require('../core/botLocator.js');
 
-var roomWithASingleBot = {
+const roomWithASingleBot = {
     'botId': {
         sockets: { 'botId': true },
         length: 1
@@ -12,7 +12,7 @@ var roomWithASingleBot = {
     }
 };
 
-var roomWhereBotIsConnectedToHuman = {
+const roomWhereBotIsConnectedToHuman = {
     'botId': {
         sockets: { 'botId': true, 'humanId': true },
         length: 2
@@ -23,7 +23,7 @@ var roomWhereBotIsConnectedToHuman = {
     }
 };
 
-var roomContainingMultipleBotsWhereOneIsConnectedToHuman = {
+const roomContainingMultipleBotsWhereOneIsConnectedToHuman = {
     'botId01': {
         sockets: { 'botId01': true, 'human01': true },
         length: 2
@@ -41,36 +41,36 @@ var roomContainingMultipleBotsWhereOneIsConnectedToHuman = {
 describe('BotLocator Tests.', function () {
 
     it('Should give undefined when bot is not found in given room.', function (done) {
-        var botLocator = new BotLocator(roomWithASingleBot);
+        const botLocator = new BotLocator(roomWithASingleBot);
 
-        var bot = botLocator.locateFirstAvailableBotIn('Unexpected Room');
+        const bot = botLocator.locateFirstAvailableBotIn('Unexpected Room');
 
         expect(bot).to.be.undefined;
         done();
     });
 
     it('Should give bot id when bot room does not contain other sockets.', function (done) {
-        var botLocator = new BotLocator(roomWithASingleBot);
+        const botLocator = new BotLocator(roomWithASingleBot);
 
-        var bot = botLocator.locateFirstAvailableBotIn('London');
+        const bot = botLocator.locateFirstAvailableBotIn('London');
 
         expect(bot).to.equal('botId');
         done();
     });
 
     it('Should give undefined when bot room contains other sockets.', function (done) {
-        var botLocator = new BotLocator(roomWhereBotIsConnectedToHuman);
+        const botLocator = new BotLocator(roomWhereBotIsConnectedToHuman);
 
-        var bot = botLocator.locateFirstAvailableBotIn('London');
+        const bot = botLocator.locateFirstAvailableBotIn('London');
 
         expect(bot).to.be.undefined;
         done();
     });
 
     it('Should give first bot in room that contains multiple bots.', function (done) {
-        var botLocator = new BotLocator(roomContainingMultipleBotsWhereOneIsConnectedToHuman);
+        const botLocator = new BotLocator(roomContainingMultipleBotsWhereOneIsConnectedToHuman);
 
-        var bot = botLocator.locateFirstAvailableBotIn('London');
+        const bot = botLocator.locateFirstAvailableBotIn('London');
 
         expect(bot).to.equal('botId02');
         done();

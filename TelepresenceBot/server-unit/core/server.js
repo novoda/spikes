@@ -1,4 +1,4 @@
-var ServerCreator = require('./serverCreator');
+const ServerCreator = require('./serverCreator');
 
-var serverCreator = new ServerCreator();
+const serverCreator = new ServerCreator();
 serverCreator.create();

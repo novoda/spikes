@@ -1,17 +1,17 @@
-var ClientType = require('./clientType.js')
+const ClientType = require('./clientType.js')
 
 module.exports = function Router(botLocator) {
     return {
         route: function (query, next) {
-            var roomName = query.room;
-            var rawClientType = query.clientType;
-            var clientType = ClientType.from(rawClientType);
+            const roomName = query.room;
+            const rawClientType = query.clientType;
+            const clientType = ClientType.from(rawClientType);
 
             switch (clientType) {
                 case ClientType.BOT:
                     return next();
                 case ClientType.HUMAN:
-                    var availableBot = botLocator.locateFirstAvailableBotIn(roomName);
+                    const availableBot = botLocator.locateFirstAvailableBotIn(roomName);
 
                     if (availableBot) {
                         query.room = availableBot;

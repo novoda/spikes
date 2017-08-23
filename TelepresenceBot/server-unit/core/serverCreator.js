@@ -1,10 +1,11 @@
-var express = require('express'),
+const express = require('express'),
     app = express(),
     httpServer = require('http').createServer(app),
     io = require('socket.io')(httpServer),
     path = require('path'),
-    debug = require('debug')('server'),
-    botLocator = require('./botLocator.js')(io.sockets.adapter.rooms),
+    debug = require('debug')('server');
+
+let botLocator = require('./botLocator.js')(io.sockets.adapter.rooms),
     router = require('./router.js')(botLocator),
     disconnector = require('./disconnector.js')(io.sockets.adapter.rooms, io.sockets.connected),
     mover = require('./mover.js')(io.sockets.adapter.sids, io),

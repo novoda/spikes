@@ -1,24 +1,24 @@
 module.exports = function (locationRooms) {
 
-    var roomsThatMatch = function (toMatch) {
+    const roomsThatMatch = function (toMatch) {
         return function (room) {
             return toMatch == room;
         };
     }
 
-    var roomsThatContainProperty = function (property) {
+    const roomsThatContainProperty = function (property) {
         return function (roomName) {
             return locationRooms[roomName].hasOwnProperty(property);
         };
     }
 
-    var roomsThatAreNotAlreadyConnectedToOtherSockets = function () {
+    const roomsThatAreNotAlreadyConnectedToOtherSockets = function () {
         return function (roomName) {
             return locationRooms[roomName].length == 1;
         };
     }
 
-    var asEmptyBotRoom = function () {
+    const asEmptyBotRoom = function () {
         return function (locationRoom) {
             return Object.keys(locationRooms[locationRoom].sockets)
                 .filter(roomsThatContainProperty('length'))
