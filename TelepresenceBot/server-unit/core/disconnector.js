@@ -12,6 +12,30 @@ module.exports = function Disconnector(rooms, connectedClients) {
         };
     }
 
+    var thosePresentIn = function (objectToSearch) {
+        return function (key) {
+            return objectToSearch[key]
+        };
+    }
+
+    var asConnectedClient = function () {
+        return function (key) {
+            return connectedClients[key];
+        };
+    }
+
+    var connectedClientsThatContainProperty = function (property) {
+        return function (connectedClient) {
+            return connectedClient.hasOwnProperty(property);
+        }
+    }
+
+    var disconnectClient = function () {
+        return function (connectedClient) {
+            connectedClient.disconnect();
+        }
+    }
+
     return {
         disconnectRoom: function (roomName) {
             Object.keys(rooms)
@@ -19,18 +43,10 @@ module.exports = function Disconnector(rooms, connectedClients) {
                 .filter(roomsThatContainProperty('sockets'))
                 .map(function (roomKey) {
                     return Object.keys(rooms[roomKey].sockets)
-                        .filter(function (key) {
-                            return connectedClients[key];
-                        })
-                        .map(function (key) {
-                            return connectedClients[key];
-                        })
-                        .filter(function (connectedClient) {
-                            return connectedClient.hasOwnProperty('disconnect');
-                        })
-                        .every(function (connectedClient) {
-                            connectedClient.disconnect();
-                        })
+                        .filter(thosePresentIn(connectedClients))
+                        .map(asConnectedClient())
+                        .filter(connectedClientsThatContainProperty('disconnect'))
+                        .every(disconnectClient());
                 });
         }
     };
