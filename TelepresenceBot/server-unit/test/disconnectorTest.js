@@ -6,9 +6,13 @@ var rooms = {
         sockets: { 'botId': true },
         length: 1
     },
-    'London': {
-        sockets: { 'botId': true },
+    'botId02': {
+        sockets: { 'botId02': true },
         length: 1
+    },
+    'London': {
+        sockets: { 'botId': true, 'botId02': true },
+        length: 2
     }
 };
 
@@ -54,7 +58,7 @@ describe('Disconnector Tests.', function () {
         done();
     });
 
-    it('Should call disconnect when disconnecting all clients in room.', function (done) {
+    it.only('Should call disconnect when disconnecting all clients in room.', function (done) {
         var disconnector = new Disconnector(rooms, connectedClients);
 
         disconnector.disconnectRoom('London');
