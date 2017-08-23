@@ -1,4 +1,3 @@
-var debug = require('debug')('test');
 module.exports = function Disconnector(rooms, connectedClients) {
 
     var roomsThatMatch = function (toMatch) {

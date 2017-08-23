@@ -1,5 +1,3 @@
-var debug = require('debug')('test');
-
 module.exports = function (locationRooms) {
 
     var roomsThatMatch = function (toMatch) {
