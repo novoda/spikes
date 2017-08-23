@@ -1,6 +1,6 @@
 var debug = require('debug')('test');
 
-module.exports = function (rooms) {
+module.exports = function (locationRooms) {
 
     var roomsThatMatch = function (toMatch) {
         return function (room) {
@@ -10,23 +10,23 @@ module.exports = function (rooms) {
 
     var roomsThatContainProperty = function (property) {
         return function (roomName) {
-            return rooms[roomName].hasOwnProperty(property);
+            return locationRooms[roomName].hasOwnProperty(property);
         };
     }
 
     var roomsThatAreNotAlreadyConnectedToOtherSockets = function () {
         return function (roomName) {
-            return rooms[roomName].length == 1;
+            return locationRooms[roomName].length == 1;
         }
     }
 
     return {
-        locateFirstAvailableBotIn: function (roomToFind) {
-            return Object.keys(rooms)
-                .filter(roomsThatMatch(roomToFind))
+        locateFirstAvailableBotIn: function (locationRoomToFind) {
+            return Object.keys(locationRooms)
+                .filter(roomsThatMatch(locationRoomToFind))
                 .filter(roomsThatContainProperty('sockets'))
                 .map(function (roomName) {
-                    return Object.keys(rooms[roomName].sockets)
+                    return Object.keys(locationRooms[roomName].sockets)
                         .filter(roomsThatContainProperty('length'))
                         .filter(roomsThatAreNotAlreadyConnectedToOtherSockets())
                         .pop();
