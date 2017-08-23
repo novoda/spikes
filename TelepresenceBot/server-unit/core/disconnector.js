@@ -1,24 +1,38 @@
+var debug = require('debug')('test');
 module.exports = function Disconnector(rooms, connectedClients) {
+
+    var roomsThatMatch = function (toMatch) {
+        return function (room) {
+            return toMatch == room;
+        };
+    }
+
+    var roomsThatContainProperty = function (property) {
+        return function (roomName) {
+            return rooms[roomName].hasOwnProperty(property);
+        };
+    }
+
     return {
         disconnectRoom: function (roomName) {
-            var room = rooms[roomName];
-
-            if (!room) {
-                return false;
-            }
-
-            var clientsInRoom = room.sockets;
-
-            for (var client in clientsInRoom) {
-                var connectedClient = connectedClients[client];
-
-                if (!connectedClient) {
-                    return false;
-                }
-
-                connectedClient.disconnect();
-            }
-            return true;
+            Object.keys(rooms)
+                .filter(roomsThatMatch(roomName))
+                .filter(roomsThatContainProperty('sockets'))
+                .map(function (roomKey) {
+                    return Object.keys(rooms[roomKey].sockets)
+                        .filter(function (key) {
+                            return connectedClients[key];
+                        })
+                        .map(function (key) {
+                            return connectedClients[key];
+                        })
+                        .filter(function (connectedClient) {
+                            return connectedClient.hasOwnProperty('disconnect');
+                        })
+                        .every(function (connectedClient) {
+                            connectedClient.disconnect();
+                        })
+                });
         }
     };
 }
