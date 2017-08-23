@@ -26,6 +26,7 @@
     "fs": "0.0.1-security",
     "mocha": "^3.4.2",
     "should": "^11.2.1",
+    "sinon": "^2.3.7",
     "supertest": "^3.0.0",
     "unit.js": "^2.0.0"
   }

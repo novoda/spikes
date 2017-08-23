@@ -1,25 +1,39 @@
-function BotLocator(rooms) {
-    this.rooms = rooms;
-}
+module.exports = function (locationRooms) {
 
-BotLocator.prototype.locateFirstAvailableBotIn = function(room) {
-    var botsInRoom = this.rooms[room];
-
-    if(!botsInRoom) {
-        return;
+    const roomsThatMatch = function (toMatch) {
+        return function (room) {
+            return toMatch == room;
+        };
     }
 
-    for (socketId in botsInRoom.sockets) {
-        var socketsInBotRoom = this.rooms[socketId];
+    const roomsThatContainProperty = function (property) {
+        return function (roomName) {
+            return locationRooms[roomName].hasOwnProperty(property);
+        };
+    }
 
-        if(botNotConnectedToHuman(socketsInBotRoom)) {
-            return socketId;
+    const roomsThatAreNotAlreadyConnectedToOtherSockets = function () {
+        return function (roomName) {
+            return locationRooms[roomName].length == 1;
+        };
+    }
+
+    const asEmptyBotRoom = function () {
+        return function (locationRoom) {
+            return Object.keys(locationRooms[locationRoom].sockets)
+                .filter(roomsThatContainProperty('length'))
+                .filter(roomsThatAreNotAlreadyConnectedToOtherSockets())
+                .pop();
+        };
+    }
+
+    return {
+        locateFirstAvailableBotIn: function (locationRoom) {
+            return Object.keys(locationRooms)
+                .filter(roomsThatMatch(locationRoom))
+                .filter(roomsThatContainProperty('sockets'))
+                .map(asEmptyBotRoom())
+                .pop();
         }
-    }
-}
-
-function botNotConnectedToHuman(socketsInBotRoom) {
-    return  socketsInBotRoom.length === 1;
-}
-
-module.exports = BotLocator;
+    };
+};
