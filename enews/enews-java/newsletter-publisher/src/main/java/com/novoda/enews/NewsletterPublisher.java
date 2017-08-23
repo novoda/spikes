@@ -9,13 +9,13 @@ import retrofit2.Retrofit;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-class NewsletterPublisher {
+public class NewsletterPublisher {
     private final MailChimpWebService webService;
     private final String listId;
     private final NewsletterScheduler newsletterScheduler;
 
-    static class Factory {
-        NewsletterPublisher newInstance(String mailChimpToken) {
+    public static class Factory {
+        public NewsletterPublisher newInstance(String mailChimpToken) {
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(new AuthHeaderInterceptor(mailChimpToken))
                     .build();
@@ -38,12 +38,12 @@ class NewsletterPublisher {
         this.newsletterScheduler = newsletterScheduler;
     }
 
-    void publish(String html) {
+    public void publish(String html, LocalDateTime atLocalDateTime) {
         Response<ApiCampaignResult> campaignResultResponse = postCampaign();
         if (campaignResultResponse.isSuccessful()) {
             String id = campaignResultResponse.body().id;
             putCampaignContent(id, html);
-            publishNewsletter(id);
+            publishNewsletter(id, atLocalDateTime);
         } else {
             ResponseBody responseBody = campaignResultResponse.errorBody();
             try {
@@ -74,10 +74,7 @@ class NewsletterPublisher {
         }
     }
 
-    private void publishNewsletter(String id) {
-        newsletterScheduler.schedule(id, LocalDateTime.now().plusDays(1).plusHours(1));
-        // Time warp campaigns have to be 24 hours in the future
-        // The scheduling is completely hidden here and is a TODO
-        // - because if someone set up a cron job they cannot *fully* control the time right now
+    private void publishNewsletter(String id, LocalDateTime atLocalDateTime) {
+        newsletterScheduler.schedule(id, atLocalDateTime);
     }
 }

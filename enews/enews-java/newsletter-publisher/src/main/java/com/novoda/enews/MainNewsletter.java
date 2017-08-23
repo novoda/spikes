@@ -24,6 +24,10 @@ public class MainNewsletter {
         LocalDateTime end = LocalDateTime.now().minusDays(7);
         Stream<ChannelHistory.Message> messageStream = scraper.scrape(start, end);
         String html = htmlGenerator.generate(messageStream);
-        newsletterPublisher.publish(html);
+        LocalDateTime atLocalDateTime = LocalDateTime.now().plusDays(1).plusHours(1);
+        newsletterPublisher.publish(html, atLocalDateTime);
+        // Time warp campaigns have to be 24 hours in the future
+        // The scheduling is completely hidden here and is a TODO
+        // - because if someone set up a cron job they cannot *fully* control the time right now
     }
 }
