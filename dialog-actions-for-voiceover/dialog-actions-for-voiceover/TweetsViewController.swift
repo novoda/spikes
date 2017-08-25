@@ -13,6 +13,7 @@ let cellIdentifier: String = "tweetCell"
 class TweetsViewController: UIViewController {
     
     let tweetsProvider = TweetsProvider()
+    let tweetsAdapter = TweetsAdapter()
     
     var tableView = UITableView()
     var tweets: [Tweet] = []
@@ -32,19 +33,19 @@ class TweetsViewController: UIViewController {
         ])
         
         tableView.register(TweetCell.self, forCellReuseIdentifier: cellIdentifier)
-        tableView.dataSource = self
-        tableView.delegate = self
-        
-        
+        tableView.dataSource = tweetsAdapter
+        tableView.delegate = tweetsAdapter
         
         tweetsProvider.fetchTweets(completion: { tweets in
-            self.update(tweets)
+            self.tweetsAdapter.update(tweets)
             self.tableView.reloadData()
         })
     }
 }
 
-extension TweetsViewController: UITableViewDelegate, UITableViewDataSource {
+class TweetsAdapter: NSObject, UITableViewDelegate, UITableViewDataSource {
+    
+    var tweets: [Tweet] = []
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: TweetCell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! TweetCell
