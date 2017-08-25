@@ -49,7 +49,8 @@ class TweetsAdapter: NSObject, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: TweetCell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! TweetCell
-        // TODO: bind tweet to view
+        let tweet = tweets[indexPath.row]
+        cell.bind(tweet)
         return cell
     }
     
