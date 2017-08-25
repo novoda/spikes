@@ -42,6 +42,7 @@ DerivedData/
 *.perspectivev3
 *.pbxuser
 xcuserdata
+*.xcuserstate
 
 # Automatic backup files
 *~.nib/
