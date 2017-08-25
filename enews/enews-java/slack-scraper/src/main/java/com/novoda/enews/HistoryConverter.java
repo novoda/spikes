@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class HistoryConverter {
 
@@ -19,6 +21,12 @@ class HistoryConverter {
         return new ChannelHistory(historyFrom, historyTo, messages);
     }
 
+    private static final Pattern urlPattern = Pattern.compile(
+            "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
+                    + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
+                    + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
+            Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+
     private static ChannelHistory.Message convert(ApiPagedChannelHistory.ApiMessage apiMessage) {
         List<ApiPagedChannelHistory.ApiAttachment> attachments = apiMessage.attachments;
         String imageUrl = null;
@@ -26,10 +34,20 @@ class HistoryConverter {
             imageUrl = attachments.get(0).imageUrl;
         }
         if (imageUrl == null) {
-            imageUrl = "http://www.emmys.com/sites/default/files/The-Missing.jpg";
+            imageUrl = "https://s3-eu-west-1.amazonaws.com/novoda-public-image-bucket/missing-image.png";
         }
         String text = apiMessage.text; // Bots send messages with attachments but no text
-        return new ChannelHistory.Message(text == null ? "" : text, imageUrl);
+
+        String link = "";
+        Matcher matcher = urlPattern.matcher(text);
+        while (matcher.find()) {
+            int matchStart = matcher.start(1);
+            int matchEnd = matcher.end();
+            // now you have the offsets of a URL match
+            link = text.substring(matchStart, matchEnd);
+        }
+
+        return new ChannelHistory.Message(text == null ? "" : text, imageUrl, link);
     }
 
     private static LocalDateTime getOldestMessageLocalDateTime(ApiPagedChannelHistory apiPagedChannelHistory) {

@@ -23,7 +23,7 @@ public class Scraper {
                 .parallelStream()
                 .map(message -> new ChannelHistory.Message(message.getText()
                         .replace("<#C0YNBKANM|enews>", "#eNews")
-                        .replace("<#C1V389HGB|enews>", "#eNews"), message.getImageUrl()))
+                        .replace("<#C1V389HGB|enews>", "#eNews"), message.getImageUrl(), message.getPageLink()))
                 .filter(message -> {
                     String messageText = message.getText().toLowerCase();
                     return messageText.contains("#enews")

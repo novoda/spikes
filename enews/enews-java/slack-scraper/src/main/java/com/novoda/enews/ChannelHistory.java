@@ -41,10 +41,12 @@ class ChannelHistory {
     public static class Message {
         private final String text;
         private final String imageUrl;
+        private final String pageLink;
 
-        public Message(String text, String imageUrl) {
+        public Message(String text, String imageUrl, String pageLink) {
             this.text = text;
             this.imageUrl = imageUrl;
+            this.pageLink = pageLink;
         }
 
         public String getImageUrl() {
@@ -69,6 +71,10 @@ class ChannelHistory {
         @Override
         public String toString() {
             return text;
+        }
+
+        public String getPageLink() {
+            return pageLink;
         }
     }
 
