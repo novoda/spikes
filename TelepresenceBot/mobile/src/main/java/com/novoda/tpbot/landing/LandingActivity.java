@@ -3,17 +3,24 @@ package com.novoda.tpbot.landing;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.novoda.tpbot.MenuFeatureSelectionController;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.bot.BotActivity;
 import com.novoda.tpbot.human.HumanActivity;
 
 public class LandingActivity extends AppCompatActivity {
 
+    private MenuFeatureSelectionController featureSelectionController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        featureSelectionController = new MenuFeatureSelectionController(getMenuInflater());
+
         setContentView(R.layout.activity_landing);
 
         View humanSelection = findViewById(R.id.human_selection);
@@ -39,4 +46,19 @@ public class LandingActivity extends AppCompatActivity {
         }
     };
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        featureSelectionController.attachFeatureSelectionTo(menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (featureSelectionController.contains(item)) {
+            featureSelectionController.handleFeatureToggle(item);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
 }
