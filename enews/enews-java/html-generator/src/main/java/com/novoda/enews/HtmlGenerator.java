@@ -53,8 +53,11 @@ public class HtmlGenerator {
             void makeFooter() {
                 br();
                 p()
-                    .text("This newsletter was created with Java 8, and is available as open source.")
-                    .a().href("https://github.com/novoda/spikes/tree/master/enews/enews-java")
+                    .text("This newsletter was created with Java 8,")
+                    .a()
+                        .href("https://github.com/novoda/spikes/tree/master/enews/enews-java")
+                        .text("and is available as open source.")
+                    .end()
                 .end();
             }
         };
