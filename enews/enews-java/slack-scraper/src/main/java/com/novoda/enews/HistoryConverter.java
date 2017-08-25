@@ -33,21 +33,18 @@ class HistoryConverter {
         if (attachments != null) {
             imageUrl = attachments.get(0).imageUrl;
         }
-        if (imageUrl == null) {
-            imageUrl = "https://s3-eu-west-1.amazonaws.com/novoda-public-image-bucket/missing-image.png";
-        }
         String text = apiMessage.text; // Bots send messages with attachments but no text
 
-        String link = "";
+        String pageLink = "";
         Matcher matcher = urlPattern.matcher(text);
         while (matcher.find()) {
             int matchStart = matcher.start(1);
             int matchEnd = matcher.end();
             // now you have the offsets of a URL match
-            link = text.substring(matchStart, matchEnd);
+            pageLink = text.substring(matchStart, matchEnd);
         }
 
-        return new ChannelHistory.Message(text == null ? "" : text, imageUrl, link);
+        return new ChannelHistory.Message(text, imageUrl, pageLink);
     }
 
     private static LocalDateTime getOldestMessageLocalDateTime(ApiPagedChannelHistory apiPagedChannelHistory) {

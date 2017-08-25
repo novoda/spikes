@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
-public class MainHtml {
+public class MainEditor {
 
     /**
      * @param args https://api.slack.com/docs/oauth-test-tokens
@@ -16,14 +16,13 @@ public class MainHtml {
         }
         String slackToken = args[0];
         Scraper scraper = new Scraper.Factory().newInstance(slackToken);
-        HtmlGenerator htmlGenerator = new HtmlGenerator.Factory().newInstance();
         ArticleEditor articleEditor = new ArticleEditor();
 
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = LocalDateTime.now().minusDays(7);
         Stream<ChannelHistory.Message> messageStream = scraper.scrape(start, end);
         Stream<Article> articleStream = articleEditor.generateArticle(messageStream);
-        String html = htmlGenerator.generate(articleStream);
-        System.out.println(html);
+        articleStream.forEach(System.out::println);
     }
+
 }

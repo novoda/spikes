@@ -1,5 +1,7 @@
 package com.novoda.enews;
 
+import com.sun.istack.internal.Nullable;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -43,25 +45,19 @@ class ChannelHistory {
         private final String imageUrl;
         private final String pageLink;
 
-        public Message(String text, String imageUrl, String pageLink) {
+        public Message(String text, @Nullable String imageUrl, String pageLink) {
             this.text = text;
             this.imageUrl = imageUrl;
             this.pageLink = pageLink;
         }
 
-        public String getImageUrl() {
-            return imageUrl;
+        public boolean hasImage() {
+            return imageUrl != null;
         }
 
-        public URL toUrl() {
-            int urlStart = text.indexOf("http");
-            int urlEnd = text.indexOf('>', urlStart);
-            String url = text.substring(urlStart, urlEnd);
-            try {
-                return new URL(url);
-            } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
-            }
+        @Nullable
+        public String getImageUrl() {
+            return imageUrl;
         }
 
         public String getText() {
