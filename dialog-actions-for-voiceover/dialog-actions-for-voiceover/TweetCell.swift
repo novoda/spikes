@@ -157,4 +157,13 @@ class TweetCell: UITableViewCell {
             constant: 0
         )
     }
+    
+    func bind(_ tweet: Tweet) {
+        usernameLabel.text = tweet.username
+        bodyLabel.text = tweet.body
+        timeLabel.text = tweet.time
+        if let url = NSURL(string: tweet.avatarUrl), let data = NSData(contentsOf: url as URL) {
+            avatarImageView.image = UIImage(data: data as Data)
+        }
+    }
 }
