@@ -24,13 +24,7 @@ class TweetsViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
         view.backgroundColor = UIColor.white
-        
-        NSLayoutConstraint.activate([
-            topLayoutGuide.bottomAnchor.constraint(equalTo: tableView.topAnchor),
-            bottomLayoutGuide.topAnchor.constraint(equalTo: tableView.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
+        constrainTableViewBoundsToViewPort()
         
         tableView.register(TweetCell.self, forCellReuseIdentifier: cellIdentifier)
         tableView.dataSource = tweetsAdapter
@@ -40,6 +34,15 @@ class TweetsViewController: UIViewController {
             self.tweetsAdapter.update(tweets)
             self.tableView.reloadData()
         })
+    }
+    
+    private func constrainTableViewBoundsToViewPort() {
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor),
+            tableView.bottomAnchor.constraint(equalTo: bottomLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
 }
 
