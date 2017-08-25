@@ -24,7 +24,6 @@ class TweetCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
-        self.backgroundColor = .blue
         setupHierarchy()
         styleViews()
         layoutViews()
