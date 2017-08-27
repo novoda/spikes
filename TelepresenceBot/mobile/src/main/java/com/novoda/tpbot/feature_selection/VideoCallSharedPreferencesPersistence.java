@@ -3,7 +3,7 @@ package com.novoda.tpbot.feature_selection;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-final class VideoCallSharedPreferencesPersistence implements FeatureSelectionPersistence {
+public final class VideoCallSharedPreferencesPersistence implements FeatureSelectionPersistence {
 
     private static final String VIDEO_CALL_PREF_NAME = "video_call";
     private static final String VIDEO_CALL_PREFERENCES_ON_OFF_KEY = "video_call_preferences_on_off";
@@ -12,7 +12,7 @@ final class VideoCallSharedPreferencesPersistence implements FeatureSelectionPer
 
     private final SharedPreferences sharedPreferences;
 
-    static VideoCallSharedPreferencesPersistence newInstance(Context context) {
+    public static VideoCallSharedPreferencesPersistence newInstance(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(VIDEO_CALL_PREF_NAME, Context.MODE_PRIVATE);
         return new VideoCallSharedPreferencesPersistence(sharedPreferences);
     }

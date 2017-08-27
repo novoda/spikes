@@ -3,7 +3,7 @@ package com.novoda.tpbot.feature_selection;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-final class ServerConnectionSharedPreferencesPersistence implements FeatureSelectionPersistence {
+public final class ServerConnectionSharedPreferencesPersistence implements FeatureSelectionPersistence {
 
     private static final String SERVER_CONNECTION_PREF_NAME = "server_connection";
     private static final String SERVER_CONNECTION_PREFERENCES_ON_OFF_KEY = "server_connection_preferences_on_off";
@@ -12,7 +12,7 @@ final class ServerConnectionSharedPreferencesPersistence implements FeatureSelec
 
     private final SharedPreferences sharedPreferences;
 
-    static ServerConnectionSharedPreferencesPersistence newInstance(Context context) {
+    public static ServerConnectionSharedPreferencesPersistence newInstance(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SERVER_CONNECTION_PREF_NAME, Context.MODE_PRIVATE);
         return new ServerConnectionSharedPreferencesPersistence(sharedPreferences);
     }
