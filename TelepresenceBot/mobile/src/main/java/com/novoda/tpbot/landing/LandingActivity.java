@@ -7,10 +7,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.novoda.tpbot.feature_selection.FeatureSelectionController;
-import com.novoda.tpbot.feature_selection.MenuFeatureSelectionController;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.bot.BotActivity;
+import com.novoda.tpbot.feature_selection.FeatureSelectionController;
+import com.novoda.tpbot.feature_selection.MenuFeatureSelectionController;
 import com.novoda.tpbot.human.HumanActivity;
 
 public class LandingActivity extends AppCompatActivity {
