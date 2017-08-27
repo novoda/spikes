@@ -20,7 +20,7 @@ public final class MenuFeatureSelectionController implements FeatureSelectionCon
 
         SparseArray<FeatureSelectionPersistence> features = new SparseArray<>();
         features.put(R.id.video_call_menu_item, VideoCallSharedPreferencesPersistence.newInstance(context));
-        features.put(R.id.server_connection_menu_item, VideoCallSharedPreferencesPersistence.newInstance(context));
+        features.put(R.id.server_connection_menu_item, ServerConnectionSharedPreferencesPersistence.newInstance(context));
 
         return new MenuFeatureSelectionController(menuInflater, features);
     }
