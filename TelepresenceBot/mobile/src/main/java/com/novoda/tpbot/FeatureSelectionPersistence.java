@@ -1,6 +1,6 @@
 package com.novoda.tpbot;
 
-interface FeatureSelectionPersistence {
+public interface FeatureSelectionPersistence {
 
     boolean isFeatureEnabled();
 

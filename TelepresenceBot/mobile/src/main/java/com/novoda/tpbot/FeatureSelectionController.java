@@ -1,6 +1,6 @@
 package com.novoda.tpbot;
 
-interface FeatureSelectionController<LIST, FEATURE> {
+public interface FeatureSelectionController<LIST, FEATURE> {
 
     void attachFeatureSelectionTo(LIST toAttachTo);
 
