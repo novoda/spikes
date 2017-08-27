@@ -6,7 +6,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-public class BotService extends Service {
+public class BoundAndroidBotService extends Service {
 
     private static boolean isBound;
 
@@ -48,11 +48,11 @@ public class BotService extends Service {
     class BotServiceBinder extends Binder {
 
         void setBotPresenter(BotPresenter botPresenter) {
-            BotService.this.botPresenter = botPresenter;
+            BoundAndroidBotService.this.botPresenter = botPresenter;
         }
 
         void onDependenciesBound() {
-            BotService.this.start();
+            BoundAndroidBotService.this.start();
         }
 
     }

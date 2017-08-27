@@ -50,7 +50,7 @@ class MovementServiceBinder {
     void unbind() {
         if (BoundAndroidMovementService.isBound()) {
             context.unbindService(movementServiceConnection);
-            context.stopService(new Intent(context, BotService.class));
+            context.stopService(new Intent(context, BoundAndroidBotService.class));
             movementServiceConnection = null;
         }
     }

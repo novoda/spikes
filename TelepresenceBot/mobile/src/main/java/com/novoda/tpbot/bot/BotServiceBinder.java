@@ -23,7 +23,7 @@ class BotServiceBinder {
         if (botServiceConnection == null) {
             botServiceConnection = new BotServiceConnection(botView, serverAddress);
         }
-        Intent botServiceIntent = new Intent(context, BotService.class);
+        Intent botServiceIntent = new Intent(context, BoundAndroidBotService.class);
         context.bindService(botServiceIntent, botServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -46,7 +46,7 @@ class BotServiceBinder {
                     lastServerPersistence,
                     serverAddress
             );
-            BotService.BotServiceBinder binder = (BotService.BotServiceBinder) service;
+            BoundAndroidBotService.BotServiceBinder binder = (BoundAndroidBotService.BotServiceBinder) service;
             binder.setBotPresenter(botPresenter);
             binder.onDependenciesBound();
         }
@@ -58,9 +58,9 @@ class BotServiceBinder {
     }
 
     void unbind() {
-        if (BotService.isBound()) {
+        if (BoundAndroidBotService.isBound()) {
             context.unbindService(botServiceConnection);
-            context.stopService(new Intent(context, BotService.class));
+            context.stopService(new Intent(context, BoundAndroidBotService.class));
             botServiceConnection = null;
         }
     }

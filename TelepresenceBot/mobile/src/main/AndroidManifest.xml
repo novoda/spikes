@@ -62,7 +62,7 @@
       android:exported="false" />
 
     <service
-      android:name="com.novoda.tpbot.bot.BotService"
+      android:name="com.novoda.tpbot.bot.BoundAndroidBotService"
       android:exported="false" />
 
   </application>
