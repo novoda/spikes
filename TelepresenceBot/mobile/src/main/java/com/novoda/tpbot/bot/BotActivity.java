@@ -49,14 +49,13 @@ public class BotActivity extends AppCompatActivity implements BotView {
     private BotServiceCreator botServiceCreator;
 
     private FeatureSelectionPersistence videoCallFeature;
-    private FeatureSelectionPersistence serverConnectionFeature;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         videoCallFeature = VideoCallSharedPreferencesPersistence.newInstance(this);
-        serverConnectionFeature = ServerConnectionSharedPreferencesPersistence.newInstance(this);
+        FeatureSelectionPersistence serverConnectionFeature = ServerConnectionSharedPreferencesPersistence.newInstance(this);
 
         setContentView(R.layout.activity_bot);
 
