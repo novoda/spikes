@@ -1,15 +1,15 @@
-var mocha = require('mocha'),
+const mocha = require('mocha'),
     request = require('supertest'),
     expect = require('chai').expect,
     fs = require('fs'),
-    ServerCreator = require('../core/serverCreator.js');
+    ServerCreator = require('../core/serverCreator.js'),
+    io = require('socket.io-client'),
+    options = {
+        transports: ['websocket'],
+        'force new connection': true
+    };
 
-var io = require('socket.io-client');
-
-var server, options = {
-    transports: ['websocket'],
-    'force new connection': true
-};
+let server;
 
 describe('API Tests - Performing GET requests.', function () {
 
@@ -28,7 +28,7 @@ describe('API Tests - Performing GET requests.', function () {
             .type('html')
             .expect(200)
             .end(function (error, response) {
-                var file = fs.readFileSync('../core/html/index.html', 'utf8');
+                const file = fs.readFileSync('../core/html/index.html', 'utf8');
                 expect(response.text).to.equal(file);
                 done();
             });
@@ -40,7 +40,7 @@ describe('API Tests - Performing GET requests.', function () {
             .type('json')
             .expect(200)
             .end(function (error, response) {
-                var file = fs.readFileSync('../core/json/rooms.json', 'utf8');
+                const file = fs.readFileSync('../core/json/rooms.json', 'utf8');
                 expect(response.text).to.equal(file);
                 done();
             });

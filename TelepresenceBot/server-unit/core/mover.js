@@ -1,6 +1,6 @@
 module.exports = function Mover(clientsAndRooms, emitter) {
 
-    var emitToRoom = function (direction) {
+    const emitToRoom = function (direction) {
         return function (room) {
             emitter.to(room).emit('direction', direction);
         }
@@ -8,7 +8,7 @@ module.exports = function Mover(clientsAndRooms, emitter) {
 
     return {
         moveIn: function (clientId, direction) {
-            var rooms = clientsAndRooms[clientId];
+            const rooms = clientsAndRooms[clientId];
 
             Object.keys(rooms || {})
                 .every(emitToRoom(direction));

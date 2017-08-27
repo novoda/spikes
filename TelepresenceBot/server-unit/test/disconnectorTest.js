@@ -1,7 +1,7 @@
-var expect = require('chai').expect,
+const expect = require('chai').expect,
     Disconnector = require('../core/disconnector.js');
 
-var rooms = {
+const rooms = {
     'botId': {
         sockets: { 'botId': true },
         length: 1
@@ -16,7 +16,7 @@ var rooms = {
     }
 };
 
-var connectedClients = {
+let connectedClients = {
     called: false,
     'botId': {
         disconnect: function () {
@@ -25,7 +25,7 @@ var connectedClients = {
     }
 };
 
-var noConnectedClients = {
+let noConnectedClients = {
     called: false,
     disconnect: function () {
         noConnectedClients.called = true;
@@ -41,7 +41,7 @@ afterEach(function (done) {
 describe('Disconnector Tests.', function () {
 
     it('Should do nothing when cannot locate room in list of rooms.', function (done) {
-        var disconnector = new Disconnector(rooms, connectedClients);
+        const disconnector = new Disconnector(rooms, connectedClients);
 
         disconnector.disconnectRoom('Room not present');
 
@@ -50,7 +50,7 @@ describe('Disconnector Tests.', function () {
     });
 
     it('Should do nothing when connected clients does contain any clients.', function (done) {
-        var disconnector = new Disconnector(rooms, noConnectedClients);
+        const disconnector = new Disconnector(rooms, noConnectedClients);
 
         disconnector.disconnectRoom('London');
 
@@ -59,7 +59,7 @@ describe('Disconnector Tests.', function () {
     });
 
     it('Should call disconnect when disconnecting all clients in room.', function (done) {
-        var disconnector = new Disconnector(rooms, connectedClients);
+        const disconnector = new Disconnector(rooms, connectedClients);
 
         disconnector.disconnectRoom('London');
 

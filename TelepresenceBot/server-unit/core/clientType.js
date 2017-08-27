@@ -3,7 +3,7 @@ module.exports = ClientType = {
     HUMAN: 'human',
     TEST: 'test',
     from: function (rawClientType) {
-        for (var key in this) {
+        for (let key in this) {
             if (ClientType[key] == rawClientType) {
                 return ClientType[key];
             }

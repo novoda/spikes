@@ -1,36 +1,36 @@
 module.exports = function Disconnector(rooms, connectedClients) {
 
-    var roomsThatMatch = function (toMatch) {
+    const roomsThatMatch = function (toMatch) {
         return function (room) {
             return toMatch == room;
         };
     }
 
-    var roomsThatContainProperty = function (property) {
+    const roomsThatContainProperty = function (property) {
         return function (roomName) {
             return rooms[roomName].hasOwnProperty(property);
         };
     }
 
-    var thosePresentIn = function (objectToSearch) {
+    const thosePresentIn = function (objectToSearch) {
         return function (key) {
             return objectToSearch[key]
         };
     }
 
-    var asConnectedClient = function () {
+    const asConnectedClient = function () {
         return function (key) {
             return connectedClients[key];
         };
     }
 
-    var connectedClientsThatContainProperty = function (property) {
+    const connectedClientsThatContainProperty = function (property) {
         return function (connectedClient) {
             return connectedClient.hasOwnProperty(property);
         }
     }
 
-    var disconnectClient = function () {
+    const disconnectClient = function () {
         return function (connectedClient) {
             connectedClient.disconnect();
         }

@@ -1,18 +1,18 @@
-var intervalId;
+const intervalId;
 
-var socketOptions ={
+const socketOptions ={
     transports: ['websocket'],
     'force new connection': true,
     query: 'clientType=human&room=London'
 };
 
-var socket = io(socketOptions);
+const socket = io(socketOptions);
 
 $(document).ready(function(){
 
     $("input").mousedown(function(){
         console.log("mouseDown");
-        var message = $(this).val();
+        const message = $(this).val();
         intervalId = setInterval(function() {
             sendMessage(message);
         }, 100);

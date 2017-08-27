@@ -27,6 +27,9 @@ import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.tpbot.controls.ServerDeclarationView;
+import com.novoda.tpbot.feature_selection.FeatureSelectionPersistence;
+import com.novoda.tpbot.feature_selection.ServerConnectionSharedPreferencesPersistence;
+import com.novoda.tpbot.feature_selection.VideoCallSharedPreferencesPersistence;
 
 import java.util.HashMap;
 
@@ -42,9 +45,15 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
     private BotServiceBinder botServiceBinder;
     private MovementServiceBinder movementServiceBinder;
 
+    private FeatureSelectionPersistence videoCallFeature;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        videoCallFeature = VideoCallSharedPreferencesPersistence.newInstance(this);
+        FeatureSelectionPersistence serverConnectionFeature = ServerConnectionSharedPreferencesPersistence.newInstance(this);
+
         setContentView(R.layout.activity_bot);
 
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
@@ -67,12 +76,15 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
         botServiceBinder = new BotServiceBinder(getApplicationContext());
         movementServiceBinder = new MovementServiceBinder(getApplicationContext(), deviceConnection);
 
+        if (!serverConnectionFeature.isFeatureEnabled()) {
+            switchableView.setDisplayedChild(1);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (!automationChecker.isHangoutJoinerAutomationServiceEnabled()) {
+        if (!automationChecker.isHangoutJoinerAutomationServiceEnabled() && videoCallFeature.isFeatureEnabled()) {
             startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
         }
     }
@@ -134,11 +146,6 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
         switch (item.getItemId()) {
             case R.id.usb_devices_list_menu_item:
                 showConnectedDevices();
-                return true;
-            case R.id.debug_mode_menu_item:
-                item.setIcon(item.isChecked() ? android.R.drawable.checkbox_off_background : android.R.drawable.checkbox_on_background);
-                switchableView.setDisplayedChild(item.isChecked() ? 0 : 1);
-                item.setChecked(!item.isChecked());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

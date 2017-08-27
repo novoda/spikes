@@ -1,4 +1,4 @@
-var sinon = require('sinon'),
+const sinon = require('sinon'),
     expect = require('chai').expect,
     router = require('../core/Router.js')(),
     disconnector = require('../core/Disconnector.js')(),
@@ -6,9 +6,9 @@ var sinon = require('sinon'),
     mover = require('../core/mover.js')(),
     ServerCreator = require('../core/serverCreator.js');
 
-var io = require('socket.io-client');
+const io = require('socket.io-client');
 
-var socketUrl = 'http://localhost:4200';
+const socketUrl = 'http://localhost:4200';
 
 options = {
     transports: ['websocket'],
@@ -42,7 +42,7 @@ describe('ServerCreator Tests.', function () {
     });
 
     it('Should delegate to Router when client is connected.', function (done) {
-        var client = io.connect(socketUrl, options);
+        const client = io.connect(socketUrl, options);
 
         client.once('connect', function () {
             client.once('joined_room', function (room) {
@@ -53,7 +53,7 @@ describe('ServerCreator Tests.', function () {
     });
 
     it('Should emit joined_room when client is connected.', function (done) {
-        var client = io.connect(socketUrl, options);
+        const client = io.connect(socketUrl, options);
 
         client.once('connect', function () {
             client.once('joined_room', function (room) {
@@ -64,7 +64,7 @@ describe('ServerCreator Tests.', function () {
     });
 
     it('Should delegate to Mover when moving in given direction.', function (done) {
-        var client = io.connect(socketUrl, options);
+        const client = io.connect(socketUrl, options);
 
         client.once('connect', function () {
             client.emit('move_in', 'forward');
@@ -79,7 +79,7 @@ describe('ServerCreator Tests.', function () {
     });
 
     it('Should delegate to Disconnector when disconnecting an already connected client.', function (done) {
-        var client = io.connect(socketUrl, options);
+        const client = io.connect(socketUrl, options);
 
         client.once('connect', function () {
             client.disconnect();

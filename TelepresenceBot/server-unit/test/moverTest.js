@@ -1,7 +1,7 @@
-var expect = require('chai').expect,
+const expect = require('chai').expect,
     Mover = require('../core/mover.js');
 
-var clientsAndRooms = {
+const clientsAndRooms = {
     'humanId': {
         'botId': true
     },
@@ -10,7 +10,7 @@ var clientsAndRooms = {
     }
 }
 
-var emitter = {
+let emitter = {
     called: false,
     to: function (room) {
         return {
@@ -32,7 +32,7 @@ afterEach(function (done) {
 describe('Mover Tests.', function () {
 
     it('Should emit to botId when moving humanId in any direction.', function (done) {
-        var mover = new Mover(clientsAndRooms, emitter);
+        const mover = new Mover(clientsAndRooms, emitter);
 
         mover.moveIn('humanId', 'forward');
 
@@ -42,7 +42,7 @@ describe('Mover Tests.', function () {
     });
 
     it('Should emit event of direction when moving humanId in any direction.', function (done) {
-        var mover = new Mover(clientsAndRooms, emitter);
+        const mover = new Mover(clientsAndRooms, emitter);
 
         mover.moveIn('humanId', 'forward');
 
@@ -52,7 +52,7 @@ describe('Mover Tests.', function () {
     });
 
     it('Should emit value of forward when moving humanId in a forward direction.', function (done) {
-        var mover = new Mover(clientsAndRooms, emitter);
+        const mover = new Mover(clientsAndRooms, emitter);
 
         mover.moveIn('humanId', 'forward');
 
@@ -62,7 +62,7 @@ describe('Mover Tests.', function () {
     });
 
     it('Should do nothing when a given clientId does not belong to any rooms.', function (done) {
-        var mover = new Mover(clientsAndRooms, emitter);
+        const mover = new Mover(clientsAndRooms, emitter);
 
         mover.moveIn('clientId', 'forward');
 
