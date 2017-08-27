@@ -35,6 +35,18 @@ public final class MenuFeatureSelectionController implements FeatureSelectionCon
     @Override
     public void attachFeatureSelectionTo(Menu toAttachTo) {
         menuInflater.inflate(FEATURE_MENU_RESOURCE, toAttachTo);
+
+        for (int index = 0; index < features.size(); index++) {
+            int key = features.keyAt(index);
+
+            MenuItem menuItem = toAttachTo.findItem(key);
+            FeatureSelectionPersistence featureSelectionPersistence = features.get(key);
+            menuItem.setChecked(featureSelectionPersistence.isFeatureEnabled());
+        }
+    }
+
+    private int from(boolean isEnabled) {
+        return isEnabled ? android.R.drawable.checkbox_on_background : android.R.drawable.checkbox_off_background;
     }
 
     @Override
@@ -48,11 +60,9 @@ public final class MenuFeatureSelectionController implements FeatureSelectionCon
         if (featureSelectionPersistence.isFeatureEnabled()) {
             featureRepresentation.setChecked(false);
             featureSelectionPersistence.setFeatureDisabled();
-            featureRepresentation.setIcon(android.R.drawable.checkbox_off_background);
         } else {
             featureRepresentation.setChecked(true);
             featureSelectionPersistence.setFeatureEnabled();
-            featureRepresentation.setIcon(android.R.drawable.checkbox_on_background);
         }
     }
 
