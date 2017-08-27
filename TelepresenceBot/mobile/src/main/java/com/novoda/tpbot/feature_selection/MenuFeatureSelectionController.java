@@ -1,4 +1,4 @@
-package com.novoda.tpbot;
+package com.novoda.tpbot.feature_selection;
 
 import android.content.Context;
 import android.support.annotation.MenuRes;
@@ -6,6 +6,8 @@ import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import com.novoda.tpbot.R;
 
 public final class MenuFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {
 
