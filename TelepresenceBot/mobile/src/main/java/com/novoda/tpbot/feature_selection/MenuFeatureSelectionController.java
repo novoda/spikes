@@ -45,10 +45,6 @@ public final class MenuFeatureSelectionController implements FeatureSelectionCon
         }
     }
 
-    private int from(boolean isEnabled) {
-        return isEnabled ? android.R.drawable.checkbox_on_background : android.R.drawable.checkbox_off_background;
-    }
-
     @Override
     public void handleFeatureToggle(MenuItem featureRepresentation) {
         FeatureSelectionPersistence featureSelectionPersistence = features.get(featureRepresentation.getItemId());
