@@ -47,6 +47,14 @@
       android:icon="@mipmap/ic_launcher"
       android:label="@string/bot" />
 
+    <service
+      android:name="com.novoda.tpbot.bot.BoundAndroidBotService"
+      android:exported="false" />
+
+    <service
+      android:name="com.novoda.tpbot.bot.BoundAndroidMovementService"
+      android:exported="false" />
+
   </application>
 
 </manifest>
