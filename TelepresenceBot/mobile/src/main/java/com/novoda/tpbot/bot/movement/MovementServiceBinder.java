@@ -1,4 +1,4 @@
-package com.novoda.tpbot.bot;
+package com.novoda.tpbot.bot.movement;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -8,19 +8,19 @@ import android.os.IBinder;
 
 import com.novoda.tpbot.bot.device.DeviceConnection;
 
-class MovementServiceBinder {
+public class MovementServiceBinder {
 
     private final Context context;
     private final DeviceConnection deviceConnection;
 
     private MovementServiceConnection movementServiceConnection;
 
-    MovementServiceBinder(Context context, DeviceConnection deviceConnection) {
+    public MovementServiceBinder(Context context, DeviceConnection deviceConnection) {
         this.context = context;
         this.deviceConnection = deviceConnection;
     }
 
-    void bind() {
+    public void bind() {
         if (movementServiceConnection == null) {
             movementServiceConnection = new MovementServiceConnection(deviceConnection);
         }
@@ -49,7 +49,7 @@ class MovementServiceBinder {
         }
     }
 
-    void unbind() {
+    public void unbind() {
         if (BoundAndroidMovementService.isBound()) {
             context.unbindService(movementServiceConnection);
             context.stopService(new Intent(context, BoundAndroidMovementService.class));

@@ -52,7 +52,7 @@
       android:exported="false" />
 
     <service
-      android:name="com.novoda.tpbot.bot.BoundAndroidMovementService"
+      android:name="com.novoda.tpbot.bot.movement.BoundAndroidMovementService"
       android:exported="false" />
 
   </application>

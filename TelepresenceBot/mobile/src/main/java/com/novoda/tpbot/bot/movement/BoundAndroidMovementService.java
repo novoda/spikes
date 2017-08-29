@@ -1,4 +1,4 @@
-package com.novoda.tpbot.bot;
+package com.novoda.tpbot.bot.movement;
 
 import android.app.Service;
 import android.content.Intent;
@@ -29,7 +29,7 @@ public class BoundAndroidMovementService extends Service {
 
     private void start() {
         if (deviceConnection == null) {
-            throw new IllegalStateException(BotPresenter.class.getSimpleName() + " must be bound before calling onDependenciesBound()");
+            throw new IllegalStateException(DeviceConnection.class.getSimpleName() + " must be bound before calling onDependenciesBound()");
         }
 
         deviceConnection.connect();
