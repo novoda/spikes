@@ -26,6 +26,7 @@ import com.novoda.tpbot.automation.AutomationChecker;
 import com.novoda.tpbot.bot.device.DeviceConnection;
 import com.novoda.tpbot.bot.device.usb.UsbDeviceConnection;
 import com.novoda.tpbot.bot.movement.MovementServiceBinder;
+import com.novoda.tpbot.bot.service.BotServiceBinder;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;

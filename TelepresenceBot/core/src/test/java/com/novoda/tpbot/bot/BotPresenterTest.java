@@ -3,6 +3,7 @@ package com.novoda.tpbot.bot;
 import com.novoda.support.Observable;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.Result;
+import com.novoda.tpbot.bot.service.BotTelepresenceService;
 import com.novoda.tpbot.controls.LastServerPersistence;
 
 import org.junit.Before;
