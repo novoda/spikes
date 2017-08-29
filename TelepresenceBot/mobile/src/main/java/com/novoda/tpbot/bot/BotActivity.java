@@ -199,7 +199,9 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
         debugView.showPermanently(getString(R.string.connected));
         switchableView.setDisplayedChild(1);
 
-        joinHangoutRoom(room);
+        if (videoCallFeature.isFeatureEnabled()) {
+            joinHangoutRoom(room);
+        }
     }
 
     private void joinHangoutRoom(String room) {
