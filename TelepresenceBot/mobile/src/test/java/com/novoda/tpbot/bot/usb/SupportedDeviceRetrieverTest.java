@@ -1,4 +1,4 @@
-package com.novoda.tpbot.bot;
+package com.novoda.tpbot.bot.usb;
 
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;

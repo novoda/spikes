@@ -1,4 +1,4 @@
-package com.novoda.tpbot.bot;
+package com.novoda.tpbot.bot.usb;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

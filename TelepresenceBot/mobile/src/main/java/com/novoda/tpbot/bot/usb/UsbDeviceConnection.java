@@ -1,4 +1,4 @@
-package com.novoda.tpbot.bot;
+package com.novoda.tpbot.bot.usb;
 
 import android.content.Context;
 import android.hardware.usb.UsbDevice;
@@ -6,8 +6,9 @@ import android.hardware.usb.UsbManager;
 
 import com.novoda.notils.logger.simple.Log;
 import com.novoda.support.Optional;
+import com.novoda.tpbot.bot.DeviceConnection;
 
-class UsbDeviceConnection extends DeviceConnection implements UsbChangesListener {
+public class UsbDeviceConnection extends DeviceConnection implements UsbChangesListener {
 
     private final UsbChangesRegister usbChangesRegister;
     private final SupportedDeviceRetriever supportedDeviceRetriever;
@@ -16,7 +17,7 @@ class UsbDeviceConnection extends DeviceConnection implements UsbChangesListener
 
     private Optional<UsbDevice> supportedUsbDevice = Optional.absent();
 
-    static UsbDeviceConnection newInstance(Context context, DeviceConnectionListener deviceConnectionListener) {
+    public static UsbDeviceConnection newInstance(Context context, DeviceConnectionListener deviceConnectionListener) {
         UsbChangesRegister usbChangesRegister = new UsbChangesRegister(context);
         UsbManager usbManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
         SupportedDeviceRetriever supportedDeviceRetriever = new SupportedDeviceRetriever(usbManager);
@@ -46,7 +47,7 @@ class UsbDeviceConnection extends DeviceConnection implements UsbChangesListener
     }
 
     @Override
-    protected void connect() {
+    public void connect() {
         usbChangesRegister.register(this);
     }
 
@@ -88,12 +89,12 @@ class UsbDeviceConnection extends DeviceConnection implements UsbChangesListener
     };
 
     @Override
-    protected void send(String data) {
+    public void send(String data) {
         // TODO: send data to serial port.
     }
 
     @Override
-    protected void disconnect() {
+    public void disconnect() {
         usbChangesRegister.unregister();
         closeConnection();
     }

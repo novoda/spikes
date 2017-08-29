@@ -1,24 +1,24 @@
 package com.novoda.tpbot.bot;
 
-abstract class DeviceConnection {
+public abstract class DeviceConnection {
 
     private final DeviceConnectionListener deviceConnectionListener;
 
-    DeviceConnection(DeviceConnectionListener deviceConnectionListener) {
+    public DeviceConnection(DeviceConnectionListener deviceConnectionListener) {
         this.deviceConnectionListener = deviceConnectionListener;
     }
 
-    final DeviceConnectionListener deviceConnectionListener() {
+    public final DeviceConnectionListener deviceConnectionListener() {
         return deviceConnectionListener;
     }
 
-    protected abstract void connect();
+    public abstract void connect();
 
-    protected abstract void disconnect();
+    public abstract void disconnect();
 
-    protected abstract void send(String data);
+    public abstract void send(String data);
 
-    interface DeviceConnectionListener {
+    protected interface DeviceConnectionListener {
         void onDeviceConnected();
 
         void onDeviceDisconnected();

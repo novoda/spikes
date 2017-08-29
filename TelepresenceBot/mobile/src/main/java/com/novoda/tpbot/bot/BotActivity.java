@@ -23,6 +23,7 @@ import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServerDeclarationListener;
 import com.novoda.tpbot.automation.AutomationChecker;
+import com.novoda.tpbot.bot.usb.UsbDeviceConnection;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
