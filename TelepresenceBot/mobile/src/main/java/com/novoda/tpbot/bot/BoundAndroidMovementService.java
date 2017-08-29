@@ -6,6 +6,8 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
+import com.novoda.tpbot.bot.device.DeviceConnection;
+
 public class BoundAndroidMovementService extends Service {
 
     private static boolean isBound;

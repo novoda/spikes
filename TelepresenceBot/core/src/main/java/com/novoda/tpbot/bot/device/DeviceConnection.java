@@ -1,4 +1,4 @@
-package com.novoda.tpbot.bot;
+package com.novoda.tpbot.bot.device;
 
 public abstract class DeviceConnection {
 
@@ -18,7 +18,7 @@ public abstract class DeviceConnection {
 
     public abstract void send(String data);
 
-    protected interface DeviceConnectionListener {
+    public interface DeviceConnectionListener {
         void onDeviceConnected();
 
         void onDeviceDisconnected();

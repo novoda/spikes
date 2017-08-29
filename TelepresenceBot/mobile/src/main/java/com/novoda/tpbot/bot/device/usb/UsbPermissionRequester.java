@@ -1,4 +1,4 @@
-package com.novoda.tpbot.bot.usb;
+package com.novoda.tpbot.bot.device.usb;
 
 import android.app.PendingIntent;
 import android.content.Context;

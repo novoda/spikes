@@ -1,4 +1,4 @@
-package com.novoda.tpbot.bot.usb;
+package com.novoda.tpbot.bot.device.usb;
 
 import android.content.Context;
 import android.hardware.usb.UsbDevice;
@@ -6,7 +6,7 @@ import android.hardware.usb.UsbManager;
 
 import com.novoda.notils.logger.simple.Log;
 import com.novoda.support.Optional;
-import com.novoda.tpbot.bot.DeviceConnection;
+import com.novoda.tpbot.bot.device.DeviceConnection;
 
 public class UsbDeviceConnection extends DeviceConnection implements UsbChangesListener {
 

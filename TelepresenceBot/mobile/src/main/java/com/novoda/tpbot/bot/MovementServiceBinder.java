@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 
+import com.novoda.tpbot.bot.device.DeviceConnection;
+
 class MovementServiceBinder {
 
     private final Context context;
