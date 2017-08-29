@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 
-import static com.novoda.tpbot.bot.AndroidMovementService.ACTION_USB_PERMISSION;
+import static com.novoda.tpbot.bot.UsbChangesRegister.ACTION_USB_PERMISSION;
 
 class UsbPermissionRequester {
 

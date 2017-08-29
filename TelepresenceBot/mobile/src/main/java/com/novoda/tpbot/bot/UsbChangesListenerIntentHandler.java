@@ -8,7 +8,7 @@ import com.novoda.notils.exception.DeveloperError;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.novoda.tpbot.bot.AndroidMovementService.ACTION_USB_PERMISSION;
+import static com.novoda.tpbot.bot.UsbChangesRegister.ACTION_USB_PERMISSION;
 
 class UsbChangesListenerIntentHandler {
 

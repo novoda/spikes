@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.usb.UsbManager;
 
-import static com.novoda.tpbot.bot.AndroidMovementService.ACTION_USB_PERMISSION;
-
 class UsbChangesRegister {
+
+    static final String ACTION_USB_PERMISSION = "com.novoda.tpbot.USB_PERMISSION";
 
     private final Context context;
     private UsbChangesListener usbChangesListener;

@@ -47,24 +47,6 @@
       android:icon="@mipmap/ic_launcher"
       android:label="@string/bot" />
 
-    <receiver android:name="com.novoda.tpbot.bot.UsbReceiver">
-      <meta-data
-        android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
-        android:resource="@xml/devices_filter" />
-      <intent-filter>
-        <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
-        <action android:name="android.hardware.usb.action.USB_DEVICE_DETACHED" />
-      </intent-filter>
-    </receiver>
-
-    <service
-      android:name="com.novoda.tpbot.bot.AndroidMovementService"
-      android:exported="false" />
-
-    <service
-      android:name="com.novoda.tpbot.bot.BoundAndroidBotService"
-      android:exported="false" />
-
   </application>
 
 </manifest>

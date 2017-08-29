@@ -4,11 +4,11 @@ abstract class DeviceConnection {
 
     private final DeviceConnectionListener deviceConnectionListener;
 
-    protected DeviceConnection(DeviceConnectionListener deviceConnectionListener) {
+    DeviceConnection(DeviceConnectionListener deviceConnectionListener) {
         this.deviceConnectionListener = deviceConnectionListener;
     }
 
-    protected final DeviceConnectionListener deviceConnectionListener() {
+    final DeviceConnectionListener deviceConnectionListener() {
         return deviceConnectionListener;
     }
 
