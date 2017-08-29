@@ -2,8 +2,6 @@ package com.novoda.tpbot.bot;
 
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.usb.UsbDevice;
-import android.hardware.usb.UsbManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,12 +9,10 @@ import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.accessibility.AccessibilityManager;
 
 import com.novoda.notils.caster.Views;
-import com.novoda.notils.logger.toast.Toaster;
 import com.novoda.support.SelfDestructingMessageView;
 import com.novoda.support.SwitchableView;
 import com.novoda.tpbot.Direction;
@@ -27,11 +23,11 @@ import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.tpbot.controls.ServerDeclarationView;
+import com.novoda.tpbot.feature_selection.ConnectedUsbDevicesFeatureSelectionController;
+import com.novoda.tpbot.feature_selection.FeatureSelectionController;
 import com.novoda.tpbot.feature_selection.FeatureSelectionPersistence;
 import com.novoda.tpbot.feature_selection.ServerConnectionSharedPreferencesPersistence;
 import com.novoda.tpbot.feature_selection.VideoCallSharedPreferencesPersistence;
-
-import java.util.HashMap;
 
 public class BotActivity extends AppCompatActivity implements BotView, DeviceConnection.DeviceConnectionListener {
 
@@ -46,6 +42,7 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
     private MovementServiceBinder movementServiceBinder;
 
     private FeatureSelectionPersistence videoCallFeature;
+    private FeatureSelectionController<Menu, MenuItem> featureSelectionController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +72,8 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
 
         botServiceBinder = new BotServiceBinder(getApplicationContext());
         movementServiceBinder = new MovementServiceBinder(getApplicationContext(), deviceConnection);
+
+        featureSelectionController = ConnectedUsbDevicesFeatureSelectionController.createFrom(this);
 
         if (!serverConnectionFeature.isFeatureEnabled()) {
             switchableView.setDisplayedChild(1);
@@ -136,41 +135,18 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.bot_menu, menu);
+        featureSelectionController.attachFeatureSelectionTo(menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.usb_devices_list_menu_item:
-                showConnectedDevices();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void showConnectedDevices() {
-        UsbManager manager = (UsbManager) getSystemService(Context.USB_SERVICE);
-        HashMap<String, UsbDevice> devices = manager.getDeviceList();
-        StringBuilder builder = new StringBuilder();
-        if (devices.isEmpty()) {
-            builder.append(getString(R.string.no_connected_devices));
+        if (featureSelectionController.contains(item)) {
+            featureSelectionController.handleFeatureToggle(item);
+            return true;
         } else {
-            for (UsbDevice device : devices.values()) {
-                builder.append(
-                        getString(
-                                R.string.usb_device_name_vendor_product,
-                                device.getDeviceName(),
-                                device.getVendorId(),
-                                device.getProductId()
-                        )
-                ).append("\n");
-            }
+            return super.onOptionsItemSelected(item);
         }
-        Toaster.newInstance(this).popBurntToast(builder.toString());
     }
 
     @Override
