@@ -11,7 +11,7 @@ import com.novoda.tpbot.R;
 import com.novoda.tpbot.bot.video.calling.VideoCallSharedPreferencesPersistence;
 import com.novoda.tpbot.feature_selection.FeatureSelectionController;
 import com.novoda.tpbot.feature_selection.FeatureSelectionPersistence;
-import com.novoda.tpbot.feature_selection.ServerConnectionSharedPreferencesPersistence;
+import com.novoda.tpbot.bot.service.ServiceConnectionSharedPreferencesPersistence;
 
 public final class LandingMenuFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {
 
@@ -26,7 +26,7 @@ public final class LandingMenuFeatureSelectionController implements FeatureSelec
 
         SparseArray<FeatureSelectionPersistence> features = new SparseArray<>();
         features.put(R.id.video_call_menu_item, VideoCallSharedPreferencesPersistence.newInstance(context));
-        features.put(R.id.server_connection_menu_item, ServerConnectionSharedPreferencesPersistence.newInstance(context));
+        features.put(R.id.server_connection_menu_item, ServiceConnectionSharedPreferencesPersistence.newInstance(context));
 
         return new LandingMenuFeatureSelectionController(menuInflater, features);
     }

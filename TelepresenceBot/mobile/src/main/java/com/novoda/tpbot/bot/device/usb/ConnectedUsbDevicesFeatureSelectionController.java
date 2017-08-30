@@ -1,4 +1,4 @@
-package com.novoda.tpbot.feature_selection;
+package com.novoda.tpbot.bot.device.usb;
 
 import android.content.Context;
 import android.hardware.usb.UsbManager;
@@ -9,7 +9,7 @@ import android.view.MenuItem;
 
 import com.novoda.notils.logger.toast.Toaster;
 import com.novoda.tpbot.R;
-import com.novoda.tpbot.bot.device.usb.ConnectedUsbDevicesFetcher;
+import com.novoda.tpbot.feature_selection.FeatureSelectionController;
 
 public final class ConnectedUsbDevicesFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {
 
