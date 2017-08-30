@@ -1,12 +1,10 @@
-package com.novoda.tpbot.bot;
+package com.novoda.tpbot.bot.device.usb;
 
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
-
-import static com.novoda.tpbot.bot.AndroidMovementService.ACTION_USB_PERMISSION;
 
 class UsbPermissionRequester {
 
@@ -22,7 +20,7 @@ class UsbPermissionRequester {
     }
 
     void requestPermission(UsbDevice usbDevice) {
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, new Intent(ACTION_USB_PERMISSION), NO_FLAGS);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, new Intent(UsbChangesRegister.ACTION_USB_PERMISSION), NO_FLAGS);
         usbManager.requestPermission(usbDevice, pendingIntent);
     }
 

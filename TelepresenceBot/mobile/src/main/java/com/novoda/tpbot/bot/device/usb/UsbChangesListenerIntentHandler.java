@@ -1,4 +1,4 @@
-package com.novoda.tpbot.bot;
+package com.novoda.tpbot.bot.device.usb;
 
 import android.content.Intent;
 import android.hardware.usb.UsbManager;
@@ -8,14 +8,12 @@ import com.novoda.notils.exception.DeveloperError;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.novoda.tpbot.bot.AndroidMovementService.ACTION_USB_PERMISSION;
-
 class UsbChangesListenerIntentHandler {
 
     private static final Map<String, IntentHandler> actionMap = new HashMap<>();
 
     static {
-        actionMap.put(ACTION_USB_PERMISSION, new IntentHandler() {
+        actionMap.put(UsbChangesRegister.ACTION_USB_PERMISSION, new IntentHandler() {
             @Override
             public void handle(Intent intent, UsbChangesListener usbChangesListener) {
                 boolean permissionGranted = intent.getExtras().getBoolean(UsbManager.EXTRA_PERMISSION_GRANTED);

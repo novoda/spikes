@@ -19,6 +19,10 @@ import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServerDeclarationListener;
 import com.novoda.tpbot.automation.AutomationChecker;
+import com.novoda.tpbot.bot.device.DeviceConnection;
+import com.novoda.tpbot.bot.device.usb.UsbDeviceConnection;
+import com.novoda.tpbot.bot.movement.MovementServiceBinder;
+import com.novoda.tpbot.bot.service.BotServiceBinder;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
@@ -174,7 +178,9 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
         debugView.showPermanently(getString(R.string.connected));
         switchableView.setDisplayedChild(1);
 
-        joinHangoutRoom(room);
+        if (videoCallFeature.isFeatureEnabled()) {
+            joinHangoutRoom(room);
+        }
     }
 
     private void joinHangoutRoom(String room) {

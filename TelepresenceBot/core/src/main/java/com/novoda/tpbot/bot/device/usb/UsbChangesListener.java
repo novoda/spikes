@@ -1,4 +1,4 @@
-package com.novoda.tpbot.bot;
+package com.novoda.tpbot.bot.device.usb;
 
 interface UsbChangesListener {
 

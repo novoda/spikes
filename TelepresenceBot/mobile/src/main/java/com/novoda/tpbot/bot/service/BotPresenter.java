@@ -1,9 +1,10 @@
-package com.novoda.tpbot.bot;
+package com.novoda.tpbot.bot.service;
 
 import com.novoda.support.Observable;
 import com.novoda.support.Observer;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.Result;
+import com.novoda.tpbot.bot.BotView;
 import com.novoda.tpbot.controls.LastServerPersistence;
 
 import static com.novoda.support.Observable.unsubscribe;
