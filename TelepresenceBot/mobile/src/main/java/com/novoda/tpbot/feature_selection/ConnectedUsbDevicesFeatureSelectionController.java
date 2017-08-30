@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import com.novoda.notils.logger.toast.Toaster;
 import com.novoda.tpbot.R;
+import com.novoda.tpbot.bot.device.usb.ConnectedUsbDevicesFetcher;
 
 public final class ConnectedUsbDevicesFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {
 
