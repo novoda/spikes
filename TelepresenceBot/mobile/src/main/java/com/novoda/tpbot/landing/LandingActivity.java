@@ -10,7 +10,7 @@ import android.view.View;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.bot.BotActivity;
 import com.novoda.tpbot.feature_selection.FeatureSelectionController;
-import com.novoda.tpbot.feature_selection.MenuFeatureSelectionController;
+import com.novoda.tpbot.landing.features.LandingMenuFeatureSelectionController;
 import com.novoda.tpbot.human.HumanActivity;
 
 public class LandingActivity extends AppCompatActivity {
@@ -20,7 +20,7 @@ public class LandingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        featureSelectionController = MenuFeatureSelectionController.createFrom(this);
+        featureSelectionController = LandingMenuFeatureSelectionController.createFrom(this);
 
         setContentView(R.layout.activity_landing);
 
