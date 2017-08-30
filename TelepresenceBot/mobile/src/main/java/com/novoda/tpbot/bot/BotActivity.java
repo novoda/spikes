@@ -16,22 +16,22 @@ import com.novoda.notils.caster.Views;
 import com.novoda.support.SelfDestructingMessageView;
 import com.novoda.support.SwitchableView;
 import com.novoda.tpbot.Direction;
+import com.novoda.tpbot.FeatureSelectionController;
+import com.novoda.tpbot.FeatureSelectionPersistence;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServerDeclarationListener;
-import com.novoda.tpbot.bot.video.calling.AutomationChecker;
 import com.novoda.tpbot.bot.device.DeviceConnection;
 import com.novoda.tpbot.bot.device.usb.UsbDeviceConnection;
+import com.novoda.tpbot.bot.menu.BotMenuFeatureSelectionController;
 import com.novoda.tpbot.bot.movement.MovementServiceBinder;
 import com.novoda.tpbot.bot.service.BotServiceBinder;
+import com.novoda.tpbot.bot.service.ServiceConnectionSharedPreferencesPersistence;
+import com.novoda.tpbot.bot.video.calling.AutomationChecker;
+import com.novoda.tpbot.bot.video.calling.VideoCallSharedPreferencesPersistence;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.tpbot.controls.ServerDeclarationView;
-import com.novoda.tpbot.bot.menu.BotMenuFeatureSelectionController;
-import com.novoda.tpbot.FeatureSelectionController;
-import com.novoda.tpbot.FeatureSelectionPersistence;
-import com.novoda.tpbot.bot.service.ServiceConnectionSharedPreferencesPersistence;
-import com.novoda.tpbot.bot.video.calling.VideoCallSharedPreferencesPersistence;
 
 public class BotActivity extends AppCompatActivity implements BotView, DeviceConnection.DeviceConnectionListener {
 
