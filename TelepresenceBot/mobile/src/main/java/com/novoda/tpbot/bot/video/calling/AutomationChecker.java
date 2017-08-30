@@ -1,4 +1,4 @@
-package com.novoda.tpbot.automation;
+package com.novoda.tpbot.bot.video.calling;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.view.accessibility.AccessibilityManager;

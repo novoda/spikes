@@ -18,7 +18,7 @@ import com.novoda.support.SwitchableView;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServerDeclarationListener;
-import com.novoda.tpbot.automation.AutomationChecker;
+import com.novoda.tpbot.bot.video.calling.AutomationChecker;
 import com.novoda.tpbot.bot.device.DeviceConnection;
 import com.novoda.tpbot.bot.device.usb.UsbDeviceConnection;
 import com.novoda.tpbot.bot.movement.MovementServiceBinder;
