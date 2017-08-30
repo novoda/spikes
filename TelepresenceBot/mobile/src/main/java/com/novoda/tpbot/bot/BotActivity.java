@@ -1,61 +1,59 @@
 package com.novoda.tpbot.bot;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.hardware.usb.UsbDevice;
-import android.hardware.usb.UsbManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.accessibility.AccessibilityManager;
 
 import com.novoda.notils.caster.Views;
-import com.novoda.notils.logger.toast.Toaster;
 import com.novoda.support.SelfDestructingMessageView;
 import com.novoda.support.SwitchableView;
 import com.novoda.tpbot.Direction;
+import com.novoda.tpbot.FeatureSelectionController;
+import com.novoda.tpbot.FeatureSelectionPersistence;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServerDeclarationListener;
-import com.novoda.tpbot.automation.AutomationChecker;
+import com.novoda.tpbot.bot.device.DeviceConnection;
+import com.novoda.tpbot.bot.device.usb.UsbDeviceConnection;
+import com.novoda.tpbot.bot.menu.BotMenuFeatureSelectionController;
+import com.novoda.tpbot.bot.movement.MovementServiceBinder;
+import com.novoda.tpbot.bot.service.BotServiceBinder;
+import com.novoda.tpbot.bot.service.ServiceConnectionSharedPreferencesPersistence;
+import com.novoda.tpbot.bot.video.calling.AutomationChecker;
+import com.novoda.tpbot.bot.video.calling.VideoCallSharedPreferencesPersistence;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.tpbot.controls.ServerDeclarationView;
-import com.novoda.tpbot.feature_selection.FeatureSelectionPersistence;
-import com.novoda.tpbot.feature_selection.ServerConnectionSharedPreferencesPersistence;
-import com.novoda.tpbot.feature_selection.VideoCallSharedPreferencesPersistence;
 
-import java.util.HashMap;
-
-public class BotActivity extends AppCompatActivity implements BotView {
+public class BotActivity extends AppCompatActivity implements BotView, DeviceConnection.DeviceConnectionListener {
 
     private static final String HANGOUTS_BASE_URL = "https://hangouts.google.com/hangouts/_/novoda.com/";
 
     private SelfDestructingMessageView debugView;
     private SwitchableView switchableView;
 
-    private AndroidMovementService androidMovementService;
-    private boolean boundToMovementService;
     private CommandRepeater commandRepeater;
     private AutomationChecker automationChecker;
-    private BotServiceCreator botServiceCreator;
+    private BotServiceBinder botServiceBinder;
+    private MovementServiceBinder movementServiceBinder;
 
     private FeatureSelectionPersistence videoCallFeature;
+    private FeatureSelectionController<Menu, MenuItem> featureSelectionController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         videoCallFeature = VideoCallSharedPreferencesPersistence.newInstance(this);
-        FeatureSelectionPersistence serverConnectionFeature = ServerConnectionSharedPreferencesPersistence.newInstance(this);
+        FeatureSelectionPersistence serverConnectionFeature = ServiceConnectionSharedPreferencesPersistence.newInstance(this);
 
         setContentView(R.layout.activity_bot);
 
@@ -73,6 +71,13 @@ public class BotActivity extends AppCompatActivity implements BotView {
 
         AccessibilityManager accessibilityManager = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
         automationChecker = new AutomationChecker(accessibilityManager);
+
+        DeviceConnection deviceConnection = UsbDeviceConnection.newInstance(getApplicationContext(), this);
+
+        botServiceBinder = new BotServiceBinder(getApplicationContext());
+        movementServiceBinder = new MovementServiceBinder(getApplicationContext(), deviceConnection);
+
+        featureSelectionController = BotMenuFeatureSelectionController.createFrom(this);
 
         if (!serverConnectionFeature.isFeatureEnabled()) {
             switchableView.setDisplayedChild(1);
@@ -115,64 +120,37 @@ public class BotActivity extends AppCompatActivity implements BotView {
         @Override
         public void onConnect(String serverAddress) {
             debugView.showPermanently(getString(R.string.connecting_ellipsis));
-            botServiceCreator = new BotServiceCreator(getApplicationContext(), BotActivity.this, serverAddress);
-            botServiceCreator.create();
+            botServiceBinder.bind(BotActivity.this, serverAddress);
         }
     };
 
     private CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
         @Override
         public void onCommandRepeated(String command) {
-            if (boundToMovementService) {
-                androidMovementService.sendCommand(command);
-            }
+            // TODO: Send command to the DeviceConnection.
         }
     };
 
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent = new Intent(this, AndroidMovementService.class);
-        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+        movementServiceBinder.bind();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.bot_menu, menu);
+        featureSelectionController.attachFeaturesTo(menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.usb_devices_list_menu_item:
-                showConnectedDevices();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void showConnectedDevices() {
-        UsbManager manager = (UsbManager) getSystemService(Context.USB_SERVICE);
-        HashMap<String, UsbDevice> devices = manager.getDeviceList();
-        StringBuilder builder = new StringBuilder();
-        if (devices.isEmpty()) {
-            builder.append(getString(R.string.no_connected_devices));
+        if (featureSelectionController.contains(item)) {
+            featureSelectionController.handleFeatureToggle(item);
+            return true;
         } else {
-            for (UsbDevice device : devices.values()) {
-                builder.append(
-                        getString(
-                                R.string.usb_device_name_vendor_product,
-                                device.getDeviceName(),
-                                device.getVendorId(),
-                                device.getProductId()
-                        )
-                ).append("\n");
-            }
+            return super.onOptionsItemSelected(item);
         }
-        Toaster.newInstance(this).popBurntToast(builder.toString());
     }
 
     @Override
@@ -182,36 +160,18 @@ public class BotActivity extends AppCompatActivity implements BotView {
     }
 
     @Override
-    protected void onStop() {
-        if (boundToMovementService) {
-            unbindService(serviceConnection);
-            boundToMovementService = false;
-        }
-        super.onStop();
-    }
-
-    @Override
     protected void onDestroy() {
-        if (botServiceCreator != null) {
-            botServiceCreator.destroy();
+        if (botServiceBinder != null) {
+            botServiceBinder.unbind();
+            botServiceBinder = null;
+        }
+
+        if (movementServiceBinder != null) {
+            movementServiceBinder.unbind();
+            movementServiceBinder = null;
         }
         super.onDestroy();
     }
-
-    private final ServiceConnection serviceConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            AndroidMovementService.Binder binder = (AndroidMovementService.Binder) iBinder;
-            androidMovementService = binder.getService();
-            boundToMovementService = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            boundToMovementService = false;
-        }
-    };
 
     @Override
     public void onConnect(String room, String serverAddress) {
@@ -248,4 +208,18 @@ public class BotActivity extends AppCompatActivity implements BotView {
         commandRepeatedListener.onCommandRepeated(direction.rawDirection());
     }
 
+    @Override
+    public void onDeviceConnected() {
+        Log.d(getClass().getSimpleName(), "onDeviceConnected");
+    }
+
+    @Override
+    public void onDeviceDisconnected() {
+        Log.d(getClass().getSimpleName(), "onDeviceDisconnected");
+    }
+
+    @Override
+    public void onDataReceived(String data) {
+        Log.d(getClass().getSimpleName(), "onDataReceived");
+    }
 }

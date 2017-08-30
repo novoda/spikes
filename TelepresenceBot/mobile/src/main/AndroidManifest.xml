@@ -17,7 +17,7 @@
     tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
     <service
-      android:name="com.novoda.tpbot.automation.HangoutJoinerAutomationService"
+      android:name=".bot.video.calling.HangoutJoinerAutomationService"
       android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
       <intent-filter>
         <action android:name="android.accessibilityservice.AccessibilityService" />
@@ -47,22 +47,12 @@
       android:icon="@mipmap/ic_launcher"
       android:label="@string/bot" />
 
-    <receiver android:name="com.novoda.tpbot.bot.UsbReceiver">
-      <meta-data
-        android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
-        android:resource="@xml/devices_filter" />
-      <intent-filter>
-        <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
-        <action android:name="android.hardware.usb.action.USB_DEVICE_DETACHED" />
-      </intent-filter>
-    </receiver>
-
     <service
-      android:name="com.novoda.tpbot.bot.AndroidMovementService"
+      android:name="com.novoda.tpbot.bot.service.BoundAndroidBotService"
       android:exported="false" />
 
     <service
-      android:name="com.novoda.tpbot.bot.BotService"
+      android:name="com.novoda.tpbot.bot.movement.BoundAndroidMovementService"
       android:exported="false" />
 
   </application>
