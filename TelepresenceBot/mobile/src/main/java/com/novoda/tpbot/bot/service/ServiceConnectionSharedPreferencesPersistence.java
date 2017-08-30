@@ -3,7 +3,7 @@ package com.novoda.tpbot.bot.service;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.novoda.tpbot.feature_selection.FeatureSelectionPersistence;
+import com.novoda.tpbot.FeatureSelectionPersistence;
 
 public final class ServiceConnectionSharedPreferencesPersistence implements FeatureSelectionPersistence {
 

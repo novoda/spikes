@@ -28,8 +28,8 @@ import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.tpbot.controls.ServerDeclarationView;
 import com.novoda.tpbot.bot.menu.BotMenuFeatureSelectionController;
-import com.novoda.tpbot.feature_selection.FeatureSelectionController;
-import com.novoda.tpbot.feature_selection.FeatureSelectionPersistence;
+import com.novoda.tpbot.FeatureSelectionController;
+import com.novoda.tpbot.FeatureSelectionPersistence;
 import com.novoda.tpbot.bot.service.ServiceConnectionSharedPreferencesPersistence;
 import com.novoda.tpbot.bot.video.calling.VideoCallSharedPreferencesPersistence;
 

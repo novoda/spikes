@@ -1,4 +1,4 @@
-package com.novoda.tpbot.feature_selection;
+package com.novoda.tpbot;
 
 public interface FeatureSelectionController<LIST, FEATURE> {
 
