@@ -6,23 +6,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.novoda.tpbot.R;
+import com.novoda.tpbot.bot.service.ServiceConnectionSharedPreferencesPersistence;
 import com.novoda.tpbot.feature_selection.FeatureSelectionController;
 import com.novoda.tpbot.feature_selection.FeatureSelectionPersistence;
 
 import static android.R.attr.key;
 
-public final class VideoCallMenuFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {
+public final class ServiceConnectionMenuFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {
 
-    private final int videoCallResourceId;
+    private final int serviceConnectionResourceId;
     private final FeatureSelectionPersistence featureSelectionPersistence;
 
     public static FeatureSelectionController<Menu, MenuItem> createFrom(Context context) {
-        FeatureSelectionPersistence featureSelectionPersistence = VideoCallSharedPreferencesPersistence.newInstance(context);
-        return new VideoCallMenuFeatureSelectionController(R.id.video_call_menu_item, featureSelectionPersistence);
+        FeatureSelectionPersistence featureSelectionPersistence = ServiceConnectionSharedPreferencesPersistence.newInstance(context);
+        return new ServiceConnectionMenuFeatureSelectionController(R.id.server_connection_menu_item, featureSelectionPersistence);
     }
 
-    private VideoCallMenuFeatureSelectionController(@IdRes int videoCallResourceId, FeatureSelectionPersistence featureSelectionPersistence) {
-        this.videoCallResourceId = videoCallResourceId;
+    private ServiceConnectionMenuFeatureSelectionController(@IdRes int serviceConnectionResourceId, FeatureSelectionPersistence featureSelectionPersistence) {
+        this.serviceConnectionResourceId = serviceConnectionResourceId;
         this.featureSelectionPersistence = featureSelectionPersistence;
     }
 
@@ -34,7 +35,7 @@ public final class VideoCallMenuFeatureSelectionController implements FeatureSel
 
     @Override
     public void handleFeatureToggle(MenuItem featureRepresentation) {
-        if (featureRepresentation.getItemId() == videoCallResourceId) {
+        if (featureRepresentation.getItemId() == serviceConnectionResourceId) {
             throw new IllegalStateException("You must check if data is present before using handleFeatureToggle().");
         }
 
@@ -49,7 +50,7 @@ public final class VideoCallMenuFeatureSelectionController implements FeatureSel
 
     @Override
     public boolean contains(MenuItem featureRepresentation) {
-        return featureRepresentation.getItemId() == videoCallResourceId;
+        return featureRepresentation.getItemId() == serviceConnectionResourceId;
     }
 
 }
