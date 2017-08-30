@@ -49,7 +49,7 @@ public class LandingActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        featureSelectionController.attachFeatureSelectionTo(menu);
+        featureSelectionController.attachFeaturesTo(menu);
         return true;
     }
 

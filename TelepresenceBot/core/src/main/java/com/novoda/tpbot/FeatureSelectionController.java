@@ -2,7 +2,7 @@ package com.novoda.tpbot;
 
 public interface FeatureSelectionController<LIST, FEATURE> {
 
-    void attachFeatureSelectionTo(LIST toAttachTo);
+    void attachFeaturesTo(LIST componentToAttachTo);
 
     void handleFeatureToggle(FEATURE featureRepresentation);
 

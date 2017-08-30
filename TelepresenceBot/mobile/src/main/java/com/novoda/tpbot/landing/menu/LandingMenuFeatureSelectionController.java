@@ -37,13 +37,13 @@ public final class LandingMenuFeatureSelectionController implements FeatureSelec
     }
 
     @Override
-    public void attachFeatureSelectionTo(Menu toAttachTo) {
-        menuInflater.inflate(FEATURE_MENU_RESOURCE, toAttachTo);
+    public void attachFeaturesTo(Menu componentToAttachTo) {
+        menuInflater.inflate(FEATURE_MENU_RESOURCE, componentToAttachTo);
 
         for (int index = 0; index < features.size(); index++) {
             int key = features.keyAt(index);
 
-            MenuItem menuItem = toAttachTo.findItem(key);
+            MenuItem menuItem = componentToAttachTo.findItem(key);
             FeatureSelectionPersistence featureSelectionPersistence = features.get(key);
             menuItem.setChecked(featureSelectionPersistence.isFeatureEnabled());
         }

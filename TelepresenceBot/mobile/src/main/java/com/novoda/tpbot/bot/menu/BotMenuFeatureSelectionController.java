@@ -8,9 +8,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.novoda.notils.logger.toast.Toaster;
+import com.novoda.tpbot.FeatureSelectionController;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.bot.device.usb.ConnectedUsbDevicesFetcher;
-import com.novoda.tpbot.FeatureSelectionController;
 
 public final class BotMenuFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {
 
@@ -38,8 +38,8 @@ public final class BotMenuFeatureSelectionController implements FeatureSelection
     }
 
     @Override
-    public void attachFeatureSelectionTo(Menu toAttachTo) {
-        menuInflater.inflate(FEATURE_MENU_RESOURCE, toAttachTo);
+    public void attachFeaturesTo(Menu componentToAttachTo) {
+        menuInflater.inflate(FEATURE_MENU_RESOURCE, componentToAttachTo);
     }
 
     @Override

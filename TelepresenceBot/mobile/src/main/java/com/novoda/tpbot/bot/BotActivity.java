@@ -139,7 +139,7 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        featureSelectionController.attachFeatureSelectionTo(menu);
+        featureSelectionController.attachFeaturesTo(menu);
         return true;
     }
 
