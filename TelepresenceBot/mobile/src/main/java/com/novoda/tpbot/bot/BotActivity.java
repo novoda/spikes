@@ -27,7 +27,7 @@ import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.tpbot.controls.ServerDeclarationView;
-import com.novoda.tpbot.bot.device.usb.ConnectedUsbDevicesFeatureSelectionController;
+import com.novoda.tpbot.bot.menu.BotMenuFeatureSelectionController;
 import com.novoda.tpbot.feature_selection.FeatureSelectionController;
 import com.novoda.tpbot.feature_selection.FeatureSelectionPersistence;
 import com.novoda.tpbot.bot.service.ServiceConnectionSharedPreferencesPersistence;
@@ -77,7 +77,7 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
         botServiceBinder = new BotServiceBinder(getApplicationContext());
         movementServiceBinder = new MovementServiceBinder(getApplicationContext(), deviceConnection);
 
-        featureSelectionController = ConnectedUsbDevicesFeatureSelectionController.createFrom(this);
+        featureSelectionController = BotMenuFeatureSelectionController.createFrom(this);
 
         if (!serverConnectionFeature.isFeatureEnabled()) {
             switchableView.setDisplayedChild(1);

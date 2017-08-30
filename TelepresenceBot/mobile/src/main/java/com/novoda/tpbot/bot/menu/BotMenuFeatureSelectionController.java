@@ -1,4 +1,4 @@
-package com.novoda.tpbot.bot.device.usb;
+package com.novoda.tpbot.bot.menu;
 
 import android.content.Context;
 import android.hardware.usb.UsbManager;
@@ -9,9 +9,10 @@ import android.view.MenuItem;
 
 import com.novoda.notils.logger.toast.Toaster;
 import com.novoda.tpbot.R;
+import com.novoda.tpbot.bot.device.usb.ConnectedUsbDevicesFetcher;
 import com.novoda.tpbot.feature_selection.FeatureSelectionController;
 
-public final class ConnectedUsbDevicesFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {
+public final class BotMenuFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {
 
     @MenuRes
     private static final int FEATURE_MENU_RESOURCE = R.menu.bot_menu;
@@ -27,10 +28,10 @@ public final class ConnectedUsbDevicesFeatureSelectionController implements Feat
         ConnectedUsbDevicesFetcher connectedUsbDevicesFetcher = new ConnectedUsbDevicesFetcher(manager, context.getResources());
         MenuInflater menuInflater = new MenuInflater(context);
         Toaster toaster = Toaster.newInstance(context);
-        return new ConnectedUsbDevicesFeatureSelectionController(menuInflater, toaster, connectedUsbDevicesFetcher);
+        return new BotMenuFeatureSelectionController(menuInflater, toaster, connectedUsbDevicesFetcher);
     }
 
-    private ConnectedUsbDevicesFeatureSelectionController(MenuInflater menuInflater, Toaster toaster, ConnectedUsbDevicesFetcher connectedUsbDevicesFetcher) {
+    private BotMenuFeatureSelectionController(MenuInflater menuInflater, Toaster toaster, ConnectedUsbDevicesFetcher connectedUsbDevicesFetcher) {
         this.menuInflater = menuInflater;
         this.toaster = toaster;
         this.connectedUsbDevicesFetcher = connectedUsbDevicesFetcher;

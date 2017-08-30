@@ -8,17 +8,17 @@ import com.novoda.tpbot.R;
 
 import java.util.HashMap;
 
-class ConnectedUsbDevicesFetcher {
+public class ConnectedUsbDevicesFetcher {
 
     private final UsbManager usbManager;
     private final Resources resources;
 
-    ConnectedUsbDevicesFetcher(UsbManager usbManager, Resources resources) {
+    public ConnectedUsbDevicesFetcher(UsbManager usbManager, Resources resources) {
         this.usbManager = usbManager;
         this.resources = resources;
     }
 
-    String fetchAsString() {
+    public String fetchAsString() {
         HashMap<String, UsbDevice> devices = usbManager.getDeviceList();
         StringBuilder builder = new StringBuilder();
         if (devices.isEmpty()) {

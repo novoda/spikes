@@ -1,4 +1,4 @@
-package com.novoda.tpbot.landing.features;
+package com.novoda.tpbot.landing.menu;
 
 import android.content.Context;
 import android.support.annotation.MenuRes;
