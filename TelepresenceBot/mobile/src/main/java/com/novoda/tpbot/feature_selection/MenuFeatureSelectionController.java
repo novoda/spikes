@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.novoda.tpbot.R;
+import com.novoda.tpbot.bot.video.calling.VideoCallSharedPreferencesPersistence;
 
 public final class MenuFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {
 

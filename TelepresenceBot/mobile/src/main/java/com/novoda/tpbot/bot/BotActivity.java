@@ -31,7 +31,7 @@ import com.novoda.tpbot.feature_selection.ConnectedUsbDevicesFeatureSelectionCon
 import com.novoda.tpbot.feature_selection.FeatureSelectionController;
 import com.novoda.tpbot.feature_selection.FeatureSelectionPersistence;
 import com.novoda.tpbot.feature_selection.ServerConnectionSharedPreferencesPersistence;
-import com.novoda.tpbot.feature_selection.VideoCallSharedPreferencesPersistence;
+import com.novoda.tpbot.bot.video.calling.VideoCallSharedPreferencesPersistence;
 
 public class BotActivity extends AppCompatActivity implements BotView, DeviceConnection.DeviceConnectionListener {
 

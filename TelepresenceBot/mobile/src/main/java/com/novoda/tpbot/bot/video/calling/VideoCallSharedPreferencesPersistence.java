@@ -1,7 +1,9 @@
-package com.novoda.tpbot.feature_selection;
+package com.novoda.tpbot.bot.video.calling;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.novoda.tpbot.feature_selection.FeatureSelectionPersistence;
 
 public final class VideoCallSharedPreferencesPersistence implements FeatureSelectionPersistence {
 
