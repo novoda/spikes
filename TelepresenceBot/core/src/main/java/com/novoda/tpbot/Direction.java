@@ -6,16 +6,16 @@ public enum Direction {
     STEER_RIGHT("→", "d"),
     STEER_LEFT("←", "a");
 
-    private final String representation;
+    private final String visualRepresentation;
     private final String rawDirection;
 
-    Direction(String representation, String rawDirection) {
-        this.representation = representation;
+    Direction(String visualRepresentation, String rawDirection) {
+        this.visualRepresentation = visualRepresentation;
         this.rawDirection = rawDirection;
     }
 
     public String visualRepresentation() {
-        return rawDirection;
+        return visualRepresentation;
     }
 
     public static Direction from(String rawDirection) {
