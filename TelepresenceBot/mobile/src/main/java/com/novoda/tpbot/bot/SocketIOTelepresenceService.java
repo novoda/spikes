@@ -3,12 +3,12 @@ package com.novoda.tpbot.bot;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.novoda.tpbot.Direction;
-import com.novoda.tpbot.Result;
+import com.novoda.support.Observable;
 import com.novoda.tpbot.ClientType;
+import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.Event;
 import com.novoda.tpbot.MalformedServerAddressException;
-import com.novoda.support.Observable;
+import com.novoda.tpbot.Result;
 import com.novoda.tpbot.Room;
 import com.novoda.tpbot.SocketConnectionObservable;
 

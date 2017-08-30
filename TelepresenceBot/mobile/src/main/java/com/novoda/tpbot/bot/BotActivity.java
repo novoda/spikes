@@ -29,6 +29,9 @@ import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.tpbot.controls.ServerDeclarationView;
+import com.novoda.tpbot.feature_selection.FeatureSelectionPersistence;
+import com.novoda.tpbot.feature_selection.ServerConnectionSharedPreferencesPersistence;
+import com.novoda.tpbot.feature_selection.VideoCallSharedPreferencesPersistence;
 
 import java.util.HashMap;
 
@@ -45,9 +48,15 @@ public class BotActivity extends AppCompatActivity implements BotView {
     private AutomationChecker automationChecker;
     private BotServiceCreator botServiceCreator;
 
+    private FeatureSelectionPersistence videoCallFeature;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        videoCallFeature = VideoCallSharedPreferencesPersistence.newInstance(this);
+        FeatureSelectionPersistence serverConnectionFeature = ServerConnectionSharedPreferencesPersistence.newInstance(this);
+
         setContentView(R.layout.activity_bot);
 
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
@@ -64,12 +73,16 @@ public class BotActivity extends AppCompatActivity implements BotView {
 
         AccessibilityManager accessibilityManager = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
         automationChecker = new AutomationChecker(accessibilityManager);
+
+        if (!serverConnectionFeature.isFeatureEnabled()) {
+            switchableView.setDisplayedChild(1);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (!automationChecker.isHangoutJoinerAutomationServiceEnabled()) {
+        if (!automationChecker.isHangoutJoinerAutomationServiceEnabled() && videoCallFeature.isFeatureEnabled()) {
             startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
         }
     }
@@ -205,7 +218,9 @@ public class BotActivity extends AppCompatActivity implements BotView {
         debugView.showPermanently(getString(R.string.connected));
         switchableView.setDisplayedChild(1);
 
-        joinHangoutRoom(room);
+        if (videoCallFeature.isFeatureEnabled()) {
+            joinHangoutRoom(room);
+        }
     }
 
     private void joinHangoutRoom(String room) {

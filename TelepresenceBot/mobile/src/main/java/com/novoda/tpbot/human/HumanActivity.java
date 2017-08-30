@@ -50,7 +50,6 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         ServerDeclarationView serverDeclarationView = Views.findById(switchableView, R.id.bot_server_declaration_view);
         serverDeclarationView.setServerDeclarationListener(serverDeclarationListener);
 
-
     }
 
     private final CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
