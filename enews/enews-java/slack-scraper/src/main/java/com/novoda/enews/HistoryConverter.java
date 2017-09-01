@@ -13,7 +13,12 @@ class HistoryConverter {
         List<ChannelHistory.Message> messages = new ArrayList<>();
         for (ApiPagedChannelHistory pagedChannelHistory : apiPagedChannelHistory) {
             for (ApiPagedChannelHistory.ApiMessage apiMessage : pagedChannelHistory.apiMessages) {
-                messages.add(convert(apiMessage));
+                try {
+                    messages.add(convert(apiMessage));
+                } catch (ConvertException e) {
+                    System.err.println("Skipping with error " + e);
+                    continue;
+                }
             }
         }
         LocalDateTime historyFrom = getOldestMessageLocalDateTime(apiPagedChannelHistory.get(apiPagedChannelHistory.size() - 1));
@@ -27,13 +32,17 @@ class HistoryConverter {
                     + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
             Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
 
-    private static ChannelHistory.Message convert(ApiPagedChannelHistory.ApiMessage apiMessage) {
+    private static ChannelHistory.Message convert(ApiPagedChannelHistory.ApiMessage apiMessage) throws ConvertException {
         List<ApiPagedChannelHistory.ApiAttachment> attachments = apiMessage.attachments;
         String imageUrl = null;
         if (attachments != null) {
             imageUrl = attachments.get(0).imageUrl;
         }
         String text = apiMessage.text; // Bots send messages with attachments but no text
+
+        if (text == null) {
+            throw new ConvertException("Cannot convert " + apiMessage, new NullPointerException("text was null"));
+        }
 
         String pageLink = "";
         Matcher matcher = urlPattern.matcher(text);
@@ -45,6 +54,13 @@ class HistoryConverter {
         }
 
         return new ChannelHistory.Message(text, imageUrl, pageLink);
+    }
+
+    private static class ConvertException extends Exception {
+
+        ConvertException(String message, Throwable cause) {
+            super(message, cause);
+        }
     }
 
     private static LocalDateTime getOldestMessageLocalDateTime(ApiPagedChannelHistory apiPagedChannelHistory) {
