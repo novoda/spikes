@@ -1,7 +1,7 @@
 package com.novoda.enews;
 
 import com.google.gson.annotations.SerializedName;
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
