@@ -18,12 +18,14 @@ public class MainNewsletter {
         String mailChimpToken = args[1];
         Scraper scraper = new Scraper.Factory().newInstance(slackToken);
         HtmlGenerator htmlGenerator = new HtmlGenerator.Factory().newInstance();
+        ArticleEditor articleEditor = new ArticleEditor();
         NewsletterPublisher newsletterPublisher = new NewsletterPublisher.Factory().newInstance(mailChimpToken);
 
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = LocalDateTime.now().minusDays(7);
         Stream<ChannelHistory.Message> messageStream = scraper.scrape(start, end);
-        String html = htmlGenerator.generate(messageStream);
+        Stream<Article> articleStream = articleEditor.generateArticle(messageStream);
+        String html = htmlGenerator.generate(articleStream);
         LocalDateTime atLocalDateTime = LocalDateTime.now().plusDays(1).plusHours(1);
         newsletterPublisher.publish(html, atLocalDateTime);
         // Time warp campaigns have to be 24 hours in the future

@@ -6,9 +6,9 @@ import com.larvalabs.linkunfurl.LinkUnfurl;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-class ArticleEditor {
+public class ArticleEditor {
 
-    Stream<Article> generateArticle(Stream<ChannelHistory.Message> messageStream) {
+    public Stream<Article> generateArticle(Stream<ChannelHistory.Message> messageStream) {
         return messageStream.parallel().map(this::generateArticle);
     }
 

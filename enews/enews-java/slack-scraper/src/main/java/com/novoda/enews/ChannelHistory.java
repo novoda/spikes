@@ -7,7 +7,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 
-class ChannelHistory {
+public class ChannelHistory {
 
     private final LocalDateTime historyFrom;
     private final LocalDateTime historyTo;

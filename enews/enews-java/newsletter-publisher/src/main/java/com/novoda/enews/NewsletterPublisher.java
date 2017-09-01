@@ -56,7 +56,7 @@ public class NewsletterPublisher {
     }
 
     private Response<ApiCampaignResult> postCampaign() {
-        CampaignSettings settings = new CampaignSettings(listId, "Test #eNews from Java", "Novoda", "no-reply@novoda.com");
+        CampaignSettings settings = new CampaignSettings(listId, "Novoda's weekly #eNews", "Novoda", "no-reply@novoda.com");
         Call<ApiCampaignResult> postCampaign = webService.postCampaign(settings);
         try {
             return postCampaign.execute();
