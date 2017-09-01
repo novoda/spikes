@@ -3,7 +3,7 @@ const Git = require("nodegit");
 module.exports = class GitBranch {
 
     async checkout(options) {
-        const repo = await this._clone(options.githubToken, options.path)
+        const repo = await this._clone(options.repoUrl, options.githubToken, options.path)
         await repo.checkoutBranch(options.baseBranch)
         const branchHeadCommit = await repo.getHeadCommit()
         const releaseBranchRef = await repo.createBranch(options.newBranch, branchHeadCommit.id())
@@ -11,21 +11,22 @@ module.exports = class GitBranch {
         return repo
     }
 
-    _clone(githubToken, path) {
+    _clone(repoUrl, githubToken, path) {
         const cloneOptions = {
             fetchOpts: {
                 callbacks: this._createAuth(githubToken)
             }
         }
-        return Git.Clone(options.repoUrl, path, cloneOptions)
+        return Git.Clone(repoUrl, path, cloneOptions)
     }
 
     async push(repo, pushOptions) {
         await this._commitAll(repo, pushOptions.commit)
         const remote = await repo.getRemote(pushOptions.remote);
         const currentBranch = await repo.getCurrentBranch()
+        const currentBranchName = currentBranch.name()
         return remote.push(
-            [`refs/heads/${currentBranch.name()}:refs/heads/${currentBranch.name()}`],
+            [`${currentBranchName}:${currentBranchName}`],
             { callbacks: this._createAuth(pushOptions.githubToken) }
         )
     }
