@@ -1,11 +1,23 @@
 package com.novoda.tpbot.injection;
 
+import android.app.Application;
+
 import com.novoda.tpbot.TelepresenceBotApplication;
 
+import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.AndroidInjectionModule;
-import dagger.android.AndroidInjector;
 
 @Component(modules = {AndroidInjectionModule.class, ActivityBindingModule.class})
-public interface TelepresenceBotApplicationComponent extends AndroidInjector<TelepresenceBotApplication> {
+public interface TelepresenceBotApplicationComponent {
+
+    @Component.Builder
+    interface Builder {
+        @BindsInstance
+        Builder application(Application application);
+
+        TelepresenceBotApplicationComponent build();
+    }
+
+    void inject(TelepresenceBotApplication application);
 }

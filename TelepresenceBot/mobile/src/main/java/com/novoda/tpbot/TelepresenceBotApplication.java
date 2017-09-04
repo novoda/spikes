@@ -22,7 +22,10 @@ public class TelepresenceBotApplication extends Application implements HasActivi
         super.onCreate();
         Log.setShowLogs(BuildConfig.DEBUG);
 
-        DaggerTelepresenceBotApplicationComponent.create()
+        DaggerTelepresenceBotApplicationComponent
+                .builder()
+                .application(this)
+                .build()
                 .inject(this);
     }
 
