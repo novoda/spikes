@@ -1,6 +1,8 @@
 package com.novoda.enews;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
@@ -24,6 +26,8 @@ public class MainHtml {
         Stream<ChannelHistory.Message> messageStream = scraper.scrape(start, end);
         Stream<Article> articleStream = articleEditor.generateArticle(messageStream);
         String html = htmlGenerator.generate(articleStream);
+
         System.out.println(html);
+        Files.write(Paths.get("./build/enews-debug.html"), html.getBytes());
     }
 }
