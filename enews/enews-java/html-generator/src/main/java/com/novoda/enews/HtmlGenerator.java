@@ -15,7 +15,7 @@ public class HtmlGenerator {
                      body();
                         style(" padding: 10px;");
                         h1()
-                            .style("font: bold 40px/1.5 Helvetica, Verdana, sans-serif; color: #34c5db;")
+                            .style("font: bold 40px/1.5 Helvetica, Verdana, sans-serif; color: #26A3DB;")
                             .text("#eNews from the week")
                         .end()
                         .div();
