@@ -23,9 +23,9 @@ class MockSlackWebService implements SlackWebService {
                 body.hasMore = false;
                 List<ApiPagedChannelHistory.ApiMessage> apiMessages = new ArrayList<>();
 
-                addEnewsMessage(apiMessages, "Hello World 1");
+                addEnewsMessage(apiMessages, "Hello World lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum 1");
                 addStandardMessage(apiMessages, "Hello World 2");
-                addEnewsMessage(apiMessages, "Hello World 3");
+                addEnewsMessage(apiMessages, "Hello World foo bar foo bar foo bar foo bar foo bar 3");
                 addStandardMessage(apiMessages, "Hello World 4");
                 addEnewsMessage(apiMessages, "Hello World 5");
 
