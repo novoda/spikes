@@ -13,9 +13,17 @@ public class HtmlGenerator {
             {
                 html();
                      body();
-                        h1().text("#eNews from the week").end();
-                    makeList();
-                    makeFooter();
+                        style(" padding: 10px;");
+                        h1()
+                            .style("font: bold 40px/1.5 Helvetica, Verdana, sans-serif; color: #34c5db;")
+                            .text("#eNews from the week")
+                        .end()
+                        .div();
+                            makeList();
+                        end();
+                        div();
+                            makeFooter();
+                        end();
                 endAll();
                 done();
             }
@@ -24,12 +32,23 @@ public class HtmlGenerator {
                 ul();
                 for (Article article : articleStream.collect(Collectors.toList())) {
 
-                    li()
-                        .div()
-                            .img().src(article.getImage()).height("100").width("100").end()
-                            .a().href(article.getPageLink()).end()
-                            .p().text(article.getPageTitle()).end()
-                            .p().text(article.getText()).end()
+                    li().style("list-style-type: none; margin: 0; padding: 10px; overflow: auto;")
+                        .a().style("display: block; text-decoration: none; color: black;").href(article.getPageLink())
+                            .div()
+                                .img()
+                                    .style("float: left; margin: 0 15px 0 0;")
+                                    .src(article.getImage()).height("100")
+                                    .width("100")
+                                .end()
+                                .p()
+                                    .style("font: bold 20px/1.5 Helvetica, Verdana, sans-serif;")
+                                    .text(article.getPageTitle())
+                                .end()
+                                .p()
+                                    .style("font: 200 12px/1.5 Georgia, Times New Roman, serif;")
+                                    .text(article.getText())
+                                .end()
+                            .end()
                         .end()
                     .end();
                 }
