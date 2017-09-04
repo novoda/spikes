@@ -33,7 +33,7 @@ public class HtmlGenerator {
                 for (Article article : articleStream.collect(Collectors.toList())) {
 
                     li().style("list-style-type: none; margin: 0; padding: 10px; overflow: auto;")
-                        .a().style("display: block; text-decoration: none; color: black;").href(article.getPageLink())
+                        .a().style("text-decoration: none; color: black;").href(article.getPageLink())
                             .div()
                                 .img()
                                     .style("float: left; margin: 0 15px 0 0; width: 100px; height: 100px;" +
