@@ -35,11 +35,14 @@ public class HtmlGenerator {
                     li().style("list-style-type: none; margin: 0; padding: 10px; overflow: auto;")
                         .a().style("text-decoration: none; color: black;").href(article.getPageLink())
                             .div()
-                                .img()
-                                    .style("float: left; margin: 0 15px 0 0; width: 100px; height: 100px;" +
-                                            " object-fit: cover;" +
-                                            " border-radius: 6px; background-color: #fafafa; padding: 10px;")
-                                    .src(article.getImage())
+                                .div()
+                                    .style("max-width: 100px")
+                                    .img()
+                                        .style("float: left; margin: 0 15px 0 0; max-width: 100%; width: auto; height: auto;" +
+                                                " object-fit: cover;" +
+                                                " border-radius: 6px; background-color: #fafafa; padding: 10px;")
+                                        .src(article.getImage())
+                                    .end()
                                 .end()
                                 .p()
                                     .style("font: bold 20px/1.5 Helvetica, Verdana, sans-serif; color: #2d2d2d;")
