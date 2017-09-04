@@ -36,7 +36,9 @@ public class HtmlGenerator {
                         .a().style("display: block; text-decoration: none; color: black;").href(article.getPageLink())
                             .div()
                                 .img()
-                                    .style("float: left; margin: 0 15px 0 0; width: 100px; height: 100px; object-fit: scale-down;")
+                                    .style("float: left; margin: 0 15px 0 0; width: 100px; height: 100px;" +
+                                            " object-fit: cover;" +
+                                            " border-radius: 6px; background-color: #fafafa; padding: 10px;")
                                     .src(article.getImage())
                                 .end()
                                 .p()
