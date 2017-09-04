@@ -8,7 +8,7 @@ import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.AndroidInjectionModule;
 
-@Component(modules = {AndroidInjectionModule.class, ActivityBindingModule.class})
+@Component(modules = {AndroidInjectionModule.class, ApplicationModule.class})
 public interface TelepresenceBotApplicationComponent {
 
     @Component.Builder
