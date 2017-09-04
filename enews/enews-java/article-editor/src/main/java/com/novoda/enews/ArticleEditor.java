@@ -16,7 +16,7 @@ public class ArticleEditor {
         String imageUrl = generateImageUrl(message);
         String pageTitle = generateTitle(message);
         String text = generateText(message);
-        String pageLink = message.getPageLink();
+        String pageLink = generatePageLink(message);
         return new Article(imageUrl, pageTitle, text, pageLink);
     }
 
@@ -43,6 +43,15 @@ public class ArticleEditor {
         } catch (IOException e) {
             return "#eNews link";
         }
+    }
+
+    private String generatePageLink(ChannelHistory.Message message) {
+        String link = message.getPageLink();
+        if(link.contains("?")) {
+          int startPositionOfParams = link.indexOf('?');
+          link = link.substring(0, startPositionOfParams);
+        }
+        return link;
     }
 
 }
