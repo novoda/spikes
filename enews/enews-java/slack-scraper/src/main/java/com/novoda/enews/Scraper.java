@@ -1,5 +1,6 @@
 package com.novoda.enews;
 
+import org.jetbrains.annotations.NotNull;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -35,7 +36,29 @@ public class Scraper {
 
     public static class Factory {
 
+        @NotNull
         public Scraper newInstance(String slackToken) {
+            return newInstance(slackToken, false);
+        }
+
+        @NotNull
+        public Scraper newInstance(String slackToken, boolean runLocally) {
+            if (runLocally) {
+                return newMockServiceInsstance(slackToken);
+            } else {
+                return newLiveServiceInstance(slackToken);
+            }
+        }
+
+        @NotNull
+        private Scraper newMockServiceInsstance(String slackToken) {
+            SlackWebService slackWebService = new MockSlackWebService();
+            SlackHistoryFetcher slackHistoryFetcher = SlackHistoryFetcher.from(slackWebService, slackToken);
+            return new Scraper(slackHistoryFetcher);
+        }
+
+        @NotNull
+        private Scraper newLiveServiceInstance(String slackToken) {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("https://slack.com/api/")
                     .addConverterFactory(GsonConverterFactory.create())
