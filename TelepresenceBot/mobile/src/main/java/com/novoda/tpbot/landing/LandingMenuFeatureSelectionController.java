@@ -10,7 +10,7 @@ import com.novoda.tpbot.FeatureSelectionController;
 import com.novoda.tpbot.FeatureSelectionPersistence;
 import com.novoda.tpbot.R;
 
-public final class LandingMenuFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {
+final class LandingMenuFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {
 
     @MenuRes
     private static final int FEATURE_MENU_RESOURCE = R.menu.feature_menu;
