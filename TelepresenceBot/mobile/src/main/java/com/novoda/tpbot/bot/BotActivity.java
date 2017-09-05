@@ -67,7 +67,7 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
         serverDeclarationView.setServerDeclarationListener(serverDeclarationListener);
 
         Handler handler = new Handler();
-        commandRepeater = new CommandRepeater(commandRepeatedListener, handler);
+        commandRepeater = new CommandRepeater(handler);
 
         AccessibilityManager accessibilityManager = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
         automationChecker = new AutomationChecker(accessibilityManager);
@@ -96,12 +96,12 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
 
         @Override
         public void onDirectionPressed(Direction direction) {
-            commandRepeater.startRepeatingCommand(direction.rawDirection());
+            commandRepeater.startRepeatingCommand(direction.rawDirection(), commandRepeatedListener);
         }
 
         @Override
         public void onDirectionReleased(Direction direction) {
-            commandRepeater.stopRepeatingCommand(direction.rawDirection());
+            commandRepeater.stopRepeatingCommand();
         }
 
         @Override

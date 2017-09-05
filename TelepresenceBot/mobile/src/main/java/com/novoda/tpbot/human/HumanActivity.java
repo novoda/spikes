@@ -40,7 +40,7 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         AndroidInjection.inject(this);
 
         Handler handler = new Handler();
-        commandRepeater = new CommandRepeater(commandRepeatedListener, handler);
+        commandRepeater = new CommandRepeater(handler);
 
         ControllerView controllerView = Views.findById(switchableView, R.id.bot_controller_direction_view);
         controllerView.setControllerListener(controllerListener);
@@ -63,12 +63,12 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
 
         @Override
         public void onDirectionPressed(Direction direction) {
-            commandRepeater.startRepeatingCommand(direction.rawDirection());
+            commandRepeater.startRepeatingCommand(direction.rawDirection(), commandRepeatedListener);
         }
 
         @Override
         public void onDirectionReleased(Direction direction) {
-            commandRepeater.stopRepeatingCommand(direction.rawDirection());
+            commandRepeater.stopRepeatingCommand();
         }
 
         @Override

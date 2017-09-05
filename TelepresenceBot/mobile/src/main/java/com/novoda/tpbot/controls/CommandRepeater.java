@@ -8,41 +8,49 @@ public class CommandRepeater {
 
     private static final long COMMAND_REPEAT_DELAY = TimeUnit.MILLISECONDS.toMillis(80);
 
-    private final Listener listener;
     private final Handler handler;
-    private String currentCommand;
+    private CommandRepeatingRunnable repeater;
 
-    public CommandRepeater(Listener listener, Handler handler) {
-        this.listener = listener;
+    public CommandRepeater(Handler handler) {
         this.handler = handler;
     }
 
-    public void startRepeatingCommand(String command) {
-        currentCommand = command;
-        sendRepeatingCommand(currentCommand);
+    public void startRepeatingCommand(String command, Listener listener) {
+        sendRepeatingCommand(command, listener);
     }
 
     public void stopCurrentRepeatingCommand() {
-        stopRepeatingCommand(currentCommand);
+        stopRepeatingCommand();
     }
 
-    public void stopRepeatingCommand(String command) {
-        if (currentCommand != null && currentCommand.equals(command)) {
-            handler.removeCallbacks(repeatCommand);
-            currentCommand = null;
+    public void stopRepeatingCommand() {
+        if (repeater != null) {
+            handler.removeCallbacks(repeater);
+            repeater = null;
         }
     }
 
-    private final Runnable repeatCommand = new Runnable() {
+    private void sendRepeatingCommand(String command, Listener listener) {
+        repeater = new CommandRepeatingRunnable(command, listener);
+        listener.onCommandRepeated(command);
+        handler.postDelayed(repeater, COMMAND_REPEAT_DELAY);
+    }
+
+    private class CommandRepeatingRunnable implements Runnable {
+
+        private final String command;
+        private final Listener listener;
+
+        private CommandRepeatingRunnable(String command, Listener listener) {
+            this.command = command;
+            this.listener = listener;
+        }
+
         @Override
         public void run() {
-            sendRepeatingCommand(CommandRepeater.this.currentCommand);
+            listener.onCommandRepeated(command);
+            handler.postDelayed(this, COMMAND_REPEAT_DELAY);
         }
-    };
-
-    private void sendRepeatingCommand(String command) {
-        listener.onCommandRepeated(command);
-        handler.postDelayed(repeatCommand, COMMAND_REPEAT_DELAY);
     }
 
     public interface Listener {
