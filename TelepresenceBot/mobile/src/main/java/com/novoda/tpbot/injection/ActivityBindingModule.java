@@ -3,7 +3,7 @@ package com.novoda.tpbot.injection;
 import android.app.Activity;
 
 import com.novoda.tpbot.landing.LandingActivity;
-import com.novoda.tpbot.landing.LandingActivitySubcomponent;
+import com.novoda.tpbot.landing.LandingSubcomponent;
 
 import dagger.Binds;
 import dagger.Module;
@@ -17,6 +17,6 @@ public abstract class ActivityBindingModule {
     @Binds
     @IntoMap
     @ActivityKey(LandingActivity.class)
-    abstract AndroidInjector.Factory<? extends Activity> bindLandingActivity(LandingActivitySubcomponent.Builder builder);
+    abstract AndroidInjector.Factory<? extends Activity> bindLandingActivity(LandingSubcomponent.Builder builder);
 
 }

@@ -16,7 +16,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class LandingActivityModule {
+public class LandingModule {
 
     @Provides
     FeatureSelectionController<Menu, MenuItem> provideController(Application application, MenuInflater menuInflater) {
