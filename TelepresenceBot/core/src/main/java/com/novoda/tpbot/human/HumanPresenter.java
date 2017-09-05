@@ -4,7 +4,7 @@ import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.Result;
 import com.novoda.support.Observable;
 import com.novoda.support.Observer;
-import com.novoda.tpbot.controls.LastServerPersistence;
+import com.novoda.tpbot.LastServerPersistence;
 
 import static com.novoda.support.Observable.unsubscribe;
 

@@ -15,8 +15,8 @@ import com.novoda.tpbot.ServerDeclarationListener;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
-import com.novoda.tpbot.controls.LastServerPersistence;
-import com.novoda.tpbot.controls.LastServerPreferences;
+import com.novoda.tpbot.LastServerPersistence;
+import com.novoda.tpbot.LastServerPreferences;
 import com.novoda.tpbot.controls.ServerDeclarationView;
 
 import javax.inject.Inject;

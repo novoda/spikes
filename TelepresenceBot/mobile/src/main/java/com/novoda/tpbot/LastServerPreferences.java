@@ -1,4 +1,4 @@
-package com.novoda.tpbot.controls;
+package com.novoda.tpbot;
 
 import android.content.SharedPreferences;
 

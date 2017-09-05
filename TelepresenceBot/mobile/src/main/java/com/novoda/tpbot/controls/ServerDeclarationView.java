@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.novoda.notils.caster.Views;
+import com.novoda.tpbot.LastServerPreferences;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServerDeclarationListener;
 

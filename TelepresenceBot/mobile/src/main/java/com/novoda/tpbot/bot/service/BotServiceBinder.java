@@ -8,9 +8,9 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 
+import com.novoda.tpbot.LastServerPersistence;
+import com.novoda.tpbot.LastServerPreferences;
 import com.novoda.tpbot.bot.BotView;
-import com.novoda.tpbot.controls.LastServerPersistence;
-import com.novoda.tpbot.controls.LastServerPreferences;
 
 public class BotServiceBinder {
 

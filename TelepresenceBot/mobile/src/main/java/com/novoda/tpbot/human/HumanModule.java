@@ -1,6 +1,6 @@
 package com.novoda.tpbot.human;
 
-import com.novoda.tpbot.controls.LastServerPersistence;
+import com.novoda.tpbot.LastServerPersistence;
 
 import dagger.Module;
 import dagger.Provides;

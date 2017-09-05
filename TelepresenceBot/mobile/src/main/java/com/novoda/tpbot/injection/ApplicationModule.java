@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.novoda.tpbot.controls.LastServerPersistence;
-import com.novoda.tpbot.controls.LastServerPreferences;
+import com.novoda.tpbot.LastServerPersistence;
+import com.novoda.tpbot.LastServerPreferences;
 import com.novoda.tpbot.human.HumanSubcomponent;
 import com.novoda.tpbot.landing.LandingSubcomponent;
 
