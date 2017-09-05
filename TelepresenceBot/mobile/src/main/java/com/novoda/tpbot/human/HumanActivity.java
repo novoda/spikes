@@ -26,7 +26,8 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
     @Inject
     SelfDestructingMessageView debugView;
 
-    private SwitchableView switchableView;
+    @Inject
+    SwitchableView switchableView;
     private CommandRepeater commandRepeater;
 
     @Inject
@@ -37,8 +38,6 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_human);
         AndroidInjection.inject(this);
-
-        switchableView = Views.findById(this, R.id.bot_switchable_view);
 
         Handler handler = new Handler();
         commandRepeater = new CommandRepeater(commandRepeatedListener, handler);

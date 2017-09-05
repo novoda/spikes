@@ -2,6 +2,7 @@ package com.novoda.tpbot.human;
 
 import com.novoda.notils.caster.Views;
 import com.novoda.support.SelfDestructingMessageView;
+import com.novoda.support.SwitchableView;
 import com.novoda.tpbot.LastServerPersistence;
 import com.novoda.tpbot.R;
 
@@ -24,6 +25,11 @@ public class HumanModule {
     @Provides
     SelfDestructingMessageView provideSelfDestructingMessageView(HumanActivity humanActivity) {
         return Views.findById(humanActivity, R.id.bot_controller_debug_view);
+    }
+
+    @Provides
+    SwitchableView provideSwitchableView(HumanActivity humanActivity) {
+        return Views.findById(humanActivity, R.id.bot_switchable_view);
     }
 
     @Provides
