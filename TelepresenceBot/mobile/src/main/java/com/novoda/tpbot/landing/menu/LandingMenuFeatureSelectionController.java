@@ -1,6 +1,5 @@
 package com.novoda.tpbot.landing.menu;
 
-import android.content.Context;
 import android.support.annotation.MenuRes;
 import android.util.SparseArray;
 import android.view.Menu;
@@ -10,8 +9,6 @@ import android.view.MenuItem;
 import com.novoda.tpbot.FeatureSelectionController;
 import com.novoda.tpbot.FeatureSelectionPersistence;
 import com.novoda.tpbot.R;
-import com.novoda.tpbot.bot.service.ServiceConnectionSharedPreferencesPersistence;
-import com.novoda.tpbot.bot.video.calling.VideoCallSharedPreferencesPersistence;
 
 public final class LandingMenuFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {
 
@@ -21,15 +18,7 @@ public final class LandingMenuFeatureSelectionController implements FeatureSelec
     private final MenuInflater menuInflater;
     private final SparseArray<FeatureSelectionPersistence> features;
 
-    public static FeatureSelectionController<Menu, MenuItem> createFrom(MenuInflater menuInflater, Context context) {
-        SparseArray<FeatureSelectionPersistence> features = new SparseArray<>();
-        features.put(R.id.video_call_menu_item, VideoCallSharedPreferencesPersistence.newInstance(context));
-        features.put(R.id.server_connection_menu_item, ServiceConnectionSharedPreferencesPersistence.newInstance(context));
-
-        return new LandingMenuFeatureSelectionController(menuInflater, features);
-    }
-
-    private LandingMenuFeatureSelectionController(MenuInflater menuInflater, SparseArray<FeatureSelectionPersistence> features) {
+    public LandingMenuFeatureSelectionController(MenuInflater menuInflater, SparseArray<FeatureSelectionPersistence> features) {
         this.menuInflater = menuInflater;
         this.features = features;
     }

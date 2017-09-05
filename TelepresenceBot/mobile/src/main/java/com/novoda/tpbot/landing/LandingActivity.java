@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.novoda.tpbot.FeatureSelectionController;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.bot.BotActivity;
 import com.novoda.tpbot.human.HumanActivity;
@@ -21,16 +19,12 @@ import dagger.android.AndroidInjection;
 public class LandingActivity extends AppCompatActivity {
 
     @Inject
-    MenuInflater menuInflater;
-
-    private FeatureSelectionController<Menu, MenuItem> featureSelectionController;
+    LandingMenuFeatureSelectionController featureSelectionController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AndroidInjection.inject(this);
-
-        featureSelectionController = LandingMenuFeatureSelectionController.createFrom(menuInflater, this);
 
         setContentView(R.layout.activity_landing);
 
@@ -72,4 +66,5 @@ public class LandingActivity extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
 }
