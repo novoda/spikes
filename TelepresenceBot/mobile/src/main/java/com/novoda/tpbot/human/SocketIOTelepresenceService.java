@@ -24,11 +24,7 @@ class SocketIOTelepresenceService implements HumanTelepresenceService {
     private Socket socket;
     private final Handler handler;
 
-    static SocketIOTelepresenceService getInstance() {
-        return LazySingleton.INSTANCE;
-    }
-
-    private SocketIOTelepresenceService() {
+    SocketIOTelepresenceService() {
         this.handler = new Handler(Looper.getMainLooper());
     }
 
@@ -57,10 +53,6 @@ class SocketIOTelepresenceService implements HumanTelepresenceService {
             socket.disconnect();
             socket.off();
         }
-    }
-
-    private static class LazySingleton {
-        private static final SocketIOTelepresenceService INSTANCE = new SocketIOTelepresenceService();
     }
 
 }

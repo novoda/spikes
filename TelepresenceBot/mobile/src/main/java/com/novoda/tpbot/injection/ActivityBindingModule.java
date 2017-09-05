@@ -2,6 +2,8 @@ package com.novoda.tpbot.injection;
 
 import android.app.Activity;
 
+import com.novoda.tpbot.human.HumanActivity;
+import com.novoda.tpbot.human.HumanSubcomponent;
 import com.novoda.tpbot.landing.LandingActivity;
 import com.novoda.tpbot.landing.LandingSubcomponent;
 
@@ -18,5 +20,10 @@ public abstract class ActivityBindingModule {
     @IntoMap
     @ActivityKey(LandingActivity.class)
     abstract AndroidInjector.Factory<? extends Activity> bindLandingActivity(LandingSubcomponent.Builder builder);
+
+    @Binds
+    @IntoMap
+    @ActivityKey(HumanActivity.class)
+    abstract AndroidInjector.Factory<? extends Activity> bindHumanActivity(HumanSubcomponent.Builder builder);
 
 }
