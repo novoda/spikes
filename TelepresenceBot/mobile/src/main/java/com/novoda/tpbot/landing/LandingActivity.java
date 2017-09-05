@@ -7,10 +7,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.novoda.tpbot.FeatureSelectionController;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.bot.BotActivity;
 import com.novoda.tpbot.human.HumanActivity;
-import com.novoda.tpbot.landing.menu.LandingMenuFeatureSelectionController;
 
 import javax.inject.Inject;
 
@@ -19,7 +19,7 @@ import dagger.android.AndroidInjection;
 public class LandingActivity extends AppCompatActivity {
 
     @Inject
-    LandingMenuFeatureSelectionController featureSelectionController;
+    FeatureSelectionController<Menu, MenuItem> featureSelectionController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

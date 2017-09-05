@@ -1,4 +1,4 @@
-package com.novoda.tpbot.landing.menu;
+package com.novoda.tpbot.landing;
 
 import android.support.annotation.MenuRes;
 import android.util.SparseArray;
@@ -18,7 +18,7 @@ public final class LandingMenuFeatureSelectionController implements FeatureSelec
     private final MenuInflater menuInflater;
     private final SparseArray<FeatureSelectionPersistence> features;
 
-    public LandingMenuFeatureSelectionController(MenuInflater menuInflater, SparseArray<FeatureSelectionPersistence> features) {
+    LandingMenuFeatureSelectionController(MenuInflater menuInflater, SparseArray<FeatureSelectionPersistence> features) {
         this.menuInflater = menuInflater;
         this.features = features;
     }
