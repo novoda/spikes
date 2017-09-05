@@ -3,7 +3,6 @@ package com.novoda.tpbot.human;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.novoda.notils.caster.Views;
 import com.novoda.support.SelfDestructingMessageView;
 import com.novoda.support.SwitchableView;
 import com.novoda.tpbot.Direction;
@@ -27,6 +26,10 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
     @Inject
     SwitchableView switchableView;
     @Inject
+    ServerDeclarationView serverDeclarationView;
+    @Inject
+    ControllerView controllerView;
+    @Inject
     CommandRepeater commandRepeater;
     @Inject
     HumanPresenter presenter;
@@ -37,11 +40,8 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         setContentView(R.layout.activity_human);
         AndroidInjection.inject(this);
 
-        ControllerView controllerView = Views.findById(switchableView, R.id.bot_controller_direction_view);
-        controllerView.setControllerListener(controllerListener);
-
-        ServerDeclarationView serverDeclarationView = Views.findById(switchableView, R.id.bot_server_declaration_view);
         serverDeclarationView.setServerDeclarationListener(serverDeclarationListener);
+        controllerView.setControllerListener(controllerListener);
     }
 
     private final CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
