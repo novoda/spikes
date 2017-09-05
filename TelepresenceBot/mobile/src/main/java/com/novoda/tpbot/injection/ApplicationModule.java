@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 
 import com.novoda.tpbot.LastServerPersistence;
 import com.novoda.tpbot.LastServerPreferences;
+import com.novoda.tpbot.bot.BotSubcomponent;
 import com.novoda.tpbot.human.HumanSubcomponent;
 import com.novoda.tpbot.landing.LandingSubcomponent;
 
@@ -15,7 +16,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
-@Module(subcomponents = {LandingSubcomponent.class, HumanSubcomponent.class})
+@Module(subcomponents = {LandingSubcomponent.class, HumanSubcomponent.class, BotSubcomponent.class})
 public class ApplicationModule {
 
     @Provides

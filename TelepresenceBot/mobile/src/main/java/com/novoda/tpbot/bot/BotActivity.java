@@ -21,7 +21,6 @@ import com.novoda.tpbot.FeatureSelectionPersistence;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServerDeclarationListener;
 import com.novoda.tpbot.bot.device.DeviceConnection;
-import com.novoda.tpbot.bot.device.usb.UsbDeviceConnection;
 import com.novoda.tpbot.bot.menu.BotMenuFeatureSelectionController;
 import com.novoda.tpbot.bot.movement.MovementServiceBinder;
 import com.novoda.tpbot.bot.service.BotServiceBinder;
@@ -32,6 +31,10 @@ import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.tpbot.controls.ServerDeclarationView;
+
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 
 public class BotActivity extends AppCompatActivity implements BotView, DeviceConnection.DeviceConnectionListener {
 
@@ -48,14 +51,17 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
     private FeatureSelectionPersistence videoCallFeature;
     private FeatureSelectionController<Menu, MenuItem> featureSelectionController;
 
+    @Inject
+    DeviceConnection deviceConnection;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_bot);
+        AndroidInjection.inject(this);
 
         videoCallFeature = VideoCallSharedPreferencesPersistence.newInstance(this);
         FeatureSelectionPersistence serverConnectionFeature = ServiceConnectionSharedPreferencesPersistence.newInstance(this);
-
-        setContentView(R.layout.activity_bot);
 
         debugView = Views.findById(this, R.id.bot_controller_debug_view);
         switchableView = Views.findById(this, R.id.bot_switchable_view);
@@ -71,8 +77,6 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
 
         AccessibilityManager accessibilityManager = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
         automationChecker = new AutomationChecker(accessibilityManager);
-
-        DeviceConnection deviceConnection = UsbDeviceConnection.newInstance(getApplicationContext(), this);
 
         botServiceBinder = new BotServiceBinder(getApplicationContext());
         movementServiceBinder = new MovementServiceBinder(getApplicationContext(), deviceConnection);
