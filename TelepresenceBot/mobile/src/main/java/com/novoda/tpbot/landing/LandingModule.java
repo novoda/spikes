@@ -19,11 +19,6 @@ import dagger.Provides;
 public class LandingModule {
 
     @Provides
-    MenuInflater provideMenuInflater(Context context) {
-        return new MenuInflater(context);
-    }
-
-    @Provides
     FeatureSelectionController<Menu, MenuItem> provideController(Context context, MenuInflater menuInflater) {
         SparseArray<FeatureSelectionPersistence> features = new SparseArray<>();
         features.put(R.id.video_call_menu_item, VideoCallSharedPreferencesPersistence.newInstance(context));

@@ -1,6 +1,5 @@
 package com.novoda.tpbot.bot.menu;
 
-import android.content.Context;
 import android.support.annotation.MenuRes;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,13 +21,7 @@ public final class BotMenuFeatureSelectionController implements FeatureSelection
     private final Toaster toaster;
     private final ConnectedDevicesFetcher connectedDevicesFetcher;
 
-    public static FeatureSelectionController<Menu, MenuItem> createFrom(Context context, ConnectedDevicesFetcher connectedDevicesFetcher) {
-        MenuInflater menuInflater = new MenuInflater(context);
-        Toaster toaster = Toaster.newInstance(context);
-        return new BotMenuFeatureSelectionController(menuInflater, toaster, connectedDevicesFetcher);
-    }
-
-    private BotMenuFeatureSelectionController(MenuInflater menuInflater, Toaster toaster, ConnectedDevicesFetcher connectedDevicesFetcher) {
+    public BotMenuFeatureSelectionController(MenuInflater menuInflater, Toaster toaster, ConnectedDevicesFetcher connectedDevicesFetcher) {
         this.menuInflater = menuInflater;
         this.toaster = toaster;
         this.connectedDevicesFetcher = connectedDevicesFetcher;
