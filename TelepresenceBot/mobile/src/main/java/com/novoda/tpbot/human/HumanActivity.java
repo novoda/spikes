@@ -23,7 +23,9 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
 
     private static final String LAZERS = String.valueOf(Character.toChars(0x1F4A5));
 
-    private SelfDestructingMessageView debugView;
+    @Inject
+    SelfDestructingMessageView debugView;
+
     private SwitchableView switchableView;
     private CommandRepeater commandRepeater;
 
@@ -33,10 +35,9 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AndroidInjection.inject(this);
         setContentView(R.layout.activity_human);
+        AndroidInjection.inject(this);
 
-        debugView = Views.findById(this, R.id.bot_controller_debug_view);
         switchableView = Views.findById(this, R.id.bot_switchable_view);
 
         Handler handler = new Handler();
