@@ -4,7 +4,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 
 import com.novoda.tpbot.bot.BotView;
 import com.novoda.tpbot.controls.LastServerPersistence;
@@ -40,7 +42,8 @@ public class BotServiceBinder {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            LastServerPersistence lastServerPersistence = LastServerPreferences.newInstance(context);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            LastServerPersistence lastServerPersistence = new LastServerPreferences(sharedPreferences);
             BotPresenter botPresenter = new BotPresenter(
                     SocketIOTelepresenceService.getInstance(),
                     botView,
