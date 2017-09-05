@@ -1,8 +1,10 @@
 package com.novoda.tpbot.bot.device.usb;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.hardware.usb.UsbManager;
 
+import com.novoda.tpbot.bot.device.ConnectedDevicesFetcher;
 import com.novoda.tpbot.bot.device.DeviceConnection;
 
 import dagger.Module;
@@ -27,6 +29,11 @@ public class UsbDeviceModule {
                 serialPortMonitor,
                 usbPermissionRequester
         );
+    }
+
+    @Provides
+    ConnectedDevicesFetcher provideConnectedDevicesFetcher(UsbManager usbManager, Resources resources) {
+        return new ConnectedUsbDevicesFetcher(usbManager, resources);
     }
 
 }

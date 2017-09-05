@@ -3,6 +3,8 @@ package com.novoda.tpbot.injection;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.hardware.usb.UsbManager;
 import android.preference.PreferenceManager;
 
 import com.novoda.tpbot.LastServerPersistence;
@@ -33,6 +35,16 @@ public class ApplicationModule {
     @Provides
     LastServerPersistence provideLastServerPersistence(SharedPreferences sharedPreferences) {
         return new LastServerPreferences(sharedPreferences);
+    }
+
+    @Provides
+    UsbManager provideUsbManager(Context context) {
+        return (UsbManager) context.getSystemService(Context.USB_SERVICE);
+    }
+
+    @Provides
+    Resources provideResources(Context context) {
+        return context.getResources();
     }
 
 }

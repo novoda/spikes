@@ -5,19 +5,21 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 
 import com.novoda.tpbot.R;
+import com.novoda.tpbot.bot.device.ConnectedDevicesFetcher;
 
 import java.util.HashMap;
 
-public class ConnectedUsbDevicesFetcher {
+class ConnectedUsbDevicesFetcher implements ConnectedDevicesFetcher {
 
     private final UsbManager usbManager;
     private final Resources resources;
 
-    public ConnectedUsbDevicesFetcher(UsbManager usbManager, Resources resources) {
+    ConnectedUsbDevicesFetcher(UsbManager usbManager, Resources resources) {
         this.usbManager = usbManager;
         this.resources = resources;
     }
 
+    @Override
     public String fetchAsString() {
         HashMap<String, UsbDevice> devices = usbManager.getDeviceList();
         StringBuilder builder = new StringBuilder();

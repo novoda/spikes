@@ -1,7 +1,6 @@
 package com.novoda.tpbot.bot.menu;
 
 import android.content.Context;
-import android.hardware.usb.UsbManager;
 import android.support.annotation.MenuRes;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,7 +9,7 @@ import android.view.MenuItem;
 import com.novoda.notils.logger.toast.Toaster;
 import com.novoda.tpbot.FeatureSelectionController;
 import com.novoda.tpbot.R;
-import com.novoda.tpbot.bot.device.usb.ConnectedUsbDevicesFetcher;
+import com.novoda.tpbot.bot.device.ConnectedDevicesFetcher;
 
 public final class BotMenuFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {
 
@@ -21,20 +20,18 @@ public final class BotMenuFeatureSelectionController implements FeatureSelection
 
     private final MenuInflater menuInflater;
     private final Toaster toaster;
-    private final ConnectedUsbDevicesFetcher connectedUsbDevicesFetcher;
+    private final ConnectedDevicesFetcher connectedDevicesFetcher;
 
-    public static FeatureSelectionController<Menu, MenuItem> createFrom(Context context) {
-        UsbManager manager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
-        ConnectedUsbDevicesFetcher connectedUsbDevicesFetcher = new ConnectedUsbDevicesFetcher(manager, context.getResources());
+    public static FeatureSelectionController<Menu, MenuItem> createFrom(Context context, ConnectedDevicesFetcher connectedDevicesFetcher) {
         MenuInflater menuInflater = new MenuInflater(context);
         Toaster toaster = Toaster.newInstance(context);
-        return new BotMenuFeatureSelectionController(menuInflater, toaster, connectedUsbDevicesFetcher);
+        return new BotMenuFeatureSelectionController(menuInflater, toaster, connectedDevicesFetcher);
     }
 
-    private BotMenuFeatureSelectionController(MenuInflater menuInflater, Toaster toaster, ConnectedUsbDevicesFetcher connectedUsbDevicesFetcher) {
+    private BotMenuFeatureSelectionController(MenuInflater menuInflater, Toaster toaster, ConnectedDevicesFetcher connectedDevicesFetcher) {
         this.menuInflater = menuInflater;
         this.toaster = toaster;
-        this.connectedUsbDevicesFetcher = connectedUsbDevicesFetcher;
+        this.connectedDevicesFetcher = connectedDevicesFetcher;
     }
 
     @Override
@@ -48,7 +45,7 @@ public final class BotMenuFeatureSelectionController implements FeatureSelection
             throw new IllegalStateException("You must check if data is present before using handleFeatureToggle().");
         }
 
-        toaster.popBurntToast(connectedUsbDevicesFetcher.fetchAsString());
+        toaster.popBurntToast(connectedDevicesFetcher.fetchAsString());
     }
 
     @Override

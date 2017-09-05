@@ -20,6 +20,7 @@ import com.novoda.tpbot.FeatureSelectionController;
 import com.novoda.tpbot.FeatureSelectionPersistence;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServerDeclarationListener;
+import com.novoda.tpbot.bot.device.ConnectedDevicesFetcher;
 import com.novoda.tpbot.bot.device.DeviceConnection;
 import com.novoda.tpbot.bot.menu.BotMenuFeatureSelectionController;
 import com.novoda.tpbot.bot.movement.MovementServiceBinder;
@@ -53,6 +54,8 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
 
     @Inject
     DeviceConnection deviceConnection;
+    @Inject
+    ConnectedDevicesFetcher connectedDevicesFetcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +84,7 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
         botServiceBinder = new BotServiceBinder(getApplicationContext());
         movementServiceBinder = new MovementServiceBinder(getApplicationContext(), deviceConnection);
 
-        featureSelectionController = BotMenuFeatureSelectionController.createFrom(this);
+        featureSelectionController = BotMenuFeatureSelectionController.createFrom(this, connectedDevicesFetcher);
 
         if (!serverConnectionFeature.isFeatureEnabled()) {
             switchableView.setDisplayedChild(1);
