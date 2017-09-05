@@ -1,6 +1,6 @@
 package com.novoda.tpbot.landing;
 
-import android.app.Application;
+import android.content.Context;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,10 +19,15 @@ import dagger.Provides;
 public class LandingModule {
 
     @Provides
-    FeatureSelectionController<Menu, MenuItem> provideController(Application application, MenuInflater menuInflater) {
+    MenuInflater provideMenuInflater(Context context) {
+        return new MenuInflater(context);
+    }
+
+    @Provides
+    FeatureSelectionController<Menu, MenuItem> provideController(Context context, MenuInflater menuInflater) {
         SparseArray<FeatureSelectionPersistence> features = new SparseArray<>();
-        features.put(R.id.video_call_menu_item, VideoCallSharedPreferencesPersistence.newInstance(application.getApplicationContext()));
-        features.put(R.id.server_connection_menu_item, ServiceConnectionSharedPreferencesPersistence.newInstance(application.getApplicationContext()));
+        features.put(R.id.video_call_menu_item, VideoCallSharedPreferencesPersistence.newInstance(context));
+        features.put(R.id.server_connection_menu_item, ServiceConnectionSharedPreferencesPersistence.newInstance(context));
 
         return new LandingMenuFeatureSelectionController(menuInflater, features);
     }
