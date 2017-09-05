@@ -7,11 +7,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.novoda.tpbot.FeatureSelectionController;
+import com.novoda.tpbot.FeatureSelectionPersistence;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.bot.service.ServiceConnectionSharedPreferencesPersistence;
 import com.novoda.tpbot.bot.video.calling.VideoCallSharedPreferencesPersistence;
-import com.novoda.tpbot.FeatureSelectionController;
-import com.novoda.tpbot.FeatureSelectionPersistence;
 
 public final class LandingMenuFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {
 
@@ -21,9 +21,7 @@ public final class LandingMenuFeatureSelectionController implements FeatureSelec
     private final MenuInflater menuInflater;
     private final SparseArray<FeatureSelectionPersistence> features;
 
-    public static FeatureSelectionController<Menu, MenuItem> createFrom(Context context) {
-        MenuInflater menuInflater = new MenuInflater(context);
-
+    public static FeatureSelectionController<Menu, MenuItem> createFrom(MenuInflater menuInflater, Context context) {
         SparseArray<FeatureSelectionPersistence> features = new SparseArray<>();
         features.put(R.id.video_call_menu_item, VideoCallSharedPreferencesPersistence.newInstance(context));
         features.put(R.id.server_connection_menu_item, ServiceConnectionSharedPreferencesPersistence.newInstance(context));
