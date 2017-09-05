@@ -1,10 +1,13 @@
 package com.novoda.tpbot.human;
 
+import android.os.Handler;
+
 import com.novoda.notils.caster.Views;
 import com.novoda.support.SelfDestructingMessageView;
 import com.novoda.support.SwitchableView;
 import com.novoda.tpbot.LastServerPersistence;
 import com.novoda.tpbot.R;
+import com.novoda.tpbot.controls.CommandRepeater;
 
 import dagger.Module;
 import dagger.Provides;
@@ -30,6 +33,11 @@ public class HumanModule {
     @Provides
     SwitchableView provideSwitchableView(HumanActivity humanActivity) {
         return Views.findById(humanActivity, R.id.bot_switchable_view);
+    }
+
+    @Provides
+    CommandRepeater provideCommandRepeater() {
+        return new CommandRepeater(new Handler());
     }
 
     @Provides
