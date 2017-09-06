@@ -15,7 +15,7 @@
     android:layout_weight="50"
     tools:text="This is some text yo" />
 
-  <com.novoda.support.SwitchableView
+  <com.novoda.tpbot.controls.SwitchableView
     android:id="@+id/bot_switchable_view"
     android:layout_width="match_parent"
     android:layout_height="0dp"

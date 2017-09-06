@@ -1,4 +1,4 @@
-package com.novoda.support;
+package com.novoda.tpbot.controls;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -12,6 +12,17 @@ import com.novoda.tpbot.R;
 public class SwitchableView extends ViewSwitcher {
 
     private static final int NOT_SET = -1;
+
+    public enum View {
+        SERVER_DECLARATION_VIEW(0),
+        CONTROLLER_VIEW(1);
+
+        private final int viewIndex;
+
+        View(int viewIndex) {
+            this.viewIndex = viewIndex;
+        }
+    }
 
     public SwitchableView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -43,6 +54,10 @@ public class SwitchableView extends ViewSwitcher {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         layoutInflater.inflate(baseLayoutId, this, true);
         layoutInflater.inflate(layoutToSwitchWithId, this, true);
+    }
+
+    public void switchTo(View view) {
+        setDisplayedChild(view.viewIndex);
     }
 
 }

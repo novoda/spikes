@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.novoda.support.SelfDestructingMessageView;
-import com.novoda.support.SwitchableView;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServiceDeclarationListener;
@@ -12,10 +11,14 @@ import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.tpbot.controls.ServerDeclarationView;
+import com.novoda.tpbot.controls.SwitchableView;
 
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
+
+import static com.novoda.tpbot.controls.SwitchableView.View.CONTROLLER_VIEW;
+import static com.novoda.tpbot.controls.SwitchableView.View.SERVER_DECLARATION_VIEW;
 
 public class HumanActivity extends AppCompatActivity implements HumanView, ControllerListener, ServiceDeclarationListener, CommandRepeater.Listener {
 
@@ -57,19 +60,19 @@ public class HumanActivity extends AppCompatActivity implements HumanView, Contr
     @Override
     public void onConnect(String message) {
         debugView.showPermanently(getString(R.string.connected));
-        switchableView.setDisplayedChild(1);
+        switchableView.switchTo(CONTROLLER_VIEW);
     }
 
     @Override
     public void onDisconnect() {
         debugView.showPermanently(getString(R.string.disconnected));
-        switchableView.setDisplayedChild(0);
+        switchableView.switchTo(SERVER_DECLARATION_VIEW);
     }
 
     @Override
     public void onError(String message) {
         debugView.showPermanently(message);
-        switchableView.setDisplayedChild(0);
+        switchableView.switchTo(SERVER_DECLARATION_VIEW);
     }
 
     @Override

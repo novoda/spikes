@@ -14,7 +14,6 @@ import android.view.accessibility.AccessibilityManager;
 
 import com.novoda.notils.caster.Views;
 import com.novoda.support.SelfDestructingMessageView;
-import com.novoda.support.SwitchableView;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.FeatureSelectionController;
 import com.novoda.tpbot.FeatureSelectionPersistence;
@@ -30,10 +29,14 @@ import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.tpbot.controls.ServerDeclarationView;
+import com.novoda.tpbot.controls.SwitchableView;
 
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
+
+import static com.novoda.tpbot.controls.SwitchableView.View.CONTROLLER_VIEW;
+import static com.novoda.tpbot.controls.SwitchableView.View.SERVER_DECLARATION_VIEW;
 
 public class BotActivity extends AppCompatActivity implements BotView, DeviceConnection.DeviceConnectionListener {
 
@@ -83,7 +86,7 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
         movementServiceBinder = new MovementServiceBinder(getApplicationContext(), deviceConnection);
 
         if (!serverConnectionFeature.isFeatureEnabled()) {
-            switchableView.setDisplayedChild(1);
+            switchableView.switchTo(CONTROLLER_VIEW);
         }
     }
 
@@ -179,7 +182,7 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
     @Override
     public void onConnect(String room, String serverAddress) {
         debugView.showPermanently(getString(R.string.connected));
-        switchableView.setDisplayedChild(1);
+        switchableView.switchTo(CONTROLLER_VIEW);
 
         if (videoCallFeature.isFeatureEnabled()) {
             joinHangoutRoom(room);
@@ -196,13 +199,13 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
     @Override
     public void onDisconnect() {
         debugView.showPermanently(getString(R.string.disconnected));
-        switchableView.setDisplayedChild(0);
+        switchableView.switchTo(SERVER_DECLARATION_VIEW);
     }
 
     @Override
     public void onError(String message) {
         debugView.showPermanently(message);
-        switchableView.setDisplayedChild(0);
+        switchableView.switchTo(SERVER_DECLARATION_VIEW);
     }
 
     @Override
