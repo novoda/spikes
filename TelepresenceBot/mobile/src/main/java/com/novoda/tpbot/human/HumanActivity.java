@@ -17,7 +17,7 @@ import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
 
-public class HumanActivity extends AppCompatActivity implements HumanView, ControllerListener, ServiceDeclarationListener {
+public class HumanActivity extends AppCompatActivity implements HumanView, ControllerListener, ServiceDeclarationListener, CommandRepeater.Listener {
 
     private static final String LAZERS = String.valueOf(Character.toChars(0x1F4A5));
 
@@ -41,14 +41,12 @@ public class HumanActivity extends AppCompatActivity implements HumanView, Contr
         AndroidInjection.inject(this);
     }
 
-    private final CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
-        @Override
-        public void onCommandRepeated(String command) {
-            debugView.showTimed(command);
-            Direction direction = Direction.from(command);
-            presenter.moveIn(direction);
-        }
-    };
+    @Override
+    public void onCommandRepeated(String command) {
+        debugView.showTimed(command);
+        Direction direction = Direction.from(command);
+        presenter.moveIn(direction);
+    }
 
     @Override
     public void onServiceConnected(String serverAddress) {
@@ -88,12 +86,12 @@ public class HumanActivity extends AppCompatActivity implements HumanView, Contr
 
     @Override
     public void onDirectionPressed(Direction direction) {
-        commandRepeater.startRepeatingCommand(direction.rawDirection(), commandRepeatedListener);
+        commandRepeater.startRepeatingCommand(direction.rawDirection());
     }
 
     @Override
     public void onDirectionReleased(Direction direction) {
-        commandRepeater.stopRepeatingCommand();
+        commandRepeater.stopRepeatingCommand(direction.rawDirection());
     }
 
     @Override

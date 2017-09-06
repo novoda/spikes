@@ -40,6 +40,11 @@ public class HumanModule {
     }
 
     @Provides
+    CommandRepeater.Listener provideCommandRepeaterListener(HumanActivity humanActivity) {
+        return humanActivity;
+    }
+
+    @Provides
     SelfDestructingMessageView provideSelfDestructingMessageView(HumanActivity humanActivity) {
         return Views.findById(humanActivity, R.id.bot_controller_debug_view);
     }
@@ -64,8 +69,8 @@ public class HumanModule {
     }
 
     @Provides
-    CommandRepeater provideCommandRepeater() {
-        return new CommandRepeater(new Handler());
+    CommandRepeater provideCommandRepeater(CommandRepeater.Listener listener) {
+        return new CommandRepeater(listener, new Handler());
     }
 
     @Provides
