@@ -8,6 +8,7 @@ import com.novoda.support.SwitchableView;
 import com.novoda.tpbot.LastServerPersistence;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.controls.CommandRepeater;
+import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.tpbot.controls.ServerDeclarationView;
 
@@ -28,6 +29,11 @@ public class HumanModule {
     }
 
     @Provides
+    ControllerListener provideControllerListener(HumanActivity humanActivity) {
+        return humanActivity;
+    }
+
+    @Provides
     SelfDestructingMessageView provideSelfDestructingMessageView(HumanActivity humanActivity) {
         return Views.findById(humanActivity, R.id.bot_controller_debug_view);
     }
@@ -38,8 +44,10 @@ public class HumanModule {
     }
 
     @Provides
-    ControllerView provideControllerView(SwitchableView switchableView) {
-        return Views.findById(switchableView, R.id.bot_controller_direction_view);
+    ControllerView provideControllerView(SwitchableView switchableView, ControllerListener controllerListener) {
+        ControllerView controllerView = Views.findById(switchableView, R.id.bot_controller_direction_view);
+        controllerView.setControllerListener(controllerListener);
+        return controllerView;
     }
 
     @Provides

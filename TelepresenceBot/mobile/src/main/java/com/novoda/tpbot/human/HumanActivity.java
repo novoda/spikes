@@ -17,7 +17,7 @@ import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
 
-public class HumanActivity extends AppCompatActivity implements HumanView {
+public class HumanActivity extends AppCompatActivity implements HumanView, ControllerListener {
 
     private static final String LAZERS = String.valueOf(Character.toChars(0x1F4A5));
 
@@ -41,7 +41,6 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         AndroidInjection.inject(this);
 
         serverDeclarationView.setServerDeclarationListener(serverDeclarationListener);
-        controllerView.setControllerListener(controllerListener);
     }
 
     private final CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
@@ -50,29 +49,6 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
             debugView.showTimed(command);
             Direction direction = Direction.from(command);
             presenter.moveIn(direction);
-        }
-    };
-
-    private final ControllerListener controllerListener = new ControllerListener() {
-
-        @Override
-        public void onDirectionPressed(Direction direction) {
-            commandRepeater.startRepeatingCommand(direction.rawDirection(), commandRepeatedListener);
-        }
-
-        @Override
-        public void onDirectionReleased(Direction direction) {
-            commandRepeater.stopRepeatingCommand();
-        }
-
-        @Override
-        public void onLazersFired() {
-            // no-op for debug
-        }
-
-        @Override
-        public void onLazersReleased() {
-            // no-op for debug
         }
     };
 
@@ -114,4 +90,23 @@ public class HumanActivity extends AppCompatActivity implements HumanView {
         super.onStop();
     }
 
+    @Override
+    public void onDirectionPressed(Direction direction) {
+        commandRepeater.startRepeatingCommand(direction.rawDirection(), commandRepeatedListener);
+    }
+
+    @Override
+    public void onDirectionReleased(Direction direction) {
+        commandRepeater.stopRepeatingCommand();
+    }
+
+    @Override
+    public void onLazersFired() {
+        // no-op for debug
+    }
+
+    @Override
+    public void onLazersReleased() {
+        // no-op for debug
+    }
 }
