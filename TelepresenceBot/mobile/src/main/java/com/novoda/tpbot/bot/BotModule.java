@@ -8,7 +8,6 @@ import com.novoda.notils.logger.toast.Toaster;
 import com.novoda.tpbot.FeatureSelectionController;
 import com.novoda.tpbot.bot.device.ConnectedDevicesFetcher;
 import com.novoda.tpbot.bot.device.DeviceConnection;
-import com.novoda.tpbot.bot.menu.BotMenuFeatureSelectionController;
 
 import dagger.Module;
 import dagger.Provides;

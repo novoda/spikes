@@ -1,4 +1,4 @@
-package com.novoda.tpbot.bot.menu;
+package com.novoda.tpbot.bot;
 
 import android.support.annotation.MenuRes;
 import android.view.Menu;
@@ -10,7 +10,7 @@ import com.novoda.tpbot.FeatureSelectionController;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.bot.device.ConnectedDevicesFetcher;
 
-public final class BotMenuFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {
+final class BotMenuFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {
 
     @MenuRes
     private static final int FEATURE_MENU_RESOURCE = R.menu.bot_menu;
@@ -21,7 +21,7 @@ public final class BotMenuFeatureSelectionController implements FeatureSelection
     private final Toaster toaster;
     private final ConnectedDevicesFetcher connectedDevicesFetcher;
 
-    public BotMenuFeatureSelectionController(MenuInflater menuInflater, Toaster toaster, ConnectedDevicesFetcher connectedDevicesFetcher) {
+    BotMenuFeatureSelectionController(MenuInflater menuInflater, Toaster toaster, ConnectedDevicesFetcher connectedDevicesFetcher) {
         this.menuInflater = menuInflater;
         this.toaster = toaster;
         this.connectedDevicesFetcher = connectedDevicesFetcher;
