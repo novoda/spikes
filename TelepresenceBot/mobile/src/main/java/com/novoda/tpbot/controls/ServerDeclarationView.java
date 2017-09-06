@@ -11,11 +11,11 @@ import android.widget.LinearLayout;
 import com.novoda.notils.caster.Views;
 import com.novoda.tpbot.LastServerPreferences;
 import com.novoda.tpbot.R;
-import com.novoda.tpbot.ServerDeclarationListener;
+import com.novoda.tpbot.ServiceDeclarationListener;
 
 public class ServerDeclarationView extends LinearLayout {
 
-    private ServerDeclarationListener serverDeclarationListener = ServerDeclarationListener.NO_OP;
+    private ServiceDeclarationListener serviceDeclarationListener = ServiceDeclarationListener.NO_OP;
 
     public ServerDeclarationView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -33,7 +33,7 @@ public class ServerDeclarationView extends LinearLayout {
             @Override
             public void onClick(View view) {
                 String serverAddress = serverAddressDeclaration.getText().toString();
-                serverDeclarationListener.onConnect(serverAddress);
+                serviceDeclarationListener.onServiceConnected(serverAddress);
             }
         });
 
@@ -44,8 +44,8 @@ public class ServerDeclarationView extends LinearLayout {
         }
     }
 
-    public void setServerDeclarationListener(ServerDeclarationListener serverDeclarationListener) {
-        this.serverDeclarationListener = serverDeclarationListener;
+    public void setServiceDeclarationListener(ServiceDeclarationListener serviceDeclarationListener) {
+        this.serviceDeclarationListener = serviceDeclarationListener;
     }
 
 }

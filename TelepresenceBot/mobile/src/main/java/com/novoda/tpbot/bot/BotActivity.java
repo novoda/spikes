@@ -19,7 +19,7 @@ import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.FeatureSelectionController;
 import com.novoda.tpbot.FeatureSelectionPersistence;
 import com.novoda.tpbot.R;
-import com.novoda.tpbot.ServerDeclarationListener;
+import com.novoda.tpbot.ServiceDeclarationListener;
 import com.novoda.tpbot.bot.device.DeviceConnection;
 import com.novoda.tpbot.bot.movement.MovementServiceBinder;
 import com.novoda.tpbot.bot.service.BotServiceBinder;
@@ -71,7 +71,7 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
         controllerView.setControllerListener(controllerListener);
 
         ServerDeclarationView serverDeclarationView = Views.findById(switchableView, R.id.bot_server_declaration_view);
-        serverDeclarationView.setServerDeclarationListener(serverDeclarationListener);
+        serverDeclarationView.setServiceDeclarationListener(serviceDeclarationListener);
 
         Handler handler = new Handler();
         commandRepeater = new CommandRepeater(handler);
@@ -118,10 +118,10 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
         }
     };
 
-    private final ServerDeclarationListener serverDeclarationListener = new ServerDeclarationListener() {
+    private final ServiceDeclarationListener serviceDeclarationListener = new ServiceDeclarationListener() {
 
         @Override
-        public void onConnect(String serverAddress) {
+        public void onServiceConnected(String serverAddress) {
             debugView.showPermanently(getString(R.string.connecting_ellipsis));
             botServiceBinder.bind(BotActivity.this, serverAddress);
         }

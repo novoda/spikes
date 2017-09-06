@@ -7,6 +7,7 @@ import com.novoda.support.SelfDestructingMessageView;
 import com.novoda.support.SwitchableView;
 import com.novoda.tpbot.LastServerPersistence;
 import com.novoda.tpbot.R;
+import com.novoda.tpbot.ServiceDeclarationListener;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
@@ -34,6 +35,11 @@ public class HumanModule {
     }
 
     @Provides
+    ServiceDeclarationListener provideServiceDeclarationListener(HumanActivity humanActivity) {
+        return humanActivity;
+    }
+
+    @Provides
     SelfDestructingMessageView provideSelfDestructingMessageView(HumanActivity humanActivity) {
         return Views.findById(humanActivity, R.id.bot_controller_debug_view);
     }
@@ -51,8 +57,10 @@ public class HumanModule {
     }
 
     @Provides
-    ServerDeclarationView provideServerDeclarationView(SwitchableView switchableView) {
-        return Views.findById(switchableView, R.id.bot_server_declaration_view);
+    ServerDeclarationView provideServerDeclarationView(SwitchableView switchableView, ServiceDeclarationListener serviceDeclarationListener) {
+        ServerDeclarationView serverDeclarationView = Views.findById(switchableView, R.id.bot_server_declaration_view);
+        serverDeclarationView.setServiceDeclarationListener(serviceDeclarationListener);
+        return serverDeclarationView;
     }
 
     @Provides

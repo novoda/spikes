@@ -7,7 +7,7 @@ import com.novoda.support.SelfDestructingMessageView;
 import com.novoda.support.SwitchableView;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
-import com.novoda.tpbot.ServerDeclarationListener;
+import com.novoda.tpbot.ServiceDeclarationListener;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
@@ -17,7 +17,7 @@ import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
 
-public class HumanActivity extends AppCompatActivity implements HumanView, ControllerListener {
+public class HumanActivity extends AppCompatActivity implements HumanView, ControllerListener, ServiceDeclarationListener {
 
     private static final String LAZERS = String.valueOf(Character.toChars(0x1F4A5));
 
@@ -39,8 +39,6 @@ public class HumanActivity extends AppCompatActivity implements HumanView, Contr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_human);
         AndroidInjection.inject(this);
-
-        serverDeclarationView.setServerDeclarationListener(serverDeclarationListener);
     }
 
     private final CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
@@ -52,13 +50,11 @@ public class HumanActivity extends AppCompatActivity implements HumanView, Contr
         }
     };
 
-    private final ServerDeclarationListener serverDeclarationListener = new ServerDeclarationListener() {
-        @Override
-        public void onConnect(String serverAddress) {
-            debugView.showPermanently(getString(R.string.connecting_ellipsis));
-            presenter.startPresenting(serverAddress);
-        }
-    };
+    @Override
+    public void onServiceConnected(String serverAddress) {
+        debugView.showPermanently(getString(R.string.connecting_ellipsis));
+        presenter.startPresenting(serverAddress);
+    }
 
     @Override
     public void onConnect(String message) {
