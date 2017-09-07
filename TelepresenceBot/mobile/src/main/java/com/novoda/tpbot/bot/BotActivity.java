@@ -1,6 +1,5 @@
 package com.novoda.tpbot.bot;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.accessibility.AccessibilityManager;
 
 import com.novoda.support.SelfDestructingMessageView;
 import com.novoda.tpbot.Direction;
@@ -43,15 +41,14 @@ public class BotActivity extends AppCompatActivity implements BotView,
 
     private static final String HANGOUTS_BASE_URL = "https://hangouts.google.com/hangouts/_/novoda.com/";
 
-    private BotServiceBinder botServiceBinder;
-    private MovementServiceBinder movementServiceBinder;
-
+    @Inject
+    MovementServiceBinder movementServiceBinder;
+    @Inject
+    BotServiceBinder botServiceBinder;
     @Inject
     SelfDestructingMessageView debugView;
     @Inject
     SwitchableView switchableView;
-    @Inject
-    DeviceConnection deviceConnection;
     @Inject
     CommandRepeater commandRepeater;
     @Inject
@@ -72,12 +69,6 @@ public class BotActivity extends AppCompatActivity implements BotView,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bot);
         AndroidInjection.inject(this);
-
-        AccessibilityManager accessibilityManager = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
-        automationChecker = new AutomationChecker(accessibilityManager);
-
-        botServiceBinder = new BotServiceBinder(getApplicationContext());
-        movementServiceBinder = new MovementServiceBinder(getApplicationContext(), deviceConnection);
 
         if (!serviceConnectionFeature.isFeatureEnabled()) {
             switchableView.switchTo(CONTROLLER_VIEW);

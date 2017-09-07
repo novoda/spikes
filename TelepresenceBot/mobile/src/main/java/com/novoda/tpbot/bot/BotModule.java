@@ -1,5 +1,6 @@
 package com.novoda.tpbot.bot;
 
+import android.content.Context;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +15,8 @@ import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServiceDeclarationListener;
 import com.novoda.tpbot.bot.device.ConnectedDevicesFetcher;
 import com.novoda.tpbot.bot.device.DeviceConnection;
+import com.novoda.tpbot.bot.movement.MovementServiceBinder;
+import com.novoda.tpbot.bot.service.BotServiceBinder;
 import com.novoda.tpbot.bot.video.calling.AutomationChecker;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
@@ -86,6 +89,16 @@ public class BotModule {
     @Provides
     AutomationChecker provideAutomationChecker(AccessibilityManager accessibilityManager) {
         return new AutomationChecker(accessibilityManager);
+    }
+
+    @Provides
+    BotServiceBinder provideBotServiceBinder(Context context) {
+        return new BotServiceBinder(context);
+    }
+
+    @Provides
+    MovementServiceBinder provideMovementServiceBinder(Context context, DeviceConnection deviceConnection) {
+        return new MovementServiceBinder(context, deviceConnection);
     }
 
 }
