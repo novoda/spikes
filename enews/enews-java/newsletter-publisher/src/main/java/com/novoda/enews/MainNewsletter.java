@@ -18,7 +18,7 @@ public class MainNewsletter {
         String mailChimpToken = args[1];
         Scraper scraper = new Scraper.Factory().newInstance(slackToken);
         HtmlGenerator htmlGenerator = new HtmlGenerator.Factory().newInstance();
-        ArticleEditor articleEditor = new ArticleEditor();
+        ArticleEditor articleEditor = new ArticleEditor.Factory().newInstance();
         NewsletterPublisher newsletterPublisher = new NewsletterPublisher.Factory().newInstance(mailChimpToken);
 
         LocalDateTime start = LocalDateTime.now();

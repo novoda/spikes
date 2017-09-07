@@ -54,4 +54,11 @@ public class ArticleEditor {
         return link;
     }
 
+    public static final class Factory {
+
+        public ArticleEditor newInstance() {
+            return new ArticleEditor();
+        }
+
+    }
 }

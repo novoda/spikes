@@ -27,7 +27,7 @@ public class RunnerMain implements RequestHandler<Request, Response> {
         Scraper scraper = new Scraper.Factory().newInstance(slackToken);
         HtmlGenerator htmlGenerator = new HtmlGenerator.Factory().newInstance();
         NewsletterPublisher newsletterPublisher = new NewsletterPublisher.Factory().newInstance(mailChimpApiKey);
-        ArticleEditor articleEditor = new ArticleEditor();
+        ArticleEditor articleEditor = new ArticleEditor.Factory().newInstance();
 
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = LocalDateTime.now().minusDays(7);

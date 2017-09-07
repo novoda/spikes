@@ -16,7 +16,7 @@ public class MainEditor {
         }
         String slackToken = args[0];
         Scraper scraper = new Scraper.Factory().newInstance(slackToken);
-        ArticleEditor articleEditor = new ArticleEditor();
+        ArticleEditor articleEditor = new ArticleEditor.Factory().newInstance();
 
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = LocalDateTime.now().minusDays(7);
