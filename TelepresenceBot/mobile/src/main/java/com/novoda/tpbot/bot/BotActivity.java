@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,11 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.accessibility.AccessibilityManager;
 
-import com.novoda.notils.caster.Views;
 import com.novoda.support.SelfDestructingMessageView;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.FeatureSelectionController;
-import com.novoda.tpbot.FeatureSelectionPersistence;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServiceDeclarationListener;
 import com.novoda.tpbot.bot.device.DeviceConnection;
@@ -38,25 +35,37 @@ import dagger.android.AndroidInjection;
 import static com.novoda.tpbot.controls.SwitchableView.View.CONTROLLER_VIEW;
 import static com.novoda.tpbot.controls.SwitchableView.View.SERVER_DECLARATION_VIEW;
 
-public class BotActivity extends AppCompatActivity implements BotView, DeviceConnection.DeviceConnectionListener {
+public class BotActivity extends AppCompatActivity implements BotView,
+        DeviceConnection.DeviceConnectionListener,
+        ControllerListener,
+        ServiceDeclarationListener,
+        CommandRepeater.Listener {
 
     private static final String HANGOUTS_BASE_URL = "https://hangouts.google.com/hangouts/_/novoda.com/";
 
-    private SelfDestructingMessageView debugView;
-    private SwitchableView switchableView;
-
-    private CommandRepeater commandRepeater;
-    private AutomationChecker automationChecker;
     private BotServiceBinder botServiceBinder;
     private MovementServiceBinder movementServiceBinder;
 
-    private FeatureSelectionPersistence videoCallFeature;
-
+    @Inject
+    SelfDestructingMessageView debugView;
+    @Inject
+    SwitchableView switchableView;
     @Inject
     DeviceConnection deviceConnection;
-
+    @Inject
+    CommandRepeater commandRepeater;
+    @Inject
+    ControllerView controllerView;
+    @Inject
+    ServerDeclarationView serverDeclarationView;
     @Inject
     FeatureSelectionController<Menu, MenuItem> featureSelectionController;
+    @Inject
+    AutomationChecker automationChecker;
+    @Inject
+    VideoCallSharedPreferencesPersistence videoCallFeature;
+    @Inject
+    ServiceConnectionSharedPreferencesPersistence serviceConnectionFeature;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,28 +73,13 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
         setContentView(R.layout.activity_bot);
         AndroidInjection.inject(this);
 
-        videoCallFeature = VideoCallSharedPreferencesPersistence.newInstance(this);
-        FeatureSelectionPersistence serverConnectionFeature = ServiceConnectionSharedPreferencesPersistence.newInstance(this);
-
-        debugView = Views.findById(this, R.id.bot_controller_debug_view);
-        switchableView = Views.findById(this, R.id.bot_switchable_view);
-
-        ControllerView controllerView = Views.findById(this, R.id.bot_controller_direction_view);
-        controllerView.setControllerListener(controllerListener);
-
-        ServerDeclarationView serverDeclarationView = Views.findById(switchableView, R.id.bot_server_declaration_view);
-        serverDeclarationView.setServiceDeclarationListener(serviceDeclarationListener);
-
-        Handler handler = new Handler();
-        commandRepeater = new CommandRepeater(commandRepeatedListener, handler);
-
         AccessibilityManager accessibilityManager = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
         automationChecker = new AutomationChecker(accessibilityManager);
 
         botServiceBinder = new BotServiceBinder(getApplicationContext());
         movementServiceBinder = new MovementServiceBinder(getApplicationContext(), deviceConnection);
 
-        if (!serverConnectionFeature.isFeatureEnabled()) {
+        if (!serviceConnectionFeature.isFeatureEnabled()) {
             switchableView.switchTo(CONTROLLER_VIEW);
         }
     }
@@ -98,44 +92,31 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
         }
     }
 
-    private final ControllerListener controllerListener = new ControllerListener() {
+    @Override
+    public void onDirectionPressed(Direction direction) {
+        commandRepeater.startRepeatingCommand(direction.rawDirection());
+    }
 
-        @Override
-        public void onDirectionPressed(Direction direction) {
-            commandRepeater.startRepeatingCommand(direction.rawDirection());
-        }
+    @Override
+    public void onDirectionReleased(Direction direction) {
+        commandRepeater.stopRepeatingCommand(direction.rawDirection());
+    }
 
-        @Override
-        public void onDirectionReleased(Direction direction) {
-            commandRepeater.stopRepeatingCommand(direction.rawDirection());
-        }
+    @Override
+    public void onLazersFired() {
+        // no-op for debug
+    }
 
-        @Override
-        public void onLazersFired() {
-            // no-op for debug
-        }
+    @Override
+    public void onLazersReleased() {
+        // no-op for debug
+    }
 
-        @Override
-        public void onLazersReleased() {
-            // no-op for debug
-        }
-    };
-
-    private final ServiceDeclarationListener serviceDeclarationListener = new ServiceDeclarationListener() {
-
-        @Override
-        public void onServiceConnected(String serverAddress) {
-            debugView.showPermanently(getString(R.string.connecting_ellipsis));
-            botServiceBinder.bind(BotActivity.this, serverAddress);
-        }
-    };
-
-    private CommandRepeater.Listener commandRepeatedListener = new CommandRepeater.Listener() {
-        @Override
-        public void onCommandRepeated(String command) {
-            // TODO: Send command to the DeviceConnection.
-        }
-    };
+    @Override
+    public void onServiceConnected(String serverAddress) {
+        debugView.showPermanently(getString(R.string.connecting_ellipsis));
+        botServiceBinder.bind(BotActivity.this, serverAddress);
+    }
 
     @Override
     protected void onStart() {
@@ -211,7 +192,6 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
     @Override
     public void moveIn(Direction direction) {
         debugView.showTimed(direction.visualRepresentation());
-        commandRepeatedListener.onCommandRepeated(direction.rawDirection());
     }
 
     @Override
@@ -227,5 +207,11 @@ public class BotActivity extends AppCompatActivity implements BotView, DeviceCon
     @Override
     public void onDataReceived(String data) {
         Log.d(getClass().getSimpleName(), "onDataReceived");
+    }
+
+    @Override
+    public void onCommandRepeated(String command) {
+        debugView.showTimed(command);
+        // TODO: Send command to the DeviceConnection.
     }
 }

@@ -1,25 +1,19 @@
 package com.novoda.tpbot.bot.video.calling;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.novoda.tpbot.FeatureSelectionPersistence;
 
+// TODO: Remove persistence, this is an implementation detail. Should be concerned with "feature" only.
 public final class VideoCallSharedPreferencesPersistence implements FeatureSelectionPersistence {
 
-    private static final String VIDEO_CALL_PREF_NAME = "video_call";
     private static final String VIDEO_CALL_PREFERENCES_ON_OFF_KEY = "video_call_preferences_on_off";
     private static final boolean ON = true;
     private static final boolean OFF = false;
 
     private final SharedPreferences sharedPreferences;
 
-    public static VideoCallSharedPreferencesPersistence newInstance(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(VIDEO_CALL_PREF_NAME, Context.MODE_PRIVATE);
-        return new VideoCallSharedPreferencesPersistence(sharedPreferences);
-    }
-
-    private VideoCallSharedPreferencesPersistence(SharedPreferences sharedPreferences) {
+    public VideoCallSharedPreferencesPersistence(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
     }
 
