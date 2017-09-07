@@ -17,9 +17,9 @@ import com.novoda.tpbot.ServiceDeclarationListener;
 import com.novoda.tpbot.bot.device.DeviceConnection;
 import com.novoda.tpbot.bot.movement.MovementServiceBinder;
 import com.novoda.tpbot.bot.service.BotServiceBinder;
-import com.novoda.tpbot.bot.service.ServiceConnectionSharedPreferencesPersistence;
+import com.novoda.tpbot.bot.service.ServiceConnectionFeature;
 import com.novoda.tpbot.bot.video.calling.AutomationChecker;
-import com.novoda.tpbot.bot.video.calling.VideoCallSharedPreferencesPersistence;
+import com.novoda.tpbot.bot.video.calling.VideoCallFeature;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
@@ -60,9 +60,9 @@ public class BotActivity extends AppCompatActivity implements BotView,
     @Inject
     AutomationChecker automationChecker;
     @Inject
-    VideoCallSharedPreferencesPersistence videoCallFeature;
+    VideoCallFeature videoCallFeature;
     @Inject
-    ServiceConnectionSharedPreferencesPersistence serviceConnectionFeature;
+    ServiceConnectionFeature serviceConnectionFeature;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

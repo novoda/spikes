@@ -6,8 +6,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.novoda.tpbot.FeatureSelection;
 import com.novoda.tpbot.FeatureSelectionController;
-import com.novoda.tpbot.FeatureSelectionPersistence;
 import com.novoda.tpbot.R;
 
 final class LandingMenuFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {
@@ -16,9 +16,9 @@ final class LandingMenuFeatureSelectionController implements FeatureSelectionCon
     private static final int FEATURE_MENU_RESOURCE = R.menu.feature_menu;
 
     private final MenuInflater menuInflater;
-    private final SparseArray<FeatureSelectionPersistence> features;
+    private final SparseArray<FeatureSelection> features;
 
-    LandingMenuFeatureSelectionController(MenuInflater menuInflater, SparseArray<FeatureSelectionPersistence> features) {
+    LandingMenuFeatureSelectionController(MenuInflater menuInflater, SparseArray<FeatureSelection> features) {
         this.menuInflater = menuInflater;
         this.features = features;
     }
@@ -31,25 +31,25 @@ final class LandingMenuFeatureSelectionController implements FeatureSelectionCon
             int key = features.keyAt(index);
 
             MenuItem menuItem = componentToAttachTo.findItem(key);
-            FeatureSelectionPersistence featureSelectionPersistence = features.get(key);
-            menuItem.setChecked(featureSelectionPersistence.isFeatureEnabled());
+            FeatureSelection featureSelection = features.get(key);
+            menuItem.setChecked(featureSelection.isFeatureEnabled());
         }
     }
 
     @Override
     public void handleFeatureToggle(MenuItem featureRepresentation) {
-        FeatureSelectionPersistence featureSelectionPersistence = features.get(featureRepresentation.getItemId());
+        FeatureSelection featureSelection = features.get(featureRepresentation.getItemId());
 
-        if (featureSelectionPersistence == null) {
+        if (featureSelection == null) {
             throw new IllegalStateException("You must check if data is present before using handleFeatureToggle().");
         }
 
-        if (featureSelectionPersistence.isFeatureEnabled()) {
+        if (featureSelection.isFeatureEnabled()) {
             featureRepresentation.setChecked(false);
-            featureSelectionPersistence.setFeatureDisabled();
+            featureSelection.setFeatureDisabled();
         } else {
             featureRepresentation.setChecked(true);
-            featureSelectionPersistence.setFeatureEnabled();
+            featureSelection.setFeatureEnabled();
         }
     }
 
