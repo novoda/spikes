@@ -12,10 +12,20 @@ public class HtmlGenerator {
         new Html(writer) {
             {
                 html();
+                meta().charset("utf-8").end();
+                    head();
+                        style();
+                            text("body { padding: 10px;}"
+                                + "h1 {font: bold 40px/1.5 Helvetica, Verdana, sans-serif; color: #26A3DB;}"
+                                + "li {list-style-type: none; margin: 0; padding: 10px; overflow: auto;}"
+                                + "a {text-decoration: none; color: black;}"
+                                + ""
+                                + ""
+                            );
+                        end();
+                    end();
                      body();
-                        style(" padding: 10px;");
                         h1()
-                            .style("font: bold 40px/1.5 Helvetica, Verdana, sans-serif; color: #26A3DB;")
                             .text("#eNews from the week")
                         .end()
                         .div();
@@ -32,24 +42,27 @@ public class HtmlGenerator {
                 ul();
                 for (Article article : articleStream.collect(Collectors.toList())) {
 
-                    li().style("list-style-type: none; margin: 0; padding: 10px; overflow: auto;")
-                        .a().style("text-decoration: none; color: black;").href(article.getPageLink())
+                    li()
+                        .a().href(article.getPageLink())
                             .div()
                                 .div()
-                                    .style("max-width: 100px")
+                                    .style("max-width: 400px; max-height: 220px;")
                                     .img()
-                                        .style("float: left; margin: 0 15px 0 0; max-width: 100%; width: auto; height: auto;" +
+                                        .style("margin: 0 15px 0 0;" +
+                                                " max-width: 100%; max-height: 220px; width: auto; height: auto;" +
                                                 " object-fit: cover;" +
                                                 " border-radius: 6px; background-color: #fafafa; padding: 10px;")
                                         .src(article.getImage())
                                     .end()
                                 .end()
                                 .p()
-                                    .style("font: bold 20px/1.5 Helvetica, Verdana, sans-serif; color: #2d2d2d;")
+                                    .style("font: bold 18px/1.5 Helvetica, Verdana, sans-serif; color: #2d2d2d;" +
+                                            " width: auto; max-width: 400px;")
                                     .text(article.getPageTitle())
                                 .end()
                                 .p()
-                                    .style("font: 200 14px/1.5 Open Sans, serif;")
+                                    .style("font: 200 14px/1.5 Open Sans, serif;" +
+                                            " width: auto; max-width: 400px;")
                                     .text(article.getText())
                                 .end()
                             .end()
