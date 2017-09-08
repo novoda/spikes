@@ -8,6 +8,12 @@ import java.util.stream.Stream;
 
 public class ArticleEditor {
 
+    private final LinkUnfurler linkUnfurler;
+
+    public ArticleEditor(LinkUnfurler linkUnfurler) {
+        this.linkUnfurler = linkUnfurler;
+    }
+
     public Stream<Article> generateArticle(Stream<ChannelHistory.Message> messageStream) {
         return messageStream.parallel().map(this::generateArticle);
     }
@@ -38,8 +44,7 @@ public class ArticleEditor {
 
     private String generateTitle(ChannelHistory.Message message) {
         try {
-            LinkInfo info = LinkUnfurl.unfurl(message.getPageLink(), 3000);
-            return info.getTitle();
+            return linkUnfurler.unfurl(message.getPageLink()).getTitle();
         } catch (IOException e) {
             return "#eNews link";
         }
@@ -57,7 +62,7 @@ public class ArticleEditor {
     public static final class Factory {
 
         public ArticleEditor newInstance() {
-            return new ArticleEditor();
+            return new ArticleEditor(new LinkUnfurler.Http());
         }
 
     }
