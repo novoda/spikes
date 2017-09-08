@@ -61,8 +61,20 @@ public class ArticleEditor {
 
     public static final class Factory {
 
+        public ArticleEditor newInstance(boolean mock) {
+            if(mock) {
+                return newMockInstance();
+            } else {
+                return newInstance();
+            }
+        }
+
         public ArticleEditor newInstance() {
             return new ArticleEditor(new LinkUnfurler.Http());
+        }
+
+        private ArticleEditor newMockInstance() {
+            return new ArticleEditor(new LinkUnfurler.Mock());
         }
 
     }
