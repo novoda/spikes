@@ -25,6 +25,37 @@ public class HtmlGenerator {
                                 + "li a {text-decoration: none; color: black;}"
                                 + "#article-title {font: bold 18px/1.5 Helvetica, Verdana, sans-serif; color: #2d2d2d; width: auto; max-width: 400px;}"
                                 + "#article-text {font: 200 14px/1.5 Open Sans, serif; width: auto; max-width: 400px;}"
+
+                                // Small / Default
+                                + "#article-image { "
+                                    + " width: 150px; height: 84px;"
+                                    + " object-fit: cover;"
+                                    + " border-radius: 6px; background-color: #fafafa; padding: 10px;"
+                                + "}"
+                                // Mobile Medium
+                                + " @media only screen and (min-width: 375px) {"
+                                    + "#article-image { "
+                                    + " width: 300px; height: 169px;"
+                                    + "}"
+                                + "}"
+                                // Mobile Large
+                                + " @media only screen and (min-width: 425px) {"
+                                    + "#article-image { "
+                                    + " width: 400px; height: 225px;"
+                                    + "}"
+                                + "}"
+                                // Tablet
+                                + " @media only screen and (min-width: 768px) {"
+                                    + "#article-image { "
+                                    + " width: 450px; height: 253px;"
+                                    + "}"
+                                + "}"
+                                // Laptop
+                                + " @media only screen and (min-width: 1024px) {"
+                                    + "#article-image { "
+                                    + " width: 500px; height: 281px;"
+                                    + "}"
+                                + "}"
                                 + ""
                             );
                         end();
@@ -51,12 +82,8 @@ public class HtmlGenerator {
                         .a().href(article.getPageLink())
                             .div()
                                 .div()
-                                    .style("max-width: 400px; max-height: 220px;")
                                     .img()
-                                        .style("margin: 0 15px 0 0;" +
-                                                " max-width: 100%; max-height: 220px; width: auto; height: auto;" +
-                                                " object-fit: cover;" +
-                                                " border-radius: 6px; background-color: #fafafa; padding: 10px;")
+                                        .id("article-image")
                                         .src(article.getImage())
                                     .end()
                                 .end()
