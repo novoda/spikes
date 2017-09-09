@@ -1,11 +1,3 @@
-//
-//  TweetCell.swift
-//  dialog-actions-for-voiceover
-//
-//  Created by Ataul Munim on 10/08/2017.
-//  Copyright © 2017 Novoda. All rights reserved.
-//
-
 import UIKit
 
 class TweetCell: UITableViewCell {
@@ -158,10 +150,10 @@ class TweetCell: UITableViewCell {
     }
     
     func bind(_ tweet: Tweet) {
-        usernameLabel.text = tweet.username
+        usernameLabel.text = tweet.user.username
         bodyLabel.text = tweet.body
         timeLabel.text = tweet.time
-        if let url = NSURL(string: tweet.avatarUrl), let data = NSData(contentsOf: url as URL) {
+        if let url = NSURL(string: tweet.user.avatarUrl), let data = NSData(contentsOf: url as URL) {
             avatarImageView.image = UIImage(data: data as Data)
         }
     }

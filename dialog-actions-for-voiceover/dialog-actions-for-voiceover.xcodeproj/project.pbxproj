@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C080409B1F64044B005C1A07 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C080409A1F64044B005C1A07 /* User.swift */; };
 		C09D2D2F1F3C705A00A6FCEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09D2D2E1F3C705A00A6FCEA /* AppDelegate.swift */; };
 		C09D2D361F3C705A00A6FCEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C09D2D351F3C705A00A6FCEA /* Assets.xcassets */; };
 		C09D2D391F3C705A00A6FCEA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C09D2D371F3C705A00A6FCEA /* LaunchScreen.storyboard */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C080409A1F64044B005C1A07 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C09D2D2B1F3C705A00A6FCEA /* dialog-actions-for-voiceover.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "dialog-actions-for-voiceover.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C09D2D2E1F3C705A00A6FCEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C09D2D351F3C705A00A6FCEA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -65,6 +67,7 @@
 				C09D2D471F3C8EEC00A6FCEA /* TweetsProvider.swift */,
 				C09D2D491F3C913400A6FCEA /* TweetsViewController.swift */,
 				C09D2D4B1F3C968D00A6FCEA /* TweetCell.swift */,
+				C080409A1F64044B005C1A07 /* User.swift */,
 			);
 			path = "dialog-actions-for-voiceover";
 			sourceTree = "<group>";
@@ -154,6 +157,7 @@
 			files = (
 				C09D2D4A1F3C913400A6FCEA /* TweetsViewController.swift in Sources */,
 				C09D2D2F1F3C705A00A6FCEA /* AppDelegate.swift in Sources */,
+				C080409B1F64044B005C1A07 /* User.swift in Sources */,
 				C09D2D4C1F3C968D00A6FCEA /* TweetCell.swift in Sources */,
 				C09D2D441F3C8BF900A6FCEA /* Tweet.swift in Sources */,
 				C09D2D481F3C8EEC00A6FCEA /* TweetsProvider.swift in Sources */,
@@ -312,6 +316,7 @@
 				C09D2D3F1F3C705A00A6FCEA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
