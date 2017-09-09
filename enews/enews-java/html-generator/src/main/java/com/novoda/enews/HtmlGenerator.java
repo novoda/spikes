@@ -28,13 +28,17 @@ public class HtmlGenerator {
                                     + " margin: 0px;"
                                 + "}"
                                 + "#title h2 {"
-                                    + " font: bold 20px/1.3 Helvetica, Verdana, sans-serif;"
+                                    + " font: bold 20px/1.0 Helvetica, Verdana, sans-serif;"
                                     + " color: #26A3DB;"
                                     + " margin: 0px;"
                                 + "}"
                                 + "#title a {"
                                     + " text-decoration: none;"
                                     + " color: #26A3DB;"
+                                + "}"
+                                + "#title p {"
+                                    + " font: bold 12px/1.0 Helvetica, Verdana, sans-serif;"
+                                    + " color: #6d6d6d;"
                                 + "}"
                                 + "li {"
                                     + " list-style-type: none; margin: 0;"
@@ -99,6 +103,19 @@ public class HtmlGenerator {
                             .h2()
                                 .text("powered by ")
                                 .a().href("https://twitter.com/novoda").target("_blank").text("@novoda").end()
+                            .end()
+                            .p()
+                                .text("Welcome to the latest edition."
+                                        + " For those of you unacquainted with how this newsletter works."
+                                        + " See below for a brief explanation."
+                                        + " Everyone else, welcome back and skip to the first article!")
+                                .br()
+                                .br()
+                                .text("Each day the whole of Novoda come together to share project updates, insights and exciting opportunities happening across the company."
+                                        + " One of these snippets is #enews where we share interesting things we've read or viewed on the web."
+                                        + " Our serverless technology peon then takes this knowledge and curates it as a summary each week."
+                                        + " Therefore the text below is exactly what was written by the author as they shared the news on slack, so apologies for fast finger spelling mistakes or slightly missing context."
+                                        + " :-)")
                             .end()
                         .end()
                         .div();
