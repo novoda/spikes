@@ -39,7 +39,7 @@ public class ArticleEditor {
                 .replaceAll("<h", "h")
                 .replaceAll("/>", "")
                 .replaceAll(">", "")
-                .replaceAll("\\?(.*)", ""); // < TODO test
+                .replaceAll("\\?(.*)", "");
     }
 
     private String generateTitle(ChannelHistory.Message message) {
