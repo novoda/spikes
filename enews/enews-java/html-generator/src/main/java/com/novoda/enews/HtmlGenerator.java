@@ -22,8 +22,18 @@ public class HtmlGenerator {
                             text("body {"
                                     + " padding: 10px;"
                                 + "}"
-                                + "h1 {"
+                                + "#title h1 {"
                                     + " font: bold 40px/1.5 Helvetica, Verdana, sans-serif;"
+                                    + " color: #26A3DB;"
+                                    + " margin: 0px;"
+                                + "}"
+                                + "#title h2 {"
+                                    + " font: bold 20px/1.3 Helvetica, Verdana, sans-serif;"
+                                    + " color: #26A3DB;"
+                                    + " margin: 0px;"
+                                + "}"
+                                + "#title a {"
+                                    + " text-decoration: none;"
                                     + " color: #26A3DB;"
                                 + "}"
                                 + "li {"
@@ -80,9 +90,16 @@ public class HtmlGenerator {
                             );
                         end();
                     end();
-                     body();
-                        h1()
-                            .text("#eNews from the week")
+                     body()
+                        .div()
+                            .id("title")
+                            .h1()
+                                .text("#enews of the week")
+                            .end()
+                            .h2()
+                                .text("powered by ")
+                                .a().href("https://twitter.com/novoda").target("_blank").text("@novoda").end()
+                            .end()
                         .end()
                         .div();
                             makeList();
