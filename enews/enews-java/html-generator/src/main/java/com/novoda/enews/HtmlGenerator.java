@@ -23,6 +23,8 @@ public class HtmlGenerator {
                                 + "h1 {font: bold 40px/1.5 Helvetica, Verdana, sans-serif; color: #26A3DB;}"
                                 + "li {list-style-type: none; margin: 0; padding: 10px; overflow: auto;}"
                                 + "li a {text-decoration: none; color: black;}"
+                                + "#article-title {font: bold 18px/1.5 Helvetica, Verdana, sans-serif; color: #2d2d2d; width: auto; max-width: 400px;}"
+                                + "#article-text {font: 200 14px/1.5 Open Sans, serif; width: auto; max-width: 400px;}"
                                 + ""
                             );
                         end();
@@ -59,13 +61,11 @@ public class HtmlGenerator {
                                     .end()
                                 .end()
                                 .p()
-                                    .style("font: bold 18px/1.5 Helvetica, Verdana, sans-serif; color: #2d2d2d;" +
-                                            " width: auto; max-width: 400px;")
+                                    .id("article-title")
                                     .text(article.getPageTitle())
                                 .end()
                                 .p()
-                                    .style("font: 200 14px/1.5 Open Sans, serif;" +
-                                            " width: auto; max-width: 400px;")
+                                    .id("article-text")
                                     .text(article.getText())
                                 .end()
                             .end()
