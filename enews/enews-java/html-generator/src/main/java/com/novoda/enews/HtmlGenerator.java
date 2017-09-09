@@ -79,7 +79,7 @@ public class HtmlGenerator {
             void makeFooter() {
                 br();
                 makeSourceFooter();
-                shareBar.injectHtmlInto(this);
+//                shareBar.injectHtmlInto(this);
             }
 
             private void makeSourceFooter() {
