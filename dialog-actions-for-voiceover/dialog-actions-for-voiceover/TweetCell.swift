@@ -30,7 +30,7 @@ class TweetCell: UITableViewCell {
         
 //        UIAccessibilityVoiceOverStatusChanged
 //        NotificationCenter.default.addObserver(forName: UIAccessibilityVoiceOverStatusChanged., object: <#T##Any?#>, queue: <#T##OperationQueue?#>, using: <#T##(Notification) -> Void#>)
-        UIAccessibilityIsVoiceOverRunning()
+//        UIAccessibilityIsVoiceOverRunning()
     }
     
     private func setupHierarchy() {
@@ -57,14 +57,11 @@ class TweetCell: UITableViewCell {
         likeButton.setTitle("like", for: .normal)
         avatarImageView.backgroundColor = UIColor.black
         
-        usernameLabel.sizeToFit()
         usernameLabel.numberOfLines = 1
         
-//        timeLabel.sizeToFit()
         timeLabel.numberOfLines = 1
         timeLabel.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .horizontal)
         
-        bodyLabel.sizeToFit()
         bodyLabel.numberOfLines = 0
         bodyLabel.lineBreakMode = .byWordWrapping
     }
