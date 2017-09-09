@@ -56,4 +56,12 @@ class TweetsAdapter: NSObject, UITableViewDelegate, UITableViewDataSource {
     func update(_ tweets: [Tweet]) {
         self.tweets = tweets
     }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
 }
