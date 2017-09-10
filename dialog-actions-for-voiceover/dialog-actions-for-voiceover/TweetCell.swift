@@ -6,6 +6,7 @@ class TweetCell: UITableViewCell {
     var usernameLabel = UILabel()
     var bodyLabel = UILabel()
     var timeLabel = UILabel()
+    var buttonsGroup = UIView()
     var replyButton = UIButton()
     var retweetButton = UIButton()
     var likeButton = UIButton()
@@ -39,9 +40,9 @@ class TweetCell: UITableViewCell {
         addSubview(usernameLabel)
         addSubview(bodyLabel)
 
-//        addSubview(replyButton)
-//        addSubview(retweetButton)
-//        addSubview(likeButton)
+        addSubview(replyButton)
+        addSubview(retweetButton)
+        addSubview(likeButton)
 
         subviews.forEach { view in
             view.translatesAutoresizingMaskIntoConstraints = false
@@ -49,13 +50,16 @@ class TweetCell: UITableViewCell {
     }
 
     private func styleViews() {
-        usernameLabel.text = "username"
-        bodyLabel.text = "tweet body"
-        timeLabel.text = "12:01"
         replyButton.setTitle("reply", for: .normal)
+        replyButton.backgroundColor = UIColor.darkGray
+
         retweetButton.setTitle("rt", for: .normal)
+        retweetButton.backgroundColor = UIColor.black
+
         likeButton.setTitle("like", for: .normal)
-        avatarImageView.backgroundColor = UIColor.black
+        likeButton.backgroundColor = UIColor.darkGray
+
+        avatarImageView.backgroundColor = UIColor.white
 
         usernameLabel.numberOfLines = 1
 
@@ -72,6 +76,40 @@ class TweetCell: UITableViewCell {
         layoutTimeLabel()
         layoutUsername()
         layoutBody()
+
+        NSLayoutConstraint.activate([
+            match(view: replyButton, attribute: .leading, otherView: avatarImageView, otherAttribute: .trailing),
+            NSLayoutConstraint(
+                    item: replyButton,
+                    attribute: .trailing,
+                    relatedBy: .lessThanOrEqual,
+                    toItem: retweetButton,
+                    attribute: .leading,
+                    multiplier: 1,
+                    constant: 0
+            ),
+            match(view: replyButton, attribute: .top, otherView: bodyLabel, otherAttribute: .bottom)
+        ])
+
+        NSLayoutConstraint.activate([
+            match(view: retweetButton, attribute: .leading, otherView: replyButton, otherAttribute: .trailing),
+            NSLayoutConstraint(
+                    item: retweetButton,
+                    attribute: .trailing,
+                    relatedBy: .lessThanOrEqual,
+                    toItem: likeButton,
+                    attribute: .leading,
+                    multiplier: 1,
+                    constant: 0
+            ),
+            match(view: retweetButton, attribute: .top, otherView: bodyLabel, otherAttribute: .bottom)
+        ])
+
+        NSLayoutConstraint.activate([
+            match(view: likeButton, attribute: .leading, otherView: retweetButton, otherAttribute: .trailing),
+            matchTweetCell(attribute: .trailing, view: likeButton),
+            match(view: retweetButton, attribute: .top, otherView: bodyLabel, otherAttribute: .bottom)
+        ])
     }
 
     private func layoutAvatar() {
@@ -113,6 +151,15 @@ class TweetCell: UITableViewCell {
             matchTweetCell(attribute: .right, view: bodyLabel),
             match(view: bodyLabel, attribute: .top, otherView: usernameLabel, otherAttribute: .bottom),
             matchTweetCell(attribute: .bottom, view: bodyLabel),
+            NSLayoutConstraint(
+                    item: bodyLabel,
+                    attribute: .bottom,
+                    relatedBy: .lessThanOrEqual,
+                    toItem: replyButton,
+                    attribute: .top,
+                    multiplier: 1,
+                    constant: 0
+            )
         ])
     }
 
