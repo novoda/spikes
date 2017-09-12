@@ -23,6 +23,7 @@ public class SecondaryDisplayActivity extends AppCompatActivity {
     private C4ToB5ViewPiano pianoWidget;
     private Button resetButton;
     private PresentationGameMvpView presentationGameMvpView;
+    private MediaRouter mediaRouter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,34 +38,38 @@ public class SecondaryDisplayActivity extends AppCompatActivity {
         presentationGameMvpView = new PresentationGameMvpView();
         gameMvpPresenter = new GamePresenter(gameMvpModel, presentationGameMvpView);
 
-        MediaRouter mediaRouter = (MediaRouter) getSystemService(MEDIA_ROUTER_SERVICE);
-        mediaRouter.addCallback(MediaRouter.ROUTE_TYPE_LIVE_VIDEO, new MediaRouter.SimpleCallback() {
-            @Override
-            public void onRoutePresentationDisplayChanged(MediaRouter router, MediaRouter.RouteInfo info) {
-                Display display = getDisplayFrom(info);
-                if (display == null) {
-                    presentationGameMvpView.update(null);
-                } else {
-                    presentationGameMvpView.update(new GameSecondaryDisplayPresentation(SecondaryDisplayActivity.this, display, pianoWidget));
-                }
-            }
-
-            @Nullable
-            private Display getDisplayFrom(@Nullable MediaRouter.RouteInfo info) {
-                return info == null ? null : info.getPresentationDisplay();
-            }
-        });
+        mediaRouter = (MediaRouter) getSystemService(MEDIA_ROUTER_SERVICE);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         gameMvpPresenter.startPresenting();
+        mediaRouter.addCallback(MediaRouter.ROUTE_TYPE_LIVE_VIDEO, simpleCallback);
     }
+
+    private final MediaRouter.SimpleCallback simpleCallback = new MediaRouter.SimpleCallback() {
+
+        @Override
+        public void onRoutePresentationDisplayChanged(MediaRouter router, MediaRouter.RouteInfo info) {
+            Display display = getDisplayFrom(info);
+            if (display == null) {
+                presentationGameMvpView.update(null);
+            } else {
+                presentationGameMvpView.update(new GameSecondaryDisplayPresentation(SecondaryDisplayActivity.this, display, pianoWidget));
+            }
+        }
+
+        @Nullable
+        private Display getDisplayFrom(@Nullable MediaRouter.RouteInfo info) {
+            return info == null ? null : info.getPresentationDisplay();
+        }
+    };
 
     @Override
     protected void onPause() {
         gameMvpPresenter.stopPresenting();
+        mediaRouter.removeCallback(simpleCallback);
         super.onPause();
     }
 
