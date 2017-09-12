@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.novoda.pianohero.C4ToB5ViewPiano xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/piano_view"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:padding="@dimen/margin">
+
+  <Button
+    android:id="@+id/secondary_display_restart_button"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Reset" />
+
+  <com.novoda.pianohero.C4ToB5ViewPiano
+    android:id="@+id/secondary_display_piano_widget"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/margin"
-    android:padding="@dimen/margin" />
+    android:layout_marginTop="@dimen/margin" />
+
+</LinearLayout>

@@ -61,7 +61,7 @@ public class AndroidThingsActivity extends AppCompatActivity {
         if (isThingsDevice()) {
             return keyStationMini32Piano;
         } else {
-            C4ToB5ViewPiano virtualPianoView = (C4ToB5ViewPiano) findViewById(R.id.piano_view);
+            C4ToB5ViewPiano virtualPianoView = (C4ToB5ViewPiano) findViewById(R.id.secondary_display_piano_widget);
             return new CompositePiano(virtualPianoView, keyStationMini32Piano);
         }
     }
@@ -111,7 +111,7 @@ public class AndroidThingsActivity extends AppCompatActivity {
     private GameMvp.View createGameMvpView() {
         return new AndroidGameMvpView(
                 createSpeaker(),
-                (C4ToB5ViewPiano) findViewById(R.id.piano_view),
+                (C4ToB5ViewPiano) findViewById(R.id.secondary_display_piano_widget),
                 createScoreDisplayer(),
                 (C4ToB5TrebleStaffWidget) findViewById(R.id.game_widget_treble_staff),
                 (TextView) findViewById(R.id.game_text_status),

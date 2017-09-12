@@ -48,7 +48,7 @@
         android:layout_marginTop="@dimen/margin" />
 
     <com.novoda.pianohero.C4ToB5ViewPiano
-        android:id="@+id/piano_view"
+        android:id="@+id/secondary_display_piano_widget"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/margin" />
