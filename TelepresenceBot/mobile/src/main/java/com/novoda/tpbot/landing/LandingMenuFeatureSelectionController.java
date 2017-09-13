@@ -24,7 +24,7 @@ import com.novoda.tpbot.R;
  * FEATURE_DISPLAYER displays the current state of the toggle in some android specific way.
  *
  * Presenter, knows about features. Features -> getFeature(representation)
- * Displayer knows how to displayer the feature.
+ * Displayer knows how to display a particular feature.
  *
  */
 final class LandingMenuFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {

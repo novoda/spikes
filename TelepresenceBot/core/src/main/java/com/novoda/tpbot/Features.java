@@ -1,12 +1,12 @@
 package com.novoda.tpbot;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class Features {
 
-    private final HashMap<Integer, Feature> features;
+    private final Map<Integer, Feature> features;
 
-    public Features(HashMap<Integer, Feature> features) {
+    public Features(Map<Integer, Feature> features) {
         this.features = features;
     }
 
