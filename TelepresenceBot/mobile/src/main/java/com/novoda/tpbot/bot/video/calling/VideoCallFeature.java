@@ -2,9 +2,9 @@ package com.novoda.tpbot.bot.video.calling;
 
 import android.content.SharedPreferences;
 
-import com.novoda.tpbot.FeatureSelection;
+import com.novoda.tpbot.Feature;
 
-public final class VideoCallFeature implements FeatureSelection {
+public final class VideoCallFeature implements Feature {
 
     private static final String VIDEO_CALL_PREFERENCES_ON_OFF_KEY = "video_call_preferences_on_off";
     private static final boolean ON = true;
@@ -17,19 +17,19 @@ public final class VideoCallFeature implements FeatureSelection {
     }
 
     @Override
-    public boolean isFeatureEnabled() {
+    public boolean isEnabled() {
         return sharedPreferences.getBoolean(VIDEO_CALL_PREFERENCES_ON_OFF_KEY, OFF);
     }
 
     @Override
-    public void setFeatureEnabled() {
+    public void setEnabled() {
         sharedPreferences.edit()
                 .putBoolean(VIDEO_CALL_PREFERENCES_ON_OFF_KEY, ON)
                 .apply();
     }
 
     @Override
-    public void setFeatureDisabled() {
+    public void setDisabled() {
         sharedPreferences.edit()
                 .putBoolean(VIDEO_CALL_PREFERENCES_ON_OFF_KEY, OFF)
                 .apply();

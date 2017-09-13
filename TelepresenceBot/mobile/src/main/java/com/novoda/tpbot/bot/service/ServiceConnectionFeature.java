@@ -2,10 +2,10 @@ package com.novoda.tpbot.bot.service;
 
 import android.content.SharedPreferences;
 
-import com.novoda.tpbot.FeatureSelection;
+import com.novoda.tpbot.Feature;
 
 // TODO: Could have Feature<T extends something> where T is the persistence or the concrete implementation. This class then just delegates to the persistence layer.
-public final class ServiceConnectionFeature implements FeatureSelection {
+public final class ServiceConnectionFeature implements Feature {
 
     private static final String SERVER_CONNECTION_PREFERENCES_ON_OFF_KEY = "server_connection_preferences_on_off";
     private static final boolean ON = true;
@@ -18,19 +18,19 @@ public final class ServiceConnectionFeature implements FeatureSelection {
     }
 
     @Override
-    public boolean isFeatureEnabled() {
+    public boolean isEnabled() {
         return sharedPreferences.getBoolean(SERVER_CONNECTION_PREFERENCES_ON_OFF_KEY, OFF);
     }
 
     @Override
-    public void setFeatureEnabled() {
+    public void setEnabled() {
         sharedPreferences.edit()
                 .putBoolean(SERVER_CONNECTION_PREFERENCES_ON_OFF_KEY, ON)
                 .apply();
     }
 
     @Override
-    public void setFeatureDisabled() {
+    public void setDisabled() {
         sharedPreferences.edit()
                 .putBoolean(SERVER_CONNECTION_PREFERENCES_ON_OFF_KEY, OFF)
                 .apply();

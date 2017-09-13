@@ -70,7 +70,7 @@ public class BotActivity extends AppCompatActivity implements BotView,
         setContentView(R.layout.activity_bot);
         AndroidInjection.inject(this);
 
-        if (!serviceConnectionFeature.isFeatureEnabled()) {
+        if (!serviceConnectionFeature.isEnabled()) {
             switchableView.switchTo(CONTROLLER_VIEW);
         }
     }
@@ -78,7 +78,7 @@ public class BotActivity extends AppCompatActivity implements BotView,
     @Override
     protected void onResume() {
         super.onResume();
-        if (!automationChecker.isHangoutJoinerAutomationServiceEnabled() && videoCallFeature.isFeatureEnabled()) {
+        if (!automationChecker.isHangoutJoinerAutomationServiceEnabled() && videoCallFeature.isEnabled()) {
             startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
         }
     }
@@ -156,7 +156,7 @@ public class BotActivity extends AppCompatActivity implements BotView,
         debugView.showPermanently(getString(R.string.connected));
         switchableView.switchTo(CONTROLLER_VIEW);
 
-        if (videoCallFeature.isFeatureEnabled()) {
+        if (videoCallFeature.isEnabled()) {
             joinHangoutRoom(room);
         }
     }

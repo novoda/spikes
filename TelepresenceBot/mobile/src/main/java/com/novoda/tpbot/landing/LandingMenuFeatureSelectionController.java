@@ -6,19 +6,33 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.novoda.tpbot.FeatureSelection;
+import com.novoda.tpbot.Feature;
 import com.novoda.tpbot.FeatureSelectionController;
 import com.novoda.tpbot.R;
 
+/***
+ * TODO: Feature toggling can be redone. Think about from business point of view.
+ *
+ * Client has a FEATURE that they want to TOGGLE (enable/disable).
+ *
+ * FEATURE.toggle
+ * FEATURE.isEnabled
+ *
+ * FEATURES a group of features represented as an immutable first class collection.
+ * FEATURES.get(representation) returns a feature for a given representation.
+ *
+ * FEATURE_DISPLAYER displays the current state of the toggle in some android specific way.
+ *
+ */
 final class LandingMenuFeatureSelectionController implements FeatureSelectionController<Menu, MenuItem> {
 
     @MenuRes
     private static final int FEATURE_MENU_RESOURCE = R.menu.feature_menu;
 
     private final MenuInflater menuInflater;
-    private final SparseArray<FeatureSelection> features;
+    private final SparseArray<Feature> features;
 
-    LandingMenuFeatureSelectionController(MenuInflater menuInflater, SparseArray<FeatureSelection> features) {
+    LandingMenuFeatureSelectionController(MenuInflater menuInflater, SparseArray<Feature> features) {
         this.menuInflater = menuInflater;
         this.features = features;
     }
@@ -31,25 +45,25 @@ final class LandingMenuFeatureSelectionController implements FeatureSelectionCon
             int key = features.keyAt(index);
 
             MenuItem menuItem = componentToAttachTo.findItem(key);
-            FeatureSelection featureSelection = features.get(key);
-            menuItem.setChecked(featureSelection.isFeatureEnabled());
+            Feature feature = features.get(key);
+            menuItem.setChecked(feature.isEnabled());
         }
     }
 
     @Override
     public void handleFeatureToggle(MenuItem featureRepresentation) {
-        FeatureSelection featureSelection = features.get(featureRepresentation.getItemId());
+        Feature feature = features.get(featureRepresentation.getItemId());
 
-        if (featureSelection == null) {
+        if (feature == null) {
             throw new IllegalStateException("You must check if data is present before using handleFeatureToggle().");
         }
 
-        if (featureSelection.isFeatureEnabled()) {
+        if (feature.isEnabled()) {
             featureRepresentation.setChecked(false);
-            featureSelection.setFeatureDisabled();
+            feature.setDisabled();
         } else {
             featureRepresentation.setChecked(true);
-            featureSelection.setFeatureEnabled();
+            feature.setEnabled();
         }
     }
 

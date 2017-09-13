@@ -6,7 +6,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.novoda.tpbot.FeatureSelectionController;
-import com.novoda.tpbot.FeatureSelection;
+import com.novoda.tpbot.Feature;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.bot.service.ServiceConnectionFeature;
 import com.novoda.tpbot.bot.video.calling.VideoCallFeature;
@@ -22,7 +22,7 @@ public class LandingModule {
             VideoCallFeature videoCallFeaturePersistence,
             ServiceConnectionFeature serviceConnectionFeature,
             MenuInflater menuInflater) {
-        SparseArray<FeatureSelection> features = new SparseArray<>();
+        SparseArray<Feature> features = new SparseArray<>();
         features.put(R.id.video_call_menu_item, videoCallFeaturePersistence);
         features.put(R.id.server_connection_menu_item, serviceConnectionFeature);
 
