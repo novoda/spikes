@@ -43,7 +43,7 @@ public class NewsletterPublisher {
         if (campaignResultResponse.isSuccessful()) {
             String id = campaignResultResponse.body().id;
             putCampaignContent(id, html);
-            publishNewsletter(id, atLocalDateTime);
+            scheduleNewsletter(id, atLocalDateTime);
         } else {
             ResponseBody responseBody = campaignResultResponse.errorBody();
             try {
@@ -74,7 +74,7 @@ public class NewsletterPublisher {
         }
     }
 
-    private void publishNewsletter(String id, LocalDateTime atLocalDateTime) {
+    private void scheduleNewsletter(String id, LocalDateTime atLocalDateTime) {
         newsletterScheduler.schedule(id, atLocalDateTime);
     }
 }
