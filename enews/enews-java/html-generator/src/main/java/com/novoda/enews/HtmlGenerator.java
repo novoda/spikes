@@ -22,6 +22,9 @@ public class HtmlGenerator {
                             text("body {"
                                     + " padding: 10px;"
                                 + "}"
+                                + "#intro {"
+                                +   "max-width: 600px;"
+                                +"}"
                                 + "#title h1 {"
                                     + " font: bold 40px/1.5 Helvetica, Verdana, sans-serif;"
                                     + " color: #26A3DB;"
@@ -105,6 +108,7 @@ public class HtmlGenerator {
                                 .a().href("https://twitter.com/novoda").target("_blank").text("@novoda").end()
                             .end()
                             .p()
+                                .id("intro")
                                 .text("Welcome to the latest edition."
                                         + " For those of you unacquainted with how this newsletter works."
                                         + " See below for a brief explanation."
