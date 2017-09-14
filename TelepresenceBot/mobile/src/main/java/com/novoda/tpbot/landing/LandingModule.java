@@ -1,6 +1,5 @@
 package com.novoda.tpbot.landing;
 
-import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,6 +12,7 @@ import com.novoda.tpbot.bot.service.ServiceConnectionFeature;
 import com.novoda.tpbot.bot.video.calling.VideoCallFeature;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import dagger.Module;
 import dagger.Provides;
@@ -21,24 +21,17 @@ import dagger.Provides;
 public class LandingModule {
 
     @Provides
-    FeatureSelectionController<Menu, MenuItem> provideController(
-            VideoCallFeature videoCallFeaturePersistence,
-            ServiceConnectionFeature serviceConnectionFeature,
-            MenuInflater menuInflater) {
-        SparseArray<Feature> features = new SparseArray<>();
-        features.put(R.id.video_call_menu_item, videoCallFeaturePersistence);
-        features.put(R.id.server_connection_menu_item, serviceConnectionFeature);
-
-        return new LandingMenuFeatureSelectionController(menuInflater, features);
-    }
-
-    @Provides
     Features provideFeatures(VideoCallFeature videoCallFeature, ServiceConnectionFeature serviceConnectionFeature) {
-        HashMap<Integer, Feature> features = new HashMap<>();
+        Map<Integer, Feature> features = new HashMap<>();
         features.put(R.id.video_call_menu_item, videoCallFeature);
         features.put(R.id.server_connection_menu_item, serviceConnectionFeature);
 
         return new Features(features);
+    }
+
+    @Provides
+    FeatureSelectionController<Menu, MenuItem> provideController(MenuInflater menuInflater, Features features) {
+        return new LandingMenuFeatureSelectionController(menuInflater, features);
     }
 
 }

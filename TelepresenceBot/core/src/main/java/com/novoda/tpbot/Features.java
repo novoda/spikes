@@ -1,6 +1,7 @@
 package com.novoda.tpbot;
 
 import java.util.Map;
+import java.util.Set;
 
 public class Features {
 
@@ -10,8 +11,12 @@ public class Features {
         this.features = features;
     }
 
-    Feature get(Integer key) {
+    public Feature get(Integer key) {
         return features.get(key);
+    }
+
+    public Set<Integer> keys() {
+        return features.keySet();
     }
 
 }
