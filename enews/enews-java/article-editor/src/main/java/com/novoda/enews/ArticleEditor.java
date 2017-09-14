@@ -52,6 +52,9 @@ public class ArticleEditor {
 
     private String generatePageLink(ChannelHistory.Message message) {
         String link = message.getPageLink();
+        if(link.contains("youtube")) {
+            return link;
+        }
         if(link.contains("?")) {
           int startPositionOfParams = link.indexOf('?');
           link = link.substring(0, startPositionOfParams);
