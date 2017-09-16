@@ -1,0 +1,37 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath libraries.build.androidGradle
+    }
+}
+
+repositories {
+    jcenter()
+    maven {
+        url 'https://maven.google.com'
+    }
+}
+
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion versions.androidSdk.compile
+    buildToolsVersion versions.androidSdk.buildTools
+
+    defaultConfig {
+        minSdkVersion versions.androidSdk.min
+        targetSdkVersion versions.androidSdk.target
+        versionCode versions.versionCode
+        versionName versions.versionName
+    }
+}
+
+dependencies {
+    compile libraries.playServicesWearable
+
+    provided libraries.wearable
+    compile libraries.wearableSupport
+}

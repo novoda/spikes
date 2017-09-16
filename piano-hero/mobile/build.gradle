@@ -11,6 +11,9 @@ repositories {
     maven {
         url 'https://github.com/kshoji/USB-MIDI-Driver/raw/master/MIDIDriver/snapshots'
     }
+    maven {
+        url 'https://maven.google.com'
+    }
     mavenCentral()
 }
 
