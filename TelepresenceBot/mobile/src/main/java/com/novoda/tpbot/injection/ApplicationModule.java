@@ -10,11 +10,10 @@ import android.view.MenuInflater;
 import android.view.accessibility.AccessibilityManager;
 
 import com.novoda.notils.logger.toast.Toaster;
+import com.novoda.tpbot.FeaturePersistenceFactory;
 import com.novoda.tpbot.LastServerPersistence;
 import com.novoda.tpbot.LastServerPreferences;
 import com.novoda.tpbot.bot.BotSubcomponent;
-import com.novoda.tpbot.bot.service.ServiceConnectionFeature;
-import com.novoda.tpbot.bot.video.calling.VideoCallFeature;
 import com.novoda.tpbot.human.HumanSubcomponent;
 import com.novoda.tpbot.landing.LandingSubcomponent;
 
@@ -68,17 +67,8 @@ public class ApplicationModule {
     }
 
     @Provides
-    ServiceConnectionFeature provideServiceConnectionFeature(Context context) {
-        String serverConnectionPreferenceName = "server_connection";
-        SharedPreferences sharedPreferences = context.getSharedPreferences(serverConnectionPreferenceName, Context.MODE_PRIVATE);
-        return new ServiceConnectionFeature(sharedPreferences);
-    }
-
-    @Provides
-    VideoCallFeature provideVideoCallFeature(Context context) {
-        String videoCallPreferenceName = "video_call";
-        SharedPreferences sharedPreferences = context.getSharedPreferences(videoCallPreferenceName, Context.MODE_PRIVATE);
-        return new VideoCallFeature(sharedPreferences);
+    FeaturePersistenceFactory featurePersistenceFactory(Context context) {
+        return new FeaturePersistenceFactory(context);
     }
 
 }

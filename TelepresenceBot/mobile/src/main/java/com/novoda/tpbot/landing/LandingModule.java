@@ -4,12 +4,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.novoda.tpbot.Feature;
+import com.novoda.tpbot.FeaturePersistence;
+import com.novoda.tpbot.FeaturePersistenceFactory;
 import com.novoda.tpbot.FeatureSelectionController;
 import com.novoda.tpbot.Features;
 import com.novoda.tpbot.R;
-import com.novoda.tpbot.bot.service.ServiceConnectionFeature;
-import com.novoda.tpbot.bot.video.calling.VideoCallFeature;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,10 +20,10 @@ import dagger.Provides;
 public class LandingModule {
 
     @Provides
-    Features provideFeatures(VideoCallFeature videoCallFeature, ServiceConnectionFeature serviceConnectionFeature) {
-        Map<Integer, Feature> features = new HashMap<>();
-        features.put(R.id.video_call_menu_item, videoCallFeature);
-        features.put(R.id.server_connection_menu_item, serviceConnectionFeature);
+    Features provideFeatures(FeaturePersistenceFactory featurePersistenceFactory) {
+        Map<Integer, FeaturePersistence> features = new HashMap<>();
+        features.put(R.id.video_call_menu_item, featurePersistenceFactory.createVideoCallPersistence());
+        features.put(R.id.server_connection_menu_item, featurePersistenceFactory.createServiceConnectionPersistence());
 
         return new Features(features);
     }

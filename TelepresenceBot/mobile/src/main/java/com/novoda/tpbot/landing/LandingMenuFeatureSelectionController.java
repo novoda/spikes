@@ -5,7 +5,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.novoda.tpbot.Feature;
+import com.novoda.tpbot.FeaturePersistence;
 import com.novoda.tpbot.FeatureSelectionController;
 import com.novoda.tpbot.Features;
 import com.novoda.tpbot.R;
@@ -29,14 +29,14 @@ final class LandingMenuFeatureSelectionController implements FeatureSelectionCon
 
         for (Integer key : features.keys()) {
             MenuItem menuItem = componentToAttachTo.findItem(key);
-            Feature feature = features.get(key);
+            FeaturePersistence feature = features.get(key);
             menuItem.setChecked(feature.isEnabled());
         }
     }
 
     @Override
     public void handleFeatureToggle(MenuItem featureRepresentation) {
-        Feature feature = features.get(featureRepresentation.getItemId());
+        FeaturePersistence feature = features.get(featureRepresentation.getItemId());
 
         if (feature == null) {
             throw new IllegalStateException("You must check if data is present before using handleFeatureToggle().");

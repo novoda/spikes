@@ -5,13 +5,13 @@ import java.util.Set;
 
 public class Features {
 
-    private final Map<Integer, Feature> features;
+    private final Map<Integer, FeaturePersistence> features;
 
-    public Features(Map<Integer, Feature> features) {
+    public Features(Map<Integer, FeaturePersistence> features) {
         this.features = features;
     }
 
-    public Feature get(Integer key) {
+    public FeaturePersistence get(Integer key) {
         return features.get(key);
     }
 

@@ -11,15 +11,15 @@ import android.view.MenuItem;
 
 import com.novoda.support.SelfDestructingMessageView;
 import com.novoda.tpbot.Direction;
+import com.novoda.tpbot.FeaturePersistence;
+import com.novoda.tpbot.FeaturePersistenceFactory;
 import com.novoda.tpbot.FeatureSelectionController;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServiceDeclarationListener;
 import com.novoda.tpbot.bot.device.DeviceConnection;
 import com.novoda.tpbot.bot.movement.MovementServiceBinder;
 import com.novoda.tpbot.bot.service.BotServiceBinder;
-import com.novoda.tpbot.bot.service.ServiceConnectionFeature;
 import com.novoda.tpbot.bot.video.calling.AutomationChecker;
-import com.novoda.tpbot.bot.video.calling.VideoCallFeature;
 import com.novoda.tpbot.controls.CommandRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
@@ -60,15 +60,18 @@ public class BotActivity extends AppCompatActivity implements BotView,
     @Inject
     AutomationChecker automationChecker;
     @Inject
-    VideoCallFeature videoCallFeature;
-    @Inject
-    ServiceConnectionFeature serviceConnectionFeature;
+    FeaturePersistenceFactory featurePersistenceFactory;
+
+    private FeaturePersistence videoCallFeature;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bot);
         AndroidInjection.inject(this);
+
+        videoCallFeature = featurePersistenceFactory.createVideoCallPersistence();
+        FeaturePersistence serviceConnectionFeature = featurePersistenceFactory.createServiceConnectionPersistence();
 
         if (!serviceConnectionFeature.isEnabled()) {
             switchableView.switchTo(CONTROLLER_VIEW);
