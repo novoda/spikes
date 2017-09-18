@@ -1,6 +1,7 @@
 package com.novoda.seatmonitor;
 
 import android.os.SystemClock;
+import android.util.Log;
 
 import com.google.android.things.pio.I2cDevice;
 import com.google.android.things.pio.PeripheralManagerService;
@@ -106,9 +107,55 @@ public class Ads1015 {
 
     }
 
+    int readADC_SingleEnded(int channel) {
+        if (channel > 3) {
+            return 0;
+        }
+
+        // Start with default values
+        int config = ADS1015_REG_CONFIG_CQUE_NONE | // Disable the comparator (default val)
+                ADS1015_REG_CONFIG_CLAT_NONLAT | // Non-latching (default val)
+                ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
+                ADS1015_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
+                ADS1015_REG_CONFIG_DR_1600SPS | // 1600 samples per second (default)
+                ADS1015_REG_CONFIG_MODE_SINGLE;   // Single-shot mode (default)
+
+        // Set PGA/voltage range
+        config |= gain.value;
+
+        // Set single-ended input channel
+        switch (channel) {
+            case (0):
+                config |= ADS1015_REG_CONFIG_MUX_SINGLE_0;
+                break;
+            case (1):
+                config |= ADS1015_REG_CONFIG_MUX_SINGLE_1;
+                break;
+            case (2):
+                config |= ADS1015_REG_CONFIG_MUX_SINGLE_2;
+                break;
+            case (3):
+                config |= ADS1015_REG_CONFIG_MUX_SINGLE_3;
+                break;
+        }
+
+        // Set 'start single-conversion' bit
+        config |= ADS1015_REG_CONFIG_OS_SINGLE;
+
+        // Write config register to the ADC
+        writeRegister(ADS1015_REG_POINTER_CONFIG, (short) config);
+
+        // Wait for the conversion to complete
+        delay(conversionDelay);
+
+        // Read the conversion results
+        // Shift 12-bit results right 4 bits for the ADS1015
+        return readRegister(ADS1015_REG_POINTER_CONVERT) >> BIT_SHIFT;
+    }
+
     int readADCDifferentialBetween0And1() {
         //noinspection PointlessBitwiseExpression Ignore for Readability
-        short config = ADS1015_REG_CONFIG_CQUE_NONE | // Disable the comparator (default val)
+        int config = ADS1015_REG_CONFIG_CQUE_NONE | // Disable the comparator (default val)
             ADS1015_REG_CONFIG_CLAT_NONLAT | // Non-latching (default val)
             ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
             ADS1015_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
@@ -124,14 +171,18 @@ public class Ads1015 {
         // Set 'start single-conversion' bit
         config |= ADS1015_REG_CONFIG_OS_SINGLE;
 
+        Log.d("TUT", "b4 write config");
         // Write config register to the ADC
-        writeRegister(ADS1015_REG_POINTER_CONFIG, config);
+        writeRegister(ADS1015_REG_POINTER_CONFIG, (short) config);
+        Log.d("TUT", "a4 write config");
 
         // Wait for the conversion to complete
         delay(conversionDelay);
 
+        Log.d("TUT", "b4 read register");
         // Read the conversion results
         int res = readRegister(ADS1015_REG_POINTER_CONVERT) >> BIT_SHIFT;
+        Log.d("TUT", "a4 read register");
         // Shift 12-bit results right 4 bits for the ADS1015,
         // making sure we keep the sign bit intact
         if (res > 0x07FF) {

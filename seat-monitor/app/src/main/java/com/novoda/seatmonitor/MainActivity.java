@@ -3,6 +3,7 @@ package com.novoda.seatmonitor;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
 
 import java.util.concurrent.TimeUnit;
@@ -17,8 +18,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         ads1015 = new Ads1015.Factory().newInstance("I2C1", 0x48);
-
-        handler = new Handler();
+        Log.d("TUT", "oncreate");
+        HandlerThread thread = new HandlerThread("backgroundMeasure");
+        thread.start();
+        handler = new Handler(thread.getLooper());
         handler.post(loop);
     }
 
@@ -26,7 +29,7 @@ public class MainActivity extends Activity {
         @Override
         public void run() {
 
-            Log.d("TUT", "Differential " + ads1015.readADCDifferentialBetween0And1());
+            Log.d("TUT", "Differential " + ads1015.readADC_SingleEnded(0));
 
             handler.postDelayed(this, TimeUnit.SECONDS.toMillis(1));
         }
