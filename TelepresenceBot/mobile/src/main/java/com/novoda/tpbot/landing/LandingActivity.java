@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.novoda.tpbot.FeatureSelectionController;
 import com.novoda.tpbot.R;
@@ -18,35 +17,21 @@ public class LandingActivity extends AppCompatActivity {
     @Inject
     FeatureSelectionController<Menu, MenuItem> featureSelectionController;
     @Inject
-    Navigator navigator;
+    LandingPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AndroidInjection.inject(this);
-
         setContentView(R.layout.activity_landing);
 
-        View humanSelection = findViewById(R.id.human_selection);
-        View botSelection = findViewById(R.id.bot_selection);
-
-        humanSelection.setOnClickListener(onHumanSelectionListener);
-        botSelection.setOnClickListener(onBotSelectionListener);
+        AndroidInjection.inject(this);
     }
 
-    private final View.OnClickListener onHumanSelectionListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            navigator.toHuman();
-        }
-    };
-
-    private final View.OnClickListener onBotSelectionListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            navigator.toBot();
-        }
-    };
+    @Override
+    protected void onStart() {
+        super.onStart();
+        presenter.startPresenting();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -64,4 +49,9 @@ public class LandingActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStop() {
+        presenter.stopPresenting();
+        super.onStop();
+    }
 }

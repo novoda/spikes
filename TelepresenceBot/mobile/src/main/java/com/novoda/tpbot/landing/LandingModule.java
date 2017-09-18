@@ -3,7 +3,9 @@ package com.novoda.tpbot.landing;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.novoda.notils.caster.Views;
 import com.novoda.tpbot.FeaturePersistence;
 import com.novoda.tpbot.FeaturePersistenceFactory;
 import com.novoda.tpbot.FeatureSelectionController;
@@ -36,6 +38,18 @@ public class LandingModule {
     @Provides
     Navigator provideNavigator(LandingActivity activity) {
         return new IntentNavigator(activity);
+    }
+
+    @Provides
+    LandingDisplayer provideLandingDisplayer(LandingActivity activity) {
+        View humanSelection = Views.findById(activity, R.id.human_selection);
+        View botSelection = Views.findById(activity, R.id.bot_selection);
+        return new LandingDisplayer(humanSelection, botSelection);
+    }
+
+    @Provides
+    LandingPresenter provideLandingPresenter(LandingDisplayer displayer, Navigator navigator) {
+        return new LandingPresenter(displayer, navigator);
     }
 
 }
