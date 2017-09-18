@@ -11,16 +11,16 @@ public class FeaturePersistenceFactory {
         this.context = context;
     }
 
-    FeaturePersistence createServiceConnectionPersistence() {
+    SharedPreferencesFeaturePersistence createServiceConnectionPersistence() {
         String serverConnectionPreferenceName = "server_connection";
         SharedPreferences sharedPreferences = context.getSharedPreferences(serverConnectionPreferenceName, Context.MODE_PRIVATE);
-        return new FeaturePersistence(sharedPreferences, serverConnectionPreferenceName);
+        return new SharedPreferencesFeaturePersistence(sharedPreferences, serverConnectionPreferenceName);
     }
 
-    FeaturePersistence createVideoCallPersistence() {
+    SharedPreferencesFeaturePersistence createVideoCallPersistence() {
         String videoCallPreferenceName = "video_call";
         SharedPreferences sharedPreferences = context.getSharedPreferences(videoCallPreferenceName, Context.MODE_PRIVATE);
-        return new FeaturePersistence(sharedPreferences, videoCallPreferenceName);
+        return new SharedPreferencesFeaturePersistence(sharedPreferences, videoCallPreferenceName);
     }
 
 }

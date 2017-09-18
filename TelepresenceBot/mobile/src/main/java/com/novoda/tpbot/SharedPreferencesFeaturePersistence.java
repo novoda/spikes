@@ -2,7 +2,7 @@ package com.novoda.tpbot;
 
 import android.content.SharedPreferences;
 
-public final class FeaturePersistence {
+final class SharedPreferencesFeaturePersistence {
 
     private static final boolean ON = true;
     private static final boolean OFF = false;
@@ -10,7 +10,7 @@ public final class FeaturePersistence {
     private final SharedPreferences sharedPreferences;
     private final String preferenceName;
 
-    public FeaturePersistence(SharedPreferences sharedPreferences, String preferenceName) {
+    SharedPreferencesFeaturePersistence(SharedPreferences sharedPreferences, String preferenceName) {
         this.sharedPreferences = sharedPreferences;
         this.preferenceName = preferenceName;
     }
