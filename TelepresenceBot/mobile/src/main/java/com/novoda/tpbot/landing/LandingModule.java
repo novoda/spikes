@@ -33,4 +33,9 @@ public class LandingModule {
         return new LandingMenuFeatureSelectionController(menuInflater, features);
     }
 
+    @Provides
+    Navigator provideNavigator(LandingActivity activity) {
+        return new IntentNavigator(activity);
+    }
+
 }

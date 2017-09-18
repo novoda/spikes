@@ -1,6 +1,5 @@
 package com.novoda.tpbot.landing;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -9,8 +8,6 @@ import android.view.View;
 
 import com.novoda.tpbot.FeatureSelectionController;
 import com.novoda.tpbot.R;
-import com.novoda.tpbot.bot.BotActivity;
-import com.novoda.tpbot.human.HumanActivity;
 
 import javax.inject.Inject;
 
@@ -20,6 +17,8 @@ public class LandingActivity extends AppCompatActivity {
 
     @Inject
     FeatureSelectionController<Menu, MenuItem> featureSelectionController;
+    @Inject
+    Navigator navigator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,16 +37,14 @@ public class LandingActivity extends AppCompatActivity {
     private final View.OnClickListener onHumanSelectionListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(getApplicationContext(), HumanActivity.class);
-            startActivity(intent);
+            navigator.toHuman();
         }
     };
 
     private final View.OnClickListener onBotSelectionListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(getApplicationContext(), BotActivity.class);
-            startActivity(intent);
+            navigator.toBot();
         }
     };
 
