@@ -242,9 +242,9 @@ public class Ads1015 {
     private short readRegister(int reg) {
 
         try {
-            return i2cBus.readRegWord(ADS1015_REG_POINTER_CONVERT);
+            return i2cBus.readRegWord(reg);
         } catch (IOException e) {
-            throw new IllegalStateException("Cannot read " + ADS1015_REG_POINTER_CONVERT, e);
+            throw new IllegalStateException("Cannot read " + reg, e);
         }
 
 //        Wire.beginTransmission(i2cAddress);
