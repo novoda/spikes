@@ -113,7 +113,7 @@ public class Ads1015 {
         }
 
         // Start with default values
-        int config = ADS1015_REG_CONFIG_CQUE_NONE | // Disable the comparator (default val)
+        short config = ADS1015_REG_CONFIG_CQUE_NONE | // Disable the comparator (default val)
                 ADS1015_REG_CONFIG_CLAT_NONLAT | // Non-latching (default val)
                 ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
                 ADS1015_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
@@ -175,7 +175,7 @@ public class Ads1015 {
 
     private void configDifferential(int muxPinsConfig) {
         //noinspection PointlessBitwiseExpression Ignore for Readability
-        int config = ADS1015_REG_CONFIG_CQUE_NONE | // Disable the comparator (default val)
+        short config = ADS1015_REG_CONFIG_CQUE_NONE | // Disable the comparator (default val)
                 ADS1015_REG_CONFIG_CLAT_NONLAT | // Non-latching (default val)
                 ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
                 ADS1015_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
@@ -193,8 +193,8 @@ public class Ads1015 {
 
         Log.d("TUT", "b4 write config");
         // Write config register to the ADC
-        writeRegister(ADS1015_REG_POINTER_CONFIG, (short) config);
         Log.d("TUT", "a4 write config");
+        writeRegister(ADS1015_REG_POINTER_CONFIG, config);
 
         // Wait for the conversion to complete
         delay(conversionDelay);
