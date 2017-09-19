@@ -21,6 +21,9 @@ import static org.hamcrest.core.Is.is;
 
 @RunWith(AndroidJUnit4.class)
 public class SignInActivityTest {
+    private final static String PASSWORD_USERNAME_TOO_SHORT = "Oops something went wrong, is your username " +
+            "and password more than 4 characters?";
+
     private UserService userService;
     private LoginFlow loginFlow;
 
@@ -40,24 +43,29 @@ public class SignInActivityTest {
 
         loginFlow.doLogin(validUser.getCredentials());
 
-        assertThat(loginFlow.checkIfLoggedIn(), is(true));
+        assertThat(loginFlow.userIsLoggedIn(), is(true));
     }
 
     @Test
-    public void signIn_UsernameTooShort_loginNotPossible() throws InterruptedException {
-        final String expectedError = "Oops something went wrong, is your username " +
-                "and password more than 4 characters?";
-        User passwordTooShortUser = userService.getUserWithTooShortUsername();
+    public void signIn_UsernameTooShort_loginNotPossible() {
+        User usernameTooShortUser = userService.getUserWithTooShortUsername();
+
+        loginFlow.doLogin(usernameTooShortUser.getCredentials());
+
+        assertThat(loginFlow.correctErrorDialogIsShown(PASSWORD_USERNAME_TOO_SHORT), is(true));
+    }
+
+    @Test
+    public void signIn_PasswordTooShort_loginNotPossible() {
+        User passwordTooShortUser = userService.getUserWithTooShortPassword();
 
         loginFlow.doLogin(passwordTooShortUser.getCredentials());
 
-        assertThat(loginFlow.correctErrorDialogIsShown(expectedError), is(true));
+        assertThat(loginFlow.correctErrorDialogIsShown(PASSWORD_USERNAME_TOO_SHORT), is(true));
     }
 
     @After
     public void tearDown() throws Exception {
-        if (loginFlow.isSignedIn()) {
-            Application.setSignedOut();
-        }
+        Application.setSignedOut();
     }
 }
