@@ -38,4 +38,5 @@ dependencies {
 
     }
     androidTestCompile 'junit:junit:4.12'
+    androidTestCompile 'com.github.javafaker:javafaker:0.13'
 }
