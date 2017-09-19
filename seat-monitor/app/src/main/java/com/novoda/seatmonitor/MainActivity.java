@@ -21,6 +21,7 @@ public class MainActivity extends Activity {
         Log.d("TUT", "oncreate");
         HandlerThread thread = new HandlerThread("backgroundMeasure");
         thread.start();
+
         handler = new Handler(thread.getLooper());
         handler.post(loop);
     }
@@ -29,7 +30,12 @@ public class MainActivity extends Activity {
         @Override
         public void run() {
 
-            Log.d("TUT", "Differential " + ads1015.readADC_SingleEnded(0));
+            Log.d("TUT", "0 & 1 Differential " + ads1015.readADCDifferentialBetween0And1());
+            Log.d("TUT", "2 & 3 Differential " + ads1015.readADCDifferentialBetween2And3());
+
+            // TODO define a "change"
+            // If there is a "change"
+            // Record that change in firebase
 
             handler.postDelayed(this, TimeUnit.SECONDS.toMillis(1));
         }

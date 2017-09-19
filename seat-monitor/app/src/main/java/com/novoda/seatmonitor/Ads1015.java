@@ -153,20 +153,40 @@ public class Ads1015 {
         return readRegister(ADS1015_REG_POINTER_CONVERT) >> BIT_SHIFT;
     }
 
-    int readADCDifferentialBetween0And1() {
+    public int readADCDifferentialBetween0And1() {
+        configDifferential(ADS1015_REG_CONFIG_MUX_DIFF_0_1);
+        return readADCDifferential();
+    }
+
+    public int readADCDifferentialBetween0And3() {
+        configDifferential(ADS1015_REG_CONFIG_MUX_DIFF_0_3);
+        return readADCDifferential();
+    }
+
+    public int readADCDifferentialBetween1And3() {
+        configDifferential(ADS1015_REG_CONFIG_MUX_DIFF_1_3);
+        return readADCDifferential();
+    }
+
+    public int readADCDifferentialBetween2And3() {
+        configDifferential(ADS1015_REG_CONFIG_MUX_DIFF_2_3);
+        return readADCDifferential();
+    }
+
+    private void configDifferential(int muxPinsConfig) {
         //noinspection PointlessBitwiseExpression Ignore for Readability
         int config = ADS1015_REG_CONFIG_CQUE_NONE | // Disable the comparator (default val)
-            ADS1015_REG_CONFIG_CLAT_NONLAT | // Non-latching (default val)
-            ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
-            ADS1015_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
-            ADS1015_REG_CONFIG_DR_1600SPS | // 1600 samples per second (default)
-            ADS1015_REG_CONFIG_MODE_SINGLE;   // Single-shot mode (default)
+                ADS1015_REG_CONFIG_CLAT_NONLAT | // Non-latching (default val)
+                ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
+                ADS1015_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
+                ADS1015_REG_CONFIG_DR_1600SPS | // 1600 samples per second (default)
+                ADS1015_REG_CONFIG_MODE_SINGLE;   // Single-shot mode (default)
 
         // Set PGA/voltage range
         config |= gain.value;
 
         // Set channels
-        config |= ADS1015_REG_CONFIG_MUX_DIFF_0_1;          // AIN0 = P, AIN1 = N
+        config |= muxPinsConfig;          // AIN0 = P, AIN1 = N
 
         // Set 'start single-conversion' bit
         config |= ADS1015_REG_CONFIG_OS_SINGLE;
@@ -178,7 +198,9 @@ public class Ads1015 {
 
         // Wait for the conversion to complete
         delay(conversionDelay);
+    }
 
+    private int readADCDifferential() {
         Log.d("TUT", "b4 read register");
         // Read the conversion results
         int res = readRegister(ADS1015_REG_POINTER_CONVERT) >> BIT_SHIFT;
@@ -190,7 +212,6 @@ public class Ads1015 {
             res |= 0xF000;
         }
         return res;
-
     }
 
     private void writeRegister(int reg, short value) {
