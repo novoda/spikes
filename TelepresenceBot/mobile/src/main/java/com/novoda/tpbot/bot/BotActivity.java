@@ -206,6 +206,6 @@ public class BotActivity extends AppCompatActivity implements BotView,
     @Override
     public void onCommandRepeated(String command) {
         debugView.showTimed(command);
-        // TODO: Send command to the DeviceConnection.
+        movementServiceBinder.sendCommand(command);
     }
 }

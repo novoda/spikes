@@ -28,6 +28,10 @@ public class MovementServiceBinder {
         context.bindService(botServiceIntent, movementServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
+    public void sendCommand(String command) {
+        deviceConnection.send(command);
+    }
+
     private class MovementServiceConnection implements ServiceConnection {
 
         private final DeviceConnection deviceConnection;

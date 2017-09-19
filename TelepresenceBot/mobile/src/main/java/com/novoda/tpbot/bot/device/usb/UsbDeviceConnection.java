@@ -71,7 +71,7 @@ class UsbDeviceConnection extends DeviceConnection implements UsbChangesListener
 
     @Override
     public void send(String data) {
-        // TODO: send data to serial port.
+        serialPortMonitor.tryToSendCommand(data);
     }
 
     @Override
