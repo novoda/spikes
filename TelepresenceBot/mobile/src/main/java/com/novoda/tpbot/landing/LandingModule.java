@@ -44,13 +44,8 @@ public class LandingModule {
     }
 
     @Provides
-    LandingDisplayer provideLandingDisplayer(LandingView landingView) {
-        return new LandingDisplayer(landingView);
-    }
-
-    @Provides
-    LandingPresenter provideLandingPresenter(LandingDisplayer displayer, Navigator navigator) {
-        return new LandingPresenter(displayer, navigator);
+    LandingPresenter provideLandingPresenter(LandingView landingView, Navigator navigator) {
+        return new LandingPresenter(landingView, navigator);
     }
 
 }

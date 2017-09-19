@@ -2,16 +2,16 @@ package com.novoda.tpbot.landing;
 
 class LandingPresenter {
 
-    private final LandingDisplayer displayer;
+    private final LandingView landingView;
     private final Navigator navigator;
 
-    LandingPresenter(LandingDisplayer displayer, Navigator navigator) {
-        this.displayer = displayer;
+    LandingPresenter(LandingView landingView, Navigator navigator) {
+        this.landingView = landingView;
         this.navigator = navigator;
     }
 
     void startPresenting() {
-        displayer.update(selectionListener);
+        landingView.setSelectionListener(selectionListener);
     }
 
     void stopPresenting() {

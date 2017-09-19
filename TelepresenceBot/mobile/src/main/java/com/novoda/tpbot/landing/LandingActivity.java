@@ -64,7 +64,7 @@ public class LandingActivity extends AppCompatActivity implements LandingView {
     }
 
     @Override
-    public void setSelectionListener(final LandingDisplayer.Listener listener) {
+    public void setSelectionListener(final LandingPresenter.Listener listener) {
         humanSelectionView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
