@@ -11,18 +11,18 @@ import org.junit.runner.RunWith;
 
 import novoda.com.sandbox.models.User;
 import novoda.com.sandbox.services.UserService;
+import novoda.com.sandbox.userFlows.LoginFlow;
 
-import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 @RunWith(AndroidJUnit4.class)
 public class SignInActivityTest {
     private UserService userService;
+    private LoginFlow loginFlow;
 
     @Rule
     public ActivityTestRule mActivityRule = new ActivityTestRule<>(
@@ -31,39 +31,33 @@ public class SignInActivityTest {
     @Before
     public void setUp() throws Exception {
         userService = new UserService();
+        loginFlow = new LoginFlow();
     }
 
     @Test
     public void signIn_ValidCredentials_loginPossible() {
         User validUser = userService.getValidUser();
 
-        onView(withId(R.id.main_activity_sign_in_button)).perform(click());
-        onView(withId(R.id.sign_in_activity_username_field))
-                .perform(typeText(validUser.getCredentials().getUsername()));
-        onView(withId(R.id.sign_in_activity_password_field))
-                .perform(typeText(validUser.getCredentials().getPassword()));
-        onView(withId(R.id.sign_in_activity_submit_button)).perform(click());
+        loginFlow.doLogin(validUser.getCredentials());
 
-        onView(withId(R.id.main_activity_sign_in_button)).check(matches(isDisplayed()));
+        assertThat(loginFlow.checkIfLoggedIn(), is(true));
     }
 
     @Test
     public void signIn_UsernameTooShort_loginNotPossible() throws InterruptedException {
-        User usernameTooShortUser = userService.getUserWithTooShortUsername();
+        final String expectedError = "Oops something went wrong, is your username " +
+                "and password more than 4 characters?";
+        User passwordTooShortUser = userService.getUserWithTooShortUsername();
 
-        onView(withId(R.id.main_activity_sign_in_button)).perform(click());
-        onView(withId(R.id.sign_in_activity_username_field))
-                .perform(typeText(usernameTooShortUser.getCredentials().getUsername()));
-        onView(withId(R.id.sign_in_activity_password_field))
-                .perform(typeText(usernameTooShortUser.getCredentials().getPassword()));
-        onView(withId(R.id.sign_in_activity_submit_button)).perform(click());
-        Thread.sleep(20);
+        loginFlow.doLogin(passwordTooShortUser.getCredentials());
 
-        onView(withText("Oops something went wrong, is your username and password more than 4 characters?")).check(matches(isDisplayed()));
+        assertThat(loginFlow.correctErrorDialogIsShown(expectedError), is(true));
     }
 
     @After
     public void tearDown() throws Exception {
-        Application.setSignedOut();
+        if (loginFlow.isSignedIn()) {
+            Application.setSignedOut();
+        }
     }
 }
