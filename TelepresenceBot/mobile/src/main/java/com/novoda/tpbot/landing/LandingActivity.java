@@ -42,6 +42,23 @@ public class LandingActivity extends AppCompatActivity implements LandingView {
     }
 
     @Override
+    public void update(final LandingPresenter.Actions actions) {
+        humanSelectionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                actions.onHumanSelected();
+            }
+        });
+
+        botSelectionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                actions.onBotSelected();
+            }
+        });
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         featureSelectionController.attachFeaturesTo(menu);
         return true;
@@ -61,23 +78,6 @@ public class LandingActivity extends AppCompatActivity implements LandingView {
     protected void onStop() {
         presenter.stopPresenting();
         super.onStop();
-    }
-
-    @Override
-    public void setSelectionListener(final LandingPresenter.Listener listener) {
-        humanSelectionView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onHumanSelected();
-            }
-        });
-
-        botSelectionView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onBotSelected();
-            }
-        });
     }
 
 }

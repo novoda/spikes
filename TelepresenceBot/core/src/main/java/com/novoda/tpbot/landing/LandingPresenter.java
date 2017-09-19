@@ -11,14 +11,14 @@ class LandingPresenter {
     }
 
     void startPresenting() {
-        landingView.setSelectionListener(selectionListener);
+        landingView.update(actions);
     }
 
     void stopPresenting() {
 
     }
 
-    private final Listener selectionListener = new Listener() {
+    private final Actions actions = new Actions() {
         @Override
         public void onBotSelected() {
             navigator.toBot();
@@ -30,7 +30,7 @@ class LandingPresenter {
         }
     };
 
-    interface Listener {
+    interface Actions {
 
         void onBotSelected();
 
