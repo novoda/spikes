@@ -69,12 +69,12 @@ public class Ads1015 {
     private final I2cDevice i2cBus;
     private final Gain gain;
 
-    Ads1015(I2cDevice i2cDevice) {
+    Ads1015(I2cDevice i2cDevice, Gain gain) {
         this.i2cBus = i2cDevice;
-        this.gain = Gain.TWO_THIRDS; /* +/- 6.144V range (limited to VDD +0.3V max!) */
+        this.gain = gain; /* +/- 6.144V range (limited to VDD +0.3V max!) */
     }
 
-    enum Gain {
+    public enum Gain {
         TWO_THIRDS(ADS1015_REG_CONFIG_PGA_6_144V),
         ONE(ADS1015_REG_CONFIG_PGA_4_096V),
         TWO(ADS1015_REG_CONFIG_PGA_2_048V),
@@ -91,7 +91,7 @@ public class Ads1015 {
 
     public static class Factory {
 
-        public Ads1015 newInstance(String i2CBus, int i2cAddress) {
+        public Ads1015 newInstance(String i2CBus, int i2cAddress, Gain gain) {
 
             PeripheralManagerService service = new PeripheralManagerService();
 
@@ -102,7 +102,7 @@ public class Ads1015 {
                 throw new IllegalStateException("Can't open 0x48", e);
             }
 
-            return new Ads1015(i2cDevice);
+            return new Ads1015(i2cDevice, gain);
         }
 
     }

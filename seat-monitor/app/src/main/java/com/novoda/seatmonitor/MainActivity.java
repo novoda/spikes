@@ -17,7 +17,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ads1015 = new Ads1015.Factory().newInstance("I2C1", 0x48);
+        ads1015 = new Ads1015.Factory().newInstance("I2C1", 0x48, Ads1015.Gain.ONE);
         Log.d("TUT", "oncreate");
         HandlerThread thread = new HandlerThread("backgroundMeasure");
         thread.start();
