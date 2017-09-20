@@ -15,6 +15,8 @@ class Ads1015DifferentialComparator implements Ads1015 {
     private final Gain gain;
     private final DifferentialPins differentialPins;
 
+    private ComparatorCallback callback;
+
     Ads1015DifferentialComparator(I2cDevice i2cDevice,
                                   Gpio alertReadyGpioBus,
                                   Gain gain,
@@ -26,24 +28,30 @@ class Ads1015DifferentialComparator implements Ads1015 {
     }
 
     @Override
-    public void startComparatorDifferential(int thresholdInMv, final ComparatorCallback callback) {
+    public void startComparatorDifferential(int thresholdInMv, ComparatorCallback callback) {
+        this.callback = callback;
         startComparatorDifferential(thresholdInMv);
         try {
-            alertReadyGpioBus.registerGpioCallback(new GpioCallback() { // TODO unregister
-                @Override
-                public boolean onGpioEdge(Gpio gpio) {
-                    float multiplier = 3.0F;  // TODO multiplier should be based on Gain
-                    configDifferential();
-                    float valueInMv = readADCDifferential() * multiplier;
-                    callback.onThresholdHit((int) valueInMv);
-                    return true;
-                }
-            });
+            alertReadyGpioBus.registerGpioCallback(thresholdHitCallback);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
 
     }
+
+    private final GpioCallback thresholdHitCallback = new GpioCallback() {
+        @Override
+        public boolean onGpioEdge(Gpio gpio) {
+            if (callback == null) {
+                throw new IllegalStateException("Didn't expect to be called with no callback", new NullPointerException("callback is null"));
+            }
+            float multiplier = 3.0F;  // TODO multiplier should be based on Gain
+            configDifferential();
+            float valueInMv = readADCDifferential() * multiplier;
+            callback.onThresholdHit((int) valueInMv);
+            return true;
+        }
+    };
 
     private void startComparatorDifferential(int threshold) {
         // Set the high threshold register
@@ -144,7 +152,7 @@ class Ads1015DifferentialComparator implements Ads1015 {
     public void close() {
         try {
             i2cBus.close();
-            alertReadyGpioBus.unregisterGpioCallback(null); // TODO
+            alertReadyGpioBus.unregisterGpioCallback(thresholdHitCallback);
             alertReadyGpioBus.close();
         } catch (IOException e) {
             throw new IllegalStateException(e);
