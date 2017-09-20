@@ -54,5 +54,4 @@ class CredentialService {
         return random.nextInt(MIN_USERNAME_LENGTH - 1) + 1;
     }
 
-
 }

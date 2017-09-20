@@ -10,12 +10,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import novoda.com.sandbox.models.User;
-import novoda.com.sandbox.services.UserService;
+import novoda.com.sandbox.repositories.UserRepository;
 import novoda.com.sandbox.userFlows.LoginFlow;
 
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -24,7 +21,7 @@ public class SignInActivityTest {
     private final static String PASSWORD_USERNAME_TOO_SHORT = "Oops something went wrong, is your username " +
             "and password more than 4 characters?";
 
-    private UserService userService;
+    private UserRepository userRepository;
     private LoginFlow loginFlow;
 
     @Rule
@@ -33,22 +30,22 @@ public class SignInActivityTest {
 
     @Before
     public void setUp() throws Exception {
-        userService = new UserService();
+        userRepository = new UserRepository();
         loginFlow = new LoginFlow();
     }
 
     @Test
     public void signIn_ValidCredentials_loginPossible() {
-        User validUser = userService.getValidUser();
+        User validUser = userRepository.getValidUser();
 
         loginFlow.doLogin(validUser.getCredentials());
 
-        assertThat(loginFlow.userIsLoggedIn(), is(true));
+        assertThat(loginFlow.userLoggedIn(), is(true));
     }
 
     @Test
     public void signIn_UsernameTooShort_loginNotPossible() {
-        User usernameTooShortUser = userService.getUserWithTooShortUsername();
+        User usernameTooShortUser = userRepository.getUserWithTooShortUsername();
 
         loginFlow.doLogin(usernameTooShortUser.getCredentials());
 
@@ -57,7 +54,7 @@ public class SignInActivityTest {
 
     @Test
     public void signIn_PasswordTooShort_loginNotPossible() {
-        User passwordTooShortUser = userService.getUserWithTooShortPassword();
+        User passwordTooShortUser = userRepository.getUserWithTooShortPassword();
 
         loginFlow.doLogin(passwordTooShortUser.getCredentials());
 

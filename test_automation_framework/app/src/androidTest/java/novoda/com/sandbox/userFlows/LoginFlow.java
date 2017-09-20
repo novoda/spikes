@@ -4,8 +4,6 @@ import novoda.com.sandbox.models.Credentials;
 import novoda.com.sandbox.pages.MainPage;
 import novoda.com.sandbox.pages.SignInPage;
 
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-
 public class LoginFlow {
 
     private MainPage mainView;
@@ -21,7 +19,7 @@ public class LoginFlow {
         signInPage.doLogin(credentials);
     }
 
-    public boolean userIsLoggedIn() {
+    public boolean userLoggedIn() {
         mainView.validateLoggedInStatus();
         return true;
     }
