@@ -3,6 +3,7 @@ module.exports = function Mover(clientsAndRooms, emitter) {
     const emitToRoom = function (direction) {
         return function (room) {
             emitter.to(room).emit('direction', direction);
+            return true;
         }
     }
 
