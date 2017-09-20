@@ -17,6 +17,7 @@ public class MainActivity extends Activity {
 
     private WiiLoadSensor wiiLoadSensorA;
     private WiiLoadSensor wiiLoadSensorB;
+    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,7 @@ public class MainActivity extends Activity {
         wiiLoadSensorB = new WiiLoadSensor(ads10150x49);
 
         try {
-            Button button = new Button("GPIO11", Button.LogicState.PRESSED_WHEN_HIGH);
+            button = new Button("GPIO11", Button.LogicState.PRESSED_WHEN_HIGH);
             button.setOnButtonEventListener(new Button.OnButtonEventListener() {
                 @Override
                 public void onButtonEvent(Button button, boolean pressed) {
@@ -61,6 +62,11 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
         wiiLoadSensorA.stopMonitoring();
         wiiLoadSensorB.stopMonitoring();
+        try {
+            button.close();
+        } catch (IOException e) {
+            // ignore
+        }
         super.onDestroy();
     }
 }
