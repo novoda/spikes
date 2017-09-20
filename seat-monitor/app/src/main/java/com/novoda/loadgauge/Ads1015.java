@@ -169,17 +169,19 @@ public interface Ads1015 {
 
             I2cDevice i2cDevice;
             Gpio alertReadyGpioBus;
+            Ads1015DifferentialReader differentialReader;
             try {
                 i2cDevice = service.openI2cDevice(i2CBus, i2cAddress);
                 alertReadyGpioBus = service.openGpio(alertReadyGpioPinName);
                 alertReadyGpioBus.setActiveType(Gpio.ACTIVE_HIGH);
                 alertReadyGpioBus.setDirection(Gpio.DIRECTION_IN);
                 alertReadyGpioBus.setEdgeTriggerType(Gpio.EDGE_RISING);
+                differentialReader = new Ads1015DifferentialReader(i2cDevice, gain, differentialPins);
             } catch (IOException e) {
                 throw new IllegalStateException("Can't open 0x48", e);
             }
 
-            return new Ads1015DifferentialComparator(i2cDevice, alertReadyGpioBus, gain, differentialPins);
+            return new Ads1015DifferentialComparator(i2cDevice, alertReadyGpioBus, gain, differentialPins, differentialReader);
         }
 
     }

@@ -14,17 +14,20 @@ class Ads1015DifferentialComparator implements Ads1015 {
     private final Gpio alertReadyGpioBus;
     private final Gain gain;
     private final DifferentialPins differentialPins;
+    private final Ads1015DifferentialReader differentialReader;
 
     private ComparatorCallback callback;
 
     Ads1015DifferentialComparator(I2cDevice i2cDevice,
                                   Gpio alertReadyGpioBus,
                                   Gain gain,
-                                  DifferentialPins differentialPins) {
+                                  DifferentialPins differentialPins,
+                                  Ads1015DifferentialReader differentialReader) {
         this.i2cBus = i2cDevice;
         this.alertReadyGpioBus = alertReadyGpioBus;
         this.gain = gain; /* +/- 6.144V range (limited to VDD +0.3V max!) */
         this.differentialPins = differentialPins;
+        this.differentialReader = differentialReader;
     }
 
     @Override
@@ -135,7 +138,7 @@ class Ads1015DifferentialComparator implements Ads1015 {
 
     @Override
     public int readDifferential() {
-        throw new UnsupportedOperationException("Not my responsibility");
+        return differentialReader.readDifferential();
     }
 
     @Override

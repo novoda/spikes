@@ -21,8 +21,14 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     testImplementation 'junit:junit:4.12'
+
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
     compileOnly 'com.google.android.things:androidthings:+'
+    compile ('com.google.android.things.contrib:driver-button:+') {
+        exclude group : 'com.android.support' , module : 'support-annotations'
+    }
 }

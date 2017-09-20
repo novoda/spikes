@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.android.things.contrib.driver.button.Button;
 import com.novoda.loadgauge.Ads1015;
 import com.novoda.loadgauge.WiiLoadSensor;
+
+import java.io.IOException;
 
 import static com.novoda.loadgauge.Ads1015.DifferentialPins.PINS_0_1;
 import static com.novoda.loadgauge.Ads1015.DifferentialPins.PINS_2_3;
@@ -29,9 +32,18 @@ public class MainActivity extends Activity {
         Ads1015 ads10150x49 = factory.newDifferentialComparatorInstance(i2CBus, 0x49, gain, alertReadyPin, PINS_2_3);
         wiiLoadSensorB = new WiiLoadSensor(ads10150x49);
 
-        // TODO button to calibrate
-        // on calibrate = current value = 0
-        // have a calibration value (base threshold on this value)
+        try {
+            Button button = new Button("GPIO11", Button.LogicState.PRESSED_WHEN_HIGH);
+            button.setOnButtonEventListener(new Button.OnButtonEventListener() {
+                @Override
+                public void onButtonEvent(Button button, boolean pressed) {
+                    wiiLoadSensorA.calibrateToZero();
+                    wiiLoadSensorB.calibrateToZero();
+                }
+            });
+        } catch (IOException e) {
+            throw new IllegalStateException("Button FooBar", e);
+        }
 
         wiiLoadSensorA.monitorForWeightChangeOver(50, sensorAWeightChangedCallback);
     }

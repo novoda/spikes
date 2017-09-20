@@ -7,16 +7,22 @@ public class WiiLoadSensor {
     private final Ads1015 ads1015;
 
     private WeightChangeCallback callback;
+    private int milliVoltsAtRest;
 
     public WiiLoadSensor(Ads1015 ads1015) {
         this.ads1015 = ads1015;
+    }
+
+    public void calibrateToZero() {
+        // Get the current load on the sensor store this value as "0"
+        milliVoltsAtRest = ads1015.readDifferential();
     }
 
     public void monitorForWeightChangeOver(float weightInKg, WeightChangeCallback callback) {
         this.callback = callback;
 
         // TODO convert weightInKg to mV
-        int threshold = 1000;
+        int threshold = 1000 + milliVoltsAtRest;
 
         ads1015.startComparatorDifferential(threshold, comparatorCallback);
     }
@@ -30,7 +36,8 @@ public class WiiLoadSensor {
             Log.d("TUT", "Theshold hit, value: " + valueInMv + "mV");
 
             // negate the cushion presence (i.e. use the calibration value)
-
+            int realValueInMv = valueInMv - milliVoltsAtRest;
+            Log.d("TUT", "Value minus rest: " + realValueInMv + "mV");
             // TODO convert valueInMv to kg
             float weightInKg = 50;
 
