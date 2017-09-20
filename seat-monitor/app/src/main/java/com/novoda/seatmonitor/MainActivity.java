@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
 
+import com.novoda.loadgauge.Ads1015;
+
 public class MainActivity extends Activity {
 
     private Handler handler;

@@ -1,4 +1,4 @@
-package com.novoda.seatmonitor;
+package com.novoda.loadgauge;
 
 import android.os.SystemClock;
 
