@@ -172,9 +172,9 @@ public interface Ads1015 {
             try {
                 i2cDevice = service.openI2cDevice(i2CBus, i2cAddress);
                 alertReadyGpioBus = service.openGpio(alertReadyGpioPinName);
-
-                // TODO Config pin to edge high or low
-
+                alertReadyGpioBus.setActiveType(Gpio.ACTIVE_HIGH);
+                alertReadyGpioBus.setDirection(Gpio.DIRECTION_IN);
+                alertReadyGpioBus.setEdgeTriggerType(Gpio.EDGE_RISING);
             } catch (IOException e) {
                 throw new IllegalStateException("Can't open 0x48", e);
             }
