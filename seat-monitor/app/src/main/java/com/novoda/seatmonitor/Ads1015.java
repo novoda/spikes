@@ -126,11 +126,11 @@ public class Ads1015 {
 
         // Start with default values
         short config = ADS1015_REG_CONFIG_CQUE_NONE | // Disable the comparator (default val)
-                ADS1015_REG_CONFIG_CLAT_NONLAT | // Non-latching (default val)
-                ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
-                ADS1015_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
-                ADS1015_REG_CONFIG_DR_1600SPS | // 1600 samples per second (default)
-                ADS1015_REG_CONFIG_MODE_SINGLE;   // Single-shot mode (default)
+            ADS1015_REG_CONFIG_CLAT_NONLAT | // Non-latching (default val)
+            ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
+            ADS1015_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
+            ADS1015_REG_CONFIG_DR_1600SPS | // 1600 samples per second (default)
+            ADS1015_REG_CONFIG_MODE_SINGLE;   // Single-shot mode (default)
 
         // Set PGA/voltage range
         config |= gain.value;
@@ -188,11 +188,11 @@ public class Ads1015 {
     private void configDifferential(int muxPinsConfig) {
         //noinspection PointlessBitwiseExpression Ignore for Readability
         short config = ADS1015_REG_CONFIG_CQUE_NONE | // Disable the comparator (default val)
-                ADS1015_REG_CONFIG_CLAT_NONLAT | // Non-latching (default val)
-                ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
-                ADS1015_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
-                ADS1015_REG_CONFIG_DR_1600SPS | // 1600 samples per second (default)
-                ADS1015_REG_CONFIG_MODE_SINGLE;   // Single-shot mode (default)
+            ADS1015_REG_CONFIG_CLAT_NONLAT | // Non-latching (default val)
+            ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
+            ADS1015_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
+            ADS1015_REG_CONFIG_DR_1600SPS | // 1600 samples per second (default)
+            ADS1015_REG_CONFIG_MODE_SINGLE;   // Single-shot mode (default)
 
         // Set PGA/voltage range
         config |= gain.value;
@@ -245,12 +245,12 @@ public class Ads1015 {
     void startComparatorSingleEnded(short channel, short threshold) {
         // Start with default values
         short config = ADS1015_REG_CONFIG_CQUE_1CONV | // Comparator enabled and asserts on 1 match
-                ADS1015_REG_CONFIG_CLAT_LATCH | // Latching mode
-                ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
-                ADS1015_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
-                ADS1015_REG_CONFIG_DR_1600SPS | // 1600 samples per second (default)
-                ADS1015_REG_CONFIG_MODE_CONTIN | // Continuous conversion mode
-                ADS1015_REG_CONFIG_MODE_CONTIN;   // Continuous conversion mode
+            ADS1015_REG_CONFIG_CLAT_LATCH | // Latching mode
+            ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
+            ADS1015_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
+            ADS1015_REG_CONFIG_DR_1600SPS | // 1600 samples per second (default)
+            ADS1015_REG_CONFIG_MODE_CONTIN | // Continuous conversion mode
+            ADS1015_REG_CONFIG_MODE_CONTIN;   // Continuous conversion mode
 
         // Set PGA/voltage range
         config |= gain.value;
@@ -317,12 +317,12 @@ public class Ads1015 {
 
         // Start with default values
         short config = ADS1015_REG_CONFIG_CQUE_1CONV | // Comparator enabled and asserts on 1 match
-                ADS1015_REG_CONFIG_CLAT_LATCH | // Latching mode
-                ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
-                ADS1015_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
-                ADS1015_REG_CONFIG_DR_1600SPS | // 1600 samples per second (default)
-                ADS1015_REG_CONFIG_MODE_CONTIN | // Continuous conversion mode
-                ADS1015_REG_CONFIG_MODE_CONTIN;   // Continuous conversion mode
+            ADS1015_REG_CONFIG_CLAT_LATCH | // Latching mode
+            ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
+            ADS1015_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
+            ADS1015_REG_CONFIG_DR_1600SPS | // 1600 samples per second (default)
+            ADS1015_REG_CONFIG_MODE_CONTIN | // Continuous conversion mode
+            ADS1015_REG_CONFIG_MODE_CONTIN;   // Continuous conversion mode
 
         // Set PGA/voltage range
         config |= gain.value;
@@ -333,4 +333,12 @@ public class Ads1015 {
         writeRegister(ADS1015_REG_POINTER_CONFIG, config);
     }
 
+    public void close() {
+        try {
+            i2cBus.close();
+            alertReadyGpioBus.close();
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 }

@@ -49,7 +49,8 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        // TODO CLOSE ALL THE THINGS
+        ads10150x48.close();
+        ads10150x49.close();
         super.onDestroy();
     }
 }
