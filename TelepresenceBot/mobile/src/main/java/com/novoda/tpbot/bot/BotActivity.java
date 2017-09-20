@@ -186,6 +186,7 @@ public class BotActivity extends AppCompatActivity implements BotView,
     @Override
     public void moveIn(Direction direction) {
         debugView.showTimed(direction.visualRepresentation());
+        movementServiceBinder.sendCommand(direction.rawDirection());
     }
 
     @Override
@@ -206,6 +207,5 @@ public class BotActivity extends AppCompatActivity implements BotView,
     @Override
     public void onCommandRepeated(String command) {
         debugView.showTimed(command);
-        movementServiceBinder.sendCommand(command);
     }
 }
