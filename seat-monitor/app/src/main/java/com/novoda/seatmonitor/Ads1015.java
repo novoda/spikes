@@ -2,6 +2,8 @@ package com.novoda.seatmonitor;
 
 import android.os.SystemClock;
 
+import com.google.android.things.pio.Gpio;
+import com.google.android.things.pio.GpioCallback;
 import com.google.android.things.pio.I2cDevice;
 import com.google.android.things.pio.PeripheralManagerService;
 
@@ -67,9 +69,11 @@ public class Ads1015 {
 
     private final I2cDevice i2cBus;
     private final Gain gain;
+    private final Gpio alertReadyGpioBus;
 
-    Ads1015(I2cDevice i2cDevice, Gain gain) {
+    Ads1015(I2cDevice i2cDevice, Gpio alertReadyGpioBus, Gain gain) {
         this.i2cBus = i2cDevice;
+        this.alertReadyGpioBus = alertReadyGpioBus;
         this.gain = gain; /* +/- 6.144V range (limited to VDD +0.3V max!) */
     }
 
@@ -88,25 +92,34 @@ public class Ads1015 {
         }
     }
 
+    public interface ComparatorCallback {
+        void onThresholdHit(int valueInMv);
+    }
+
     public static class Factory {
 
-        public Ads1015 newInstance(String i2CBus, int i2cAddress, Gain gain) {
+        public Ads1015 newInstance(String i2CBus, int i2cAddress, Gain gain, String alertReadyGpioPinName) {
 
             PeripheralManagerService service = new PeripheralManagerService();
 
             I2cDevice i2cDevice;
+            Gpio alertReadyGpioBus;
             try {
                 i2cDevice = service.openI2cDevice(i2CBus, i2cAddress);
+                alertReadyGpioBus = service.openGpio(alertReadyGpioPinName);
+
+                // TODO Config pin to edge high or low
+
             } catch (IOException e) {
                 throw new IllegalStateException("Can't open 0x48", e);
             }
 
-            return new Ads1015(i2cDevice, gain);
+            return new Ads1015(i2cDevice, alertReadyGpioBus, gain);
         }
 
     }
 
-    int readADC_SingleEnded(int channel) {
+    int readADC_SingleEnded(short channel) {
         if (channel > 3) {
             return 0;
         }
@@ -227,6 +240,97 @@ public class Ads1015 {
         } catch (IOException e) {
             throw new IllegalStateException("Cannot read " + reg, e);
         }
+    }
+
+    void startComparatorSingleEnded(short channel, short threshold) {
+        // Start with default values
+        short config = ADS1015_REG_CONFIG_CQUE_1CONV | // Comparator enabled and asserts on 1 match
+                ADS1015_REG_CONFIG_CLAT_LATCH | // Latching mode
+                ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
+                ADS1015_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
+                ADS1015_REG_CONFIG_DR_1600SPS | // 1600 samples per second (default)
+                ADS1015_REG_CONFIG_MODE_CONTIN | // Continuous conversion mode
+                ADS1015_REG_CONFIG_MODE_CONTIN;   // Continuous conversion mode
+
+        // Set PGA/voltage range
+        config |= gain.value;
+
+        // Set single-ended input channel
+        switch (channel) {
+            case (0):
+                config |= ADS1015_REG_CONFIG_MUX_SINGLE_0;
+                break;
+            case (1):
+                config |= ADS1015_REG_CONFIG_MUX_SINGLE_1;
+                break;
+            case (2):
+                config |= ADS1015_REG_CONFIG_MUX_SINGLE_2;
+                break;
+            case (3):
+                config |= ADS1015_REG_CONFIG_MUX_SINGLE_3;
+                break;
+        }
+
+        // Set the high threshold register
+        // Shift 12-bit results left 4 bits for the ADS1015
+        writeRegister(ADS1015_REG_POINTER_HITHRESH, (short) (threshold << BIT_SHIFT));
+
+        // Write config register to the ADC
+        writeRegister(ADS1015_REG_POINTER_CONFIG, config);
+    }
+
+    public void startComparatorADCDifferentialBetween0And1(int threshold, final ComparatorCallback callback) {
+        startComparatorDifferential(ADS1015_REG_CONFIG_MUX_DIFF_0_1, threshold);
+        try {
+            alertReadyGpioBus.registerGpioCallback(new GpioCallback() { // TODO unregister
+                @Override
+                public boolean onGpioEdge(Gpio gpio) {
+
+                    float multiplier = 3.0F;  // TODO multiplier should be based on Gain
+                    float valueInMv = readADCDifferentialBetween0And1() * multiplier;
+                    callback.onThresholdHit((int) valueInMv);
+                    return true;
+                }
+            });
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+
+    }
+
+    public void startComparatorADCDifferentialBetween0And3(int threshold, ComparatorCallback callback) {
+        startComparatorDifferential(ADS1015_REG_CONFIG_MUX_DIFF_0_3, threshold);
+    }
+
+    public void startComparatorADCDifferentialBetween1And3(int threshold, ComparatorCallback callback) {
+        startComparatorDifferential(ADS1015_REG_CONFIG_MUX_DIFF_0_3, threshold);
+    }
+
+    public void startComparatorADCDifferentialBetween2And3(int threshold, ComparatorCallback callback) {
+        startComparatorDifferential(ADS1015_REG_CONFIG_MUX_DIFF_0_3, threshold);
+    }
+
+    private void startComparatorDifferential(int muxPinsConfig, int threshold) {
+        // Set the high threshold register
+        // Shift 12-bit results left 4 bits for the ADS1015
+        writeRegister(ADS1015_REG_POINTER_HITHRESH, (short) (threshold << BIT_SHIFT));
+
+        // Start with default values
+        short config = ADS1015_REG_CONFIG_CQUE_1CONV | // Comparator enabled and asserts on 1 match
+                ADS1015_REG_CONFIG_CLAT_LATCH | // Latching mode
+                ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
+                ADS1015_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
+                ADS1015_REG_CONFIG_DR_1600SPS | // 1600 samples per second (default)
+                ADS1015_REG_CONFIG_MODE_CONTIN | // Continuous conversion mode
+                ADS1015_REG_CONFIG_MODE_CONTIN;   // Continuous conversion mode
+
+        // Set PGA/voltage range
+        config |= gain.value;
+
+        config |= muxPinsConfig;
+
+        // Write config register to the ADC
+        writeRegister(ADS1015_REG_POINTER_CONFIG, config);
     }
 
 }

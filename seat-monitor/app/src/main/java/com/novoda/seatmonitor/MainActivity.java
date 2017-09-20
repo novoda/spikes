@@ -6,39 +6,50 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
 
-import java.util.concurrent.TimeUnit;
-
 public class MainActivity extends Activity {
 
     private Handler handler;
-    private Ads1015 ads1015;
+    private Ads1015 ads10150x48;
+    private Ads1015 ads10150x49;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ads1015 = new Ads1015.Factory().newInstance("I2C1", 0x48, Ads1015.Gain.ONE);
+        ads10150x48 = new Ads1015.Factory().newInstance("I2C1", 0x48, Ads1015.Gain.ONE, "GPIO23");
+        ads10150x49 = new Ads1015.Factory().newInstance("I2C1", 0x49, Ads1015.Gain.ONE, "GPIO23");
         Log.d("TUT", "oncreate");
         HandlerThread thread = new HandlerThread("backgroundMeasure");
         thread.start();
 
-        handler = new Handler(thread.getLooper());
-        handler.post(loop);
+        // TODO button to calibrate
+        // on calibrate = current value = 0
+        // have a calibration value (base threshold on this value)
+
+        // TODO instead of looping and polling every second
+        // set a threshold and use the Trigger GPIO callback
+        // then get the reading
+
+        ads10150x48.startComparatorADCDifferentialBetween0And1(1000, comparatorCallback);
+
     }
 
-    private final Runnable loop = new Runnable() {
+    private final Ads1015.ComparatorCallback comparatorCallback = new Ads1015.ComparatorCallback() {
         @Override
-        public void run() {
+        public void onThresholdHit(int valueInMv) {
+            Log.d("TUT", "0x48 0 & 1 Differential " + valueInMv + "mV");
 
-            Log.d("TUT", "0 & 1 Differential " + ads1015.readADCDifferentialBetween0And1());
-            Log.d("TUT", "2 & 3 Differential " + ads1015.readADCDifferentialBetween2And3());
+            // negate the cushion presence (i.e. use the calibration value)
+            // convert to KG
 
-            // TODO define a "change"
-            // If there is a "change"
-            // Record that change in firebase
+            // TODO Record that change in firebase / iot core
 
-            handler.postDelayed(this, TimeUnit.SECONDS.toMillis(1));
         }
     };
 
+    @Override
+    protected void onDestroy() {
+        // TODO CLOSE ALL THE THINGS
+        super.onDestroy();
+    }
 }
