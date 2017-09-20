@@ -33,10 +33,6 @@ public class MainActivity extends Activity {
         // on calibrate = current value = 0
         // have a calibration value (base threshold on this value)
 
-        // TODO instead of looping and polling every second
-        // set a threshold and use the Trigger GPIO callback
-        // then get the reading
-
         wiiLoadSensorA.monitorForWeightChangeOver(50, sensorAWeightChangedCallback);
     }
 
