@@ -30,6 +30,7 @@ class UsbDeviceConnection extends DeviceConnection implements UsbChangesListener
     @Override
     public void connect() {
         usbChangesRegister.register(this);
+        openConnection();
     }
 
     @Override

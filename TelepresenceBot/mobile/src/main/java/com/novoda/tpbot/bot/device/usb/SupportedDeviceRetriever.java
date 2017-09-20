@@ -11,7 +11,7 @@ import java.util.Map;
 
 class SupportedDeviceRetriever {
 
-    private static final List<Integer> SUPPORTED_VENDOR_IDS = Arrays.asList(9025, 10755, 4292, 5401); // TODO: read from devices_filter.xml
+    private static final List<Integer> SUPPORTED_VENDOR_IDS = Arrays.asList(9025, 10755, 4292, 32903); // TODO: read from devices_filter.xml
 
     private final UsbManager usbManager;
 
