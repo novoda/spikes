@@ -1,7 +1,6 @@
 package com.novoda.seatmonitor;
 
 import android.os.SystemClock;
-import android.util.Log;
 
 import com.google.android.things.pio.I2cDevice;
 import com.google.android.things.pio.PeripheralManagerService;
@@ -191,20 +190,15 @@ public class Ads1015 {
         // Set 'start single-conversion' bit
         config |= ADS1015_REG_CONFIG_OS_SINGLE;
 
-        Log.d("TUT", "b4 write config");
         // Write config register to the ADC
-        Log.d("TUT", "a4 write config");
         writeRegister(ADS1015_REG_POINTER_CONFIG, config);
-
         // Wait for the conversion to complete
         delay(conversionDelay);
     }
 
     private int readADCDifferential() {
-        Log.d("TUT", "b4 read register");
         // Read the conversion results
         int res = readRegister(ADS1015_REG_POINTER_CONVERT) >> BIT_SHIFT;
-        Log.d("TUT", "a4 read register");
         // Shift 12-bit results right 4 bits for the ADS1015,
         // making sure we keep the sign bit intact
         if (res > 0x07FF) {
@@ -220,19 +214,6 @@ public class Ads1015 {
         } catch (IOException e) {
             throw new IllegalStateException("Cannot write " + reg + " with value " + value, e);
         }
-//        Wire.beginTransmission(i2cAddress);
-//        i2cwrite((uint8_t) reg);
-//        i2cwrite((uint8_t) (value >> 8));
-//        i2cwrite((uint8_t) (value & 0xFF));
-//        Wire.endTransmission();
-    }
-
-    private void i2cwrite(byte x) {
-//      #if ARDUINO >= 100
-//        Wire.write((uint8_t) x);
-//      #else
-//        Wire.send(x);
-//      #endif
     }
 
     private void delay(long millis) {
@@ -246,20 +227,6 @@ public class Ads1015 {
         } catch (IOException e) {
             throw new IllegalStateException("Cannot read " + reg, e);
         }
-
-//        Wire.beginTransmission(i2cAddress);
-//        i2cwrite(ADS1015_REG_POINTER_CONVERT);
-//        Wire.endTransmission();
-//        Wire.requestFrom(i2cAddress, (uint8_t) 2);
-//        return ((i2cread() << 8) | i2cread());
     }
-
-//    static uint8_t i2cread(void) {
-//  #if ARDUINO >= 100
-//        return Wire.read();
-//  #else
-//        return Wire.receive();
-//  #endif
-//    }
 
 }
