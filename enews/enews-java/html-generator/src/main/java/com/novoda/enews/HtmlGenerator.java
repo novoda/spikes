@@ -19,7 +19,7 @@ public class HtmlGenerator {
                     head();
                         shareBar.injectCssInto(this);
                         style();
-                            text("body {"
+                            text("#newsletter-body {"
                                     + " margin: 0 auto;"
                                     + " padding: 10px;"
                                 + "}"
@@ -70,7 +70,7 @@ public class HtmlGenerator {
                                 + "}"
                                 // Mobile Small
                                 + " @media only screen and (min-width: 320px) {"
-                                    + "body {"
+                                    + "#newsletter-body {"
                                         + " max-width: 360px;"
                                     + "}"
                                     + "#header-image { "
@@ -101,7 +101,7 @@ public class HtmlGenerator {
                                 + "}"
                                 // Mobile Large
                                 + " @media only screen and (min-width: 425px) {"
-                                    + "body {"
+                                    + "#newsletter-body {"
                                         + " max-width: 425px;"
                                     + "}"
                                     + "#header-image { "
@@ -132,7 +132,7 @@ public class HtmlGenerator {
                                 + "}"
                                 // Tablet
                                 + " @media only screen and (min-width: 768px) {"
-                                    + "body {"
+                                    + "#newsletter-body {"
                                         + " max-width: 600px;"
                                     + "}"
                                     + "#header-image { "
@@ -163,7 +163,7 @@ public class HtmlGenerator {
                                 + "}"
                                 // Laptop
                                 + " @media only screen and (min-width: 1024px) {"
-                                    + "body {"
+                                    + "#newsletter-body {"
                                         + " max-width: 800px;"
                                     + "}"
                                     + "#header-image { "
@@ -198,34 +198,37 @@ public class HtmlGenerator {
                     end();
                      body()
                         .div()
-                            .id("title")
-                             .a().href("https://twitter.com/novoda").target("_blank")
-                                .img()
-                                    .id("header-image")
-                                    .src("https://s3-eu-west-1.amazonaws.com/novoda-public-image-bucket/blank.gif")
+                            .id("newsletter-body")
+                            .div()
+                                .id("title")
+                                 .a().href("https://twitter.com/novoda").target("_blank")
+                                    .img()
+                                        .id("header-image")
+                                        .src("https://s3-eu-west-1.amazonaws.com/novoda-public-image-bucket/blank.gif")
+                                    .end()
+                                .end()
+                                .p()
+                                    .id("intro")
+                                    .text("Welcome to the latest edition."
+                                            + " For those of you unacquainted with how this newsletter works."
+                                            + " See below for a brief explanation."
+                                            + " Everyone else, welcome back and skip to the first article!")
+                                    .br()
+                                    .br()
+                                    .text("Each day the whole of Novoda come together to share project updates, insights and exciting opportunities happening across the company."
+                                            + " One of these snippets is #enews where we share interesting things we've read or viewed on the web."
+                                            + " Our serverless technology peon then takes this knowledge and curates it as a summary each week."
+                                            + " Therefore the text below is exactly what was written by the author as they shared the news on slack, so apologies for fast finger spelling mistakes or slightly missing context."
+                                            + " :-)")
                                 .end()
                             .end()
-                            .p()
-                                .id("intro")
-                                .text("Welcome to the latest edition."
-                                        + " For those of you unacquainted with how this newsletter works."
-                                        + " See below for a brief explanation."
-                                        + " Everyone else, welcome back and skip to the first article!")
-                                .br()
-                                .br()
-                                .text("Each day the whole of Novoda come together to share project updates, insights and exciting opportunities happening across the company."
-                                        + " One of these snippets is #enews where we share interesting things we've read or viewed on the web."
-                                        + " Our serverless technology peon then takes this knowledge and curates it as a summary each week."
-                                        + " Therefore the text below is exactly what was written by the author as they shared the news on slack, so apologies for fast finger spelling mistakes or slightly missing context."
-                                        + " :-)")
-                            .end()
-                        .end()
-                        .div()
-                            .id("content");
-                            makeList();
-                        end();
-                        div();
-                            makeFooter();
+                            .div()
+                                .id("content");
+                                makeList();
+                            end();
+                            div();
+                                makeFooter();
+                            end();
                         end();
                 endAll();
                 done();
