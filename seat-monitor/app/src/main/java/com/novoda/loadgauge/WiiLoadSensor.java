@@ -22,7 +22,7 @@ public class WiiLoadSensor {
         this.callback = callback;
 
         // TODO convert weightInKg to mV
-        int threshold = 1000 + milliVoltsAtRest;
+        int threshold = -500 + milliVoltsAtRest;
 
         ads1015.startComparatorDifferential(threshold, comparatorCallback);
     }
