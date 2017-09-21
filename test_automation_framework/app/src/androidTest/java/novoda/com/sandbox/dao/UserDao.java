@@ -12,12 +12,19 @@ public class UserDao {
         return false;
     }
 
+    public boolean userWithUsernameAvailable() {
+        return false;
+    }
+
     public User fetchValidUserFromDatabase() {
         return new User.UserBuilder(new Credentials("testt", "test")).build();
     }
 
-
     public User fetchValidAdminUserFromDatabase() {
         return new User.UserBuilder(new Credentials("test", "test")).withAdminStatus().build();
+    }
+
+    public User fetchUserWithGivenUsername(String username) {
+        return new User.UserBuilder(new Credentials(username, "asjfsf")).build();
     }
 }

@@ -26,6 +26,11 @@ class CredentialService {
         return new Credentials(username, password);
     }
 
+    Credentials getCredentialsWithGivenUsername(String username) {
+        String password = createValidPassword();
+        return new Credentials(username, password);
+    }
+
     Credentials getCredentialsWithTooShortUsername() {
         String username = faker.lorem().characters(createTooShortUsernameLength());
         String password = createValidPassword();
@@ -53,5 +58,4 @@ class CredentialService {
     private int createTooShortUsernameLength() {
         return random.nextInt(MIN_USERNAME_LENGTH - 1) + 1;
     }
-
 }

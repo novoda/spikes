@@ -29,6 +29,14 @@ public class UserRepository {
         }
     }
 
+    public User getUserWithGivenUsername(String username) {
+        if (userDao.userWithUsernameAvailable()) {
+            return userDao.fetchUserWithGivenUsername(username);
+        } else {
+            return userCreationService.createUserWithGivenUsername(username);
+        }
+    }
+
     public User getUserWithTooShortUsername() {
         return userCreationService.createUserWithTooShortUsername();
     }

@@ -15,6 +15,11 @@ public class UserCreationService {
         return new User.UserBuilder(credentials).build();
     }
 
+    public User createUserWithGivenUsername(String username) {
+        Credentials credentials = credentialService.getCredentialsWithGivenUsername(username);
+        return new User.UserBuilder(credentials).build();
+    }
+
     public User createNewAdminUser() {
         Credentials credentials = credentialService.getValidCredentials();
         return new User.UserBuilder(credentials).withAdminStatus().build();

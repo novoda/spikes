@@ -44,6 +44,16 @@ public class SignInActivityTest {
     }
 
     @Test
+    public void signIn_GivenUsername_loginPossible() {
+        String username = "MyValidUsername";
+        User validUser = userRepository.getUserWithGivenUsername(username);
+
+        loginFlow.doLogin(validUser.getCredentials());
+
+        assertThat(loginFlow.userLoggedIn(), is(true));
+    }
+
+    @Test
     public void signIn_UsernameTooShort_loginNotPossible() {
         User usernameTooShortUser = userRepository.getUserWithTooShortUsername();
 
