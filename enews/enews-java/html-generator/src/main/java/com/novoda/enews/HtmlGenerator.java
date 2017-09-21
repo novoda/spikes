@@ -20,6 +20,7 @@ public class HtmlGenerator {
                         shareBar.injectCssInto(this);
                         style();
                             text("body {"
+                                    + " margin: 0 auto;"
                                     + " padding: 10px;"
                                 + "}"
                                 + "#header-image { "
@@ -43,10 +44,14 @@ public class HtmlGenerator {
                                     + " text-decoration: none;"
                                     + " color: black;"
                                 + "}"
+                                + "#content { "
+                                    + " margin: 0 auto;"
+                                    + " max-width: 360px;"
+                                + "}"
                                 + "#article-image { "
                                     + " width: 150px; height: 84px;"
                                     + " object-fit: cover;"
-                                    + " border-radius: 6px; background-color: #fafafa; padding: 10px;"
+                                    + " background-color: #fafafa; padding: 10px;"
                                 + "}"
                                 + "#article-title {"
                                     + " font: bold 20px/1.5 Open Sans, Helvetica, Verdana, sans-serif;"
@@ -62,11 +67,17 @@ public class HtmlGenerator {
                                 + "}"
                                 // Mobile Small
                                 + " @media only screen and (min-width: 320px) {"
+                                    + "body {"
+                                        + " max-width: 360px;"
+                                    + "}"
                                     + "#header-image { "
                                         + " background: url(https://s3-eu-west-1.amazonaws.com/novoda-public-image-bucket/Header_PhoneSmall.png);"
                                         + " width:360px; height:190px"
                                     + "}"
                                     + "#intro {"
+                                        + "max-width: 360px;"
+                                    +"}"
+                                    + "#content {"
                                         + "max-width: 360px;"
                                     +"}"
                                     + "#article-image { "
@@ -87,11 +98,17 @@ public class HtmlGenerator {
                                 + "}"
                                 // Mobile Large
                                 + " @media only screen and (min-width: 425px) {"
+                                    + "body {"
+                                        + " max-width: 425px;"
+                                    + "}"
                                     + "#header-image { "
                                         + " background: url(https://s3-eu-west-1.amazonaws.com/novoda-public-image-bucket/Header_PhoneLarge.png);"
                                         + " width:425px; height:188px"
                                     + "}"
                                     + "#intro {"
+                                        + "max-width: 360px;"
+                                    +"}"
+                                    + "#content {"
                                         + "max-width: 360px;"
                                     +"}"
                                     + "#article-image { "
@@ -112,12 +129,18 @@ public class HtmlGenerator {
                                 + "}"
                                 // Tablet
                                 + " @media only screen and (min-width: 768px) {"
+                                    + "body {"
+                                        + " max-width: 600px;"
+                                    + "}"
                                     + "#header-image { "
                                         + " background: url(https://s3-eu-west-1.amazonaws.com/novoda-public-image-bucket/Header_Tablet.png);"
                                         + " width:600px; height:180px"
                                     + "}"
                                     + "#intro {"
                                     +   "max-width: 600px;"
+                                    +"}"
+                                    + "#content {"
+                                        + "max-width: 600px;"
                                     +"}"
                                     + "#article-image { "
                                         + " width: 480px; height: 268px;"
@@ -137,11 +160,17 @@ public class HtmlGenerator {
                                 + "}"
                                 // Laptop
                                 + " @media only screen and (min-width: 1024px) {"
+                                    + "body {"
+                                        + " max-width: 800px;"
+                                    + "}"
                                     + "#header-image { "
                                         + " background: url(https://s3-eu-west-1.amazonaws.com/novoda-public-image-bucket/Header_desktop.png);"
                                         + " width:800px; height:253px"
                                     + "}"
                                     + "#intro {"
+                                        + "max-width: 800px;"
+                                    +"}"
+                                    + "#content {"
                                         + "max-width: 800px;"
                                     +"}"
                                     + "#article-image { "
@@ -170,6 +199,7 @@ public class HtmlGenerator {
                              .a().href("https://twitter.com/novoda").target("_blank")
                                 .img()
                                     .id("header-image")
+                                    .src("https://s3-eu-west-1.amazonaws.com/novoda-public-image-bucket/blank.gif")
                                 .end()
                             .end()
                             .p()
@@ -187,7 +217,8 @@ public class HtmlGenerator {
                                         + " :-)")
                             .end()
                         .end()
-                        .div();
+                        .div()
+                            .id("content");
                             makeList();
                         end();
                         div();
