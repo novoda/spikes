@@ -32,7 +32,7 @@ public class HtmlGenerator {
                                     + " color: #26A3DB;"
                                 + "}"
                                 + "#title p {"
-                                    + " font: bold 12px/1.0 Open Sans, Helvetica, Verdana, sans-serif, monospace;"
+                                    + " font: 300 1.2em/1.8 Open Sans, regular;"
                                     + " color: #6d6d6d;"
                                 + "}"
                                 + "li {"
