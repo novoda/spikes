@@ -123,10 +123,10 @@ public interface Ads1015 {
     class Factory {
 
         public Ads1015 newSingleEndedReaderInstance(
-            String i2CBus,
-            int i2cAddress,
-            Gain gain,
-            Channel channel) {
+                String i2CBus,
+                int i2cAddress,
+                Gain gain,
+                Channel channel) {
 
             PeripheralManagerService service = new PeripheralManagerService();
 
@@ -140,11 +140,37 @@ public interface Ads1015 {
             return new Ads1015SingleEndedReader(i2cDevice, gain, channel);
         }
 
+        public Ads1015 newSingleEndedComparatorInstance(
+                String i2CBus,
+                int i2cAddress,
+                Gain gain,
+                String alertReadyGpioPinName,
+                Channel channel) {
+
+            PeripheralManagerService service = new PeripheralManagerService();
+
+            I2cDevice i2cDevice;
+            Gpio alertReadyGpioBus;
+            Ads1015SingleEndedReader singleEndedReader;
+            try {
+                i2cDevice = service.openI2cDevice(i2CBus, i2cAddress);
+                alertReadyGpioBus = service.openGpio(alertReadyGpioPinName);
+                alertReadyGpioBus.setActiveType(Gpio.ACTIVE_LOW);
+                alertReadyGpioBus.setDirection(Gpio.DIRECTION_IN);
+                alertReadyGpioBus.setEdgeTriggerType(Gpio.EDGE_FALLING);
+                singleEndedReader = new Ads1015SingleEndedReader(i2cDevice, gain, channel);
+            } catch (IOException e) {
+                throw new IllegalStateException("Can't open 0x48", e);
+            }
+
+            return new Ads1015SingleEndedComparator(i2cDevice, gain, alertReadyGpioBus, channel, singleEndedReader);
+        }
+
         public Ads1015 newDifferentialReaderInstance(
-            String i2CBus,
-            int i2cAddress,
-            Gain gain,
-            DifferentialPins differentialPins) {
+                String i2CBus,
+                int i2cAddress,
+                Gain gain,
+                DifferentialPins differentialPins) {
 
             PeripheralManagerService service = new PeripheralManagerService();
 
@@ -159,11 +185,11 @@ public interface Ads1015 {
         }
 
         public Ads1015 newDifferentialComparatorInstance(
-            String i2CBus,
-            int i2cAddress,
-            Gain gain,
-            String alertReadyGpioPinName,
-            DifferentialPins differentialPins) {
+                String i2CBus,
+                int i2cAddress,
+                Gain gain,
+                String alertReadyGpioPinName,
+                DifferentialPins differentialPins) {
 
             PeripheralManagerService service = new PeripheralManagerService();
 
@@ -173,9 +199,9 @@ public interface Ads1015 {
             try {
                 i2cDevice = service.openI2cDevice(i2CBus, i2cAddress);
                 alertReadyGpioBus = service.openGpio(alertReadyGpioPinName);
-                alertReadyGpioBus.setActiveType(Gpio.ACTIVE_HIGH);
+                alertReadyGpioBus.setActiveType(Gpio.ACTIVE_LOW);
                 alertReadyGpioBus.setDirection(Gpio.DIRECTION_IN);
-                alertReadyGpioBus.setEdgeTriggerType(Gpio.EDGE_RISING);
+                alertReadyGpioBus.setEdgeTriggerType(Gpio.EDGE_FALLING);
                 differentialReader = new Ads1015DifferentialReader(i2cDevice, gain, differentialPins);
             } catch (IOException e) {
                 throw new IllegalStateException("Can't open 0x48", e);

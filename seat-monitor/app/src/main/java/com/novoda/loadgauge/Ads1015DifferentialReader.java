@@ -1,6 +1,7 @@
 package com.novoda.loadgauge;
 
 import android.os.SystemClock;
+import android.util.Log;
 
 import com.google.android.things.pio.I2cDevice;
 
@@ -23,7 +24,9 @@ class Ads1015DifferentialReader implements Ads1015 {
     @Override
     public int readDifferential() {
         configDifferential();
-        return readADCDifferential();
+        int i = readADCDifferential();
+        Log.d("TUT", "Val: " + i);
+        return i;
 
     }
 

@@ -1,6 +1,7 @@
 package com.novoda.loadgauge;
 
 import android.os.SystemClock;
+import android.util.Log;
 
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.GpioCallback;
@@ -33,13 +34,15 @@ class Ads1015DifferentialComparator implements Ads1015 {
     @Override
     public void startComparatorDifferential(int thresholdInMv, ComparatorCallback callback) {
         this.callback = callback;
-        startComparatorDifferential(thresholdInMv);
         try {
             alertReadyGpioBus.registerGpioCallback(thresholdHitCallback);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
 
+        int differential = readADCDifferential();
+        Log.d("TUT", "Start value : " + differential);
+        startComparatorDifferential(differential + 1);
     }
 
     private final GpioCallback thresholdHitCallback = new GpioCallback() {
@@ -48,18 +51,19 @@ class Ads1015DifferentialComparator implements Ads1015 {
             if (callback == null) {
                 throw new IllegalStateException("Didn't expect to be called with no callback", new NullPointerException("callback is null"));
             }
+            Log.d("TUT", "Threshold hit");
             float multiplier = 3.0F;  // TODO multiplier should be based on Gain
-            configDifferential();
+//            configDifferential();
             float valueInMv = readADCDifferential() * multiplier;
             callback.onThresholdHit((int) valueInMv);
             return true;
         }
     };
 
-    private void startComparatorDifferential(int threshold) {
+    private void startComparatorDifferential(int thresholdInMv) {
         // Set the high threshold register
         // Shift 12-bit results left 4 bits for the ADS1015
-        writeRegister(ADS1015_REG_POINTER_HITHRESH, (short) (threshold << BIT_SHIFT));
+        writeRegister(ADS1015_REG_POINTER_HITHRESH, (short) (thresholdInMv << BIT_SHIFT));
 
         // Start with default values
         short config = ADS1015_REG_CONFIG_CQUE_1CONV | // Comparator enabled and asserts on 1 match
@@ -67,7 +71,6 @@ class Ads1015DifferentialComparator implements Ads1015 {
             ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
             ADS1015_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
             ADS1015_REG_CONFIG_DR_1600SPS | // 1600 samples per second (default)
-            ADS1015_REG_CONFIG_MODE_CONTIN | // Continuous conversion mode
             ADS1015_REG_CONFIG_MODE_CONTIN;   // Continuous conversion mode
 
         // Set PGA/voltage range

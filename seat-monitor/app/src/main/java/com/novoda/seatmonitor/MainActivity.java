@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
 
         String i2CBus = "I2C1";
         Ads1015.Gain gain = Ads1015.Gain.ONE;
-        String alertReadyPin = "GPIO_33";
+        String alertReadyPin = "GPIO_39";
         Ads1015.Factory factory = new Ads1015.Factory();
         Ads1015 ads10150x48 = factory.newDifferentialComparatorInstance(i2CBus, 0x48, gain, alertReadyPin, PINS_0_1);
         wiiLoadSensorA = new WiiLoadSensor(ads10150x48);
