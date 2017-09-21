@@ -54,7 +54,6 @@ public class HtmlGenerator {
                                 + "#article-image { "
                                     + " width: 150px; height: 84px;"
                                     + " object-fit: cover;"
-                                    + " background-color: #fafafa; padding: 10px;"
                                 + "}"
                                 + "#article-title {"
                                     + " font: bold 20px/1.5 Open Sans, Helvetica, Verdana, sans-serif;"
