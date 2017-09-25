@@ -50,7 +50,7 @@ class Ads1015SingleEndedComparator implements Ads1015 {
                 ADS1015_REG_CONFIG_DR_1600SPS | // 1600 samples per second (default)
                 ADS1015_REG_CONFIG_MODE_CONTIN;   // Continuous conversion mode
 
-        // Set PGA/voltage range
+        // Set PGA/voltage range                                             
         config |= gain.value;
 
         // Set single-ended input channel
@@ -70,11 +70,13 @@ class Ads1015SingleEndedComparator implements Ads1015 {
             if (callback == null) {
                 throw new IllegalStateException("Didn't expect to be called with no callback", new NullPointerException("callback is null"));
             }
-            Log.d("TUT", "Threshold hit");
             float multiplier = 3.0F;  // TODO multiplier should be based on Gain
 //            configDifferential();
-            float valueInMv = readSingleEnded() * multiplier;
-            callback.onThresholdHit((int) valueInMv);
+            int value = readSingleEnded();
+            Log.d("TUT", "Threshold hit raw " + value);
+            float valueInMv = value * multiplier;
+            Log.d("TUT", "Threshold hit out " + valueInMv + "mV");
+            callback.onThresholdHit(valueInMv);
             return true;
         }
     };

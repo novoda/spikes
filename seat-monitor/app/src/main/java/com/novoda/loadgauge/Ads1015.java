@@ -117,7 +117,7 @@ public interface Ads1015 {
     }
 
     interface ComparatorCallback {
-        void onThresholdHit(int valueInMv);
+        void onThresholdHit(float valueInMv);
     }
 
     class Factory {

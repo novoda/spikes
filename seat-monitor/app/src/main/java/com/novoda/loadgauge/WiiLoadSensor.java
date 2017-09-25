@@ -1,7 +1,5 @@
 package com.novoda.loadgauge;
 
-import android.util.Log;
-
 public class WiiLoadSensor {
 
     private final Ads1015 ads1015;
@@ -22,22 +20,21 @@ public class WiiLoadSensor {
         this.callback = callback;
 
         // TODO convert weightInKg to mV
-        int threshold = -500 + milliVoltsAtRest;
+        int thresholdInMv = 0 + milliVoltsAtRest;
 
-        ads1015.startComparatorDifferential(threshold, comparatorCallback);
+//        ads1015.startComparatorDifferential(thresholdInMv, comparatorCallback);
+        ads1015.startComparatorSingleEnded(ads1015.readSingleEnded() + 1, comparatorCallback);
     }
 
     private final Ads1015.ComparatorCallback comparatorCallback = new Ads1015.ComparatorCallback() {
         @Override
-        public void onThresholdHit(int valueInMv) {
+        public void onThresholdHit(float valueInMv) {
             if (callback == null) {
                 throw new IllegalStateException("Didn't expect comparator to be called with no callback", new NullPointerException("callback is null"));
             }
-            Log.d("TUT", "Theshold hit, value: " + valueInMv + "mV");
-
             // negate the cushion presence (i.e. use the calibration value)
-            int realValueInMv = valueInMv - milliVoltsAtRest;
-            Log.d("TUT", "Value minus rest: " + realValueInMv + "mV");
+//            float realValueInMv = valueInMv - milliVoltsAtRest;
+//            Log.d("TUT", "Value minus rest: " + realValueInMv + "mV");
             // TODO convert valueInMv to kg
             float weightInKg = 50;
 
