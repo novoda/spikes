@@ -20,23 +20,21 @@ public class PeekableMoreThingsView extends FrameLayout {
     private RecyclerView recyclerView;
     private Button button;
     private View moreThingsContainer;
-    private View moreThingsTouchStealingOverlay;
 
     public PeekableMoreThingsView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        setBackgroundColor(Color.argb(80, 55, 55, 80));
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_peekable_more_things, this);
-        moreThingsTouchStealingOverlay = findViewById(R.id.more_things_touch_stealing_overlay);
-        moreThingsTouchStealingOverlay.setBackgroundColor(Color.argb(200, 90, 55, 55));
+
+        View moreThingsTouchStealingOverlay = findViewById(R.id.more_things_touch_stealing_overlay);
         moreThingsTouchStealingOverlay.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (moreThingsContainer.getTranslationX() == 0) {
+                if (moreThingsContainer.getTranslationX() != translationXForPeekMode()) {
                     return false;
                 }
                 showExpandedView();
@@ -63,10 +61,9 @@ public class PeekableMoreThingsView extends FrameLayout {
     }
 
     public void showPeekView() {
-        int peekViewWidth = getResources().getDimensionPixelSize(R.dimen.peek_width);
         moreThingsContainer.setTranslationX(getWidth());
         moreThingsContainer.setVisibility(VISIBLE);
-        moreThingsContainer.animate().translationXBy(-peekViewWidth);
+        moreThingsContainer.animate().translationX(translationXForPeekMode());
         updateButtonWithExpandAction();
         setDismissPeekViewClickListener();
     }
@@ -102,11 +99,14 @@ public class PeekableMoreThingsView extends FrameLayout {
     }
 
     private void dismissExpandedView() {
-        int peekViewWidth = getResources().getDimensionPixelSize(R.dimen.peek_width);
-        int parentWidth = getWidth();
-        moreThingsContainer.animate().translationX(parentWidth - peekViewWidth);
+        moreThingsContainer.animate().translationX(translationXForPeekMode());
         setDismissPeekViewClickListener();
         updateButtonWithExpandAction();
+    }
+
+    private int translationXForPeekMode() {
+        int peekViewWidth = getResources().getDimensionPixelSize(R.dimen.peek_width);
+        return getWidth() - peekViewWidth;
     }
 
     private void dismissPeekView() {
