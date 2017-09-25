@@ -1,11 +1,13 @@
 package com.novoda.androidskeleton;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,15 +20,30 @@ public class PeekableMoreThingsView extends FrameLayout {
     private RecyclerView recyclerView;
     private Button button;
     private View moreThingsContainer;
+    private View moreThingsTouchStealingOverlay;
 
     public PeekableMoreThingsView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        setBackgroundColor(Color.argb(80, 55, 55, 80));
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         View.inflate(getContext(), R.layout.merge_peekable_more_things, this);
+        moreThingsTouchStealingOverlay = findViewById(R.id.more_things_touch_stealing_overlay);
+        moreThingsTouchStealingOverlay.setBackgroundColor(Color.argb(200, 90, 55, 55));
+        moreThingsTouchStealingOverlay.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (moreThingsContainer.getTranslationX() == 0) {
+                    return false;
+                }
+                showExpandedView();
+                return true;
+            }
+        });
+
         moreThingsContainer = findViewById(R.id.more_things_container);
         button = (Button) findViewById(R.id.more_things_button);
         recyclerView = (RecyclerView) findViewById(R.id.more_things_recyclerview);

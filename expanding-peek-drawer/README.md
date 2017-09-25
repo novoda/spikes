@@ -20,3 +20,10 @@ Maybe:
 - since the drawer animates out with a slide from "peek" to "full-screen" then users expect it to be closeable this way too (with a swipe). At this
 point, children of the view are active and if there's a horizontal scroll in the children, then it could get awk - at the very least, the swipe would
 need to start from
+
+---
+
+TODO:
+
+- the animations and interactions seem fine for the drawer itself
+-
