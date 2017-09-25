@@ -7,7 +7,7 @@ The initial state should show part of the view ("peek" state).
 
 In the "peek" state, the children of this view are not interactive.
 Clicking anywhere on the view should expand the view to "fullscreen" state.
-Clicking anywhere outside the view should dismiss the view entirely (perhaps with a callback).
+Clicking anywhere outside the view should dismiss the view entirely (perhaps with a buttonListener).
 
 In "fullscreen" state, the children are active. There is a cross which will can dismiss the view entirely.
 Pressing back should also dismiss the view entirely.
