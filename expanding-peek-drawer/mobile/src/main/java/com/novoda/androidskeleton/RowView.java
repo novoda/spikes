@@ -33,17 +33,19 @@ public class RowView extends LinearLayout {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
     }
 
-    void update(Row row) {
+    void update(Row row, ItemClickListener itemClickListener) {
         titleTextView.setText(row.heading);
-        recyclerView.setAdapter(new ItemsAdapter(row.items));
+        recyclerView.setAdapter(new ItemsAdapter(row.items, itemClickListener));
     }
 
     private static class ItemsAdapter extends RecyclerView.Adapter {
 
         private final List<Item> items;
+        private final ItemClickListener itemClickListener;
 
-        ItemsAdapter(List<Item> items) {
+        ItemsAdapter(List<Item> items, ItemClickListener itemClickListener) {
             this.items = items;
+            this.itemClickListener = itemClickListener;
         }
 
         @Override
@@ -53,10 +55,16 @@ public class RowView extends LinearLayout {
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            Item item = items.get(position);
+        public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+            final Item item = items.get(position);
             ((TextView) holder.itemView).setText(item.title);
             holder.itemView.setBackgroundColor(item.color);
+            holder.itemView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClickListener.onClick(holder.itemView.getContext(), item);
+                }
+            });
         }
 
         @Override

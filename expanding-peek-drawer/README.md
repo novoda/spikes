@@ -22,8 +22,3 @@ point, children of the view are active and if there's a horizontal scroll in the
 need to start from
 
 ---
-
-TODO:
-
-- the animations and interactions seem fine for the drawer itself
--

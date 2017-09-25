@@ -1,7 +1,6 @@
 package com.novoda.androidskeleton;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -123,6 +123,7 @@ public class PeekableMoreThingsView extends FrameLayout {
     private static class RowsAdapter extends RecyclerView.Adapter {
 
         private final List<Row> rows;
+        private Toast toast;
 
         RowsAdapter(List<Row> rows) {
             this.rows = rows;
@@ -137,8 +138,19 @@ public class PeekableMoreThingsView extends FrameLayout {
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             Row row = rows.get(position);
-            ((RowView) holder.itemView).update(row);
+            ((RowView) holder.itemView).update(row, itemClickListener);
         }
+
+        private final ItemClickListener itemClickListener = new ItemClickListener() {
+            @Override
+            public void onClick(Context context, Item item) {
+                if (toast != null) {
+                    toast.cancel();
+                }
+                toast = Toast.makeText(context, "click " + item.title, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        };
 
         @Override
         public int getItemCount() {
