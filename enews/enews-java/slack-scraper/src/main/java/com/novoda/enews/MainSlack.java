@@ -27,7 +27,7 @@ public class MainSlack {
         Scraper scraper = new Scraper.Factory().newInstance(slackToken, runLocally);
 
         LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = LocalDateTime.now().minusDays(7);
+        LocalDateTime end = LocalDateTime.now().minusDays(6);
         List<ChannelHistory.Message> messages = scraper.scrape(start, end).collect(Collectors.toList());
         messages.forEach(System.out::println);
         System.out.println("Total was: " + messages.size());

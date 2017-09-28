@@ -30,7 +30,7 @@ public class RunnerMain implements RequestHandler<Request, Response> {
         ArticleEditor articleEditor = new ArticleEditor.Factory().newInstance();
 
         LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = LocalDateTime.now().minusDays(7);
+        LocalDateTime end = LocalDateTime.now().minusDays(6);
         Stream<ChannelHistory.Message> messageStream = scraper.scrape(start, end);
         Stream<Article> articleStream = articleEditor.generateArticle(messageStream);
         String html = htmlGenerator.generate(articleStream);
