@@ -5,13 +5,29 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.things.contrib.driver.button.Button;
-import com.novoda.loadgauge.Ads1015;
 import com.novoda.loadgauge.WiiLoadSensor;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
 
-import static com.novoda.loadgauge.Ads1015.DifferentialPins.PINS_0_1;
-import static com.novoda.loadgauge.Ads1015.DifferentialPins.PINS_2_3;
+import org.eclipse.paho.android.service.MqttAndroidClient;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 public class MainActivity extends Activity {
 
@@ -24,29 +40,110 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         Log.d("TUT", "oncreate");
 
-        String i2CBus = "I2C1";
-        Ads1015.Gain gain = Ads1015.Gain.ONE;
-        String alertReadyPin = "GPIO23";
-        Ads1015.Factory factory = new Ads1015.Factory();
-        Ads1015 ads10150x48 = factory.newDifferentialComparatorInstance(i2CBus, 0x48, gain, alertReadyPin, PINS_0_1);
-        wiiLoadSensorA = new WiiLoadSensor(ads10150x48);
-        Ads1015 ads10150x49 = factory.newDifferentialComparatorInstance(i2CBus, 0x49, gain, alertReadyPin, PINS_2_3);
-        wiiLoadSensorB = new WiiLoadSensor(ads10150x49);
+//        String i2CBus = "I2C1";
+//        Ads1015.Gain gain = Ads1015.Gain.ONE;
+//        String alertReadyPin = "GPIO23";
+//        Ads1015.Factory factory = new Ads1015.Factory();
+//        Ads1015 ads10150x48 = factory.newDifferentialComparatorInstance(i2CBus, 0x48, gain, alertReadyPin, PINS_0_1);
+//        wiiLoadSensorA = new WiiLoadSensor(ads10150x48);
+//        Ads1015 ads10150x49 = factory.newDifferentialComparatorInstance(i2CBus, 0x49, gain, alertReadyPin, PINS_2_3);
+//        wiiLoadSensorB = new WiiLoadSensor(ads10150x49);
+//
+//        try {
+//            button = new Button("GPIO11", Button.LogicState.PRESSED_WHEN_HIGH);
+//            button.setOnButtonEventListener(new Button.OnButtonEventListener() {
+//                @Override
+//                public void onButtonEvent(Button button, boolean pressed) {
+//                    wiiLoadSensorA.calibrateToZero();
+//                    wiiLoadSensorB.calibrateToZero();
+//                }
+//            });
+//        } catch (IOException e) {
+//            throw new IllegalStateException("Button FooBar", e);
+//        }
+//
+//        wiiLoadSensorA.monitorForWeightChangeOver(50, sensorAWeightChangedCallback);
+
+        practiceMQtt();
+    }
+
+    private void practiceMQtt() {
+        String serverURI = "ssl://mqtt.googleapis.com:8883";
+        String projectId = "seat-monitor";
+        String cloudRegion = "europe-west1";
+        String registryId = "my-devices";
+        String deviceId = "home-attic-raspberry-pi";
+        String clientId = "projects/" + projectId + "/locations/" + cloudRegion + "/registries/" + registryId + "/devices/" + deviceId + "";
+        MqttAndroidClient mqttAndroidClient = new MqttAndroidClient(MainActivity.this, serverURI, clientId);
+
+        mqttAndroidClient.setCallback(new MqttCallback() {
+            @Override
+            public void connectionLost(Throwable cause) {
+                Log.e("TUT", "connection lost", cause);
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+                Log.d("TUT", "message arrived " + topic + " MSG " + message);
+
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+                Log.d("TUT", "delivery complete " + token);
+
+            }
+        });
 
         try {
-            button = new Button("GPIO11", Button.LogicState.PRESSED_WHEN_HIGH);
-            button.setOnButtonEventListener(new Button.OnButtonEventListener() {
-                @Override
-                public void onButtonEvent(Button button, boolean pressed) {
-                    wiiLoadSensorA.calibrateToZero();
-                    wiiLoadSensorB.calibrateToZero();
-                }
-            });
-        } catch (IOException e) {
-            throw new IllegalStateException("Button FooBar", e);
-        }
+            MqttConnectOptions connectOptions = new MqttConnectOptions();
+            // Note that the the Google Cloud IoT Core only supports MQTT 3.1.1, and Paho requires that we
+            // explictly set this. If you don't set MQTT version, the server will immediately close its
+            // connection to your device.
+            connectOptions.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1_1);
 
-        wiiLoadSensorA.monitorForWeightChangeOver(50, sensorAWeightChangedCallback);
+            // With Google Cloud IoT Core, the username field is ignored, however it must be set for the
+            // Paho client library to send the password field. The password field is used to transmit a JWT
+            // to authorize the device.
+            connectOptions.setUserName("unused");
+
+            String privateKeyFile = "android.resource://" + BuildConfig.APPLICATION_ID + "/raw/rsa_private.pem";
+//            String privateKeyFile = "file:///android_asset/rsa_private.pem";
+            connectOptions.setPassword(
+                createJwtRsa(projectId, privateKeyFile).toCharArray());
+
+            mqttAndroidClient.connect(connectOptions);
+        } catch (MqttException e) {
+            Log.e("TUT", "fail", e);
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("TUT", "fail", e);
+        } catch (IOException e) {
+            Log.e("TUT", "fail", e);
+        } catch (InvalidKeySpecException e) {
+            Log.e("TUT", "fail", e);
+        }
+    }
+
+    private String createJwtRsa(String projectId, String privateKeyFile) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+        LocalDateTime now = LocalDateTime.now();
+        // Create a JWT to authenticate this device. The device will be disconnected after the token
+        // expires, and will have to reconnect with a new token. The audience field should always be set
+        // to the GCP project id.
+        JwtBuilder jwtBuilder =
+            Jwts.builder()
+                .setIssuedAt(Date.from(now.toInstant(ZoneOffset.MIN)))
+                .setExpiration(Date.from(now.plusMinutes(20).toInstant(ZoneOffset.MIN)))
+                .setAudience(projectId);
+
+        InputStream inStream = getResources().openRawResource(R.raw.rsa_private);
+        byte[] keyBytes = new byte[inStream.available()];
+//        byte[] keyBytes = Files.readAllBytes(Paths.get(privateKeyFile));
+        X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
+//        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
+        KeyFactory kf = KeyFactory.getInstance("RSA");
+
+        PrivateKey privateKey = kf.generatePrivate(spec);
+        return jwtBuilder.signWith(SignatureAlgorithm.RS256, privateKey).compact();
     }
 
     private final WiiLoadSensor.WeightChangeCallback sensorAWeightChangedCallback = new WiiLoadSensor.WeightChangeCallback() {
@@ -55,6 +152,7 @@ public class MainActivity extends Activity {
             Log.d("TUT", "sensor A, weight: " + newWeightInKg + "kg");
 
             // TODO Record that change in firebase / iot core
+
         }
     };
 

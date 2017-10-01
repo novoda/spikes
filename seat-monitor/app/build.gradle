@@ -5,7 +5,7 @@ android {
     buildToolsVersion "26.0.0"
     defaultConfig {
         applicationId "com.novoda.seatmonitor"
-        minSdkVersion 24
+        minSdkVersion 26
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -31,4 +31,9 @@ dependencies {
     compile ('com.google.android.things.contrib:driver-button:+') {
         exclude group : 'com.android.support' , module : 'support-annotations'
     }
+
+    
+    compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0'
+    compile 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
+    compile 'io.jsonwebtoken:jjwt:0.7.0'
 }
