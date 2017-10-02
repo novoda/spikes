@@ -44,30 +44,20 @@ public class MainActivity extends Activity {
 //
 //        wiiLoadSensorA.monitorForWeightChangeOver(50, sensorAWeightChangedCallback);
 
-        practiceMQtt();
-    }
-
-    private void practiceMQtt() {
-        String serverURI = "ssl://mqtt.googleapis.com:8883";
-        String projectId = "seat-monitor";
-        String cloudRegion = "europe-west1";
-        final String registryId = "my-devices";
-        final String deviceId = "home-attic-raspberry-pi";
-//        final String deviceId = "work-desk-nxp";
-
         CloudIotCoreCommunicator cloudIotCoreComms = new CloudIotCoreCommunicator.Builder()
             .withContext(this)
-            .withServerURI(serverURI)
-            .withProjectId(projectId)
-            .withCloudRegion(cloudRegion)
-            .withRegistryId(registryId)
-            .withDeviceId(deviceId)
+            .withServerURI("ssl://mqtt.googleapis.com:8883")
+            .withProjectId("seat-monitor")
+            .withCloudRegion("europe-west1")
+            .withRegistryId("my-devices")
+            // "work-desk-nxp";
+            .withDeviceId("home-attic-raspberry-pi")
             .withPrivateKeyRawFileId(R.raw.rsa_private)
             .build();
 
         cloudIotCoreComms.practiceMQtt();
     }
-    
+
     private final WiiLoadSensor.WeightChangeCallback sensorAWeightChangedCallback = new WiiLoadSensor.WeightChangeCallback() {
         @Override
         public void onWeightChanged(float newWeightInKg) {
