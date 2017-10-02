@@ -2,6 +2,7 @@ package com.novoda.seatmonitor;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.things.contrib.driver.button.Button;
@@ -13,7 +14,7 @@ import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
@@ -110,40 +111,43 @@ public class MainActivity extends Activity {
             String privateKeyFile = "android.resource://" + BuildConfig.APPLICATION_ID + "/raw/rsa_private.pem";
 //            String privateKeyFile = "file:///android_asset/rsa_private.pem";
             connectOptions.setPassword(
-                createJwtRsa(projectId, privateKeyFile).toCharArray());
+                    createJwtRsa(projectId, R.raw.rsa_private).toCharArray());
 
             mqttAndroidClient.connect(connectOptions);
         } catch (MqttException e) {
             Log.e("TUT", "fail", e);
         } catch (NoSuchAlgorithmException e) {
             Log.e("TUT", "fail", e);
-        } catch (IOException e) {
-            Log.e("TUT", "fail", e);
         } catch (InvalidKeySpecException e) {
             Log.e("TUT", "fail", e);
         }
     }
 
-    private String createJwtRsa(String projectId, String privateKeyFile) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+    private String createJwtRsa(String projectId, int rawFileId) throws NoSuchAlgorithmException, InvalidKeySpecException {
         LocalDateTime now = LocalDateTime.now();
         // Create a JWT to authenticate this device. The device will be disconnected after the token
         // expires, and will have to reconnect with a new token. The audience field should always be set
         // to the GCP project id.
         JwtBuilder jwtBuilder =
-            Jwts.builder()
-                .setIssuedAt(Date.from(now.toInstant(ZoneOffset.MIN)))
-                .setExpiration(Date.from(now.plusMinutes(20).toInstant(ZoneOffset.MIN)))
-                .setAudience(projectId);
+                Jwts.builder()
+                        .setIssuedAt(Date.from(now.toInstant(ZoneOffset.MIN)))
+                        .setExpiration(Date.from(now.plusMinutes(20).toInstant(ZoneOffset.MIN)))
+                        .setAudience(projectId);
 
-        InputStream inStream = getResources().openRawResource(R.raw.rsa_private);
-        byte[] keyBytes = new byte[inStream.available()];
-//        byte[] keyBytes = Files.readAllBytes(Paths.get(privateKeyFile));
-        X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
-//        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
+        InputStream inStream = getResources().openRawResource(rawFileId);
+
+        byte[] keyBytes = Base64.decode(toString(inStream), Base64.DEFAULT);
+
+        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory kf = KeyFactory.getInstance("RSA");
-
         PrivateKey privateKey = kf.generatePrivate(spec);
+
         return jwtBuilder.signWith(SignatureAlgorithm.RS256, privateKey).compact();
+    }
+
+    private String toString(InputStream is) {
+        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
     }
 
     private final WiiLoadSensor.WeightChangeCallback sensorAWeightChangedCallback = new WiiLoadSensor.WeightChangeCallback() {
