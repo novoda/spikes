@@ -2,35 +2,12 @@ package com.novoda.seatmonitor;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.things.contrib.driver.button.Button;
 import com.novoda.loadgauge.WiiLoadSensor;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.Date;
-
-import org.eclipse.paho.android.service.MqttAndroidClient;
-import org.eclipse.paho.client.mqttv3.IMqttActionListener;
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.IMqttToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 public class MainActivity extends Activity {
 
@@ -75,116 +52,22 @@ public class MainActivity extends Activity {
         String projectId = "seat-monitor";
         String cloudRegion = "europe-west1";
         final String registryId = "my-devices";
-//        String deviceId = "home-attic-raspberry-pi";
-        final String deviceId = "work-desk-nxp";
-        String clientId = "projects/" + projectId + "/locations/" + cloudRegion + "/registries/" + registryId + "/devices/" + deviceId;
-        final MqttAndroidClient mqttAndroidClient = new MqttAndroidClient(MainActivity.this, serverURI, clientId);
+        final String deviceId = "home-attic-raspberry-pi";
+//        final String deviceId = "work-desk-nxp";
 
-        mqttAndroidClient.setCallback(new MqttCallback() {
-            @Override
-            public void connectionLost(Throwable cause) {
-                Log.e("TUT", "connection lost", cause);
-            }
+        CloudIotCoreCommunicator cloudIotCoreComms = new CloudIotCoreCommunicator.Builder()
+            .withContext(this)
+            .withServerURI(serverURI)
+            .withProjectId(projectId)
+            .withCloudRegion(cloudRegion)
+            .withRegistryId(registryId)
+            .withDeviceId(deviceId)
+            .withPrivateKeyRawFileId(R.raw.rsa_private)
+            .build();
 
-            @Override
-            public void messageArrived(String topic, MqttMessage message) throws Exception {
-                Log.d("TUT", "message arrived " + topic + " MSG " + message);
-
-            }
-
-            @Override
-            public void deliveryComplete(IMqttDeliveryToken token) {
-                Log.d("TUT", "delivery complete " + token);
-
-            }
-        });
-
-        try {
-            MqttConnectOptions connectOptions = new MqttConnectOptions();
-            // Note that the the Google Cloud IoT Core only supports MQTT 3.1.1, and Paho requires that we
-            // explictly set this. If you don't set MQTT version, the server will immediately close its
-            // connection to your device.
-            connectOptions.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1_1);
-
-            // With Google Cloud IoT Core, the username field is ignored, however it must be set for the
-            // Paho client library to send the password field. The password field is used to transmit a JWT
-            // to authorize the device.
-            connectOptions.setUserName("unused-but-necessary");
-            connectOptions.setPassword(createJwtRsa(projectId, R.raw.rsa_private).toCharArray());
-
-            mqttAndroidClient.connect(connectOptions);
-
-            mqttAndroidClient.connect(connectOptions, null, new IMqttActionListener() {
-                @Override
-                public void onSuccess(IMqttToken asyncActionToken) {
-                    Log.d("TUT", "success, connected");
-
-                    String topic = "/devices/" + deviceId + "/events";
-                    String payload = registryId + "/" + deviceId + "-payload-" + "1HelloWorld";
-                    MqttMessage message = new MqttMessage(payload.getBytes());
-                    message.setQos(1);
-                    try {
-                        Log.d("TUT", "publish");
-                        mqttAndroidClient.publish(topic, message);
-                    } catch (MqttException e) {
-                        throw new IllegalStateException(e);
-                    }
-
-                    try {
-                        Log.d("TUT", "dcon");
-                        mqttAndroidClient.disconnect();
-                    } catch (MqttException e) {
-                        throw new IllegalStateException(e);
-                    }
-                    Log.d("TUT", "MQTT hacking is complete master.");
-                }
-
-                @Override
-                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    Log.e("TUT", "failure, not connected", exception);
-
-                }
-            });
-
-        } catch (MqttException e) {
-            throw new IllegalStateException(e);
-        } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException(e);
-        } catch (InvalidKeySpecException e) {
-            throw new IllegalStateException(e);
-        }
-        Log.d("TUT", "MQTT setup is complete master.");
+        cloudIotCoreComms.practiceMQtt();
     }
-
-    private String createJwtRsa(String projectId, int rawFileId) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        LocalDateTime now = LocalDateTime.now();
-        // Create a JWT to authenticate this device. The device will be disconnected after the token
-        // expires, and will have to reconnect with a new token. The audience field should always be set
-        // to the GCP project id.
-        Date issueDate = Date.from(now.minusDays(1).toInstant(ZoneOffset.MIN)); // TODO DATE HACK????
-        Log.d("TUT", "JWT issue date: " + issueDate);
-        JwtBuilder jwtBuilder =
-                Jwts.builder()
-                        .setIssuedAt(issueDate)
-                        .setExpiration(Date.from(now.plusMinutes(20).toInstant(ZoneOffset.MIN)))
-                        .setAudience(projectId);
-
-        InputStream inStream = getResources().openRawResource(rawFileId);
-
-        byte[] keyBytes = Base64.decode(toString(inStream), Base64.DEFAULT);
-
-        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
-        KeyFactory kf = KeyFactory.getInstance("RSA");
-        PrivateKey privateKey = kf.generatePrivate(spec);
-
-        return jwtBuilder.signWith(SignatureAlgorithm.RS256, privateKey).compact();
-    }
-
-    private String toString(InputStream is) {
-        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
-    }
-
+    
     private final WiiLoadSensor.WeightChangeCallback sensorAWeightChangedCallback = new WiiLoadSensor.WeightChangeCallback() {
         @Override
         public void onWeightChanged(float newWeightInKg) {
