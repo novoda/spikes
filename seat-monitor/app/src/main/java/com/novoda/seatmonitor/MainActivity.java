@@ -107,11 +107,7 @@ public class MainActivity extends Activity {
             // Paho client library to send the password field. The password field is used to transmit a JWT
             // to authorize the device.
             connectOptions.setUserName("unused");
-
-            String privateKeyFile = "android.resource://" + BuildConfig.APPLICATION_ID + "/raw/rsa_private.pem";
-//            String privateKeyFile = "file:///android_asset/rsa_private.pem";
-            connectOptions.setPassword(
-                    createJwtRsa(projectId, R.raw.rsa_private).toCharArray());
+            connectOptions.setPassword(createJwtRsa(projectId, R.raw.rsa_private).toCharArray());
 
             mqttAndroidClient.connect(connectOptions);
         } catch (MqttException e) {
