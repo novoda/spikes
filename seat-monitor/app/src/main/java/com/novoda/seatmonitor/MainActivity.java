@@ -161,7 +161,7 @@ public class MainActivity extends Activity {
         // Create a JWT to authenticate this device. The device will be disconnected after the token
         // expires, and will have to reconnect with a new token. The audience field should always be set
         // to the GCP project id.
-        Date issueDate = Date.from(now.toInstant(ZoneOffset.MIN));
+        Date issueDate = Date.from(now.minusDays(1).toInstant(ZoneOffset.MIN)); // TODO DATE HACK????
         Log.d("TUT", "JWT issue date: " + issueDate);
         JwtBuilder jwtBuilder =
                 Jwts.builder()
