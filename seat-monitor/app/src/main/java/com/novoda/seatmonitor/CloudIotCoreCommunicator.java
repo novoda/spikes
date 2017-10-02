@@ -159,8 +159,6 @@ public class CloudIotCoreCommunicator {
             connectOptions.setUserName("unused-but-necessary");
             connectOptions.setPassword(createJwtRsa(projectId, privateKeyBytes).toCharArray());
 
-            client.connect(connectOptions);
-
             client.connect(connectOptions, null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
