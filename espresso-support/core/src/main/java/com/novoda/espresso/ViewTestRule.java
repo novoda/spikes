@@ -22,7 +22,7 @@ public class ViewTestRule<T extends View> extends ActivityTestRule<ViewActivity>
 
     @Override
     protected Intent getActivityIntent() {
-        Intent intent = super.getActivityIntent();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.putExtra(ViewActivity.EXTRA_LAYOUT_ID, id);
         return intent;
     }
