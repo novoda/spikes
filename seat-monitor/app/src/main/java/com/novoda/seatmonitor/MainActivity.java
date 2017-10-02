@@ -20,7 +20,9 @@ import java.time.ZoneOffset;
 import java.util.Date;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
+import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -72,10 +74,11 @@ public class MainActivity extends Activity {
         String serverURI = "ssl://mqtt.googleapis.com:8883";
         String projectId = "seat-monitor";
         String cloudRegion = "europe-west1";
-        String registryId = "my-devices";
-        String deviceId = "home-attic-raspberry-pi";
-        String clientId = "projects/" + projectId + "/locations/" + cloudRegion + "/registries/" + registryId + "/devices/" + deviceId + "";
-        MqttAndroidClient mqttAndroidClient = new MqttAndroidClient(MainActivity.this, serverURI, clientId);
+        final String registryId = "my-devices";
+//        String deviceId = "home-attic-raspberry-pi";
+        final String deviceId = "work-desk-nxp";
+        String clientId = "projects/" + projectId + "/locations/" + cloudRegion + "/registries/" + registryId + "/devices/" + deviceId;
+        final MqttAndroidClient mqttAndroidClient = new MqttAndroidClient(MainActivity.this, serverURI, clientId);
 
         mqttAndroidClient.setCallback(new MqttCallback() {
             @Override
@@ -106,17 +109,51 @@ public class MainActivity extends Activity {
             // With Google Cloud IoT Core, the username field is ignored, however it must be set for the
             // Paho client library to send the password field. The password field is used to transmit a JWT
             // to authorize the device.
-            connectOptions.setUserName("unused");
+            connectOptions.setUserName("unused-but-necessary");
             connectOptions.setPassword(createJwtRsa(projectId, R.raw.rsa_private).toCharArray());
 
             mqttAndroidClient.connect(connectOptions);
+
+            mqttAndroidClient.connect(connectOptions, null, new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    Log.d("TUT", "success, connected");
+
+                    String topic = "/devices/" + deviceId + "/events";
+                    String payload = registryId + "/" + deviceId + "-payload-" + "1HelloWorld";
+                    MqttMessage message = new MqttMessage(payload.getBytes());
+                    message.setQos(1);
+                    try {
+                        Log.d("TUT", "publish");
+                        mqttAndroidClient.publish(topic, message);
+                    } catch (MqttException e) {
+                        throw new IllegalStateException(e);
+                    }
+
+                    try {
+                        Log.d("TUT", "dcon");
+                        mqttAndroidClient.disconnect();
+                    } catch (MqttException e) {
+                        throw new IllegalStateException(e);
+                    }
+                    Log.d("TUT", "MQTT hacking is complete master.");
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    Log.e("TUT", "failure, not connected", exception);
+
+                }
+            });
+
         } catch (MqttException e) {
-            Log.e("TUT", "fail", e);
+            throw new IllegalStateException(e);
         } catch (NoSuchAlgorithmException e) {
-            Log.e("TUT", "fail", e);
+            throw new IllegalStateException(e);
         } catch (InvalidKeySpecException e) {
-            Log.e("TUT", "fail", e);
+            throw new IllegalStateException(e);
         }
+        Log.d("TUT", "MQTT setup is complete master.");
     }
 
     private String createJwtRsa(String projectId, int rawFileId) throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -124,9 +161,11 @@ public class MainActivity extends Activity {
         // Create a JWT to authenticate this device. The device will be disconnected after the token
         // expires, and will have to reconnect with a new token. The audience field should always be set
         // to the GCP project id.
+        Date issueDate = Date.from(now.toInstant(ZoneOffset.MIN));
+        Log.d("TUT", "JWT issue date: " + issueDate);
         JwtBuilder jwtBuilder =
                 Jwts.builder()
-                        .setIssuedAt(Date.from(now.toInstant(ZoneOffset.MIN)))
+                        .setIssuedAt(issueDate)
                         .setExpiration(Date.from(now.plusMinutes(20).toInstant(ZoneOffset.MIN)))
                         .setAudience(projectId);
 
