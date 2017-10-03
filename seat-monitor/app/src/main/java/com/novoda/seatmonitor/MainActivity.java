@@ -59,6 +59,7 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 cloudIotCoreComms.practiceMQtt();
+                cloudIotCoreComms.sendMessage("123HelloWorld");
             }
         }).start();
     }

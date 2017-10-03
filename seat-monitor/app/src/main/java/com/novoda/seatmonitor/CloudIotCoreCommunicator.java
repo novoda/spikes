@@ -178,9 +178,6 @@ public class CloudIotCoreCommunicator {
             });
             iMqttToken.waitForCompletion(TimeUnit.SECONDS.toMillis(30));
             Log.d("TUT", "IoT Core connection established.");
-
-            sendMessage();
-
         } catch (MqttException e) {
             throw new IllegalStateException(e);
         } catch (NoSuchAlgorithmException e) {
@@ -210,14 +207,14 @@ public class CloudIotCoreCommunicator {
         return jwtBuilder.signWith(SignatureAlgorithm.RS256, privateKey).compact();
     }
 
-    private void sendMessage() {
+    public void sendMessage(String message) {
         String topic = "/devices/" + deviceId + "/events";
-        String payload = "registryId" + "/" + deviceId + "-payload-" + "1HelloWorld"; // TODO does this need to be a sepcific format?
-        MqttMessage message = new MqttMessage(payload.getBytes());
-        message.setQos(1);
+        String payload = "registryId" + "/" + deviceId + "-payload-" + message; // TODO does this need to be a sepcific format?
+        MqttMessage mqttMessage = new MqttMessage(payload.getBytes());
+        mqttMessage.setQos(1);
         try {
             Log.d("TUT", "IoT Core message published. To topic: " + topic);
-            client.publish(topic, message);
+            client.publish(topic, mqttMessage);
         } catch (MqttException e) {
             throw new IllegalStateException(e);
         }
