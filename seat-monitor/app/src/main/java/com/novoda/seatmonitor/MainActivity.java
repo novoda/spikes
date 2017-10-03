@@ -7,13 +7,12 @@ import android.util.Log;
 import com.google.android.things.contrib.driver.button.Button;
 import com.novoda.loadgauge.WiiLoadSensor;
 
-import java.io.IOException;
-
 public class MainActivity extends Activity {
 
     private WiiLoadSensor wiiLoadSensorA;
     private WiiLoadSensor wiiLoadSensorB;
     private Button button;
+    private CloudIotCoreCommunicator cloudIotCoreComms;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +43,7 @@ public class MainActivity extends Activity {
 //
 //        wiiLoadSensorA.monitorForWeightChangeOver(50, sensorAWeightChangedCallback);
 
-        final CloudIotCoreCommunicator cloudIotCoreComms = new CloudIotCoreCommunicator.Builder()
+        cloudIotCoreComms = new CloudIotCoreCommunicator.Builder()
                 .withContext(this)
                 .withServerURI("ssl://mqtt.googleapis.com:8883")
                 .withProjectId("seat-monitor")
@@ -76,13 +75,14 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        wiiLoadSensorA.stopMonitoring();
-        wiiLoadSensorB.stopMonitoring();
-        try {
-            button.close();
-        } catch (IOException e) {
-            // ignore
-        }
+//        wiiLoadSensorA.stopMonitoring();
+//        wiiLoadSensorB.stopMonitoring();
+//        try {
+//            button.close();
+//        } catch (IOException e) {
+//            // ignore
+//        }
+        cloudIotCoreComms.disconnect();
         super.onDestroy();
     }
 }

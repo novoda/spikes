@@ -179,7 +179,6 @@ public class CloudIotCoreCommunicator {
             iMqttToken.waitForCompletion(TimeUnit.SECONDS.toMillis(30));
 
             sendMessage();
-            disconnect();
             Log.d("TUT", "MQTT hacking is complete master.");
 
         } catch (MqttException e) {
@@ -225,7 +224,7 @@ public class CloudIotCoreCommunicator {
         }
     }
 
-    private void disconnect() {
+    public void disconnect() {
         try {
             Log.d("TUT", "dcon");
             client.disconnect();
