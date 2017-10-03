@@ -158,7 +158,7 @@ public class CloudIotCoreCommunicator {
         }
     }
 
-    public void sendMessage(String message) {
+    public void publishMessage(String message) {
         // The MQTT topic that this device will publish telemetry data to. The MQTT topic name is
         // required to be in the format below. Note that this is not the same as the device registry's
         // Cloud Pub/Sub topic.

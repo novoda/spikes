@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 cloudIotCoreComms.connect();
-//                cloudIotCoreComms.sendMessage("123HelloWorld");
+//                cloudIotCoreComms.publishMessage("123HelloWorld");
             }
         }).start();
     }
@@ -74,7 +74,7 @@ public class MainActivity extends Activity {
         public void onWeightChanged(float newWeightInKg) {
             Log.d("TUT", "sensor A, weight: " + newWeightInKg + "kg");
 
-            cloudIotCoreComms.sendMessage(newWeightInKg + "kg");
+            cloudIotCoreComms.publishMessage(newWeightInKg + "kg");
         }
     };
 
