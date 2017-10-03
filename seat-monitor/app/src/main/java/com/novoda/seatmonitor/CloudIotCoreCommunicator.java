@@ -1,18 +1,9 @@
 package com.novoda.seatmonitor;
 
 import android.content.Context;
-import android.util.Base64;
 import android.util.Log;
 
 import java.io.InputStream;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -23,10 +14,6 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 public class CloudIotCoreCommunicator {
 
@@ -101,11 +88,9 @@ public class CloudIotCoreCommunicator {
             if (privateKeyRawFileId == 0) {
                 throw new IllegalStateException("privateKeyRawFileId must not be 0");
             }
-            InputStream inStream = context.getResources().openRawResource(privateKeyRawFileId);
-            byte[] privateKeyBytes = Base64.decode(inputToString(inStream), Base64.DEFAULT);
-
             MqttAndroidClient client = new MqttAndroidClient(context, serverURI, clientId);
-            return new CloudIotCoreCommunicator(client, projectId, deviceId, privateKeyBytes);
+            CloudIotCorePasswordGenerator passwordGenerator = new CloudIotCorePasswordGenerator(projectId, context.getResources(), privateKeyRawFileId);
+            return new CloudIotCoreCommunicator(client, deviceId, passwordGenerator);
         }
 
         private String inputToString(InputStream is) {
@@ -115,20 +100,18 @@ public class CloudIotCoreCommunicator {
     }
 
     private final MqttAndroidClient client;
-    private final String projectId;
     private final String deviceId;
-    private final byte[] privateKeyBytes;
+    private final CloudIotCorePasswordGenerator passwordGenerator;
 
-    CloudIotCoreCommunicator(MqttAndroidClient client, String projectId, String deviceId, byte[] privateKeyBytes) {
+    CloudIotCoreCommunicator(MqttAndroidClient client, String deviceId, CloudIotCorePasswordGenerator passwordGenerator) {
         this.client = client;
-        this.projectId = projectId;
         this.deviceId = deviceId;
-        this.privateKeyBytes = privateKeyBytes;
+        this.passwordGenerator = passwordGenerator;
     }
 
     void connect() {
         monitorConnection();
-        connect(projectId, privateKeyBytes);
+        clientConnect();
     }
 
     private void monitorConnection() {
@@ -152,7 +135,7 @@ public class CloudIotCoreCommunicator {
         });
     }
 
-    private void connect(String projectId, byte[] privateKeyBytes) {
+    private void clientConnect() {
         try {
             MqttConnectOptions connectOptions = new MqttConnectOptions();
             // Note that the the Google Cloud IoT Core only supports MQTT 3.1.1, and Paho requires that we explictly set this.
@@ -162,7 +145,7 @@ public class CloudIotCoreCommunicator {
             // With Google Cloud IoT Core, the username field is ignored, however it must be set for the
             // Paho client library to send the password field. The password field is used to transmit a JWT to authorize the device.
             connectOptions.setUserName("unused-but-necessary");
-            connectOptions.setPassword(createJwtRsa(projectId, privateKeyBytes).toCharArray());
+            connectOptions.setPassword(passwordGenerator.createJwtRsaPassword());
 
             IMqttToken iMqttToken = client.connect(connectOptions);
             iMqttToken.setActionCallback(new IMqttActionListener() {
@@ -180,31 +163,7 @@ public class CloudIotCoreCommunicator {
             Log.d("TUT", "IoT Core connection established.");
         } catch (MqttException e) {
             throw new IllegalStateException(e);
-        } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException(e);
-        } catch (InvalidKeySpecException e) {
-            throw new IllegalStateException(e);
         }
-    }
-
-    private static String createJwtRsa(String projectId, byte[] privateKeyBytes) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        LocalDateTime now = LocalDateTime.now();
-        // Create a JWT to authenticate this device. The device will be disconnected after the token
-        // expires, and will have to reconnect with a new token. The audience field should always be set
-        // to the GCP project id.
-        Date issueDate = Date.from(now.minusDays(1).toInstant(ZoneOffset.MIN)); // TODO DATE HACK????
-        Log.d("TUT", "JWT issue date: " + issueDate);
-        JwtBuilder jwtBuilder =
-                Jwts.builder()
-                        .setIssuedAt(issueDate)
-                        .setExpiration(Date.from(now.plusMinutes(20).toInstant(ZoneOffset.MIN)))
-                        .setAudience(projectId);
-
-        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(privateKeyBytes);
-        KeyFactory kf = KeyFactory.getInstance("RSA");
-        PrivateKey privateKey = kf.generatePrivate(spec);
-
-        return jwtBuilder.signWith(SignatureAlgorithm.RS256, privateKey).compact();
     }
 
     public void sendMessage(String message) {
