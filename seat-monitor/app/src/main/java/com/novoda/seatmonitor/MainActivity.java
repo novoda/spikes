@@ -59,7 +59,7 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 cloudIotCoreComms.connect();
-                cloudIotCoreComms.sendMessage("123HelloWorld");
+//                cloudIotCoreComms.sendMessage("123HelloWorld");
             }
         }).start();
     }
@@ -69,8 +69,7 @@ public class MainActivity extends Activity {
         public void onWeightChanged(float newWeightInKg) {
             Log.d("TUT", "sensor A, weight: " + newWeightInKg + "kg");
 
-            // TODO Record that change in firebase / iot core
-
+            cloudIotCoreComms.sendMessage(newWeightInKg + "kg");
         }
     };
 
