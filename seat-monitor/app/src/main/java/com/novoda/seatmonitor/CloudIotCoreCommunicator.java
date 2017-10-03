@@ -177,9 +177,9 @@ public class CloudIotCoreCommunicator {
                 }
             });
             iMqttToken.waitForCompletion(TimeUnit.SECONDS.toMillis(30));
+            Log.d("TUT", "IoT Core connection established.");
 
             sendMessage();
-            Log.d("TUT", "MQTT hacking is complete master.");
 
         } catch (MqttException e) {
             throw new IllegalStateException(e);
@@ -188,7 +188,6 @@ public class CloudIotCoreCommunicator {
         } catch (InvalidKeySpecException e) {
             throw new IllegalStateException(e);
         }
-        Log.d("TUT", "MQTT setup is complete master.");
     }
 
     private static String createJwtRsa(String projectId, byte[] privateKeyBytes) throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -217,7 +216,7 @@ public class CloudIotCoreCommunicator {
         MqttMessage message = new MqttMessage(payload.getBytes());
         message.setQos(1);
         try {
-            Log.d("TUT", "publish");
+            Log.d("TUT", "IoT Core message published. To topic: " + topic);
             client.publish(topic, message);
         } catch (MqttException e) {
             throw new IllegalStateException(e);
@@ -226,7 +225,7 @@ public class CloudIotCoreCommunicator {
 
     public void disconnect() {
         try {
-            Log.d("TUT", "dcon");
+            Log.d("TUT", "IoT Core connection disconnected.");
             client.disconnect();
         } catch (MqttException e) {
             throw new IllegalStateException(e);
