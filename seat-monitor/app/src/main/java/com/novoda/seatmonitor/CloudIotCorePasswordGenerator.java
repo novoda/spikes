@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.util.Base64;
 import android.util.Log;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -38,12 +39,15 @@ class CloudIotCorePasswordGenerator {
             throw new IllegalStateException("Algorithm not supported. (developer error)", e);
         } catch (InvalidKeySpecException e) {
             throw new IllegalStateException("Invalid Key spec. (developer error)", e);
+        } catch (IOException e) {
+            throw new IllegalStateException("Cannot read private key file.", e);
         }
     }
 
-    private static byte[] decodePrivateKey(Resources resources, int privateKeyRawFileId) {
-        InputStream inStream = resources.openRawResource(privateKeyRawFileId);
-        return Base64.decode(inputToString(inStream), Base64.DEFAULT);
+    private static byte[] decodePrivateKey(Resources resources, int privateKeyRawFileId) throws IOException {
+        try(InputStream inStream = resources.openRawResource(privateKeyRawFileId)) {
+            return Base64.decode(inputToString(inStream), Base64.DEFAULT);
+        }
     }
 
     private static String inputToString(InputStream is) {
