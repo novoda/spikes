@@ -168,7 +168,7 @@ public class CloudIotCoreCommunicator {
 
     public void sendMessage(String message) {
         String topic = "/devices/" + deviceId + "/events";
-        String payload = "registryId" + "/" + deviceId + "-payload-" + message; // TODO does this need to be a sepcific format?
+        String payload = "{msg:\"" + message + "\"}";
         MqttMessage mqttMessage = new MqttMessage(payload.getBytes());
         mqttMessage.setQos(1);
         try {
