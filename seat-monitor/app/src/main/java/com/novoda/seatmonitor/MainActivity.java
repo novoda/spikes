@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                cloudIotCoreComms.practiceMQtt();
+                cloudIotCoreComms.connect();
                 cloudIotCoreComms.sendMessage("123HelloWorld");
             }
         }).start();

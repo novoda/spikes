@@ -126,9 +126,9 @@ public class CloudIotCoreCommunicator {
         this.privateKeyBytes = privateKeyBytes;
     }
 
-    void practiceMQtt() {
+    void connect() {
         monitorConnection();
-        connect();
+        connect(projectId, privateKeyBytes);
     }
 
     private void monitorConnection() {
@@ -152,7 +152,7 @@ public class CloudIotCoreCommunicator {
         });
     }
 
-    private void connect() {
+    private void connect(String projectId, byte[] privateKeyBytes) {
         try {
             MqttConnectOptions connectOptions = new MqttConnectOptions();
             // Note that the the Google Cloud IoT Core only supports MQTT 3.1.1, and Paho requires that we explictly set this.
