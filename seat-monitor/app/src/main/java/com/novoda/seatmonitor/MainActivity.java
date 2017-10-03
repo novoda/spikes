@@ -51,7 +51,6 @@ public class MainActivity extends Activity {
 
         cloudIotCoreComms = new CloudIotCoreCommunicator.Builder()
                 .withContext(this)
-                .withServerURI("ssl://mqtt.googleapis.com:8883")
                 .withProjectId("seat-monitor")
                 .withCloudRegion("europe-west1")
                 .withRegistryId("my-devices")

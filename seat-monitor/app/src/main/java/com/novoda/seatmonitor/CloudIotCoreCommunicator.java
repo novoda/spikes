@@ -17,10 +17,11 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class CloudIotCoreCommunicator {
 
+    private static final String SERVER_URI = "ssl://mqtt.googleapis.com:8883";
+
     static class Builder {
 
         private Context context;
-        private String serverURI;
         private String projectId;
         private String cloudRegion;
         private String registryId;
@@ -29,11 +30,6 @@ public class CloudIotCoreCommunicator {
 
         public Builder withContext(Context context) {
             this.context = context;
-            return this;
-        }
-
-        public Builder withServerURI(String serverURI) {
-            this.serverURI = serverURI;
             return this;
         }
 
@@ -67,10 +63,6 @@ public class CloudIotCoreCommunicator {
                 throw new IllegalStateException("context must not be null");
             }
 
-            if (serverURI == null) {
-                throw new IllegalStateException("serverURI must not be null");
-            }
-
             if (projectId == null) {
                 throw new IllegalStateException("projectId must not be null");
             }
@@ -88,7 +80,7 @@ public class CloudIotCoreCommunicator {
             if (privateKeyRawFileId == 0) {
                 throw new IllegalStateException("privateKeyRawFileId must not be 0");
             }
-            MqttAndroidClient client = new MqttAndroidClient(context, serverURI, clientId);
+            MqttAndroidClient client = new MqttAndroidClient(context, SERVER_URI, clientId);
             CloudIotCorePasswordGenerator passwordGenerator = new CloudIotCorePasswordGenerator(projectId, context.getResources(), privateKeyRawFileId);
             return new CloudIotCoreCommunicator(client, deviceId, passwordGenerator);
         }
