@@ -126,7 +126,11 @@ public class CloudIotCoreCommunicator {
     }
 
     void practiceMQtt() {
+        monitorConnection();
+        connect();
+    }
 
+    private void monitorConnection() {
         client.setCallback(new MqttCallback() {
             @Override
             public void connectionLost(Throwable cause) {
@@ -145,17 +149,17 @@ public class CloudIotCoreCommunicator {
 
             }
         });
+    }
 
+    private void connect() {
         try {
             MqttConnectOptions connectOptions = new MqttConnectOptions();
-            // Note that the the Google Cloud IoT Core only supports MQTT 3.1.1, and Paho requires that we
-            // explictly set this. If you don't set MQTT version, the server will immediately close its
-            // connection to your device.
+            // Note that the the Google Cloud IoT Core only supports MQTT 3.1.1, and Paho requires that we explictly set this.
+            // If you don't set MQTT version, the server will immediately close its connection to your device.
             connectOptions.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1_1);
 
             // With Google Cloud IoT Core, the username field is ignored, however it must be set for the
-            // Paho client library to send the password field. The password field is used to transmit a JWT
-            // to authorize the device.
+            // Paho client library to send the password field. The password field is used to transmit a JWT to authorize the device.
             connectOptions.setUserName("unused-but-necessary");
             connectOptions.setPassword(createJwtRsa(projectId, privateKeyBytes).toCharArray());
 
@@ -163,31 +167,14 @@ public class CloudIotCoreCommunicator {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
                     Log.d("TUT", "success, connected");
-
-                    String topic = "/devices/" + deviceId + "/events";
-                    String payload = "registryId" + "/" + deviceId + "-payload-" + "1HelloWorld"; // TODO does this need to be a sepcific format?
-                    MqttMessage message = new MqttMessage(payload.getBytes());
-                    message.setQos(1);
-                    try {
-                        Log.d("TUT", "publish");
-                        client.publish(topic, message);
-                    } catch (MqttException e) {
-                        throw new IllegalStateException(e);
-                    }
-
-                    try {
-                        Log.d("TUT", "dcon");
-                        client.disconnect();
-                    } catch (MqttException e) {
-                        throw new IllegalStateException(e);
-                    }
+                    sendMessage();
+                    disconnect();
                     Log.d("TUT", "MQTT hacking is complete master.");
                 }
 
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                     Log.e("TUT", "failure, not connected", exception);
-
                 }
             });
 
@@ -209,16 +196,38 @@ public class CloudIotCoreCommunicator {
         Date issueDate = Date.from(now.minusDays(1).toInstant(ZoneOffset.MIN)); // TODO DATE HACK????
         Log.d("TUT", "JWT issue date: " + issueDate);
         JwtBuilder jwtBuilder =
-            Jwts.builder()
-                .setIssuedAt(issueDate)
-                .setExpiration(Date.from(now.plusMinutes(20).toInstant(ZoneOffset.MIN)))
-                .setAudience(projectId);
+                Jwts.builder()
+                        .setIssuedAt(issueDate)
+                        .setExpiration(Date.from(now.plusMinutes(20).toInstant(ZoneOffset.MIN)))
+                        .setAudience(projectId);
 
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(privateKeyBytes);
         KeyFactory kf = KeyFactory.getInstance("RSA");
         PrivateKey privateKey = kf.generatePrivate(spec);
 
         return jwtBuilder.signWith(SignatureAlgorithm.RS256, privateKey).compact();
+    }
+
+    private void sendMessage() {
+        String topic = "/devices/" + deviceId + "/events";
+        String payload = "registryId" + "/" + deviceId + "-payload-" + "1HelloWorld"; // TODO does this need to be a sepcific format?
+        MqttMessage message = new MqttMessage(payload.getBytes());
+        message.setQos(1);
+        try {
+            Log.d("TUT", "publish");
+            client.publish(topic, message);
+        } catch (MqttException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    private void disconnect() {
+        try {
+            Log.d("TUT", "dcon");
+            client.disconnect();
+        } catch (MqttException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
 }
