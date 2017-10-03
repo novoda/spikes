@@ -15,6 +15,7 @@ public class MainActivity extends Activity {
     private WiiLoadSensor wiiLoadSensorA;
     //    private WiiLoadSensor wiiLoadSensorB;
     private Button button;
+    private CloudIotCoreCommunicator cloudIotCoreComms;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,26 @@ public class MainActivity extends Activity {
             throw new IllegalStateException("Button FooBar", e);
         }
         wiiLoadSensorA.monitorForWeightChangeOver(50, sensorAWeightChangedCallback);
+
+        cloudIotCoreComms = new CloudIotCoreCommunicator.Builder()
+                .withContext(this)
+                .withServerURI("ssl://mqtt.googleapis.com:8883")
+                .withProjectId("seat-monitor")
+                .withCloudRegion("europe-west1")
+                .withRegistryId("my-devices")
+                // work-desk-nxp
+                // home-attic-raspberry-pi
+                .withDeviceId("work-desk-nxp")
+                .withPrivateKeyRawFileId(R.raw.rsa_private)
+                .build();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                cloudIotCoreComms.connect();
+//                cloudIotCoreComms.sendMessage("123HelloWorld");
+            }
+        }).start();
     }
 
     private final WiiLoadSensor.WeightChangeCallback sensorAWeightChangedCallback = new WiiLoadSensor.WeightChangeCallback() {
@@ -54,7 +75,7 @@ public class MainActivity extends Activity {
         public void onWeightChanged(float newWeightInKg) {
             Log.d("TUT", "sensor A, weight: " + newWeightInKg + "kg");
 
-            // TODO Record that change in firebase / iot core
+            cloudIotCoreComms.sendMessage(newWeightInKg + "kg");
         }
     };
 
@@ -67,6 +88,7 @@ public class MainActivity extends Activity {
         } catch (IOException e) {
             // ignore
         }
+        cloudIotCoreComms.disconnect();
         super.onDestroy();
     }
 }
