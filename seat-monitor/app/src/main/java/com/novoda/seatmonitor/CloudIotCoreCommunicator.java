@@ -13,6 +13,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -163,13 +164,11 @@ public class CloudIotCoreCommunicator {
             connectOptions.setUserName("unused-but-necessary");
             connectOptions.setPassword(createJwtRsa(projectId, privateKeyBytes).toCharArray());
 
-            client.connect(connectOptions, null, new IMqttActionListener() {
+            IMqttToken iMqttToken = client.connect(connectOptions);
+            iMqttToken.setActionCallback(new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
                     Log.d("TUT", "success, connected");
-                    sendMessage();
-                    disconnect();
-                    Log.d("TUT", "MQTT hacking is complete master.");
                 }
 
                 @Override
@@ -177,6 +176,11 @@ public class CloudIotCoreCommunicator {
                     Log.e("TUT", "failure, not connected", exception);
                 }
             });
+            iMqttToken.waitForCompletion(TimeUnit.SECONDS.toMillis(30));
+
+            sendMessage();
+            disconnect();
+            Log.d("TUT", "MQTT hacking is complete master.");
 
         } catch (MqttException e) {
             throw new IllegalStateException(e);
