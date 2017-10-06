@@ -74,7 +74,7 @@ public class MainActivity extends Activity {
         public void onWeightChanged(float newWeightInKg) {
             Log.d("TUT", "sensor A, weight: " + newWeightInKg + "kg");
 
-            cloudIotCoreComms.publishMessage(newWeightInKg + "kg");
+            cloudIotCoreComms.publishMessage("{\"weight\":\"" + newWeightInKg + "kg" + "\"}");
         }
     };
 
