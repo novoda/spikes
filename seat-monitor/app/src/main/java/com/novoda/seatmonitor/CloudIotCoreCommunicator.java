@@ -167,7 +167,7 @@ public class CloudIotCoreCommunicator {
         // required to be in the format below. Note that this is not the same as the device registry's
         // Cloud Pub/Sub topic.
         String topic = "/devices/" + deviceId + "/events";
-        String payload = "{msg:\"" + message + "\"}";
+        String payload = message;
         MqttMessage mqttMessage = new MqttMessage(payload.getBytes());
         mqttMessage.setQos(1);
         try {
