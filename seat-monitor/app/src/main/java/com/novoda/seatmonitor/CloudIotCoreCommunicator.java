@@ -104,6 +104,7 @@ public class CloudIotCoreCommunicator {
     void connect() {
         monitorConnection();
         clientConnect();
+        subscribeToConfigChanges();
     }
 
     private void monitorConnection() {
@@ -153,6 +154,14 @@ public class CloudIotCoreCommunicator {
             });
             iMqttToken.waitForCompletion(TimeUnit.SECONDS.toMillis(30));
             Log.d("TUT", "IoT Core connection established.");
+        } catch (MqttException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    private void subscribeToConfigChanges() {
+        try {
+            client.subscribe("/devices/" + deviceId + "/config", 1);
         } catch (MqttException e) {
             throw new IllegalStateException(e);
         }
