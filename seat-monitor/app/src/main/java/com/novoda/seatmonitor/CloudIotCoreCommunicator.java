@@ -3,7 +3,6 @@ package com.novoda.seatmonitor;
 import android.content.Context;
 import android.util.Log;
 
-import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -85,10 +84,6 @@ public class CloudIotCoreCommunicator {
             return new CloudIotCoreCommunicator(client, deviceId, passwordGenerator);
         }
 
-        private String inputToString(InputStream is) {
-            java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
-            return s.hasNext() ? s.next() : "";
-        }
     }
 
     private final MqttAndroidClient client;
