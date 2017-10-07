@@ -31,7 +31,7 @@ public class HtmlGenerator {
                                 + "#title p {"
                                     + " font: 300 1.2em/1.8 Open Sans, regular;"
                                     + " color: #6d6d6d;"
-                                    + " text-align: left;"
+                                    + " text-align: justify;"
                                 + "}"
                                 + "ul {"
                                     + " -webkit-padding-start: 0px;"
