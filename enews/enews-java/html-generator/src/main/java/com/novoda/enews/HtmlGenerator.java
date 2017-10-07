@@ -20,8 +20,8 @@ public class HtmlGenerator {
                         shareBar.injectCssInto(this);
                         style();
                             text("#newsletter-body {"
-                                    + " display: flex;"
-                                    + " flex-direction: column;"
+//                                    + " display: flex;"
+//                                    + " flex-direction: column;" Not supported in email clients
                                     + " align-items: center;"
                                 + "}"
                                 + "#header-image { "
