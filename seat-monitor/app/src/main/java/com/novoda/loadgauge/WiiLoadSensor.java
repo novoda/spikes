@@ -1,11 +1,15 @@
 package com.novoda.loadgauge;
 
+import android.os.SystemClock;
+import android.util.Log;
+
 public class WiiLoadSensor {
 
     private final Ads1015 ads1015;
 
     private WeightChangeCallback callback;
     private int milliVoltsAtRest;
+    private boolean running;
 
     public WiiLoadSensor(Ads1015 ads1015) {
         this.ads1015 = ads1015;
@@ -16,33 +20,43 @@ public class WiiLoadSensor {
         milliVoltsAtRest = ads1015.readDifferential();
     }
 
-    public void monitorForWeightChangeOver(float weightInKg, WeightChangeCallback callback) {
+    public void monitorWeight(WeightChangeCallback callback) {
         this.callback = callback;
 
-        // TODO convert weightInKg to mV
-        int thresholdInMv = 0 + milliVoltsAtRest;
+        running = true;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(running) {
 
-//        ads1015.startComparatorDifferential(thresholdInMv, comparatorCallback);
-        ads1015.startComparatorSingleEnded(ads1015.readSingleEnded() + 1, comparatorCallback);
+                    if (WiiLoadSensor.this.callback == null) {
+                        throw new IllegalStateException("Didn't expect comparator to be called with no callback", new NullPointerException("callback is null"));
+                    }
+
+                    int result = readWeight();
+
+                    WiiLoadSensor.this.callback.onWeightChanged(50);
+
+                    SystemClock.sleep(1000);
+                }
+            }
+        }).start(); // TODO proper threading mechanism
+
     }
 
-    private final Ads1015.ComparatorCallback comparatorCallback = new Ads1015.ComparatorCallback() {
-        @Override
-        public void onThresholdHit(float valueInMv) {
-            if (callback == null) {
-                throw new IllegalStateException("Didn't expect comparator to be called with no callback", new NullPointerException("callback is null"));
-            }
-            // negate the cushion presence (i.e. use the calibration value)
+    private int readWeight() {
+        int result = ads1015.readSingleEnded();
+
+        Log.d("TUT", "Current result: " + result);
+        // negate the cushion presence (i.e. use the calibration value)
 //            float realValueInMv = valueInMv - milliVoltsAtRest;
 //            Log.d("TUT", "Value minus rest: " + realValueInMv + "mV");
-            // TODO convert valueInMv to kg
-            float weightInKg = 50;
-
-            callback.onWeightChanged(weightInKg);
-        }
-    };
+        // TODO convert valueInMv to kg
+        return result;
+    }
 
     public void stopMonitoring() {
+        running = false;
         ads1015.close();
     }
 
