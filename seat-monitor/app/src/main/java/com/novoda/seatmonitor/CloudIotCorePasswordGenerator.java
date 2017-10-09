@@ -2,7 +2,6 @@ package com.novoda.seatmonitor;
 
 import android.content.res.Resources;
 import android.util.Base64;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,8 +9,8 @@ import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 
 import io.jsonwebtoken.JwtBuilder;
@@ -44,7 +43,7 @@ class CloudIotCorePasswordGenerator {
     }
 
     private static byte[] decodePrivateKey(Resources resources, int privateKeyRawFileId) throws IOException {
-        try(InputStream inStream = resources.openRawResource(privateKeyRawFileId)) {
+        try (InputStream inStream = resources.openRawResource(privateKeyRawFileId)) {
             return Base64.decode(inputToString(inStream), Base64.DEFAULT);
         }
     }
@@ -59,16 +58,14 @@ class CloudIotCorePasswordGenerator {
     }
 
     private static String createPassword(String projectId, byte[] privateKeyBytes, SignatureAlgorithm signatureAlgorithm, String algorithmName) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        LocalDateTime now = LocalDateTime.now();
-        // Create a JWT to authenticate this device. The device will be disconnected after the token
-        // expires, and will have to reconnect with a new token. The audience field should always be set
-        // to the GCP project id.
-        Date issueDate = Date.from(now.minusDays(1).toInstant(ZoneOffset.MIN)); // TODO DATE HACK????
-        Log.d("TUT", "JWT issue date: " + issueDate);
+        Instant now = Instant.now();
+        Date issueDate = Date.from(now);
         JwtBuilder jwtBuilder =
                 Jwts.builder()
                         .setIssuedAt(issueDate)
-                        .setExpiration(Date.from(now.plusMinutes(20).toInstant(ZoneOffset.MIN)))
+                        // The device will be disconnected after the token expires, and will have to reconnect with a new token.
+                        .setExpiration(Date.from(now.plus(Duration.ofMinutes(20))))
+                        // The audience field should always be set to the GCP project id.
                         .setAudience(projectId);
 
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(privateKeyBytes);
