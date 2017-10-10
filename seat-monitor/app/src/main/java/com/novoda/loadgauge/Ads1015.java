@@ -65,13 +65,9 @@ public interface Ads1015 {
 
     long CONVERSION_DELAY = TimeUnit.MILLISECONDS.toMillis(1);
 
-    int readSingleEnded();
+    int read();
 
-    int readDifferential();
-
-    void startComparatorSingleEnded(int thresholdInMv, ComparatorCallback callback);
-
-    void startComparatorDifferential(int thresholdInMv, ComparatorCallback callback);
+    void startComparator(int thresholdInMv, ComparatorCallback callback);
 
     void close();
 

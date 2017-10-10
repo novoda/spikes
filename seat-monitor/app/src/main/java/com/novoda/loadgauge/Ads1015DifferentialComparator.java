@@ -31,19 +31,6 @@ class Ads1015DifferentialComparator implements Ads1015 {
         this.differentialReader = differentialReader;
     }
 
-    @Override
-    public void startComparatorDifferential(int thresholdInMv, ComparatorCallback callback) {
-        this.callback = callback;
-        try {
-            alertReadyGpioBus.registerGpioCallback(thresholdHitCallback);
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
-
-        int differential = readADCDifferential();
-        Log.d("TUT", "Start value : " + differential);
-        startComparatorDifferential(differential + 1);
-    }
 
     private final GpioCallback thresholdHitCallback = new GpioCallback() {
         @Override
@@ -59,6 +46,20 @@ class Ads1015DifferentialComparator implements Ads1015 {
             return true;
         }
     };
+
+    @Override
+    public void startComparator(int thresholdInMv, ComparatorCallback callback) {
+        this.callback = callback;
+        try {
+            alertReadyGpioBus.registerGpioCallback(thresholdHitCallback);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+
+        int differential = readADCDifferential();
+        Log.d("TUT", "Start value : " + differential);
+        startComparatorDifferential(differential + 1);
+    }
 
     private void startComparatorDifferential(int thresholdInMv) {
         // Set the high threshold register
@@ -140,18 +141,8 @@ class Ads1015DifferentialComparator implements Ads1015 {
     }
 
     @Override
-    public int readDifferential() {
-        return differentialReader.readDifferential();
-    }
-
-    @Override
-    public int readSingleEnded() {
-        throw new UnsupportedOperationException("Not my responsibility");
-    }
-
-    @Override
-    public void startComparatorSingleEnded(int thresholdInMv, ComparatorCallback callback) {
-        throw new UnsupportedOperationException("Not my responsibility");
+    public int read() {
+        return differentialReader.read();
     }
 
     @Override

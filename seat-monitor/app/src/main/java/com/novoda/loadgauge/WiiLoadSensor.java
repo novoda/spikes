@@ -17,7 +17,7 @@ public class WiiLoadSensor {
 
     public void calibrateToZero() {
         // Get the current load on the sensor store this value as "0"
-        milliVoltsAtRest = ads1015.readDifferential();
+        milliVoltsAtRest = ads1015.read();
     }
 
     public void monitorWeight(WeightChangeCallback callback) {
@@ -45,7 +45,7 @@ public class WiiLoadSensor {
     }
 
     private int readWeight() {
-        int result = ads1015.readSingleEnded();
+        int result = ads1015.read();
 
         Log.d("TUT", "Current result: " + result);
         // negate the cushion presence (i.e. use the calibration value)

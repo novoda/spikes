@@ -31,7 +31,7 @@ class Ads1015SingleEndedComparator implements Ads1015 {
     }
 
     @Override
-    public void startComparatorSingleEnded(int thresholdInMv, ComparatorCallback callback) {
+    public void startComparator(int thresholdInMv, ComparatorCallback callback) {
         this.callback = callback;
         try {
             alertReadyGpioBus.registerGpioCallback(thresholdHitCallback);
@@ -72,7 +72,7 @@ class Ads1015SingleEndedComparator implements Ads1015 {
             }
             float multiplier = 3.0F;  // TODO multiplier should be based on Gain
 //            configDifferential();
-            int value = readSingleEnded();
+            int value = read();
             Log.d("TUT", "Threshold hit raw " + value);
             float valueInMv = value * multiplier;
             Log.d("TUT", "Threshold hit out " + valueInMv + "mV");
@@ -90,18 +90,8 @@ class Ads1015SingleEndedComparator implements Ads1015 {
     }
 
     @Override
-    public int readDifferential() {
-        throw new UnsupportedOperationException("Not my responsibility");
-    }
-
-    @Override
-    public int readSingleEnded() {
-        return singleEndedReader.readSingleEnded();
-    }
-
-    @Override
-    public void startComparatorDifferential(int threshold, final ComparatorCallback callback) {
-        throw new UnsupportedOperationException("Not my responsibility");
+    public int read() {
+        return singleEndedReader.read();
     }
 
     @Override

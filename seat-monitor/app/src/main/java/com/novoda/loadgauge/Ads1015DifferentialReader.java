@@ -22,12 +22,11 @@ class Ads1015DifferentialReader implements Ads1015 {
     }
 
     @Override
-    public int readDifferential() {
+    public int read() {
         configDifferential();
         int i = readADCDifferential();
         Log.d("TUT", "Val: " + i);
         return i;
-
     }
 
     private void configDifferential() {
@@ -87,17 +86,7 @@ class Ads1015DifferentialReader implements Ads1015 {
     }
 
     @Override
-    public int readSingleEnded() {
-        throw new UnsupportedOperationException("Not my responsibility");
-    }
-
-    @Override
-    public void startComparatorDifferential(int threshold, final ComparatorCallback callback) {
-        throw new UnsupportedOperationException("Not my responsibility");
-    }
-
-    @Override
-    public void startComparatorSingleEnded(int thresholdInMv, ComparatorCallback callback) {
+    public void startComparator(int thresholdInMv, ComparatorCallback callback) {
         throw new UnsupportedOperationException("Not my responsibility");
     }
 

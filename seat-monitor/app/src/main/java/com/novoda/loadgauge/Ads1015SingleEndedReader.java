@@ -21,7 +21,7 @@ class Ads1015SingleEndedReader implements Ads1015 {
     }
 
     @Override
-    public int readSingleEnded() {
+    public int read() {
         // Start with default values
         short config = ADS1015_REG_CONFIG_CQUE_NONE | // Disable the comparator (default val)
             ADS1015_REG_CONFIG_CLAT_NONLAT | // Non-latching (default val)
@@ -71,17 +71,7 @@ class Ads1015SingleEndedReader implements Ads1015 {
     }
 
     @Override
-    public int readDifferential() {
-        throw new UnsupportedOperationException("Not my responsibility");
-    }
-
-    @Override
-    public void startComparatorDifferential(int threshold, final ComparatorCallback callback) {
-        throw new UnsupportedOperationException("Not my responsibility");
-    }
-
-    @Override
-    public void startComparatorSingleEnded(int thresholdInMv, ComparatorCallback callback) {
+    public void startComparator(int thresholdInMv, ComparatorCallback callback) {
         throw new UnsupportedOperationException("Not my responsibility");
     }
 
