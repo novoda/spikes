@@ -17,11 +17,11 @@ public class BotServiceBinder {
 
     private BotServiceConnection botServiceConnection;
 
-    public BotServiceBinder(Context context) {
+    BotServiceBinder(Context context) {
         this.context = context;
     }
 
-    public void bind(BotView botView, String serverAddress) {
+    void bind(BotView botView, String serverAddress) {
         if (botServiceConnection == null) {
             botServiceConnection = new BotServiceConnection(botView, serverAddress);
         }
@@ -60,7 +60,7 @@ public class BotServiceBinder {
         }
     }
 
-    public void unbind() {
+    void unbind() {
         if (BoundAndroidBotService.isBound()) {
             context.unbindService(botServiceConnection);
             context.stopService(new Intent(context, BoundAndroidBotService.class));

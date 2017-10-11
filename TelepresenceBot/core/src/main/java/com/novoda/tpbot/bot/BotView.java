@@ -2,7 +2,7 @@ package com.novoda.tpbot.bot;
 
 import com.novoda.tpbot.Direction;
 
-public interface BotView {
+interface BotView {
 
     void onConnect(String room, String serverAddress);
 
