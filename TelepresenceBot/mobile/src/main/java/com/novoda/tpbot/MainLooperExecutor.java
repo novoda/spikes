@@ -3,16 +3,16 @@ package com.novoda.tpbot;
 import android.os.Handler;
 import android.os.Looper;
 
-public class MainThreadExecutor implements Executor {
+public class MainLooperExecutor implements Executor {
 
     private final Handler handler;
 
-    public static MainThreadExecutor newInstance() {
+    public static MainLooperExecutor newInstance() {
         Handler handler = new Handler(Looper.getMainLooper());
-        return new MainThreadExecutor(handler);
+        return new MainLooperExecutor(handler);
     }
 
-    private MainThreadExecutor(Handler handler) {
+    private MainLooperExecutor(Handler handler) {
         this.handler = handler;
     }
 

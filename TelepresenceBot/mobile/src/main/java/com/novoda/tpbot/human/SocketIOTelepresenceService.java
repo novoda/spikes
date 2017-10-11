@@ -1,12 +1,11 @@
 package com.novoda.tpbot.human;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import com.novoda.support.Observable;
 import com.novoda.tpbot.ClientType;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.Event;
+import com.novoda.tpbot.Executor;
+import com.novoda.tpbot.MainLooperExecutor;
 import com.novoda.tpbot.MalformedServerAddressException;
 import com.novoda.tpbot.Result;
 import com.novoda.tpbot.Room;
@@ -22,10 +21,10 @@ import io.socket.client.Socket;
 class SocketIOTelepresenceService implements HumanTelepresenceService {
 
     private Socket socket;
-    private final Handler handler;
+    private final Executor executor;
 
     SocketIOTelepresenceService() {
-        this.handler = new Handler(Looper.getMainLooper());
+        this.executor = MainLooperExecutor.newInstance();
     }
 
     @Override
@@ -39,7 +38,7 @@ class SocketIOTelepresenceService implements HumanTelepresenceService {
             MalformedServerAddressException exceptionWithUserFacingMessage = new MalformedServerAddressException(exception);
             return Observable.just(Result.from(exceptionWithUserFacingMessage));
         }
-        return new SocketConnectionObservable(socket, handler);
+        return new SocketConnectionObservable(socket, executor);
     }
 
     @Override

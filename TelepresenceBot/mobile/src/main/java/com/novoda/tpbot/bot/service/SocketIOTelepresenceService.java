@@ -1,12 +1,11 @@
 package com.novoda.tpbot.bot.service;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import com.novoda.support.Observable;
 import com.novoda.tpbot.ClientType;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.Event;
+import com.novoda.tpbot.Executor;
+import com.novoda.tpbot.MainLooperExecutor;
 import com.novoda.tpbot.MalformedServerAddressException;
 import com.novoda.tpbot.Result;
 import com.novoda.tpbot.Room;
@@ -23,14 +22,14 @@ import io.socket.emitter.Emitter;
 class SocketIOTelepresenceService implements BotTelepresenceService {
 
     private Socket socket;
-    private final Handler handler;
+    private final Executor executor;
 
     static SocketIOTelepresenceService getInstance() {
         return LazySingleton.INSTANCE;
     }
 
     private SocketIOTelepresenceService() {
-        this.handler = new Handler(Looper.getMainLooper());
+        this.executor = MainLooperExecutor.newInstance();
     }
 
     @Override
@@ -44,7 +43,7 @@ class SocketIOTelepresenceService implements BotTelepresenceService {
             MalformedServerAddressException exceptionWithUserFacingMessage = new MalformedServerAddressException(exception);
             return Observable.just(Result.from(exceptionWithUserFacingMessage));
         }
-        return new SocketConnectionObservable(socket, handler);
+        return new SocketConnectionObservable(socket, executor);
     }
 
     @Override
@@ -67,13 +66,14 @@ class SocketIOTelepresenceService implements BotTelepresenceService {
         private final Emitter.Listener directionListener = new Emitter.Listener() {
             @Override
             public void call(final Object... args) {
-                handler.post(new Runnable() {
+                executor.execute(new Executor.Action() {
                     @Override
-                    public void run() {
+                    public void perform() {
                         if (args[0] != null && args[0] instanceof String) {
                             String rawDirection = (String) args[0];
                             notifyOf(Direction.from(rawDirection));
                         }
+
                     }
                 });
             }
