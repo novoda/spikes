@@ -18,7 +18,6 @@ import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServiceDeclarationListener;
 import com.novoda.tpbot.bot.device.DeviceConnection;
 import com.novoda.tpbot.bot.movement.MovementServiceBinder;
-import com.novoda.tpbot.bot.service.BotServiceBinder;
 import com.novoda.tpbot.bot.video.calling.AutomationChecker;
 import com.novoda.tpbot.controls.ActionRepeater;
 import com.novoda.tpbot.controls.ControllerListener;

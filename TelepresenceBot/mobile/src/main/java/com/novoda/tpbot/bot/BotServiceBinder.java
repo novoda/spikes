@@ -1,4 +1,4 @@
-package com.novoda.tpbot.bot.service;
+package com.novoda.tpbot.bot;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,7 +10,6 @@ import android.preference.PreferenceManager;
 
 import com.novoda.tpbot.LastServerPersistence;
 import com.novoda.tpbot.LastServerPreferences;
-import com.novoda.tpbot.bot.BotView;
 
 public class BotServiceBinder {
 
