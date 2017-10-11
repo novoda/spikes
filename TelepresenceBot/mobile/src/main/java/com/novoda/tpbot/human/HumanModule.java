@@ -1,7 +1,7 @@
 package com.novoda.tpbot.human;
 
 import com.novoda.notils.caster.Views;
-import com.novoda.support.SelfDestructingMessageView;
+import com.novoda.tpbot.support.SelfDestructingMessageView;
 import com.novoda.tpbot.LastServerPersistence;
 import com.novoda.tpbot.MyLooperDelayedExecutor;
 import com.novoda.tpbot.R;

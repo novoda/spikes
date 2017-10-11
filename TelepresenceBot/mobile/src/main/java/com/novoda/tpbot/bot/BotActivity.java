@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.novoda.support.SelfDestructingMessageView;
+import com.novoda.tpbot.support.SelfDestructingMessageView;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.FeaturePersistence;
 import com.novoda.tpbot.FeaturePersistenceFactory;

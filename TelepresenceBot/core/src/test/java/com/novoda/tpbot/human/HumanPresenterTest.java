@@ -1,7 +1,7 @@
 package com.novoda.tpbot.human;
 
 import com.novoda.tpbot.Result;
-import com.novoda.support.Observable;
+import com.novoda.tpbot.support.Observable;
 import com.novoda.tpbot.LastServerPersistence;
 
 import org.junit.Before;

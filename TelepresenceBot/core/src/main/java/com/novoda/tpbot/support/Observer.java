@@ -1,4 +1,4 @@
-package com.novoda.support;
+package com.novoda.tpbot.support;
 
 public interface Observer<T> {
 

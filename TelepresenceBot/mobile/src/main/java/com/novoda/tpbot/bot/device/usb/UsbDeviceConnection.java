@@ -3,7 +3,7 @@ package com.novoda.tpbot.bot.device.usb;
 import android.hardware.usb.UsbDevice;
 
 import com.novoda.notils.logger.simple.Log;
-import com.novoda.support.Optional;
+import com.novoda.tpbot.support.Optional;
 import com.novoda.tpbot.bot.device.DeviceConnection;
 
 class UsbDeviceConnection extends DeviceConnection implements UsbChangesListener {

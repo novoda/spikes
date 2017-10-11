@@ -1,4 +1,4 @@
-package com.novoda.support;
+package com.novoda.tpbot.support;
 
 import android.annotation.TargetApi;
 import android.content.Context;

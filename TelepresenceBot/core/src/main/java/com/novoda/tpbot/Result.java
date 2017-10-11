@@ -1,6 +1,6 @@
 package com.novoda.tpbot;
 
-import com.novoda.support.Optional;
+import com.novoda.tpbot.support.Optional;
 
 public class Result {
 

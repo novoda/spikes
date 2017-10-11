@@ -1,4 +1,4 @@
-package com.novoda.support;
+package com.novoda.tpbot.support;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,6 +1,6 @@
 package com.novoda.tpbot;
 
-import com.novoda.support.Observable;
+import com.novoda.tpbot.support.Observable;
 
 import io.socket.client.Socket;
 import io.socket.client.SocketIOException;
