@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.hardware.usb.UsbManager;
 
-import com.novoda.tpbot.MainLooperExecutor;
+import com.novoda.tpbot.threading.MainLooperExecutor;
 import com.novoda.tpbot.bot.device.ConnectedDevicesFetcher;
 import com.novoda.tpbot.bot.device.DeviceConnection;
 

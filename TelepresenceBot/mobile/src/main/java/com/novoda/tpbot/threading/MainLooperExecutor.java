@@ -1,4 +1,4 @@
-package com.novoda.tpbot;
+package com.novoda.tpbot.threading;
 
 import android.os.Handler;
 import android.os.Looper;

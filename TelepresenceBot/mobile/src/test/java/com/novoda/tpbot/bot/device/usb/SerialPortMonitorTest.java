@@ -7,7 +7,7 @@ import android.hardware.usb.UsbManager;
 import com.felhr.usbserial.UsbSerialDevice;
 import com.felhr.usbserial.UsbSerialInterface;
 import com.novoda.notils.logger.simple.Log;
-import com.novoda.tpbot.Executor;
+import com.novoda.tpbot.threading.Executor;
 
 import org.junit.Before;
 import org.junit.Rule;

@@ -1,6 +1,6 @@
 package com.novoda.tpbot.controls;
 
-import com.novoda.tpbot.Executor;
+import com.novoda.tpbot.threading.Executor;
 
 import java.util.concurrent.TimeUnit;
 

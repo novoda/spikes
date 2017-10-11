@@ -8,7 +8,7 @@ import com.felhr.usbserial.UsbSerialDevice;
 import com.felhr.usbserial.UsbSerialInterface;
 import com.novoda.notils.exception.DeveloperError;
 import com.novoda.notils.logger.simple.Log;
-import com.novoda.tpbot.Executor;
+import com.novoda.tpbot.threading.Executor;
 
 import java.io.UnsupportedEncodingException;
 

@@ -1,4 +1,4 @@
-package com.novoda.tpbot;
+package com.novoda.tpbot.threading;
 
 public interface Executor {
 
