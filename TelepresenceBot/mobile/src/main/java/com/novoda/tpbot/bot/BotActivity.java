@@ -201,7 +201,7 @@ public class BotActivity extends AppCompatActivity implements BotView,
 
     @Override
     public void onDataReceived(String data) {
-        Log.d(getClass().getSimpleName(), "onDataReceived");
+        Log.d(getClass().getSimpleName(), "onDataReceived: " + data);
     }
 
     @Override

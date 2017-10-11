@@ -3,6 +3,8 @@ package com.novoda.tpbot.bot.device.usb;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.felhr.usbserial.UsbSerialDevice;
 import com.felhr.usbserial.UsbSerialInterface;
@@ -15,6 +17,7 @@ class SerialPortMonitor {
 
     private final UsbManager usbManager;
     private final SerialPortCreator serialPortCreator;
+    private final Handler handler;
 
     private UsbSerialDevice serialPort;
     private UsbDeviceConnection deviceConnection;
@@ -22,6 +25,7 @@ class SerialPortMonitor {
     SerialPortMonitor(UsbManager usbManager, SerialPortCreator serialPortCreator) {
         this.usbManager = usbManager;
         this.serialPortCreator = serialPortCreator;
+        this.handler = new Handler(Looper.getMainLooper());
     }
 
     boolean tryToMonitorSerialPortFor(UsbDevice usbDevice, DataReceiver dataReceiver) {
@@ -80,10 +84,15 @@ class SerialPortMonitor {
 
         @Override
         public void onReceivedData(byte[] bytes) {
-            String data;
+            final String data;
             try {
                 data = new String(bytes, "UTF-8");
-                dataReceiver.onReceive(data);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        dataReceiver.onReceive(data);
+                    }
+                });
             } catch (UnsupportedEncodingException e) {
                 throw new DeveloperError("Error receiving data from USB serial.");
             }
