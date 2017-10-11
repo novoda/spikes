@@ -40,7 +40,7 @@ public class LandingModule {
 
     @Provides
     Navigator provideNavigator(LandingActivity activity) {
-        return new IntentNavigator(activity);
+        return new LandingIntentNavigator(activity);
     }
 
     @Provides

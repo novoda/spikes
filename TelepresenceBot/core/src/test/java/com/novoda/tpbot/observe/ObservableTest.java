@@ -1,4 +1,4 @@
-package com.novoda.tpbot.support;
+package com.novoda.tpbot.observe;
 
 import com.novoda.tpbot.model.Result;
 

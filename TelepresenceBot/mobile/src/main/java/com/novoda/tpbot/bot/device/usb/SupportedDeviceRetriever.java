@@ -3,7 +3,7 @@ package com.novoda.tpbot.bot.device.usb;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 
-import com.novoda.tpbot.support.Optional;
+import com.novoda.tpbot.model.Optional;
 
 import java.util.Arrays;
 import java.util.List;

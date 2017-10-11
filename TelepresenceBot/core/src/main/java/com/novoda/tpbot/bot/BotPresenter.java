@@ -1,12 +1,12 @@
 package com.novoda.tpbot.bot;
 
-import com.novoda.tpbot.support.Observable;
-import com.novoda.tpbot.support.Observer;
+import com.novoda.tpbot.observe.Observable;
+import com.novoda.tpbot.observe.Observer;
 import com.novoda.tpbot.model.Direction;
 import com.novoda.tpbot.LastServerPersistence;
 import com.novoda.tpbot.model.Result;
 
-import static com.novoda.tpbot.support.Observable.unsubscribe;
+import static com.novoda.tpbot.observe.Observable.unsubscribe;
 
 class BotPresenter {
 

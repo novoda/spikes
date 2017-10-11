@@ -8,7 +8,7 @@ import android.view.accessibility.AccessibilityManager;
 
 import com.novoda.notils.caster.Views;
 import com.novoda.notils.logger.toast.Toaster;
-import com.novoda.tpbot.support.SelfDestructingMessageView;
+import com.novoda.tpbot.controls.SelfDestructingMessageView;
 import com.novoda.tpbot.FeatureSelectionController;
 import com.novoda.tpbot.threading.MyLooperDelayedExecutor;
 import com.novoda.tpbot.R;

@@ -1,6 +1,6 @@
 package com.novoda.tpbot.bot;
 
-import com.novoda.tpbot.support.Observable;
+import com.novoda.tpbot.observe.Observable;
 import com.novoda.tpbot.model.Direction;
 import com.novoda.tpbot.model.Result;
 

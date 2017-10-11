@@ -11,7 +11,7 @@
     android:layout_marginLeft="@dimen/server_declaration_address_margin"
     android:layout_marginRight="@dimen/server_declaration_address_margin" />
 
-  <com.novoda.tpbot.support.ForegroundTextView
+  <com.novoda.tpbot.controls.ForegroundTextView
     android:id="@+id/bot_server_connect"
     style="@style/Human.Connect"
     android:layout_width="0dp"

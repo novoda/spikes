@@ -2,7 +2,7 @@ package com.novoda.tpbot.human;
 
 import com.novoda.tpbot.model.Direction;
 import com.novoda.tpbot.model.Result;
-import com.novoda.tpbot.support.Observable;
+import com.novoda.tpbot.observe.Observable;
 
 interface HumanTelepresenceService {
 

@@ -1,6 +1,6 @@
 package com.novoda.tpbot.human;
 
-import com.novoda.tpbot.support.Observable;
+import com.novoda.tpbot.observe.Observable;
 import com.novoda.tpbot.model.ClientType;
 import com.novoda.tpbot.model.Direction;
 import com.novoda.tpbot.model.Event;

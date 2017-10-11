@@ -7,14 +7,14 @@
   tools:context="com.novoda.tpbot.landing.LandingActivity"
   android:orientation="vertical">
 
-  <com.novoda.tpbot.support.ForegroundTextView
+  <com.novoda.tpbot.controls.ForegroundTextView
     android:id="@+id/bot_selection"
     style="@style/Landing.Bot"
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:layout_weight="100" />
 
-  <com.novoda.tpbot.support.ForegroundTextView
+  <com.novoda.tpbot.controls.ForegroundTextView
     android:id="@+id/human_selection"
     style="@style/Landing.Human"
     android:layout_width="match_parent"

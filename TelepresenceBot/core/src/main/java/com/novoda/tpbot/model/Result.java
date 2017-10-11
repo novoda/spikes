@@ -1,7 +1,5 @@
 package com.novoda.tpbot.model;
 
-import com.novoda.tpbot.support.Optional;
-
 public class Result {
 
     private final Optional<String> message;
