@@ -3,13 +3,12 @@ package com.novoda.tpbot.bot.device.usb;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
-import android.os.Handler;
-import android.os.Looper;
 
 import com.felhr.usbserial.UsbSerialDevice;
 import com.felhr.usbserial.UsbSerialInterface;
 import com.novoda.notils.exception.DeveloperError;
 import com.novoda.notils.logger.simple.Log;
+import com.novoda.tpbot.Executor;
 
 import java.io.UnsupportedEncodingException;
 
@@ -17,15 +16,15 @@ class SerialPortMonitor {
 
     private final UsbManager usbManager;
     private final SerialPortCreator serialPortCreator;
-    private final Handler handler;
+    private final Executor executor;
 
     private UsbSerialDevice serialPort;
     private UsbDeviceConnection deviceConnection;
 
-    SerialPortMonitor(UsbManager usbManager, SerialPortCreator serialPortCreator) {
+    SerialPortMonitor(UsbManager usbManager, SerialPortCreator serialPortCreator, Executor executor) {
         this.usbManager = usbManager;
         this.serialPortCreator = serialPortCreator;
-        this.handler = new Handler(Looper.getMainLooper());
+        this.executor = executor;
     }
 
     boolean tryToMonitorSerialPortFor(UsbDevice usbDevice, DataReceiver dataReceiver) {
@@ -87,9 +86,9 @@ class SerialPortMonitor {
             final String data;
             try {
                 data = new String(bytes, "UTF-8");
-                handler.post(new Runnable() {
+                executor.execute(new Executor.Action() {
                     @Override
-                    public void run() {
+                    public void perform() {
                         dataReceiver.onReceive(data);
                     }
                 });

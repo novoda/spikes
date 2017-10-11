@@ -19,7 +19,7 @@ public class UsbDeviceModule {
         UsbManager usbManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
         SupportedDeviceRetriever supportedDeviceRetriever = new SupportedDeviceRetriever(usbManager);
         SerialPortCreator serialPortCreator = new SerialPortCreator();
-        SerialPortMonitor serialPortMonitor = new SerialPortMonitor(usbManager, serialPortCreator);
+        SerialPortMonitor serialPortMonitor = new SerialPortMonitor(usbManager, serialPortCreator, );
         UsbPermissionRequester usbPermissionRequester = new UsbPermissionRequester(context, usbManager);
 
         return new UsbDeviceConnection(

@@ -48,7 +48,7 @@ public class SerialPortMonitorTest {
     @Before
     public void setUp() {
         Log.setShowLogs(false);
-        serialPortMonitor = new SerialPortMonitor(usbManager, serialPortCreator);
+        serialPortMonitor = new SerialPortMonitor(usbManager, serialPortCreator, );
     }
 
     @Test
