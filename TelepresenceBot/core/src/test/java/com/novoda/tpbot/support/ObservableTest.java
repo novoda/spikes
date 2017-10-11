@@ -1,6 +1,6 @@
 package com.novoda.tpbot.support;
 
-import com.novoda.tpbot.Result;
+import com.novoda.tpbot.model.Result;
 
 import org.junit.Rule;
 import org.junit.Test;

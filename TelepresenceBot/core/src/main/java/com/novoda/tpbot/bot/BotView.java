@@ -1,6 +1,6 @@
 package com.novoda.tpbot.bot;
 
-import com.novoda.tpbot.Direction;
+import com.novoda.tpbot.model.Direction;
 
 interface BotView {
 

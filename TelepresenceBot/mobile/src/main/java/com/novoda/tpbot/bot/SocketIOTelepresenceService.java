@@ -1,14 +1,14 @@
 package com.novoda.tpbot.bot;
 
 import com.novoda.tpbot.support.Observable;
-import com.novoda.tpbot.ClientType;
-import com.novoda.tpbot.Direction;
-import com.novoda.tpbot.Event;
+import com.novoda.tpbot.model.ClientType;
+import com.novoda.tpbot.model.Direction;
+import com.novoda.tpbot.model.Event;
 import com.novoda.tpbot.Executor;
 import com.novoda.tpbot.MainLooperExecutor;
-import com.novoda.tpbot.MalformedServerAddressException;
-import com.novoda.tpbot.Result;
-import com.novoda.tpbot.Room;
+import com.novoda.tpbot.error.MalformedServerAddressException;
+import com.novoda.tpbot.model.Result;
+import com.novoda.tpbot.model.Room;
 import com.novoda.tpbot.SocketConnectionObservable;
 
 import java.net.MalformedURLException;

@@ -1,4 +1,4 @@
-package com.novoda.tpbot;
+package com.novoda.tpbot.model;
 
 import com.novoda.tpbot.support.Optional;
 

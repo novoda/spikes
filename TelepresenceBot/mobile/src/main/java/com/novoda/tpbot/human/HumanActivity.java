@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.novoda.tpbot.support.SelfDestructingMessageView;
-import com.novoda.tpbot.Direction;
+import com.novoda.tpbot.model.Direction;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServiceDeclarationListener;
 import com.novoda.tpbot.controls.ActionRepeater;

@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import com.novoda.tpbot.FeaturePersistence;
 import com.novoda.tpbot.FeaturePersistenceFactory;
 import com.novoda.tpbot.FeatureSelectionController;
-import com.novoda.tpbot.Features;
+import com.novoda.tpbot.model.Features;
 import com.novoda.tpbot.R;
 
 import java.util.HashMap;
