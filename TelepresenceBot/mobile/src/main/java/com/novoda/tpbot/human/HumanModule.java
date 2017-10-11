@@ -1,17 +1,16 @@
 package com.novoda.tpbot.human;
 
-import android.os.Handler;
-
 import com.novoda.notils.caster.Views;
 import com.novoda.support.SelfDestructingMessageView;
-import com.novoda.tpbot.controls.SwitchableView;
 import com.novoda.tpbot.LastServerPersistence;
+import com.novoda.tpbot.MyLooperDelayedExecutor;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServiceDeclarationListener;
-import com.novoda.tpbot.controls.CommandRepeater;
+import com.novoda.tpbot.controls.ActionRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.tpbot.controls.ServerDeclarationView;
+import com.novoda.tpbot.controls.SwitchableView;
 
 import dagger.Module;
 import dagger.Provides;
@@ -40,7 +39,7 @@ public class HumanModule {
     }
 
     @Provides
-    CommandRepeater.Listener provideCommandRepeaterListener(HumanActivity humanActivity) {
+    ActionRepeater.Listener provideCommandRepeaterListener(HumanActivity humanActivity) {
         return humanActivity;
     }
 
@@ -69,8 +68,8 @@ public class HumanModule {
     }
 
     @Provides
-    CommandRepeater provideCommandRepeater(CommandRepeater.Listener listener) {
-        return new CommandRepeater(listener, new Handler());
+    ActionRepeater provideCommandRepeater(ActionRepeater.Listener listener) {
+        return new ActionRepeater(listener, MyLooperDelayedExecutor.newInstance());
     }
 
     @Provides

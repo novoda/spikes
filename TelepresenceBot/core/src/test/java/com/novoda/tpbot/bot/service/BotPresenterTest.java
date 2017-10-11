@@ -1,10 +1,10 @@
-package com.novoda.tpbot.bot;
+package com.novoda.tpbot.bot.service;
 
 import com.novoda.support.Observable;
 import com.novoda.tpbot.Direction;
-import com.novoda.tpbot.Result;
-import com.novoda.tpbot.bot.service.BotTelepresenceService;
 import com.novoda.tpbot.LastServerPersistence;
+import com.novoda.tpbot.Result;
+import com.novoda.tpbot.bot.BotView;
 
 import org.junit.Before;
 import org.junit.Rule;

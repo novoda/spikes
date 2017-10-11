@@ -20,7 +20,7 @@ import com.novoda.tpbot.bot.device.DeviceConnection;
 import com.novoda.tpbot.bot.movement.MovementServiceBinder;
 import com.novoda.tpbot.bot.service.BotServiceBinder;
 import com.novoda.tpbot.bot.video.calling.AutomationChecker;
-import com.novoda.tpbot.controls.CommandRepeater;
+import com.novoda.tpbot.controls.ActionRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.tpbot.controls.ServerDeclarationView;
@@ -37,7 +37,7 @@ public class BotActivity extends AppCompatActivity implements BotView,
         DeviceConnection.DeviceConnectionListener,
         ControllerListener,
         ServiceDeclarationListener,
-        CommandRepeater.Listener {
+        ActionRepeater.Listener {
 
     private static final String HANGOUTS_BASE_URL = "https://hangouts.google.com/hangouts/_/novoda.com/";
 
@@ -50,7 +50,7 @@ public class BotActivity extends AppCompatActivity implements BotView,
     @Inject
     SwitchableView switchableView;
     @Inject
-    CommandRepeater commandRepeater;
+    ActionRepeater actionRepeater;
     @Inject
     ControllerView controllerView;
     @Inject
@@ -88,12 +88,12 @@ public class BotActivity extends AppCompatActivity implements BotView,
 
     @Override
     public void onDirectionPressed(Direction direction) {
-        commandRepeater.startRepeatingCommand(direction.rawDirection());
+        actionRepeater.startRepeatingCommand(direction.rawDirection());
     }
 
     @Override
     public void onDirectionReleased(Direction direction) {
-        commandRepeater.stopRepeatingCommand(direction.rawDirection());
+        actionRepeater.stopRepeatingCommand(direction.rawDirection());
     }
 
     @Override
@@ -136,7 +136,7 @@ public class BotActivity extends AppCompatActivity implements BotView,
 
     @Override
     protected void onPause() {
-        commandRepeater.stopCurrentRepeatingCommand();
+        actionRepeater.stopCurrentRepeatingCommand();
         super.onPause();
     }
 
@@ -205,7 +205,7 @@ public class BotActivity extends AppCompatActivity implements BotView,
     }
 
     @Override
-    public void onCommandRepeated(String command) {
+    public void onActionRepeated(String command) {
         debugView.showTimed(command);
     }
 }

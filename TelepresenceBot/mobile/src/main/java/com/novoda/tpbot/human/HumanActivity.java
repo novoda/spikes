@@ -7,7 +7,7 @@ import com.novoda.support.SelfDestructingMessageView;
 import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServiceDeclarationListener;
-import com.novoda.tpbot.controls.CommandRepeater;
+import com.novoda.tpbot.controls.ActionRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
 import com.novoda.tpbot.controls.ServerDeclarationView;
@@ -20,7 +20,7 @@ import dagger.android.AndroidInjection;
 import static com.novoda.tpbot.controls.SwitchableView.View.CONTROLLER_VIEW;
 import static com.novoda.tpbot.controls.SwitchableView.View.SERVER_DECLARATION_VIEW;
 
-public class HumanActivity extends AppCompatActivity implements HumanView, ControllerListener, ServiceDeclarationListener, CommandRepeater.Listener {
+public class HumanActivity extends AppCompatActivity implements HumanView, ControllerListener, ServiceDeclarationListener, ActionRepeater.Listener {
 
     private static final String LAZERS = String.valueOf(Character.toChars(0x1F4A5));
 
@@ -33,7 +33,7 @@ public class HumanActivity extends AppCompatActivity implements HumanView, Contr
     @Inject
     ControllerView controllerView;
     @Inject
-    CommandRepeater commandRepeater;
+    ActionRepeater actionRepeater;
     @Inject
     HumanPresenter presenter;
 
@@ -45,7 +45,7 @@ public class HumanActivity extends AppCompatActivity implements HumanView, Contr
     }
 
     @Override
-    public void onCommandRepeated(String command) {
+    public void onActionRepeated(String command) {
         debugView.showTimed(command);
         Direction direction = Direction.from(command);
         presenter.moveIn(direction);
@@ -77,7 +77,7 @@ public class HumanActivity extends AppCompatActivity implements HumanView, Contr
 
     @Override
     protected void onPause() {
-        commandRepeater.stopCurrentRepeatingCommand();
+        actionRepeater.stopCurrentRepeatingCommand();
         super.onPause();
     }
 
@@ -89,12 +89,12 @@ public class HumanActivity extends AppCompatActivity implements HumanView, Contr
 
     @Override
     public void onDirectionPressed(Direction direction) {
-        commandRepeater.startRepeatingCommand(direction.rawDirection());
+        actionRepeater.startRepeatingCommand(direction.rawDirection());
     }
 
     @Override
     public void onDirectionReleased(Direction direction) {
-        commandRepeater.stopRepeatingCommand(direction.rawDirection());
+        actionRepeater.stopRepeatingCommand(direction.rawDirection());
     }
 
     @Override

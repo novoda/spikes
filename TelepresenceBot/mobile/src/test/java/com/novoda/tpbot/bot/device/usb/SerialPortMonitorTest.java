@@ -7,6 +7,7 @@ import android.hardware.usb.UsbManager;
 import com.felhr.usbserial.UsbSerialDevice;
 import com.felhr.usbserial.UsbSerialInterface;
 import com.novoda.notils.logger.simple.Log;
+import com.novoda.tpbot.Executor;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -42,13 +43,15 @@ public class SerialPortMonitorTest {
     private UsbSerialDevice usbSerialPort;
     @Mock
     private UsbDeviceConnection usbDeviceConnection;
+    @Mock
+    private Executor executor;
 
     private SerialPortMonitor serialPortMonitor;
 
     @Before
     public void setUp() {
         Log.setShowLogs(false);
-        serialPortMonitor = new SerialPortMonitor(usbManager, serialPortCreator, );
+        serialPortMonitor = new SerialPortMonitor(usbManager, serialPortCreator, executor);
     }
 
     @Test
@@ -121,6 +124,12 @@ public class SerialPortMonitorTest {
 
         serialPortMonitor.tryToMonitorSerialPortFor(usbDevice, dataReceiver);
 
+        ArgumentCaptor<UsbSerialInterface.UsbReadCallback> usbReadCaptor = ArgumentCaptor.forClass(UsbSerialInterface.UsbReadCallback.class);
+        verify(usbSerialPort).read(usbReadCaptor.capture());
+        usbReadCaptor.getValue().onReceivedData(ANY_DATA.getBytes());
+        ArgumentCaptor<Executor.Action> actionCaptor = ArgumentCaptor.forClass(Executor.Action.class);
+        verify(executor).execute(actionCaptor.capture());
+        actionCaptor.getValue().perform();
         ArgumentCaptor<UsbSerialInterface.UsbReadCallback> argumentCaptor = ArgumentCaptor.forClass(UsbSerialInterface.UsbReadCallback.class);
         verify(usbSerialPort).read(argumentCaptor.capture());
         argumentCaptor.getValue().onReceivedData(ANY_DATA.getBytes());
