@@ -1,7 +1,6 @@
 package com.novoda.loadgauge;
 
 import android.os.SystemClock;
-import android.util.Log;
 
 public class WiiLoadSensor {
 
@@ -35,7 +34,7 @@ public class WiiLoadSensor {
 
                     int result = readWeight();
 
-                    WiiLoadSensor.this.callback.onWeightChanged(50);
+                    WiiLoadSensor.this.callback.onWeightChanged(result);
 
                     SystemClock.sleep(1000);
                 }
@@ -47,7 +46,7 @@ public class WiiLoadSensor {
     private int readWeight() {
         int result = ads1015.read();
 
-        Log.d("TUT", "Current result: " + result);
+//        Log.d("TUT", "Current result: " + result);
         // negate the cushion presence (i.e. use the calibration value)
 //            float realValueInMv = valueInMv - milliVoltsAtRest;
 //            Log.d("TUT", "Value minus rest: " + realValueInMv + "mV");

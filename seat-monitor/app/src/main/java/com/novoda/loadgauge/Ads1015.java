@@ -122,16 +122,9 @@ public interface Ads1015 {
                 String i2CBus,
                 int i2cAddress,
                 Gain gain,
-                Channel channel) {
+                Channel channel, I2cDevice i2cDevice) {
 
             PeripheralManagerService service = new PeripheralManagerService();
-
-            I2cDevice i2cDevice;
-            try {
-                i2cDevice = service.openI2cDevice(i2CBus, i2cAddress);
-            } catch (IOException e) {
-                throw new IllegalStateException("Can't open 0x48", e);
-            }
 
             return new Ads1015SingleEndedReader(i2cDevice, gain, channel);
         }
