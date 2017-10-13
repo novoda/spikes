@@ -1,14 +1,11 @@
 package com.novoda.loadgauge;
 
-import android.os.SystemClock;
-
 public class WiiLoadSensor {
 
     private final Ads1015 ads1015;
 
     private WeightChangeCallback callback;
     private int milliVoltsAtRest;
-    private boolean running;
 
     public WiiLoadSensor(Ads1015 ads1015) {
         this.ads1015 = ads1015;
@@ -21,29 +18,9 @@ public class WiiLoadSensor {
 
     public void monitorWeight(WeightChangeCallback callback) {
         this.callback = callback;
-
-        running = true;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while(running) {
-
-                    if (WiiLoadSensor.this.callback == null) {
-                        throw new IllegalStateException("Didn't expect comparator to be called with no callback", new NullPointerException("callback is null"));
-                    }
-
-                    int result = readWeight();
-
-                    WiiLoadSensor.this.callback.onWeightChanged(result);
-
-                    SystemClock.sleep(1000);
-                }
-            }
-        }).start(); // TODO proper threading mechanism
-
     }
 
-    private int readWeight() {
+    public int readWeight() {
         int result = ads1015.read();
 
 //        Log.d("TUT", "Current result: " + result);
@@ -55,7 +32,6 @@ public class WiiLoadSensor {
     }
 
     public void stopMonitoring() {
-        running = false;
         ads1015.close();
     }
 

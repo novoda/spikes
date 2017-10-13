@@ -2,6 +2,7 @@ package com.novoda.seatmonitor;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 
 import com.google.android.things.contrib.driver.button.Button;
@@ -20,6 +21,8 @@ public class MainActivity extends Activity {
     private WiiLoadSensor wiiLoadSensorD;
     private Button button;
     private CloudIotCoreCommunicator cloudIotCoreComms;
+
+    private boolean running;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +64,32 @@ public class MainActivity extends Activity {
         } catch (IOException e) {
             throw new IllegalStateException("Button FooBar", e);
         }
-        wiiLoadSensorA.monitorWeight(sensorAWeightChangedCallback);
-        wiiLoadSensorB.monitorWeight(sensorBWeightChangedCallback);
-        wiiLoadSensorC.monitorWeight(sensorCWeightChangedCallback);
-        wiiLoadSensorD.monitorWeight(sensorDWeightChangedCallback);
+//        wiiLoadSensorA.monitorWeight(sensorAWeightChangedCallback);
+//        wiiLoadSensorB.monitorWeight(sensorBWeightChangedCallback);
+//        wiiLoadSensorC.monitorWeight(sensorCWeightChangedCallback);
+//        wiiLoadSensorD.monitorWeight(sensorDWeightChangedCallback);
+
+        running = true;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (running) {
+
+                    int weight0 = wiiLoadSensorA.readWeight();
+                    int weight1 = wiiLoadSensorB.readWeight();
+                    int weight2 = wiiLoadSensorC.readWeight();
+                    int weight3 = wiiLoadSensorD.readWeight();
+
+                    Log.d("TUT", "P0 " + weight0);
+                    Log.d("TUT", "P1 " + weight1);
+                    Log.d("TUT", "P2 " + weight2);
+                    Log.d("TUT", "P3 " + weight3);
+                    Log.d("TUT" , "----");
+
+                    SystemClock.sleep(1000);
+                }
+            }
+        }).start(); // TODO proper threading mechanism
 
 //        cloudIotCoreComms = new CloudIotCoreCommunicator.Builder()
 //                .withContext(this)
