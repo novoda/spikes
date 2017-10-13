@@ -22,7 +22,7 @@ class Ads1015DifferentialReader implements Ads1015 {
     }
 
     @Override
-    public int read() {
+    public int read(Channel channel) {
         configDifferential();
         int i = readADCDifferential();
         Log.d("TUT", "Val: " + i);

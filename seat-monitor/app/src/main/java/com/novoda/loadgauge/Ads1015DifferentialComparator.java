@@ -141,8 +141,8 @@ class Ads1015DifferentialComparator implements Ads1015 {
     }
 
     @Override
-    public int read() {
-        return differentialReader.read();
+    public int read(Channel channel) {
+        return differentialReader.read(Channel.ZERO);
     }
 
     @Override

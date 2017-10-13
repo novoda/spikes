@@ -72,7 +72,7 @@ class Ads1015SingleEndedComparator implements Ads1015 {
             }
             float multiplier = 3.0F;  // TODO multiplier should be based on Gain
 //            configDifferential();
-            int value = read();
+            int value = read(Channel.ZERO);
             Log.d("TUT", "Threshold hit raw " + value);
             float valueInMv = value * multiplier;
             Log.d("TUT", "Threshold hit out " + valueInMv + "mV");
@@ -90,8 +90,8 @@ class Ads1015SingleEndedComparator implements Ads1015 {
     }
 
     @Override
-    public int read() {
-        return singleEndedReader.read();
+    public int read(Channel channel) {
+        return singleEndedReader.read(Channel.ZERO);
     }
 
     @Override

@@ -65,7 +65,7 @@ public interface Ads1015 {
 
     long CONVERSION_DELAY = TimeUnit.MILLISECONDS.toMillis(1);
 
-    int read();
+    int read(Channel channel);
 
     void startComparator(int thresholdInMv, ComparatorCallback callback);
 
@@ -121,12 +121,17 @@ public interface Ads1015 {
         public Ads1015 newSingleEndedReaderInstance(
                 String i2CBus,
                 int i2cAddress,
-                Gain gain,
-                Channel channel, I2cDevice i2cDevice) {
+                Gain gain) {
 
-            PeripheralManagerService service = new PeripheralManagerService();
+            I2cDevice i2cDevice;
+            try {
+                PeripheralManagerService service = new PeripheralManagerService();
+                i2cDevice = service.openI2cDevice(i2CBus, i2cAddress);
+            } catch (IOException e) {
+                throw new IllegalStateException("Can't open " + i2cAddress, e);
+            }
 
-            return new Ads1015SingleEndedReader(i2cDevice, gain, channel);
+            return new Ads1015SingleEndedReader(i2cDevice, gain);
         }
 
         public Ads1015 newSingleEndedComparatorInstance(
@@ -147,7 +152,7 @@ public interface Ads1015 {
                 alertReadyGpioBus.setActiveType(Gpio.ACTIVE_LOW);
                 alertReadyGpioBus.setDirection(Gpio.DIRECTION_IN);
                 alertReadyGpioBus.setEdgeTriggerType(Gpio.EDGE_FALLING);
-                singleEndedReader = new Ads1015SingleEndedReader(i2cDevice, gain, channel);
+                singleEndedReader = new Ads1015SingleEndedReader(i2cDevice, gain);
             } catch (IOException e) {
                 throw new IllegalStateException("Can't open 0x48", e);
             }

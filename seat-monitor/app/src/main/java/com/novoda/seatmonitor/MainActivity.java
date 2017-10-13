@@ -6,8 +6,6 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import com.google.android.things.contrib.driver.button.Button;
-import com.google.android.things.pio.I2cDevice;
-import com.google.android.things.pio.PeripheralManagerService;
 import com.novoda.loadgauge.Ads1015;
 import com.novoda.loadgauge.WiiLoadSensor;
 
@@ -15,10 +13,10 @@ import java.io.IOException;
 
 public class MainActivity extends Activity {
 
-    private WiiLoadSensor wiiLoadSensorA;
-    private WiiLoadSensor wiiLoadSensorB;
-    private WiiLoadSensor wiiLoadSensorC;
-    private WiiLoadSensor wiiLoadSensorD;
+    private WiiLoadSensor wiiLoadSensor0;
+    private WiiLoadSensor wiiLoadSensor1;
+    private WiiLoadSensor wiiLoadSensor2;
+    private WiiLoadSensor wiiLoadSensor3;
     private Button button;
     private CloudIotCoreCommunicator cloudIotCoreComms;
 
@@ -30,44 +28,31 @@ public class MainActivity extends Activity {
         Log.d("TUT", "oncreate");
 
         String i2CBus = "I2C1";
-        I2cDevice i2cDevice;
-        try {
-            PeripheralManagerService service = new PeripheralManagerService();
-            i2cDevice = service.openI2cDevice(i2CBus, 0x48);
-        } catch (IOException e) {
-            throw new IllegalStateException("Can't open 0x48", e);
-        }
-
         Ads1015.Gain gain = Ads1015.Gain.TWO_THIRDS;
         Ads1015.Factory factory = new Ads1015.Factory();
-        Ads1015 ads10150x48Channel0 = factory.newSingleEndedReaderInstance(i2CBus, 0x48, gain, Ads1015.Channel.ZERO, i2cDevice);
-        Ads1015 ads10150x48Channel1 = factory.newSingleEndedReaderInstance(i2CBus, 0x48, gain, Ads1015.Channel.ONE, i2cDevice);
-        Ads1015 ads10150x48Channel2 = factory.newSingleEndedReaderInstance(i2CBus, 0x48, gain, Ads1015.Channel.TWO, i2cDevice);
-        Ads1015 ads10150x48Channel3 = factory.newSingleEndedReaderInstance(i2CBus, 0x48, gain, Ads1015.Channel.THREE, i2cDevice);
-        wiiLoadSensorA = new WiiLoadSensor(ads10150x48Channel0);
-        wiiLoadSensorB = new WiiLoadSensor(ads10150x48Channel1);
-        wiiLoadSensorC = new WiiLoadSensor(ads10150x48Channel2);
-        wiiLoadSensorD = new WiiLoadSensor(ads10150x48Channel3);
-//        Ads1015 ads10150x49 = factory.newDifferentialComparatorInstance(i2CBus, 0x49, gain, alertReadyPin, PINS_2_3);
-//        wiiLoadSensorB = new WiiLoadSensor(ads10150x49);
+        Ads1015 ads10150x48 = factory.newSingleEndedReaderInstance(i2CBus, 0x48, gain);
+        wiiLoadSensor0 = new WiiLoadSensor(ads10150x48, Ads1015.Channel.ZERO);
+        wiiLoadSensor1 = new WiiLoadSensor(ads10150x48, Ads1015.Channel.ONE);
+        wiiLoadSensor2 = new WiiLoadSensor(ads10150x48, Ads1015.Channel.TWO);
+        wiiLoadSensor3 = new WiiLoadSensor(ads10150x48, Ads1015.Channel.THREE);
 
         try {
             button = new Button("GPIO_128", Button.LogicState.PRESSED_WHEN_HIGH);
             button.setOnButtonEventListener(new Button.OnButtonEventListener() {
                 @Override
                 public void onButtonEvent(Button button, boolean pressed) {
-                    wiiLoadSensorA.calibrateToZero();
-//                    wiiLoadSensorB.calibrateToZero();
+                    wiiLoadSensor0.calibrateToZero();
+//                    wiiLoadSensor1.calibrateToZero();
                     Log.d("TUT", "Calibrated");
                 }
             });
         } catch (IOException e) {
             throw new IllegalStateException("Button FooBar", e);
         }
-//        wiiLoadSensorA.monitorWeight(sensorAWeightChangedCallback);
-//        wiiLoadSensorB.monitorWeight(sensorBWeightChangedCallback);
-//        wiiLoadSensorC.monitorWeight(sensorCWeightChangedCallback);
-//        wiiLoadSensorD.monitorWeight(sensorDWeightChangedCallback);
+//        wiiLoadSensor0.monitorWeight(sensorAWeightChangedCallback);
+//        wiiLoadSensor1.monitorWeight(sensorBWeightChangedCallback);
+//        wiiLoadSensor2.monitorWeight(sensorCWeightChangedCallback);
+//        wiiLoadSensor3.monitorWeight(sensorDWeightChangedCallback);
 
         running = true;
         new Thread(new Runnable() {
@@ -75,10 +60,10 @@ public class MainActivity extends Activity {
             public void run() {
                 while (running) {
 
-                    int weight0 = wiiLoadSensorA.readWeight();
-                    int weight1 = wiiLoadSensorB.readWeight();
-                    int weight2 = wiiLoadSensorC.readWeight();
-                    int weight3 = wiiLoadSensorD.readWeight();
+                    int weight0 = wiiLoadSensor0.readWeight();
+                    int weight1 = wiiLoadSensor1.readWeight();
+                    int weight2 = wiiLoadSensor2.readWeight();
+                    int weight3 = wiiLoadSensor3.readWeight();
 
                     Log.d("TUT", "P0 " + weight0);
                     Log.d("TUT", "P1 " + weight1);
@@ -145,10 +130,10 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        wiiLoadSensorA.stopMonitoring();
-        wiiLoadSensorB.stopMonitoring();
-        wiiLoadSensorC.stopMonitoring();
-        wiiLoadSensorD.stopMonitoring();
+        wiiLoadSensor0.stopMonitoring();
+        wiiLoadSensor1.stopMonitoring();
+        wiiLoadSensor2.stopMonitoring();
+        wiiLoadSensor3.stopMonitoring();
         try {
             button.close();
         } catch (IOException e) {
