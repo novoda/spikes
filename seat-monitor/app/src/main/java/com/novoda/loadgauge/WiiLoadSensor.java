@@ -1,5 +1,7 @@
 package com.novoda.loadgauge;
 
+import com.novoda.ads1015.Ads1015;
+
 public class WiiLoadSensor {
 
     private final Ads1015 ads1015;

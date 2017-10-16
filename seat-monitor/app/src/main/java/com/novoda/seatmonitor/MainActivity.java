@@ -6,7 +6,7 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import com.google.android.things.contrib.driver.button.Button;
-import com.novoda.loadgauge.Ads1015;
+import com.novoda.ads1015.Ads1015;
 import com.novoda.loadgauge.WiiLoadSensor;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.novoda.loadgauge;
+package com.novoda.ads1015;
 
 import com.google.android.things.pio.I2cDevice;
 

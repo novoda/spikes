@@ -1,11 +1,10 @@
-package com.novoda.loadgauge;
+package com.novoda.ads1015;
 
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.I2cDevice;
 import com.google.android.things.pio.PeripheralManagerService;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 public interface Ads1015 {
 
@@ -60,8 +59,6 @@ public interface Ads1015 {
     short ADS1015_REG_CONFIG_CQUE_2CONV = 0x0001;  // Assert ALERT/RDY after two conversions
     short ADS1015_REG_CONFIG_CQUE_4CONV = 0x0002;  // Assert ALERT/RDY after four conversions
     short ADS1015_REG_CONFIG_CQUE_NONE = 0x0003;  // Disable the comparator and put ALERT/RDY in high state (default)
-
-    long CONVERSION_DELAY = TimeUnit.MILLISECONDS.toMillis(1);
 
     int read(Channel channel);
 
