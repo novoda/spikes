@@ -70,7 +70,7 @@ class Ads1015SingleEndedReader implements Ads1015 {
 
 //    static uint16_t readRegister(uint8_t i2cAddress, uint8_t reg) {
 //        Wire.beginTransmission(i2cAddress);
-//        i2cwrite(ADS1015_REG_POINTER_CONVERT);
+//        i2cwrite(reg);
 //        Wire.endTransmission();
 //        Wire.requestFrom(i2cAddress, (uint8_t) 2);
 //        return ((i2cread() << 8) | i2cread());
