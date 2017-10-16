@@ -1,6 +1,5 @@
 package com.novoda.loadgauge;
 
-import android.os.SystemClock;
 import android.util.Log;
 
 import com.google.android.things.pio.I2cDevice;
@@ -67,10 +66,6 @@ class Ads1015DifferentialReader implements Ads1015 {
 
     private void writeRegister(int reg, short value) {
         readerWriter.writeRegister(i2cBus, reg, value);
-    }
-
-    private void delay(long millis) {
-        SystemClock.sleep(millis);
     }
 
     private int readRegister(int reg) {
