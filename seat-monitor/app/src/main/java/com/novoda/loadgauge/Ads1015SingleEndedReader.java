@@ -19,7 +19,7 @@ class Ads1015SingleEndedReader implements Ads1015 {
     @Override
     public int read(Channel channel) {
         // Start with default values
-        short config = ADS1015_REG_CONFIG_CQUE_NONE | // Disable the comparator (default val)
+        int config = ADS1015_REG_CONFIG_CQUE_NONE | // Disable the comparator (default val)
             ADS1015_REG_CONFIG_CLAT_NONLAT | // Non-latching (default val)
             ADS1015_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
             ADS1015_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
@@ -53,12 +53,12 @@ class Ads1015SingleEndedReader implements Ads1015 {
 //        Wire.endTransmission();
 //    }
 
-    private void writeRegister(int reg, short value) {
+    private void writeRegister(int reg, int value) {
         try {
-//            i2cBus.write(new byte[]{(byte) reg}, 1);
-//            i2cBus.write(new byte[]{(byte) (value >> 8)}, 1);
-//            i2cBus.write(new byte[]{(byte) (value & 0xFF)}, 1);
-            i2cBus.writeRegWord(reg, value);
+            byte lsb = (byte) (value & 0xFF);
+            byte msb = (byte) (value >> 8);
+            byte[] b = new byte[]{msb, lsb};
+            i2cBus.writeRegBuffer(reg, b, b.length);
         } catch (IOException e) {
             throw new IllegalStateException("Cannot write " + reg + " with value " + value, e);
         }
