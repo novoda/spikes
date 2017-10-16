@@ -61,8 +61,6 @@ public interface Ads1015 {
     short ADS1015_REG_CONFIG_CQUE_4CONV = 0x0002;  // Assert ALERT/RDY after four conversions
     short ADS1015_REG_CONFIG_CQUE_NONE = 0x0003;  // Disable the comparator and put ALERT/RDY in high state (default)
 
-    int BIT_SHIFT = 4;
-
     long CONVERSION_DELAY = TimeUnit.MILLISECONDS.toMillis(1);
 
     int read(Channel channel);
@@ -131,7 +129,7 @@ public interface Ads1015 {
                 throw new IllegalStateException("Can't open " + i2cAddress, e);
             }
 
-            return new Ads1015SingleEndedReader(i2cDevice, gain);
+            return new Ads1015SingleEndedReader(i2cDevice, gain, new ReaderWriter());
         }
 
         public Ads1015 newSingleEndedComparatorInstance(
@@ -152,7 +150,7 @@ public interface Ads1015 {
                 alertReadyGpioBus.setActiveType(Gpio.ACTIVE_LOW);
                 alertReadyGpioBus.setDirection(Gpio.DIRECTION_IN);
                 alertReadyGpioBus.setEdgeTriggerType(Gpio.EDGE_FALLING);
-                singleEndedReader = new Ads1015SingleEndedReader(i2cDevice, gain);
+                singleEndedReader = new Ads1015SingleEndedReader(i2cDevice, gain, new ReaderWriter());
             } catch (IOException e) {
                 throw new IllegalStateException("Can't open 0x48", e);
             }
@@ -175,7 +173,7 @@ public interface Ads1015 {
                 throw new IllegalStateException("Can't open 0x48", e);
             }
 
-            return new Ads1015DifferentialReader(i2cDevice, gain, differentialPins);
+            return new Ads1015DifferentialReader(i2cDevice, gain, differentialPins, new ReaderWriter());
         }
 
         public Ads1015 newDifferentialComparatorInstance(
@@ -196,12 +194,12 @@ public interface Ads1015 {
                 alertReadyGpioBus.setActiveType(Gpio.ACTIVE_LOW);
                 alertReadyGpioBus.setDirection(Gpio.DIRECTION_IN);
                 alertReadyGpioBus.setEdgeTriggerType(Gpio.EDGE_FALLING);
-                differentialReader = new Ads1015DifferentialReader(i2cDevice, gain, differentialPins);
+                differentialReader = new Ads1015DifferentialReader(i2cDevice, gain, differentialPins, new ReaderWriter());
             } catch (IOException e) {
                 throw new IllegalStateException("Can't open 0x48", e);
             }
 
-            return new Ads1015DifferentialComparator(i2cDevice, alertReadyGpioBus, gain, differentialPins, differentialReader);
+            return new Ads1015DifferentialComparator(i2cDevice, alertReadyGpioBus, gain, differentialPins, new ReaderWriter());
         }
 
     }

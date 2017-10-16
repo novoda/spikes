@@ -12,13 +12,15 @@ class Ads1015DifferentialReader implements Ads1015 {
     private final I2cDevice i2cBus;
     private final Gain gain;
     private final DifferentialPins differentialPins;
+    private final ReaderWriter readerWriter;
 
     Ads1015DifferentialReader(I2cDevice i2cDevice,
                               Gain gain,
-                              DifferentialPins differentialPins) {
+                              DifferentialPins differentialPins, ReaderWriter readerWriter) {
         this.i2cBus = i2cDevice;
         this.gain = gain; /* +/- 6.144V range (limited to VDD +0.3V max!) */
         this.differentialPins = differentialPins;
+        this.readerWriter = readerWriter;
     }
 
     @Override
@@ -49,16 +51,14 @@ class Ads1015DifferentialReader implements Ads1015 {
 
         // Write config register to the ADC
         writeRegister(ADS1015_REG_POINTER_CONFIG, config);
-        // Wait for the conversion to complete
-        delay(CONVERSION_DELAY);
     }
 
     private int readADCDifferential() {
         // Read the conversion results
-        int res = readRegister(ADS1015_REG_POINTER_CONVERT) >> BIT_SHIFT;
+        int res = readRegister(ADS1015_REG_POINTER_CONVERT);
         // Shift 12-bit results right 4 bits for the ADS1015,
         // making sure we keep the sign bit intact
-        if (res > 0x07FF) {
+        if (res > 0x07FF) {  // TODO do we still need this?
             // negative number - extend the sign to 16th bit
             res |= 0xF000;
         }
@@ -66,23 +66,15 @@ class Ads1015DifferentialReader implements Ads1015 {
     }
 
     private void writeRegister(int reg, short value) {
-        try {
-            i2cBus.writeRegWord(reg, value);
-        } catch (IOException e) {
-            throw new IllegalStateException("Cannot write " + reg + " with value " + value, e);
-        }
+        readerWriter.writeRegister(i2cBus, reg, value);
     }
 
     private void delay(long millis) {
         SystemClock.sleep(millis);
     }
 
-    private short readRegister(int reg) {
-        try {
-            return i2cBus.readRegWord(reg);
-        } catch (IOException e) {
-            throw new IllegalStateException("Cannot read " + reg, e);
-        }
+    private int readRegister(int reg) {
+        return readerWriter.readRegister(i2cBus, reg);
     }
 
     @Override

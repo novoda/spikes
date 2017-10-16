@@ -15,6 +15,7 @@ class Ads1015SingleEndedComparator implements Ads1015 {
     private final Gpio alertReadyGpioBus;
     private final Channel channel;
     private final Ads1015SingleEndedReader singleEndedReader;
+    private final ReaderWriter readerWriter;
 
     private ComparatorCallback callback;
 
@@ -28,6 +29,7 @@ class Ads1015SingleEndedComparator implements Ads1015 {
         this.alertReadyGpioBus = alertReadyGpioBus;
         this.channel = channel;
         this.singleEndedReader = singleEndedReader;
+        readerWriter = new ReaderWriter();
     }
 
     @Override
@@ -42,6 +44,10 @@ class Ads1015SingleEndedComparator implements Ads1015 {
     }
 
     private void startComparatorSingleEnded(int thresholdInMv) {
+        // Set the high threshold register
+        // Shift 12-bit results left 4 bits for the ADS1015
+        writeRegister(ADS1015_REG_POINTER_HITHRESH, (short) thresholdInMv); // TODO is this cast right
+
         // Start with default values
         short config = ADS1015_REG_CONFIG_CQUE_1CONV | // Comparator enabled and asserts on 1 match
                 ADS1015_REG_CONFIG_CLAT_LATCH | // Latching mode
@@ -56,10 +62,6 @@ class Ads1015SingleEndedComparator implements Ads1015 {
         // Set single-ended input channel
         config |= channel.value;
 
-        // Set the high threshold register
-        // Shift 12-bit results left 4 bits for the ADS1015
-        writeRegister(ADS1015_REG_POINTER_HITHRESH, (short) (thresholdInMv << BIT_SHIFT));
-
         // Write config register to the ADC
         writeRegister(ADS1015_REG_POINTER_CONFIG, config);
     }
@@ -72,7 +74,7 @@ class Ads1015SingleEndedComparator implements Ads1015 {
             }
             float multiplier = 3.0F;  // TODO multiplier should be based on Gain
 //            configDifferential();
-            int value = read(Channel.ZERO);
+            int value = read(channel);
             Log.d("TUT", "Threshold hit raw " + value);
             float valueInMv = value * multiplier;
             Log.d("TUT", "Threshold hit out " + valueInMv + "mV");
@@ -82,16 +84,12 @@ class Ads1015SingleEndedComparator implements Ads1015 {
     };
 
     private void writeRegister(int reg, short value) {
-        try {
-            i2cBus.writeRegWord(reg, value);
-        } catch (IOException e) {
-            throw new IllegalStateException("Cannot write " + reg + " with value " + value, e);
-        }
+        readerWriter.writeRegister(i2cBus, reg, value);
     }
 
     @Override
     public int read(Channel channel) {
-        return singleEndedReader.read(Channel.ZERO);
+        return singleEndedReader.read(channel);
     }
 
     @Override
