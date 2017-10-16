@@ -25,23 +25,12 @@ class Ads1015SingleEndedReader implements Ads1015 {
             ADS1015_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
             ADS1015_REG_CONFIG_DR_1600SPS | // 1600 samples per second (default)
             ADS1015_REG_CONFIG_MODE_SINGLE;   // Single-shot mode (default)
-
-        // Set PGA/voltage range
         config |= gain.value;
-
-        // Set single-ended input channel
         config |= channel.value;
-
-        // Set 'start single-conversion' bit
         config |= ADS1015_REG_CONFIG_OS_SINGLE;
 
-        // Write config register to the ADC
         writeRegister(ADS1015_REG_POINTER_CONFIG, config);
-
-        // Wait for the conversion to complete
-        delay(CONVERSION_DELAY);
-
-        // Read the conversion results
+        waitForConversionToComplete(CONVERSION_DELAY);
         return readRegister(ADS1015_REG_POINTER_CONVERT);
     }
 
@@ -64,7 +53,7 @@ class Ads1015SingleEndedReader implements Ads1015 {
         }
     }
 
-    private void delay(long millis) {
+    private void waitForConversionToComplete(long millis) {
         SystemClock.sleep(millis);
     }
 
