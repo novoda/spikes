@@ -5,6 +5,8 @@ import android.os.SystemClock;
 import com.google.android.things.pio.I2cDevice;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 class Ads1015SingleEndedReader implements Ads1015 {
 
@@ -34,14 +36,6 @@ class Ads1015SingleEndedReader implements Ads1015 {
         return readRegister(ADS1015_REG_POINTER_CONVERT);
     }
 
-//    static void writeRegister(uint8_t i2cAddress, uint8_t reg, uint16_t value) {
-//        Wire.beginTransmission(i2cAddress);
-//        i2cwrite((uint8_t) reg);
-//        i2cwrite((uint8_t) (value >> 8));
-//        i2cwrite((uint8_t) (value & 0xFF));
-//        Wire.endTransmission();
-//    }
-
     private void writeRegister(int reg, int value) {
         try {
             byte lsb = (byte) (value & 0xFF);
@@ -57,20 +51,15 @@ class Ads1015SingleEndedReader implements Ads1015 {
         SystemClock.sleep(millis);
     }
 
-//    static uint16_t readRegister(uint8_t i2cAddress, uint8_t reg) {
-//        Wire.beginTransmission(i2cAddress);
-//        i2cwrite(reg);
-//        Wire.endTransmission();
-//        Wire.requestFrom(i2cAddress, (uint8_t) 2);
-//        return ((i2cread() << 8) | i2cread());
-//    }
-
     private int readRegister(int reg) {
         try {
             byte[] b = new byte[2];
-            i2cBus.readRegBuffer(reg, b, 2);
-            // Shift 12-bit results right 4 bits for the ADS1015
-            return ((b[0] & 0xFF) << 8 | (b[1] & 0xFF)) >> BIT_SHIFT;
+            i2cBus.readRegBuffer(reg, b, b.length);
+            return ByteBuffer.allocate(b.length)
+                    .order(ByteOrder.BIG_ENDIAN)
+                    .put(b)
+                    // Shift 12-bit results right 4 bits for the ADS1015
+                    .getShort(0) >> BIT_SHIFT;
         } catch (IOException e) {
             throw new IllegalStateException("Cannot read " + reg, e);
         }
