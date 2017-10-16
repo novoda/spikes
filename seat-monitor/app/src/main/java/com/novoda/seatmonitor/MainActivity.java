@@ -21,6 +21,7 @@ public class MainActivity extends Activity {
     private CloudIotCoreCommunicator cloudIotCoreComms;
 
     private boolean running;
+    private Ads1015 ads10150x48;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +31,7 @@ public class MainActivity extends Activity {
         String i2CBus = "I2C1";
         Ads1015.Gain gain = Ads1015.Gain.TWO_THIRDS;
         Ads1015.Factory factory = new Ads1015.Factory();
-        Ads1015 ads10150x48 = factory.newSingleEndedReaderInstance(i2CBus, 0x48, gain);
+        ads10150x48 = factory.newSingleEndedReaderInstance(i2CBus, 0x48, gain);
         wiiLoadSensor0 = new WiiLoadSensor(ads10150x48, Ads1015.Channel.ZERO);
         wiiLoadSensor1 = new WiiLoadSensor(ads10150x48, Ads1015.Channel.ONE);
         wiiLoadSensor2 = new WiiLoadSensor(ads10150x48, Ads1015.Channel.TWO);
@@ -49,10 +50,6 @@ public class MainActivity extends Activity {
         } catch (IOException e) {
             throw new IllegalStateException("Button FooBar", e);
         }
-//        wiiLoadSensor0.monitorWeight(sensorAWeightChangedCallback);
-//        wiiLoadSensor1.monitorWeight(sensorBWeightChangedCallback);
-//        wiiLoadSensor2.monitorWeight(sensorCWeightChangedCallback);
-//        wiiLoadSensor3.monitorWeight(sensorDWeightChangedCallback);
 
         running = true;
         new Thread(new Runnable() {
@@ -96,44 +93,9 @@ public class MainActivity extends Activity {
 //        }).start();
     }
 
-    private final WiiLoadSensor.WeightChangeCallback sensorAWeightChangedCallback = new WiiLoadSensor.WeightChangeCallback() {
-        @Override
-        public void onWeightChanged(float newWeightInKg) {
-            Log.d("TUT", "sensor A, weight: " + newWeightInKg);
-//            cloudIotCoreComms.publishMessage("{\"weight\":\"" + newWeightInKg + "kg" + "\"}");
-        }
-    };
-
-    private final WiiLoadSensor.WeightChangeCallback sensorBWeightChangedCallback = new WiiLoadSensor.WeightChangeCallback() {
-        @Override
-        public void onWeightChanged(float newWeightInKg) {
-            Log.d("TUT", "sensor B, weight: " + newWeightInKg);
-//            cloudIotCoreComms.publishMessage("{\"weight\":\"" + newWeightInKg + "kg" + "\"}");
-        }
-    };
-
-    private final WiiLoadSensor.WeightChangeCallback sensorCWeightChangedCallback = new WiiLoadSensor.WeightChangeCallback() {
-        @Override
-        public void onWeightChanged(float newWeightInKg) {
-            Log.d("TUT", "sensor C, weight: " + newWeightInKg);
-//            cloudIotCoreComms.publishMessage("{\"weight\":\"" + newWeightInKg + "kg" + "\"}");
-        }
-    };
-
-    private final WiiLoadSensor.WeightChangeCallback sensorDWeightChangedCallback = new WiiLoadSensor.WeightChangeCallback() {
-        @Override
-        public void onWeightChanged(float newWeightInKg) {
-            Log.d("TUT", "sensor D, weight: " + newWeightInKg);
-//            cloudIotCoreComms.publishMessage("{\"weight\":\"" + newWeightInKg + "kg" + "\"}");
-        }
-    };
-
     @Override
     protected void onDestroy() {
-        wiiLoadSensor0.stopMonitoring();
-        wiiLoadSensor1.stopMonitoring();
-        wiiLoadSensor2.stopMonitoring();
-        wiiLoadSensor3.stopMonitoring();
+        ads10150x48.close();
         try {
             button.close();
         } catch (IOException e) {
