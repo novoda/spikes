@@ -70,7 +70,7 @@ class Ads1015SingleEndedReader implements Ads1015 {
             byte[] b = new byte[2];
             i2cBus.readRegBuffer(reg, b, 2);
             // Shift 12-bit results right 4 bits for the ADS1015
-            return (b[1] << 8 | b[0]) >> BIT_SHIFT; // TODO check >> or >>>
+            return ((b[0] & 0xFF) << 8 | (b[1] & 0xFF)) >> BIT_SHIFT;
         } catch (IOException e) {
             throw new IllegalStateException("Cannot read " + reg, e);
         }
