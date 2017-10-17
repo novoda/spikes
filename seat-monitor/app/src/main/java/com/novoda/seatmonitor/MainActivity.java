@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
         String i2CBus = "I2C1";
         Ads1015.Gain gain = Ads1015.Gain.TWO_THIRDS;
         Ads1015.Factory factory = new Ads1015.Factory();
-        ads10150x48 = factory.newSingleEndedReaderInstance(i2CBus, 0x48, gain);
+        ads10150x48 = factory.newAds1015(i2CBus, 0x48, gain);
         wiiLoadSensor0 = new WiiLoadSensor(ads10150x48, Ads1015.Channel.ZERO);
         wiiLoadSensor1 = new WiiLoadSensor(ads10150x48, Ads1015.Channel.ONE);
         wiiLoadSensor2 = new WiiLoadSensor(ads10150x48, Ads1015.Channel.TWO);
@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
                     Log.d("TUT", "P1 " + weight1);
                     Log.d("TUT", "P2 " + weight2);
                     Log.d("TUT", "P3 " + weight3);
-                    Log.d("TUT" , "----");
+                    Log.d("TUT", "----");
 
                     SystemClock.sleep(1000);
                 }

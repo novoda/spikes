@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-class ReaderWriter {
+class RegisterReaderWriter {
 
     private static final int ADS1015_BIT_SHIFT = 4;
 
@@ -30,11 +30,18 @@ class ReaderWriter {
         try {
             byte[] b = new byte[2];
             device.readRegBuffer(reg, b, b.length);
-            return ByteBuffer.allocate(b.length)
+            int value = ByteBuffer.allocate(b.length)
                     .order(ByteOrder.BIG_ENDIAN)
                     .put(b)
                     // Shift 12-bit results right 4 bits for the ADS1015
                     .getShort(0) >> ADS1015_BIT_SHIFT;
+
+            // making sure we keep the sign bit intact
+            if (value > 0x07FF) {
+                // negative number - extend the sign to 16th bit
+                value |= 0xF000;
+            }
+            return value;
         } catch (IOException e) {
             throw new IllegalStateException("Cannot read " + reg, e);
         }
