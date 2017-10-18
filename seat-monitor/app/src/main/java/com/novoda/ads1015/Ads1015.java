@@ -116,20 +116,22 @@ public interface Ads1015 {
             } catch (IOException e) {
                 throw new IllegalStateException("Can't open " + i2cAddress, e);
             }
-            Gpio alertReadyGpioBus;
-            try {
-                alertReadyGpioBus = service.openGpio(alertReadyGpioPinName);
-                alertReadyGpioBus.setActiveType(Gpio.ACTIVE_LOW);
-                alertReadyGpioBus.setDirection(Gpio.DIRECTION_IN);
-                alertReadyGpioBus.setEdgeTriggerType(Gpio.EDGE_FALLING);
-            } catch (IOException e) {
-                throw new IllegalStateException("Can't open " + alertReadyGpioPinName, e);
-            }
 
             RegisterReaderWriter readerWriter = new RegisterReaderWriter();
             ConfigBuilder configBuilder = new ConfigBuilder();
             ChannelReader channelReader = new ChannelReader(readerWriter, configBuilder, i2cDevice, gain);
-            ChannelComparator channelComparator = new ChannelComparator(readerWriter, configBuilder, i2cDevice, alertReadyGpioBus, gain);
+
+            Comparator channelComparator;
+            try {
+                Gpio alertReadyGpioBus = service.openGpio(alertReadyGpioPinName);
+                alertReadyGpioBus.setActiveType(Gpio.ACTIVE_LOW);
+                alertReadyGpioBus.setDirection(Gpio.DIRECTION_IN);
+                alertReadyGpioBus.setEdgeTriggerType(Gpio.EDGE_FALLING);
+                channelComparator = new Comparator.ChannelComparator(readerWriter, configBuilder, i2cDevice, alertReadyGpioBus, gain);
+            } catch (IOException e) {
+                channelComparator = new Comparator.Incomplete(alertReadyGpioPinName, e);
+            }
+
             return new Ads1015AndroidThings(channelReader, channelComparator, i2cDevice);
         }
 

@@ -7,12 +7,12 @@ import java.io.IOException;
 class Ads1015AndroidThings implements Ads1015 {
 
     private final ChannelReader channelReader;
-    private final ChannelComparator channelComparator;
+    private final Comparator comparator;
     private final I2cDevice device;
 
-    Ads1015AndroidThings(ChannelReader channelReader, ChannelComparator channelComparator, I2cDevice device) {
+    Ads1015AndroidThings(ChannelReader channelReader, Comparator comparator, I2cDevice device) {
         this.channelReader = channelReader;
-        this.channelComparator = channelComparator;
+        this.comparator = comparator;
         this.device = device;
     }
 
@@ -23,14 +23,14 @@ class Ads1015AndroidThings implements Ads1015 {
 
     @Override
     public void startComparator(Channel channel, int thresholdInMv, ComparatorCallback callback) {
-        channelComparator.startComparator(channel, thresholdInMv, callback);
+        comparator.start(channel, thresholdInMv, callback);
     }
 
     @Override
     public void close() {
         try {
             device.close();
-            channelComparator.close();
+            comparator.close();
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
