@@ -35,11 +35,16 @@ public class ArticleEditor {
     }
 
     private String generateText(ChannelHistory.Message message) {
-        return message.getText()
+        String text = message.getText()
                 .replaceAll("<h", "h")
                 .replaceAll("/>", "")
                 .replaceAll(">", "")
-                .replaceAll("\\?(.*)", "");
+                .replaceAll("\\?(.*)", "")
+                .replaceAll("(http|https)://(.*)", "");
+        if(text.isEmpty()) {
+            return "I was so excited by this #enews, I didn't have time to write anything. Check it out!";
+        }
+        return text;
     }
 
     private String generateTitle(ChannelHistory.Message message) {
