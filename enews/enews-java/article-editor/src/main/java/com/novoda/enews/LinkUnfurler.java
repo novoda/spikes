@@ -31,7 +31,7 @@ interface LinkUnfurler {
 
         @Override
         public Information unfurl(String url) throws IOException {
-            LinkInfo info = LinkUnfurl.unfurl(url, 3000);
+            LinkInfo info = LinkUnfurl.unfurl(url, 3500);
             return new Information(info.getTitle(), url);
         }
     }
