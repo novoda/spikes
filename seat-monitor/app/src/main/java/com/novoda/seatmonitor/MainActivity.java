@@ -2,26 +2,26 @@ package com.novoda.seatmonitor;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 
 import com.google.android.things.contrib.driver.button.Button;
 import com.novoda.ads1015.Ads1015;
-import com.novoda.loadgauge.WiiLoadSensor;
+import com.novoda.loadgauge.CloudLoadGauge;
+import com.novoda.loadgauge.CloudLoadGauges;
+import com.novoda.loadgauge.LoadGauge;
 
 import java.io.IOException;
 
 public class MainActivity extends Activity {
 
-    private WiiLoadSensor wiiLoadSensor0;
-    private WiiLoadSensor wiiLoadSensor1;
-    private WiiLoadSensor wiiLoadSensor2;
-    private WiiLoadSensor wiiLoadSensor3;
-    private Button button;
-    private CloudIotCoreCommunicator cloudIotCoreComms;
+    private static final String LOCATION = "Liverpool";
 
-    private boolean running;
+    private Button button;
+
     private Ads1015 ads10150x48;
+    private CloudDataTimer cloudDataTimer;
+    private CloudLoadGauges cloudLoadGauges;
+    private CloudIotCoreCommunicator cloudIotCoreComms;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,18 +32,18 @@ public class MainActivity extends Activity {
         Ads1015.Gain gain = Ads1015.Gain.TWO_THIRDS;
         Ads1015.Factory factory = new Ads1015.Factory();
         ads10150x48 = factory.newAds1015(i2CBus, 0x48, gain);
-        wiiLoadSensor0 = new WiiLoadSensor(ads10150x48, Ads1015.Channel.ZERO);
-        wiiLoadSensor1 = new WiiLoadSensor(ads10150x48, Ads1015.Channel.ONE);
-        wiiLoadSensor2 = new WiiLoadSensor(ads10150x48, Ads1015.Channel.TWO);
-        wiiLoadSensor3 = new WiiLoadSensor(ads10150x48, Ads1015.Channel.THREE);
+        CloudLoadGauge loadGauge0 = new CloudLoadGauge(LOCATION + "1", new LoadGauge(ads10150x48, Ads1015.Channel.ZERO));
+        CloudLoadGauge loadGauge1 = new CloudLoadGauge(LOCATION + "2", new LoadGauge(ads10150x48, Ads1015.Channel.ONE));
+        CloudLoadGauge loadGauge2 = new CloudLoadGauge(LOCATION + "3", new LoadGauge(ads10150x48, Ads1015.Channel.TWO));
+        CloudLoadGauge loadGauge3 = new CloudLoadGauge(LOCATION + "4", new LoadGauge(ads10150x48, Ads1015.Channel.THREE));
+        cloudLoadGauges = CloudLoadGauges.from(loadGauge0, loadGauge1, loadGauge2, loadGauge3);
 
         try {
             button = new Button("GPIO_128", Button.LogicState.PRESSED_WHEN_HIGH);
             button.setOnButtonEventListener(new Button.OnButtonEventListener() {
                 @Override
                 public void onButtonEvent(Button button, boolean pressed) {
-                    wiiLoadSensor0.calibrateToZero();
-//                    wiiLoadSensor1.calibrateToZero();
+                    cloudLoadGauges.calibrateToZero();
                     Log.d("TUT", "Calibrated");
                 }
             });
@@ -51,57 +51,46 @@ public class MainActivity extends Activity {
             throw new IllegalStateException("Button FooBar", e);
         }
 
-        running = true;
+        cloudIotCoreComms = new CloudIotCoreCommunicator.Builder()
+                .withContext(this)
+                .withProjectId("seat-monitor")
+                .withCloudRegion("europe-west1")
+                .withRegistryId("my-devices")
+                .withDeviceId("work-desk-nxp")
+                .withPrivateKeyRawFileId(R.raw.rsa_private)
+                .build();
+
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (running) {
-
-                    int weight0 = wiiLoadSensor0.readWeight();
-                    int weight1 = wiiLoadSensor1.readWeight();
-                    int weight2 = wiiLoadSensor2.readWeight();
-                    int weight3 = wiiLoadSensor3.readWeight();
-
-                    Log.d("TUT", "P0 " + weight0);
-                    Log.d("TUT", "P1 " + weight1);
-                    Log.d("TUT", "P2 " + weight2);
-                    Log.d("TUT", "P3 " + weight3);
-                    Log.d("TUT", "----");
-
-                    SystemClock.sleep(1000);
-                }
+                cloudIotCoreComms.connect();
+                startContinuousMonitoring();
             }
-        }).start(); // TODO proper threading mechanism
-
-//        cloudIotCoreComms = new CloudIotCoreCommunicator.Builder()
-//                .withContext(this)
-//                .withProjectId("seat-monitor")
-//                .withCloudRegion("europe-west1")
-//                .withRegistryId("my-devices")
-//                // work-desk-nxp
-//                // home-attic-raspberry-pi
-//                .withDeviceId("work-desk-nxp")
-//                .withPrivateKeyRawFileId(R.raw.rsa_private)
-//                .build();
-//
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                cloudIotCoreComms.connect();
-////                cloudIotCoreComms.publishMessage("123HelloWorld");
-//            }
-//        }).start();
+        }).start();
     }
+
+    private void startContinuousMonitoring() {
+        cloudDataTimer = new CloudDataTimer(LOCATION, cloudIotCoreComms, cloudLoadGauges, restartTimer);
+        cloudDataTimer.start();
+    }
+
+    private final CloudDataTimer.RestartTimer restartTimer = new CloudDataTimer.RestartTimer() {
+        @Override
+        public void onFinished() {
+            startContinuousMonitoring();
+        }
+    };
 
     @Override
     protected void onDestroy() {
+        cloudDataTimer.cancel();
+        cloudIotCoreComms.disconnect();
         ads10150x48.close();
         try {
             button.close();
         } catch (IOException e) {
             // ignore
         }
-//        cloudIotCoreComms.disconnect();
         super.onDestroy();
     }
 }
