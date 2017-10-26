@@ -31,7 +31,6 @@ dependencies {
     compile ('com.google.android.things.contrib:driver-button:+') {
         exclude group : 'com.android.support' , module : 'support-annotations'
     }
-
     
     compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0'
     compile 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
