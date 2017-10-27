@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+  android:width="360dp"
+  android:height="640dp"
+  android:viewportHeight="640"
+  android:viewportWidth="360">
+
+  <path
+    android:name="path-1"
+    android:fillColor="#FFFFFF"
+    android:fillType="evenOdd"
+    android:pathData="M0,180 L90,180 L90,360 L0,360 L0,180 Z"
+    android:strokeWidth="1" />
+  <path
+    android:fillType="evenOdd"
+    android:pathData="M2,182 L88,182 L88,358 L2,358 L2,182 Z"
+    android:strokeColor="#000000"
+    android:strokeWidth="4" />
+  <path
+    android:name="divider"
+    android:fillColor="#000000"
+    android:fillType="evenOdd"
+    android:pathData="M1,268 L89,268 L89,272 L1,272 L1,268 Z"
+    android:strokeWidth="1" />
+  <path
+    android:name="path-2"
+    android:fillColor="#FFFFFF"
+    android:fillType="evenOdd"
+    android:pathData="M86,442 L266,442 L266,532 L86,532 L86,442 Z"
+    android:strokeWidth="1" />
+  <path
+    android:fillType="evenOdd"
+    android:pathData="M88,444 L264,444 L264,530 L88,530 L88,444 Z"
+    android:strokeColor="#000000"
+    android:strokeWidth="4" />
+  <path
+    android:name="divider"
+    android:fillColor="#000000"
+    android:fillType="evenOdd"
+    android:pathData="M176,444 L180,444 L180,532 L176,532 L176,444 Z"
+    android:strokeWidth="1" />
+  <path
+    android:name="path-3"
+    android:fillColor="#FFFFFF"
+    android:fillType="evenOdd"
+    android:pathData="M348,188 L360,188 L360,352 L348,352 L348,188 Z"
+    android:strokeWidth="1" />
+  <path
+    android:fillColor="@color/blueprint_table_shading"
+    android:fillType="evenOdd"
+    android:pathData="M350,190 L358,190 L358,350 L350,350 L350,190 Z"
+    android:strokeColor="#000000"
+    android:strokeWidth="4" />
+  <path
+    android:name="path-4"
+    android:fillColor="#FFFFFF"
+    android:fillType="evenOdd"
+    android:pathData="M254,205 L326,205 L326,335 L254,335 L254,205 Z"
+    android:strokeWidth="1" />
+  <path
+    android:fillColor="@color/blueprint_table_shading"
+    android:fillType="evenOdd"
+    android:pathData="M256,207 L324,207 L324,333 L256,333 L256,207 Z"
+    android:strokeColor="#000000"
+    android:strokeWidth="4" />
+</vector>
