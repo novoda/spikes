@@ -1,1 +1,1 @@
-include ':device', ':app'
+include ':meeting-room-device', ':companion-app'
