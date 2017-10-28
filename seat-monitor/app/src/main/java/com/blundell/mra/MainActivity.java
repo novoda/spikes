@@ -23,18 +23,31 @@ public class MainActivity extends AppCompatActivity {
 
         ImageView blueprint = findViewById(R.id.imageView);
         blueprint.setImageResource(R.drawable.liverpool_downstairs);
+        final AbsoluteLayout parent = findViewById(R.id.absolute_hacks);
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("offices");
+        final DatabaseReference ref = database.getReference("offices");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("TUT", "Data Time");
+                for (DataSnapshot offices : dataSnapshot.getChildren()) {
+                    FirebaseOfficeHeatMaps office = offices.getValue(FirebaseOfficeHeatMaps.class);
+                    Log.d("TUT", "Value is: " + office);
+                    for (FirebaseRoom room : office.getRooms()) {
+                        for (FirebaseSeatHeat seatHeat : room.getSeatHeats()) {
+                            SeatGrid.Position position = SeatGrid.lookup(seatHeat.getSeatId());
+                            Log.d("TUT", office.getOffice()
+                                    + " "
+                                    + room.getLocation()
+                                    + " room x: " + position.getX()
+                                    + " y: " + position.getY());
 
-                for (DataSnapshot office : dataSnapshot.getChildren()) {
-                    FirebaseOfficeHeatMaps value = office.getValue(FirebaseOfficeHeatMaps.class);
-                    Log.d("TUT", "Value is: " + value);
+                            ImageView overlay = createSeatHeat(position.getX(), position.getY(), seatHeat.getHeat());
+                            parent.addView(overlay);
+                        }
+                    }
                 }
-
             }
 
             @Override
@@ -43,28 +56,27 @@ public class MainActivity extends AppCompatActivity {
                 Log.w("TUT", "Failed to read value.", error.toException());
             }
         });
-        AbsoluteLayout parent = findViewById(R.id.absolute_hacks);
-
-        ImageView view1 = createSeatHeat(2, 5, 90);
-        ImageView view2 = createSeatHeat(1, 5, 20);
-        parent.addView(view1);
-        parent.addView(view2);
     }
 
     @NonNull
     private ImageView createSeatHeat(int gridX, int gridY, int heatPercent) {
         ImageView view = new ImageView(this);
         float density = getResources().getDisplayMetrics().density;
-        int width = (int) (94 * density);
+        int width = (int) (106 * density);
         int height = (int) (94 * density);
-        int x = (int) (82 * density) * gridX;
-        int y = (int) (82 * density) * gridY;
+        int x = (int) (96 * density) * gridX;
+        int y = (int) (80 * density) * gridY;
         AbsoluteLayout.LayoutParams params = new AbsoluteLayout.LayoutParams(width,
                                                                              height,
                                                                              x, y
         );
         view.setLayoutParams(params);
-        view.setBackgroundColor(Color.argb(33, 255 * heatPercent, 0, 0));
+
+        int color = ColorScale.getColor(heatPercent);
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+        view.setBackgroundColor(Color.argb(44, red, green, blue));
         return view;
     }
 
