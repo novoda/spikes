@@ -53,4 +53,12 @@
     app:layout_constraintStart_toEndOf="@+id/absolute_hacks"
     app:layout_constraintTop_toTopOf="@+id/absolute_hacks" android:paddingTop="20dip"/>
 
+  <ImageView
+    android:id="@+id/imageView2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:srcCompat="@drawable/scale" />
+
 </android.support.constraint.ConstraintLayout>

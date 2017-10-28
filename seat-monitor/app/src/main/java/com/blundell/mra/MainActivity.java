@@ -30,19 +30,11 @@ public class MainActivity extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("TUT", "Data Time");
                 for (DataSnapshot offices : dataSnapshot.getChildren()) {
                     FirebaseOfficeHeatMaps office = offices.getValue(FirebaseOfficeHeatMaps.class);
-                    Log.d("TUT", "Value is: " + office);
                     for (FirebaseRoom room : office.getRooms()) {
                         for (FirebaseSeatHeat seatHeat : room.getSeatHeats()) {
                             SeatGrid.Position position = SeatGrid.lookup(seatHeat.getSeatId());
-                            Log.d("TUT", office.getOffice()
-                                    + " "
-                                    + room.getLocation()
-                                    + " room x: " + position.getX()
-                                    + " y: " + position.getY());
-
                             ImageView overlay = createSeatHeat(position.getX(), position.getY(), seatHeat.getHeat());
                             parent.addView(overlay);
                         }
@@ -52,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError error) {
-                // Failed to read value
                 Log.w("TUT", "Failed to read value.", error.toException());
             }
         });
