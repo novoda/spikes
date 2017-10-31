@@ -1,6 +1,6 @@
 package com.novoda.loadgauge;
 
-import com.novoda.ads1015.Ads1015;
+import com.blundell.adc.Ads1015;
 
 public class LoadGauge {
 

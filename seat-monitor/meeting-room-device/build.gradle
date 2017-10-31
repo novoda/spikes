@@ -35,4 +35,5 @@ dependencies {
     compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0'
     compile 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
     compile 'io.jsonwebtoken:jjwt:0.7.0'
+    compile 'com.blundell:ads1015:0.0.3'
 }

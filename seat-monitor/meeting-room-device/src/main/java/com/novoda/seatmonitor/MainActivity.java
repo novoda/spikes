@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.blundell.adc.Ads1015;
 import com.google.android.things.contrib.driver.button.Button;
-import com.novoda.ads1015.Ads1015;
 import com.novoda.loadgauge.CloudLoadGauge;
 import com.novoda.loadgauge.CloudLoadGauges;
 import com.novoda.loadgauge.LoadGauge;
