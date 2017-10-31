@@ -1,12 +1,3 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath libraries.build.androidGradle
-    }
-}
-
 apply plugin: 'com.android.application'
 
 android {

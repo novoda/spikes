@@ -1,5 +1,12 @@
 buildscript {
     apply from: 'dependencies.gradle'
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath libraries.build.androidGradle
+    }
 }
 
 ext {
