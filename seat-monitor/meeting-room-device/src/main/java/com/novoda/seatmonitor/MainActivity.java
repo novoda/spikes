@@ -2,6 +2,8 @@ package com.novoda.seatmonitor;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
 
 import com.blundell.adc.Ads1015;
@@ -22,6 +24,7 @@ public class MainActivity extends Activity {
     private CloudDataTimer cloudDataTimer;
     private CloudLoadGauges cloudLoadGauges;
     private CloudIotCoreCommunicator cloudIotCoreComms;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +63,10 @@ public class MainActivity extends Activity {
                 .withPrivateKeyRawFileId(R.raw.rsa_private)
                 .build();
 
-        new Thread(new Runnable() {
+        HandlerThread thread = new HandlerThread("background");
+        thread.start();
+        handler = new Handler(thread.getLooper());
+        handler.post(new Runnable() {
             @Override
             public void run() {
                 cloudIotCoreComms.connect();
