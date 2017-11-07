@@ -72,7 +72,7 @@ public class MainActivity extends Activity {
                 cloudIotCoreComms.connect();
                 startContinuousMonitoring();
             }
-        }).start();
+        });
     }
 
     private void startContinuousMonitoring() {
