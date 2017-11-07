@@ -8,3 +8,5 @@
 /build
 /captures
 .externalNativeBuild
+cloud-backend/functions/node_modules
+google-services.json
