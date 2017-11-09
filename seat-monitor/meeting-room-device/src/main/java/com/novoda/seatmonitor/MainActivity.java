@@ -16,7 +16,8 @@ import java.io.IOException;
 
 public class MainActivity extends Activity {
 
-    private static final String LOCATION = "Liverpool";
+    private static final String OFFICE = "Liverpool";
+    private static final String LOCATION = "Downstairs";
 
     private Button button;
 
@@ -76,7 +77,7 @@ public class MainActivity extends Activity {
     }
 
     private void startContinuousMonitoring() {
-        cloudDataTimer = new CloudDataTimer(LOCATION, cloudIotCoreComms, cloudLoadGauges, restartTimer);
+        cloudDataTimer = new CloudDataTimer(OFFICE, LOCATION, cloudIotCoreComms, cloudLoadGauges, restartTimer);
         cloudDataTimer.start();
     }
 

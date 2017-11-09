@@ -1,21 +1,21 @@
 {
-  "location": "Liverpool",
-  "totalLoadGauges": 4,
+  "office": "Liverpool",
+  "location": "Downstairs",
   "dataLoadGauges": [
     {
-      "id": "Liverpool1",
+      "id": "Downstairs1",
       "weight": 125
     },
     {
-      "id": "Liverpool2",
+      "id": "Downstairs2",
       "weight": 831
     },
     {
-      "id": "Liverpool3",
+      "id": "Downstairs3",
       "weight": 937
     },
     {
-      "id": "Liverpool4",
+      "id": "Downstairs4",
       "weight": 712
     }
   ]
