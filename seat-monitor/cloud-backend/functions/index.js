@@ -98,3 +98,4 @@ function updateCurrentDataFirebase(data) {
     lastTimestamp: data.timestamp
   });
 }
+

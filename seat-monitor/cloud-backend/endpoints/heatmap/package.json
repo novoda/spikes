@@ -1,0 +1,15 @@
+{
+  "name": "endpoints",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "blundell",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/bigquery": "^0.10.0",
+    "cors": "^2.8.4"
+  }
+}
