@@ -1,0 +1,22 @@
+{
+  "office": "Liverpool",
+  "location": "Downstairs",
+  "dataLoadGauges": [
+    {
+      "id": "Downstairs1",
+      "weight": 125
+    },
+    {
+      "id": "Downstairs2",
+      "weight": 831
+    },
+    {
+      "id": "Downstairs3",
+      "weight": 937
+    },
+    {
+      "id": "Downstairs4",
+      "weight": 712
+    }
+  ]
+}

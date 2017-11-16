@@ -29,7 +29,8 @@ public class CloudLoadGauges {
                     .append(loadGauge.asJsonObject())
                     .append(",");
         }
-        jsonLoadGauges.delete(jsonLoadGauges.lastIndexOf(","), 1);
+        int lastCommaIndex = jsonLoadGauges.lastIndexOf(",");
+        jsonLoadGauges.delete(lastCommaIndex, lastCommaIndex + 1);
 
         return "["
                 + jsonLoadGauges.toString()
