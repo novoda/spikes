@@ -45,7 +45,7 @@ public class HtmlGenerator {
                                     + " text-decoration: none;"
                                     + " color: black;"
                                 + "}"
-                                + "#article {"
+                                + ".article {"
                                     + "width: 70%;"
                                     + "margin: 0 auto;"
                                 + "}"
@@ -188,7 +188,7 @@ public class HtmlGenerator {
                     li()
                         .a().href(article.getPageLink())
                             .div()
-                                .id("article")
+                                .classAttr("article")
                                 .img()
                                     .id("article-image")
                                     .src(article.getImage())
