@@ -1,17 +1,17 @@
 package com.novoda.enews;
 
-import com.larvalabs.linkunfurl.LinkInfo;
-import com.larvalabs.linkunfurl.LinkUnfurl;
-
 import java.io.IOException;
+import java.util.Random;
 import java.util.stream.Stream;
 
 public class ArticleEditor {
 
     private final LinkUnfurler linkUnfurler;
+    private final MissingImageFetcher missingImageFetcher;
 
-    public ArticleEditor(LinkUnfurler linkUnfurler) {
+    public ArticleEditor(LinkUnfurler linkUnfurler, MissingImageFetcher missingImageFetcher) {
         this.linkUnfurler = linkUnfurler;
+        this.missingImageFetcher = missingImageFetcher;
     }
 
     public Stream<Article> generateArticle(Stream<ChannelHistory.Message> messageStream) {
@@ -30,7 +30,7 @@ public class ArticleEditor {
         if (message.hasImage()) {
             return message.getImageUrl();
         } else {
-            return "https://s3-eu-west-1.amazonaws.com/novoda-public-image-bucket/missing-image.png";
+            return missingImageFetcher.getMissingImageUrl();
         }
     }
 
@@ -41,7 +41,7 @@ public class ArticleEditor {
                 .replaceAll(">", "")
                 .replaceAll("\\?(.*)", "")
                 .replaceAll("(http|https)://(.*)", "");
-        if(text.isEmpty()) {
+        if (text.isEmpty()) {
             return "I was so excited by this #enews, I didn't have time to write anything. Check it out!";
         }
         return text;
@@ -57,12 +57,12 @@ public class ArticleEditor {
 
     private String generatePageLink(ChannelHistory.Message message) {
         String link = message.getPageLink();
-        if(link.contains("youtube")) {
+        if (link.contains("youtube")) {
             return link;
         }
-        if(link.contains("?")) {
-          int startPositionOfParams = link.indexOf('?');
-          link = link.substring(0, startPositionOfParams);
+        if (link.contains("?")) {
+            int startPositionOfParams = link.indexOf('?');
+            link = link.substring(0, startPositionOfParams);
         }
         return link;
     }
@@ -70,7 +70,7 @@ public class ArticleEditor {
     public static final class Factory {
 
         public ArticleEditor newInstance(boolean mock) {
-            if(mock) {
+            if (mock) {
                 return newMockInstance();
             } else {
                 return newInstance();
@@ -78,11 +78,11 @@ public class ArticleEditor {
         }
 
         public ArticleEditor newInstance() {
-            return new ArticleEditor(new LinkUnfurler.Http());
+            return new ArticleEditor(new LinkUnfurler.Http(), new MissingImageFetcher(new Random()));
         }
 
         private ArticleEditor newMockInstance() {
-            return new ArticleEditor(new LinkUnfurler.Mock());
+            return new ArticleEditor(new LinkUnfurler.Mock(), new MissingImageFetcher(new Random()));
         }
 
     }
