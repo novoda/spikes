@@ -1,0 +1,38 @@
+<resources>
+  <string name="app_name">meeting seating</string>
+  <string-array name="drawer_options">
+    <item>Seat List</item>
+    <item>Heatmap</item>
+    <item>Settings</item>
+    <item>Logout</item>
+  </string-array>
+  <string-array name="end_of_email_options">
+    <item>\@novoda.co.uk</item>
+    <item>\@novoda.com</item>
+    <item>\@novoda.de</item>
+    <item>\@novoda.io</item>
+  </string-array>
+  <string name="action_toolbar_refresh">Refresh</string>
+  <string name="action_toolbar_filter">Filter</string>
+  <string name="action_toolbar_search">Search</string>
+  <string name="action_toolbar_heatmap">Heatmap</string>
+  <string name="toolbar_statistics_title">Statistics</string>
+  <string name="toolbar_room_title">Room List</string>
+  <string name="toolbar_seat_title">Seats</string>
+  <string name="toolbar_seat_filter_title">Filter Menu</string>
+  <string name="nav_drawer_closed">Closed</string>
+  <string name="nav_drawer_open">Open</string>
+  <string name="drawer_greeting">Offline Mode</string>
+  <string name="button_filter_proceed">APPLY FILTERS</string>
+  <string name="filter_expandable_rooms">Rooms</string>
+  <string name="filter_expandable_seats">Seat</string>
+  <string name="toast_fetching_data">Fetching data</string>
+  <string name="action_toolbar_reset">RESET</string>
+  <string name="toolbar_settings_title">Settings</string>
+  <string name="login_remember_me">Remember me</string>
+  <string name="login_signin_button">Sign in</string>
+  <string name="login_newacct_button">Create an Account</string>
+  <string name="signup_create_button">Create account</string>
+  <string name="seats_no_list_items">No Seats to show!</string>
+  <string name="toolbar_heatmap_title">Heatmap View</string>
+</resources>

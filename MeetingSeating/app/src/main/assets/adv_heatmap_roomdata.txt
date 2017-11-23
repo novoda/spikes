@@ -1,0 +1,89 @@
+[GET] /heat-map?roomId=990
+{
+	"roomId":990,
+     "sizeX":3,
+     "sizeY":4,
+     "seats":[
+        {
+           "seatId":123,
+           "heat":90,
+           "posX":2,
+           "posY":2
+        },
+        {
+           "seatId":124,
+           "heat":50,
+           "posX":2,
+           "posY":1
+        },
+        {
+           "seatId":125,
+           "heat":40,
+           "posX":1,
+           "posY":0
+        },
+        {
+           "seatId":126,
+           "heat":0,
+           "posX":0,
+           "posY":0
+        }
+     ]
+ }
+
+ [GET] /heat-map?roomId=991
+ {
+ 	"roomId":991,
+     "sizeX":5,
+     "sizeY":6,
+     "seats":[
+        {
+           "seatId":123,
+           "heat":90,
+           "posX":3,
+           "posY":4
+        },
+        {
+           "seatId":124,
+           "heat":45,
+           "posX":3,
+           "posY":3
+        },
+        {
+           "seatId":125,
+           "heat":35,
+           "posX":3,
+           "posY":2
+        }
+     ]
+ }
+
+ [GET] /heat-map?roomId=992
+ {
+ 	"roomId":992,
+     "sizeX":4,
+     "sizeY":4,
+     "seats":[]
+ }
+
+ [GET] /heat-map?roomId=993
+{
+	"roomId":993,
+     "sizeX":3,
+     "sizeY":4,
+     "seats":[
+        {
+           "seatId":123,
+           "heat":78,
+           "posX":2,
+           "posY":3
+        },
+        {
+           "seatId":124,
+           "heat":72,
+           "posX":1,
+           "posY":3
+        }
+     ]
+}
+

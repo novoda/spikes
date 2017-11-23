@@ -1,0 +1,253 @@
+{
+  "lastUpdateTimestamp": "1507024182",
+  "rooms": [
+    {
+      "location": "Asia",
+      "roomId": 4,
+      "seats": [
+        {
+          "seatId": 100000,
+          "value": 10,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 100001,
+          "value": 14,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 100002,
+          "value": 9,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 100003,
+          "value": 5,
+          "unitType": "kg"
+        },{
+           "seatId": 100004,
+           "value": 10,
+           "unitType": "kg"
+        },{
+           "seatId": 100005,
+           "value": 17,
+           "unitType": "kg"
+        },{
+           "seatId": 100006,
+           "value": 14,
+           "unitType": "kg"
+        },{
+           "seatId": 100007,
+           "value": 13,
+           "unitType": "kg"
+        }
+      ]
+    },
+    {
+      "location": "Africa",
+      "roomId": 5,
+      "seats": [
+        {
+          "seatId": 1,
+          "value": 77,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 2,
+          "value": 76,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 3,
+          "value": 67,
+          "unitType": "kg"
+        }
+      ]
+    },
+    {
+      "location": "Europe",
+      "roomId": 1,
+      "seats": [
+        {
+          "seatId": 1,
+          "value": 45,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 2,
+          "value": 47,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 3,
+          "value": 49,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 4,
+          "value": 50,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 5,
+          "value": 45,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 6,
+          "value": 46,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 7,
+          "value": 59,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 8,
+          "value": 32,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 9,
+          "value": 38,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 10,
+          "value": 34,
+          "unitType": "kg"
+        }
+      ]
+    },
+    {
+      "location": "North America",
+      "roomId": 2,
+      "seats": [
+        {
+          "seatId": 61,
+          "value": 102,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 62,
+          "value": 90,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 63,
+          "value": 95,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 64,
+          "value": 98,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 65,
+          "value": 135,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 66,
+          "value": 89,
+          "unitType": "kg"
+        }
+      ]
+    },
+    {
+      "location": "South America",
+      "roomId": 3,
+      "seats": [
+        {
+          "seatId": 10,
+          "value": 77,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 11,
+          "value": 76,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 12,
+          "value": 67,
+          "unitType": "kg"
+        }
+      ]
+    },
+    {
+      "location": "Antartica",
+      "roomId": 7,
+      "seats": [
+        {
+          "seatId": 10,
+          "value": 22,
+          "unitType": "kg"
+        }
+      ]
+    },
+    {
+      "location": "Australia",
+      "roomId": 6,
+      "seats": [
+        {
+          "seatId": 600,
+          "value": 149,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 601,
+          "value": 155,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 602,
+          "value": 160,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 603,
+          "value": 172,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 604,
+          "value": 159,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 605,
+          "value": 169,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 606,
+          "value": 190,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 607,
+          "value": 170,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 608,
+          "value": 169,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 609,
+          "value": 150,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 610,
+          "value": 120,
+          "unitType": "kg"
+        }
+      ]
+    }
+  ]
+}

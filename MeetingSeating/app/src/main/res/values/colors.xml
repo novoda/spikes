@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="colorPrimary">#5E91D9</color>
+  <color name="colorPrimaryDark">#3164ac</color>
+  <color name="colorAccent">#ff9743</color>
+  <color name="lightGrey">#bababa</color>
+  <color name="white">#FFFFFF</color>
+  <color name="black">#000000</color>
+  <color name="novoda_blue">#5E91D9</color>
+  <color name="novoda_blue_light">#74A2E5</color>
+  <color name="novoda_orange">#EAA54F</color>
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:padding="25dp">
+
+  <TextView
+    android:id="@+id/tv_seat_id"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="#"
+    android:textAlignment="textStart"
+    android:textSize="20sp"
+    android:textStyle="bold" />
+
+  <TextView
+    android:id="@+id/tv_location"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_centerHorizontal="true"
+    android:text="Room Location"
+    android:textAlignment="center"
+    android:textSize="16sp" />
+
+  <TextView
+    android:id="@+id/tv_weight"
+    android:layout_width="100dp"
+    android:layout_height="wrap_content"
+    android:layout_alignBaseline="@+id/tv_location"
+    android:layout_alignBottom="@+id/tv_location"
+    android:layout_alignParentEnd="true"
+    android:text="Weight"
+    android:textAlignment="textEnd"
+    android:textSize="16sp" />
+</RelativeLayout>

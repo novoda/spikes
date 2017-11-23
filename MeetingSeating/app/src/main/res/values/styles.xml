@@ -1,0 +1,62 @@
+<resources>
+  <!-- Base application theme -->
+  <style name="AppTheme"
+    parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+    <item name="android:textColorHint">@color/white</item>
+  </style>
+  <!-- Toolbar -->
+  <style name="AppToolbar">
+    <item name="android:layout_height">55dp</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:minHeight">?attr/actionBarSize</item>
+    <item name="android:layout_marginTop">0dp</item>
+    <item name="android:layout_marginLeft">0dp</item>
+    <item name="android:layout_marginRight">0dp</item>
+    <item name="android:background">?attr/colorPrimary</item>
+    <item name="android:theme">@style/ThemeOverlay.AppCompat.ActionBar</item>
+  </style>
+  <!-- Nav Drawer -->
+  <style name="LeftDrawer">
+    <item name="android:layout_width">420dp</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:layout_gravity">start</item>
+  </style>
+
+  <style name="LeftDrawerList">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">0dp</item>
+    <item name="android:layout_marginTop">40dp</item>
+    <item name="android:choiceMode">singleChoice</item>
+    <item name="android:background">@android:color/transparent</item>
+    <item name="android:divider">@color/black</item>
+    <item name="android:dividerHeight">0dp</item>
+  </style>
+
+  <style name="filter_expandable_header_textview">
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:padding">10dp</item>
+    <item name="android:clickable">true</item>
+    <item name="android:textSize">25sp</item>
+    <item name="android:textColor">@color/white</item>
+    <item name="android:background">@color/colorPrimary</item>
+    <item name="android:layout_gravity">center_horizontal</item>
+    <item name="android:layout_marginTop">10dp</item>
+    <item name="android:textAlignment">center</item>
+  </style>
+
+  <style name="filter_expandable_contents">
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:padding">25dp</item>
+    <item name="android:paddingStart">45dp</item>
+    <item name="android:textSize">20sp</item>
+    <item name="android:background">@color/white</item>
+    <item name="android:layout_gravity">center_horizontal</item>
+    <item name="android:layout_marginBottom">5dp</item>
+  </style>
+
+</resources>

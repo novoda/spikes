@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/drawer_layout"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+  <!-- Main layout when drawer is closed -->
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.novoda.frankboylan.meetingseating.seats.SeatActivity">
+
+    <android.support.v7.widget.Toolbar
+      android:id="@+id/toolbar_seat"
+      style="@style/AppToolbar"
+      app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    <!-- Filter View -->
+    <RelativeLayout
+      android:id="@+id/rl_filter"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+      <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/lightGrey">
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
+          <!-- First Expandable TextView Header -->
+          <TextView
+            style="@style/filter_expandable_header_textview"
+            android:onClick="handlerExpandableToggle"
+            android:tag="rooms"
+            android:text="@string/filter_expandable_rooms" />
+          <!-- Content to toggle -->
+          <LinearLayout
+            android:id="@+id/ll_filter_expandable_rooms"
+            style="@style/filter_expandable_contents"
+            android:orientation="vertical">
+            <!-- Dynamic Switch's added here -->
+          </LinearLayout>
+          <!-- Second Expandable TextView Header -->
+          <TextView
+            style="@style/filter_expandable_header_textview"
+            android:onClick="handlerExpandableToggle"
+            android:tag="seats"
+            android:text="@string/filter_expandable_seats" />
+          <!-- Content to Toggle -->
+          <LinearLayout
+            android:id="@+id/ll_filter_expandable_seats"
+            style="@style/filter_expandable_contents"
+            android:layout_marginBottom="75dp"
+            android:orientation="vertical">
+            <!-- Dynamic Switch's added here -->
+          </LinearLayout>
+        </LinearLayout>
+      </ScrollView>
+
+      <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimaryDark"
+        android:onClick="handlerApplyFilter"
+        android:text="@string/button_filter_proceed"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+    </RelativeLayout>
+    <!-- List of Seats -->
+    <TextView
+      android:id="@+id/tv_list_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@color/white"
+      android:text="@string/seats_no_list_items"
+      android:textAlignment="center"
+      android:textSize="30sp" />
+
+    <ListView
+      android:id="@+id/listview_all_seats"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:background="@color/white" />
+  </LinearLayout>
+  <!-- The drawer layout -->
+  <LinearLayout
+    style="@style/LeftDrawer"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+      android:id="@+id/side_drawer_personal"
+      android:layout_width="match_parent"
+      android:layout_height="225dp"
+      android:background="@color/colorPrimaryDark"
+      android:gravity="center|bottom"
+      android:orientation="horizontal">
+      <!-- Image and Greeting Message Here -->
+      <TextView
+        android:id="@+id/tv_drawer_greeting"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:maxLines="2"
+        android:paddingBottom="8dp"
+        android:text="@string/drawer_greeting"
+        android:textColor="@color/white"
+        android:textSize="36sp" />
+    </LinearLayout>
+
+    <ListView
+      android:id="@+id/side_drawer"
+      style="@style/LeftDrawerList"
+      android:layout_weight="1" />
+  </LinearLayout>
+</android.support.v4.widget.DrawerLayout>

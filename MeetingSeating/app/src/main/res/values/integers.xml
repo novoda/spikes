@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <integer name="slide_animation_duration">600</integer>
+  <integer name="slide_animation_duration_quick">400</integer>
+  <integer name="filter_switch_min_height">100</integer>
+  <integer name="filter_switch_min_width">150</integer>
+</resources>

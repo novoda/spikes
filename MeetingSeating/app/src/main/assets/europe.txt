@@ -1,0 +1,59 @@
+{
+  "lastUpdateTimestamp": "1507024180",
+  "rooms": [
+    {
+      "location": "Lisbon",
+      "unitName": "66",
+      "roomName": "Reception",
+      "roomId": 3034,
+      "seats": [
+        {
+          "seatId": 23,
+          "value": 30,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 24,
+          "value": 45,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 25,
+          "value": 60,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 26,
+          "value": 40,
+          "unitType": "kg"
+        },{
+           "seatId": 27,
+           "value": 35,
+           "unitType": "kg"
+        }
+      ]
+    },
+    {
+      "location": "Rome",
+      "roomName": "Coliseum",
+      "roomId": 333,
+      "seats": [
+        {
+          "seatId": 100,
+          "value": 130,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 101,
+          "value": 150,
+          "unitType": "kg"
+        },
+        {
+          "seatId": 102,
+          "value": 145,
+          "unitType": "kg"
+        }
+      ]
+    }
+  ]
+}
