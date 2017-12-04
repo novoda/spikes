@@ -49,7 +49,11 @@ public class ArticleEditor {
 
     private String generateTitle(ChannelHistory.Message message) {
         try {
-            return linkUnfurler.unfurl(message.getPageLink()).getTitle();
+            String pageLink = message.getPageLink();
+            if (pageLink.startsWith("www")) {
+                pageLink = "http:// " + pageLink;
+            }
+            return linkUnfurler.unfurl(pageLink).getTitle();
         } catch (IOException e) {
             return "#eNews link";
         }
