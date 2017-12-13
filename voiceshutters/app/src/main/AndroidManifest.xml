@@ -2,22 +2,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.novoda.voiceshutters">
 
-  <application>
-    <uses-library android:name="com.google.android.things" />
+  <uses-permission android:name="android.permission.BLUETOOTH" />
+  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <activity android:name=".MainActivity">
+  <application
+    android:label="@string/app_name"
+    android:theme="@style/Theme.AppCompat">
+    <activity
+      android:name=".MainActivity"
+      android:label="@string/app_name"></activity>
+    <activity android:name=".ClientActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
-
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-
-        <category android:name="android.intent.category.IOT_LAUNCHER" />
-        <category android:name="android.intent.category.DEFAULT" />
-      </intent-filter>
     </activity>
+    <activity android:name=".ServerActivity" />
   </application>
 
 </manifest>
