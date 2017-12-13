@@ -1,0 +1,5 @@
+rootProject.name = 'hermes'
+include 'demo-java'
+include 'demo-kotlin'
+include 'hermes-core'
+
