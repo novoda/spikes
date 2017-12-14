@@ -6,6 +6,14 @@ Simple pub/sub implementation without tie to any framework.
 
 A very basic way to propagate objects among consumers/subscribers. 
 
+This came as a potential solution to a problem we had in the all-4 app. We have
+a set of monitors that "observe" events from the video activity. In order to have them 
+all grouped and avoid having multiple calls they all extend the same interface and then 
+have no-ops for operations that are not wanted.
+
+By using a pub/sub like this one it means we can handle only the events that we care 
+about explicitly instead of ignoring the ones we don't want.
+
 ## Usage (Java)
 
 ### Using lambdas
