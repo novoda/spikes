@@ -8,16 +8,40 @@ class Hermes {
         brokers.forEach { it.track(event) }
     }
 
-    fun <A> register(broker: Broker<A>): Hermes {
-        brokers += broker
+    @Suppress("UNCHECKED_CAST")
+    @SafeVarargs
+    fun <A> register(type: Class<A>, vararg consumers: Consumer<A>): Hermes {
+        val candidateBroker = brokers.find { it.type == type } as? Broker<A>?
+        candidateBroker.let { broker ->
+            when(broker) {
+                null -> brokers += Broker(type, mutableListOf(*consumers))
+                else -> broker.consumers += consumers
+            }
+        }
         return this
     }
 
+    @SafeVarargs
+    fun <A> register(type: Class<A>, vararg consumers: (A) -> Unit): Hermes =
+        register(type, *consumers.map { Consumer(it) }.toTypedArray())
+
+    inline fun <reified A> register(vararg consumers: Consumer<A>): Hermes =
+        register(A::class.java, *consumers)
+
+    inline fun <reified A> register(vararg consumers: (A) -> Unit): Hermes =
+        register(A::class.java, *consumers)
+
+    inline fun <reified A> register(consumer: Consumer<A>): Hermes =
+        register(A::class.java, consumer)
+
+    inline fun <reified A> register(noinline consumer: (A) -> Unit): Hermes =
+        register(A::class.java, consumer)
+
 }
 
-class Broker<A> private constructor(
-    private val type: Class<A>,
-    private vararg val consumers: Consumer<A>
+private data class Broker<A>(
+    val type: Class<A>,
+    val consumers: MutableList<Consumer<A>>
 ) {
 
     companion object {
@@ -42,6 +66,7 @@ class Broker<A> private constructor(
 
 }
 
+@FunctionalInterface
 interface Consumer<in A> {
 
     companion object {

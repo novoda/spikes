@@ -1,6 +1,5 @@
 package com.novoda.hermes.demo;
 
-import com.novoda.hermes.Broker;
 import com.novoda.hermes.Consumer;
 import com.novoda.hermes.Hermes;
 
@@ -11,8 +10,8 @@ import java.util.Scanner;
 public class Application {
 
     private final static Hermes hermes = new Hermes()
-        .register(Broker.broker(String.class, event -> log("Event logged: " + event)))
-        .register(Broker.broker(ExpectedValue.class, new MeConsumer(), new NovodaConsumer(), new MurrayConsumer()));
+        .register(String.class, (String event) -> log("Event logged: " + event))
+        .register(ExpectedValue.class, new MeConsumer(), new NovodaConsumer(), new MurrayConsumer());
 
     private static void log(String message) {
         System.out.println(message);

@@ -39,19 +39,26 @@ hermes.register(Event.class, new ConsumerA(), new ConsumerB());
 ```
 val hermes = Hermes()
 
-hermes.register(Broker(Consumer<Event> { log("Event logged: $it") }))
+hermes.register { event: String -> log("Event logged: $event") }
+
+//or
+
+hermes.register<String> { log("Event logged: $it") }
 
 hemes.track(new Event("some value"));
 ```
 
 ### Using consumer implementations
 ```
-hermes.register(Broker(SomeConsumer()))
+hermes.register(SomeConsumer())
 ```
 
-### Using trailing lambda (WIP)
+### Multiple lambdas
 ```
-hermes.register { og("Event logged: $it") }
+hermes..register<String>(
+   { log("Event logged once more: $it") },
+   { log("Event logged and another one: $it") }
+)
 ```
 
 ## TODOs
@@ -60,4 +67,5 @@ hermes.register { og("Event logged: $it") }
  - Add support for [Reactive Streams](http://www.reactive-streams.org/) (Rx, Java 9 Flow, etc)
  - Add support for [Coroutines](https://kotlinlang.org/docs/reference/coroutines.html) (Using Channels)
  - Add android demo
+ - Potentially add support for Java below 8
  

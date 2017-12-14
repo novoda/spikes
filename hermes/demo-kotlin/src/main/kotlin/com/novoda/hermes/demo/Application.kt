@@ -1,6 +1,5 @@
 package com.novoda.hermes.demo
 
-import com.novoda.hermes.Broker
 import com.novoda.hermes.Consumer
 import com.novoda.hermes.Hermes
 import java.util.*
@@ -9,11 +8,15 @@ import kotlin.system.exitProcess
 object Application {
 
     private val hermes = Hermes()
-        .register(Broker(Consumer<String> { log("Event logged: " + it) }))
-        .register(Broker(MeConsumer()))
-        .register(Broker(NovodaConsumer()))
-        .register(Broker(MurrayConsumer()))
-        .register(Broker(HelloConsumer(), HelloMeetConsumer()))
+        .register { event: String -> log("Event logged: $event") }
+        .register<String>(
+            { log("Event logged once more: $it") },
+            { log("Event logged and another one: $it") }
+        )
+        .register(MeConsumer())
+        .register(NovodaConsumer())
+        .register(MurrayConsumer())
+        .register(HelloConsumer(), HelloMeetConsumer())
 
     private fun log(message: String) {
         println(message)
