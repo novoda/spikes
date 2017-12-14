@@ -72,8 +72,10 @@ hermes..register<String>(
 ## TODOs
 
  - Add tests
+ - Add documentation
  - Add support for [Reactive Streams](http://www.reactive-streams.org/) (Rx, Java 9 Flow, etc)
  - Add support for [Coroutines](https://kotlinlang.org/docs/reference/coroutines.html) (Using Channels)
  - Add android demo
+ - Add deployment
  - Potentially add support for Java below 8
  
