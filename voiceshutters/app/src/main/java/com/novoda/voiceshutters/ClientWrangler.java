@@ -249,7 +249,7 @@ class ClientWrangler {
         BluetoothGattCharacteristic characteristic = service.getCharacteristic(uuid);
         characteristic.setValue(data);
         boolean result = bluetoothGatt.writeCharacteristic(characteristic);
-        SystemClock.sleep(500);
+        SystemClock.sleep(760);
         return result;
     }
 

@@ -8,13 +8,21 @@
     android:id="@+id/button1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:onClick="onSelectClient"
-    android:text="Client" />
+    android:onClick="onSelectSignIn"
+    android:text="Sign In" />
 
   <Button
     android:id="@+id/button2"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:onClick="onSelectServer"
-    android:text="Server" />
+    android:onClick="onSelectSignOut"
+    android:text="Sign Out" />
+
+  <Button
+    android:id="@+id/button3"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:onClick="onSelectClient"
+    android:text="Client" />
+
 </LinearLayout>
