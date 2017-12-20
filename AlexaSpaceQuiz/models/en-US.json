@@ -1,0 +1,58 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "space quiz",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.RepeatIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StartOverIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AnswerIntent",
+          "slots": [
+            {
+              "name": "Answer",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "the answer is {Answer}",
+            "my answer is {Answer}",
+            "is it {Answer}",
+            "{Answer} is my answer",
+            "{Answer}"
+          ]
+        },
+        {
+          "name": "DontKnowIntent",
+          "samples": [
+            "i don't know",
+            "don't know",
+            "i don't know that one",
+            "dunno",
+            "skip",
+            "i don't know that",
+            "who knows",
+            "i don't know this question"
+          ]
+        }
+      ]
+    }
+  }
+}

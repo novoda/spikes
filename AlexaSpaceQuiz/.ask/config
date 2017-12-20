@@ -1,0 +1,19 @@
+{
+  "deploy_settings": {
+    "default": {
+      "skill_id": "amzn1.ask.skill.9da4f111-08f5-425b-a2cb-66891532a26e",
+      "was_cloned": false,
+      "merge": {
+        "skillManifest": {
+          "apis": {
+            "custom": {
+              "endpoint": {
+                "uri": "arn:aws:lambda:us-east-1:953109185106:function:spacequiz"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
