@@ -22,7 +22,6 @@ const GAME_STATES = {
     START: '_STARTMODE', // Entry point, start the game.
     HELP: '_HELPMODE', // The user is asking for help.
 };
-const APP_ID = 'amzn1.ask.skill.9da4f111-08f5-425b-a2cb-66891532a26e'; // TODO replace with your app ID (OPTIONAL)
 
 /**
  * When editing your questions pay attention to your punctuation. Make sure you use question marks or periods.
@@ -363,7 +362,6 @@ const helpStateHandlers = Alexa.CreateStateHandler(GAME_STATES.HELP, {
 
 exports.handler = function (event, context) {
     const alexa = Alexa.handler(event, context);
-    alexa.appId = APP_ID;
     // To enable string internationalization (i18n) features, set a resources object.
     alexa.resources = languageString;
     alexa.registerHandlers(newSessionHandlers, startStateHandlers, triviaStateHandlers, helpStateHandlers);
