@@ -37,7 +37,7 @@ const languageString = {
             'REPEAT_QUESTION_MESSAGE': 'To repeat the last question, say, repeat. ',
             'ASK_MESSAGE_START': 'Would you like to start playing?',
             'HELP_REPROMPT': 'To give an answer to a question, respond with the number of the answer. ',
-            'STOP_MESSAGE': 'Would you like to keep playing?',
+            'STOP_MESSAGE': 'Would you like to start another game?',
             'CANCEL_MESSAGE': 'Ok, let\'s play again soon.',
             'NO_MESSAGE': 'Ok, we\'ll play another time. Goodbye!',
             'TRIVIA_UNHANDLED': 'Try saying a number between 1 and %s',
