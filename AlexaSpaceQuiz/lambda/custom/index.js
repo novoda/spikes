@@ -62,6 +62,10 @@ const newSessionHandlers = {
         this.handler.state = GAME_STATES.START;
         this.emitWithState('StartGame', true);
     },
+    'QuizIntent': function() {
+        this.handler.state = GAME_STATES.START;
+        this.emitWithState('StartGame', true);
+    },
     'AMAZON.StartOverIntent': function () {
         this.handler.state = GAME_STATES.START;
         this.emitWithState('StartGame', true);

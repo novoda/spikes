@@ -48,6 +48,24 @@
           ]
         },
         {
+          "name": "QuizIntent",
+          "samples": [
+            "start",
+            "start now",
+            "start a quiz",
+            "start a new quiz",
+            "start a new game",
+            "start a game",
+            "start a quiz game",
+            "quiz me",
+            "and start a quiz",
+            "and quiz me",
+            "for a quiz",
+            "a quiz"
+          ],
+          "slots": []
+        },
+        {
           "name": "DontKnowIntent",
           "samples": [
             "i don't know",
