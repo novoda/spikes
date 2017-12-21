@@ -172,7 +172,7 @@ function handleUserGuess(userGaveUp) {
         speechOutput = userGaveUp ? '' : this.t('ANSWER_IS_MESSAGE');
         speechOutput += speechOutputAnalysis + this.t('GAME_OVER_MESSAGE', currentScore.toString(), GAME_LENGTH.toString());
 
-        this.emit(':tell', speechOutput);
+        this.emit(':tellWithCard', speechOutput, this.t('GAME_NAME'), speechOutput);
     } else {
         currentQuestionIndex += 1;
         correctAnswerIndex = Math.floor(Math.random() * (ANSWER_COUNT));
@@ -262,7 +262,7 @@ const triviaStateHandlers = Alexa.CreateStateHandler(GAME_STATES.TRIVIA, {
         this.emit(':askWithCard', speechOutput, speechOutput, this.t('GAME_NAME'), speechOutput);
     },
     'AMAZON.CancelIntent': function () {
-        this.emit(':tell', this.t('CANCEL_MESSAGE'));
+        this.emit(':tellWithCard', this.t('CANCEL_MESSAGE'), this.t('GAME_NAME'), this.t('CANCEL_MESSAGE'));
     },
     'Unhandled': function () {
         const speechOutput = this.t('TRIVIA_UNHANDLED', ANSWER_COUNT.toString());
@@ -303,14 +303,14 @@ const helpStateHandlers = Alexa.CreateStateHandler(GAME_STATES.HELP, {
     },
     'AMAZON.NoIntent': function () {
         const speechOutput = this.t('NO_MESSAGE');
-        this.emit(':tell', speechOutput);
+        this.emit(':tellWithCard', speechOutput, this.t('GAME_NAME'), speechOutput);
     },
     'AMAZON.StopIntent': function () {
         const speechOutput = this.t('STOP_MESSAGE');
         this.emit(':askWithCard', speechOutput, speechOutput, this.t('GAME_NAME'), speechOutput);
     },
     'AMAZON.CancelIntent': function () {
-        this.emit(':tell', this.t('CANCEL_MESSAGE'));
+        this.emit(':tellWithCard', this.t('CANCEL_MESSAGE'), this.t('GAME_NAME'), this.t('CANCEL_MESSAGE'));
     },
     'Unhandled': function () {
         const speechOutput = this.t('HELP_UNHANDLED');
