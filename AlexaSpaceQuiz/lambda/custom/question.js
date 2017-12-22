@@ -15,6 +15,7 @@ module.exports = {
                 '1,000',
                 '120,000',
             ],
+            'follow-up': 'Follow up for Reindeer have very thick coats...'
         },
         {
             'The 1964 classic Rudolph The Red Nosed Reindeer was filmed in. ': [
@@ -26,6 +27,7 @@ module.exports = {
                 'Norway',
                 'France',
             ],
+            'follow-up': 'Follow up for The 1964 classic Rudolph The Red...'
         },
         {
             'Santas reindeer are cared for by one of the Christmas elves, what is his name?': [
@@ -34,6 +36,7 @@ module.exports = {
                 'Bushy Evergreen',
                 'Pepper Minstix',
             ],
+            'follow-up': 'Follow up for Santas reindeer are cared for by one...'
         },
         {
             'If all of Santas reindeer had antlers while pulling his Christmas sleigh, they would all be': [
@@ -42,6 +45,7 @@ module.exports = {
                 'Girls and boys',
                 'No way to tell',
             ],
+            'follow-up': 'Follow up for If all of Santas reindeer had antlers...'
         },
         {
             'What do Reindeer eat?': [
