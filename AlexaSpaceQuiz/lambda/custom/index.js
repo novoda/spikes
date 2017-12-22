@@ -149,6 +149,14 @@ function isAnswerSlotValid(intent) {
         && parseInt(intent.slots.Answer.value, 10) > 0;
 }
 
+function getFollowUpSentence(question) {
+    if (question.hasOwnProperty('follow-up')) {
+        return question['follow-up'] + ' ';
+    } else {
+        return '';
+    } 
+}
+
 function handleUserGuess(userGaveUp) {
     const answerSlotValid = isAnswerSlotValid(this.event.request.intent);
     let speechOutput = '';
@@ -194,7 +202,7 @@ function handleUserGuess(userGaveUp) {
         speechOutput += userGaveUp ? '' : this.t('ANSWER_IS_MESSAGE');
         speechOutput += speechOutputAnalysis + this.t('SCORE_IS_MESSAGE', currentScore.toString()) + repromptText;
         
-        let followUp = translatedQuestions[gameQuestions[currentQuestionIndex]].hasOwnProperty('follow-up') ? translatedQuestions[gameQuestions[currentQuestionIndex]]['follow-up'] : '';
+        let followUp = getFollowUpSentence(translatedQuestions[gameQuestions[currentQuestionIndex]]);
 
         Object.assign(this.attributes, {
             'speechOutput': repromptText,
@@ -231,7 +239,7 @@ const startStateHandlers = Alexa.CreateStateHandler(GAME_STATES.START, {
 
         speechOutput += repromptText;
 
-        let followUp = translatedQuestions[gameQuestions[currentQuestionIndex]].hasOwnProperty('follow-up') ? translatedQuestions[gameQuestions[currentQuestionIndex]]['follow-up'] : '';
+        let followUp = getFollowUpSentence(translatedQuestions[gameQuestions[currentQuestionIndex]]);
 
         Object.assign(this.attributes, {
             'speechOutput': repromptText,
