@@ -171,6 +171,8 @@ function handleUserGuess(userGaveUp) {
         speechOutputAnalysis += this.t('CORRECT_ANSWER_MESSAGE', correctAnswerIndex, correctAnswerText);
     }
 
+    speechOutputAnalysis += this.attributes['follow-up'];
+
     // Check if we can exit the game session after GAME_LENGTH questions (zero-indexed)
     if (this.attributes['currentQuestionIndex'] === GAME_LENGTH - 1) {
         speechOutput = userGaveUp ? '' : this.t('ANSWER_IS_MESSAGE');
@@ -191,6 +193,8 @@ function handleUserGuess(userGaveUp) {
 
         speechOutput += userGaveUp ? '' : this.t('ANSWER_IS_MESSAGE');
         speechOutput += speechOutputAnalysis + this.t('SCORE_IS_MESSAGE', currentScore.toString()) + repromptText;
+        
+        let followUp = translatedQuestions[gameQuestions[currentQuestionIndex]].hasOwnProperty('follow-up') ? translatedQuestions[gameQuestions[currentQuestionIndex]]['follow-up'] : '';
 
         Object.assign(this.attributes, {
             'speechOutput': repromptText,
@@ -200,6 +204,7 @@ function handleUserGuess(userGaveUp) {
             'questions': gameQuestions,
             'score': currentScore,
             'correctAnswerText': translatedQuestions[gameQuestions[currentQuestionIndex]][Object.keys(translatedQuestions[gameQuestions[currentQuestionIndex]])[0]][0],
+            'follow-up': followUp
         });
 
         this.emit(':askWithCard', speechOutput, repromptText, this.t('GAME_NAME'), repromptText);
@@ -226,6 +231,8 @@ const startStateHandlers = Alexa.CreateStateHandler(GAME_STATES.START, {
 
         speechOutput += repromptText;
 
+        let followUp = translatedQuestions[gameQuestions[currentQuestionIndex]].hasOwnProperty('follow-up') ? translatedQuestions[gameQuestions[currentQuestionIndex]]['follow-up'] : '';
+
         Object.assign(this.attributes, {
             'speechOutput': repromptText,
             'repromptText': repromptText,
@@ -234,6 +241,7 @@ const startStateHandlers = Alexa.CreateStateHandler(GAME_STATES.START, {
             'questions': gameQuestions,
             'score': 0,
             'correctAnswerText': translatedQuestions[gameQuestions[currentQuestionIndex]][Object.keys(translatedQuestions[gameQuestions[currentQuestionIndex]])[0]][0],
+            'follow-up': followUp
         });
 
         // Set the current state to trivia mode. The skill will now use handlers defined in triviaStateHandlers
