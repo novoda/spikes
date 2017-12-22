@@ -13,6 +13,9 @@
 'use strict';
 
 const Alexa = require('alexa-sdk');
+const makePlainText = Alexa.utils.TextUtils.makePlainText;
+const makeRichText = Alexa.utils.TextUtils.makeRichText;
+const makeImage = Alexa.utils.ImageUtils.makeImage;
 const questions = require('./question');
 
 const ANSWER_COUNT = 4; // The number of possible answers per trivia question.
@@ -194,9 +197,12 @@ function handleUserGuess(userGaveUp) {
         const roundAnswers = populateRoundAnswers.call(this, gameQuestions, currentQuestionIndex, correctAnswerIndex, translatedQuestions);
         const questionIndexForSpeech = currentQuestionIndex + 1;
         let repromptText = this.t('TELL_QUESTION_MESSAGE', questionIndexForSpeech.toString(), spokenQuestion);
+        let cardText = this.t('TELL_QUESTION_MESSAGE', questionIndexForSpeech.toString(), spokenQuestion);
+        cardText += "<br />"
 
         for (let i = 0; i < ANSWER_COUNT; i++) {
             repromptText += `${i + 1}. ${roundAnswers[i]}. `;
+            cardText += `<br />${i + 1}. ${roundAnswers[i]}. `;
         }
 
         speechOutput += userGaveUp ? '' : this.t('ANSWER_IS_MESSAGE');
@@ -207,6 +213,7 @@ function handleUserGuess(userGaveUp) {
         Object.assign(this.attributes, {
             'speechOutput': repromptText,
             'repromptText': repromptText,
+            'cardText': cardText,
             'currentQuestionIndex': currentQuestionIndex,
             'correctAnswerIndex': correctAnswerIndex + 1,
             'questions': gameQuestions,
@@ -232,9 +239,11 @@ const startStateHandlers = Alexa.CreateStateHandler(GAME_STATES.START, {
         const currentQuestionIndex = 0;
         const spokenQuestion = Object.keys(translatedQuestions[gameQuestions[currentQuestionIndex]])[0];
         let repromptText = this.t('TELL_QUESTION_MESSAGE', '1', spokenQuestion);
-
+        let cardText = this.t('TELL_QUESTION_MESSAGE', '1', spokenQuestion);
+        cardText += "<br />"
         for (let i = 0; i < ANSWER_COUNT; i++) {
             repromptText += `${i + 1}. ${roundAnswers[i]}. `;
+            cardText += `<br />${i + 1}. ${roundAnswers[i]}. `;
         }
 
         speechOutput += repromptText;
@@ -244,6 +253,7 @@ const startStateHandlers = Alexa.CreateStateHandler(GAME_STATES.START, {
         Object.assign(this.attributes, {
             'speechOutput': repromptText,
             'repromptText': repromptText,
+            'cardText': cardText,
             'currentQuestionIndex': currentQuestionIndex,
             'correctAnswerIndex': correctAnswerIndex + 1,
             'questions': gameQuestions,
@@ -254,7 +264,19 @@ const startStateHandlers = Alexa.CreateStateHandler(GAME_STATES.START, {
 
         // Set the current state to trivia mode. The skill will now use handlers defined in triviaStateHandlers
         this.handler.state = GAME_STATES.TRIVIA;
-        this.emit(':askWithCard', speechOutput, repromptText, this.t('GAME_NAME'), repromptText);
+
+        this.response.speak(speechOutput)
+            .listen(repromptText);
+        if (this.event.context.System.device.supportedInterfaces.Display) {
+            const builder = new Alexa.templateBuilders.BodyTemplate1Builder();
+            const template = builder.setTitle(this.t('GAME_NAME'))
+                                    .setBackgroundImage(makeImage('https://cdn.pixabay.com/photo/2015/02/04/17/18/space-624054_1280.jpg'))
+                                    .setTextContent(makeRichText(cardText))
+                                    .build();
+
+            this.response.renderTemplate(template);
+        }
+        this.emit(':responseReady');
     },
 });
 
