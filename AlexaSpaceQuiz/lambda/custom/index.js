@@ -160,6 +160,35 @@ function getFollowUpSentence(question) {
     } 
 }
 
+function askWithCardBackground(context, speechOutput, repromptText, cardText) {
+    context.response.speak(speechOutput)
+            .listen(repromptText);
+    if (context.event.context.System.device.supportedInterfaces.Display) {
+        const builder = new Alexa.templateBuilders.BodyTemplate1Builder();
+        const template = builder.setTitle(context.t('GAME_NAME'))
+                                .setBackgroundImage(makeImage('https://cdn.pixabay.com/photo/2015/02/04/17/18/space-624054_1280.jpg'))
+                                .setTextContent(makeRichText(cardText))
+                                .build();
+
+        context.response.renderTemplate(template);
+    }
+    context.emit(':responseReady');
+}
+
+function tellWithCardBackground(context, speechOutput, cardText) {
+    context.response.speak(speechOutput);
+    if (context.event.context.System.device.supportedInterfaces.Display) {
+        const builder = new Alexa.templateBuilders.BodyTemplate1Builder();
+        const template = builder.setTitle(context.t('GAME_NAME'))
+                                .setBackgroundImage(makeImage('https://cdn.pixabay.com/photo/2015/02/04/17/18/space-624054_1280.jpg'))
+                                .setTextContent(makeRichText(cardText))
+                                .build();
+
+        context.response.renderTemplate(template);
+    }
+    context.emit(':responseReady');
+}
+
 function handleUserGuess(userGaveUp) {
     const answerSlotValid = isAnswerSlotValid(this.event.request.intent);
     let speechOutput = '';
@@ -187,9 +216,11 @@ function handleUserGuess(userGaveUp) {
     // Check if we can exit the game session after GAME_LENGTH questions (zero-indexed)
     if (this.attributes['currentQuestionIndex'] === GAME_LENGTH - 1) {
         speechOutput = userGaveUp ? '' : this.t('ANSWER_IS_MESSAGE');
+        let cardText = speechOutput;
         speechOutput += speechOutputAnalysis + this.t('GAME_OVER_MESSAGE', currentScore.toString(), GAME_LENGTH.toString());
+        cardText += speechOutputAnalysis + "<br /><br />" + this.t('GAME_OVER_MESSAGE', currentScore.toString(), GAME_LENGTH.toString());
 
-        this.emit(':tellWithCard', speechOutput, this.t('GAME_NAME'), speechOutput);
+        tellWithCardBackground(this, speechOutput, cardText);
     } else {
         currentQuestionIndex += 1;
         correctAnswerIndex = Math.floor(Math.random() * (ANSWER_COUNT));
@@ -222,7 +253,7 @@ function handleUserGuess(userGaveUp) {
             'follow-up': followUp
         });
 
-        this.emit(':askWithCard', speechOutput, repromptText, this.t('GAME_NAME'), repromptText);
+        askWithCardBackground(this, speechOutput, repromptText, cardText);
     }
 }
 
@@ -265,18 +296,7 @@ const startStateHandlers = Alexa.CreateStateHandler(GAME_STATES.START, {
         // Set the current state to trivia mode. The skill will now use handlers defined in triviaStateHandlers
         this.handler.state = GAME_STATES.TRIVIA;
 
-        this.response.speak(speechOutput)
-            .listen(repromptText);
-        if (this.event.context.System.device.supportedInterfaces.Display) {
-            const builder = new Alexa.templateBuilders.BodyTemplate1Builder();
-            const template = builder.setTitle(this.t('GAME_NAME'))
-                                    .setBackgroundImage(makeImage('https://cdn.pixabay.com/photo/2015/02/04/17/18/space-624054_1280.jpg'))
-                                    .setTextContent(makeRichText(cardText))
-                                    .build();
-
-            this.response.renderTemplate(template);
-        }
-        this.emit(':responseReady');
+        askWithCardBackground(this, speechOutput, repromptText, cardText);
     },
 });
 
@@ -292,7 +312,8 @@ const triviaStateHandlers = Alexa.CreateStateHandler(GAME_STATES.TRIVIA, {
         this.emitWithState('StartGame', false);
     },
     'AMAZON.RepeatIntent': function () {
-        this.emit(':askWithCard', this.attributes['speechOutput'], this.attributes['repromptText'], this.t('GAME_NAME'), this.attributes['repromptText']);
+        askWithCardBackground(this, this.attributes['speechOutput'], this.attributes['repromptText'], this.attributes['cardText']);
+        // this.emit(':askWithCard', this.attributes['speechOutput'], this.attributes['repromptText'], this.t('GAME_NAME'), this.attributes['repromptText']);
     },
     'AMAZON.HelpIntent': function () {
         this.handler.state = GAME_STATES.HELP;
