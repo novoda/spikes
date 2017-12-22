@@ -313,7 +313,6 @@ const triviaStateHandlers = Alexa.CreateStateHandler(GAME_STATES.TRIVIA, {
     },
     'AMAZON.RepeatIntent': function () {
         askWithCardBackground(this, this.attributes['speechOutput'], this.attributes['repromptText'], this.attributes['cardText']);
-        // this.emit(':askWithCard', this.attributes['speechOutput'], this.attributes['repromptText'], this.t('GAME_NAME'), this.attributes['repromptText']);
     },
     'AMAZON.HelpIntent': function () {
         this.handler.state = GAME_STATES.HELP;
@@ -325,11 +324,13 @@ const triviaStateHandlers = Alexa.CreateStateHandler(GAME_STATES.TRIVIA, {
         this.emit(':askWithCard', speechOutput, speechOutput, this.t('GAME_NAME'), speechOutput);
     },
     'AMAZON.CancelIntent': function () {
-        this.emit(':tellWithCard', this.t('CANCEL_MESSAGE'), this.t('GAME_NAME'), this.t('CANCEL_MESSAGE'));
+        tellWithCardBackground(this, this.t('CANCEL_MESSAGE'), this.t('CANCEL_MESSAGE'));
+        // this.emit(':tellWithCard', this.t('CANCEL_MESSAGE'), this.t('GAME_NAME'), this.t('CANCEL_MESSAGE'));
     },
     'Unhandled': function () {
         const speechOutput = this.t('TRIVIA_UNHANDLED', ANSWER_COUNT.toString());
-        this.emit(':askWithCard', speechOutput, speechOutput, this.t('GAME_NAME'), speechOutput);
+        askWithCardBackground(this, speechOutput, speechOutput, speechOutput);
+        // this.emit(':askWithCard', speechOutput, speechOutput, this.t('GAME_NAME'), speechOutput);
     },
     'SessionEndedRequest': function () {
         console.log(`Session ended in trivia state: ${this.event.request.reason}`);
@@ -366,14 +367,16 @@ const helpStateHandlers = Alexa.CreateStateHandler(GAME_STATES.HELP, {
     },
     'AMAZON.NoIntent': function () {
         const speechOutput = this.t('NO_MESSAGE');
-        this.emit(':tellWithCard', speechOutput, this.t('GAME_NAME'), speechOutput);
+        tellWithCardBackground(this, speechOutput, speechOutput);
+        // this.emit(':tellWithCard', speechOutput, this.t('GAME_NAME'), speechOutput);
     },
     'AMAZON.StopIntent': function () {
         const speechOutput = this.t('STOP_MESSAGE');
         this.emit(':askWithCard', speechOutput, speechOutput, this.t('GAME_NAME'), speechOutput);
     },
     'AMAZON.CancelIntent': function () {
-        this.emit(':tellWithCard', this.t('CANCEL_MESSAGE'), this.t('GAME_NAME'), this.t('CANCEL_MESSAGE'));
+        tellWithCardBackground(this, this.t('CANCEL_MESSAGE'), this.t('CANCEL_MESSAGE'));
+        // this.emit(':tellWithCard', this.t('CANCEL_MESSAGE'), this.t('GAME_NAME'), this.t('CANCEL_MESSAGE'));
     },
     'Unhandled': function () {
         const speechOutput = this.t('HELP_UNHANDLED');
