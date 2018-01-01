@@ -1,14 +1,13 @@
 package com.novoda.inkyphat;
 
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.SpiDevice;
 
 import java.io.IOException;
 
-class InkyPhatTriColourDisplay implements InkyPhat {
+class InkyPhatV1 implements InkyPhat {
 
     private static final boolean SPI_COMMAND = false;
     private static final boolean SPI_DATA = true;
@@ -41,10 +40,10 @@ class InkyPhatTriColourDisplay implements InkyPhat {
 
     private byte border = BORDER_WHITE;
 
-    InkyPhatTriColourDisplay(SpiDevice spiBus,
-                             Gpio chipBusyPin, Gpio chipResetPin, Gpio chipCommandPin,
-                             PixelBuffer pixelBuffer,
-                             ImageConverter imageConverter, ColorConverter colorConverter) {
+    InkyPhatV1(SpiDevice spiBus,
+               Gpio chipBusyPin, Gpio chipResetPin, Gpio chipCommandPin,
+               PixelBuffer pixelBuffer,
+               ImageConverter imageConverter, ColorConverter colorConverter) {
         this.spiBus = spiBus;
         this.chipBusyPin = chipBusyPin;
         this.chipResetPin = chipResetPin;

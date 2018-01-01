@@ -13,11 +13,19 @@
     <uses-library android:name="com.google.android.things" />
 
 
-    <activity android:name=".MainActivity">
+    <activity android:name="com.novoda.tut.MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
         <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+
+      <!-- Launch activity automatically on boot -->
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+
+        <category android:name="android.intent.category.IOT_LAUNCHER" />
+        <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
     </activity>
   </application>
