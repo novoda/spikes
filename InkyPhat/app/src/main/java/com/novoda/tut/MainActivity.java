@@ -24,6 +24,7 @@ public class MainActivity extends Activity {
 //        Tests.drawHelloWorldText(inkyPhat);
 //        Tests.drawNameBadge(inkyPhat, getResources());
         inkyPhat.refresh();
+        inkyPhat.close();
     }
 
     @Override
