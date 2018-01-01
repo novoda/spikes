@@ -26,7 +26,7 @@ class InkyPhatV1 implements InkyPhat {
     private static final byte VCOM_DC_SETTING = (byte) 0x82;
     private static final byte PARTIAL_EXIT = (byte) 0x92;
 
-    private static final byte BORDER_WHITE = (byte) 0b00000000;
+    private static final byte BORDER_WHITE = (byte) 0b10000000;
     private static final byte BORDER_BLACK = (byte) 0b11000000;
     private static final byte BORDER_RED = (byte) 0b01000000;
 
