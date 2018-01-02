@@ -61,19 +61,19 @@ const languageString = {
 };
 
 const backgroundImages = [
-    "https://pixabay.com/get/e837b5092dfd013ed1584d05fb0938c9bd22ffd41cb015499df6c07ea6/stars-1246590_1280.jpg",
-    "https://pixabay.com/get/eb33b50c28fc083ed1534705fb0938c9bd22ffd41cb015499df5c47faf/galaxy-2643089_1920.jpg",
-    "https://pixabay.com/get/e832b4092af3053ed1534705fb0938c9bd22ffd41cb015499df5c470a3/sunrise-1756274_1920.jpg",
-    "https://pixabay.com/get/eb33b20729f6073ed1584d05fb0938c9bd22ffd41cb015499df5c77da5/space-2638126_1280.jpg",
-    "https://pixabay.com/get/e835b20e29f7093ed1584d05fb0938c9bd22ffd41cb015499df5c770a6/milky-way-1031138_1280.jpg",
-    "https://pixabay.com/get/eb33b60a2bf6033ed1584d05fb0938c9bd22ffd41cb015499df5c67ca6/milky-way-2675322_1280.jpg",
-    "https://pixabay.com/get/e830b70929f1083ed1584d05fb0938c9bd22ffd41cb015499df5c87ba0/universe-1566159_1280.jpg",
-    "https://pixabay.com/get/eb30b00e20f0043ed1584d05fb0938c9bd22ffd41cb015499df5c97fa0/space-2511845_1280.jpg",
-    "https://pixabay.com/get/e83db7082ef5073ed1584d05fb0938c9bd22ffd41cb015499df5c97ca5/astronomy-1867616_1280.jpg",
-    "https://pixabay.com/get/eb3cb80e2bfd093ed1584d05fb0938c9bd22ffd41cb015499df6c378a1/milky-way-2991398_1280.jpg",
-    "https://pixabay.com/get/ea35b30c29f7023ed1584d05fb0938c9bd22ffd41cb015499df6c37faf/astronomy-3023133_1280.jpg",
-    "https://pixabay.com/get/ea35b5072af3083ed1584d05fb0938c9bd22ffd41cb015499df6c37da2/moon-3048279_1280.jpg",
-    "https://pixabay.com/get/eb34b60628fc023ed1584d05fb0938c9bd22ffd41cb015499df6c37aa2/abstract-2179083_1280.jpg"
+    "https://s3.amazonaws.com/alexa-space-quiz-public-files/abstract-2179083_1280.jpg",
+    "https://s3.amazonaws.com/alexa-space-quiz-public-files/astronomy-1867616_1280.jpg",
+    "https://s3.amazonaws.com/alexa-space-quiz-public-files/astronomy-3023133_1920.jpg",
+    "https://s3.amazonaws.com/alexa-space-quiz-public-files/galaxy-2643089_1280.jpg",
+    "https://s3.amazonaws.com/alexa-space-quiz-public-files/milky-way-1031138_1280.jpg",
+    "https://s3.amazonaws.com/alexa-space-quiz-public-files/milky-way-2675322_1280.jpg",
+    "https://s3.amazonaws.com/alexa-space-quiz-public-files/milky-way-2991398_1280.jpg",
+    "https://s3.amazonaws.com/alexa-space-quiz-public-files/moon-3048279_1920.jpg",
+    "https://s3.amazonaws.com/alexa-space-quiz-public-files/space-2511845_1920.jpg",
+    "https://s3.amazonaws.com/alexa-space-quiz-public-files/space-2638126_1280.jpg",
+    "https://s3.amazonaws.com/alexa-space-quiz-public-files/stars-1246590_1280.jpg",
+    "https://s3.amazonaws.com/alexa-space-quiz-public-files/sunrise-1756274_1920.jpg",
+    "https://s3.amazonaws.com/alexa-space-quiz-public-files/universe-1566159_1920.jpg"
 ];
 
 const newSessionHandlers = {
