@@ -79,7 +79,7 @@ const newSessionHandlers = {
     },
     'Unhandled': function () {
         const speechOutput = this.t('START_UNHANDLED');
-        this.emit(':askWithCard', speechOutput, speechOutput, this.t('GAME_NAME'), speechOutput);
+        askWithCardBackground(this, speechOutput, speechOutput, speechOutput);
     },
 };
 
@@ -321,16 +321,14 @@ const triviaStateHandlers = Alexa.CreateStateHandler(GAME_STATES.TRIVIA, {
     'AMAZON.StopIntent': function () {
         this.handler.state = GAME_STATES.HELP;
         const speechOutput = this.t('STOP_MESSAGE');
-        this.emit(':askWithCard', speechOutput, speechOutput, this.t('GAME_NAME'), speechOutput);
+        askWithCardBackground(this, speechOutput, speechOutput, speechOutput);
     },
     'AMAZON.CancelIntent': function () {
         tellWithCardBackground(this, this.t('CANCEL_MESSAGE'), this.t('CANCEL_MESSAGE'));
-        // this.emit(':tellWithCard', this.t('CANCEL_MESSAGE'), this.t('GAME_NAME'), this.t('CANCEL_MESSAGE'));
     },
     'Unhandled': function () {
         const speechOutput = this.t('TRIVIA_UNHANDLED', ANSWER_COUNT.toString());
         askWithCardBackground(this, speechOutput, speechOutput, speechOutput);
-        // this.emit(':askWithCard', speechOutput, speechOutput, this.t('GAME_NAME'), speechOutput);
     },
     'SessionEndedRequest': function () {
         console.log(`Session ended in trivia state: ${this.event.request.reason}`);
@@ -342,7 +340,7 @@ const helpStateHandlers = Alexa.CreateStateHandler(GAME_STATES.HELP, {
         const askMessage = newGame ? this.t('ASK_MESSAGE_START') : this.t('REPEAT_QUESTION_MESSAGE') + this.t('STOP_MESSAGE');
         const speechOutput = this.t('HELP_MESSAGE', GAME_LENGTH) + askMessage;
         const repromptText = this.t('HELP_REPROMPT') + askMessage;
-        this.emit(':askWithCard', speechOutput, repromptText, this.t('GAME_NAME'), repromptText);
+        askWithCardBackground(this, speechOutput, repromptText, repromptText);
     },
     'AMAZON.StartOverIntent': function () {
         this.handler.state = GAME_STATES.START;
@@ -368,19 +366,17 @@ const helpStateHandlers = Alexa.CreateStateHandler(GAME_STATES.HELP, {
     'AMAZON.NoIntent': function () {
         const speechOutput = this.t('NO_MESSAGE');
         tellWithCardBackground(this, speechOutput, speechOutput);
-        // this.emit(':tellWithCard', speechOutput, this.t('GAME_NAME'), speechOutput);
     },
     'AMAZON.StopIntent': function () {
         const speechOutput = this.t('STOP_MESSAGE');
-        this.emit(':askWithCard', speechOutput, speechOutput, this.t('GAME_NAME'), speechOutput);
+        askWithCardBackground(this, speechOutput, speechOutput, speechOutput);
     },
     'AMAZON.CancelIntent': function () {
         tellWithCardBackground(this, this.t('CANCEL_MESSAGE'), this.t('CANCEL_MESSAGE'));
-        // this.emit(':tellWithCard', this.t('CANCEL_MESSAGE'), this.t('GAME_NAME'), this.t('CANCEL_MESSAGE'));
     },
     'Unhandled': function () {
         const speechOutput = this.t('HELP_UNHANDLED');
-        this.emit(':askWithCard', speechOutput, speechOutput, this.t('GAME_NAME'), speechOutput);
+        askWithCardBackground(this, speechOutput, speechOutput, speechOutput);
     },
     'SessionEndedRequest': function () {
         console.log(`Session ended in help state: ${this.event.request.reason}`);
