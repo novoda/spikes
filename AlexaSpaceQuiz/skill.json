@@ -10,9 +10,9 @@
             "It's the last answer?"
           ],
           "name": "Space quiz",
-          "smallIconUri": "https://api.amazonalexa.com/v0/skills/amzn1.ask.skill.9da4f111-08f5-425b-a2cb-66891532a26e/images/eyJkIjoiR0duZDVmK2VKTGJNQXJTa0JwN3lrT3lwa3gwTGdkVndwZWRwVkhoL2N5c2NSNS9GcFU0S3pXWmJYYkh6V290MXFmMXhGRkhSWElVMmxab2VZak5lVXVlRllRZlpSQmIrdWsvdkYwTWJVN3c4RUc3aHdDTEtUdHFZK3lIRzBJOHkiLCJpdiI6InFMb25DNkN3UVU1OGFXcVJjRi9ESFE9PSIsInYiOjF9",
+          "smallIconUri": "https://s3.amazonaws.com/alexa-space-quiz-public-files/small-icon.png",
           "description": "A simple quiz with some multiple-choice answers",
-          "largeIconUri": "https://api.amazonalexa.com/v0/skills/amzn1.ask.skill.9da4f111-08f5-425b-a2cb-66891532a26e/images/eyJkIjoiMzMwRGxzSG81WlZjNEJtbmpYY21rVmwxTm1vYTMxd1o2THpIUDRiMG9uQjdSOVRGYVdvRk9EUTBNWjFzcnd0V3ZRd1MyWU1RSFltTlZHWTY3Z0w0c1AvcHFqY3dUbHM1dFNkU3ZaUUpnWGQ1ZVhMN2NvT3JtZFJ5djFkQ3BDeTBHL2k0UzVSZ0R4K0E3Q1FYNVNrSWhRPT0iLCJpdiI6IlFMOHJNbHovMWRWRVVKQmlhVjZDRFE9PSIsInYiOjF9"
+          "largeIconUri": "https://s3.amazonaws.com/alexa-space-quiz-public-files/large-icon.png"
         }
       },
       "isAvailableWorldwide": true,
