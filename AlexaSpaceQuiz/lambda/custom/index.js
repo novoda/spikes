@@ -13,6 +13,9 @@
 'use strict';
 
 const Alexa = require('alexa-sdk');
+const makePlainText = Alexa.utils.TextUtils.makePlainText;
+const makeRichText = Alexa.utils.TextUtils.makeRichText;
+const makeImage = Alexa.utils.ImageUtils.makeImage;
 const questions = require('./question');
 
 const ANSWER_COUNT = 4; // The number of possible answers per trivia question.
@@ -57,6 +60,22 @@ const languageString = {
     }
 };
 
+const backgroundImages = [
+    "https://pixabay.com/get/e837b5092dfd013ed1584d05fb0938c9bd22ffd41cb015499df6c07ea6/stars-1246590_1280.jpg",
+    "https://pixabay.com/get/eb33b50c28fc083ed1534705fb0938c9bd22ffd41cb015499df5c47faf/galaxy-2643089_1920.jpg",
+    "https://pixabay.com/get/e832b4092af3053ed1534705fb0938c9bd22ffd41cb015499df5c470a3/sunrise-1756274_1920.jpg",
+    "https://pixabay.com/get/eb33b20729f6073ed1584d05fb0938c9bd22ffd41cb015499df5c77da5/space-2638126_1280.jpg",
+    "https://pixabay.com/get/e835b20e29f7093ed1584d05fb0938c9bd22ffd41cb015499df5c770a6/milky-way-1031138_1280.jpg",
+    "https://pixabay.com/get/eb33b60a2bf6033ed1584d05fb0938c9bd22ffd41cb015499df5c67ca6/milky-way-2675322_1280.jpg",
+    "https://pixabay.com/get/e830b70929f1083ed1584d05fb0938c9bd22ffd41cb015499df5c87ba0/universe-1566159_1280.jpg",
+    "https://pixabay.com/get/eb30b00e20f0043ed1584d05fb0938c9bd22ffd41cb015499df5c97fa0/space-2511845_1280.jpg",
+    "https://pixabay.com/get/e83db7082ef5073ed1584d05fb0938c9bd22ffd41cb015499df5c97ca5/astronomy-1867616_1280.jpg",
+    "https://pixabay.com/get/eb3cb80e2bfd093ed1584d05fb0938c9bd22ffd41cb015499df6c378a1/milky-way-2991398_1280.jpg",
+    "https://pixabay.com/get/ea35b30c29f7023ed1584d05fb0938c9bd22ffd41cb015499df6c37faf/astronomy-3023133_1280.jpg",
+    "https://pixabay.com/get/ea35b5072af3083ed1584d05fb0938c9bd22ffd41cb015499df6c37da2/moon-3048279_1280.jpg",
+    "https://pixabay.com/get/eb34b60628fc023ed1584d05fb0938c9bd22ffd41cb015499df6c37aa2/abstract-2179083_1280.jpg"
+];
+
 const newSessionHandlers = {
     'LaunchRequest': function () {
         this.handler.state = GAME_STATES.START;
@@ -76,7 +95,7 @@ const newSessionHandlers = {
     },
     'Unhandled': function () {
         const speechOutput = this.t('START_UNHANDLED');
-        this.emit(':askWithCard', speechOutput, speechOutput, this.t('GAME_NAME'), speechOutput);
+        askWithCardBackground(this, speechOutput, speechOutput, speechOutput);
     },
 };
 
@@ -157,6 +176,40 @@ function getFollowUpSentence(question) {
     } 
 }
 
+function getRandomBackgroundUrl() {
+    const rand = Math.floor(Math.random() * backgroundImages.length);
+    return backgroundImages[rand];
+}
+
+function askWithCardBackground(context, speechOutput, repromptText, cardText) {
+    context.response.speak(speechOutput)
+            .listen(repromptText);
+    if (context.event.context.System.device.supportedInterfaces.Display) {
+        const builder = new Alexa.templateBuilders.BodyTemplate1Builder();
+        const template = builder.setTitle(context.t('GAME_NAME'))
+                                .setBackgroundImage(makeImage(getRandomBackgroundUrl()))
+                                .setTextContent(makeRichText(cardText))
+                                .build();
+
+        context.response.renderTemplate(template);
+    }
+    context.emit(':responseReady');
+}
+
+function tellWithCardBackground(context, speechOutput, cardText) {
+    context.response.speak(speechOutput);
+    if (context.event.context.System.device.supportedInterfaces.Display) {
+        const builder = new Alexa.templateBuilders.BodyTemplate1Builder();
+        const template = builder.setTitle(context.t('GAME_NAME'))
+                                .setBackgroundImage(makeImage(getRandomBackgroundUrl()))
+                                .setTextContent(makeRichText(cardText))
+                                .build();
+
+        context.response.renderTemplate(template);
+    }
+    context.emit(':responseReady');
+}
+
 function handleUserGuess(userGaveUp) {
     const answerSlotValid = isAnswerSlotValid(this.event.request.intent);
     let speechOutput = '';
@@ -184,9 +237,11 @@ function handleUserGuess(userGaveUp) {
     // Check if we can exit the game session after GAME_LENGTH questions (zero-indexed)
     if (this.attributes['currentQuestionIndex'] === GAME_LENGTH - 1) {
         speechOutput = userGaveUp ? '' : this.t('ANSWER_IS_MESSAGE');
+        let cardText = speechOutput;
         speechOutput += speechOutputAnalysis + this.t('GAME_OVER_MESSAGE', currentScore.toString(), GAME_LENGTH.toString());
+        cardText += speechOutputAnalysis + "<br /><br />" + this.t('GAME_OVER_MESSAGE', currentScore.toString(), GAME_LENGTH.toString());
 
-        this.emit(':tellWithCard', speechOutput, this.t('GAME_NAME'), speechOutput);
+        tellWithCardBackground(this, speechOutput, cardText);
     } else {
         currentQuestionIndex += 1;
         correctAnswerIndex = Math.floor(Math.random() * (ANSWER_COUNT));
@@ -194,9 +249,12 @@ function handleUserGuess(userGaveUp) {
         const roundAnswers = populateRoundAnswers.call(this, gameQuestions, currentQuestionIndex, correctAnswerIndex, translatedQuestions);
         const questionIndexForSpeech = currentQuestionIndex + 1;
         let repromptText = this.t('TELL_QUESTION_MESSAGE', questionIndexForSpeech.toString(), spokenQuestion);
+        let cardText = this.t('TELL_QUESTION_MESSAGE', questionIndexForSpeech.toString(), spokenQuestion);
+        cardText += "<br />"
 
         for (let i = 0; i < ANSWER_COUNT; i++) {
             repromptText += `${i + 1}. ${roundAnswers[i]}. `;
+            cardText += `<br />${i + 1}. ${roundAnswers[i]}. `;
         }
 
         speechOutput += userGaveUp ? '' : this.t('ANSWER_IS_MESSAGE');
@@ -207,6 +265,7 @@ function handleUserGuess(userGaveUp) {
         Object.assign(this.attributes, {
             'speechOutput': repromptText,
             'repromptText': repromptText,
+            'cardText': cardText,
             'currentQuestionIndex': currentQuestionIndex,
             'correctAnswerIndex': correctAnswerIndex + 1,
             'questions': gameQuestions,
@@ -215,7 +274,7 @@ function handleUserGuess(userGaveUp) {
             'follow-up': followUp
         });
 
-        this.emit(':askWithCard', speechOutput, repromptText, this.t('GAME_NAME'), repromptText);
+        askWithCardBackground(this, speechOutput, repromptText, cardText);
     }
 }
 
@@ -232,9 +291,11 @@ const startStateHandlers = Alexa.CreateStateHandler(GAME_STATES.START, {
         const currentQuestionIndex = 0;
         const spokenQuestion = Object.keys(translatedQuestions[gameQuestions[currentQuestionIndex]])[0];
         let repromptText = this.t('TELL_QUESTION_MESSAGE', '1', spokenQuestion);
-
+        let cardText = this.t('TELL_QUESTION_MESSAGE', '1', spokenQuestion);
+        cardText += "<br />"
         for (let i = 0; i < ANSWER_COUNT; i++) {
             repromptText += `${i + 1}. ${roundAnswers[i]}. `;
+            cardText += `<br />${i + 1}. ${roundAnswers[i]}. `;
         }
 
         speechOutput += repromptText;
@@ -244,6 +305,7 @@ const startStateHandlers = Alexa.CreateStateHandler(GAME_STATES.START, {
         Object.assign(this.attributes, {
             'speechOutput': repromptText,
             'repromptText': repromptText,
+            'cardText': cardText,
             'currentQuestionIndex': currentQuestionIndex,
             'correctAnswerIndex': correctAnswerIndex + 1,
             'questions': gameQuestions,
@@ -254,7 +316,8 @@ const startStateHandlers = Alexa.CreateStateHandler(GAME_STATES.START, {
 
         // Set the current state to trivia mode. The skill will now use handlers defined in triviaStateHandlers
         this.handler.state = GAME_STATES.TRIVIA;
-        this.emit(':askWithCard', speechOutput, repromptText, this.t('GAME_NAME'), repromptText);
+
+        askWithCardBackground(this, speechOutput, repromptText, cardText);
     },
 });
 
@@ -270,7 +333,7 @@ const triviaStateHandlers = Alexa.CreateStateHandler(GAME_STATES.TRIVIA, {
         this.emitWithState('StartGame', false);
     },
     'AMAZON.RepeatIntent': function () {
-        this.emit(':askWithCard', this.attributes['speechOutput'], this.attributes['repromptText'], this.t('GAME_NAME'), this.attributes['repromptText']);
+        askWithCardBackground(this, this.attributes['speechOutput'], this.attributes['repromptText'], this.attributes['cardText']);
     },
     'AMAZON.HelpIntent': function () {
         this.handler.state = GAME_STATES.HELP;
@@ -279,14 +342,14 @@ const triviaStateHandlers = Alexa.CreateStateHandler(GAME_STATES.TRIVIA, {
     'AMAZON.StopIntent': function () {
         this.handler.state = GAME_STATES.HELP;
         const speechOutput = this.t('STOP_MESSAGE');
-        this.emit(':askWithCard', speechOutput, speechOutput, this.t('GAME_NAME'), speechOutput);
+        askWithCardBackground(this, speechOutput, speechOutput, speechOutput);
     },
     'AMAZON.CancelIntent': function () {
-        this.emit(':tellWithCard', this.t('CANCEL_MESSAGE'), this.t('GAME_NAME'), this.t('CANCEL_MESSAGE'));
+        tellWithCardBackground(this, this.t('CANCEL_MESSAGE'), this.t('CANCEL_MESSAGE'));
     },
     'Unhandled': function () {
         const speechOutput = this.t('TRIVIA_UNHANDLED', ANSWER_COUNT.toString());
-        this.emit(':askWithCard', speechOutput, speechOutput, this.t('GAME_NAME'), speechOutput);
+        askWithCardBackground(this, speechOutput, speechOutput, speechOutput);
     },
     'SessionEndedRequest': function () {
         console.log(`Session ended in trivia state: ${this.event.request.reason}`);
@@ -298,7 +361,7 @@ const helpStateHandlers = Alexa.CreateStateHandler(GAME_STATES.HELP, {
         const askMessage = newGame ? this.t('ASK_MESSAGE_START') : this.t('REPEAT_QUESTION_MESSAGE') + this.t('STOP_MESSAGE');
         const speechOutput = this.t('HELP_MESSAGE', GAME_LENGTH) + askMessage;
         const repromptText = this.t('HELP_REPROMPT') + askMessage;
-        this.emit(':askWithCard', speechOutput, repromptText, this.t('GAME_NAME'), repromptText);
+        askWithCardBackground(this, speechOutput, repromptText, repromptText);
     },
     'AMAZON.StartOverIntent': function () {
         this.handler.state = GAME_STATES.START;
@@ -323,18 +386,18 @@ const helpStateHandlers = Alexa.CreateStateHandler(GAME_STATES.HELP, {
     },
     'AMAZON.NoIntent': function () {
         const speechOutput = this.t('NO_MESSAGE');
-        this.emit(':tellWithCard', speechOutput, this.t('GAME_NAME'), speechOutput);
+        tellWithCardBackground(this, speechOutput, speechOutput);
     },
     'AMAZON.StopIntent': function () {
         const speechOutput = this.t('STOP_MESSAGE');
-        this.emit(':askWithCard', speechOutput, speechOutput, this.t('GAME_NAME'), speechOutput);
+        askWithCardBackground(this, speechOutput, speechOutput, speechOutput);
     },
     'AMAZON.CancelIntent': function () {
-        this.emit(':tellWithCard', this.t('CANCEL_MESSAGE'), this.t('GAME_NAME'), this.t('CANCEL_MESSAGE'));
+        tellWithCardBackground(this, this.t('CANCEL_MESSAGE'), this.t('CANCEL_MESSAGE'));
     },
     'Unhandled': function () {
         const speechOutput = this.t('HELP_UNHANDLED');
-        this.emit(':askWithCard', speechOutput, speechOutput, this.t('GAME_NAME'), speechOutput);
+        askWithCardBackground(this, speechOutput, speechOutput, speechOutput);
     },
     'SessionEndedRequest': function () {
         console.log(`Session ended in help state: ${this.event.request.reason}`);

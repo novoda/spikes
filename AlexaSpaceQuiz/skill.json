@@ -25,7 +25,12 @@
         "endpoint": {
           "sslCertificateType": "Trusted",
           "sourceDir": "lambda/custom"
-        }
+        },
+        "interfaces": [
+          {
+            "type": "RENDER_TEMPLATE"
+          }
+        ]
       }
     },
     "manifestVersion": "1.0",
