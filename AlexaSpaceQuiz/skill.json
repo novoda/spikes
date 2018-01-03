@@ -3,20 +3,20 @@
     "publishingInformation": {
       "locales": {
         "en-US": {
-          "summary": "A simple quiz",
+          "summary": "A quiz to test your knowledge about astronomy, space exploration and our Solar System",
           "examplePhrases": [
-            "Alexa, Talk to Test quiz",
-            "I'm sure my answer is right",
-            "It's the last answer?"
+            "Alexa, play Space Quiz",
+            "It's the answer number two",
+            "Repeat the question"
           ],
           "name": "Space quiz",
           "smallIconUri": "https://s3.amazonaws.com/alexa-space-quiz-public-files/small-icon.png",
-          "description": "A simple quiz with some multiple-choice answers",
+          "description": "Test your knowledge about Space with this fun quiz!\n\nYou will receive several questions about astronomy, space exploration and our Solar System. Answer with the number of the right answer and try to get as many right answers as possible.",
           "largeIconUri": "https://s3.amazonaws.com/alexa-space-quiz-public-files/large-icon.png"
         }
       },
       "isAvailableWorldwide": true,
-      "testingInstructions": "Test this quiz answering the questions",
+      "testingInstructions": "Start the skill with the invocation\nAlexa, start Space Quiz.\n\nThen after each question, tell the number of the answer you think it's right, among the proposed ones.\n\nThe user can ask the skill to repeat the last question.",
       "category": "CHILDRENS_GAMES",
       "distributionCountries": []
     },
