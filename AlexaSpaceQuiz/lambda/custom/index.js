@@ -24,6 +24,7 @@ const GAME_STATES = {
     TRIVIA: '_TRIVIAMODE', // Asking trivia questions.
     START: '_STARTMODE', // Entry point, start the game.
     HELP: '_HELPMODE', // The user is asking for help.
+    STOP: '_STOPMODE', // The user is about to quit the game.
 };
 
 /**
@@ -41,10 +42,12 @@ const languageString = {
             'ASK_MESSAGE_START': 'Would you like to start playing?',
             'HELP_REPROMPT': 'To give an answer to a question, respond with the number of the answer. ',
             'STOP_MESSAGE': 'Would you like to start another game?',
+            'CONTINUE_MESSAGE': 'Would you like to continue playing?',
             'CANCEL_MESSAGE': 'Ok, let\'s play again soon.',
             'NO_MESSAGE': 'Ok, we\'ll play another time. Goodbye!',
             'TRIVIA_UNHANDLED': 'Try saying a number between 1 and %s',
             'HELP_UNHANDLED': 'Say yes to continue, or no to end the game.',
+            'STOP_UNHANDLED': 'Say yes to start another game, or no to exit the quiz.',
             'START_UNHANDLED': 'Say start to start a new game.',
             'NEW_GAME_MESSAGE': 'Welcome to %s. ',
             'WELCOME_MESSAGE': 'I will ask you %s questions, try to get as many right as you can. ' +
@@ -340,9 +343,8 @@ const triviaStateHandlers = Alexa.CreateStateHandler(GAME_STATES.TRIVIA, {
         this.emitWithState('helpTheUser', false);
     },
     'AMAZON.StopIntent': function () {
-        this.handler.state = GAME_STATES.HELP;
-        const speechOutput = this.t('STOP_MESSAGE');
-        askWithCardBackground(this, speechOutput, speechOutput, speechOutput);
+        this.handler.state = GAME_STATES.STOP;
+        this.emitWithState('StopGame');
     },
     'AMAZON.CancelIntent': function () {
         tellWithCardBackground(this, this.t('CANCEL_MESSAGE'), this.t('CANCEL_MESSAGE'));
@@ -358,7 +360,7 @@ const triviaStateHandlers = Alexa.CreateStateHandler(GAME_STATES.TRIVIA, {
 
 const helpStateHandlers = Alexa.CreateStateHandler(GAME_STATES.HELP, {
     'helpTheUser': function (newGame) {
-        const askMessage = newGame ? this.t('ASK_MESSAGE_START') : this.t('REPEAT_QUESTION_MESSAGE') + this.t('STOP_MESSAGE');
+        const askMessage = newGame ? this.t('ASK_MESSAGE_START') : this.t('REPEAT_QUESTION_MESSAGE') + this.t('CONTINUE_MESSAGE');
         const speechOutput = this.t('HELP_MESSAGE', GAME_LENGTH) + askMessage;
         const repromptText = this.t('HELP_REPROMPT') + askMessage;
         askWithCardBackground(this, speechOutput, repromptText, repromptText);
@@ -389,8 +391,8 @@ const helpStateHandlers = Alexa.CreateStateHandler(GAME_STATES.HELP, {
         tellWithCardBackground(this, speechOutput, speechOutput);
     },
     'AMAZON.StopIntent': function () {
-        const speechOutput = this.t('STOP_MESSAGE');
-        askWithCardBackground(this, speechOutput, speechOutput, speechOutput);
+        this.handler.state = GAME_STATES.STOP;
+        this.emitWithState('StopGame');
     },
     'AMAZON.CancelIntent': function () {
         tellWithCardBackground(this, this.t('CANCEL_MESSAGE'), this.t('CANCEL_MESSAGE'));
@@ -404,10 +406,41 @@ const helpStateHandlers = Alexa.CreateStateHandler(GAME_STATES.HELP, {
     },
 });
 
+const stopStateHandlers = Alexa.CreateStateHandler(GAME_STATES.STOP, {
+    'StopGame': function() {
+        const speechOutput = this.t('STOP_MESSAGE');
+        askWithCardBackground(this, speechOutput, speechOutput, speechOutput);
+    },
+    'AMAZON.StartOverIntent': function () {
+        this.emitWithState('AMAZON.YesIntent');
+    },
+    'AMAZON.RepeatIntent': function () {
+        askWithCardBackground(this, this.attributes['speechOutput'], this.attributes['repromptText'], this.attributes['cardText']);
+    },
+    'AMAZON.StopIntent': function () {
+        this.emitWithState('AMAZON.NoIntent');
+    },
+    'AMAZON.YesIntent': function () {
+        this.handler.state = GAME_STATES.START;
+        this.emitWithState('StartGame', false);
+    },
+    'AMAZON.NoIntent': function () {
+        const speechOutput = this.t('NO_MESSAGE');
+        tellWithCardBackground(this, speechOutput, speechOutput);
+    },
+    'Unhandled': function () {
+        const speechOutput = this.t('STOP_UNHANDLED');
+        askWithCardBackground(this, speechOutput, speechOutput, speechOutput);
+    },
+    'SessionEndedRequest': function () {
+        console.log(`Session ended in trivia state: ${this.event.request.reason}`);
+    },
+});
+
 exports.handler = function (event, context) {
     const alexa = Alexa.handler(event, context);
     // To enable string internationalization (i18n) features, set a resources object.
     alexa.resources = languageString;
-    alexa.registerHandlers(newSessionHandlers, startStateHandlers, triviaStateHandlers, helpStateHandlers);
+    alexa.registerHandlers(newSessionHandlers, startStateHandlers, triviaStateHandlers, helpStateHandlers, stopStateHandlers);
     alexa.execute();
 };
