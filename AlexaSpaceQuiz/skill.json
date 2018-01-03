@@ -9,6 +9,17 @@
             "It's the answer number two",
             "Repeat the question"
           ],
+          "keywords": [
+            "space",
+            "quiz",
+            "game",
+            "kids",
+            "astronomy",
+            "knowledge",
+            "exploration",
+            "challenge",
+            "fun"
+          ],
           "name": "Space quiz",
           "smallIconUri": "https://s3.amazonaws.com/alexa-space-quiz-public-files/small-icon.png",
           "description": "Test your knowledge about Space with this fun quiz!\n\nYou will receive several questions about astronomy, space exploration and our Solar System. Answer with the number of the right answer and try to get as many right answers as possible.",
