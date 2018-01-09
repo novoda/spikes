@@ -9,4 +9,5 @@ java terminal application
 
 # game of life js
 react web client
+run via npm run serve
 
