@@ -1,4 +1,4 @@
-# Game of Life Multiplatform
+# Game of Life - Kotlin Multiplatform
 ---------------------------------
 
 # common
