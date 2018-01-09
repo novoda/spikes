@@ -28,3 +28,4 @@ local.properties
 .gradle/
 # Mac OS
 .DS_Store
+node_modules
