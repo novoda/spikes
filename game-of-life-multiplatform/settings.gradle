@@ -1,0 +1,3 @@
+rootProject.name = 'game-of-life'
+
+include 'game-of-life-jvm', 'game-of-life-js', 'common'
