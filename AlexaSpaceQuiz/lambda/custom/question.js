@@ -196,7 +196,7 @@ module.exports = {
              "As long as a cruise ship",
              "As long as a train"
           ],
-          "follow-up":"The International space station is the largest spacecraft ever built, with a length of 360 feet"
+          "follow-up":"The International space station is the largest spacecraft ever built, with a length of 360 feet."
        },
        {  
           "When did the first manned mission land on the Moon?":[  
@@ -205,7 +205,7 @@ module.exports = {
              "1989",
              "2001"
           ],
-          "follow-up":"The first mission to land on the Moon was the United States' Apollo 11"
+          "follow-up":"The first mission to land on the Moon was the United States' Apollo 11."
        },
        {  
           "How long does it take for light to travel from the Sun to the Earth?":[  
@@ -223,7 +223,7 @@ module.exports = {
              "30",
              "231"
           ],
-          "follow-up":"All 12 where US astronauts from the Apollo Program missions "
+          "follow-up":"All 12 where US astronauts from the Apollo Program missions."
        },
        {  
           "Which was the first reusable spacecraft?":[  
@@ -243,7 +243,7 @@ module.exports = {
              "A ball of cheese",
              "The North Star"
           ],
-          "follow-up":"It is a supermassive black hole called Sagittarius A"
+          "follow-up":"It is a supermassive black hole called Sagittarius A."
        }
     ]
 };
