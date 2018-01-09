@@ -1,0 +1,1 @@
+require("game-of-life-js.js");
