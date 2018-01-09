@@ -1,16 +1,10 @@
 package com.novoda.gol.terminal
 
-import com.novoda.gol.PositionEntity
-import com.novoda.gol.ListBasedMatrix
-import com.novoda.gol.Presenter
-import com.novoda.gol.View
+import com.novoda.gol.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 const val EXIT = "exit"
-
-private val view = View()
-private val presenter = Presenter(view)
 
 fun main(args: Array<String>) {
 
@@ -25,17 +19,37 @@ fun main(args: Array<String>) {
 
     val cellMatrix = ListBasedMatrix(width = width, height = height, seeds = listOf(PositionEntity(2, 1), PositionEntity(2, 2), PositionEntity(2, 3)))
 
-    presenter.startSimulationWith(cellMatrix)
+    var boardEntity: BoardEntity = SimulationBoardEntity(cellMatrix)
+
 
     while (keepLooping) {
         val input = br.readLine()
         keepLooping = input != EXIT
 
+        render(boardEntity)
+
         if (keepLooping) {
-            presenter.nextIteration()
+            boardEntity = boardEntity.nextIteration()
         }
     }
+}
 
+fun render(boardEntity: BoardEntity) {
+    for (y in 0 until boardEntity.getHeight()) {
+        for (x in 0 until boardEntity.getWidth()) {
+            val cellAtPosition = boardEntity.cellAtPosition(x, y)
+            if (cellAtPosition.isAlive) {
+                print("X")
+            } else {
+                print(" ")
+            }
+
+        }
+        print("\n")
+    }
+
+    print("exit: Stop Simulation\n")
+    print("next: Next Iteration\n")
 }
 
 
