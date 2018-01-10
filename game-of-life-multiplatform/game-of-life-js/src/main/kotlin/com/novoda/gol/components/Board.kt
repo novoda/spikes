@@ -7,6 +7,7 @@ import com.novoda.gol.data.PositionEntity
 import com.novoda.gol.patterns.PatternEntity
 import com.novoda.gol.presentation.BoardPresenter
 import com.novoda.gol.presentation.BoardView
+import com.novoda.gol.presentation.BoardViewState
 import kotlinext.js.js
 import kotlinx.html.style
 import react.*
@@ -81,6 +82,8 @@ data class BoardProps(var isIdle: Boolean, var selectedPattern: PatternEntity? =
 interface BoardState : RState {
     var boardEntity: BoardEntity
 }
+
+fun RBuilder.board(board: BoardViewState) = board(board.isIdle, board.selectedPattern)
 
 fun RBuilder.board(isIdle: Boolean, selectedPattern: PatternEntity? = null) = child(
         Board::class) {

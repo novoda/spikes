@@ -6,6 +6,7 @@ import com.novoda.gol.patterns.PatternEntity
 import com.novoda.gol.patterns.PatternRepository
 import com.novoda.gol.presentation.AppPresenter
 import com.novoda.gol.presentation.AppView
+import com.novoda.gol.presentation.BoardViewState
 import com.novoda.gol.presentation.PatternViewState
 import kotlinx.html.style
 import react.*
@@ -16,6 +17,7 @@ import kotlin.properties.Delegates.observable
 class App : RComponent<RProps, State>(), AppView {
 
     override var onControlButtonClicked: () -> Unit = {}
+    override var onPatternSelected: (pattern: PatternEntity) -> Unit = {}
 
     override var controlButtonLabel by observable("") { _, _, newValue ->
         setState {
@@ -26,6 +28,12 @@ class App : RComponent<RProps, State>(), AppView {
     override var patternSelectionVisibility by observable(true) { _, _, newValue ->
         setState {
             patternViewState.shouldDisplay = newValue
+        }
+    }
+
+    override var board by observable(BoardViewState(true, null)) { _, _, newValue ->
+        setState {
+            boardViewState = newValue
         }
     }
 
@@ -41,7 +49,6 @@ class App : RComponent<RProps, State>(), AppView {
 
     override fun State.init() {
         patternViewState = PatternViewState(true, PatternRepository.patterns())
-        isIdle = true
     }
 
     override fun RBuilder.render(): ReactElement? =
@@ -53,9 +60,6 @@ class App : RComponent<RProps, State>(), AppView {
 
                 controlButton(state.controlButtonLabel, {
                     onControlButtonClicked()
-                    setState {
-                        isIdle = isIdle.not()
-                    }
                 })
 
                 div {
@@ -63,7 +67,7 @@ class App : RComponent<RProps, State>(), AppView {
                         display = "flex"
                     }
 
-                    board(state.isIdle, state.selectedPattern)
+                    board(state.boardViewState)
 
                     if (state.patternViewState.shouldDisplay) {
 
@@ -75,11 +79,9 @@ class App : RComponent<RProps, State>(), AppView {
 
                             h2 { +"Choose a pattern" }
 
-                            for (patternEntity in state.patternViewState.patternEntities) {
-                                pattern(patternEntity, {
-                                    setState {
-                                        selectedPattern = patternEntity
-                                    }
+                            state.patternViewState.patternEntities.forEach { pattern ->
+                                pattern(pattern, {
+                                    onPatternSelected(pattern)
                                 })
                             }
                         }
@@ -90,8 +92,7 @@ class App : RComponent<RProps, State>(), AppView {
 
 interface State : RState {
     var patternViewState: PatternViewState
-    var isIdle: Boolean
-    var selectedPattern: PatternEntity?
+    var boardViewState: BoardViewState
     var controlButtonLabel: String
 }
 
