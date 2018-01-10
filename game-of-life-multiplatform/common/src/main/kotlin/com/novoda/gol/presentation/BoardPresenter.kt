@@ -32,6 +32,7 @@ class BoardPresenter(width: Int, height: Int) {
         boardModel.onBoardChanged = { }
         boardView.onCellClicked = { }
         boardView.onPatternSelected = {}
+        boardView.onStartSimulationClicked = {}
+        boardView.onStopSimulationClicked = {}
     }
-
 }
