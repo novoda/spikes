@@ -3,9 +3,8 @@
 package com.novoda.gol.components
 
 import com.novoda.gol.ListBasedMatrix
-import com.novoda.gol.patterns.Blinker
-import com.novoda.gol.patterns.Glider
 import com.novoda.gol.patterns.PatternEntity
+import com.novoda.gol.patterns.PatternRepository
 import kotlinx.html.style
 import react.*
 import react.dom.div
@@ -15,7 +14,7 @@ import kotlin.browser.window
 class App : RComponent<RProps, State>() {
 
     override fun State.init() {
-        patternEntities = listOf(Glider.create(), Blinker.create())
+        patternEntities = PatternRepository.patterns()
     }
 
     override fun RBuilder.render(): ReactElement? =

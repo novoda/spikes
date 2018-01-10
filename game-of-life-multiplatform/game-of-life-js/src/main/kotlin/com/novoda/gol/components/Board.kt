@@ -3,8 +3,9 @@
 package com.novoda.gol.components
 
 import com.novoda.gol.BoardEntity
-import com.novoda.gol.ListBasedMatrix
-import com.novoda.gol.SimulationBoardEntity
+import com.novoda.gol.BoardPresenter
+import com.novoda.gol.BoardView
+import com.novoda.gol.PositionEntity
 import com.novoda.gol.patterns.PatternEntity
 import kotlinext.js.js
 import kotlinx.html.style
@@ -12,40 +13,47 @@ import react.*
 import react.dom.div
 
 
-class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardProps) {
+class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardProps), BoardView {
+
+    override var onCellClicked: (position: PositionEntity) -> Unit = {}
+    override var onPatternSelected: (pattern: PatternEntity) -> Unit = {}
+    override var onTick: () -> Unit = {}
+
+    override fun renderBoard(boardEntity: BoardEntity) {
+        setState {
+            this.boardEntity = boardEntity
+        }
+    }
+
+    private lateinit var presenter : BoardPresenter
+
+    override fun componentWillMount() {
+        presenter.bind(this)
+    }
+
+    override fun componentWillUnmount() {
+        presenter.unbind(this)
+    }
 
     override fun BoardState.init(props: BoardProps) {
-        val cellMatrix = ListBasedMatrix(width = 50, height = 50)
-        boardEntity = SimulationBoardEntity(cellMatrix)
+        presenter = BoardPresenter(50,50)
 
         if (props.selectedPattern != null) {
-            boardEntity = boardEntity.applyPattern(selectedPattern!!)
-            state.selectedPattern = props.selectedPattern
+            onPatternSelected.invoke(props.selectedPattern!!)
         }
     }
 
     override fun componentWillReceiveProps(nextProps: BoardProps) {
         if (nextProps.isIdle.not()) {
-            setState {
-                boardEntity = boardEntity.nextIteration()
-            }
+            onTick.invoke()
         } else {
-
-            if (hasSelectedNewPattern(nextProps)) {
-                setState {
-                    selectedPattern = nextProps.selectedPattern
-                    boardEntity = boardEntity.applyPattern(nextProps.selectedPattern!!)
-                }
-            }
+            onPatternSelected.invoke(nextProps.selectedPattern!!)
         }
     }
 
-    private fun hasSelectedNewPattern(nextProps: BoardProps) =
-            nextProps.selectedPattern != null && nextProps.selectedPattern != state.selectedPattern
+    override fun RBuilder.render() = renderBoard(state)
 
-    override fun RBuilder.render() = renderBoard()
-
-    private fun RBuilder.renderBoard(): ReactElement {
+    private fun RBuilder.renderBoard(state: BoardState): ReactElement {
         return div {
             for (y in 0 until state.boardEntity.getHeight()) {
                 div {
@@ -57,9 +65,7 @@ class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardPr
                         cell(state.boardEntity.cellAtPosition(x, y), {
 
                             if (props.isIdle) {
-                                setState {
-                                    boardEntity = boardEntity.toggleCell(x, y)
-                                }
+                                onCellClicked.invoke(PositionEntity(x, y))
                             }
                         })
                     }
@@ -73,7 +79,6 @@ data class BoardProps(var isIdle: Boolean, var selectedPattern: PatternEntity? =
 
 interface BoardState : RState {
     var boardEntity: BoardEntity
-    var selectedPattern: PatternEntity?
 }
 
 fun RBuilder.board(isIdle: Boolean, selectedPattern: PatternEntity? = null) = child(
