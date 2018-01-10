@@ -1,4 +1,4 @@
-package com.novoda.gol
+package com.novoda.gol.data
 
 import com.novoda.gol.patterns.PatternEntity
 

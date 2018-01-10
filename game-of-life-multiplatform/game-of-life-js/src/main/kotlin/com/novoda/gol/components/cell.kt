@@ -1,6 +1,6 @@
 package com.novoda.gol.components
 
-import com.novoda.gol.CellEntity
+import com.novoda.gol.data.CellEntity
 import kotlinext.js.js
 import kotlinx.html.js.onClickFunction
 import kotlinx.html.style

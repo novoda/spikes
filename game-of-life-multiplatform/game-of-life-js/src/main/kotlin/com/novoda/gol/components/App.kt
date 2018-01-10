@@ -2,7 +2,7 @@
 
 package com.novoda.gol.components
 
-import com.novoda.gol.ListBasedMatrix
+import com.novoda.gol.data.ListBasedMatrix
 import com.novoda.gol.patterns.PatternEntity
 import com.novoda.gol.patterns.PatternRepository
 import kotlinx.html.style

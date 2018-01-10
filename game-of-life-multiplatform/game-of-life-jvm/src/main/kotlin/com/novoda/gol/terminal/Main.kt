@@ -1,6 +1,9 @@
 package com.novoda.gol.terminal
 
-import com.novoda.gol.*
+import com.novoda.gol.data.BoardEntity
+import com.novoda.gol.data.ListBasedMatrix
+import com.novoda.gol.data.PositionEntity
+import com.novoda.gol.data.SimulationBoardEntity
 import java.io.BufferedReader
 import java.io.InputStreamReader
 

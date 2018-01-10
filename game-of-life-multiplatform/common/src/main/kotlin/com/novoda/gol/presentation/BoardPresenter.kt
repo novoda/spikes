@@ -1,4 +1,4 @@
-package com.novoda.gol
+package com.novoda.gol.presentation
 
 
 class BoardPresenter(width: Int, height: Int) {

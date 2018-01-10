@@ -1,5 +1,9 @@
-package com.novoda.gol
+package com.novoda.gol.presentation
 
+import com.novoda.gol.data.BoardEntity
+import com.novoda.gol.data.ListBasedMatrix
+import com.novoda.gol.data.PositionEntity
+import com.novoda.gol.data.SimulationBoardEntity
 import com.novoda.gol.patterns.PatternEntity
 import kotlin.properties.Delegates.observable
 

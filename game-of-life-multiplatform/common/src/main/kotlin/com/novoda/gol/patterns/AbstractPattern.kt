@@ -1,6 +1,6 @@
 package com.novoda.gol.patterns
 
-import com.novoda.gol.CellMatrix
+import com.novoda.gol.data.CellMatrix
 
 abstract class AbstractPattern(private val cellMatrix: CellMatrix) : PatternEntity {
 
