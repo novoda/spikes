@@ -7,18 +7,15 @@ class AppPresenter {
     fun bind(view: AppView) {
 
         model.onSimulationStateChanged = { isIdle ->
-            view.controlButtonLabel = if (isIdle) "Start simulation" else "Stop Simulation"
-            view.patternSelectionVisibility = isIdle
-            view.board = view.board.copy(isIdle = isIdle)
+            view.renderControlButtonLabel(if (isIdle) "Start simulation" else "Stop Simulation")
+            view.renderPatternSelectionVisibility(visibility = isIdle)
         }
 
-        view.onControlButtonClicked = {
-            model.toggleSimulation()
-        }
+        model.onBoardStateChanged = view::renderBoard
 
-        view.onPatternSelected = { pattern ->
-            view.board = view.board.copy(selectedPattern = pattern)
-        }
+        view.onControlButtonClicked = model::toggleSimulation
+
+        view.onPatternSelected = model::selectPattern
     }
 
     fun unbind(view: AppView) {

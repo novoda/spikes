@@ -12,30 +12,11 @@ import kotlinx.html.style
 import react.*
 import react.dom.div
 import react.dom.h2
-import kotlin.properties.Delegates.observable
 
 class App : RComponent<RProps, State>(), AppView {
 
     override var onControlButtonClicked: () -> Unit = {}
     override var onPatternSelected: (pattern: PatternEntity) -> Unit = {}
-
-    override var controlButtonLabel by observable("") { _, _, newValue ->
-        setState {
-            controlButtonLabel = newValue
-        }
-    }
-
-    override var patternSelectionVisibility by observable(true) { _, _, newValue ->
-        setState {
-            patternViewState.shouldDisplay = newValue
-        }
-    }
-
-    override var board by observable(BoardViewState(true, null)) { _, _, newValue ->
-        setState {
-            boardViewState = newValue
-        }
-    }
 
     private val presenter: AppPresenter = AppPresenter()
 
@@ -49,6 +30,24 @@ class App : RComponent<RProps, State>(), AppView {
 
     override fun State.init() {
         patternViewState = PatternViewState(true, PatternRepository.patterns())
+    }
+
+    override fun renderControlButtonLabel(controlButtonLabel: String) {
+        setState {
+            this.controlButtonLabel = controlButtonLabel
+        }
+    }
+
+    override fun renderPatternSelectionVisibility(visibility: Boolean) {
+        setState {
+            patternViewState.shouldDisplay = visibility
+        }
+    }
+
+    override fun renderBoard(boardViewState: BoardViewState) {
+        setState {
+            this.boardViewState = boardViewState
+        }
     }
 
     override fun RBuilder.render(): ReactElement? =

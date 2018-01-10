@@ -34,7 +34,7 @@ class BoardModelImpl private constructor(initialBoard: BoardEntity, private val 
     }
 
     override fun selectPattern(pattern: PatternEntity) {
-        if (gameLoop.isLooping() || this.pattern == pattern) {
+        if (gameLoop.isLooping()) {
             return
         }
         this.pattern = pattern

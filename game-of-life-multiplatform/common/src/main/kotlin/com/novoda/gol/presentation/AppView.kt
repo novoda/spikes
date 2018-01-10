@@ -4,11 +4,10 @@ import com.novoda.gol.patterns.PatternEntity
 
 interface AppView {
 
-    var controlButtonLabel: String
-    var patternSelectionVisibility: Boolean
-    var board: BoardViewState
-
     var onControlButtonClicked : () -> Unit
     var onPatternSelected: (pattern : PatternEntity) -> Unit
 
+    fun renderControlButtonLabel(controlButtonLabel: String)
+    fun renderPatternSelectionVisibility(visibility: Boolean)
+    fun renderBoard(boardViewState: BoardViewState)
 }
