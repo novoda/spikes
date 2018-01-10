@@ -6,6 +6,7 @@ import com.novoda.gol.patterns.PatternEntity
 import com.novoda.gol.patterns.PatternRepository
 import com.novoda.gol.presentation.AppPresenter
 import com.novoda.gol.presentation.AppView
+import com.novoda.gol.presentation.PatternViewState
 import kotlinx.html.style
 import react.*
 import react.dom.div
@@ -22,6 +23,12 @@ class App : RComponent<RProps, State>(), AppView {
         }
     }
 
+    override var patternSelectionVisibility by observable(true) { _, _, newValue ->
+        setState {
+            patternViewState.shouldDisplay = newValue
+        }
+    }
+
     private val presenter: AppPresenter = AppPresenter()
 
     override fun componentWillMount() {
@@ -33,6 +40,7 @@ class App : RComponent<RProps, State>(), AppView {
     }
 
     override fun State.init() {
+        patternViewState = PatternViewState(true, PatternRepository.patterns())
         patternEntities = PatternRepository.patterns()
         isIdle = true
     }
@@ -58,7 +66,8 @@ class App : RComponent<RProps, State>(), AppView {
 
                     board(state.isIdle, state.selectedPattern)
 
-                    if (state.isIdle) {
+                    console.log("shouldDisplay: ${state.patternViewState.shouldDisplay}")
+                    if (state.patternViewState.shouldDisplay) {
 
                         div {
 
@@ -82,6 +91,7 @@ class App : RComponent<RProps, State>(), AppView {
 }
 
 interface State : RState {
+    var patternViewState: PatternViewState
     var patternEntities: List<PatternEntity>
     var isIdle: Boolean
     var selectedPattern: PatternEntity?

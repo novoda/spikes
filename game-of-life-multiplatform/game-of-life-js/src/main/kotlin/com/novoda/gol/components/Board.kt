@@ -50,7 +50,9 @@ class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardPr
         } else {
             onStopSimulationClicked()
         }
-        onPatternSelected.invoke(nextProps.selectedPattern!!)
+        if (props.selectedPattern != null) {
+            onPatternSelected.invoke(props.selectedPattern!!)
+        }
     }
 
     override fun RBuilder.render() = renderBoard(state)
