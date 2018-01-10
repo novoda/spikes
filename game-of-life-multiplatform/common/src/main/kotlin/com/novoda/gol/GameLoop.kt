@@ -1,7 +1,7 @@
-package com.novoda.gol.data
+package com.novoda.gol
 
 
-expect class GameLoop {
+expect class GameLoop() {
 
     var onTick: () -> Unit
 

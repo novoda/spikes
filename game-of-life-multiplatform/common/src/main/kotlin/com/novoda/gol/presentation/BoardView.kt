@@ -8,7 +8,8 @@ interface BoardView {
 
     var onPatternSelected: (pattern: PatternEntity) -> Unit
     var onCellClicked: (position: PositionEntity) -> Unit
-    var onTick: () -> Unit
+    var onStartSimulationClicked: () -> Unit
+    var onStopSimulationClicked: () -> Unit
 
     fun renderBoard(boardEntity: BoardEntity)
 

@@ -3,10 +3,10 @@
 package com.novoda.gol.components
 
 import com.novoda.gol.data.BoardEntity
-import com.novoda.gol.presentation.BoardPresenter
-import com.novoda.gol.presentation.BoardView
 import com.novoda.gol.data.PositionEntity
 import com.novoda.gol.patterns.PatternEntity
+import com.novoda.gol.presentation.BoardPresenter
+import com.novoda.gol.presentation.BoardView
 import kotlinext.js.js
 import kotlinx.html.style
 import react.*
@@ -14,10 +14,11 @@ import react.dom.div
 
 
 class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardProps), BoardView {
-
     override var onCellClicked: (position: PositionEntity) -> Unit = {}
+
     override var onPatternSelected: (pattern: PatternEntity) -> Unit = {}
-    override var onTick: () -> Unit = {}
+    override var onStartSimulationClicked: () -> Unit = {}
+    override var onStopSimulationClicked: () -> Unit = {}
 
     override fun renderBoard(boardEntity: BoardEntity) {
         setState {
@@ -25,7 +26,7 @@ class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardPr
         }
     }
 
-    private lateinit var presenter : BoardPresenter
+    private lateinit var presenter: BoardPresenter
 
     override fun componentWillMount() {
         presenter.bind(this)
@@ -45,8 +46,9 @@ class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardPr
 
     override fun componentWillReceiveProps(nextProps: BoardProps) {
         if (nextProps.isIdle.not()) {
-            onTick.invoke()
+            onStartSimulationClicked()
         } else {
+            onStopSimulationClicked()
             onPatternSelected.invoke(nextProps.selectedPattern!!)
         }
     }

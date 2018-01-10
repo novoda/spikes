@@ -1,5 +1,6 @@
 package com.novoda.gol.presentation
 
+import com.novoda.gol.GameLoop
 import com.novoda.gol.data.BoardEntity
 import com.novoda.gol.data.ListBasedMatrix
 import com.novoda.gol.data.PositionEntity
@@ -8,8 +9,9 @@ import com.novoda.gol.patterns.PatternEntity
 import kotlin.properties.Delegates.observable
 
 
-class BoardModelImpl(width: Int, height: Int) : BoardModel {
-    private var board: BoardEntity by observable(SimulationBoardEntity(ListBasedMatrix(width, height)) as BoardEntity) { _, _, newValue ->
+class BoardModelImpl private constructor(initialBoard: BoardEntity, private val gameLoop: GameLoop) : BoardModel {
+
+    private var board: BoardEntity by observable(initialBoard) { _, _, newValue ->
         onBoardChanged.invoke(newValue)
     }
     private var pattern: PatternEntity? = null
@@ -17,6 +19,12 @@ class BoardModelImpl(width: Int, height: Int) : BoardModel {
     override var onBoardChanged by observable<(BoardEntity) -> Unit>({}, { _, _, newValue ->
         newValue.invoke(board)
     })
+
+    init {
+        gameLoop.onTick = {
+            nextIteration()
+        }
+    }
 
     override fun toggleCellAt(positionEntity: PositionEntity) {
         board = board.toggleCell(positionEntity.x, positionEntity.y)
@@ -32,5 +40,25 @@ class BoardModelImpl(width: Int, height: Int) : BoardModel {
 
     override fun nextIteration() {
         board = board.nextIteration()
+    }
+
+    override fun startSimulation() {
+        if (gameLoop.isLooping()) {
+            return
+        }
+        gameLoop.startWith(300)
+    }
+
+    override fun stopSimulation() {
+        if (gameLoop.isLooping().not()) {
+            return
+        }
+        gameLoop.stop()
+    }
+
+    companion object {
+
+        fun create(width: Int, height: Int): BoardModel = BoardModelImpl(SimulationBoardEntity(ListBasedMatrix(width, height)), GameLoop())
+
     }
 }

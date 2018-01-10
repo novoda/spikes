@@ -1,4 +1,4 @@
-package com.novoda.gol.data
+package com.novoda.gol
 
 import kotlin.browser.window
 
@@ -12,12 +12,13 @@ actual class GameLoop {
     actual fun startWith(intervalMs: Int) {
         loop = window.setInterval({
             onTick.invoke()
-        })
+        }, intervalMs)
     }
 
     actual fun stop() {
         if (loop != null) {
             window.clearInterval(loop!!)
+            loop = null
         }
     }
 
