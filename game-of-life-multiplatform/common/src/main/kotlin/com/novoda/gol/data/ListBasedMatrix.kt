@@ -1,4 +1,4 @@
-package com.novoda.gol
+package com.novoda.gol.data
 
 data class ListBasedMatrix(private val width: Int, private val height: Int, private val seeds: List<PositionEntity> = listOf()) : CellMatrix {
 

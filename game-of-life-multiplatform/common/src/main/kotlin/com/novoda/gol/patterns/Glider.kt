@@ -1,8 +1,8 @@
 package com.novoda.gol.patterns
 
-import com.novoda.gol.CellMatrix
-import com.novoda.gol.ListBasedMatrix
-import com.novoda.gol.PositionEntity
+import com.novoda.gol.data.CellMatrix
+import com.novoda.gol.data.ListBasedMatrix
+import com.novoda.gol.data.PositionEntity
 
 class Glider private constructor(cellMatrix: CellMatrix) : AbstractPattern(cellMatrix) {
     override fun getName() = "Glider"

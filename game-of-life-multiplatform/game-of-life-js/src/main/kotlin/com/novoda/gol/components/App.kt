@@ -2,19 +2,18 @@
 
 package com.novoda.gol.components
 
-import com.novoda.gol.ListBasedMatrix
 import com.novoda.gol.patterns.PatternEntity
 import com.novoda.gol.patterns.PatternRepository
 import kotlinx.html.style
 import react.*
 import react.dom.div
 import react.dom.h2
-import kotlin.browser.window
 
 class App : RComponent<RProps, State>() {
 
     override fun State.init() {
         patternEntities = PatternRepository.patterns()
+        isIdle = true
     }
 
     override fun RBuilder.render(): ReactElement? =
@@ -25,10 +24,8 @@ class App : RComponent<RProps, State>() {
                 }
 
                 controlButton(controlButtonLabel(), {
-                    if (state.gameLoop != null) {
-                        stopSimulation()
-                    } else {
-                        startSimulation()
+                    setState {
+                        isIdle = isIdle.not()
                     }
                 })
 
@@ -37,9 +34,9 @@ class App : RComponent<RProps, State>() {
                         display = "flex"
                     }
 
-                    board(isIdle(), state.selectedPattern)
+                    board(state.isIdle, state.selectedPattern)
 
-                    if (isIdle()) {
+                    if (state.isIdle) {
 
                         div {
 
@@ -49,11 +46,10 @@ class App : RComponent<RProps, State>() {
 
                             h2 { +"Choose a pattern" }
 
-                            for (pattern in state.patternEntities) {
-                                pattern(pattern, {
-                                    ListBasedMatrix(width = 50, height = 50, seeds = pattern.getSeeds())
+                            for (patternEntity in state.patternEntities) {
+                                pattern(patternEntity, {
                                     setState {
-                                        selectedPattern = pattern
+                                        selectedPattern = patternEntity
                                     }
                                 })
                             }
@@ -62,35 +58,13 @@ class App : RComponent<RProps, State>() {
                 }
             }
 
-    private fun controlButtonLabel() = if (isIdle()) "Start simulation" else "Stop Simulation"
-
-    private fun isIdle() = state.gameLoop == null
-
-    private fun startSimulation() {
-        setState {
-            gameLoop = window.setInterval({
-                nextIteration()
-            }, 300)
-        }
-    }
-
-    private fun stopSimulation() {
-        window.clearInterval(state.gameLoop!!)
-
-        setState {
-            gameLoop = null
-        }
-    }
-
-    private fun nextIteration() {
-        setState {}
-    }
+    private fun controlButtonLabel() = if (state.isIdle) "Start simulation" else "Stop Simulation"
 
 }
 
 interface State : RState {
     var patternEntities: List<PatternEntity>
-    var gameLoop: Int?
+    var isIdle: Boolean
     var selectedPattern: PatternEntity?
 }
 

@@ -1,4 +1,4 @@
-package com.novoda.gol
+package com.novoda.gol.data
 
 data class CellEntity(val isAlive: Boolean) {
 

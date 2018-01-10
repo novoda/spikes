@@ -2,11 +2,11 @@
 
 package com.novoda.gol.components
 
-import com.novoda.gol.BoardEntity
-import com.novoda.gol.BoardPresenter
-import com.novoda.gol.BoardView
-import com.novoda.gol.PositionEntity
+import com.novoda.gol.data.BoardEntity
+import com.novoda.gol.data.PositionEntity
 import com.novoda.gol.patterns.PatternEntity
+import com.novoda.gol.presentation.BoardPresenter
+import com.novoda.gol.presentation.BoardView
 import kotlinext.js.js
 import kotlinx.html.style
 import react.*
@@ -17,15 +17,16 @@ class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardPr
 
     override var onCellClicked: (position: PositionEntity) -> Unit = {}
     override var onPatternSelected: (pattern: PatternEntity) -> Unit = {}
-    override var onTick: () -> Unit = {}
+    override var onStartSimulationClicked: () -> Unit = {}
+    override var onStopSimulationClicked: () -> Unit = {}
+
+    private lateinit var presenter: BoardPresenter
 
     override fun renderBoard(boardEntity: BoardEntity) {
         setState {
             this.boardEntity = boardEntity
         }
     }
-
-    private lateinit var presenter : BoardPresenter
 
     override fun componentWillMount() {
         presenter.bind(this)
@@ -36,7 +37,7 @@ class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardPr
     }
 
     override fun BoardState.init(props: BoardProps) {
-        presenter = BoardPresenter(50,50)
+        presenter = BoardPresenter(50, 50)
 
         if (props.selectedPattern != null) {
             onPatternSelected.invoke(props.selectedPattern!!)
@@ -45,10 +46,11 @@ class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardPr
 
     override fun componentWillReceiveProps(nextProps: BoardProps) {
         if (nextProps.isIdle.not()) {
-            onTick.invoke()
+            onStartSimulationClicked()
         } else {
-            onPatternSelected.invoke(nextProps.selectedPattern!!)
+            onStopSimulationClicked()
         }
+        onPatternSelected.invoke(nextProps.selectedPattern!!)
     }
 
     override fun RBuilder.render() = renderBoard(state)
@@ -63,10 +65,7 @@ class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardPr
 
                     for (x in 0 until state.boardEntity.getWidth()) {
                         cell(state.boardEntity.cellAtPosition(x, y), {
-
-                            if (props.isIdle) {
-                                onCellClicked.invoke(PositionEntity(x, y))
-                            }
+                            onCellClicked.invoke(PositionEntity(x, y))
                         })
                     }
                 }

@@ -1,9 +1,9 @@
-package com.novoda.gol
+package com.novoda.gol.presentation
 
 
 class BoardPresenter(width: Int, height: Int) {
 
-    private val boardModel = BoardModelImpl(width, height)
+    private val boardModel = BoardModelImpl.create(width, height)
 
     fun bind(boardView: BoardView) {
 
@@ -15,20 +15,24 @@ class BoardPresenter(width: Int, height: Int) {
             boardModel.toggleCellAt(position)
         }
 
-        boardView.onTick = {
-            boardModel.nextIteration()
-        }
-
         boardView.onPatternSelected = { pattern ->
             boardModel.selectPattern(pattern)
+        }
+
+        boardView.onStartSimulationClicked = {
+            boardModel.startSimulation()
+        }
+
+        boardView.onStopSimulationClicked = {
+            boardModel.stopSimulation()
         }
     }
 
     fun unbind(boardView: BoardView) {
         boardModel.onBoardChanged = { }
         boardView.onCellClicked = { }
-        boardView.onTick = {}
         boardView.onPatternSelected = {}
+        boardView.onStartSimulationClicked = {}
+        boardView.onStopSimulationClicked = {}
     }
-
 }
