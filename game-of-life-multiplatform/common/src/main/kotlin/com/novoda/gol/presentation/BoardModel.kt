@@ -12,8 +12,6 @@ interface BoardModel {
 
     fun selectPattern(pattern: PatternEntity)
 
-    fun nextIteration()
-
     fun startSimulation()
 
     fun stopSimulation()

@@ -22,7 +22,7 @@ class BoardModelImpl private constructor(initialBoard: BoardEntity, private val 
 
     init {
         gameLoop.onTick = {
-            nextIteration()
+            board = board.nextIteration()
         }
     }
 
@@ -39,10 +39,6 @@ class BoardModelImpl private constructor(initialBoard: BoardEntity, private val 
         }
         this.pattern = pattern
         board = board.applyPattern(pattern)
-    }
-
-    override fun nextIteration() {
-        board = board.nextIteration()
     }
 
     override fun startSimulation() {
