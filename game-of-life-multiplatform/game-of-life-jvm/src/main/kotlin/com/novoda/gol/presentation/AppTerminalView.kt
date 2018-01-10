@@ -40,7 +40,7 @@ class AppTerminalView : AppView {
     }
 
     override fun renderPatternSelectionVisibility(visibility: Boolean) {
-        //TODO: pattern selection ignored in first iteration
+        //TODO: pattern selection is ignored in first iteration
     }
 
     override fun renderBoard(boardViewState: BoardViewState) {
