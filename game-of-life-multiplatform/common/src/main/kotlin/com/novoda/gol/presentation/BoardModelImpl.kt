@@ -27,6 +27,9 @@ class BoardModelImpl private constructor(initialBoard: BoardEntity, private val 
     }
 
     override fun toggleCellAt(positionEntity: PositionEntity) {
+        if (gameLoop.isLooping()) {
+            return
+        }
         board = board.toggleCell(positionEntity.x, positionEntity.y)
     }
 

@@ -14,19 +14,19 @@ import react.dom.div
 
 
 class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardProps), BoardView {
-    override var onCellClicked: (position: PositionEntity) -> Unit = {}
 
+    override var onCellClicked: (position: PositionEntity) -> Unit = {}
     override var onPatternSelected: (pattern: PatternEntity) -> Unit = {}
     override var onStartSimulationClicked: () -> Unit = {}
     override var onStopSimulationClicked: () -> Unit = {}
+
+    private lateinit var presenter: BoardPresenter
 
     override fun renderBoard(boardEntity: BoardEntity) {
         setState {
             this.boardEntity = boardEntity
         }
     }
-
-    private lateinit var presenter: BoardPresenter
 
     override fun componentWillMount() {
         presenter.bind(this)
@@ -65,10 +65,7 @@ class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardPr
 
                     for (x in 0 until state.boardEntity.getWidth()) {
                         cell(state.boardEntity.cellAtPosition(x, y), {
-
-                            if (props.isIdle) {
-                                onCellClicked.invoke(PositionEntity(x, y))
-                            }
+                            onCellClicked.invoke(PositionEntity(x, y))
                         })
                     }
                 }
