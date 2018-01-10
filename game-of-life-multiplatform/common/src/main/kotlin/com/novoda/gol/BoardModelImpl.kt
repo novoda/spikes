@@ -1,21 +1,16 @@
 package com.novoda.gol
 
 import com.novoda.gol.patterns.PatternEntity
+import kotlin.properties.Delegates.observable
 
 
 class BoardModelImpl(width: Int, height: Int) : BoardModel {
-    private var board: BoardEntity
+    private var board: BoardEntity = SimulationBoardEntity(ListBasedMatrix(width = width, height = height))
     private var pattern: PatternEntity? = null
-    override var onBoardChanged: (board: BoardEntity) -> Unit = {}
 
-    init {
-        val cellMatrix = ListBasedMatrix(width = width, height = height)
-        board = SimulationBoardEntity(cellMatrix)
-    }
-
-    override fun bind() {
-        onBoardChanged.invoke(board)
-    }
+    override var onBoardChanged by observable<(BoardEntity) -> Unit>({}, { _, _, newValue ->
+        newValue.invoke(board)
+    })
 
     override fun toggleCellAt(positionEntity: PositionEntity) {
         board = board.toggleCell(positionEntity.x, positionEntity.y)

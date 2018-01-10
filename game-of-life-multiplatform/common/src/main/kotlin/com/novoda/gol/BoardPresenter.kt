@@ -22,8 +22,6 @@ class BoardPresenter(width: Int, height: Int) {
         boardView.onPatternSelected = { pattern ->
             boardModel.selectPattern(pattern)
         }
-
-        boardModel.bind()
     }
 
     fun unbind(boardView: BoardView) {
