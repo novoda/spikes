@@ -41,7 +41,6 @@ class App : RComponent<RProps, State>(), AppView {
 
     override fun State.init() {
         patternViewState = PatternViewState(true, PatternRepository.patterns())
-        patternEntities = PatternRepository.patterns()
         isIdle = true
     }
 
@@ -66,7 +65,6 @@ class App : RComponent<RProps, State>(), AppView {
 
                     board(state.isIdle, state.selectedPattern)
 
-                    console.log("shouldDisplay: ${state.patternViewState.shouldDisplay}")
                     if (state.patternViewState.shouldDisplay) {
 
                         div {
@@ -77,7 +75,7 @@ class App : RComponent<RProps, State>(), AppView {
 
                             h2 { +"Choose a pattern" }
 
-                            for (patternEntity in state.patternEntities) {
+                            for (patternEntity in state.patternViewState.patternEntities) {
                                 pattern(patternEntity, {
                                     setState {
                                         selectedPattern = patternEntity
@@ -92,7 +90,6 @@ class App : RComponent<RProps, State>(), AppView {
 
 interface State : RState {
     var patternViewState: PatternViewState
-    var patternEntities: List<PatternEntity>
     var isIdle: Boolean
     var selectedPattern: PatternEntity?
     var controlButtonLabel: String
