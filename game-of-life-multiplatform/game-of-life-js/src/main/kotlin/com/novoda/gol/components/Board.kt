@@ -40,19 +40,21 @@ class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardPr
     override fun BoardState.init(props: BoardProps) {
         presenter = BoardPresenter(50, 50)
 
-        if (props.selectedPattern != null) {
-            onPatternSelected.invoke(props.selectedPattern!!)
+        if (props.boardViewState.selectedPattern != null) {
+            onPatternSelected.invoke(props.boardViewState.selectedPattern!!)
         }
     }
 
     override fun componentWillReceiveProps(nextProps: BoardProps) {
-        if (nextProps.isIdle.not()) {
+        val state = nextProps.boardViewState
+
+        if (state.isIdle.not()) {
             onStartSimulationClicked()
         } else {
             onStopSimulationClicked()
         }
-        if (nextProps.selectedPattern != null) {
-            onPatternSelected.invoke(nextProps.selectedPattern!!)
+        if (state.selectedPattern != null) {
+            onPatternSelected.invoke(state.selectedPattern!!)
         }
     }
 
@@ -77,18 +79,12 @@ class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardPr
     }
 }
 
-data class BoardProps(var isIdle: Boolean, var selectedPattern: PatternEntity? = null) : RProps
+data class BoardProps(var boardViewState: BoardViewState) : RProps
 
 interface BoardState : RState {
     var boardEntity: BoardEntity
 }
 
-fun RBuilder.board(board: BoardViewState) = board(board.isIdle, board.selectedPattern)
-
-fun RBuilder.board(isIdle: Boolean, selectedPattern: PatternEntity? = null) = child(
-        Board::class) {
-    attrs.isIdle = isIdle
-    attrs.selectedPattern = selectedPattern
+fun RBuilder.board(board: BoardViewState) = child(Board::class) {
+    attrs.boardViewState = board
 }
-
-
