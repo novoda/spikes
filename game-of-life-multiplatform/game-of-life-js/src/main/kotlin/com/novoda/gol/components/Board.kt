@@ -50,8 +50,8 @@ class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardPr
         } else {
             onStopSimulationClicked()
         }
-        if (props.selectedPattern != null) {
-            onPatternSelected.invoke(props.selectedPattern!!)
+        if (nextProps.selectedPattern != null) {
+            onPatternSelected.invoke(nextProps.selectedPattern!!)
         }
     }
 
