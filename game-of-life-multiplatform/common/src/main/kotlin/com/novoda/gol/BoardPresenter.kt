@@ -1,9 +1,9 @@
 package com.novoda.gol
 
 
-class BoardPresenter {
+class BoardPresenter(width: Int, height: Int) {
 
-    private val boardModel = BoardModelImpl()
+    private val boardModel = BoardModelImpl(width, height)
 
     fun bind(boardView: BoardView) {
 
@@ -22,6 +22,8 @@ class BoardPresenter {
         boardView.onPatternSelected = { pattern ->
             boardModel.selectPattern(pattern)
         }
+
+        boardModel.bind()
     }
 
     fun unbind(boardView: BoardView) {

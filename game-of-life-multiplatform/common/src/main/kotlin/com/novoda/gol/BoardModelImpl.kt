@@ -3,17 +3,19 @@ package com.novoda.gol
 import com.novoda.gol.patterns.PatternEntity
 
 
-class BoardModelImpl : BoardModel {
-
+class BoardModelImpl(width: Int, height: Int) : BoardModel {
     private var board: BoardEntity
     private var pattern: PatternEntity? = null
+    override var onBoardChanged: (board: BoardEntity) -> Unit = {}
 
     init {
-        val cellMatrix = ListBasedMatrix(width = 50, height = 50)
+        val cellMatrix = ListBasedMatrix(width = width, height = height)
         board = SimulationBoardEntity(cellMatrix)
     }
 
-    override var onBoardChanged: (board: BoardEntity) -> Unit = {}
+    override fun bind() {
+        onBoardChanged.invoke(board)
+    }
 
     override fun toggleCellAt(positionEntity: PositionEntity) {
         board = board.toggleCell(positionEntity.x, positionEntity.y)

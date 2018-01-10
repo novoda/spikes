@@ -2,7 +2,10 @@
 
 package com.novoda.gol.components
 
-import com.novoda.gol.*
+import com.novoda.gol.BoardEntity
+import com.novoda.gol.BoardPresenter
+import com.novoda.gol.BoardView
+import com.novoda.gol.PositionEntity
 import com.novoda.gol.patterns.PatternEntity
 import kotlinext.js.js
 import kotlinx.html.style
@@ -22,7 +25,7 @@ class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardPr
         }
     }
 
-    private val presenter = BoardPresenter()
+    private lateinit var presenter : BoardPresenter
 
     override fun componentWillMount() {
         presenter.bind(this)
@@ -33,8 +36,7 @@ class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardPr
     }
 
     override fun BoardState.init(props: BoardProps) {
-        val cellMatrix = ListBasedMatrix(width = 50, height = 50)
-        boardEntity = SimulationBoardEntity(cellMatrix)
+        presenter = BoardPresenter(50,50)
 
         if (props.selectedPattern != null) {
             onPatternSelected.invoke(props.selectedPattern!!)
