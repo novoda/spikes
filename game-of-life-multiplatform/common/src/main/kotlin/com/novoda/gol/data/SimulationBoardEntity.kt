@@ -8,7 +8,7 @@ data class SimulationBoardEntity(private val cellMatrix: CellMatrix) : BoardEnti
         val seeds = this.cellMatrix.getSeeds().toMutableList()
         seeds.addAll(patternEntity.getSeeds())
 
-        val cellMatrix = ListBasedMatrix(width = 50, height = 50, seeds = seeds)
+        val cellMatrix = ListBasedMatrix(width = cellMatrix.getWidth(), height = cellMatrix.getHeight(), seeds = seeds)
         return SimulationBoardEntity(cellMatrix)
     }
 
