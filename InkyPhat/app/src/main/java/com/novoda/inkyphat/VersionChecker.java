@@ -1,7 +1,5 @@
 package com.novoda.inkyphat;
 
-import android.util.Log;
-
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.PeripheralManagerService;
 
@@ -15,18 +13,17 @@ class VersionChecker {
         this.service = service;
     }
 
-    Version checkVersion(String gpioBusyPin) throws IOException {
-        try (Gpio chipBusyPin = service.openGpio(gpioBusyPin)) {
-            chipBusyPin.setDirection(Gpio.DIRECTION_IN);
+    Version checkVersion(String gpioBusyPin, String gpioResetPin) throws IOException {
+        try (Gpio busyPin = service.openGpio(gpioBusyPin);
+             Gpio resetPin = service.openGpio(gpioResetPin)) {
+            busyPin.setDirection(Gpio.DIRECTION_IN);
+            resetPin.setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
+            resetPin.setValue(true);
 
-            boolean initialValue = chipBusyPin.getValue();
-
-            if (initialValue) {
-                Log.d("TUT", "version 2 board");
-                return Version.TWO;
-            } else {
-                Log.d("TUT", "version 1 board");
+            if (busyPin.getValue()) {
                 return Version.ONE;
+            } else {
+                return Version.TWO;
             }
         }
     }

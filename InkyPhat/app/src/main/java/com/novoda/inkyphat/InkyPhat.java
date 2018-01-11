@@ -90,7 +90,7 @@ public interface InkyPhat extends AutoCloseable {
             PeripheralManagerService service = new PeripheralManagerService();
             VersionChecker versionChecker = new VersionChecker(service);
             try {
-                VersionChecker.Version version = versionChecker.checkVersion(gpioBusyPin);
+                VersionChecker.Version version = versionChecker.checkVersion(gpioBusyPin, gpioResetPin);
                 SpiDevice device = service.openSpiDevice(spiBus);
 
                 Gpio chipBusyPin = service.openGpio(gpioBusyPin);
