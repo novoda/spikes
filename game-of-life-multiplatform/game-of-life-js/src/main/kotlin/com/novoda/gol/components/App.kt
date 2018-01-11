@@ -6,7 +6,7 @@ import com.novoda.gol.patterns.PatternEntity
 import com.novoda.gol.patterns.PatternRepository
 import com.novoda.gol.presentation.AppPresenter
 import com.novoda.gol.presentation.AppView
-import com.novoda.gol.presentation.BoardViewState
+import com.novoda.gol.presentation.BoardViewInput
 import com.novoda.gol.presentation.PatternViewState
 import kotlinx.html.style
 import react.*
@@ -44,9 +44,9 @@ class App : RComponent<RProps, State>(), AppView {
         }
     }
 
-    override fun renderBoard(boardViewState: BoardViewState) {
+    override fun renderBoardWith(boardViewInput: BoardViewInput) {
         setState {
-            this.boardViewState = boardViewState
+            this.boardViewInput = boardViewInput
         }
     }
 
@@ -66,7 +66,7 @@ class App : RComponent<RProps, State>(), AppView {
                         display = "flex"
                     }
 
-                    board(state.boardViewState)
+                    board(state.boardViewInput)
 
                     if (state.patternViewState.shouldDisplay) {
 
@@ -91,7 +91,7 @@ class App : RComponent<RProps, State>(), AppView {
 
 interface State : RState {
     var patternViewState: PatternViewState
-    var boardViewState: BoardViewState
+    var boardViewInput: BoardViewInput
     var controlButtonLabel: String
 }
 

@@ -5,7 +5,7 @@ import kotlin.properties.Delegates.observable
 
 class AppModel {
 
-    private var boardViewState by observable(BoardViewState(true)) { _, _, newValue ->
+    private var boardViewState by observable(BoardViewInput(true)) { _, _, newValue ->
         onBoardStateChanged(newValue)
     }
 
@@ -13,12 +13,12 @@ class AppModel {
         newValue(boardViewState.isIdle)
     }
 
-    var onBoardStateChanged: (BoardViewState) -> Unit by observable<(BoardViewState) -> Unit>({}) { _, _, newValue ->
+    var onBoardStateChanged: (BoardViewInput) -> Unit by observable<(BoardViewInput) -> Unit>({}) { _, _, newValue ->
         newValue(boardViewState)
     }
 
     fun toggleSimulation() {
-        boardViewState = BoardViewState(isIdle = boardViewState.isIdle.not())
+        boardViewState = BoardViewInput(isIdle = boardViewState.isIdle.not())
         onSimulationStateChanged(boardViewState.isIdle)
     }
 

@@ -9,5 +9,5 @@ interface AppView {
 
     fun renderControlButtonLabel(controlButtonLabel: String)
     fun renderPatternSelectionVisibility(visibility: Boolean)
-    fun renderBoard(boardViewState: BoardViewState)
+    fun renderBoardWith(boardViewInput: BoardViewInput)
 }
