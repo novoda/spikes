@@ -7,7 +7,8 @@ import com.novoda.gol.data.PositionEntity
 import com.novoda.gol.patterns.PatternEntity
 import com.novoda.gol.presentation.BoardPresenter
 import com.novoda.gol.presentation.BoardView
-import com.novoda.gol.presentation.BoardViewState
+import com.novoda.gol.presentation.BoardViewInput
+import com.novoda.gol.presentation.apply
 import kotlinext.js.js
 import kotlinx.html.style
 import react.*
@@ -40,22 +41,13 @@ class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardPr
     override fun BoardState.init(props: BoardProps) {
         presenter = BoardPresenter(50, 50)
 
-        if (props.boardViewState.selectedPattern != null) {
-            onPatternSelected.invoke(props.boardViewState.selectedPattern!!)
+        if (props.boardViewInput.selectedPattern != null) {
+            onPatternSelected.invoke(props.boardViewInput.selectedPattern!!)
         }
     }
 
     override fun componentWillReceiveProps(nextProps: BoardProps) {
-        val state = nextProps.boardViewState
-
-        if (state.isIdle.not()) {
-            onStartSimulationClicked()
-        } else {
-            onStopSimulationClicked()
-        }
-        if (state.selectedPattern != null) {
-            onPatternSelected.invoke(state.selectedPattern!!)
-        }
+        apply(nextProps.boardViewInput)
     }
 
     override fun RBuilder.render() = renderBoard(state)
@@ -79,12 +71,12 @@ class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardPr
     }
 }
 
-data class BoardProps(var boardViewState: BoardViewState) : RProps
+data class BoardProps(var boardViewInput: BoardViewInput) : RProps
 
 interface BoardState : RState {
     var boardEntity: BoardEntity
 }
 
-fun RBuilder.board(board: BoardViewState) = child(Board::class) {
-    attrs.boardViewState = board
+fun RBuilder.board(board: BoardViewInput) = child(Board::class) {
+    attrs.boardViewInput = board
 }

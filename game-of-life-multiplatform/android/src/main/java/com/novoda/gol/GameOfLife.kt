@@ -23,16 +23,8 @@ class GameOfLife : AppCompatActivity(), AppView {
         patternSelectionButton.visibility = if (visibility) View.VISIBLE else View.INVISIBLE
     }
 
-    override fun renderBoard(boardViewState: BoardViewState) {
-        if (boardViewState.selectedPattern != null) {
-            boardView.onPatternSelected(boardViewState.selectedPattern!!)
-        }
-
-        if (boardViewState.isIdle.not()) {
-            boardView.onStartSimulationClicked()
-        } else {
-            boardView.onStopSimulationClicked()
-        }
+    override fun renderBoardWith(boardViewInput: BoardViewInput) {
+        boardView.apply(boardViewInput)
     }
 
     private val appPresenter = AppPresenter()

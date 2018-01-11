@@ -43,7 +43,7 @@ class AppTerminalView : AppView {
         //TODO: pattern selection is ignored in first iteration
     }
 
-    override fun renderBoard(boardViewState: BoardViewState) {
-        BoardTerminalView().onCreate(boardViewState)
+    override fun renderBoardWith(boardViewInput: BoardViewInput) {
+        BoardTerminalView().onCreate(boardViewInput)
     }
 }

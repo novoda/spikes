@@ -13,10 +13,10 @@ class BoardTerminalView : BoardView {
 
     private var presenter = BoardPresenter(width = 20, height = 20)
 
-    fun onCreate(boardViewState: BoardViewState) {
+    fun onCreate(boardViewInput: BoardViewInput) {
         presenter.bind(this)
-        if (boardViewState.selectedPattern != null) {
-            onPatternSelected(boardViewState.selectedPattern!!)
+        if (boardViewInput.selectedPattern != null) {
+            onPatternSelected(boardViewInput.selectedPattern!!)
             onStartSimulationClicked()
         }
     }

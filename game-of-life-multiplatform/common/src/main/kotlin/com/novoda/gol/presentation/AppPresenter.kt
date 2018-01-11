@@ -11,7 +11,7 @@ class AppPresenter {
             view.renderPatternSelectionVisibility(visibility = isIdle)
         }
 
-        model.onBoardStateChanged = view::renderBoard
+        model.onBoardStateChanged = view::renderBoardWith
 
         view.onControlButtonClicked = model::toggleSimulation
 

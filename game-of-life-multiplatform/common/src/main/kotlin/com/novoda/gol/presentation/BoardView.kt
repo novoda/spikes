@@ -12,5 +12,16 @@ interface BoardView {
     var onStopSimulationClicked: () -> Unit
 
     fun renderBoard(boardEntity: BoardEntity)
+}
 
+fun BoardView.apply(boardViewInput: BoardViewInput) {
+    if (boardViewInput.selectedPattern != null) {
+        onPatternSelected(boardViewInput.selectedPattern)
+    }
+
+    if (boardViewInput.isIdle.not()) {
+        onStartSimulationClicked()
+    } else {
+        onStopSimulationClicked()
+    }
 }
