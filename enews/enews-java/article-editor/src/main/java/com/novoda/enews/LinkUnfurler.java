@@ -32,7 +32,11 @@ interface LinkUnfurler {
         @Override
         public Information unfurl(String url) throws IOException {
             LinkInfo info = LinkUnfurl.unfurl(url, 3500);
-            return new Information(info.getTitle(), url);
+            String title = info.getTitle();
+            if (title == null) {
+                throw new UnsupportedUrlTypeException("No title for url " + url);
+            }
+            return new Information(title, url);
         }
     }
 
@@ -41,6 +45,12 @@ interface LinkUnfurler {
         @Override
         public Information unfurl(String url) {
             return new Information("Mock Title", url);
+        }
+    }
+
+    class UnsupportedUrlTypeException extends RuntimeException {
+        public UnsupportedUrlTypeException(String message) {
+            super(message);
         }
     }
 

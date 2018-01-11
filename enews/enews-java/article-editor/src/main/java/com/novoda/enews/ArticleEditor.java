@@ -1,5 +1,7 @@
 package com.novoda.enews;
 
+import com.novoda.enews.LinkUnfurler.UnsupportedUrlTypeException;
+
 import java.io.IOException;
 import java.util.Random;
 import java.util.stream.Stream;
@@ -54,7 +56,7 @@ public class ArticleEditor {
                 pageLink = "http:// " + pageLink;
             }
             return linkUnfurler.unfurl(pageLink).getTitle();
-        } catch (IOException e) {
+        } catch (IOException | UnsupportedUrlTypeException e) {
             return "#eNews link";
         }
     }
