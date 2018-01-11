@@ -20,7 +20,7 @@ class GameOfLife : AppCompatActivity(), AppView {
     }
 
     override fun renderPatternSelectionVisibility(visibility: Boolean) {
-        patternSelectionlButton.visibility = if (visibility) View.VISIBLE else View.INVISIBLE
+        patternSelectionButton.visibility = if (visibility) View.VISIBLE else View.INVISIBLE
     }
 
     override fun renderBoard(boardViewState: BoardViewState) {
@@ -36,24 +36,24 @@ class GameOfLife : AppCompatActivity(), AppView {
     }
 
     private val appPresenter = AppPresenter()
-    private val boardPresenter = BoardPresenter(50, 50)
+    private val boardPresenter = BoardPresenter(20, 20)
     private lateinit var boardView: BoardView
     private lateinit var controlButton: Button
-    private lateinit var patternSelectionlButton: Button
+    private lateinit var patternSelectionButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_of_life)
 
         controlButton = findViewById(R.id.controlButton)
-        patternSelectionlButton = findViewById(R.id.patternSelectionButton)
+        patternSelectionButton = findViewById(R.id.patternSelectionButton)
         boardView = findViewById<AndroidBoardView>(R.id.boardView)
 
         controlButton.setOnClickListener {
             onControlButtonClicked()
         }
 
-        patternSelectionlButton.setOnClickListener {
+        patternSelectionButton.setOnClickListener {
             showPatternSelection()
         }
     }

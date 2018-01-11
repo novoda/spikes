@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import com.novoda.gol.data.CellMatrix
 
@@ -12,8 +13,9 @@ class CellMatrixView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-
     private var cellMatrix: CellMatrix? = null
+
+    var onCellClicked: (x: Int, y: Int) -> Unit = { _, _ -> }
 
     private val deadCell = Paint().apply {
         color = Color.GRAY
@@ -46,5 +48,20 @@ class CellMatrixView @JvmOverloads constructor(
                         paint)
             }
         }
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (event.actionMasked == MotionEvent.ACTION_DOWN) {
+            val cellMatrix = cellMatrix ?: return false
+            val cellDimen = width.toFloat() / cellMatrix.getWidth()
+
+            val x = event.x
+            val y = event.y
+
+            onCellClicked((x / cellDimen).toInt(), (y / cellDimen).toInt())
+        }
+
+
+        return super.onTouchEvent(event)
     }
 }

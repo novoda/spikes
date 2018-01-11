@@ -21,6 +21,9 @@ class AndroidBoardView @JvmOverloads constructor(
 
     init {
         addView(cellMatrixView, FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
+        cellMatrixView.onCellClicked = { x, y ->
+            onCellClicked(PositionEntity(x, y))
+        }
     }
 
     override fun renderBoard(boardEntity: BoardEntity) {
