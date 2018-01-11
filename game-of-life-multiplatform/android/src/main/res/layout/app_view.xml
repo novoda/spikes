@@ -11,13 +11,13 @@
     android:layout_height="wrap_content">
 
     <Button
-      android:id="@+id/controlButton"
+      android:id="@+id/control_button"
       android:layout_width="0dp"
       android:layout_weight="1"
       android:layout_height="wrap_content" />
 
     <Button
-      android:id="@+id/patternSelectionButton"
+      android:id="@+id/pattern_selection_button"
       android:text="Choose Pattern"
       android:layout_width="0dp"
       android:layout_weight="1"
@@ -27,7 +27,7 @@
 
 
   <com.novoda.gol.presentation.AndroidBoardView
-    android:id="@+id/boardView"
+    android:id="@+id/board_view"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" />
 

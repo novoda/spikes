@@ -14,7 +14,7 @@ class GameOfLife : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_of_life)
-        appView = findViewById<AndroidAppView>(R.id.appView)
+        appView = findViewById<AndroidAppView>(R.id.app_view)
     }
 
     override fun onStart() {

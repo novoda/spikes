@@ -41,9 +41,9 @@ class AndroidAppView @JvmOverloads constructor(
         super.onFinishInflate()
         LayoutInflater.from(context).inflate(R.layout.app_view, this)
 
-        controlButton = findViewById(R.id.controlButton)
-        patternSelectionButton = findViewById(R.id.patternSelectionButton)
-        boardView = findViewById<AndroidBoardView>(R.id.boardView)
+        controlButton = findViewById(R.id.control_button)
+        patternSelectionButton = findViewById(R.id.pattern_selection_button)
+        boardView = findViewById<AndroidBoardView>(R.id.board_view)
         controlButton.setOnClickListener {
             onControlButtonClicked()
         }

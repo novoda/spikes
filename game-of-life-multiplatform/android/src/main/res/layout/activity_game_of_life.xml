@@ -6,7 +6,7 @@
   tools:context="com.novoda.gol.GameOfLife">
 
   <com.novoda.gol.presentation.AndroidAppView
-    android:id="@+id/appView"
+    android:id="@+id/app_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
 
