@@ -1,7 +1,11 @@
 #!/bin/bash
 
-find . -path ./Pods -prune -o -name "*\.m" -exec wc -l {} +
+find . -path ./Pods -prune -o -name "*\.h" -exec wc -l {} +
 
+H_TOTAL=$(find . -path ./Pods -prune -o -name "*\.h" | wc -l)
+printf "Total number of *.h files: %s \n" $H_TOTAL
+
+find . -path ./Pods -prune -o -name "*\.m" -exec wc -l {} +
 TOTAL=$(find . -path ./Pods -prune -o -name "*\.m" | wc -l)
 printf "Total number of *.m files: %s \n" $TOTAL
 
