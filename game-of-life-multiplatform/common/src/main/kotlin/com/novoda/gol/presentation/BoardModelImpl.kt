@@ -10,7 +10,7 @@ import com.novoda.gol.patterns.PatternEntity
 import kotlin.properties.Delegates.observable
 
 
-class BoardModelImpl private constructor(initialBoard: BoardEntity, private val gameLoop: GameLoop) : BoardModel {
+class BoardModelImpl(initialBoard: BoardEntity, private val gameLoop: GameLoop) : BoardModel {
 
     private var board: BoardEntity by observable(initialBoard) { _, _, newValue ->
         onBoardChanged.invoke(newValue)
