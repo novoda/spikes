@@ -23,6 +23,9 @@ class AppModel {
     }
 
     fun selectPattern(pattern: PatternEntity) {
+        if (boardViewState.isIdle.not()) {
+            return
+        }
         boardViewState = boardViewState.copy(selectedPattern = pattern)
     }
 }
