@@ -1,4 +1,3 @@
 rootProject.name = 'game-of-life'
 
-include ':android'
-include 'game-of-life-jvm', 'game-of-life-js', 'common'
+include 'common', 'common-jvm', 'terminal-jvm', ':android', 'game-of-life-js'

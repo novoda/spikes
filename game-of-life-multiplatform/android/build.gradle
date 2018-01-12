@@ -31,7 +31,7 @@ android {
 }
 
 dependencies {
-    compile project(":game-of-life-jvm")
+    compile project(":common-jvm")
     compile 'com.android.support:appcompat-v7:27.+'
     compile 'com.android.support.constraint:constraint-layout:+'
 

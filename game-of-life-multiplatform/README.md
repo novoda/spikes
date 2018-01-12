@@ -4,10 +4,16 @@
 # common
 business logic
 
-# game of life jvm
-java terminal application
+# common-jvm
+jvm specific implementations
+
+# terminal-jvm
+jvm based terminal client
+
+# android
+jvm based android client
 
 # game of life js
 react web client
-run via npm run serve
+run via npm install & npm run serve
 
