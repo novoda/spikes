@@ -1,6 +1,7 @@
 package com.novoda.gol.presentation
 
 import com.novoda.gol.GameLoop
+import com.novoda.gol.GameLoopImpl
 import com.novoda.gol.data.BoardEntity
 import com.novoda.gol.data.ListBasedMatrix
 import com.novoda.gol.data.PositionEntity
@@ -9,7 +10,7 @@ import com.novoda.gol.patterns.PatternEntity
 import kotlin.properties.Delegates.observable
 
 
-class BoardModelImpl private constructor(initialBoard: BoardEntity, private val gameLoop: GameLoop) : BoardModel {
+class BoardModelImpl(initialBoard: BoardEntity, private val gameLoop: GameLoop) : BoardModel {
 
     private var board: BoardEntity by observable(initialBoard) { _, _, newValue ->
         onBoardChanged.invoke(newValue)
@@ -57,7 +58,7 @@ class BoardModelImpl private constructor(initialBoard: BoardEntity, private val 
 
     companion object {
 
-        fun create(width: Int, height: Int): BoardModel = BoardModelImpl(SimulationBoardEntity(ListBasedMatrix(width, height)), GameLoop())
+        fun create(width: Int, height: Int): BoardModel = BoardModelImpl(SimulationBoardEntity(ListBasedMatrix(width, height)), GameLoopImpl())
 
     }
 }

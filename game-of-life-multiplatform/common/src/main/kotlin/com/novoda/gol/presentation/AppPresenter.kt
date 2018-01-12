@@ -1,13 +1,11 @@
 package com.novoda.gol.presentation
 
-class AppPresenter {
-
-    private val model = AppModel()
+class AppPresenter(private val model: AppModel = AppModel()) {
 
     fun bind(view: AppView) {
 
         model.onSimulationStateChanged = { isIdle ->
-            view.renderControlButtonLabel(if (isIdle) "Start simulation" else "Stop Simulation")
+            view.renderControlButtonLabel(if (isIdle) "Start Simulation" else "Stop Simulation")
             view.renderPatternSelectionVisibility(visibility = isIdle)
         }
 

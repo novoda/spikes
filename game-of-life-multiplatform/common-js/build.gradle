@@ -5,6 +5,7 @@ dependencies {
 
     expectedBy project(":common")
     testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
+    testCompile 'io.mockk:mockk-js:1.6.3'
 }
 
 [compileKotlin2Js, compileTestKotlin2Js]*.configure {

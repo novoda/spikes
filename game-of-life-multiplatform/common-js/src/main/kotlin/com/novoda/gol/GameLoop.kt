@@ -2,24 +2,24 @@ package com.novoda.gol
 
 import kotlin.browser.window
 
-actual class GameLoop {
+actual class GameLoopImpl : GameLoop {
 
     private var loop: Int? = null
 
-    actual var onTick: () -> Unit = {}
+    override var onTick: () -> Unit = {}
 
-    actual fun startWith(intervalMs: Int) {
+    override fun startWith(intervalMs: Int) {
         loop = window.setInterval({
             onTick.invoke()
         }, intervalMs)
     }
 
-    actual fun stop() {
+    override fun stop() {
         if (loop != null) {
             window.clearInterval(loop!!)
             loop = null
         }
     }
 
-    actual fun isLooping() = loop != null
+    override fun isLooping() = loop != null
 }

@@ -4,24 +4,24 @@ import io.reactivex.Flowable
 import io.reactivex.disposables.Disposable
 import java.util.concurrent.TimeUnit
 
-actual class GameLoop actual constructor() {
+actual class GameLoopImpl : GameLoop {
 
     private var gameLoop: Disposable? = null
 
-    actual var onTick: () -> Unit = {}
+    override var onTick: () -> Unit = {}
 
-    actual fun startWith(intervalMs: Int) {
+    override fun startWith(intervalMs: Int) {
         gameLoop = Flowable.interval(intervalMs.toLong(), TimeUnit.MILLISECONDS).subscribe {
             onTick()
         }
     }
 
-    actual fun stop() {
+    override fun stop() {
         gameLoop?.dispose()
         gameLoop = null
 
     }
 
-    actual fun isLooping() = gameLoop != null
+    override fun isLooping() = gameLoop != null
 
 }
