@@ -1,7 +1,3 @@
-apply plugin: 'kotlin-platform-js'
-apply plugin: "kotlin-dce-js"
-apply plugin: "com.moowork.node"
-
 buildscript {
     apply from: "versions.gradle"
 
@@ -12,6 +8,11 @@ buildscript {
         classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
     }
 }
+
+apply plugin: "kotlin2js"
+apply plugin: "kotlin-dce-js"
+apply plugin: "com.moowork.node"
+
 
 node {
     download = true
@@ -25,8 +26,9 @@ repositories {
 }
 
 dependencies {
+    compile project(":common-js")
+    
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
-    expectedBy project(":common")
     compile("org.jetbrains.kotlinx:kotlinx-html-js:$kotlinx_html_version") { force = true }
     compile "org.jetbrains:kotlin-react:$react_version"
     compile "org.jetbrains:kotlin-react-dom:$react_dom_version"
