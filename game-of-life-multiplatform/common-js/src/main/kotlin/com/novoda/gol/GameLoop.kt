@@ -2,7 +2,6 @@ package com.novoda.gol
 
 import kotlin.browser.window
 
-
 actual class GameLoop {
 
     private var loop: Int? = null
