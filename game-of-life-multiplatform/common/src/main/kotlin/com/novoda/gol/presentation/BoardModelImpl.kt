@@ -1,6 +1,7 @@
 package com.novoda.gol.presentation
 
 import com.novoda.gol.GameLoop
+import com.novoda.gol.GameLoopImpl
 import com.novoda.gol.data.BoardEntity
 import com.novoda.gol.data.ListBasedMatrix
 import com.novoda.gol.data.PositionEntity
@@ -57,7 +58,7 @@ class BoardModelImpl private constructor(initialBoard: BoardEntity, private val 
 
     companion object {
 
-        fun create(width: Int, height: Int): BoardModel = BoardModelImpl(SimulationBoardEntity(ListBasedMatrix(width, height)), GameLoop())
+        fun create(width: Int, height: Int): BoardModel = BoardModelImpl(SimulationBoardEntity(ListBasedMatrix(width, height)), GameLoopImpl())
 
     }
 }

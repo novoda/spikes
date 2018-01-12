@@ -1,1 +1,1 @@
-require("game-of-life-js.js");
+require("web.js");

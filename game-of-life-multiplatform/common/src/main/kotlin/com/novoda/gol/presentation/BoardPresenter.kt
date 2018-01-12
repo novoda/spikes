@@ -1,9 +1,9 @@
 package com.novoda.gol.presentation
 
 
-class BoardPresenter(width: Int, height: Int) {
+class BoardPresenter(private val boardModel: BoardModel) {
 
-    private val boardModel = BoardModelImpl.create(width, height)
+    constructor(width: Int, height: Int) : this(BoardModelImpl.create(width, height))
 
     fun bind(boardView: BoardView) {
 

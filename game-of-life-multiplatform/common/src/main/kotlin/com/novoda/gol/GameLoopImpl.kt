@@ -1,7 +1,6 @@
 package com.novoda.gol
 
-
-expect class GameLoop() {
+interface GameLoop {
 
     var onTick: () -> Unit
 
@@ -11,3 +10,5 @@ expect class GameLoop() {
 
     fun isLooping(): Boolean
 }
+
+expect class GameLoopImpl() : GameLoop
