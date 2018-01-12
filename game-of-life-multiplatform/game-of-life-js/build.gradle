@@ -1,5 +1,4 @@
 apply plugin: 'kotlin-platform-js'
-apply plugin: "kotlin2js"
 apply plugin: "kotlin-dce-js"
 apply plugin: "com.moowork.node"
 
@@ -8,8 +7,6 @@ buildscript {
 
     repositories {
         maven { url "https://plugins.gradle.org/m2/" }
-        maven { url "http://dl.bintray.com/kotlin/kotlin-dev" }
-        mavenCentral()
     }
     dependencies {
         classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
@@ -30,24 +27,18 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
     expectedBy project(":common")
-    testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
     compile("org.jetbrains.kotlinx:kotlinx-html-js:$kotlinx_html_version") { force = true }
     compile "org.jetbrains:kotlin-react:$react_version"
     compile "org.jetbrains:kotlin-react-dom:$react_dom_version"
+
+    testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
 }
 
-compileKotlin2Js {
+[compileKotlin2Js, compileTestKotlin2Js]*.configure {
     kotlinOptions {
         sourceMap = true
         sourceMapEmbedSources = "always"
         moduleKind = 'commonjs'
-        metaInfo = false
-    }
-}
-
-kotlin {
-    experimental {
-        coroutines 'enable'
     }
 }
 

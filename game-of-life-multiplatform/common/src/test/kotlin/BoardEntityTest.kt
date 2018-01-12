@@ -1,7 +1,8 @@
-import com.novoda.gol.data.PositionEntity
+
 import com.novoda.gol.data.ListBasedMatrix
+import com.novoda.gol.data.PositionEntity
 import com.novoda.gol.data.SimulationBoardEntity
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class BoardEntityTest {
