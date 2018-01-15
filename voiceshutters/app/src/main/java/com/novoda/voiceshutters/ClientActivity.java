@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class ClientActivity extends Activity {
 
     private static final int REQUEST_ENABLE_BT = 123;
@@ -86,7 +88,7 @@ public class ClientActivity extends Activity {
                                 devices.get(0),
                                 "TestWifiSSID",
                                 "Password 123",
-                                "testUserIdFromPhone"
+                                FirebaseAuth.getInstance().getUid()
                         );
                     }
             );
