@@ -2,7 +2,6 @@
 <input-method xmlns:android="http://schemas.android.com/apk/res/android"
   android:supportsSwitchingToNextInputMethod="true">
   <subtype
-    android:imeSubtypeLocale="en_US"
     android:imeSubtypeMode="keyboard"
     android:label="Novoda Keyboard" />
 </input-method>
