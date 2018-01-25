@@ -1,6 +1,7 @@
 package com.novoda.gol.presentation
 
 import android.content.Context
+import android.graphics.Typeface
 import android.support.v7.app.AlertDialog
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -61,11 +62,13 @@ class AndroidAppView @JvmOverloads constructor(
 
         for (pattern in PatternRepository.patterns()) {
             val patternNameView = TextView(context)
+            patternNameView.typeface = Typeface.DEFAULT_BOLD
             patternNameView.text = pattern.getName()
+            patternNameView.setPadding(0, 0, 0, pxFromDp(10f))
             patternSelectionView.addView(patternNameView)
 
             val cellMatrixView = CellMatrixView(context)
-            patternSelectionView.addView(cellMatrixView, pxFromDp(25f), pxFromDp(25f))
+            patternSelectionView.addView(cellMatrixView, pxFromDp(50f), pxFromDp(50f))
             cellMatrixView.render(pattern)
             cellMatrixView.setOnClickListener {
                 onPatternSelected(pattern)
