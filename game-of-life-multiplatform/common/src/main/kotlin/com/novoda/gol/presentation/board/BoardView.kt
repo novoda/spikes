@@ -1,4 +1,4 @@
-package com.novoda.gol.presentation
+package com.novoda.gol.presentation.board
 
 import com.novoda.gol.data.BoardEntity
 import com.novoda.gol.data.PositionEntity

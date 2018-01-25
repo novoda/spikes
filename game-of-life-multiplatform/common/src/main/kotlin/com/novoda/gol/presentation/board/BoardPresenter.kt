@@ -1,4 +1,4 @@
-package com.novoda.gol.presentation
+package com.novoda.gol.presentation.board
 
 
 class BoardPresenter(private val boardModel: BoardModel) {

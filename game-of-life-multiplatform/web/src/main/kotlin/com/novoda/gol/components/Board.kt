@@ -5,10 +5,10 @@ package com.novoda.gol.components
 import com.novoda.gol.data.BoardEntity
 import com.novoda.gol.data.PositionEntity
 import com.novoda.gol.patterns.PatternEntity
-import com.novoda.gol.presentation.BoardPresenter
-import com.novoda.gol.presentation.BoardView
-import com.novoda.gol.presentation.BoardViewInput
-import com.novoda.gol.presentation.apply
+import com.novoda.gol.presentation.board.BoardPresenter
+import com.novoda.gol.presentation.board.BoardView
+import com.novoda.gol.presentation.board.BoardViewInput
+import com.novoda.gol.presentation.board.apply
 import kotlinext.js.js
 import kotlinx.html.style
 import react.*

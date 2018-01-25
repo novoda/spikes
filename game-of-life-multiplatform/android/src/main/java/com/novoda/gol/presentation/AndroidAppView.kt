@@ -12,6 +12,11 @@ import android.widget.TextView
 import com.novoda.gol.R
 import com.novoda.gol.patterns.PatternEntity
 import com.novoda.gol.patterns.PatternRepository
+import com.novoda.gol.presentation.app.AppView
+import com.novoda.gol.presentation.board.BoardPresenter
+import com.novoda.gol.presentation.board.BoardView
+import com.novoda.gol.presentation.board.BoardViewInput
+import com.novoda.gol.presentation.board.apply
 
 class AndroidAppView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0

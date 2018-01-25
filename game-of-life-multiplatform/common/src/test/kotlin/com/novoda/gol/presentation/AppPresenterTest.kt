@@ -2,6 +2,10 @@ package com.novoda.gol.presentation
 
 import com.novoda.gol.patterns.Glider
 import com.novoda.gol.patterns.PatternEntity
+import com.novoda.gol.presentation.app.AppModel
+import com.novoda.gol.presentation.app.AppPresenter
+import com.novoda.gol.presentation.app.AppView
+import com.novoda.gol.presentation.board.BoardViewInput
 import io.mockk.*
 import kotlin.test.Test
 

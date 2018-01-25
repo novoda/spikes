@@ -1,4 +1,4 @@
-package com.novoda.gol.presentation
+package com.novoda.gol.presentation.app
 
 class AppPresenter(private val model: AppModel = AppModel()) {
 

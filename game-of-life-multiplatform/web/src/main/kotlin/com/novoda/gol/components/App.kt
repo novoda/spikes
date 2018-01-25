@@ -4,10 +4,10 @@ package com.novoda.gol.components
 
 import com.novoda.gol.patterns.PatternEntity
 import com.novoda.gol.patterns.PatternRepository
-import com.novoda.gol.presentation.AppPresenter
-import com.novoda.gol.presentation.AppView
-import com.novoda.gol.presentation.BoardViewInput
-import com.novoda.gol.presentation.PatternViewState
+import com.novoda.gol.presentation.board.BoardViewInput
+import com.novoda.gol.presentation.app.PatternViewState
+import com.novoda.gol.presentation.app.AppPresenter
+import com.novoda.gol.presentation.app.AppView
 import kotlinx.html.style
 import react.*
 import react.dom.div

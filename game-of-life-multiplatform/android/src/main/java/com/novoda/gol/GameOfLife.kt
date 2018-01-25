@@ -3,8 +3,8 @@ package com.novoda.gol
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.novoda.gol.presentation.AndroidAppView
-import com.novoda.gol.presentation.AppPresenter
-import com.novoda.gol.presentation.AppView
+import com.novoda.gol.presentation.app.AppPresenter
+import com.novoda.gol.presentation.app.AppView
 
 class GameOfLife : AppCompatActivity() {
 

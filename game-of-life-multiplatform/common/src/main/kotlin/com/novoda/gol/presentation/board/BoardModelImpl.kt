@@ -1,4 +1,4 @@
-package com.novoda.gol.presentation
+package com.novoda.gol.presentation.board
 
 import com.novoda.gol.GameLoop
 import com.novoda.gol.GameLoopImpl
