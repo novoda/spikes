@@ -9,7 +9,7 @@ repositories {
 // the dependencies are not transitive (we specify only sourceset below)
 dependencies {
     compile gradleApi()
-    compile gradlePlugins.gradleAndroidCommandPlugin
+    compile gradlePlugins.androidCommandPlugin
 }
 
 // Allows us to add the code from the `plugin` module to the same classpath as this module
