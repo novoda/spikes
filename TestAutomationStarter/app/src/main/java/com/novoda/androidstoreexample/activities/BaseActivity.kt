@@ -6,8 +6,12 @@ import android.support.v7.app.AppCompatActivity
 import com.novoda.androidstoreexample.dagger.App
 import com.novoda.androidstoreexample.dagger.component.AppComponent
 import com.novoda.androidstoreexample.mvp.view.BaseView
+import android.widget.RelativeLayout
+import android.widget.ProgressBar
 
-abstract class BaseActivity: AppCompatActivity(), BaseView {
+
+
+abstract class  BaseActivity: AppCompatActivity(), BaseView {
 
     abstract fun getActivityLayout(): Int
 
@@ -22,6 +26,7 @@ abstract class BaseActivity: AppCompatActivity(), BaseView {
         initProgressDialog()
     }
 
+    @Suppress("DEPRECATION")
     private fun initProgressDialog() {
         progressDialog = ProgressDialog(this)
         progressDialog?.setProgressStyle(ProgressDialog.STYLE_SPINNER)
