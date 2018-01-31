@@ -1,6 +1,0 @@
-<resources>
-
-  <integer name="drop_cap_number_picker_min">1</integer>
-  <integer name="drop_cap_number_picker_max">10</integer>
-
-</resources>
