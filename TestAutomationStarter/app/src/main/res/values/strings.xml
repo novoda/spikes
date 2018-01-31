@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Android Store Example</string>
+    <string name="categories">Categories</string>
+    <string name="products">products</string>
+    <string name="error_in_fetching_data">Error in Fetching Data</string>
+    <string name="error_fetching_data">Error while fetching data</string>
+</resources>
