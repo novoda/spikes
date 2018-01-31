@@ -1,6 +1,0 @@
-<resources>
-
-  <dimen name="text_size_number_picker_min">12sp</dimen>
-  <dimen name="text_size_number_picker_max">140sp</dimen>
-
-</resources>
