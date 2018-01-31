@@ -22,6 +22,10 @@ class CategoryListPresenterImpl : CategoryListPresenter {
         categoryListInteractor.cancel()
     }
 
+    override fun onCategoryItemClicked(type: String) {
+        categoryListView.onItemClicked(type)
+    }
+
     override fun loadCategoryList() {
         categoryListView.showProgress()
         categoryListInteractor.loadCategoryList(object: CategoryListListener {

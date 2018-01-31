@@ -7,14 +7,8 @@ import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 import java.io.File
-import java.io.InputStream
 
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 class JsonSchemaTest {
     @Before
     fun setUp() {
@@ -26,7 +20,6 @@ class JsonSchemaTest {
         get("categories")
                 .then()
                 .body(matchesJsonSchemaInClasspath("schemas/category-schema.json"))
-
     }
 
     @Test

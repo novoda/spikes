@@ -1,35 +1,22 @@
 {
-  "$id": "http://example.com/example.json",
   "type": "object",
-  "definitions": {},
-  "$schema": "http://json-schema.org/draft-06/schema#",
   "properties": {
     "categories": {
-      "$id": "/properties/categories",
       "type": "array",
       "items": {
-        "$id": "/properties/categories/items",
         "type": "object",
         "properties": {
           "title": {
-            "$id": "/properties/categories/items/properties/title",
             "type": "string",
             "title": "The Title Schema",
             "description": "An explanation about the purpose of this instance.",
-            "default": "",
-            "examples": [
-              "SHIRTS"
-            ]
+            "default": ""
           },
           "image": {
-            "$id": "/properties/categories/items/properties/image",
             "type": "string",
             "title": "The Image Schema",
             "description": "An explanation about the purpose of this instance.",
-            "default": "",
-            "examples": [
-              "shirtimage"
-            ]
+            "default": ""
           }
         }
       }
