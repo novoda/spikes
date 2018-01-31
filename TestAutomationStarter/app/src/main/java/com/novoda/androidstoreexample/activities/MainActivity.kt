@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.novoda.androidstoreexample.R
 import com.novoda.androidstoreexample.adapters.CategoryAdapter
-import com.novoda.androidstoreexample.dagger.CategoryListModule
+import com.novoda.androidstoreexample.dagger.categoryList.CategoryListModule
 import com.novoda.androidstoreexample.dagger.component.AppComponent
 import com.novoda.androidstoreexample.models.Category
 import com.novoda.androidstoreexample.mvp.presenter.CategoryListPresenter
@@ -39,7 +39,7 @@ class MainActivity : BaseActivity(), CategoryListView {
     }
 
     override fun injectDependencies(appComponent: AppComponent) {
-        appComponent.plus(CategoryListModule(this)).inject(this)
+        appComponent.injectCategory(CategoryListModule(this)).inject(this)
     }
 
     override fun onItemClicked(type: String) {

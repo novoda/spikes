@@ -9,8 +9,8 @@ import com.novoda.androidstoreexample.mvp.view.CategoryListView
 import javax.inject.Inject
 
 class CategoryListPresenterImpl : CategoryListPresenter {
-    val categoryListView: CategoryListView
-    val categoryListInteractor: CategoryListInteractor
+    private val categoryListView: CategoryListView
+    private val categoryListInteractor: CategoryListInteractor
 
     @Inject
     constructor(categoryListView: CategoryListView, categoryListInteractor: CategoryListInteractor) {

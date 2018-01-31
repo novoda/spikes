@@ -1,4 +1,4 @@
-package com.novoda.androidstoreexample.dagger
+package com.novoda.androidstoreexample.dagger.categoryList
 
 import dagger.Module
 import dagger.Provides

@@ -1,0 +1,41 @@
+package com.novoda.androidstoreexample.mvp.presenter.impl
+
+import com.novoda.androidstoreexample.models.ProductResponse
+import com.novoda.androidstoreexample.mvp.interactor.ProductListInteractor
+import com.novoda.androidstoreexample.mvp.listener.ProductListListener
+import com.novoda.androidstoreexample.mvp.presenter.ProductListPresenter
+import com.novoda.androidstoreexample.mvp.view.ProductListView
+import javax.inject.Inject
+
+class ProductListPresenterImpl: ProductListPresenter {
+    private val productListInteractor: ProductListInteractor
+    private val productListView: ProductListView
+
+    @Inject
+    constructor(productListInteractor: ProductListInteractor, productListView: ProductListView) {
+        this.productListInteractor = productListInteractor
+        this.productListView = productListView
+    }
+
+
+    override fun cancel() {
+        productListInteractor.cancel()
+    }
+
+    override fun loadProductList(category: String) {
+       productListView.showProgress()
+        productListInteractor.loadProductList(object: ProductListListener{
+            override fun onFailure(message: String) {
+                productListView.hideProgress()
+                productListView.showMessage(message)
+            }
+
+            override fun onSuccess(productResponse: ProductResponse) {
+                val productList = productResponse.products.toList()
+                productListView.showProductList(productList)
+                productListView.hideProgress()
+            }
+
+        }, category)
+    }
+}
