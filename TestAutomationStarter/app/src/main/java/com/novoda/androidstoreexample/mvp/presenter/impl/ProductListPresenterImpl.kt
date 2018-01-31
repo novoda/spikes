@@ -22,7 +22,7 @@ class ProductListPresenterImpl: ProductListPresenter {
         productListInteractor.cancel()
     }
 
-    override fun loadProductList(category: String) {
+    override fun loadProductList(category: Int) {
        productListView.showProgress()
         productListInteractor.loadProductList(object: ProductListListener{
             override fun onFailure(message: String) {

@@ -25,7 +25,7 @@ class ProductListActivity : BaseActivity(), ProductListView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val category = intent.getStringExtra(CATEGORY_NAME_EXTRA).toLowerCase()
+        val category = intent.getIntExtra(CATEGORY_NAME_EXTRA, -1)
         presenter.loadProductList(category)
     }
 

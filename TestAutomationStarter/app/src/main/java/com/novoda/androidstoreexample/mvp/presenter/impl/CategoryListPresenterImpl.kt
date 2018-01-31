@@ -22,7 +22,7 @@ class CategoryListPresenterImpl : CategoryListPresenter {
         categoryListInteractor.cancel()
     }
 
-    override fun onCategoryItemClicked(type: String) {
+    override fun onCategoryItemClicked(type: Int) {
         categoryListView.onItemClicked(type)
     }
 

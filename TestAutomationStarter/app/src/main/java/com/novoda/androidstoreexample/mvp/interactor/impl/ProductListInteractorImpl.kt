@@ -29,7 +29,7 @@ class ProductListInteractorImpl: ProductListInteractor {
         call.cancel()
     }
 
-    override fun loadProductList(produListListener: ProductListListener, category: String) {
+    override fun loadProductList(produListListener: ProductListListener, category: Int) {
         call = apiService.getProductsFromCategory(category)
         call.enqueue(object: Callback<ProductResponse> {
             override fun onFailure(call: Call<ProductResponse>?, t: Throwable?) {

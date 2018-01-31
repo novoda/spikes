@@ -12,7 +12,7 @@ import com.novoda.androidstoreexample.models.Category
 
 class CategoryAdapter(private val context: Context,
                       private val categories: List<Category>,
-                      private val itemClicked: (Category) -> Unit) : RecyclerView.Adapter<CategoryAdapter.Holder>() {
+                      private val itemClicked: (Int) -> Unit) : RecyclerView.Adapter<CategoryAdapter.Holder>() {
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): Holder {
         val view = LayoutInflater.from(context)
                 .inflate(R.layout.category_item, parent, false)
@@ -28,7 +28,7 @@ class CategoryAdapter(private val context: Context,
     }
 
 
-    inner class Holder(itemView: View?, private val itemClick: (Category) -> Unit) : RecyclerView.ViewHolder(itemView) {
+    inner class Holder(itemView: View?, private val itemClick: (Int) -> Unit) : RecyclerView.ViewHolder(itemView) {
         private val categoryImage = itemView?.findViewById<ImageView>(R.id.categoryImage)
         private val categoryName = itemView?.findViewById<TextView>(R.id.categoryName)
 
@@ -37,7 +37,7 @@ class CategoryAdapter(private val context: Context,
                     "drawable", context.packageName)
             categoryImage?.setImageResource(resourceId)
             categoryName?.text = category.title
-            itemView.setOnClickListener { itemClick(category) }
+            itemView.setOnClickListener { itemClick(category.id) }
         }
     }
 }

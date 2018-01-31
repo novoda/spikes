@@ -7,5 +7,5 @@ interface CategoryListView : BaseView{
 
     fun showCategoryList(categories: List<Category>)
 
-    fun onItemClicked(type: String)
+    fun onItemClicked(type: Int)
 }

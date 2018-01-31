@@ -28,8 +28,8 @@ class MainActivity : BaseActivity(), CategoryListView {
 
     override fun showCategoryList(categories: List<Category>) {
         categoryListView.layoutManager = LinearLayoutManager(this)
-        categoryAdapter = CategoryAdapter(this, categories) {
-            presenter.onCategoryItemClicked(it.title)
+        categoryAdapter = CategoryAdapter(this, categories) { category ->
+            presenter.onCategoryItemClicked(category)
         }
         categoryListView.adapter = categoryAdapter
     }
@@ -42,7 +42,7 @@ class MainActivity : BaseActivity(), CategoryListView {
         appComponent.injectCategory(CategoryListModule(this)).inject(this)
     }
 
-    override fun onItemClicked(type: String) {
+    override fun onItemClicked(type: Int) {
         val productIntent = Intent(this, ProductListActivity::class.java)
         productIntent.putExtra(CATEGORY_NAME_EXTRA, type)
         startActivity(productIntent)

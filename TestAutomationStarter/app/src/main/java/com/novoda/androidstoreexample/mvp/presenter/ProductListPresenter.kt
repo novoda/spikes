@@ -2,6 +2,6 @@ package com.novoda.androidstoreexample.mvp.presenter
 
 interface ProductListPresenter: BasePresenter {
 
-    fun loadProductList(category: String)
+    fun loadProductList(category: Int)
 
 }
