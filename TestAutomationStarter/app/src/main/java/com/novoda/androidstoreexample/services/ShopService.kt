@@ -1,7 +1,5 @@
-package com.novoda.androidstoreexample.network
+package com.novoda.androidstoreexample.services
 
-import com.novoda.androidstoreexample.models.CategoryResponse
-import com.novoda.androidstoreexample.models.ProductResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

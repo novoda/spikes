@@ -26,7 +26,6 @@ abstract class  BaseActivity: AppCompatActivity(), BaseView {
         initProgressDialog()
     }
 
-    @Suppress("DEPRECATION")
     private fun initProgressDialog() {
         progressDialog = ProgressDialog(this)
         progressDialog?.setProgressStyle(ProgressDialog.STYLE_SPINNER)

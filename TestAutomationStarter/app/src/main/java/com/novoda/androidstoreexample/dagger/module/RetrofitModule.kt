@@ -2,7 +2,7 @@ package com.novoda.androidstoreexample.dagger.module
 
 import dagger.Module
 import dagger.Provides
-import com.novoda.androidstoreexample.network.ShopService
+import com.novoda.androidstoreexample.services.ShopService
 import okhttp3.OkHttpClient
 import retrofit2.Converter
 import retrofit2.Retrofit

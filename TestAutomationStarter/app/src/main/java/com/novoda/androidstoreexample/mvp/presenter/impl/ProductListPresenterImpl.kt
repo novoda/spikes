@@ -1,6 +1,6 @@
 package com.novoda.androidstoreexample.mvp.presenter.impl
 
-import com.novoda.androidstoreexample.models.ProductResponse
+import com.novoda.androidstoreexample.services.ProductResponse
 import com.novoda.androidstoreexample.mvp.interactor.ProductListInteractor
 import com.novoda.androidstoreexample.mvp.listener.ProductListListener
 import com.novoda.androidstoreexample.mvp.presenter.ProductListPresenter

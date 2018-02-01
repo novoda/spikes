@@ -1,10 +1,10 @@
 package com.novoda.androidstoreexample.mvp.interactor.impl
 
 import android.content.Context
-import com.novoda.androidstoreexample.models.CategoryResponse
+import com.novoda.androidstoreexample.services.CategoryResponse
 import com.novoda.androidstoreexample.mvp.interactor.CategoryListInteractor
 import com.novoda.androidstoreexample.mvp.listener.CategoryListListener
-import com.novoda.androidstoreexample.network.ShopService
+import com.novoda.androidstoreexample.services.ShopService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

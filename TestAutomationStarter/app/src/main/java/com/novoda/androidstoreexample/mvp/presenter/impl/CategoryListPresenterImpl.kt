@@ -1,7 +1,7 @@
 package com.novoda.androidstoreexample.mvp.presenter.impl
 
 import com.novoda.androidstoreexample.models.Category
-import com.novoda.androidstoreexample.models.CategoryResponse
+import com.novoda.androidstoreexample.services.CategoryResponse
 import com.novoda.androidstoreexample.mvp.interactor.CategoryListInteractor
 import com.novoda.androidstoreexample.mvp.listener.CategoryListListener
 import com.novoda.androidstoreexample.mvp.presenter.CategoryListPresenter

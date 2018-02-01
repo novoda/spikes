@@ -1,5 +1,6 @@
-package com.novoda.androidstoreexample.models
+package com.novoda.androidstoreexample.services
 
+import com.novoda.androidstoreexample.models.Product
 import java.util.*
 
 data class ProductResponse(val products: Array<Product>) {

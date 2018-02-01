@@ -1,5 +1,6 @@
-package com.novoda.androidstoreexample.models
+package com.novoda.androidstoreexample.services
 
+import com.novoda.androidstoreexample.models.Category
 import java.util.*
 
 data class CategoryResponse(val categories: Array<Category>) {
