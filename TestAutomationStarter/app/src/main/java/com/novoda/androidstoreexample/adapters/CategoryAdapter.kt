@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.novoda.androidstoreexample.R
 import com.novoda.androidstoreexample.models.Category
+import com.novoda.androidstoreexample.utilities.ImageHelper
 
 class CategoryAdapter(private val context: Context,
                       private val categories: List<Category>,
@@ -33,8 +34,7 @@ class CategoryAdapter(private val context: Context,
         private val categoryName = itemView?.findViewById<TextView>(R.id.categoryName)
 
         fun bindCategory(category: Category, context: Context) {
-            val resourceId = context.resources.getIdentifier(category.image,
-                    "drawable", context.packageName)
+            val resourceId = ImageHelper().getResourceIdForImage(context, category.image)
             categoryImage?.setImageResource(resourceId)
             categoryName?.text = category.title
             itemView.setOnClickListener { itemClick(category.id) }

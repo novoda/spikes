@@ -4,4 +4,6 @@ interface ProductListPresenter: BasePresenter {
 
     fun loadProductList(category: Int)
 
+    fun onProductClicked(productId: Int)
+
 }

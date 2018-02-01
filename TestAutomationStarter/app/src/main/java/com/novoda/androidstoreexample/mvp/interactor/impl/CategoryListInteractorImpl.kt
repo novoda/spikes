@@ -14,15 +14,13 @@ import javax.inject.Inject
 class CategoryListInteractorImpl: CategoryListInteractor {
     val retrofit: Retrofit
     val apiService: ShopService
-    val appContext: Context
 
     lateinit var call: Call<CategoryResponse>
 
     @Inject
-    constructor(retrofit: Retrofit, apiService: ShopService, appContext: Context) {
+    constructor(retrofit: Retrofit, apiService: ShopService) {
         this.retrofit = retrofit
         this.apiService = apiService
-        this.appContext = appContext
     }
 
 

@@ -12,4 +12,7 @@ interface ShopService {
     @GET("category/{categoryId}/items")
     fun getProductsFromCategory(@Path("categoryId") categoryName: Int): Call<ProductResponse>
 
+    @GET("items/{itemId}")
+    fun getItemForId(@Path("itemId") itemId: Int): Call<ProductDetailsResponse>
+
 }

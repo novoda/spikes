@@ -38,4 +38,8 @@ class ProductListPresenterImpl: ProductListPresenter {
 
         }, category)
     }
+
+    override fun onProductClicked(productId: Int) {
+        productListView.onProductClicked(productId)
+    }
 }

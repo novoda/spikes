@@ -9,6 +9,8 @@ import com.novoda.androidstoreexample.dagger.module.AppModule
 import com.novoda.androidstoreexample.dagger.module.ClientModule
 import com.novoda.androidstoreexample.dagger.module.HostModule
 import com.novoda.androidstoreexample.dagger.module.RetrofitModule
+import com.novoda.androidstoreexample.dagger.productDetails.ProductDetailsComponent
+import com.novoda.androidstoreexample.dagger.productDetails.ProductDetailsModule
 import javax.inject.Singleton
 
 @Singleton
@@ -16,4 +18,5 @@ import javax.inject.Singleton
 interface AppComponent {
     fun injectCategory(categoryListModule: CategoryListModule): CategoryListComponent
     fun injectProducts(productListModule: ProductListModule): ProductListComponent
+    fun injectProductDetails(productDetailsModule: ProductDetailsModule): ProductDetailsComponent
 }

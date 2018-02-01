@@ -6,4 +6,5 @@ interface ProductListView: BaseView {
 
     fun showProductList(products: List<Product>)
 
+    fun onProductClicked(productId: Int)
 }

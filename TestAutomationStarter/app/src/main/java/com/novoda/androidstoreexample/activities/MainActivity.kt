@@ -10,7 +10,7 @@ import com.novoda.androidstoreexample.dagger.component.AppComponent
 import com.novoda.androidstoreexample.models.Category
 import com.novoda.androidstoreexample.mvp.presenter.CategoryListPresenter
 import com.novoda.androidstoreexample.mvp.view.CategoryListView
-import com.novoda.androidstoreexample.utilities.CATEGORY_NAME_EXTRA
+import com.novoda.androidstoreexample.utilities.CATEGORY_ID_EXTRA
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -44,7 +44,7 @@ class MainActivity : BaseActivity(), CategoryListView {
 
     override fun onItemClicked(type: Int) {
         val productIntent = Intent(this, ProductListActivity::class.java)
-        productIntent.putExtra(CATEGORY_NAME_EXTRA, type)
+        productIntent.putExtra(CATEGORY_ID_EXTRA, type)
         startActivity(productIntent)
     }
 
