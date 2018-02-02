@@ -2,7 +2,7 @@ buildscript {
     apply from: 'versions.gradle'
 
     repositories {
-        maven { url "https://plugins.gradle.org/m2/" }
+        gradlePluginPortal()
     }
     dependencies {
         classpath 'com.moowork.gradle:gradle-node-plugin:1.2.0'
@@ -21,7 +21,6 @@ repositories {
     maven { url "http://dl.bintray.com/kotlin/kotlin-dev" }
     maven { url "http://dl.bintray.com/kotlinx/kotlinx" }
     maven { url "http://dl.bintray.com/hypnosphi/kotlin-wrappers" }
-    mavenCentral()
 }
 
 dependencies {

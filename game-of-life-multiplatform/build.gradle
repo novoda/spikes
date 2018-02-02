@@ -4,6 +4,7 @@ allprojects {
         ext.kotlin_version = '1.2.10'
 
         repositories {
+            google()
             jcenter()
         }
         dependencies {
@@ -12,7 +13,7 @@ allprojects {
     }
 
     repositories {
-        maven { url 'https://maven.google.com' }
+        google()
         jcenter()
     }
 }
