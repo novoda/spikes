@@ -57,9 +57,9 @@ class DesktopBoardView : View(), BoardView {
         for (y in 0 until boardEntity.getHeight()) {
             for (x in 0 until boardEntity.getWidth()) {
                 val cellAtPosition = boardEntity.cellAtPosition(x, y)
-                val rect = rectangles[y to x]
+                val rect = rectangles[y to x]!!
                 runLater {
-                    rect?.fill = if (cellAtPosition.isAlive) Color.BLUE
+                    rect.fill = if (cellAtPosition.isAlive) Color.BLUE
                     else Color.GRAY
                 }
             }

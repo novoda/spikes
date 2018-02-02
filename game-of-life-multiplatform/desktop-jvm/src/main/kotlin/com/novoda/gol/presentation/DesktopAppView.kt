@@ -14,7 +14,7 @@ import javafx.scene.control.ComboBox
 import javafx.scene.layout.BorderPane
 import tornadofx.*
 
-class DesktopAppView : View() , AppView {
+class DesktopAppView : View(), AppView {
 
     private lateinit var boardView: DesktopBoardView
     private lateinit var controlButton: Button
@@ -24,7 +24,7 @@ class DesktopAppView : View() , AppView {
     override var onControlButtonClicked: () -> Unit = {}
     override var onPatternSelected: (pattern: PatternEntity) -> Unit = {}
 
-    private var presenter = BoardPresenter(width = 20, height = 20)
+    private val presenter = BoardPresenter(width = 20, height = 20)
 
     override val root: Parent = borderpane {
         setPrefSize(400.0, 420.0)
