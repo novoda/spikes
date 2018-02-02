@@ -28,6 +28,8 @@ class AndroidBoardView @JvmOverloads constructor(
     }
 
     override fun renderBoard(boardEntity: BoardEntity) {
-        cellMatrixView.render(boardEntity)
+        cellMatrixView.post {
+            cellMatrixView.render(boardEntity)
+        }
     }
 }
