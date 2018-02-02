@@ -26,3 +26,8 @@ run via npm install & npm run serve
 
 ![nyan cat](https://user-images.githubusercontent.com/1046688/34879934-279134dc-f7af-11e7-953b-f4e7f140c57d.gif)
 
+# desktop-jvm
+jvm based desktop client
+
+![gol](https://user-images.githubusercontent.com/517070/35706797-723ef2dc-07a7-11e8-857d-d4fc86a2e200.png)
+
