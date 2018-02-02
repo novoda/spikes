@@ -16,18 +16,23 @@ js specific implementations
 jvm based terminal client
 
 # android
-jvm based android client
+JVM based Android client
+
+Install to an Android device via `./gradlew android:installAll`
 
 ![gol](https://user-images.githubusercontent.com/1046688/34879875-fbe8cbd8-f7ae-11e7-8c33-21fbfac15e8b.gif)
 
 # web
-react web client
-run via npm install & npm run serve
+React web client
+
+Run via `npm install & npm run serve` from the `web` folder.
 
 ![nyan cat](https://user-images.githubusercontent.com/1046688/34879934-279134dc-f7af-11e7-953b-f4e7f140c57d.gif)
 
 # desktop-jvm
-jvm based desktop client
+JVM based desktop client using TornadoFX
+
+Run with `./gradlew desktop-jvm:run`
 
 ![gol](https://user-images.githubusercontent.com/517070/35706797-723ef2dc-07a7-11e8-857d-d4fc86a2e200.png)
 

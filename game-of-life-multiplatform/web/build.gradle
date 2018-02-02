@@ -1,18 +1,17 @@
 buildscript {
-    apply from: "versions.gradle"
+    apply from: 'versions.gradle'
 
     repositories {
-        maven { url "https://plugins.gradle.org/m2/" }
+        gradlePluginPortal()
     }
     dependencies {
-        classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
+        classpath 'com.moowork.gradle:gradle-node-plugin:1.2.0'
     }
 }
 
-apply plugin: "kotlin2js"
-apply plugin: "kotlin-dce-js"
-apply plugin: "com.moowork.node"
-
+apply plugin: 'kotlin2js'
+apply plugin: 'kotlin-dce-js'
+apply plugin: 'com.moowork.node'
 
 node {
     download = true
@@ -22,11 +21,10 @@ repositories {
     maven { url "http://dl.bintray.com/kotlin/kotlin-dev" }
     maven { url "http://dl.bintray.com/kotlinx/kotlinx" }
     maven { url "http://dl.bintray.com/hypnosphi/kotlin-wrappers" }
-    mavenCentral()
 }
 
 dependencies {
-    compile project(":common-js")
+    compile project(':common-js')
     
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
     compile("org.jetbrains.kotlinx:kotlinx-html-js:$kotlinx_html_version") { force = true }
@@ -39,7 +37,7 @@ dependencies {
 [compileKotlin2Js, compileTestKotlin2Js]*.configure {
     kotlinOptions {
         sourceMap = true
-        sourceMapEmbedSources = "always"
+        sourceMapEmbedSources = 'always'
         moduleKind = 'commonjs'
     }
 }
