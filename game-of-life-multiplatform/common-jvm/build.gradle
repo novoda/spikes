@@ -10,7 +10,3 @@ dependencies {
     testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
     testCompile 'io.mockk:mockk:1.6.3'
 }
-
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-}
