@@ -13,10 +13,7 @@ import com.novoda.gol.R
 import com.novoda.gol.patterns.PatternEntity
 import com.novoda.gol.patterns.PatternRepository
 import com.novoda.gol.presentation.app.AppView
-import com.novoda.gol.presentation.board.BoardPresenter
-import com.novoda.gol.presentation.board.BoardView
-import com.novoda.gol.presentation.board.BoardViewInput
-import com.novoda.gol.presentation.board.apply
+import com.novoda.gol.presentation.board.*
 
 class AndroidAppView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -41,7 +38,8 @@ class AndroidAppView @JvmOverloads constructor(
     private lateinit var patternSelectionButton: Button
     private lateinit var boardView: BoardView
 
-    private val boardPresenter = BoardPresenter(20, 20)
+
+    private val boardPresenter = BoardPresenter(BoardModelImpl.create(20, 20))
 
     override fun onFinishInflate() {
         super.onFinishInflate()
