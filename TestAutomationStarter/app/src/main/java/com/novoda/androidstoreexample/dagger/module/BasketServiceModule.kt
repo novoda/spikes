@@ -6,7 +6,7 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class BasketModule {
+class BasketServiceModule {
 
     @Provides
     @Singleton

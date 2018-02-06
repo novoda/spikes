@@ -54,6 +54,6 @@ class ProductDetailsActivity : BaseActivity(), ProductDetailView {
     }
 
     fun addToBasket(view: View) {
-        presenter.addToBasket(product)
+        presenter.addToBasket()
     }
 }

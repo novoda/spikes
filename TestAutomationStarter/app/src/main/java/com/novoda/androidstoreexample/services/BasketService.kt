@@ -1,5 +1,6 @@
 package com.novoda.androidstoreexample.services
 
+import com.novoda.androidstoreexample.models.Order
 import com.novoda.androidstoreexample.models.Product
 
 class BasketService {
@@ -11,6 +12,15 @@ class BasketService {
         } else {
             basket[product] = 1
         }
+    }
+
+    fun getBasket():List<Order>{
+        var orders = mutableListOf<Order>()
+        basket.forEach {
+            val order = Order(it.key, it.value)
+            orders.fill(order)
+        }
+        return orders
     }
 
 }

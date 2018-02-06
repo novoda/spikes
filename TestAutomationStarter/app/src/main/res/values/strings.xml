@@ -5,4 +5,8 @@
     <string name="error_in_fetching_data">Error in Fetching Data</string>
     <string name="error_fetching_data">Error while fetching data</string>
     <string name="add_to_basket">Add To Basket</string>
+    <string name="basket_item_images">Basket Item Images</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="basket">Basket</string>
 </resources>

@@ -14,6 +14,8 @@ class ProductDetailPresenterImpl: ProductDetailPresenter {
     private val productDetailsInteractor: ProductDetailsInteractor
     private val basketService: BasketService
 
+    private lateinit var product: Product
+
     @Inject
     constructor(productDetailView: ProductDetailView, productDetailsInteractor: ProductDetailsInteractor, basketService: BasketService) {
         this.productDetailView = productDetailView
@@ -36,12 +38,13 @@ class ProductDetailPresenterImpl: ProductDetailPresenter {
 
             override fun onSuccess(response: ProductDetailsResponse) {
                 productDetailView.populateProduct(response.item)
+                product = response.item
                 productDetailView.hideProgress()
             }
         }, productId)
     }
 
-    override fun addToBasket(product: Product) {
+    override fun addToBasket() {
         basketService.addToBasket(product)
     }
 }
