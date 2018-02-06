@@ -1,7 +1,7 @@
 package com.novoda.androidstoreexample.activities
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import com.novoda.androidstoreexample.R
@@ -20,6 +20,8 @@ class ProductDetailsActivity : BaseActivity(), ProductDetailView {
     @Inject
     lateinit var presenter: ProductDetailPresenter
 
+    lateinit var product: Product
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val itemId = intent.getIntExtra(PRODUCT_ID_EXTRA, -0)
@@ -32,6 +34,7 @@ class ProductDetailsActivity : BaseActivity(), ProductDetailView {
         productDetailTitle.text = product.title
         productDetailDescription.text = product.productDescription
         productDetailPrice.text = product.price
+        this.product = product
     }
 
     override fun getActivityLayout(): Int {
@@ -48,5 +51,9 @@ class ProductDetailsActivity : BaseActivity(), ProductDetailView {
 
     override fun hideProgress() {
         productDetailsProgressBar.visibility = GONE
+    }
+
+    fun addToBasket(view: View) {
+        presenter.addToBasket(product)
     }
 }

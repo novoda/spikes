@@ -1,20 +1,24 @@
 package com.novoda.androidstoreexample.mvp.presenter.impl
 
+import com.novoda.androidstoreexample.models.Product
 import com.novoda.androidstoreexample.mvp.interactor.ProductDetailsInteractor
 import com.novoda.androidstoreexample.mvp.listener.ProductDetailsListener
 import com.novoda.androidstoreexample.mvp.presenter.ProductDetailPresenter
 import com.novoda.androidstoreexample.mvp.view.ProductDetailView
+import com.novoda.androidstoreexample.services.BasketService
 import com.novoda.androidstoreexample.services.ProductDetailsResponse
 import javax.inject.Inject
 
 class ProductDetailPresenterImpl: ProductDetailPresenter {
     private val productDetailView: ProductDetailView
     private val productDetailsInteractor: ProductDetailsInteractor
+    private val basketService: BasketService
 
     @Inject
-    constructor(productDetailView: ProductDetailView, productDetailsInteractor: ProductDetailsInteractor) {
+    constructor(productDetailView: ProductDetailView, productDetailsInteractor: ProductDetailsInteractor, basketService: BasketService) {
         this.productDetailView = productDetailView
         this.productDetailsInteractor = productDetailsInteractor
+        this.basketService = basketService
     }
 
 
@@ -35,5 +39,9 @@ class ProductDetailPresenterImpl: ProductDetailPresenter {
                 productDetailView.hideProgress()
             }
         }, productId)
+    }
+
+    override fun addToBasket(product: Product) {
+        basketService.addToBasket(product)
     }
 }
