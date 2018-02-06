@@ -21,7 +21,7 @@ import org.junit.runner.RunWith
 import java.io.InputStream
 
 @RunWith(AndroidJUnit4::class)
-class ExampleInstrumentedTest {
+class MockServerTestExample {
 
     private val activityTestRule = ActivityTestRule<MainActivity>(MainActivity::class.java, false, false)
     private val mockWebServer = MockWebServer()
