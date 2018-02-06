@@ -4,6 +4,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
 
     expectedBy project(":common")
+    compile project(":core")
     testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
     testCompile 'io.mockk:mockk-js:1.6.3'
 
