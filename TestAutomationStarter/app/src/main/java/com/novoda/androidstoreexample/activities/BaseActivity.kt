@@ -17,27 +17,10 @@ abstract class  BaseActivity: AppCompatActivity(), BaseView {
 
     abstract fun injectDependencies(appComponent: AppComponent)
 
-    private var progressDialog: ProgressDialog? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getActivityLayout())
         injectDependencies(App.component)
-        initProgressDialog()
-    }
-
-    private fun initProgressDialog() {
-        progressDialog = ProgressDialog(this)
-        progressDialog?.setProgressStyle(ProgressDialog.STYLE_SPINNER)
-        progressDialog?.setMessage("Please Wait")
-    }
-
-    override fun showProgress() {
-        progressDialog?.show()
-    }
-
-    override fun hideProgress() {
-        progressDialog?.hide()
     }
 
     override fun showMessage(message: String) {

@@ -1,8 +1,11 @@
 package com.novoda.androidstoreexample.activities
 
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import com.novoda.androidstoreexample.R
 import com.novoda.androidstoreexample.adapters.CategoryAdapter
 import com.novoda.androidstoreexample.dagger.categoryList.CategoryListModule
@@ -32,6 +35,14 @@ class MainActivity : BaseActivity(), CategoryListView {
             presenter.onCategoryItemClicked(category)
         }
         categoryListView.adapter = categoryAdapter
+    }
+
+    override fun showProgress() {
+        mainActivityProgressBar.visibility = VISIBLE
+    }
+
+    override fun hideProgress() {
+        mainActivityProgressBar.visibility = GONE
     }
 
     override fun getActivityLayout(): Int {

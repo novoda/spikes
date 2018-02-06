@@ -3,6 +3,8 @@ package com.novoda.androidstoreexample.activities
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import com.novoda.androidstoreexample.R
 import com.novoda.androidstoreexample.adapters.ProductListAdapter
 import com.novoda.androidstoreexample.dagger.categoryList.ProductListModule
@@ -48,5 +50,15 @@ class ProductListActivity : BaseActivity(), ProductListView {
         val intent = Intent(this, ProductDetailsActivity::class.java)
         intent.putExtra(PRODUCT_ID_EXTRA, productId)
         startActivity(intent)
+    }
+
+    override fun showProgress() {
+        productListProgressView.visibility = VISIBLE
+    }
+
+    override fun hideProgress() {
+        productListProgressView.visibility = GONE
+
+
     }
 }

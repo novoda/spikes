@@ -2,6 +2,8 @@ package com.novoda.androidstoreexample.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import com.novoda.androidstoreexample.R
 import com.novoda.androidstoreexample.dagger.component.AppComponent
 import com.novoda.androidstoreexample.dagger.productDetails.ProductDetailsModule
@@ -38,5 +40,13 @@ class ProductDetailsActivity : BaseActivity(), ProductDetailView {
 
     override fun injectDependencies(appComponent: AppComponent) {
         appComponent.injectProductDetails(ProductDetailsModule(this)).inject(this)
+    }
+
+    override fun showProgress() {
+        productDetailsProgressBar.visibility = VISIBLE
+    }
+
+    override fun hideProgress() {
+        productDetailsProgressBar.visibility = GONE
     }
 }
