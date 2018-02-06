@@ -2,8 +2,11 @@
 
 package com.novoda.gol.components
 
+import com.novoda.gol.GameLoopImpl
 import com.novoda.gol.data.BoardEntity
+import com.novoda.gol.data.ListBasedMatrix
 import com.novoda.gol.data.PositionEntity
+import com.novoda.gol.data.SimulationBoardEntity
 import com.novoda.gol.patterns.PatternEntity
 import com.novoda.gol.presentation.board.*
 import kotlinext.js.js
@@ -36,7 +39,11 @@ class Board(boardProps: BoardProps) : RComponent<BoardProps, BoardState>(boardPr
     }
 
     override fun BoardState.init(props: BoardProps) {
-        presenter = BoardPresenter(BoardModelImpl.create(50, 50))
+        presenter = BoardPresenter(
+                BoardModelImpl(
+                        SimulationBoardEntity(ListBasedMatrix(50, 50)), GameLoopImpl()
+                )
+        )
 
         if (props.boardViewInput.selectedPattern != null) {
             onPatternSelected.invoke(props.boardViewInput.selectedPattern!!)

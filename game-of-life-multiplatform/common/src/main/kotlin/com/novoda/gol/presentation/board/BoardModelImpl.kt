@@ -1,11 +1,8 @@
 package com.novoda.gol.presentation.board
 
 import com.novoda.gol.GameLoop
-import com.novoda.gol.GameLoopImpl
 import com.novoda.gol.data.BoardEntity
-import com.novoda.gol.data.ListBasedMatrix
 import com.novoda.gol.data.PositionEntity
-import com.novoda.gol.data.SimulationBoardEntity
 import com.novoda.gol.patterns.PatternEntity
 import kotlin.properties.Delegates.observable
 
@@ -56,9 +53,4 @@ class BoardModelImpl(initialBoard: BoardEntity, private val gameLoop: GameLoop) 
         gameLoop.stop()
     }
 
-    companion object {
-
-        fun create(width: Int, height: Int): BoardModel = BoardModelImpl(SimulationBoardEntity(ListBasedMatrix(width, height)), GameLoopImpl())
-
-    }
 }

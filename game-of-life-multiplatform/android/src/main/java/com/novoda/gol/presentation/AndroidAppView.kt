@@ -9,7 +9,10 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.novoda.gol.GameLoopImpl
 import com.novoda.gol.R
+import com.novoda.gol.data.ListBasedMatrix
+import com.novoda.gol.data.SimulationBoardEntity
 import com.novoda.gol.patterns.PatternEntity
 import com.novoda.gol.patterns.PatternRepository
 import com.novoda.gol.presentation.app.AppView
@@ -39,7 +42,11 @@ class AndroidAppView @JvmOverloads constructor(
     private lateinit var boardView: BoardView
 
 
-    private val boardPresenter = BoardPresenter(BoardModelImpl.create(20, 20))
+    private val boardPresenter = BoardPresenter(
+            BoardModelImpl(
+                    SimulationBoardEntity(ListBasedMatrix(20, 20)), GameLoopImpl()
+            )
+    )
 
     override fun onFinishInflate() {
         super.onFinishInflate()
