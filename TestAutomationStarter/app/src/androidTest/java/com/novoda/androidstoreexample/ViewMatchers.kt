@@ -9,7 +9,6 @@ import org.hamcrest.Matcher
 
 object ViewMatchers {
 
-    @JvmStatic
     fun withCategoryTitle(title: String): Matcher<RecyclerView.ViewHolder> {
         return object : BoundedMatcher<RecyclerView.ViewHolder, CategoryAdapter.Holder>(CategoryAdapter.Holder::class.java) {
             override fun matchesSafely(item: CategoryAdapter.Holder): Boolean {
