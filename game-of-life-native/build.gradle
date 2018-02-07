@@ -1,0 +1,23 @@
+
+    buildscript {
+        repositories {
+            mavenCentral()
+            maven {
+                url "https://dl.bintray.com/jetbrains/kotlin-native-dependencies"
+            }
+        }
+
+        dependencies {
+            classpath "org.jetbrains.kotlin:kotlin-native-gradle-plugin:+"
+        }
+    }
+
+apply plugin: 'konan'
+
+konan.targets = ['iphone', 'iphone_sim']
+
+konanArtifacts {
+    framework('KotlinGameOfLife') {
+        srcDir '../game-of-life-multiplatform/core/src/main/kotlin'
+    }
+}
