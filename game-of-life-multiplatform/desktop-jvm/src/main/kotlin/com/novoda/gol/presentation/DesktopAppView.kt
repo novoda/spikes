@@ -1,17 +1,19 @@
 package com.novoda.gol.presentation
 
+import com.novoda.gol.GameLoopImpl
+import com.novoda.gol.data.ListBasedMatrix
+import com.novoda.gol.data.SimulationBoardEntity
 import com.novoda.gol.patterns.PatternEntity
 import com.novoda.gol.patterns.PatternRepository
 import com.novoda.gol.presentation.app.AppView
+import com.novoda.gol.presentation.board.BoardModelImpl
 import com.novoda.gol.presentation.board.BoardPresenter
-import com.novoda.gol.presentation.board.BoardView
 import com.novoda.gol.presentation.board.BoardViewInput
 import com.novoda.gol.presentation.board.apply
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.Parent
 import javafx.scene.control.Button
 import javafx.scene.control.ComboBox
-import javafx.scene.layout.BorderPane
 import tornadofx.*
 
 class DesktopAppView : View(), AppView {
@@ -24,7 +26,11 @@ class DesktopAppView : View(), AppView {
     override var onControlButtonClicked: () -> Unit = {}
     override var onPatternSelected: (pattern: PatternEntity) -> Unit = {}
 
-    private val presenter = BoardPresenter(width = 20, height = 20)
+    private val presenter = BoardPresenter(
+            BoardModelImpl(
+                    SimulationBoardEntity(ListBasedMatrix(20, 20)), GameLoopImpl()
+            )
+    )
 
     override val root: Parent = borderpane {
         setPrefSize(400.0, 420.0)
@@ -36,11 +42,13 @@ class DesktopAppView : View(), AppView {
                 }
             }
             val items = PatternRepository
-                .patterns()
-                .observable()
-            selectedPatternProperty.onChange { it?.let {
-                onPatternSelected(it)
-            } }
+                    .patterns()
+                    .observable()
+            selectedPatternProperty.onChange {
+                it?.let {
+                    onPatternSelected(it)
+                }
+            }
             combobox<PatternEntity>(selectedPatternProperty, items) {
                 patternSelectBox = this
                 cellFormat { text = it.getName() }

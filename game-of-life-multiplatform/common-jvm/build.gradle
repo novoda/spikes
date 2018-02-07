@@ -4,6 +4,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.1'
     expectedBy project(":common")
+    compile project(":core")
     testCompile "junit:junit:4.12"
 
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"

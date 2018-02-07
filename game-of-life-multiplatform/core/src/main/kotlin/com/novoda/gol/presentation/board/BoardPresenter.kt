@@ -3,8 +3,6 @@ package com.novoda.gol.presentation.board
 
 class BoardPresenter(private val boardModel: BoardModel) {
 
-    constructor(width: Int, height: Int) : this(BoardModelImpl.create(width, height))
-
     fun bind(boardView: BoardView) {
 
         boardModel.onBoardChanged = { board ->
