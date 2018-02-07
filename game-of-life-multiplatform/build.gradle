@@ -6,9 +6,11 @@ allprojects {
         repositories {
             google()
             jcenter()
+            maven { url "https://dl.bintray.com/jetbrains/kotlin-native-dependencies" }
         }
         dependencies {
             classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+            classpath "org.jetbrains.kotlin:kotlin-native-gradle-plugin:+"
         }
     }
 
