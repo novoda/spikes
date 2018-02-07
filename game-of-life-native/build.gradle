@@ -18,6 +18,6 @@ konan.targets = ['iphone', 'iphone_sim']
 
 konanArtifacts {
     framework('KotlinGameOfLife') {
-        srcDir '../game-of-life-multiplatform/core/src/main/kotlin'
+        srcDir 'kotlin'
     }
 }
