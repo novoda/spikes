@@ -13,7 +13,7 @@ import KotlinGameOfLife
 class GameOfLifeViewController: UIViewController, KGOLAppView {
 
     private let appPresenter: KGOLAppPresenter
-    private let boardPresenter:KGOLBoardPresenter
+    private let boardPresenter: KGOLBoardPresenter
     private let controlButton: UIButton
     private let boardView: UIBoard
 
@@ -30,11 +30,11 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
         boardView = UIBoard(frame: CGRect(x: 0, y: 150, width: 300, height: 300))
         boardView.backgroundColor = .blue
         appPresenter = KGOLAppPresenter(model: KGOLAppModel())
-        let cellMatrix = KGOLListBasedMatrix(width:20, height:20, seeds:NSArray() as! [Any])
-        let boardEntity = KGOLSimulationBoardEntity(cellMatrix:cellMatrix)
+        let cellMatrix = KGOLListBasedMatrix(width: 20, height: 20, seeds: NSArray() as! [Any])
+        let boardEntity = KGOLSimulationBoardEntity(cellMatrix: cellMatrix)
         let loop = SwiftGameLoop() as KGOLGameLoop
-        let model = KGOLBoardModelImpl(initialBoard:boardEntity, gameLoop:loop)
-        boardPresenter = KGOLBoardPresenter(boardModel:model)
+        let model = KGOLBoardModelImpl(initialBoard: boardEntity, gameLoop: loop)
+        boardPresenter = KGOLBoardPresenter(boardModel: model)
         super.init(coder: aDecoder)
 
         controlButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
@@ -52,8 +52,8 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
         boardView.renderBoard(boardViewInput: boardViewInput)
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         view.addSubview(controlButton)
         view.addSubview(boardView)
 
@@ -62,11 +62,11 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
     }
 
     private func createBoardPresenter() -> KGOLBoardPresenter {
-        let cellMatrix = KGOLListBasedMatrix(width:20, height:20, seeds:NSArray() as! [Any])
-        let boardEntity = KGOLSimulationBoardEntity(cellMatrix:cellMatrix)
+        let cellMatrix = KGOLListBasedMatrix(width: 20, height: 20, seeds: NSArray() as! [Any])
+        let boardEntity = KGOLSimulationBoardEntity(cellMatrix: cellMatrix)
         let loop = SwiftGameLoop() as KGOLGameLoop
-        let model = KGOLBoardModelImpl(initialBoard:boardEntity, gameLoop:loop)
-        return KGOLBoardPresenter(boardModel:model)
+        let model = KGOLBoardModelImpl(initialBoard: boardEntity, gameLoop: loop)
+        return KGOLBoardPresenter(boardModel: model)
     }
 
     @objc func buttonAction(sender: UIButton!) {
