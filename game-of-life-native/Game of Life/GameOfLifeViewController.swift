@@ -49,12 +49,8 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
         super.viewDidLoad()
         view.addSubview(controlButton)
         view.addSubview(boardView)
-
-        if (appPresenter == nil) {
-            let model = KGOLAppModel()
-            appPresenter = KGOLAppPresenter(model: model)
-        }
-
+        
+        appPresenter = KGOLAppPresenter(model: KGOLAppModel())
         appPresenter?.bind(view: self)
         boardView.willAppear()
     }
