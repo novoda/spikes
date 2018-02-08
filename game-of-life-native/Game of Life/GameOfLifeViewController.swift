@@ -13,7 +13,7 @@ import KotlinGameOfLife
 class GameOfLifeViewController: UIViewController, KGOLAppView {
     
     private var appPresenter : KGOLAppPresenter?
-    private let controllButton = UIButton(frame: CGRect(x: 100, y: 100, width: 200, height: 50))
+    private let controlButton = UIButton(frame: CGRect(x: 100, y: 100, width: 200, height: 50))
     private let boardView = UIBoard(frame: CGRect(x: 0, y: 150, width: 300, height: 300))
     
     var onControlButtonClicked: () -> KGOLStdlibUnit = {
@@ -28,7 +28,7 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
     }
     
     func renderControlButtonLabel(controlButtonLabel: String) {
-        controllButton.setTitle(controlButtonLabel, for: .normal)
+        controlButton.setTitle(controlButtonLabel, for: .normal)
     }
     
     func renderPatternSelectionVisibility(visibility: Bool) {
@@ -45,9 +45,9 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
         if (appPresenter == nil){
             let model = KGOLAppModel()
             appPresenter = KGOLAppPresenter(model: model)
-            controllButton.backgroundColor = .green
-            controllButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-            self.view.addSubview(controllButton)
+            controlButton.backgroundColor = .green
+            controlButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+            self.view.addSubview(controlButton)
             
             boardView.backgroundColor = .blue
             self.view.addSubview(boardView)
