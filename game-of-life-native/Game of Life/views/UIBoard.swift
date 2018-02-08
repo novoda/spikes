@@ -73,7 +73,8 @@ class UIBoard: UIView, KGOLBoardView {
     }
     
     @objc func onCellClicked(_ sender: UICell) {
-        onCellClicked(sender.position!)
+        guard let position = sender.position else { return }
+        onCellClicked(position)
     }
     
     func willAppear() {
