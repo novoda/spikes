@@ -12,8 +12,8 @@ import KotlinGameOfLife
 
 class GameOfLifeViewController: UIViewController, KGOLAppView {
 
-    private var appPresenter: KGOLAppPresenter?
-    private var boardPresenter:KGOLBoardPresenter?
+    private let appPresenter: KGOLAppPresenter
+    private let boardPresenter:KGOLBoardPresenter
     private let controlButton: UIButton
     private let boardView: UIBoard
 
@@ -29,6 +29,12 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
         controlButton.backgroundColor = .green
         boardView = UIBoard(frame: CGRect(x: 0, y: 150, width: 300, height: 300))
         boardView.backgroundColor = .blue
+        appPresenter = KGOLAppPresenter(model: KGOLAppModel())
+        let cellMatrix = KGOLListBasedMatrix(width:20, height:20, seeds:NSArray() as! [Any])
+        let boardEntity = KGOLSimulationBoardEntity(cellMatrix:cellMatrix)
+        let loop = SwiftGameLoop() as KGOLGameLoop
+        let model = KGOLBoardModelImpl(initialBoard:boardEntity, gameLoop:loop)
+        boardPresenter = KGOLBoardPresenter(boardModel:model)
         super.init(coder: aDecoder)
 
         controlButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
@@ -51,11 +57,8 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
         view.addSubview(controlButton)
         view.addSubview(boardView)
 
-        appPresenter = KGOLAppPresenter(model: KGOLAppModel())
-        boardPresenter = createBoardPresenter()
-
-        appPresenter?.bind(view: self)
-        boardPresenter?.bind(boardView: boardView)
+        appPresenter.bind(view: self)
+        boardPresenter.bind(boardView: boardView)
     }
 
     private func createBoardPresenter() -> KGOLBoardPresenter {
@@ -71,8 +74,8 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        appPresenter?.unbind(view: self)
-        boardPresenter?.unbind(boardView: boardView)
+        appPresenter.unbind(view: self)
+        boardPresenter.unbind(boardView: boardView)
     }
 
 }
