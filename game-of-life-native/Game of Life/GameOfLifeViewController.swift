@@ -13,6 +13,7 @@ import KotlinGameOfLife
 class GameOfLifeViewController: UIViewController, KGOLAppView {
 
     private var appPresenter: KGOLAppPresenter?
+    private var boardPresenter:KGOLBoardPresenter?
     private let controlButton: UIButton
     private let boardView: UIBoard
 
@@ -49,10 +50,20 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
         super.viewDidLoad()
         view.addSubview(controlButton)
         view.addSubview(boardView)
-        
+
         appPresenter = KGOLAppPresenter(model: KGOLAppModel())
+        boardPresenter = createBoardPresenter()
+
         appPresenter?.bind(view: self)
-        boardView.willAppear()
+        boardPresenter?.bind(boardView: boardView)
+    }
+
+    private func createBoardPresenter() -> KGOLBoardPresenter {
+        let cellMatrix = KGOLListBasedMatrix(width:20, height:20, seeds:NSArray() as! [Any])
+        let boardEntity = KGOLSimulationBoardEntity(cellMatrix:cellMatrix)
+        let loop = SwiftGameLoop() as KGOLGameLoop
+        let model = KGOLBoardModelImpl(initialBoard:boardEntity, gameLoop:loop)
+        return KGOLBoardPresenter(boardModel:model)
     }
 
     @objc func buttonAction(sender: UIButton!) {
@@ -61,7 +72,7 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
 
     override func viewWillDisappear(_ animated: Bool) {
         appPresenter?.unbind(view: self)
-        boardView.willDisAppear()
+        boardPresenter?.unbind(boardView: boardView)
     }
 
 }

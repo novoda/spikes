@@ -11,8 +11,6 @@ import KotlinGameOfLife
 
 class UIBoard: UIView, KGOLBoardView {
    
-    private var boardPresenter:KGOLBoardPresenter?
-    
     var onPatternSelected: (KGOLPatternEntity) -> KGOLStdlibUnit = {_ in
         return  KGOLStdlibUnit()
     }
@@ -76,21 +74,4 @@ class UIBoard: UIView, KGOLBoardView {
         guard let position = sender.position else { return }
         onCellClicked(position)
     }
-    
-    func willAppear() {
-        if (boardPresenter == nil){
-            let cellMatrix = KGOLListBasedMatrix(width:20, height:20, seeds:NSArray() as! [Any])
-            let boardEntity = KGOLSimulationBoardEntity(cellMatrix:cellMatrix)
-            let loop = SwiftGameLoop() as KGOLGameLoop
-            let model = KGOLBoardModelImpl(initialBoard:boardEntity, gameLoop:loop)
-            boardPresenter = KGOLBoardPresenter(boardModel:model)
-        }
-        
-        boardPresenter?.bind(boardView: self)
-    }
-    
-    func willDisAppear() {
-        boardPresenter?.unbind(boardView: self)
-    }
-    
 }
