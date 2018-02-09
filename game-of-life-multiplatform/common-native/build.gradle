@@ -5,12 +5,18 @@ konan.targets = ['iphone', 'iphone_sim']
 konanArtifacts {
 
     program('native-test') {
-        srcDir 'src/main/kotlin'
-        srcDir 'src/test/kotlin'
-        srcDir project(':common').file('src/test/kotlin')
-        srcDir project(':common').file('src/main/kotlin')
-        extraOpts '-tr', '-Xmulti-platform'
+        enableMultiplatform true
+
+//        srcDir 'src/main/kotlin'
+//        srcDir 'src/test/kotlin'
+//        srcDir project(':common').file('src/test/kotlin')
+//        srcDir project(':common').file('src/main/kotlin')
+//        extraOpts '-tr', '-Xmulti-platform'
+        dependencies {
+            expectedBy project(':common')
+        }
     }
+
 }
 
 
