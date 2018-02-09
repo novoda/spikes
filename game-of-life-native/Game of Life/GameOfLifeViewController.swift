@@ -13,6 +13,7 @@ import KotlinGameOfLife
 class GameOfLifeViewController: UIViewController, KGOLAppView {
 
     private let controlButton = UIButton(type: UIButtonType.system)
+    private let patternSelectionButton = UIButton(type: UIButtonType.system)
     private let boardView = UIBoard()
     private let appPresenter = KGOLAppPresenter(model: KGOLAppModel())
     private let boardPresenter: KGOLBoardPresenter
@@ -46,6 +47,13 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
                 width: self.view.bounds.width / 2,
                 height: yOffset)
 
+        patternSelectionButton.frame = CGRect(
+                x: self.view.bounds.width / 2,
+                y: yOffset,
+                width: self.view.bounds.width / 2,
+                height: yOffset)
+        patternSelectionButton.setTitle("Choose a Pattern", for: .normal)
+
         boardView.frame = CGRect(
                 x: 0,
                 y: controlButton.bounds.height + yOffset,
@@ -58,7 +66,7 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
     }
 
     func renderPatternSelectionVisibility(visibility: Bool) {
-
+        patternSelectionButton.isHidden = !visibility
     }
 
     func renderBoardWith(boardViewInput: KGOLBoardViewInput) {
@@ -68,6 +76,7 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(controlButton)
+        view.addSubview(patternSelectionButton)
         view.addSubview(boardView)
     }
 
