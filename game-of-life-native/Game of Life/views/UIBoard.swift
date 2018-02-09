@@ -64,7 +64,7 @@ class UIBoard: UIView, KGOLBoardView {
                 cellView.addTarget(self, action: #selector(onCellClicked(_:)), for: .touchUpInside)
 
                 if (cell.isAlive) {
-                    cellView.backgroundColor = .black
+                    cellView.backgroundColor = .white
                 }
 
                 addSubview(cellView)

@@ -26,7 +26,7 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
 
     required init?(coder aDecoder: NSCoder) {
         controlButton.backgroundColor = .green
-        boardView.backgroundColor = .blue
+        boardView.backgroundColor = .black
 
         let cellMatrix = KGOLListBasedMatrix(width: 20, height: 20, seeds: NSArray() as! [Any])
         let boardEntity = KGOLSimulationBoardEntity(cellMatrix: cellMatrix)
@@ -39,12 +39,19 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
     }
 
     private func setupLayout() {
-        controlButton.pinToSuperview(edges: [.left, .top], constant: 35)
-        controlButton.addWidthConstraint(with: 75)
+        let yOffset: CGFloat = CGFloat(35)
 
-        boardView.pinToSuperview(edges: [.right, .left])
-        boardView.pin(edge: .top, to: .bottom, of: controlButton)
-        boardView.heightAnchor.constraint(equalTo: boardView.widthAnchor).isActive = true
+        controlButton.frame = CGRect(
+                x: 0,
+                y: yOffset,
+                width: self.view.bounds.width / 2,
+                height: yOffset)
+
+        boardView.frame = CGRect(
+                x: 0,
+                y: controlButton.bounds.height + yOffset,
+                width: self.view.bounds.width,
+                height: self.view.bounds.width)
     }
 
     func renderControlButtonLabel(controlButtonLabel: String) {
@@ -63,11 +70,11 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
         super.viewDidLoad()
         view.addSubview(controlButton)
         view.addSubview(boardView)
-        setupLayout()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setupLayout()
         appPresenter.bind(view: self)
         boardPresenter.bind(boardView: boardView)
     }
