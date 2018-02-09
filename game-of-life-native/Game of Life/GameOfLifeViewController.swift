@@ -35,7 +35,8 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
         boardPresenter = KGOLBoardPresenter(boardModel: model)
 
         super.init(coder: aDecoder)
-        controlButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+        controlButton.addTarget(self, action: #selector(controlButtonAction), for: .touchUpInside)
+        patternSelectionButton.addTarget(self, action: #selector(patternSelectionButtonAction), for: .touchUpInside)
     }
 
     private func setupLayout() {
@@ -87,8 +88,23 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
         boardPresenter.bind(boardView: boardView)
     }
 
-    @objc func buttonAction(sender: UIButton!) {
+    @objc func controlButtonAction(sender: UIButton!) {
         let _ = onControlButtonClicked()
+    }
+
+    @objc func patternSelectionButtonAction(sender: UIButton!) {
+        let alert = UIAlertController(title: "Patterns", message: "Please Choose a Pattern", preferredStyle: .actionSheet)
+
+        let patterns = KGOLPatternRepositoryCompanion().patterns() as NSArray
+        for pattern in patterns {
+            let patternEntity: KGOLPatternEntity = pattern as! KGOLPatternEntity
+
+            alert.addAction(UIAlertAction(title: patternEntity.getName(), style: .default, handler: { (action) in
+                let _ = self.onPatternSelected(patternEntity)
+            }))
+        }
+
+        self.present(alert, animated: true, completion: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
