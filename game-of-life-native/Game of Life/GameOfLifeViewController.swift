@@ -81,7 +81,7 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
     }
 
     @objc func buttonAction(sender: UIButton!) {
-        onControlButtonClicked()
+        let _ = onControlButtonClicked()
     }
 
     override func viewWillDisappear(_ animated: Bool) {

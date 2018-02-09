@@ -20,7 +20,7 @@ class SwiftGameLoop: NSObject, KGOLGameLoop {
     }
 
     @objc func handleTimer() {
-        onTick()
+        let _ = onTick()
     }
 
     func stop() {
