@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9669CCAD3EC9D78FF85D9CF1 /* UIView+AutoLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9669CA2B2BCFE9B53ACE1EA8 /* UIView+AutoLayout.swift */; };
 		AEFF08D3202B40B400E7B138 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEFF08D2202B40B400E7B138 /* AppDelegate.swift */; };
 		AEFF08D5202B40B400E7B138 /* GameOfLifeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEFF08D4202B40B400E7B138 /* GameOfLifeViewController.swift */; };
 		AEFF08D8202B40B400E7B138 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AEFF08D6202B40B400E7B138 /* Main.storyboard */; };
@@ -35,7 +34,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		9669CA2B2BCFE9B53ACE1EA8 /* UIView+AutoLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+AutoLayout.swift"; sourceTree = "<group>"; };
 		AEFF08CF202B40B400E7B138 /* Game of Life.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Game of Life.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AEFF08D2202B40B400E7B138 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AEFF08D4202B40B400E7B138 /* GameOfLifeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOfLifeViewController.swift; sourceTree = "<group>"; };
@@ -89,7 +87,6 @@
 				AEFF08DB202B40B400E7B138 /* LaunchScreen.storyboard */,
 				AEFF08DE202B40B400E7B138 /* Info.plist */,
 				AEFF08EE202B41AB00E7B138 /* SwiftGameLoop.swift */,
-				9669CA2B2BCFE9B53ACE1EA8 /* UIView+AutoLayout.swift */,
 			);
 			path = "Game of Life";
 			sourceTree = "<group>";
@@ -198,7 +195,6 @@
 				AEFF08EC202B417D00E7B138 /* UICell.swift in Sources */,
 				AEFF08ED202B417D00E7B138 /* UIBoard.swift in Sources */,
 				AEFF08D3202B40B400E7B138 /* AppDelegate.swift in Sources */,
-				9669CCAD3EC9D78FF85D9CF1 /* UIView+AutoLayout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
