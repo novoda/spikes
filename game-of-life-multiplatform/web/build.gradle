@@ -65,5 +65,5 @@ task devBuild(dependsOn: [npmInstall, copyStatic, copyKotlinJs])
 assemble.dependsOn buildBundle, copyStatic
 
 afterEvaluate {
-    copyKotlinJs.dependsOn copyDependenciesKotlinJs
+//    copyKotlinJs.dependsOn copyDependenciesKotlinJs
 }
