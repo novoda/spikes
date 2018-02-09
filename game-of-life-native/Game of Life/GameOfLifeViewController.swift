@@ -12,7 +12,7 @@ import KotlinGameOfLife
 
 class GameOfLifeViewController: UIViewController, KGOLAppView {
 
-    private let controlButton = UIButton()
+    private let controlButton = UIButton(type: UIButtonType.system)
     private let boardView = UIBoard()
     private let appPresenter = KGOLAppPresenter(model: KGOLAppModel())
     private let boardPresenter: KGOLBoardPresenter
@@ -25,7 +25,6 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        controlButton.backgroundColor = .green
         boardView.backgroundColor = .black
 
         let cellMatrix = KGOLListBasedMatrix(width: 20, height: 20, seeds: NSArray() as! [Any])
