@@ -12,10 +12,10 @@ import KotlinGameOfLife
 
 class GameOfLifeViewController: UIViewController, KGOLAppView {
 
-    private let appPresenter: KGOLAppPresenter
+    private let controlButton = UIButton()
+    private let boardView = UIBoard()
+    private let appPresenter = KGOLAppPresenter(model: KGOLAppModel())
     private let boardPresenter: KGOLBoardPresenter
-    private let controlButton: UIButton
-    private let boardView: UIBoard
 
     var onControlButtonClicked: () -> KGOLStdlibUnit = {
         return KGOLStdlibUnit()
@@ -25,18 +25,16 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        controlButton = UIButton(frame: CGRect(x: 100, y: 100, width: 200, height: 50))
         controlButton.backgroundColor = .green
-        boardView = UIBoard()
         boardView.backgroundColor = .blue
-        appPresenter = KGOLAppPresenter(model: KGOLAppModel())
+
         let cellMatrix = KGOLListBasedMatrix(width: 20, height: 20, seeds: NSArray() as! [Any])
         let boardEntity = KGOLSimulationBoardEntity(cellMatrix: cellMatrix)
         let loop = SwiftGameLoop() as KGOLGameLoop
         let model = KGOLBoardModelImpl(initialBoard: boardEntity, gameLoop: loop)
         boardPresenter = KGOLBoardPresenter(boardModel: model)
-        super.init(coder: aDecoder)
 
+        super.init(coder: aDecoder)
         controlButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
     }
 
