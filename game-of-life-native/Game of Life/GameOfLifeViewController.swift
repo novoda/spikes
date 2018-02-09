@@ -26,8 +26,6 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        boardView.backgroundColor = .black
-
         let cellMatrix = KGOLListBasedMatrix(width: 20, height: 20, seeds: NSArray() as! [Any])
         let boardEntity = KGOLSimulationBoardEntity(cellMatrix: cellMatrix)
         let loop = SwiftGameLoop() as KGOLGameLoop
@@ -55,6 +53,7 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
                 height: yOffset)
         patternSelectionButton.setTitle("Choose a Pattern", for: .normal)
 
+        boardView.backgroundColor = .black
         boardView.frame = CGRect(
                 x: 0,
                 y: controlButton.bounds.height + yOffset,
