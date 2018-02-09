@@ -72,14 +72,6 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
         boardPresenter.bind(boardView: boardView)
     }
 
-    private func createBoardPresenter() -> KGOLBoardPresenter {
-        let cellMatrix = KGOLListBasedMatrix(width: 20, height: 20, seeds: NSArray() as! [Any])
-        let boardEntity = KGOLSimulationBoardEntity(cellMatrix: cellMatrix)
-        let loop = SwiftGameLoop() as KGOLGameLoop
-        let model = KGOLBoardModelImpl(initialBoard: boardEntity, gameLoop: loop)
-        return KGOLBoardPresenter(boardModel: model)
-    }
-
     @objc func buttonAction(sender: UIButton!) {
         let _ = onControlButtonClicked()
     }
