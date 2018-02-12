@@ -54,8 +54,8 @@ class UIBoard: UIView, KGOLBoardView {
 
         let cellDimen = bounds.size.width / CGFloat(boardEntity.getWidth())
 
-        for y in 0...boardEntity.getHeight() - 1 {
-            for x in 0...boardEntity.getWidth() - 1 {
+        for y in 0..<boardEntity.getHeight() {
+            for x in 0..<boardEntity.getWidth() {
                 let cell = boardEntity.cellAtPosition(x: x, y: y)
 
                 let position = KGOLPositionEntity(x: x, y: y)
@@ -73,7 +73,9 @@ class UIBoard: UIView, KGOLBoardView {
     }
 
     @objc func onCellClicked(_ sender: UICell) {
-        guard let position = sender.position else { return }
+        guard let position = sender.position else {
+            return
+        }
         let _ = onCellClicked(position)
     }
 }
