@@ -103,8 +103,8 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
             guard let patternEntity: KGOLPatternEntity = pattern as? KGOLPatternEntity else {
                 return
             }
-            alert.addAction(UIAlertAction(title: patternEntity.getName(), style: .default, handler: { (action) in
-                let _ = self.onPatternSelected(patternEntity)
+            alert.addAction(UIAlertAction(title: patternEntity.getName(), style: .default, handler: { [weak self] action in
+                let _ = self?.onPatternSelected(patternEntity)
             }))
         }
 
