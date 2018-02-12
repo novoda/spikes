@@ -51,9 +51,7 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
                 y: yOffset,
                 width: self.view.bounds.width / 2,
                 height: yOffset)
-        patternSelectionButton.setTitle("Choose a Pattern", for: .normal)
 
-        boardView.backgroundColor = .black
         boardView.frame = CGRect(
                 x: 0,
                 y: controlButton.bounds.height + yOffset,
@@ -78,6 +76,8 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
         view.addSubview(controlButton)
         view.addSubview(patternSelectionButton)
         view.addSubview(boardView)
+        patternSelectionButton.setTitle("Choose a Pattern", for: .normal)
+        boardView.backgroundColor = .black
     }
 
     override func viewWillAppear(_ animated: Bool) {
