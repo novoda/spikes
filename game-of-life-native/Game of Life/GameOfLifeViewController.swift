@@ -12,8 +12,8 @@ import KotlinGameOfLife
 
 class GameOfLifeViewController: UIViewController, KGOLAppView {
 
-    private let controlButton = UIButton(type: UIButtonType.system)
-    private let patternSelectionButton = UIButton(type: UIButtonType.system)
+    private let controlButton = UIButton(type: .system)
+    private let patternSelectionButton = UIButton(type: .system)
     private let boardView = UIBoard()
     private let appPresenter = KGOLAppPresenter(model: KGOLAppModel())
     private let boardPresenter: KGOLBoardPresenter
