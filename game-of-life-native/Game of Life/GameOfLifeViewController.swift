@@ -33,8 +33,6 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
         boardPresenter = KGOLBoardPresenter(boardModel: model)
 
         super.init(coder: aDecoder)
-        controlButton.addTarget(self, action: #selector(controlButtonAction), for: .touchUpInside)
-        patternSelectionButton.addTarget(self, action: #selector(patternSelectionButtonAction), for: .touchUpInside)
     }
 
     private func setupLayout() {
@@ -73,9 +71,15 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupViews()
+    }
+
+    private func setupViews() {
         view.addSubview(controlButton)
         view.addSubview(patternSelectionButton)
         view.addSubview(boardView)
+        controlButton.addTarget(self, action: #selector(controlButtonAction), for: .touchUpInside)
+        patternSelectionButton.addTarget(self, action: #selector(patternSelectionButtonAction), for: .touchUpInside)
         patternSelectionButton.setTitle("Choose a Pattern", for: .normal)
         boardView.backgroundColor = .black
     }
