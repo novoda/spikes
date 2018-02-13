@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  Game of Life
-//
-//  Created by Tobias Heine on 13.02.18.
-//  Copyright © 2018 Novoda. All rights reserved.
-//
-
 import UIKit
 
 @UIApplicationMain

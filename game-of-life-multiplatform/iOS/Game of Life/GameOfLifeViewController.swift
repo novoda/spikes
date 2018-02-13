@@ -1,11 +1,3 @@
-//
-//  ViewController.swift
-//  Game of Life
-//
-//  Created by Tobias Heine on 06.02.18.
-//  Copyright © 2018 Novoda. All rights reserved.
-//
-
 import UIKit
 import Foundation
 import KotlinGameOfLife
