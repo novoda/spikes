@@ -7,7 +7,7 @@ module.exports = {
         filename: "bundle.js"
     },
     resolve: {
-        modules: [path.resolve(__dirname, "node_modules"), path.resolve(__dirname, "build/classes/main/min/")]
+        modules: [path.resolve(__dirname, "node_modules"), path.resolve(__dirname, "build/kotlin-js-min/main/")]
     },
     module: {
         rules: [
