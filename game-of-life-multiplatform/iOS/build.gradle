@@ -7,8 +7,7 @@ konanArtifacts {
     framework('KotlinGameOfLife') {
         enableMultiplatform true
     }
-
-
+    
 }
 dependencies {
     expectedBy project(':common')
