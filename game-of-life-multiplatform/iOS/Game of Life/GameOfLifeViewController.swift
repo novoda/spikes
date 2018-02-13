@@ -16,7 +16,7 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
     private let patternSelectionButton = UIButton(type: .system)
     private let boardView = UIBoard()
     private let appPresenter = KGOLAppPresenter(model: KGOLAppModel())
-    private let boardPresenter: KGOLBoardPresenter
+    private let boardPresenter = KGOLBoardPresenter(width: 20, height: 20)
     
     var onControlButtonClicked: () -> KGOLStdlibUnit = {
         return KGOLStdlibUnit()
@@ -26,8 +26,6 @@ class GameOfLifeViewController: UIViewController, KGOLAppView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        boardPresenter = KGOLBoardPresenter(width: 20, height: 20)
-        
         super.init(coder: aDecoder)
     }
     
