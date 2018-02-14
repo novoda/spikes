@@ -36,3 +36,12 @@ Run with `./gradlew desktop-jvm:run`
 
 ![gol](https://user-images.githubusercontent.com/517070/35706797-723ef2dc-07a7-11e8-857d-d4fc86a2e200.png)
 
+# iOS
+iOS client
+
+Requires xcode 9.2
+
+Run from xcode
+
+![gol](https://user-images.githubusercontent.com/1046688/36028985-87516e70-0da1-11e8-870c-908a969af1ae.gif)
+

@@ -2,7 +2,7 @@ var webpack = require("webpack");
 var merge = require("webpack-merge");
 var path = require("path");
 
-var kotlinPath = path.resolve(__dirname, "build/classes/main");
+var kotlinPath = path.resolve(__dirname, "build/classes/kotlin/main");
 module.exports = merge({
     devtool: "inline-source-map",
     resolve: {
