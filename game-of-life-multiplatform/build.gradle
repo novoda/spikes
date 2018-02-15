@@ -10,7 +10,7 @@ allprojects {
         }
         dependencies {
             classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-            classpath "org.jetbrains.kotlin:kotlin-native-gradle-plugin:0.6-dev-1005"
+            classpath "org.jetbrains.kotlin:kotlin-native-gradle-plugin:$kotlin_native_version"
         }
     }
 
