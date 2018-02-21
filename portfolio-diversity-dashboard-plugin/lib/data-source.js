@@ -20,7 +20,16 @@ const parseRss = (url) => {
 
 const toViewState = (items) => {
     var mentions = new Map([["android", 0], ["ios", 0], ["web", 0]])
-    
+    countMentions(mentions, items)
+        
+    return {
+        webMentions: mentions.get("web"),
+        androidMentions: mentions.get("android"),
+        iosMentions: mentions.get("ios"),
+    }
+}
+
+function countMentions(mentions, items){
     for (var itemIndex = 0; itemIndex < items.length; itemIndex++) {
         var item = items[itemIndex]
         if (item.categories != null){
@@ -36,12 +45,6 @@ const toViewState = (items) => {
                 countMentionsFor(mentions, "web", category, copyWebTags)
             }
         }
-    }
-        
-    return {
-        webMentions: mentions.get("web"),
-        androidMentions: mentions.get("android"),
-        iosMentions: mentions.get("ios"),
     }
 }
 
