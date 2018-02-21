@@ -1,8 +1,12 @@
 {
-    "foo": {
-        "value": "Hello"
-    },
-    "bar": {
-        "value": "World"
-    }
+    "web-tags": [
+        "react", "javascript"
+    ],
+    "android-tags": [
+        "android", "activity"
+    ],
+    "ios-tags": [
+        "iOS", "swift"
+    ],
+    "url" : "https://www.novoda.com/blog/rss"
 }
