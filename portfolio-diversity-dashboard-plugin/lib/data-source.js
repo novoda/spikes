@@ -40,15 +40,15 @@ function countMentions(mentions, items){
             
             for (var categoryIndex = 0; categoryIndex < item.categories.length; categoryIndex++){
                 var category = item.categories[categoryIndex].toLowerCase()                
-                countMentionsFor(mentions, "android", category, copyAndroidTags)
-                countMentionsFor(mentions, "ios", category, copyIosTags)
-                countMentionsFor(mentions, "web", category, copyWebTags)
+                countMentionWhenTagsHaveCategory(mentions, "android", category, copyAndroidTags)
+                countMentionWhenTagsHaveCategory(mentions, "ios", category, copyIosTags)
+                countMentionWhenTagsHaveCategory(mentions, "web", category, copyWebTags)
             }
         }
     }
 }
 
-function countMentionsFor(mentions, platform, category, tags){
+function countMentionWhenTagsHaveCategory(mentions, platform, category, tags){
     var catgoryIndex = findIndexForCategory(category, tags)
     if (catgoryIndex >=0){
         tags.splice(catgoryIndex, 1)
