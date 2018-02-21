@@ -23,6 +23,11 @@ const toViewState = (items) => {
     var webMentions=0
     var iosMentions=0
 
+    var mentions = new Map()
+    mentions.set("android", 0)
+    mentions.set("ios", 0)
+    mentions.set("web", 0)
+
     for (var itemIndex = 0; itemIndex < items.length; itemIndex++) {
         var item = items[itemIndex]
         if (item.categories != null){
@@ -32,34 +37,27 @@ const toViewState = (items) => {
             var copyWebTags = webTags.slice()
             
             for (var categoryIndex = 0; categoryIndex < item.categories.length; categoryIndex++){
-                var category = item.categories[categoryIndex].toLowerCase()
-                
-                var androidCatgoryIndex = findIndexForCategory(category, copyAndroidTags)
-                if (androidCatgoryIndex >=0){
-                    copyAndroidTags.splice(androidCatgoryIndex, 1)
-                    androidMentions++        
-                }
-
-                var iosCatgoryIndex = findIndexForCategory(category, copyIosTags)
-                if (iosCatgoryIndex >=0){
-                    copyIosTags.splice(iosCatgoryIndex, 1)
-                    iosMentions++        
-                }
-
-                var webCatgoryIndex = findIndexForCategory(category, copyWebTags)
-                if (webCatgoryIndex >=0){
-                    copyWebTags.splice(webCatgoryIndex, 1)
-                    webMentions++        
-                }
+                var category = item.categories[categoryIndex].toLowerCase()                
+                countMentionsFor(mentions, "android", category, copyAndroidTags)
+                countMentionsFor(mentions, "ios", category, copyIosTags)
+                countMentionsFor(mentions, "web", category, copyWebTags)
             }
         }
     }
         
     return {
-        webMentions: webMentions,
-        androidMentions: androidMentions,
-        iosMentions: iosMentions,
+        webMentions: mentions.get("web"),
+        androidMentions: mentions.get("android"),
+        iosMentions: mentions.get("ios"),
     }
+}
+
+function countMentionsFor(mentions, platform, category, tags){
+    var catgoryIndex = findIndexForCategory(category, tags)
+    if (catgoryIndex >=0){
+        tags.splice(catgoryIndex, 1)
+        mentions.set(platform,mentions.get(platform)+1)        
+    }                   
 }
 
 function findIndexForCategory(category, tags) {
