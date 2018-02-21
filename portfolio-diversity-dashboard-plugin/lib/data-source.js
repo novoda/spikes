@@ -1,8 +1,8 @@
 const Rss = require('rss-parser')
 
-const webTags = ["react","javascript"]
+const webTags = ["react", "javascript"]
 const androidTags = ["android", "google"]
-const iosTags = ["iOS","XCode","swift"]
+const iosTags = ["ios", "xcode", "swift", "apple"]
 
 const extractDiversityFrom = (url) => {
     return parseRss(url).then(rss => {
@@ -27,10 +27,11 @@ const toViewState = (items) => {
         var item = items[itemIndex]
         if (item.categories != null){
             for (var categoryIndex = 0; categoryIndex < item.categories.length; categoryIndex++){
-                var category = items[itemIndex].categories[categoryIndex]
-                var isAndroidMention = (androidTags.indexOf(category) > -1);
-                var isIosMention = (iosTags.indexOf(category) > -1);
-                var isWebMention = (webTags.indexOf(category) > -1);
+                var category = item.categories[categoryIndex].toLowerCase()
+
+                var isAndroidMention = androidTags.some(function(v){ return v.indexOf(category)>=0 })
+                var isIosMention = iosTags.some(function(v){ return v.indexOf(category)>=0 })
+                var isWebMention = webTags.some(function(v){ return v.indexOf(category)>=0 })
 
                 if (isAndroidMention){
                     androidMentions++        
