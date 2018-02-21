@@ -19,20 +19,20 @@ const parseRss = (url) => {
 }
 
 const toViewState = (items) => {
-    var mentions = new Map([["android", 0], ["ios", 0], ["web", 0]])
+    var mentions = new Map([["android", { count: 0 }], ["ios", { count: 0 }], ["web", { count: 0 }]])
     countMentions(mentions, items)
         
     return {
-        webMentions: mentions.get("web"),
-        androidMentions: mentions.get("android"),
-        iosMentions: mentions.get("ios"),
+        webMentions: mentions.get("web").count,
+        androidMentions: mentions.get("android").count,
+        iosMentions: mentions.get("ios").count,
     }
 }
 
 function countMentions(mentions, items){
     for (var itemIndex = 0; itemIndex < items.length; itemIndex++) {
         var item = items[itemIndex]
-        if (item.categories != null){
+        if (item.categories != null) {
             
             var copyAndroidTags = androidTags.slice()
             var copyIosTags = iosTags.slice()
@@ -40,19 +40,19 @@ function countMentions(mentions, items){
             
             for (var categoryIndex = 0; categoryIndex < item.categories.length; categoryIndex++){
                 var category = item.categories[categoryIndex].toLowerCase()                
-                countMentionWhenTagsHaveCategory(mentions, "android", category, copyAndroidTags)
-                countMentionWhenTagsHaveCategory(mentions, "ios", category, copyIosTags)
-                countMentionWhenTagsHaveCategory(mentions, "web", category, copyWebTags)
+                countMentionWhenTagsHaveCategory(mentions.get("android"), category, copyAndroidTags)
+                countMentionWhenTagsHaveCategory(mentions.get("ios"), category, copyIosTags)
+                countMentionWhenTagsHaveCategory(mentions.get("web"), category, copyWebTags)
             }
         }
     }
 }
 
-function countMentionWhenTagsHaveCategory(mentions, platform, category, tags){
+function countMentionWhenTagsHaveCategory(mention, category, tags){
     var catgoryIndex = findIndexForCategory(category, tags)
     if (catgoryIndex >=0){
         tags.splice(catgoryIndex, 1)
-        mentions.set(platform, mentions.get(platform)+1)        
+        mention.count = mention.count+1
     }                   
 }
 
