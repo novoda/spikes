@@ -1,7 +1,9 @@
 const generateViewState = (configuration) => {
+    console.log(configuration)    
     const viewState = {
-        foo: configuration.foo.value,
-        bar: configuration.bar.value
+        numWebMentions: 100,
+        numAndroidMentions: 200,
+        numIosMentions: 300,
     }
     return Promise.resolve(viewState)
 }
