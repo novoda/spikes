@@ -1,6 +1,10 @@
 const Rss = require('rss-parser')
 
-const parseBlogPosts = (url) => {
+const webTags = ["react","javascript"]
+const androidTags = ["android", "google"]
+const iosTags = ["iOS","XCode","swift"]
+
+const extractDiversityFrom = (url) => {
     return parseRss(url).then(rss => {
         return rss.feed.entries;
     }).then(toItem)
@@ -22,4 +26,4 @@ const toItem = (items) => {
     }
 }
 
-module.exports = () => parseBlogPosts('https://www.novoda.com/blog/rss/')
+module.exports = () => extractDiversityFrom('https://www.novoda.com/blog/rss/')
