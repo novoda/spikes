@@ -19,15 +19,8 @@ const parseRss = (url) => {
 }
 
 const toViewState = (items) => {
-    var androidMentions=0
-    var webMentions=0
-    var iosMentions=0
-
-    var mentions = new Map()
-    mentions.set("android", 0)
-    mentions.set("ios", 0)
-    mentions.set("web", 0)
-
+    var mentions = new Map([["android", 0], ["ios", 0], ["web", 0]])
+    
     for (var itemIndex = 0; itemIndex < items.length; itemIndex++) {
         var item = items[itemIndex]
         if (item.categories != null){
