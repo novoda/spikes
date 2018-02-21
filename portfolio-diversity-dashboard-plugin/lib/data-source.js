@@ -1,7 +1,7 @@
 const Rss = require('rss-parser')
 
 const webTags = ["react", "javascript"]
-const androidTags = ["android", "google"]
+const androidTags = ["android", "google", "kotlin"]
 const iosTags = ["ios", "xcode", "swift", "apple"]
 
 const extractDiversityFrom = (url) => {
@@ -22,26 +22,33 @@ const toViewState = (items) => {
     var androidMentions=0
     var webMentions=0
     var iosMentions=0
-    
+
     for (var itemIndex = 0; itemIndex < items.length; itemIndex++) {
         var item = items[itemIndex]
         if (item.categories != null){
+            
+            var copyAndroidTags = androidTags.slice()
+            var copyIosTags = iosTags.slice()
+            var copyWebTags = webTags.slice()
+            
             for (var categoryIndex = 0; categoryIndex < item.categories.length; categoryIndex++){
                 var category = item.categories[categoryIndex].toLowerCase()
-
-                var isAndroidMention = androidTags.some(function(v){ return v.indexOf(category)>=0 })
-                var isIosMention = iosTags.some(function(v){ return v.indexOf(category)>=0 })
-                var isWebMention = webTags.some(function(v){ return v.indexOf(category)>=0 })
-
-                if (isAndroidMention){
+                
+                var androidCatgoryIndex = findIndexForCategory(category, copyAndroidTags)
+                if (androidCatgoryIndex >=0){
+                    copyAndroidTags.splice(androidCatgoryIndex, 1)
                     androidMentions++        
                 }
 
-                if (isIosMention){
+                var iosCatgoryIndex = findIndexForCategory(category, copyIosTags)
+                if (iosCatgoryIndex >=0){
+                    copyIosTags.splice(iosCatgoryIndex, 1)
                     iosMentions++        
                 }
 
-                if (isWebMention){
+                var webCatgoryIndex = findIndexForCategory(category, copyWebTags)
+                if (webCatgoryIndex >=0){
+                    copyWebTags.splice(webCatgoryIndex, 1)
                     webMentions++        
                 }
             }
@@ -53,6 +60,16 @@ const toViewState = (items) => {
         androidMentions: androidMentions,
         iosMentions: iosMentions,
     }
+}
+
+function findIndexForCategory(category, tags) {
+    for (var i=tags.length; i--;) {
+        var tag = tags[i].toLowerCase()
+        if (tag.indexOf(category)>=0 || category.indexOf(tag)>=0){
+            break;
+        } 
+    }
+    return i
 }
 
 module.exports = () => extractDiversityFrom('https://www.novoda.com/blog/rss/')
