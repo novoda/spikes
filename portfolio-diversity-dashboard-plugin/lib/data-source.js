@@ -4,7 +4,7 @@ const webTags = ["react", "javascript"]
 const androidTags = ["android", "google", "kotlin"]
 const iosTags = ["ios", "xcode", "swift", "apple"]
 
-const extractDiversityFrom = (url) => {
+const extractMentionsFrom = (url) => {
     return parseRss(url).then(rss => {
         return rss.feed.entries;
     }).then(toViewState)
@@ -49,7 +49,7 @@ function countMentionsFor(mentions, platform, category, tags){
     var catgoryIndex = findIndexForCategory(category, tags)
     if (catgoryIndex >=0){
         tags.splice(catgoryIndex, 1)
-        mentions.set(platform,mentions.get(platform)+1)        
+        mentions.set(platform, mentions.get(platform)+1)        
     }                   
 }
 
@@ -63,4 +63,4 @@ function findIndexForCategory(category, tags) {
     return i
 }
 
-module.exports = () => extractDiversityFrom('https://www.novoda.com/blog/rss/')
+module.exports = () => extractMentionsFrom('https://www.novoda.com/blog/rss/')
