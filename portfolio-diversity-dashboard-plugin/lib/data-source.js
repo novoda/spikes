@@ -33,16 +33,13 @@ const toViewState = (items) => {
 }
 
 function mostUsedTagsFrom(items){
-    var tagsWithUsages = tagsWithUsagesFrom(items)
-    tagsWithUsages = sortMapDescendingByValue(tagsWithUsages)
-    
-    return tagsWithUsages
+    return sortMapDescendingByValue(tagsWithUsagesFrom(items))
         .splice(0,3)
         .map(function(tagUsage)
 	    {
 		    return tagUsage[0]
         })
-        .join(",")
+        .join(", ")
 }
 
 function tagsWithUsagesFrom(items){
