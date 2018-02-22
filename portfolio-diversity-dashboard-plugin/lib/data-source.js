@@ -34,8 +34,15 @@ const toViewState = (items) => {
 
 function mostUsedTagsFrom(items){
     var tagsWithUsages = tagsWithUsagesFrom(items)
-    console.log(tagsWithUsages);    
-    return "android, swift, kotlin"
+    tagsWithUsages = sortMapDescendingByValue(tagsWithUsages)
+    
+    return tagsWithUsages
+        .splice(0,3)
+        .map(function(tagUsage)
+	    {
+		    return tagUsage[0]
+        })
+        .join(",")
 }
 
 function tagsWithUsagesFrom(items){
@@ -58,6 +65,23 @@ function tagsWithUsagesFrom(items){
     }
 
     return tagsWithUsages
+}
+
+function sortMapDescendingByValue(obj)
+{
+	var sortable=[];
+	for(var key in obj)
+		if(obj.hasOwnProperty(key))
+			sortable.push([key, obj[key]]);
+	
+	sortable.sort(function(a, b)
+	{
+		var x=a[1],
+			y=b[1];
+		return y<x ? -1 : y>x ? 1 : 0;
+    });
+    
+    return sortable;
 }
 
 function counTagsIn(items, tags){
