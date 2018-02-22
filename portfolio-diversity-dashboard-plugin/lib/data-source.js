@@ -19,44 +19,46 @@ const parseRss = (url) => {
 }
 
 const toViewState = (items) => {
-    var mentions = new Map([["android", { count: 0 }], ["ios", { count: 0 }], ["web", { count: 0 }]])
-    countMentions(mentions, items)
+    var mentions = new Map([["android", 0], ["ios", 0], ["web", 0]])
+    mentions.set("android", counTagsIn(items, androidTags))
+    mentions.set("ios", counTagsIn(items, iosTags))
+    mentions.set("web", counTagsIn(items, webTags))
         
     return {
-        webMentions: mentions.get("web").count,
-        androidMentions: mentions.get("android").count,
-        iosMentions: mentions.get("ios").count,
+        webMentions: mentions.get("web"),
+        androidMentions: mentions.get("android"),
+        iosMentions: mentions.get("ios"),
     }
 }
 
-function countMentions(mentions, items){
+function counTagsIn(items, tags){
+    var mentionCount = 0
     for (var itemIndex = 0; itemIndex < items.length; itemIndex++) {
         var item = items[itemIndex]
-        if (item.categories != null) {
-            
-            var copyAndroidTags = androidTags.slice()
-            var copyIosTags = iosTags.slice()
-            var copyWebTags = webTags.slice()
+        if (item.categories != null) {            
+            var copyTags = tags.slice()
             
             for (var categoryIndex = 0; categoryIndex < item.categories.length; categoryIndex++){
                 var category = item.categories[categoryIndex].toLowerCase()                
-                countMentionWhenTagsHaveCategory(mentions.get("android"), category, copyAndroidTags)
-                countMentionWhenTagsHaveCategory(mentions.get("ios"), category, copyIosTags)
-                countMentionWhenTagsHaveCategory(mentions.get("web"), category, copyWebTags)
+                mentionCount+= countAndRemoveFoundTags(category, copyTags)
             }
         }
     }
+
+    return mentionCount
 }
 
-function countMentionWhenTagsHaveCategory(mention, category, tags){
-    var catgoryIndex = findIndexForCategory(category, tags)
+function countAndRemoveFoundTags(category, tags){
+    var count = 0
+    var catgoryIndex = findIndexForCategoryIn(category, tags)
     if (catgoryIndex >=0){
         tags.splice(catgoryIndex, 1)
-        mention.count = mention.count+1
-    }                   
+        count++
+    }          
+    return count         
 }
 
-function findIndexForCategory(category, tags) {
+function findIndexForCategoryIn(category, tags) {
     for (var i=tags.length; i--;) {
         var tag = tags[i].toLowerCase()
         if (tag.indexOf(category)>=0 || category.indexOf(tag)>=0){
