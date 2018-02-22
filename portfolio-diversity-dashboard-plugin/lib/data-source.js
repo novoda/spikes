@@ -25,11 +25,39 @@ const toViewState = (items) => {
     mentions.set("web", counTagsIn(items, webTags))
         
     return {
+        mostUsedTags: mostUsedTagsFrom(items),
         webMentions: mentions.get("web"),
         androidMentions: mentions.get("android"),
-        iosMentions: mentions.get("ios"),
-        mostUsedTags: "android, swift, kotlin"
+        iosMentions: mentions.get("ios")
     }
+}
+
+function mostUsedTagsFrom(items){
+    var tagsWithUsages = tagsWithUsagesFrom(items)
+    console.log(tagsWithUsages);    
+    return "android, swift, kotlin"
+}
+
+function tagsWithUsagesFrom(items){
+    var tagsWithUsages = new Map()
+
+    for (var itemIndex = 0; itemIndex < items.length; itemIndex++) {
+        var item = items[itemIndex]
+        if (item.categories != null) {                
+
+            for (var categoryIndex = 0; categoryIndex < item.categories.length; categoryIndex++){
+                var category = item.categories[categoryIndex].toLowerCase()                
+                
+                if (tagsWithUsages[category] == undefined){
+                    tagsWithUsages[category] = 0
+                } 
+                
+                tagsWithUsages[category] = tagsWithUsages[category]+1                
+            }
+        }
+    }
+
+    return tagsWithUsages
 }
 
 function counTagsIn(items, tags){
