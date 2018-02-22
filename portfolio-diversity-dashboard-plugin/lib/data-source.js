@@ -28,6 +28,7 @@ const toViewState = (items) => {
         webMentions: mentions.get("web"),
         androidMentions: mentions.get("android"),
         iosMentions: mentions.get("ios"),
+        mostUsedTags: "android, swift, kotlin"
     }
 }
 
