@@ -35,10 +35,7 @@ const toViewState = (items) => {
 function mostUsedTagsFrom(items){
     return sortMapDescendingByValue(tagsWithUsagesFrom(items))
         .splice(0,3)
-        .map(function(tagUsage)
-	    {
-		    return tagUsage[0]
-        })
+        .map(tagUsage => tagUsage[0])
         .join(", ")
 }
 
