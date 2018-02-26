@@ -1,0 +1,11 @@
+{
+  "name": "portfolio-diversity-dashboard-plugin",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "repository": {},
+  "license": "MIT",
+  "dependencies": {
+    "rss-parser": "^2.11.0",
+    "dashboard-plugin": "https://github.com/novoda/dashboards/blob/master/plugin/dashboard-plugin-1.0.3.tgz?raw=true"
+  }
+}
