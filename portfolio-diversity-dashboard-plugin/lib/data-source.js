@@ -1,8 +1,8 @@
 const Rss = require('rss-parser')
 
 const crossPlatformTags = ["react native", "flutter", "j2objc", "kotlin multiplatform", "kotlin/native"]
-const androidTags = ["android", "google", "kotlin", "android studio"]
-const iosTags = ["ios", "xcode", "swift", "apple"]
+const androidTags = ["android", "google", "kotlin", "android studio", "gradle"]
+const iosTags = ["ios", "xcode", "swift", "apple", "cocoa pods"]
 
 const generateViewStateFrom = (url) => {
     return parseRss(url).then(rss => {
