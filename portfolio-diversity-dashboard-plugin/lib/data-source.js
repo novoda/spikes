@@ -42,21 +42,18 @@ function mostUsedTagsFrom(items){
 function tagsWithUsagesFrom(items){
     var tagsWithUsages = new Map()
 
-    for (var itemIndex = 0; itemIndex < items.length; itemIndex++) {
-        var item = items[itemIndex]
-        if (item.categories != null) {                
-
-            for (var categoryIndex = 0; categoryIndex < item.categories.length; categoryIndex++){
-                var category = item.categories[categoryIndex].toLowerCase()                
-                
+    items
+        .filter(item => item.categories != null)
+        .map(function(item){ return item.categories})
+        .map(function(categories){
+            categories.forEach(category => {
                 if (tagsWithUsages[category] == undefined){
                     tagsWithUsages[category] = 0
                 } 
                 
-                tagsWithUsages[category] = tagsWithUsages[category]+1                
-            }
-        }
-    }
+                tagsWithUsages[category] = tagsWithUsages[category]+1                 
+            });
+        })
 
     return tagsWithUsages
 }
