@@ -77,17 +77,17 @@ function sortMapDescendingByValue(obj)
 
 function counTagsIn(items, tags){
     var mentionCount = 0
-    for (var itemIndex = 0; itemIndex < items.length; itemIndex++) {
-        var item = items[itemIndex]
-        if (item.categories != null) {            
+    
+    items
+        .filter(item => item.categories != null)
+        .map(function(item){ return item.categories})
+        .map(function(categories){
             var copyTags = tags.slice()
-            
-            for (var categoryIndex = 0; categoryIndex < item.categories.length; categoryIndex++){
-                var category = item.categories[categoryIndex].toLowerCase()                
+            categories.forEach(element => {
+                var category = element.toLowerCase()                
                 mentionCount+= countAndRemoveFoundTags(category, copyTags)
-            }
-        }
-    }
+            });
+        })
 
     return mentionCount
 }
