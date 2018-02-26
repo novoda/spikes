@@ -8,12 +8,8 @@ const component = {
 
 const configuration = () => {
     return {
-        "portfolio-diversity-dashboard-plugin": {
-            name: 'portfolio-diversity-dashboard-plugin',
-            template: {
-                foo: plugin.createStringField('Foo name for admin panel'),
-                bar: plugin.createStringField('Bar name for admin panel')
-            }
+        "blog-diversity-dashboard-plugin": {
+            name: 'Novoda Blog Diversity Dashboard'
         }
     }
 }
