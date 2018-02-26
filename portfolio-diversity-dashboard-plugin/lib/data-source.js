@@ -1,6 +1,6 @@
 const Rss = require('rss-parser')
 
-const webTags = ["react", "javascript"]
+const crossPlatformTags = ["react native", "flutter", "j2objc", "kotlin multiplatform", "kotlin/native"]
 const androidTags = ["android", "google", "kotlin"]
 const iosTags = ["ios", "xcode", "swift", "apple"]
 
@@ -19,14 +19,14 @@ const parseRss = (url) => {
 }
 
 const toViewState = (items) => {
-    var mentions = new Map([["android", 0], ["ios", 0], ["web", 0]])
+    var mentions = new Map([["android", 0], ["ios", 0], ["cross-platform", 0]])
     mentions.set("android", counTagsIn(items, androidTags))
     mentions.set("ios", counTagsIn(items, iosTags))
-    mentions.set("web", counTagsIn(items, webTags))
+    mentions.set("cross-platform", counTagsIn(items, crossPlatformTags))
         
     return {
         mostUsedTags: mostUsedTagsFrom(items),
-        webMentions: mentions.get("web"),
+        crossPlatformMentions: mentions.get("cross-platform"),
         androidMentions: mentions.get("android"),
         iosMentions: mentions.get("ios")
     }
