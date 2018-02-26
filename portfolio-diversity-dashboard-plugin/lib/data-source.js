@@ -20,9 +20,9 @@ const parseRss = (url) => {
 
 const toViewState = (items) => {
     var mentions = new Map([["android", 0], ["ios", 0], ["cross-platform", 0]])
-    mentions.set("android", counTagsIn(items, androidTags))
-    mentions.set("ios", counTagsIn(items, iosTags))
-    mentions.set("cross-platform", counTagsIn(items, crossPlatformTags))
+    mentions.set("android", counUniqueTagsIn(items, androidTags))
+    mentions.set("ios", counUniqueTagsIn(items, iosTags))
+    mentions.set("cross-platform", counUniqueTagsIn(items, crossPlatformTags))
         
     return {
         mostUsedTags: mostUsedTagsFrom(items),
@@ -75,9 +75,9 @@ function sortMapDescendingByValue(obj)
     return sortable;
 }
 
-function counTagsIn(items, tags){
+function counUniqueTagsIn(items, tags){
     var mentionCount = 0
-    
+
     items
         .filter(item => item.categories != null)
         .map(function(item){ return item.categories})
