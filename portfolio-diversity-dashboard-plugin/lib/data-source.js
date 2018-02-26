@@ -4,7 +4,7 @@ const crossPlatformTags = ["react native", "flutter", "j2objc", "kotlin multipla
 const androidTags = ["android", "google", "kotlin"]
 const iosTags = ["ios", "xcode", "swift", "apple"]
 
-const extractMentionsFrom = (url) => {
+const generateViewStateFrom = (url) => {
     return parseRss(url).then(rss => {
         return rss.feed.entries;
     }).then(toViewState)
@@ -115,4 +115,4 @@ function findIndexForCategoryIn(category, tags) {
     return i
 }
 
-module.exports = () => extractMentionsFrom('https://www.novoda.com/blog/rss/')
+module.exports = () => generateViewStateFrom('https://www.novoda.com/blog/rss/')
