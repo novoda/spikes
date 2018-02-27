@@ -7,8 +7,23 @@ konanArtifacts {
     framework('KotlinGameOfLife') {
         enableMultiplatform true
     }
+
+    library('native') {
+        enableMultiplatform true
+    }
+
+    program('native-test') {
+        srcDir 'src/test/kotlin'
+        commonSourceSet 'test'
+        libraries {
+            artifact 'native'
+        }
+        extraOpts '-tr'
+    }
     
 }
 dependencies {
     expectedBy project(':common')
 }
+
+task test(dependsOn: run)
