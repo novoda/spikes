@@ -6,6 +6,7 @@ konanArtifacts {
 
     framework('KotlinGameOfLife') {
         enableMultiplatform true
+        enableDebug true
     }
     
 }
