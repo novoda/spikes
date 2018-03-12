@@ -8,6 +8,8 @@ repositories {
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+    compile gradleApi()
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile 'com.google.guava:guava:19.0'
+    testCompile 'com.google.truth:truth:0.30'
 }
