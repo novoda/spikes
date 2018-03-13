@@ -3,6 +3,7 @@ package com.novoda.releaseplugin
 import com.google.common.io.Resources
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.TaskOutcome
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -23,11 +24,52 @@ class PrintChangelogIntegrationTest {
 
     @Test
     void shouldPrintChangelog() throws IOException {
-        configureExtensionWith('0.1')
+        configureExtensionWith('0.1', Resources.getResource("CHANGELOG.md"))
 
         BuildResult build = buildWithArgs('printReleaseChangelog')
 
         assertThat(build.output).contains("- Initial release.")
+    }
+
+    @Test
+    void shouldNotRunParseChangelogTwiceWhenVersionAndChangelogAreSame() {
+        configureExtensionWith('0.1', Resources.getResource("CHANGELOG.md"))
+        buildWithArgs('printReleaseChangelog')
+
+        BuildResult build = buildWithArgs('printReleaseChangelog')
+
+        def parseReleaseChangelog = build.task(":parseReleaseChangelog")
+        assertThat(parseReleaseChangelog.outcome).isEqualTo(TaskOutcome.UP_TO_DATE)
+    }
+
+    @Test
+    void shouldRunParseChangelogTwiceWhenVersionDiffersButChangelogAreSame() {
+        configureExtensionWith('0.1', Resources.getResource("CHANGELOG.md"))
+        buildWithArgs('printReleaseChangelog')
+
+        configureExtensionWith('0.2', Resources.getResource("CHANGELOG.md"))
+        BuildResult build = buildWithArgs('printReleaseChangelog')
+
+        def parseReleaseChangelog = build.task(":parseReleaseChangelog")
+        assertThat(parseReleaseChangelog.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    }
+
+    @Test
+    void shouldRunParseChangelogTwiceWhenVersionIsSameButChangelogDiffers() {
+        configureExtensionWith('0.1', Resources.getResource("CHANGELOG.md"))
+        buildWithArgs('printReleaseChangelog')
+
+        def differentChangelog = testProjectDir.newFile("DIFFERENT_CHANGELOG.md")
+        writeFile(differentChangelog, """[Version 0.1](Foo)
+                                                 --------------------------
+                                                 
+                                                 - BAR.""")
+
+        configureExtensionWith('0.1', differentChangelog.toURI().toURL())
+        BuildResult build = buildWithArgs('printReleaseChangelog')
+
+        def parseReleaseChangelog = build.task(":parseReleaseChangelog")
+        assertThat(parseReleaseChangelog.outcome).isEqualTo(TaskOutcome.SUCCESS)
     }
 
     private BuildResult buildWithArgs(String args) {
@@ -38,8 +80,8 @@ class PrintChangelogIntegrationTest {
                 .build()
     }
 
-    private void configureExtensionWith(String version) {
-        def changelog = Resources.getResource("CHANGELOG.md").getPath()
+    private void configureExtensionWith(String version, URL changelog) {
+        def changelogPath = changelog.getPath()
         String buildFileContent = """
                 
                 plugins {
@@ -54,7 +96,7 @@ class PrintChangelogIntegrationTest {
                 }
 
                 releasePlugin {               
-                     changelog = '${changelog}'
+                     changelog = '${changelogPath}'
                      version = '$version'
                 }
                 

@@ -3,17 +3,19 @@ package com.novoda.releaseplugin.internal
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.provider.PropertyState
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 
 class ParseChangeLogTask extends DefaultTask {
 
-//    @InputFile
+    @Input
     final PropertyState<String> changelog
 
     @OutputFile
     File releaseChangelog
 
+    @Input
     final PropertyState<String> version
 
     ParseChangeLogTask() {
