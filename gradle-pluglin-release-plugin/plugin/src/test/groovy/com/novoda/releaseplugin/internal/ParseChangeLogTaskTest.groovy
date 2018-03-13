@@ -28,9 +28,9 @@ class ParseChangeLogTaskTest {
     @Test
     void shouldParseChangelogV1() {
         def task = project.task('parseReleaseChangeLog', type: ParseChangeLogTask)
-        task.version = '0.1'
+        task.version.set('0.1')
         def releaseChangelog = temporaryFolder.newFile("v0-1-changelog.md")
-        task.changelog = new File(Resources.getResource("CHANGELOG.md").getPath())
+        task.changelog.set(Resources.getResource("CHANGELOG.md").getPath())
         task.releaseChangelog = releaseChangelog
 
         project.tasks['parseReleaseChangeLog'].execute()
@@ -41,9 +41,9 @@ class ParseChangeLogTaskTest {
     @Test
     void shouldParseChangelogV2() {
         def task = project.task('parseReleaseChangeLog', type: ParseChangeLogTask)
-        task.version = '0.2'
+        task.version.set('0.2')
         def releaseChangelog = temporaryFolder.newFile("v0-2-changelog.md")
-        task.changelog = new File(Resources.getResource("CHANGELOG.md").getPath())
+        task.changelog.set(Resources.getResource("CHANGELOG.md").getPath())
         task.releaseChangelog = releaseChangelog
 
         project.tasks['parseReleaseChangeLog'].execute()

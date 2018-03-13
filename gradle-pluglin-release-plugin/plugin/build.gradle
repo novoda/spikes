@@ -2,6 +2,7 @@ group 'com.novoda'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'groovy'
+apply plugin: 'java-gradle-plugin'
 
 repositories {
     mavenCentral()
@@ -9,6 +10,7 @@ repositories {
 
 dependencies {
     compile gradleApi()
+    compile gradleTestKit()
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile 'com.google.guava:guava:19.0'
     testCompile 'com.google.truth:truth:0.30'
