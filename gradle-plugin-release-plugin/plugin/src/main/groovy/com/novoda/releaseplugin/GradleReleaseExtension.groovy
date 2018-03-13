@@ -1,19 +1,19 @@
 package com.novoda.releaseplugin
 
 import org.gradle.api.Project
-import org.gradle.api.provider.PropertyState
+import org.gradle.api.provider.Property
 
 class GradleReleaseExtension {
 
     private final Project project
 
-    final PropertyState<String> changelog
-    final PropertyState<String> version
+    final Property<String> changelog
+    final Property<String> version
 
     GradleReleaseExtension(Project project) {
         this.project = project
-        changelog = project.property(String)
-        version = project.property(String)
+        changelog = project.objects.property(String)
+        version = project.objects.property(String)
     }
 
     void setChangelog(String changelog) {

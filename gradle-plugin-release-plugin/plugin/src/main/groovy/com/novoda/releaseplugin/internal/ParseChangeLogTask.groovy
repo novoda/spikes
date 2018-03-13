@@ -12,11 +12,11 @@ class ParseChangeLogTask extends DefaultTask {
     @Input
     final Property<String> changelog
 
-    @OutputFile
-    File releaseChangelog
-
     @Input
     final Property<String> version
+
+    @OutputFile
+    File releaseChangelog
 
     ParseChangeLogTask() {
         group = 'changelog'
