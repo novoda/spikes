@@ -2,7 +2,7 @@ package com.novoda.releaseplugin.internal
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
-import org.gradle.api.provider.PropertyState
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
@@ -10,19 +10,19 @@ import org.gradle.api.tasks.TaskAction
 class ParseChangeLogTask extends DefaultTask {
 
     @Input
-    final PropertyState<String> changelog
+    final Property<String> changelog
 
     @OutputFile
     File releaseChangelog
 
     @Input
-    final PropertyState<String> version
+    final Property<String> version
 
     ParseChangeLogTask() {
         group = 'changelog'
         description = 'Extracts the changelog for the current release'
-        changelog = project.property(String)
-        version = project.property(String)
+        changelog = project.objects.property(String)
+        version = project.objects.property(String)
     }
 
     @TaskAction
