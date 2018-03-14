@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/main_layout"
   android:layout_width="match_parent"
@@ -7,4 +7,26 @@
   android:background="@drawable/cutout_wallpaper"
   tools:context="com.novoda.androidp.pt651_dispplay_cutout.CutoutActivity">
 
-</LinearLayout>
+  <Button
+    android:id="@+id/btn_cutout_always"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:text="Cutout Always" />
+
+  <Button
+    android:id="@+id/btn_cutout_default"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/btn_cutout_always"
+    android:text="Cutout Default" />
+
+  <Button
+    android:id="@+id/btn_cutout_never"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/btn_cutout_default"
+    android:layout_centerInParent="true"
+    android:text="Cutout Never" />
+
+</RelativeLayout>
