@@ -5,28 +5,69 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@drawable/cutout_wallpaper"
+  android:padding="8dp"
   tools:context="com.novoda.androidp.pt651_dispplay_cutout.CutoutActivity">
 
-  <Button
-    android:id="@+id/btn_cutout_always"
+  <TextView
+    android:id="@+id/tv_cutout_title"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:background="#e91e63"
+    style="@style/TextAppearance.AppCompat.Large"
+    android:gravity="center_horizontal"
+    android:padding="16dp"
+    android:text="Text at the very top" />
+
+  <RadioGroup
+    android:id="@+id/rd_cutout_mode"
+    android:padding="8dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
-    android:text="Cutout Always" />
+    android:background="@color/colorPrimary">
 
-  <Button
-    android:id="@+id/btn_cutout_default"
+    <RadioButton
+      android:id="@+id/rd_cutout_always"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Cutout Mode Always" />
+
+    <RadioButton
+      android:id="@+id/rd_cutout_default"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Cutout Mode Default" />
+
+    <RadioButton
+      android:id="@+id/rd_cutout_never"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Cutout Mode Never" />
+
+  </RadioGroup>
+
+  <RadioGroup
+    android:layout_marginTop="8dp"
+    android:padding="8dp"
+    android:id="@+id/rd_cutout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_below="@id/btn_cutout_always"
-    android:text="Cutout Default" />
+    android:layout_below="@id/rd_cutout_mode"
+    android:background="@color/colorPrimary">
 
-  <Button
-    android:id="@+id/btn_cutout_never"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_below="@id/btn_cutout_default"
-    android:layout_centerInParent="true"
-    android:text="Cutout Never" />
+    <RadioButton
+      android:id="@+id/rd_cutout_yes"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Use displayCutout.safeInset" />
+
+    <RadioButton
+      android:id="@+id/rd_cutout_no"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Don't use displayCutout.safeInset" />
+
+  </RadioGroup>
 
 </RelativeLayout>
