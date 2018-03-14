@@ -15,7 +15,6 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.btn_cutout_activity).setOnClickListener {
             startActivity(Intent(applicationContext, CutoutActivity::class.java))
         }
-
     }
 
 }
