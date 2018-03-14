@@ -13,7 +13,7 @@ class ProductListPageObject {
     fun navigateToProductDetails() {
         val productMatcher = ViewMatchers.withProductTitle("hat white")
 
-        onView(withId(R.id.productListView)).perform(RecyclerViewActions.scrollToHolder(productMatcher), RecyclerViewActions.actionOnHolderItem(productMatcher, ViewActions.click()))
+        onView(withId(R.id.productListView)).perform( RecyclerViewActions.actionOnHolderItem(productMatcher, ViewActions.click()))
     }
 
 }

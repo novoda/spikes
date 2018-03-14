@@ -4,7 +4,6 @@ import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.contrib.RecyclerViewActions.actionOnHolderItem
-import android.support.test.espresso.contrib.RecyclerViewActions.scrollToHolder
 import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import com.novoda.androidstoreexample.R
@@ -21,7 +20,7 @@ class MainActivityPageObject {
     fun navigateToProductList() {
         val categoryMatcher = ViewMatchers.withCategoryTitle("HATS")
 
-        onView(withId(R.id.categoryListView)).perform(scrollToHolder(categoryMatcher), actionOnHolderItem(categoryMatcher, click()))
+        onView(withId(R.id.categoryListView)).perform( actionOnHolderItem(categoryMatcher, click()))
     }
 
 }
