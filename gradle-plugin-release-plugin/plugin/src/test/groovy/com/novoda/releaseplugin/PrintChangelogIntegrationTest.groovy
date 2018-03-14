@@ -40,18 +40,20 @@ class PrintChangelogIntegrationTest {
 
         def parseReleaseChangelog = build.task(":parseReleaseChangelog")
         assertThat(parseReleaseChangelog.outcome).isEqualTo(TaskOutcome.UP_TO_DATE)
+        assertThat(build.output).contains("- Initial release.")
     }
 
     @Test
     void shouldRunParseChangelogTwiceWhenVersionDiffersButChangelogAreSame() {
-        configureExtensionWith('0.1', Resources.getResource("CHANGELOG.md"))
+        configureExtensionWith('0.2', Resources.getResource("CHANGELOG.md"))
         buildWithArgs('printReleaseChangelog')
 
-        configureExtensionWith('0.2', Resources.getResource("CHANGELOG.md"))
+        configureExtensionWith('0.1', Resources.getResource("CHANGELOG.md"))
         BuildResult build = buildWithArgs('printReleaseChangelog')
 
         def parseReleaseChangelog = build.task(":parseReleaseChangelog")
         assertThat(parseReleaseChangelog.outcome).isEqualTo(TaskOutcome.SUCCESS)
+        assertThat(build.output).contains("- Initial release.")
     }
 
     @Test
@@ -70,6 +72,7 @@ class PrintChangelogIntegrationTest {
 
         def parseReleaseChangelog = build.task(":parseReleaseChangelog")
         assertThat(parseReleaseChangelog.outcome).isEqualTo(TaskOutcome.SUCCESS)
+        assertThat(build.output).contains("- BAR.")
     }
 
     private BuildResult buildWithArgs(String args) {
