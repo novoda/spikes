@@ -60,10 +60,10 @@ class PrintChangelogIntegrationTest {
         buildWithArgs('printReleaseChangelog')
 
         def differentChangelog = testProjectDir.newFile("DIFFERENT_CHANGELOG.md")
-        writeFile(differentChangelog, """[Version 0.1](Foo)
+        differentChangelog.text = """[Version 0.1](Foo)
                                                  --------------------------
                                                  
-                                                 - BAR.""")
+                                                 - BAR."""
 
         configureExtensionWith('0.1', differentChangelog.toURI().toURL())
         BuildResult build = buildWithArgs('printReleaseChangelog')
@@ -104,18 +104,7 @@ class PrintChangelogIntegrationTest {
                     compile gradleApi()
                 }
                 """
-        writeFile(buildFile, buildFileContent)
+        buildFile.text = buildFileContent
     }
 
-    private static void writeFile(File destination, String content) throws IOException {
-        BufferedWriter output = null
-        try {
-            output = new BufferedWriter(new FileWriter(destination))
-            output.write(content)
-        } finally {
-            if (output != null) {
-                output.close()
-            }
-        }
-    }
 }
