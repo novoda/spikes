@@ -16,7 +16,7 @@ class GradleReleasePlugin implements Plugin<Project> {
         def parseChangelog = project.tasks.create('parseReleaseChangelog', ParseChangeLogTask) { task ->
             task.changelog.set(pluginExtension.changelog)
             task.version.set(pluginExtension.version)
-            task.releaseChangelog = project.file("${project.buildDir.path}/releaseChangelog.md")
+            task.releaseChangelog = new File(project.buildDir, "releaseChangelog.md")
         }
 
         project.tasks.create('printReleaseChangelog') { task ->
