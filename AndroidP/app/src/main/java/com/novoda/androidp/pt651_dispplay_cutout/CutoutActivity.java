@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.DisplayCutout;
 import android.view.View;
 import android.view.WindowInsets;
+import android.view.WindowManager;
 
 import com.novoda.androidp.R;
 
@@ -17,8 +18,8 @@ public class CutoutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cutout);
         
-//        WindowManager.LayoutParams attributes = getWindow().getAttributes();
-//        attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
+        WindowManager.LayoutParams attributes = getWindow().getAttributes();
+        attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER;
 
         linearLayout = findViewById(R.id.main_layout);
 
