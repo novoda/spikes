@@ -56,7 +56,7 @@
     <codeStyleSettings language="XML">
       <indentOptions>
         <option name="INDENT_SIZE" value="2" />
-        <option name="CONTINUATION_INDENT_SIZE" value="4" />
+        <option name="CONTINUATION_INDENT_SIZE" value="2" />
         <option name="TAB_SIZE" value="2" />
       </indentOptions>
     </codeStyleSettings>
@@ -65,6 +65,9 @@
       <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
       <option name="KEEP_BLANK_LINES_BEFORE_RBRACE" value="0" />
       <option name="BLANK_LINES_AFTER_CLASS_HEADER" value="1" />
+      <indentOptions>
+        <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      </indentOptions>
     </codeStyleSettings>
   </code_scheme>
 </component>
