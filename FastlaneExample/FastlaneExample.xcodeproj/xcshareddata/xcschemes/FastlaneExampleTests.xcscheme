@@ -20,6 +20,20 @@
                ReferencedContainer = "container:FastlaneExample.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "4C2AF83620583A4100673284"
+               BuildableName = "FastlaneExampleTests.xctest"
+               BlueprintName = "FastlaneExampleTests"
+               ReferencedContainer = "container:FastlaneExample.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -39,23 +53,13 @@
                ReferencedContainer = "container:FastlaneExample.xcodeproj">
             </BuildableReference>
          </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4C1272A1205A937A0071B402"
-               BuildableName = "FastlaneExampleUITests.xctest"
-               BlueprintName = "FastlaneExampleUITests"
-               ReferencedContainer = "container:FastlaneExample.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4C2AF82220583A4100673284"
-            BuildableName = "FastlaneExample.app"
-            BlueprintName = "FastlaneExample"
+            BlueprintIdentifier = "4C2AF83620583A4100673284"
+            BuildableName = "FastlaneExampleTests.xctest"
+            BlueprintName = "FastlaneExampleTests"
             ReferencedContainer = "container:FastlaneExample.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -73,16 +77,15 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4C2AF82220583A4100673284"
-            BuildableName = "FastlaneExample.app"
-            BlueprintName = "FastlaneExample"
+            BlueprintIdentifier = "4C2AF83620583A4100673284"
+            BuildableName = "FastlaneExampleTests.xctest"
+            BlueprintName = "FastlaneExampleTests"
             ReferencedContainer = "container:FastlaneExample.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -92,8 +95,7 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4C2AF82220583A4100673284"
@@ -101,7 +103,7 @@
             BlueprintName = "FastlaneExample"
             ReferencedContainer = "container:FastlaneExample.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
