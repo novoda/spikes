@@ -1,105 +1,78 @@
 package com.novoda.sliceanddice
 
 import android.content.Intent
-import android.content.IntentSender
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.Snackbar
+import android.support.constraint.ConstraintSet
 import android.support.v7.app.AppCompatActivity
 import android.transition.TransitionManager
 import android.view.View
+import android.widget.ArrayAdapter
 import androidx.slice.SliceManager
 import com.novoda.sliceshost.R
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.settings_card.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var sliceManager: SliceManager
+    private var pendingSliceUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         sliceManager = SliceManager.getInstance(this)
-    }
+        sliceSelector.adapter = ArrayAdapter<SliceChoice>(this, android.R.layout.simple_list_item_1, sliceChoices)
 
-    private val sliceUri = Uri.parse("content://com.novoda.sliceprovider/")
+        transitionUiTo(UiState.Empty, animate = false)
+    }
 
     override fun onStart() {
         super.onStart()
 
-        if (providerAppNotInstalled()) {
-            showMissingProviderDialog(this, { finish() }, sliceUri)
+        if (providerAppNotInstalled(packageManager, baseSliceUri.authority)) {
+            showMissingProviderDialog(this, { finish() }, baseSliceUri)
             return
         }
 
-        tryShowingSlice()
+        sliceSelector.onItemSelectedListener = sliceSelectionListener({ _, _, selectedPosition, _ ->
+            onSliceSelectionChanged(sliceChoices[selectedPosition].uri)
+        })
+
+        sliceSelector.setSelection(0)
     }
 
-    private fun providerAppNotInstalled(): Boolean {
-        try {
-            val packageInfo = packageManager.getPackageInfo(sliceUri.authority, PackageManager.GET_PROVIDERS)
-                    ?: return true
-
-            val contentProvider = packageInfo.providers.find { it.authority == sliceUri.authority }
-            return contentProvider == null
-        } catch (e: PackageManager.NameNotFoundException) {
-            return true
-        }
+    private fun onSliceSelectionChanged(selectedSliceUri: Uri) {
+        tryShowingSlice(selectedSliceUri)
     }
 
-    private fun tryShowingSlice() {
-        if (sliceManager.missingPermission()) {
-            needPermissionGroup.visibility = View.VISIBLE
-            sliceView.visibility = View.INVISIBLE
-            permissionCta.setOnClickListener { sliceManager.requestPermission() }
+    private fun tryShowingSlice(sliceUri: Uri) {
+        if (sliceManager.missingPermission(sliceUri, appName = getString(R.string.app_name))) {
+            transitionUiTo(UiState.NeedPermission)
+            permissionCta.setOnClickListener {
+                sliceManager.requestPermission(sliceUri, this)
+            }
         } else {
-            startObservingSliceLiveData()
-        }
-    }
-
-    private fun SliceManager.missingPermission() = try {
-        // TODO this is a very expensive and hacky way to check, but we don't really have alternatives
-        // as Android P DP1, since there's no permission API 🤷‍
-        bindSlice(sliceUri)?.isPermissionRequest(getString(R.string.app_name)) ?: false
-    } catch (e: SecurityException) {
-        true
-    } catch (e: IllegalArgumentException) {
-        false
-    }
-
-    private fun SliceManager.requestPermission() {
-        try {
-            val intentSender: IntentSender? = bindSlice(sliceUri)!!.permissionRequestPendingIntent.intentSender
-            startIntentSenderForResult(intentSender, REQUEST_CODE_PERMISSIONS, null, 0, 0, 0)
-        } catch (e: IllegalArgumentException) {
-            Snackbar.make(
-                    root,
-                    "Looks like we've hit a bug in Slices, fixed in alpha2. " +
-                            "Uninstall the app and reboot the device/emulator.",
-                    Snackbar.LENGTH_INDEFINITE
-            ).show()
+            startObservingSliceLiveData(sliceUri)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            startObservingSliceLiveData()
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
-        }
+        handleSlicePermissionActivityResult(requestCode, onSlicePermissionResult = { startObservingSliceLiveData() })
     }
 
-    private fun startObservingSliceLiveData() {
-        TransitionManager.beginDelayedTransition(root)
-        needPermissionGroup.visibility = View.INVISIBLE
-        sliceView.visibility = View.VISIBLE
+    private fun startObservingSliceLiveData(sliceUri: Uri? = pendingSliceUri) {
+        if (sliceUri == null) {
+            throw IllegalArgumentException("The slice URI to bind to cannot be null")
+        }
+
+        transitionUiTo(UiState.SliceContent)
 
         val slice = sliceManager.bindSlice(sliceUri)
         sliceView.setSlice(slice)
 
-        // TODO due to a bug in 28.0.0-alpha1, we can't use the LiveData version 😭
+        // TODO due to a bug in 28.0.0-alpha1, we can't use the LiveData yet 😭
 //        SliceLiveData.fromUri(this, sliceUri)
 //            .observe(this, Observer({ sliceResult ->
 //                sliceView.setSlice(sliceResult)
@@ -107,8 +80,38 @@ class MainActivity : AppCompatActivity() {
 //            }))
     }
 
-    companion object {
-        private const val REQUEST_CODE_PERMISSIONS = 1234
+    private fun transitionUiTo(uiState: UiState, animate: Boolean = true) {
+        if (animate) {
+            TransitionManager.beginDelayedTransition(sliceContainer)
+        }
+
+        ConstraintSet().apply {
+            clone(sliceContainer)
+            setVisibility(R.id.needPermissionGroup, uiState.permissionGroupVisibility)
+            setVisibility(R.id.sliceView, uiState.sliceViewVisibility)
+            applyTo(sliceContainer)
+        }
+    }
+
+    private sealed class UiState {
+
+        abstract val permissionGroupVisibility: Int
+
+        abstract val sliceViewVisibility: Int
+
+        object Empty : UiState() {
+            override val permissionGroupVisibility = View.INVISIBLE
+            override val sliceViewVisibility = View.INVISIBLE
+        }
+
+        object NeedPermission : UiState() {
+            override val permissionGroupVisibility = View.VISIBLE
+            override val sliceViewVisibility = View.INVISIBLE
+        }
+
+        object SliceContent : UiState() {
+            override val permissionGroupVisibility = View.INVISIBLE
+            override val sliceViewVisibility = View.VISIBLE
+        }
     }
 }
-

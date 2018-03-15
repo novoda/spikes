@@ -11,8 +11,9 @@ class NovodaSliceProvider : SliceProvider() {
         Log.i("SliceProvider", "Creating slices")
 
         return when (sliceUri.path) {
-            "yucca" -> createYuccaSlice(context, sliceUri)
-            "search" -> createSearchSlice(context, sliceUri)
+            "/demo" -> createDemoSlice(context, sliceUri)
+            "/yucca" -> createYuccaSlice(context, sliceUri)
+            "/search" -> createSearchSlice(context, sliceUri)
             else -> createDemoSlice(context, sliceUri)
         }
     }

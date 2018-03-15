@@ -1,51 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root"
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  tools:context="com.novoda.sliceanddice.MainActivity">
+
+  <include layout="@layout/settings_card" />
+
+  <android.support.constraint.ConstraintLayout
+    android:id="@+id/sliceContainer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.novoda.sliceanddice.MainActivity">
+    android:layout_height="match_parent">
 
-  <TextView
-      android:id="@+id/title"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="16dp"
-      android:layout_marginRight="16dp"
-      android:layout_marginTop="16dp"
-      android:text="@string/slices_title"
-      android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-      app:layout_constraintLeft_toLeftOf="parent"
-      app:layout_constraintRight_toRightOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      android:fontFamily="@font/product_sans_regular" />
-
-  <androidx.slice.widget.SliceView
+    <androidx.slice.widget.SliceView
       android:id="@+id/sliceView"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_margin="16dp"
       android:visibility="invisible"
-      app:layout_constraintLeft_toLeftOf="parent"
-      app:layout_constraintRight_toRightOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/title" />
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
 
-  <android.support.constraint.Group
+    <android.support.constraint.Group
       android:id="@+id/needPermissionGroup"
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:layout_margin="16dp"
-      android:layout_marginBottom="8dp"
       android:visibility="invisible"
       app:constraint_referenced_ids="permissionCta,permissionLabel"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintLeft_toLeftOf="parent"
-      app:layout_constraintRight_toRightOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/title" />
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
 
-  <TextView
+    <TextView
       android:id="@+id/permissionLabel"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
@@ -55,7 +47,7 @@
       app:layout_constraintStart_toStartOf="@+id/needPermissionGroup"
       app:layout_constraintTop_toTopOf="@+id/needPermissionGroup" />
 
-  <Button
+    <Button
       android:id="@+id/permissionCta"
       style="@style/Widget.AppCompat.Button.Colored"
       android:layout_width="wrap_content"
@@ -66,4 +58,6 @@
       app:layout_constraintEnd_toEndOf="@+id/permissionLabel"
       app:layout_constraintTop_toBottomOf="@+id/permissionLabel" />
 
-</android.support.constraint.ConstraintLayout>
+  </android.support.constraint.ConstraintLayout>
+
+</LinearLayout>

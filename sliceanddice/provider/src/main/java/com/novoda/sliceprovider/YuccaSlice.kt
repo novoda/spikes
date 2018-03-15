@@ -10,7 +10,6 @@ import androidx.slice.builders.ListBuilder
 import androidx.slice.builders.ListBuilder.HeaderBuilder
 import androidx.slice.builders.ListBuilder.RowBuilder
 
-
 @SuppressLint("RestrictedApi") // The GridBuilder's image size definitions shouldn't be restricted APIs
 internal fun createYuccaSlice(context: Context, sliceUri: Uri): Slice = ListBuilder(context, sliceUri)
     .apply {
