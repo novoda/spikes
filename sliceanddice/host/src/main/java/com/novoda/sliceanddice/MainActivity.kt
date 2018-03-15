@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.transition.TransitionManager
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.slice.SliceManager
 import com.novoda.sliceshost.R
 import kotlinx.android.synthetic.main.activity_main.*
@@ -47,10 +48,21 @@ class MainActivity : AppCompatActivity() {
         tryShowingSlice(selectedSliceUri)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        handleSlicePermissionActivityResult(requestCode, onSlicePermissionResult = {
+            if (pendingSliceUri == null) {
+                throw IllegalArgumentException("The slice URI to bind to cannot be null")
+            }
+            tryShowingSlice(pendingSliceUri!!)
+            pendingSliceUri = null
+        })
+    }
+
     private fun tryShowingSlice(sliceUri: Uri) {
         if (sliceManager.missingPermission(sliceUri, appName = getString(R.string.app_name))) {
             transitionUiTo(UiState.NeedPermission)
             permissionCta.setOnClickListener {
+                pendingSliceUri = sliceUri
                 sliceManager.requestPermission(sliceUri, this)
             }
         } else {
@@ -58,19 +70,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        handleSlicePermissionActivityResult(requestCode, onSlicePermissionResult = { startObservingSliceLiveData() })
-    }
-
-    private fun startObservingSliceLiveData(sliceUri: Uri? = pendingSliceUri) {
-        if (sliceUri == null) {
-            throw IllegalArgumentException("The slice URI to bind to cannot be null")
-        }
-
+    private fun startObservingSliceLiveData(sliceUri: Uri) {
         transitionUiTo(UiState.SliceContent)
 
         val slice = sliceManager.bindSlice(sliceUri)
         sliceView.setSlice(slice)
+
+        if (sliceUri.path == sliceChoices[0].uri.path) {
+            Toast.makeText(
+                this,
+                "The demo slice has an InputRange. Using an InputRange triggers its action " +
+                    "immediately whenever the slice is set on the SliceView. This is a bug in " +
+                    "Slices, sorry.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
 
         // TODO due to a bug in 28.0.0-alpha1, we can't use the LiveData yet 😭
 //        SliceLiveData.fromUri(this, sliceUri)
