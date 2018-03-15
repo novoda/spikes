@@ -16,11 +16,41 @@ or alternatively using `brew cask install fastlane`
 
 # Available Actions
 ## iOS
-### ios verify_app
+### ios test
 ```
-fastlane ios verify_app
+fastlane ios test
 ```
-Run tests and SwiftLint
+Runs all the tests
+### ios ui_tests
+```
+fastlane ios ui_tests
+```
+Runs all the UI tests
+### ios release_dev
+```
+fastlane ios release_dev
+```
+Build and send the release to Crashlytics for internal testing
+### ios release_testflight
+```
+fastlane ios release_testflight
+```
+Test, Build and send a release to Testflight
+### ios code_coverage
+```
+fastlane ios code_coverage
+```
+Generate Unit Test Code Coverage
+### ios new_sprint
+```
+fastlane ios new_sprint
+```
+Update the version number for a new sprint
+### ios install_certificates
+```
+fastlane ios install_certificates
+```
+Install developer certificates and provisioning profiles
 
 ----
 
