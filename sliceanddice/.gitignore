@@ -44,13 +44,3 @@ local.properties
 
 # Heap dump captures
 /captures/
-
-# App secrets are ignored...
-/app/google-services.json
-/team-props/*.properties
-/team-props/signing/*.keystore
-/team-props/play-store-keys.json
-
-# ...except for the debug signing configuration
-!/team-props/debugSigningConfig.properties
-!/team-props/signing/debug.keystore
