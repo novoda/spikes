@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import com.novoda.androidp.pt651_dispplay_cutout.CutoutActivity
+import com.novoda.androidp.pt651_display_cutout.CutoutActivity
 
 class MainActivity : AppCompatActivity() {
 

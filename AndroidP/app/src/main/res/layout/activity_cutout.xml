@@ -6,7 +6,7 @@
   android:layout_height="match_parent"
   android:background="@drawable/cutout_wallpaper"
   android:padding="8dp"
-  tools:context="com.novoda.androidp.pt651_dispplay_cutout.CutoutActivity">
+  tools:context="com.novoda.androidp.pt651_display_cutout.CutoutActivity">
 
   <TextView
     android:id="@+id/tv_cutout_title"
