@@ -19,7 +19,8 @@ internal fun createYuccaSlice(context: Context, sliceUri: Uri): Slice = ListBuil
         )
         addRow(
             RowBuilder(this)
-                .setTitle("This seems to be a match")
+                .setTitle("This seems like a match")
+                .setTitleItem(Icon.createWithResource(context, R.drawable.assistant))
         )
         addGrid(
             GridBuilder(this).apply {
@@ -33,11 +34,12 @@ internal fun createYuccaSlice(context: Context, sliceUri: Uri): Slice = ListBuil
         addRow(
             RowBuilder(this)
                 .setTitle("It might be one of these")
+                .setTitleItem(Icon.createWithResource(context, R.drawable.assistant))
         )
         addGrid(
             GridBuilder(this).apply {
                 addCell(GridBuilder.CellBuilder(this)
-                    .addText("Yucca")
+                    .addTitleText("Yucca")
                     .addImage(Icon.createWithResource(context, R.drawable.yucca), GridBuilder.LARGE_IMAGE)
                 )
                 addCell(GridBuilder.CellBuilder(this)
