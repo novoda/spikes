@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C1272A5205A937A0071B402 /* FastlaneExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1272A4205A937A0071B402 /* FastlaneExampleUITests.swift */; };
 		4C2AF82720583A4100673284 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C2AF82620583A4100673284 /* AppDelegate.swift */; };
 		4C2AF82920583A4100673284 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C2AF82820583A4100673284 /* ViewController.swift */; };
 		4C2AF82C20583A4100673284 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AF82A20583A4100673284 /* Main.storyboard */; };
@@ -16,6 +17,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4C1272A7205A937A0071B402 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C2AF81B20583A4100673284 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4C2AF82220583A4100673284;
+			remoteInfo = FastlaneExample;
+		};
 		4C2AF83820583A4100673284 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4C2AF81B20583A4100673284 /* Project object */;
@@ -26,6 +34,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C1272A2205A937A0071B402 /* FastlaneExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FastlaneExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C1272A4205A937A0071B402 /* FastlaneExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FastlaneExampleUITests.swift; sourceTree = "<group>"; };
+		4C1272A6205A937A0071B402 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C2AF82320583A4100673284 /* FastlaneExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FastlaneExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C2AF82620583A4100673284 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4C2AF82820583A4100673284 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -39,6 +50,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4C12729F205A937A0071B402 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4C2AF82020583A4100673284 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -56,11 +74,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C1272A3205A937A0071B402 /* FastlaneExampleUITests */ = {
+			isa = PBXGroup;
+			children = (
+				4C1272A4205A937A0071B402 /* FastlaneExampleUITests.swift */,
+				4C1272A6205A937A0071B402 /* Info.plist */,
+			);
+			path = FastlaneExampleUITests;
+			sourceTree = "<group>";
+		};
 		4C2AF81A20583A4100673284 = {
 			isa = PBXGroup;
 			children = (
 				4C2AF82520583A4100673284 /* FastlaneExample */,
 				4C2AF83A20583A4100673284 /* FastlaneExampleTests */,
+				4C1272A3205A937A0071B402 /* FastlaneExampleUITests */,
 				4C2AF82420583A4100673284 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -70,6 +98,7 @@
 			children = (
 				4C2AF82320583A4100673284 /* FastlaneExample.app */,
 				4C2AF83720583A4100673284 /* FastlaneExampleTests.xctest */,
+				4C1272A2205A937A0071B402 /* FastlaneExampleUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -99,6 +128,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		4C1272A1205A937A0071B402 /* FastlaneExampleUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C1272AB205A937A0071B402 /* Build configuration list for PBXNativeTarget "FastlaneExampleUITests" */;
+			buildPhases = (
+				4C12729E205A937A0071B402 /* Sources */,
+				4C12729F205A937A0071B402 /* Frameworks */,
+				4C1272A0205A937A0071B402 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4C1272A8205A937A0071B402 /* PBXTargetDependency */,
+			);
+			name = FastlaneExampleUITests;
+			productName = FastlaneExampleUITests;
+			productReference = 4C1272A2205A937A0071B402 /* FastlaneExampleUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		4C2AF82220583A4100673284 /* FastlaneExample */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4C2AF84020583A4100673284 /* Build configuration list for PBXNativeTarget "FastlaneExample" */;
@@ -144,6 +191,11 @@
 				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = "Berta Devant";
 				TargetAttributes = {
+					4C1272A1205A937A0071B402 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 4C2AF82220583A4100673284;
+					};
 					4C2AF82220583A4100673284 = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
@@ -170,11 +222,19 @@
 			targets = (
 				4C2AF82220583A4100673284 /* FastlaneExample */,
 				4C2AF83620583A4100673284 /* FastlaneExampleTests */,
+				4C1272A1205A937A0071B402 /* FastlaneExampleUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4C1272A0205A937A0071B402 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4C2AF82120583A4100673284 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -195,6 +255,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		4C12729E205A937A0071B402 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C1272A5205A937A0071B402 /* FastlaneExampleUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4C2AF81F20583A4100673284 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -215,6 +283,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4C1272A8205A937A0071B402 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4C2AF82220583A4100673284 /* FastlaneExample */;
+			targetProxy = 4C1272A7205A937A0071B402 /* PBXContainerItemProxy */;
+		};
 		4C2AF83920583A4100673284 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 4C2AF82220583A4100673284 /* FastlaneExample */;
@@ -242,6 +315,36 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		4C1272A9205A937A0071B402 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V994K8B55B;
+				INFOPLIST_FILE = FastlaneExampleUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = bertadevant.ios.FastlaneExampleUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FastlaneExample;
+			};
+			name = Debug;
+		};
+		4C1272AA205A937A0071B402 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V994K8B55B;
+				INFOPLIST_FILE = FastlaneExampleUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = bertadevant.ios.FastlaneExampleUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FastlaneExample;
+			};
+			name = Release;
+		};
 		4C2AF83E20583A4100673284 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -418,6 +521,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4C1272AB205A937A0071B402 /* Build configuration list for PBXNativeTarget "FastlaneExampleUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C1272A9205A937A0071B402 /* Debug */,
+				4C1272AA205A937A0071B402 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		4C2AF81E20583A4100673284 /* Build configuration list for PBXProject "FastlaneExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
