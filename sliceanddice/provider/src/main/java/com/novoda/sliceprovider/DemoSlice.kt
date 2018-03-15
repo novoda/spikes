@@ -11,9 +11,9 @@ import androidx.slice.Slice
 import androidx.slice.builders.GridBuilder
 import androidx.slice.builders.ListBuilder
 import androidx.slice.builders.ListBuilder.HeaderBuilder
-import androidx.slice.builders.ListBuilder.RowBuilder
 import androidx.slice.builders.ListBuilder.InputRangeBuilder
 import androidx.slice.builders.ListBuilder.RangeBuilder
+import androidx.slice.builders.ListBuilder.RowBuilder
 import androidx.slice.builders.SliceAction
 
 @SuppressLint("RestrictedApi") // The GridBuilder's image size definitions shouldn't be restricted APIs

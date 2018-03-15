@@ -74,7 +74,7 @@ internal fun createSearchSlice(context: Context, sliceUri: Uri): Slice = ListBui
             GridBuilder(this).apply {
                 addCell(GridBuilder.CellBuilder(this)
                     .addImage(Icon.createWithResource(context, R.drawable.rick_and_morty), GridBuilder.LARGE_IMAGE)
-                    .addText(("Rick and Morty is an American adult animated science fiction comedy series created by " +
+                    .addText(("<b>Rick and Morty</b> is an American adult animated science fiction comedy series created by " +
                         "<b>Justin Roiland</b> and <b>Dan Harmon</b> for Cartoon Network's late-night programming " +
                         "block <b>Adult Swim</b>.").asHtml())
                     .setContentIntent(
