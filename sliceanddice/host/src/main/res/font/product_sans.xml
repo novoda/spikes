@@ -1,53 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <font-family
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+  
   <font
-      app:fontStyle="normal"
-      app:fontWeight="100"
-      app:font="@font/product_sans_thin_regular" />
+    app:fontStyle="normal"
+    app:fontWeight="100"
+    app:font="@font/product_sans_thin_regular" />
 
   <font
-      app:fontStyle="italic"
-      app:fontWeight="100"
-      app:font="@font/product_sans_thin_italic" />
+    app:fontStyle="italic"
+    app:fontWeight="100"
+    app:font="@font/product_sans_thin_italic" />
 
   <font
-      app:fontStyle="normal"
-      app:fontWeight="300"
-      app:font="@font/product_sans_light_regular" />
+    app:fontStyle="normal"
+    app:fontWeight="300"
+    app:font="@font/product_sans_light_regular" />
 
   <font
-      app:fontStyle="italic"
-      app:fontWeight="300"
-      app:font="@font/product_sans_light_italic" />
+    app:fontStyle="italic"
+    app:fontWeight="300"
+    app:font="@font/product_sans_light_italic" />
 
   <font
-      app:fontStyle="normal"
-      app:fontWeight="400"
-      app:font="@font/product_sans_regular" />
+    app:fontStyle="normal"
+    app:fontWeight="400"
+    app:font="@font/product_sans_regular" />
 
   <font
-      app:fontStyle="italic"
-      app:fontWeight="400"
-      app:font="@font/product_sans_italic" />
+    app:fontStyle="italic"
+    app:fontWeight="400"
+    app:font="@font/product_sans_italic" />
 
   <font
-      app:fontStyle="normal"
-      app:fontWeight="500"
-      app:font="@font/product_sans_medium_regular" />
+    app:fontStyle="normal"
+    app:fontWeight="500"
+    app:font="@font/product_sans_medium_regular" />
 
   <font
-      app:fontStyle="italic"
-      app:fontWeight="500"
-      app:font="@font/product_sans_medium_italic" />
+    app:fontStyle="italic"
+    app:fontWeight="500"
+    app:font="@font/product_sans_medium_italic" />
 
   <font
-      app:fontStyle="normal"
-      app:fontWeight="700"
-      app:font="@font/product_sans_bold_regular" />
+    app:fontStyle="normal"
+    app:fontWeight="700"
+    app:font="@font/product_sans_bold_regular" />
 
   <font
-      app:fontStyle="italic"
-      app:fontWeight="700"
-      app:font="@font/product_sans_bold_italic" />
+    app:fontStyle="italic"
+    app:fontWeight="700"
+    app:font="@font/product_sans_bold_italic" />
+
 </font-family>
