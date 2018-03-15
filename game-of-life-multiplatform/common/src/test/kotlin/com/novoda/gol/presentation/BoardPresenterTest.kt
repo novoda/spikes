@@ -7,6 +7,9 @@ import com.novoda.gol.data.PositionEntity
 import com.novoda.gol.data.SimulationBoardEntity
 import com.novoda.gol.patterns.AbstractPattern
 import com.novoda.gol.patterns.PatternEntity
+import com.novoda.gol.presentation.board.BoardModelImpl
+import com.novoda.gol.presentation.board.BoardPresenter
+import com.novoda.gol.presentation.board.BoardView
 import io.mockk.*
 import kotlin.test.Test
 import kotlin.test.assertFalse

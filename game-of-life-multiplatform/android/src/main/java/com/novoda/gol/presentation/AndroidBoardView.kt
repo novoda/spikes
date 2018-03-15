@@ -6,6 +6,7 @@ import android.widget.FrameLayout
 import com.novoda.gol.data.BoardEntity
 import com.novoda.gol.data.PositionEntity
 import com.novoda.gol.patterns.PatternEntity
+import com.novoda.gol.presentation.board.BoardView
 
 
 class AndroidBoardView @JvmOverloads constructor(
@@ -27,6 +28,8 @@ class AndroidBoardView @JvmOverloads constructor(
     }
 
     override fun renderBoard(boardEntity: BoardEntity) {
-        cellMatrixView.render(boardEntity)
+        cellMatrixView.post {
+            cellMatrixView.render(boardEntity)
+        }
     }
 }
