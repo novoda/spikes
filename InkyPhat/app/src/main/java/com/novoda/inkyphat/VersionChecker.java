@@ -1,15 +1,15 @@
 package com.novoda.inkyphat;
 
 import com.google.android.things.pio.Gpio;
-import com.google.android.things.pio.PeripheralManagerService;
+import com.google.android.things.pio.PeripheralManager;
 
 import java.io.IOException;
 
 class VersionChecker {
 
-    private final PeripheralManagerService service;
+    private final PeripheralManager service;
 
-    VersionChecker(PeripheralManagerService service) {
+    VersionChecker(PeripheralManager service) {
         this.service = service;
     }
 

@@ -112,6 +112,7 @@ class InkyPhatV1 implements InkyPhat {
     }
 
     private void turnDisplayOn() throws IOException {
+        reset();
         busyWait();
 
         sendCommand(POWER_SETTING, new byte[]{0x07, 0x00, 0x0A, 0x00});
@@ -128,6 +129,11 @@ class InkyPhatV1 implements InkyPhat {
         sendCommand(VCOM_DC_SETTING, new byte[]{0x0A});
 
         sendCommand(PARTIAL_EXIT);
+    }
+
+    private void reset() throws IOException {
+        chipResetPin.setValue(false);
+        chipResetPin.setValue(true);
     }
 
     private void update() throws IOException {

@@ -115,7 +115,7 @@ class InkyPhatV2 implements InkyPhat {
     }
 
     private void turnDisplayOn() throws IOException {
-        sendCommand(RESET);
+        reset();
         busyWait();
 
         sendData(new byte[]{0x74, 0x54}); // Set analog control block
@@ -129,6 +129,12 @@ class InkyPhatV2 implements InkyPhat {
         sendCommand(GATE_LINE_WIDTH, new byte[]{0x04});
         // Data entry mode
         sendCommand(DATA_ENTRY_MODE, new byte[]{0x03});
+    }
+
+    private void reset() throws IOException {
+        chipResetPin.setValue(false);
+        chipResetPin.setValue(true);
+        sendCommand(RESET);
     }
 
     private void update() throws IOException {

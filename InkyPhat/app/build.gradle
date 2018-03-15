@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.novoda.inkyphat"
-        minSdkVersion 24
-        targetSdkVersion 26
+        minSdkVersion 27
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -18,9 +18,10 @@ android {
         }
     }
 }
-
+                         
 dependencies {
-    provided 'com.google.android.things:androidthings:0.6.1-devpreview'
+    provided 'com.google.android.things:androidthings:0.7-devpreview'
+    compile 'com.google.android.things.contrib:driver-button:0.5'
 
     androidTestCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
