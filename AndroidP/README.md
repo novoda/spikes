@@ -17,22 +17,22 @@ When your activity screen goes behind the cutout you can specify how it should b
 
 * [`LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT` ](https://developer.android.com/reference/android/view/WindowManager.LayoutParams.html#LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT)
 
-> The window is allowed to extend into the DisplayCutout area, only if the DisplayCutout is fully contained within the status bar. Otherwise, the window is laid out such that it does not overlap with the DisplayCutout area.
+    > The window is allowed to extend into the DisplayCutout area, only if the DisplayCutout is fully contained within the status bar. Otherwise, the window is laid out such that it does not overlap with the DisplayCutout area.
 
-> In practice, this means that if the window did not set FLAG_FULLSCREEN or SYSTEM_UI_FLAG_FULLSCREEN, it can extend into the cutout area in portrait. Otherwise (i.e. fullscreen or landscape) it is laid out such that it does overlap the cutout area.
-> 
-> The usual precautions for not overlapping with the status bar are sufficient for ensuring that no important content overlaps with the DisplayCutout.
+    > In practice, this means that if the window did not set FLAG_FULLSCREEN or SYSTEM_UI_FLAG_FULLSCREEN, it can extend into the cutout area in portrait. Otherwise (i.e. fullscreen or landscape) it is laid out such that it does overlap the cutout area.
+ 
+    > The usual precautions for not overlapping with the status bar are sufficient for ensuring that no important content overlaps with the DisplayCutout.
 
 * [`LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS`](https://developer.android.com/reference/android/view/WindowManager.LayoutParams.html#LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS)
 
-> The window is always allowed to extend into the DisplayCutout area, even if fullscreen or in landscape.
+    > The window is always allowed to extend into the DisplayCutout area, even if fullscreen or in landscape.
 
-> The window must make sure that no important content overlaps with the DisplayCutout.
+    > The window must make sure that no important content overlaps with the DisplayCutout.
 
 * [`LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER`](https://developer.android.com/reference/android/view/WindowManager.LayoutParams.html#LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER)
 
-> The window is never allowed to overlap with the DisplayCutout area.
-> This should be used with windows that transiently set SYSTEM_UI_FLAG_FULLSCREEN to avoid a relayout of the window when the flag is set or cleared.
+    > The window is never allowed to overlap with the DisplayCutout area.
+    > This should be used with windows that transiently set SYSTEM_UI_FLAG_FULLSCREEN to avoid a relayout of the window when the flag is set or cleared.
 
 
 
