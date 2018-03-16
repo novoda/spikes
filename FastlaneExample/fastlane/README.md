@@ -26,11 +26,16 @@ Runs all the tests
 fastlane ios ui_tests
 ```
 Runs all the UI tests
+### ios beta_release
+```
+fastlane ios beta_release
+```
+Build Beta version and send to internal testing
 ### ios release_dev
 ```
 fastlane ios release_dev
 ```
-Build and send the release to Crashlytics for internal testing
+Build 
 ### ios release_testflight
 ```
 fastlane ios release_testflight
