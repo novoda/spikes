@@ -29,26 +29,26 @@ class ParseChangeLogTaskTest {
     void shouldParseChangelogV1() {
         def task = project.task('parseReleaseChangeLog', type: ParseChangeLogTask)
         task.version.set('0.1')
-        def releaseChangelog = temporaryFolder.newFile("v0-1-changelog.md")
-        task.changelog.set(Resources.getResource("CHANGELOG.md").getPath())
+        def releaseChangelog = temporaryFolder.newFile('v0-1-changelog.md')
+        task.changelog.set(Resources.getResource('CHANGELOG.md').getPath())
         task.releaseChangelog = releaseChangelog
 
         project.tasks['parseReleaseChangeLog'].execute()
 
-        assertThat(task.releaseChangelog.text).isEqualTo("- Initial release.")
+        assertThat(task.releaseChangelog.text).isEqualTo('- Initial release.')
     }
 
     @Test
     void shouldParseChangelogV2() {
         def task = project.task('parseReleaseChangeLog', type: ParseChangeLogTask)
         task.version.set('0.2')
-        def releaseChangelog = temporaryFolder.newFile("v0-2-changelog.md")
-        task.changelog.set(Resources.getResource("CHANGELOG.md").getPath())
+        def releaseChangelog = temporaryFolder.newFile('v0-2-changelog.md')
+        task.changelog.set(Resources.getResource('CHANGELOG.md').getPath())
         task.releaseChangelog = releaseChangelog
 
         project.tasks['parseReleaseChangeLog'].execute()
 
-        assertThat(releaseChangelog.text).isEqualTo("- Second Feature ([PR#2](https://github.com/novoda/gradle-plugin-release-plugin/pull/2))\n" +
-                "- First Feature ([PR#1](https://github.com/novoda/gradle-plugin-release-plugin/pull/1))")
+        assertThat(releaseChangelog.text).isEqualTo("""- Second Feature ([PR#2](https://github.com/novoda/gradle-plugin-release-plugin/pull/2))
+- First Feature ([PR#1](https://github.com/novoda/gradle-plugin-release-plugin/pull/1))""")
     }
 }
