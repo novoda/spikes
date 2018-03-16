@@ -11,7 +11,6 @@ import com.novoda.androidp.R
 
 class CutoutActivity : AppCompatActivity() {
 
-    private lateinit var linearLayout: View
     private val CUTOUT_MODE = "cutout_mode"
     private val CUTOUT_USE_INSET = "cutout_use_inset"
     private val CUTOUT_MODE_DEFAULT = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT
@@ -29,7 +28,7 @@ class CutoutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cutout)
-        linearLayout = findViewById(R.id.main_layout)
+        setFullscreen()
 
         val pref = PreferenceManager.getDefaultSharedPreferences(this)
         setLayoutCutoutMode(pref)
@@ -37,6 +36,15 @@ class CutoutActivity : AppCompatActivity() {
         setupRadioButtonForCutoutMode(pref)
         setupRadioButtonForInset(pref)
 
+    }
+
+    private fun setFullscreen() {
+        getWindow().getDecorView().systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
     }
 
     private fun setLayoutCutoutMode(pref: SharedPreferences) {
@@ -78,20 +86,8 @@ class CutoutActivity : AppCompatActivity() {
     }
 
     private fun restart() {
-        linearLayout.requestLayout();
         startActivity(getIntent());
         finish();
     }
 
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (hasFocus) {
-            linearLayout.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-        }
-    }
 }
