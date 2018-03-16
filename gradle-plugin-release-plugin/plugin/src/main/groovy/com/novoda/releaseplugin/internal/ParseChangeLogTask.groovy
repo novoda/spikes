@@ -31,6 +31,13 @@ class ParseChangeLogTask extends DefaultTask {
         releaseChangelog.text = changelog
     }
 
+    /**
+     *  The changelog needs needs to follow this format:
+        [Version 0.1](https://github.com/novoda/gradle-plugin-release-plugin/releases/tag/v0.1)
+        --------------------------
+
+        - Initial release.
+     */
     String extractChangelog() {
         String fullChangelog = new File(changelog.get()).text
         def latestChangelog = (fullChangelog =~ /\[Version ${version.get()}.*\n-*([\s\S]*?)\[Version.*\n-*/)
