@@ -26,7 +26,7 @@ class ParseChangeLogTaskTest {
     }
 
     @Test
-    void shouldParseChangelogV1() {
+    void 'should parse changelog V1'() {
         def task = project.task('parseReleaseChangeLog', type: ParseChangeLogTask)
         task.version.set('0.1')
         def releaseChangelog = temporaryFolder.newFile('v0-1-changelog.md')
@@ -39,7 +39,7 @@ class ParseChangeLogTaskTest {
     }
 
     @Test
-    void shouldParseChangelogV2() {
+    void 'should parse changelog V2'() {
         def task = project.task('parseReleaseChangeLog', type: ParseChangeLogTask)
         task.version.set('0.2')
         def releaseChangelog = temporaryFolder.newFile('v0-2-changelog.md')

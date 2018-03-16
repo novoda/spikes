@@ -23,7 +23,7 @@ class PrintChangelogIntegrationTest {
     }
 
     @Test
-    void shouldPrintChangelog() throws IOException {
+    void 'should print changelog'() throws IOException {
         configureExtensionWith('0.1', Resources.getResource('CHANGELOG.md'))
 
         BuildResult build = buildWithArgs('printReleaseChangelog')
@@ -32,7 +32,7 @@ class PrintChangelogIntegrationTest {
     }
 
     @Test
-    void shouldNotRunParseChangelogTwiceWhenVersionAndChangelogAreSame() {
+    void 'should not run parse changelog twice when version and changelog are same'() {
         configureExtensionWith('0.1', Resources.getResource('CHANGELOG.md'))
         buildWithArgs('printReleaseChangelog')
 
@@ -44,7 +44,7 @@ class PrintChangelogIntegrationTest {
     }
 
     @Test
-    void shouldRunParseChangelogTwiceWhenVersionDiffersButChangelogAreSame() {
+    void 'should run parse changelog twice when version differs but changelog are same'() {
         configureExtensionWith('0.2', Resources.getResource('CHANGELOG.md'))
         buildWithArgs('printReleaseChangelog')
 
@@ -57,7 +57,7 @@ class PrintChangelogIntegrationTest {
     }
 
     @Test
-    void shouldRunParseChangelogTwiceWhenVersionIsSameButChangelogDiffers() {
+    void 'should run parse changelog twice when version is same but changelog differs'() {
         configureExtensionWith('0.1', Resources.getResource('CHANGELOG.md'))
         buildWithArgs('printReleaseChangelog')
 
