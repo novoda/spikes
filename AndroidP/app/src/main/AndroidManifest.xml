@@ -14,9 +14,7 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-    <activity
-      android:name=".pt651_display_cutout.CutoutActivity"
-      android:theme="@style/Theme.AppCompat.NoActionBar" />
+    <activity android:name=".pt651_display_cutout.CutoutActivity" />
   </application>
 
 </manifest>
