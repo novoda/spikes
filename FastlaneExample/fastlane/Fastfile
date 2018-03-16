@@ -13,17 +13,17 @@ platform :ios do
 
   desc "Runs all the tests"
   lane :test do
-    scan(scheme: 'FastlaneExampleTests')
+    run_tests(scheme: 'FastlaneExampleTests')
   end
 
   desc "Runs all the UI tests"
   lane :ui_tests do
-    scan(scheme: 'UITests')
+    run_tests(scheme: 'UITests')
   end
 
   desc "Build Beta version and send to internal testing"
   lane :beta_release do
-    gym
+    build_ios_app
   end
 
   desc "Build "
@@ -33,19 +33,19 @@ platform :ios do
     increment_version_number
     commit_version_bump
     custom_overlay
-    gym
+    build_ios_app
     reset_git_repo
   end
 
   desc "Test, Build and send a release to Testflight"
   lane :release_testflight do
-    gym(configuration: 'Release')
+    build_ios_app(configuration: 'Release')
     testflight
   end
 
   desc "Generate Unit Test Code Coverage"
   lane :code_coverage do
-    scan
+    run_tests
     xcov(scheme: 'MyScheme', only_project_targets: true)
   end
 
