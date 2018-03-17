@@ -591,7 +591,7 @@ public class MainActivity extends Activity {
                     b = (int) ((5 - n) / 2.0);
                     if (b > 0) {
                         // TODO https://github.com/FastLED/FastLED/wiki/Pixel-reference#chsv
-//                        leds[led] = CRGB(0, 0, b);
+                        leds[led] = CRGB.create(0, 0, b);
                     }
                 }
 
