@@ -34,6 +34,10 @@ class FastLED {
         // TODO
     }
 
+    void set(int position, CHSV hsv) {
+        // TODO
+    }
+
     // https://github.com/FastLED/FastLED/blob/03d12093a92ee2b64fabb03412aa0c3e4f6384dd/pixeltypes.h#L196
     public void modifyHSV(int position, int hue, int saturation, int value) {
         // TODO

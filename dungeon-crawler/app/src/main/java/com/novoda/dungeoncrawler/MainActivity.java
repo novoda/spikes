@@ -476,6 +476,7 @@ public class MainActivity extends Activity {
                 if (i % 10 == n) {
                     // TODO https://github.com/FastLED/FastLED/wiki/Pixel-reference#chsv
 //                    LEDS[i] = CHSV(c, 255, 150);
+                    ledStrip.set(i, new FastLED.CHSV(c, 255, 150));
                 }
             }
         } else if (mode == 1) {
@@ -485,6 +486,7 @@ public class MainActivity extends Activity {
                 if (random.nextInt(200) == 0) {
                     // TODO https://github.com/FastLED/FastLED/wiki/Pixel-reference#chsv
 //                    LEDS[i] = CHSV(25, 255, 100);
+                    ledStrip.set(i, new FastLED.CHSV(25, 255, 100));
                 }
             }
         }
