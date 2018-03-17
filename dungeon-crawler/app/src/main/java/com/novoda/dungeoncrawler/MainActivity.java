@@ -65,23 +65,18 @@ public class MainActivity extends Activity {
         new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy()
     };
 
-    private static final int ENEMY_COUNT = 10;
     private static final Particle[] particlePool = {
         new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle()
     };
-    private static final int PARTICLE_COUNT = 40;
     private static final Spawner[] spawnPool = {
         new Spawner(), new Spawner()
     };
-    private static final int SPAWN_COUNT = 2;
     private static final Lava[] lavaPool = {
         new Lava(), new Lava(), new Lava(), new Lava()
     };
-    private static final int LAVA_COUNT = 4;
     private static final Conveyor[] conveyorPool = {
         new Conveyor(), new Conveyor()
     };
-    private static final int CONVEYOR_COUNT = 2;
     private static final Boss boss = new Boss();
 
     private static final CRGB[] LEDS = new CRGB[NUM_LEDS];
@@ -205,30 +200,30 @@ public class MainActivity extends Activity {
 
     // TODO GPIO
     private void digitalWrite(int pin, int value) {
-
+        Log.d("TUT", "Digital write pin " + pin + " value " + value);
     }
 
     void cleanupLevel() {
-        for (int i = 0; i < ENEMY_COUNT; i++) {
+        for (int i = 0; i < enemyPool.length; i++) {
             enemyPool[i].kill();
         }
-        for (int i = 0; i < PARTICLE_COUNT; i++) {
+        for (int i = 0; i < particlePool.length; i++) {
             particlePool[i].kill();
         }
-        for (int i = 0; i < SPAWN_COUNT; i++) {
+        for (int i = 0; i < spawnPool.length; i++) {
             spawnPool[i].kill();
         }
-        for (int i = 0; i < LAVA_COUNT; i++) {
+        for (int i = 0; i < lavaPool.length; i++) {
             lavaPool[i].kill();
         }
-        for (int i = 0; i < CONVEYOR_COUNT; i++) {
+        for (int i = 0; i < conveyorPool.length; i++) {
             conveyorPool[i].kill();
         }
         boss.kill();
     }
 
     void spawnEnemy(int pos, int dir, int sp, int wobble) {
-        for (int e = 0; e < ENEMY_COUNT; e++) {
+        for (int e = 0; e < enemyPool.length; e++) {
             if (!enemyPool[e].isAlive()) {
                 enemyPool[e].spawn(pos, dir, sp, wobble);
                 enemyPool[e].playerSide = pos > playerPosition ? 1 : -1;
@@ -238,7 +233,7 @@ public class MainActivity extends Activity {
     }
 
     void spawnLava(int left, int right, int ontime, int offtime, int offset, String state) {
-        for (int i = 0; i < LAVA_COUNT; i++) {
+        for (int i = 0; i < lavaPool.length; i++) {
             if (!lavaPool[i].isAlive()) {
                 lavaPool[i].Spawn(left, right, ontime, offtime, offset, state, millis());
                 return;
@@ -247,7 +242,7 @@ public class MainActivity extends Activity {
     }
 
     void spawnConveyor(int startPoint, int endPoint, int dir) {
-        for (int i = 0; i < CONVEYOR_COUNT; i++) {
+        for (int i = 0; i < conveyorPool.length; i++) {
             if (!conveyorPool[i].isAlive()) {
                 conveyorPool[i].spawn(startPoint, endPoint, dir);
                 return;
@@ -537,7 +532,7 @@ public class MainActivity extends Activity {
         // Returns if the player is in active lava
         int i;
         Lava LP;
-        for (i = 0; i < LAVA_COUNT; i++) {
+        for (i = 0; i < lavaPool.length; i++) {
             LP = lavaPool[i];
             if (LP.isAlive() && LP.state.equals("ON")) {
                 if (LP.left < pos && LP.right > pos) {
@@ -558,7 +553,7 @@ public class MainActivity extends Activity {
             levelNumber = 0;
             lives = 3;
         }
-        for (int p = 0; p < PARTICLE_COUNT; p++) {
+        for (int p = 0; p < particlePool.length; p++) {
             particlePool[p].spawn(playerPosition);
         }
         stageStartTime = millis();
@@ -571,7 +566,7 @@ public class MainActivity extends Activity {
         long m = 10000 + millis();
         playerPositionModifier = 0;
 
-        for (i = 0; i < CONVEYOR_COUNT; i++) {
+        for (i = 0; i < conveyorPool.length; i++) {
             if (conveyorPool[i].isAlive()) {
                 dir = conveyorPool[i].direction;
                 ss = getLED(conveyorPool[i].startPoint);
@@ -625,7 +620,7 @@ public class MainActivity extends Activity {
 
     void tickSpawners() {
         long mm = millis();
-        for (int s = 0; s < SPAWN_COUNT; s++) {
+        for (int s = 0; s < spawnPool.length; s++) {
             if (spawnPool[s].isAlive() && spawnPool[s].activate < mm) {
                 if (spawnPool[s].lastSpawned + spawnPool[s].rate < mm || spawnPool[s].lastSpawned == 0) {
                     spawnEnemy(spawnPool[s].position, spawnPool[s].direction, spawnPool[s].sp, 0);
@@ -670,7 +665,7 @@ public class MainActivity extends Activity {
         int A, B, p, i, brightness, flicker;
         long mm = millis();
         Lava LP;
-        for (i = 0; i < LAVA_COUNT; i++) {
+        for (i = 0; i < lavaPool.length; i++) {
             flicker = new Random().nextInt(5);
             LP = lavaPool[i];
             if (LP.isAlive()) {
@@ -699,7 +694,7 @@ public class MainActivity extends Activity {
     }
 
     void tickEnemies() {
-        for (int i = 0; i < ENEMY_COUNT; i++) {
+        for (int i = 0; i < enemyPool.length; i++) {
             if (enemyPool[i].isAlive()) {
                 enemyPool[i].tick(millis());
                 // hit attack?
@@ -731,7 +726,7 @@ public class MainActivity extends Activity {
 
     private boolean tickParticles() {
         boolean stillActive = false;
-        for (int p = 0; p < PARTICLE_COUNT; p++) {
+        for (int p = 0; p < particlePool.length; p++) {
             if (particlePool[p].isAlive()) {
                 particlePool[p].tick(USE_GRAVITY);
 //  TODO:       LEDS[getLED(particlePool[p].position)] += CRGB.(particlePool[p].power, 0, 0);
