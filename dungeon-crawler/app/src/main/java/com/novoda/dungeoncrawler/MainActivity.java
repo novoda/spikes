@@ -48,6 +48,7 @@ public class MainActivity extends Activity {
     private boolean attacking = false;                // Is the attack in progress?
 
     // PLAYER
+    private static final FastLED.CRGB PLAYER_COLOR = FastLED.CRGB.GREEN;
     private static final int MAX_PLAYER_SPEED = 10;     // Max move speed of the player
     private String stage;                       // what stage the game is at (PLAY/DEAD/WIN/GAMEOVER)
     private long stageStartTime;               // Stores the time the stage changed for stages that are time based
@@ -79,29 +80,30 @@ public class MainActivity extends Activity {
     };
     private static final Boss boss = new Boss();
 
-    private static final CRGB[] LEDS = new CRGB[NUM_LEDS];
     private static final RunningMedian MPU_ANGLE_SAMPLES = new RunningMedian(5);
     private static final RunningMedian MPU_WOBBLE_SAMPLES = new RunningMedian(5);
 
     private ArduinoLoop arduinoLoop = new ArduinoLoop();
+    private FastLED ledStrip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        accelGyro = new MPU6050();
         accelGyro.initialize();
 
 //         Fast LED
-//        FastLED.addLeds<APA102, DATA_PIN, CLOCK_PIN, LED_COLOR_ORDER> (LEDS, NUM_LEDS);
-//        FastLED.setBrightness(BRIGHTNESS);
-//        FastLED.setDither(1);
+        ledStrip = new FastLED(NUM_LEDS, LED_COLOR_ORDER, DATA_PIN, CLOCK_PIN);
+        ledStrip.setBrightness(BRIGHTNESS);
+        ledStrip.setDither(1);
 
         // Life LEDs
-//        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
 //            pinMode(lifeLEDs[i], OUTPUT);
-//            digitalWrite(lifeLEDs[i], Gpio.ACTIVE_HIGH);
-//        }
+            digitalWrite(lifeLEDs[i], Gpio.ACTIVE_HIGH);
+        }
 
         loadLevel();
 
@@ -274,7 +276,6 @@ public class MainActivity extends Activity {
 
     private void loop() {
         long mm = millis();
-        int brightness = 0;
 
         if (stage.equals("PLAY")) {
             if (attacking) {
@@ -352,64 +353,62 @@ public class MainActivity extends Activity {
                 drawExit();
             } else if (stage.equals("DEAD")) {
                 // DEAD
-//                FastLED.clear(); TODO
+                ledStrip.clear();
                 if (!tickParticles()) {
                     loadLevel();
                 }
             } else if (stage.equals("WIN")) {
                 // LEVEL COMPLETE
-//                FastLED.clear(); TODO
+                ledStrip.clear();
                 if (stageStartTime + 500 > mm) {
                     int n = (int) Math.max(map((int) (mm - stageStartTime), 0, 500, NUM_LEDS, 0), 0);
                     for (int i = NUM_LEDS; i >= n; i--) {
-                        brightness = 255;
-                        LEDS[i] = CRGB.create(0, brightness, 0); // TODO CRGB(0, brightness, 0)
+                        ledStrip.set(i, PLAYER_COLOR);
                     }
                     SFXwin();
                 } else if (stageStartTime + 1000 > mm) {
                     int n = (int) Math.max(map((int) (mm - stageStartTime), 500, 1000, NUM_LEDS, 0), 0);
                     for (int i = 0; i < n; i++) {
-                        brightness = 255;
-                        LEDS[i] = CRGB.create(0, brightness, 0); // TODO
+                        ledStrip.set(i, PLAYER_COLOR);
                     }
                     SFXwin();
                 } else if (stageStartTime + 1200 > mm) {
-                    LEDS[0] = CRGB.create(0, 255, 0); // TODO
+                    ledStrip.set(0, PLAYER_COLOR);
                 } else {
                     nextLevel();
                 }
             } else if (stage.equals("COMPLETE")) {
-//                FastLED.clear();  TODO
+                ledStrip.clear();
                 SFXcomplete();
                 if (stageStartTime + 500 > mm) {
                     int n = (int) Math.max(map((int) (mm - stageStartTime), 0, 500, NUM_LEDS, 0), 0);
                     for (int i = NUM_LEDS; i >= n; i--) {
-                        brightness = (int) ((Math.sin(((i * 10) + mm) / 500.0) + 1) * 255);
-                        LEDS[i].setHSV(brightness, 255, 50);
+                        int brightness = (int) ((Math.sin(((i * 10) + mm) / 500.0) + 1) * 255);
+                        ledStrip.modifyHSV(i, brightness, 255, 50);
                     }
                 } else if (stageStartTime + 5000 > mm) {
                     for (int i = NUM_LEDS; i >= 0; i--) {
-                        brightness = (int) ((Math.sin(((i * 10) + mm) / 500.0) + 1) * 255);
-                        LEDS[i].setHSV(brightness, 255, 50);
+                        int brightness = (int) ((Math.sin(((i * 10) + mm) / 500.0) + 1) * 255);
+                        ledStrip.modifyHSV(i, brightness, 255, 50);
                     }
                 } else if (stageStartTime + 5500 > mm) {
                     int n = (int) Math.max(map((int) (mm - stageStartTime), 5000, 5500, NUM_LEDS, 0), 0);
                     for (int i = 0; i < n; i++) {
-                        brightness = (int) ((Math.sin(((i * 10) + mm) / 500.0) + 1) * 255);
-                        LEDS[i].setHSV(brightness, 255, 50);
+                        int brightness = (int) ((Math.sin(((i * 10) + mm) / 500.0) + 1) * 255);
+                        ledStrip.modifyHSV(i, brightness, 255, 50);
                     }
                 } else {
                     nextLevel();
                 }
             } else if (stage.equals("GAMEOVER")) {
                 // GAME OVER!
-//                FastLED.clear();  TODO
+                ledStrip.clear();
                 stageStartTime = 0;
             }
 
             Log.d("TUT", "" + (millis() - mm));
             Log.d("TUT", " - ");
-//            FastLED.show(); TODO
+            ledStrip.show();
             Log.d("TUT", "" + (millis() - mm));
         }
     }
@@ -498,7 +497,7 @@ public class MainActivity extends Activity {
         int mode = (int) ((mm / 20000) % 2);
 
         for (i = 0; i < NUM_LEDS; i++) {
-            LEDS[i].nscale8(250);
+            ledStrip.modifyScale(i, 250);
         }
         if (mode == 0) {
             // Marching green <> orange
@@ -567,30 +566,35 @@ public class MainActivity extends Activity {
     }
 
     void tickConveyors() {
-        int b, dir, n, i, ss, ee, led;
+        int blue;
+        int direction;
+        int n;
+        int i;
+        int startPosition;
+        int endPosition;
+        int led;
         long m = 10000 + millis();
         playerPositionModifier = 0;
 
         for (i = 0; i < conveyorPool.length; i++) {
             if (conveyorPool[i].isAlive()) {
-                dir = conveyorPool[i].direction;
-                ss = getLED(conveyorPool[i].startPoint);
-                ee = getLED(conveyorPool[i].endPoint);
-                for (led = ss; led < ee; led++) {
-                    b = 5;
-                    n = (int) ((-led + (m / 100)) % 5);
-                    if (dir == -1) {
+                direction = conveyorPool[i].direction;
+                startPosition = getLED(conveyorPool[i].startPoint);
+                endPosition = getLED(conveyorPool[i].endPoint);
+                for (led = startPosition; led < endPosition; led++) {
+                    if (direction == -1) {
                         n = (int) ((led + (m / 100)) % 5);
+                    } else {
+                        n = (int) ((-led + (m / 100)) % 5);
                     }
-                    b = (int) ((5 - n) / 2.0);
-                    if (b > 0) {
-                        // TODO https://github.com/FastLED/FastLED/wiki/Pixel-reference#chsv
-                        LEDS[led] = CRGB.create(0, 0, b);
+                    blue = (int) ((5 - n) / 2.0);
+                    if (blue > 0) {
+                        ledStrip.set(led, new FastLED.CRGB(0, 0, blue));
                     }
                 }
 
                 if (playerPosition > conveyorPool[i].startPoint && playerPosition < conveyorPool[i].endPoint) {
-                    if (dir == -1) {
+                    if (direction == -1) {
                         playerPositionModifier = -(MAX_PLAYER_SPEED - 4);
                     } else {
                         playerPositionModifier = (MAX_PLAYER_SPEED - 4);
@@ -640,8 +644,8 @@ public class MainActivity extends Activity {
         if (boss.isAlive()) {
             boss.ticks++;
             for (int i = getLED(boss.position - BOSS_WIDTH / 2); i <= getLED(boss.position + BOSS_WIDTH / 2); i++) {
-                LEDS[i] = CRGB.DarkRed;
-                LEDS[i].mod(100);
+                ledStrip.set(i, FastLED.CRGB.DARK_RED);
+                ledStrip.modifyMod(i, 100);
             }
             // CHECK COLLISION
             if (getLED(playerPosition) > getLED(boss.position - BOSS_WIDTH / 2) && getLED(playerPosition) < getLED(boss.position + BOSS_WIDTH)) {
@@ -682,7 +686,7 @@ public class MainActivity extends Activity {
                         LP.lastOn = mm;
                     }
                     for (p = A; p <= B; p++) {
-                        LEDS[p] = CRGB.create(3 + flicker, (3 + flicker) / 1.5, 0);
+                        ledStrip.set(p, new FastLED.CRGB(3 + flicker, (int) ((3 + flicker) / 1.5), 0));
                     }
                 } else if (LP.state.equals("ON")) {
                     if (LP.lastOn + LP.ontime < mm) {
@@ -690,7 +694,7 @@ public class MainActivity extends Activity {
                         LP.lastOn = mm;
                     }
                     for (p = A; p <= B; p++) {
-                        LEDS[p] = CRGB.create(150 + flicker, 100 + flicker, 0);
+                        ledStrip.set(p, new FastLED.CRGB(150 + flicker, 100 + flicker, 0));
                     }
                 }
             }
@@ -715,7 +719,8 @@ public class MainActivity extends Activity {
                 }
                 // Draw (if still alive)
                 if (enemyPool[i].isAlive()) {
-                    LEDS[getLED(enemyPool[i].position)] = CRGB.create(255, 0, 0); // TODO is create correct here? it was CRGB(255, 0, 0)
+                    int p = getLED(enemyPool[i].position);
+                    ledStrip.set(p, FastLED.CRGB.RED);
                 }
                 // hit player?
                 if (
@@ -742,7 +747,8 @@ public class MainActivity extends Activity {
     }
 
     private void drawPlayer() {
-        LEDS[getLED(playerPosition)] = CRGB.create(0, 255, 0); // TODO
+        int p = getLED(playerPosition);
+        ledStrip.set(p, PLAYER_COLOR);
     }
 
     void drawAttack() {
@@ -751,24 +757,29 @@ public class MainActivity extends Activity {
         }
         // TODO check casts
         int n = (int) map((int) (millis() - attackMillis), 0, ATTACK_DURATION, 100, 5);
-        for (int i = getLED(playerPosition - (ATTACK_WIDTH / 2)) + 1; i <= getLED(playerPosition + (ATTACK_WIDTH / 2)) - 1; i++) {
-            LEDS[i] = CRGB.create(0, 0, n); // TODO
+        int forwardPosition = playerPosition + (ATTACK_WIDTH / 2);
+        int rearPosition = playerPosition - (ATTACK_WIDTH / 2);
+        for (int i = getLED(rearPosition) + 1; i <= getLED(forwardPosition) - 1; i++) {
+            ledStrip.set(i, new FastLED.CRGB(0, 0, n));
         }
+        int i = getLED(playerPosition);
         if (n > 90) {
             n = 255;
-            LEDS[getLED(playerPosition)] = CRGB.create(255, 255, 255);// TODO
+            ledStrip.set(i, FastLED.CRGB.WHITE);
         } else {
             n = 0;
-            LEDS[getLED(playerPosition)] = CRGB.create(0, 255, 0); // TODO
+            ledStrip.set(i, FastLED.CRGB.GREEN);
         }
-        LEDS[getLED(playerPosition - (ATTACK_WIDTH / 2))] = CRGB.create(n, n, 255); // TODO
-        LEDS[getLED(playerPosition + (ATTACK_WIDTH / 2))] = CRGB.create(n, n, 255);     // TODO
+        ledStrip.set(getLED(rearPosition), new FastLED.CRGB(n, n, 255));
+        ledStrip.set(getLED(forwardPosition), new FastLED.CRGB(n, n, 255));
     }
 
     private void drawExit() {
-        if (!boss.isAlive()) {
-            LEDS[NUM_LEDS - 1] = CRGB.create(0, 0, 255); // TODO
+        if (boss.isAlive()) {
+            return;
         }
+        int exitPosition = NUM_LEDS - 1;
+        ledStrip.set(exitPosition, new FastLED.CRGB(0, 0, 255));
     }
 
     void nextLevel() {
