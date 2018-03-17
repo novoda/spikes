@@ -25,12 +25,12 @@ public class MainActivity extends Activity {
     private static final int BEND_POINT = 550;   // 0/1000 point at which the LED strip goes up the wall
 
     // GAME
-    private long previousMillis = 0;           // Time of the last redraw
-    private int levelNumber = 0;
-    private long lastInputTime = 0;
     private static final int TIMEOUT = 30000;
     private static final int LEVEL_COUNT = 9;
     private static final int MAX_VOLUME = 10;
+    private long previousMillis = 0;           // Time of the last redraw
+    private int levelNumber = 0;
+    private long lastInputTime = 0;
 
     // JOYSTICK
     private static final int JOYSTICK_ORIENTATION = 1;     // 0, 1 or 2 to set the angle of the joystick
@@ -43,9 +43,9 @@ public class MainActivity extends Activity {
     // WOBBLE ATTACK
     private static final int ATTACK_WIDTH = 70;     // Width of the wobble attack, world is 1000 wide
     private static final int ATTACK_DURATION = 500;    // Duration of a wobble attack (ms)
+    private static final int BOSS_WIDTH = 40;
     private long attackMillis = 0;             // Time the attack started
     private boolean attacking = false;                // Is the attack in progress?
-    private static final int BOSS_WIDTH = 40;
 
     // PLAYER
     private static final int MAX_PLAYER_SPEED = 10;     // Max move speed of the player
@@ -58,35 +58,35 @@ public class MainActivity extends Activity {
     private int lives = 3;
 
     // POOLS
-    private final int[] lifeLEDs = new int[]{52, 50, 40};
+    private static final int[] lifeLEDs = new int[]{52, 50, 40};
 
-    private final Enemy[] enemyPool = new Enemy[]{
+    private static final Enemy[] enemyPool = new Enemy[]{
         new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy(),
         new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy()
     };
 
     private static final int ENEMY_COUNT = 10;
-    private Particle[] particlePool = {
+    private static final Particle[] particlePool = {
         new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle()
     };
     private static final int PARTICLE_COUNT = 40;
-    private Spawner[] spawnPool = {
+    private static final Spawner[] spawnPool = {
         new Spawner(), new Spawner()
     };
     private static final int SPAWN_COUNT = 2;
-    private Lava[] lavaPool = {
+    private static final Lava[] lavaPool = {
         new Lava(), new Lava(), new Lava(), new Lava()
     };
     private static final int LAVA_COUNT = 4;
-    private Conveyor[] conveyorPool = {
+    private static final Conveyor[] conveyorPool = {
         new Conveyor(), new Conveyor()
     };
     private static final int CONVEYOR_COUNT = 2;
-    private Boss boss = new Boss();
+    private static final Boss boss = new Boss();
 
-    private CRGB[] leds = new CRGB[NUM_LEDS];
-    private RunningMedian MPUAngleSamples = new RunningMedian(5);
-    private RunningMedian MPUWobbleSamples = new RunningMedian(5);
+    private static final CRGB[] LEDS = new CRGB[NUM_LEDS];
+    private static final RunningMedian MPU_ANGLE_SAMPLES = new RunningMedian(5);
+    private static final RunningMedian MPU_WOBBLE_SAMPLES = new RunningMedian(5);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +96,7 @@ public class MainActivity extends Activity {
         accelGyro.initialize();
 
 //         Fast LED
-//        FastLED.addLeds<APA102, DATA_PIN, CLOCK_PIN, LED_COLOR_ORDER> (leds, NUM_LEDS);
+//        FastLED.addLeds<APA102, DATA_PIN, CLOCK_PIN, LED_COLOR_ORDER> (LEDS, NUM_LEDS);
 //        FastLED.setBrightness(BRIGHTNESS);
 //        FastLED.setDither(1);
 
@@ -365,18 +365,18 @@ public class MainActivity extends Activity {
                     int n = (int) Math.max(map((int) (mm - stageStartTime), 0, 500, NUM_LEDS, 0), 0);
                     for (int i = NUM_LEDS; i >= n; i--) {
                         brightness = 255;
-                        leds[i] = CRGB.create(0, brightness, 0); // TODO CRGB(0, brightness, 0)
+                        LEDS[i] = CRGB.create(0, brightness, 0); // TODO CRGB(0, brightness, 0)
                     }
                     SFXwin();
                 } else if (stageStartTime + 1000 > mm) {
                     int n = (int) Math.max(map((int) (mm - stageStartTime), 500, 1000, NUM_LEDS, 0), 0);
                     for (int i = 0; i < n; i++) {
                         brightness = 255;
-                        leds[i] = CRGB.create(0, brightness, 0); // TODO
+                        LEDS[i] = CRGB.create(0, brightness, 0); // TODO
                     }
                     SFXwin();
                 } else if (stageStartTime + 1200 > mm) {
-                    leds[0] = CRGB.create(0, 255, 0); // TODO
+                    LEDS[0] = CRGB.create(0, 255, 0); // TODO
                 } else {
                     nextLevel();
                 }
@@ -387,18 +387,18 @@ public class MainActivity extends Activity {
                     int n = (int) Math.max(map((int) (mm - stageStartTime), 0, 500, NUM_LEDS, 0), 0);
                     for (int i = NUM_LEDS; i >= n; i--) {
                         brightness = (int) ((Math.sin(((i * 10) + mm) / 500.0) + 1) * 255);
-                        leds[i].setHSV(brightness, 255, 50);
+                        LEDS[i].setHSV(brightness, 255, 50);
                     }
                 } else if (stageStartTime + 5000 > mm) {
                     for (int i = NUM_LEDS; i >= 0; i--) {
                         brightness = (int) ((Math.sin(((i * 10) + mm) / 500.0) + 1) * 255);
-                        leds[i].setHSV(brightness, 255, 50);
+                        LEDS[i].setHSV(brightness, 255, 50);
                     }
                 } else if (stageStartTime + 5500 > mm) {
                     int n = (int) Math.max(map((int) (mm - stageStartTime), 5000, 5500, NUM_LEDS, 0), 0);
                     for (int i = 0; i < n; i++) {
                         brightness = (int) ((Math.sin(((i * 10) + mm) / 500.0) + 1) * 255);
-                        leds[i].setHSV(brightness, 255, 50);
+                        LEDS[i].setHSV(brightness, 255, 50);
                     }
                 } else {
                     nextLevel();
@@ -481,14 +481,14 @@ public class MainActivity extends Activity {
         if (a < 0) {
             a += JOYSTICK_DEADZONE;
         }
-        MPUAngleSamples.add(a);
-        MPUWobbleSamples.add(g);
+        MPU_ANGLE_SAMPLES.add(a);
+        MPU_WOBBLE_SAMPLES.add(g);
 
-        joystickTilt = MPUAngleSamples.getMedian();
+        joystickTilt = MPU_ANGLE_SAMPLES.getMedian();
         if (JOYSTICK_DIRECTION == 1) {
             joystickTilt = 0 - joystickTilt;
         }
-        joystickWobble = Math.abs(MPUWobbleSamples.getHighest());
+        joystickWobble = Math.abs(MPU_WOBBLE_SAMPLES.getHighest());
     }
 
     // ---------------------------------
@@ -500,7 +500,7 @@ public class MainActivity extends Activity {
         int mode = (int) ((mm / 20000) % 2);
 
         for (i = 0; i < NUM_LEDS; i++) {
-            leds[i].nscale8(250);
+            LEDS[i].nscale8(250);
         }
         if (mode == 0) {
             // Marching green <> orange
@@ -510,7 +510,7 @@ public class MainActivity extends Activity {
             for (i = 0; i < NUM_LEDS; i++) {
                 if (i % 10 == n) {
                     // TODO https://github.com/FastLED/FastLED/wiki/Pixel-reference#chsv
-//                    leds[i] = CHSV(c, 255, 150);
+//                    LEDS[i] = CHSV(c, 255, 150);
                 }
             }
         } else if (mode == 1) {
@@ -519,7 +519,7 @@ public class MainActivity extends Activity {
             for (i = 0; i < NUM_LEDS; i++) {
                 if (random.nextInt(200) == 0) {
                     // TODO https://github.com/FastLED/FastLED/wiki/Pixel-reference#chsv
-//                    leds[i] = CHSV(25, 255, 100);
+//                    LEDS[i] = CHSV(25, 255, 100);
                 }
             }
         }
@@ -587,7 +587,7 @@ public class MainActivity extends Activity {
                     b = (int) ((5 - n) / 2.0);
                     if (b > 0) {
                         // TODO https://github.com/FastLED/FastLED/wiki/Pixel-reference#chsv
-                        leds[led] = CRGB.create(0, 0, b);
+                        LEDS[led] = CRGB.create(0, 0, b);
                     }
                 }
 
@@ -642,8 +642,8 @@ public class MainActivity extends Activity {
         if (boss.isAlive()) {
             boss.ticks++;
             for (int i = getLED(boss.position - BOSS_WIDTH / 2); i <= getLED(boss.position + BOSS_WIDTH / 2); i++) {
-                leds[i] = CRGB.DarkRed;
-                leds[i].mod(100);
+                LEDS[i] = CRGB.DarkRed;
+                LEDS[i].mod(100);
             }
             // CHECK COLLISION
             if (getLED(playerPosition) > getLED(boss.position - BOSS_WIDTH / 2) && getLED(playerPosition) < getLED(boss.position + BOSS_WIDTH)) {
@@ -684,7 +684,7 @@ public class MainActivity extends Activity {
                         LP.lastOn = mm;
                     }
                     for (p = A; p <= B; p++) {
-                        leds[p] = CRGB.create(3 + flicker, (3 + flicker) / 1.5, 0);
+                        LEDS[p] = CRGB.create(3 + flicker, (3 + flicker) / 1.5, 0);
                     }
                 } else if (LP.state.equals("ON")) {
                     if (LP.lastOn + LP.ontime < mm) {
@@ -692,7 +692,7 @@ public class MainActivity extends Activity {
                         LP.lastOn = mm;
                     }
                     for (p = A; p <= B; p++) {
-                        leds[p] = CRGB.create(150 + flicker, 100 + flicker, 0);
+                        LEDS[p] = CRGB.create(150 + flicker, 100 + flicker, 0);
                     }
                 }
             }
@@ -717,7 +717,7 @@ public class MainActivity extends Activity {
                 }
                 // Draw (if still alive)
                 if (enemyPool[i].isAlive()) {
-                    leds[getLED(enemyPool[i].position)] = CRGB.create(255, 0, 0); // TODO is create correct here? it was CRGB(255, 0, 0)
+                    LEDS[getLED(enemyPool[i].position)] = CRGB.create(255, 0, 0); // TODO is create correct here? it was CRGB(255, 0, 0)
                 }
                 // hit player?
                 if (
@@ -736,7 +736,7 @@ public class MainActivity extends Activity {
         for (int p = 0; p < PARTICLE_COUNT; p++) {
             if (particlePool[p].isAlive()) {
                 particlePool[p].tick(USE_GRAVITY);
-//  TODO:       leds[getLED(particlePool[p].position)] += CRGB.(particlePool[p].power, 0, 0);
+//  TODO:       LEDS[getLED(particlePool[p].position)] += CRGB.(particlePool[p].power, 0, 0);
                 stillActive = true;
             }
         }
@@ -744,7 +744,7 @@ public class MainActivity extends Activity {
     }
 
     private void drawPlayer() {
-        leds[getLED(playerPosition)] = CRGB.create(0, 255, 0); // TODO
+        LEDS[getLED(playerPosition)] = CRGB.create(0, 255, 0); // TODO
     }
 
     void drawAttack() {
@@ -754,22 +754,22 @@ public class MainActivity extends Activity {
         // TODO check casts
         int n = (int) map((int) (millis() - attackMillis), 0, ATTACK_DURATION, 100, 5);
         for (int i = getLED(playerPosition - (ATTACK_WIDTH / 2)) + 1; i <= getLED(playerPosition + (ATTACK_WIDTH / 2)) - 1; i++) {
-            leds[i] = CRGB.create(0, 0, n); // TODO
+            LEDS[i] = CRGB.create(0, 0, n); // TODO
         }
         if (n > 90) {
             n = 255;
-            leds[getLED(playerPosition)] = CRGB.create(255, 255, 255);// TODO
+            LEDS[getLED(playerPosition)] = CRGB.create(255, 255, 255);// TODO
         } else {
             n = 0;
-            leds[getLED(playerPosition)] = CRGB.create(0, 255, 0); // TODO
+            LEDS[getLED(playerPosition)] = CRGB.create(0, 255, 0); // TODO
         }
-        leds[getLED(playerPosition - (ATTACK_WIDTH / 2))] = CRGB.create(n, n, 255); // TODO
-        leds[getLED(playerPosition + (ATTACK_WIDTH / 2))] = CRGB.create(n, n, 255);     // TODO
+        LEDS[getLED(playerPosition - (ATTACK_WIDTH / 2))] = CRGB.create(n, n, 255); // TODO
+        LEDS[getLED(playerPosition + (ATTACK_WIDTH / 2))] = CRGB.create(n, n, 255);     // TODO
     }
 
     private void drawExit() {
         if (!boss.isAlive()) {
-            leds[NUM_LEDS - 1] = CRGB.create(0, 0, 255); // TODO
+            LEDS[NUM_LEDS - 1] = CRGB.create(0, 0, 255); // TODO
         }
     }
 
