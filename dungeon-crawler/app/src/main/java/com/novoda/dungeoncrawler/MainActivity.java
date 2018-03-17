@@ -256,20 +256,20 @@ public class MainActivity extends Activity {
     }
 
     void spawnBoss() {
-        boss.Spawn();
+        boss.spawn();
         moveBoss();
     }
 
     void moveBoss() {
         int spawnSpeed = 2500;
-        if (boss._lives == 2) {
+        if (boss.lives == 2) {
             spawnSpeed = 2000;
         }
-        if (boss._lives == 1) {
+        if (boss.lives == 1) {
             spawnSpeed = 1500;
         }
-        spawnPool[0].Spawn(boss._pos, spawnSpeed, 3, 0, 0);
-        spawnPool[1].Spawn(boss._pos, spawnSpeed, 3, 1, 0);
+        spawnPool[0].Spawn(boss.position, spawnSpeed, 3, 0, 0);
+        spawnPool[1].Spawn(boss.position, spawnSpeed, 3, 1, 0);
     }
 
     /**
@@ -334,7 +334,7 @@ public class MainActivity extends Activity {
                     if (playerPosition < 0) {
                         playerPosition = 0;
                     }
-                    if (playerPosition >= 1000 && !boss.Alive()) {
+                    if (playerPosition >= 1000 && !boss.isAlive()) {
                         // Reached exit!
                         levelComplete();
                         return;
@@ -643,25 +643,25 @@ public class MainActivity extends Activity {
 
     void tickBoss() {
         // DRAW
-        if (boss.Alive()) {
-            boss._ticks++;
-            for (int i = getLED(boss._pos - BOSS_WIDTH / 2); i <= getLED(boss._pos + BOSS_WIDTH / 2); i++) {
+        if (boss.isAlive()) {
+            boss.ticks++;
+            for (int i = getLED(boss.position - BOSS_WIDTH / 2); i <= getLED(boss.position + BOSS_WIDTH / 2); i++) {
                 leds[i] = CRGB.DarkRed;
                 leds[i].mod(100);
             }
             // CHECK COLLISION
-            if (getLED(playerPosition) > getLED(boss._pos - BOSS_WIDTH / 2) && getLED(playerPosition) < getLED(boss._pos + BOSS_WIDTH)) {
+            if (getLED(playerPosition) > getLED(boss.position - BOSS_WIDTH / 2) && getLED(playerPosition) < getLED(boss.position + BOSS_WIDTH)) {
                 die();
                 return;
             }
             // CHECK FOR ATTACK
             if (attacking) {
                 if (
-                    (getLED(playerPosition + (ATTACK_WIDTH / 2)) >= getLED(boss._pos - BOSS_WIDTH / 2) && getLED(playerPosition + (ATTACK_WIDTH / 2)) <= getLED(boss._pos + BOSS_WIDTH / 2)) ||
-                        (getLED(playerPosition - (ATTACK_WIDTH / 2)) <= getLED(boss._pos + BOSS_WIDTH / 2) && getLED(playerPosition - (ATTACK_WIDTH / 2)) >= getLED(boss._pos - BOSS_WIDTH / 2))
+                    (getLED(playerPosition + (ATTACK_WIDTH / 2)) >= getLED(boss.position - BOSS_WIDTH / 2) && getLED(playerPosition + (ATTACK_WIDTH / 2)) <= getLED(boss.position + BOSS_WIDTH / 2)) ||
+                        (getLED(playerPosition - (ATTACK_WIDTH / 2)) <= getLED(boss.position + BOSS_WIDTH / 2) && getLED(playerPosition - (ATTACK_WIDTH / 2)) >= getLED(boss.position - BOSS_WIDTH / 2))
                     ) {
-                    boss.Hit();
-                    if (boss.Alive()) {
+                    boss.hit();
+                    if (boss.isAlive()) {
                         moveBoss();
                     } else {
                         spawnPool[0].Kill();
@@ -708,7 +708,7 @@ public class MainActivity extends Activity {
         for (int i = 0; i < ENEMY_COUNT; i++) {
             if (enemyPool[i].Alive()) {
                 enemyPool[i].Tick();
-                // Hit attack?
+                // hit attack?
                 if (attacking) {
                     if (enemyPool[i]._pos > playerPosition - (ATTACK_WIDTH / 2) && enemyPool[i]._pos < playerPosition + (ATTACK_WIDTH / 2)) {
                         enemyPool[i].Kill();
@@ -723,7 +723,7 @@ public class MainActivity extends Activity {
                 if (enemyPool[i].Alive()) {
                     leds[getLED(enemyPool[i]._pos)] = CRGB.create(255, 0, 0); // TODO is create correct here? it was CRGB(255, 0, 0)
                 }
-                // Hit player?
+                // hit player?
                 if (
                     (enemyPool[i].playerSide == 1 && enemyPool[i]._pos <= playerPosition) ||
                         (enemyPool[i].playerSide == -1 && enemyPool[i]._pos >= playerPosition)
@@ -772,7 +772,7 @@ public class MainActivity extends Activity {
     }
 
     private void drawExit() {
-        if (!boss.Alive()) {
+        if (!boss.isAlive()) {
             leds[NUM_LEDS - 1] = CRGB.create(0, 0, 255); // TODO
         }
     }
