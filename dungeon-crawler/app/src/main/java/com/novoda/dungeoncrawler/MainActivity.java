@@ -248,8 +248,8 @@ public class MainActivity extends Activity {
 
     void spawnConveyor(int startPoint, int endPoint, int dir) {
         for (int i = 0; i < CONVEYOR_COUNT; i++) {
-            if (!conveyorPool[i].Alive()) {
-                conveyorPool[i].Spawn(startPoint, endPoint, dir);
+            if (!conveyorPool[i].isAlive()) {
+                conveyorPool[i].spawn(startPoint, endPoint, dir);
                 return;
             }
         }
@@ -578,10 +578,10 @@ public class MainActivity extends Activity {
         playerPositionModifier = 0;
 
         for (i = 0; i < CONVEYOR_COUNT; i++) {
-            if (conveyorPool[i]._alive) {
-                dir = conveyorPool[i]._dir;
-                ss = getLED(conveyorPool[i]._startPoint);
-                ee = getLED(conveyorPool[i]._endPoint);
+            if (conveyorPool[i].isAlive()) {
+                dir = conveyorPool[i].direction;
+                ss = getLED(conveyorPool[i].startPoint);
+                ee = getLED(conveyorPool[i].endPoint);
                 for (led = ss; led < ee; led++) {
                     b = 5;
                     n = (int) ((-led + (m / 100)) % 5);
@@ -595,7 +595,7 @@ public class MainActivity extends Activity {
                     }
                 }
 
-                if (playerPosition > conveyorPool[i]._startPoint && playerPosition < conveyorPool[i]._endPoint) {
+                if (playerPosition > conveyorPool[i].startPoint && playerPosition < conveyorPool[i].endPoint) {
                     if (dir == -1) {
                         playerPositionModifier = -(MAX_PLAYER_SPEED - 4);
                     } else {
