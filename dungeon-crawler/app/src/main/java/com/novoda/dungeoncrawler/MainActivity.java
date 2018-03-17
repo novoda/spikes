@@ -271,7 +271,7 @@ public class MainActivity extends Activity {
             if (attacking) {
                 SFXattacking();
             } else {
-                SFXtilt(joyState.tilt);
+                SFXtilt(joyState == null ? 0 : joyState.tilt);
             }
         } else if (stage.equals("DEAD")) {
             SFXdead();
