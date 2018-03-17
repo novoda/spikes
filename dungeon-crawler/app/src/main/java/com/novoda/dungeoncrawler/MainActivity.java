@@ -184,7 +184,7 @@ public class MainActivity extends Activity {
         if (millis == 0) {
             millis = System.currentTimeMillis();
         }
-        return millis - System.currentTimeMillis();
+        return millis -= System.currentTimeMillis();
     }
 
     void updateLives() {
