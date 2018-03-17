@@ -30,6 +30,7 @@ public class MainActivity extends Activity {
     private long lastInputTime = 0;
 
     // WOBBLE ATTACK
+    private static final int ATTACK_THRESHOLD = 30000; // The threshold that triggers an attack // TODO DOESN'T BELONG HERE
     private static final int ATTACK_WIDTH = 70;     // Width of the wobble attack, world is 1000 wide
     private static final int ATTACK_DURATION = 500;    // Duration of a wobble attack (ms)
     private static final int BOSS_WIDTH = 40;
@@ -51,21 +52,21 @@ public class MainActivity extends Activity {
     private static final int[] lifeLEDs = new int[]{52, 50, 40};
 
     private static final Enemy[] enemyPool = new Enemy[]{
-        new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy(),
-        new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy()
+            new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy(),
+            new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy()
     };
 
     private static final Particle[] particlePool = {
-        new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle()
+            new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle()
     };
     private static final Spawner[] spawnPool = {
-        new Spawner(), new Spawner()
+            new Spawner(), new Spawner()
     };
     private static final Lava[] lavaPool = {
-        new Lava(), new Lava(), new Lava(), new Lava()
+            new Lava(), new Lava(), new Lava(), new Lava()
     };
     private static final Conveyor[] conveyorPool = {
-        new Conveyor(), new Conveyor()
+            new Conveyor(), new Conveyor()
     };
     private static final Boss boss = new Boss();
 
@@ -302,7 +303,7 @@ public class MainActivity extends Activity {
                 }
 
                 // If not attacking, check if they should be
-                if (!attacking && joyState.wobble > Joystick.ATTACK_THRESHOLD) {
+                if (!attacking && joyState.wobble > ATTACK_THRESHOLD) {
                     attackMillis = mm;
                     attacking = true;
                 }
@@ -620,9 +621,9 @@ public class MainActivity extends Activity {
             // CHECK FOR ATTACK
             if (attacking) {
                 if (
-                    (getLED(playerPosition + (ATTACK_WIDTH / 2)) >= getLED(boss.position - BOSS_WIDTH / 2) && getLED(playerPosition + (ATTACK_WIDTH / 2)) <= getLED(boss.position + BOSS_WIDTH / 2)) ||
-                        (getLED(playerPosition - (ATTACK_WIDTH / 2)) <= getLED(boss.position + BOSS_WIDTH / 2) && getLED(playerPosition - (ATTACK_WIDTH / 2)) >= getLED(boss.position - BOSS_WIDTH / 2))
-                    ) {
+                        (getLED(playerPosition + (ATTACK_WIDTH / 2)) >= getLED(boss.position - BOSS_WIDTH / 2) && getLED(playerPosition + (ATTACK_WIDTH / 2)) <= getLED(boss.position + BOSS_WIDTH / 2)) ||
+                                (getLED(playerPosition - (ATTACK_WIDTH / 2)) <= getLED(boss.position + BOSS_WIDTH / 2) && getLED(playerPosition - (ATTACK_WIDTH / 2)) >= getLED(boss.position - BOSS_WIDTH / 2))
+                        ) {
                     boss.hit();
                     if (boss.isAlive()) {
                         moveBoss();
@@ -689,9 +690,9 @@ public class MainActivity extends Activity {
                 }
                 // hit player?
                 if (
-                    (enemyPool[i].playerSide == 1 && enemyPool[i].position <= playerPosition) ||
-                        (enemyPool[i].playerSide == -1 && enemyPool[i].position >= playerPosition)
-                    ) {
+                        (enemyPool[i].playerSide == 1 && enemyPool[i].position <= playerPosition) ||
+                                (enemyPool[i].playerSide == -1 && enemyPool[i].position >= playerPosition)
+                        ) {
                     die();
                     return;
                 }

@@ -5,7 +5,6 @@ class Joystick {
     // JOYSTICK
     private static final int JOYSTICK_ORIENTATION = 1;     // 0, 1 or 2 to set the angle of the joystick
     private static final int JOYSTICK_DIRECTION = 1;     // 0/1 to flip joystick direction
-    static final int ATTACK_THRESHOLD = 30000; // The threshold that triggers an attack // TODO DOESN'T BELONG HERE
     static final int DEADZONE = 5;     // Angle to ignore
 
     private static final JoyState JOY_STATE = new JoyState();
