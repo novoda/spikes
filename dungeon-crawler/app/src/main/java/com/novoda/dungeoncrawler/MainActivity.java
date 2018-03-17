@@ -11,7 +11,7 @@ import java.util.Random;
 public class MainActivity extends Activity {
 
     // LED setup
-    private static final int NUM_LEDS = 475;
+    private static final int NUM_LEDS = 20;//475;
     private static final int DATA_PIN = 3;
     private static final int CLOCK_PIN = 4;
     private static final int LED_COLOR_ORDER = 0;//BGR;//GBR
@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
     private boolean attacking = false;                // Is the attack in progress?
 
     // PLAYER
-    private static final FastLED.CRGB PLAYER_COLOR = FastLED.CRGB.GREEN;
+    private static final Display.CRGB PLAYER_COLOR = Display.CRGB.GREEN;
     private static final int MAX_PLAYER_SPEED = 10;     // Max move speed of the player
     private String stage;                       // what stage the game is at (PLAY/DEAD/WIN/GAMEOVER)
     private long stageStartTime;               // Stores the time the stage changed for stages that are time based
@@ -71,7 +71,7 @@ public class MainActivity extends Activity {
     private static final Boss boss = new Boss();
 
     private ArduinoLoop arduinoLoop = new ArduinoLoop();
-    private FastLED ledStrip;
+    private Display ledStrip;
     private Joystick joystick;
     private Joystick.JoyState joyState;
 
@@ -84,9 +84,10 @@ public class MainActivity extends Activity {
         joystick.initialise();
 
 //         Fast LED
-        ledStrip = new FastLED(NUM_LEDS, LED_COLOR_ORDER, DATA_PIN, CLOCK_PIN);
-        ledStrip.setBrightness(BRIGHTNESS);
-        ledStrip.setDither(1);
+//        ledStrip = new FastLED(NUM_LEDS, LED_COLOR_ORDER, DATA_PIN, CLOCK_PIN);
+        ledStrip = new LogcatDisplay(NUM_LEDS);
+//        ledStrip.setBrightness(BRIGHTNESS);
+//        ledStrip.setDither(1);
 
         // Life LEDs
         for (int i = 0; i < 3; i++) {
@@ -476,7 +477,7 @@ public class MainActivity extends Activity {
                 if (i % 10 == n) {
                     // TODO https://github.com/FastLED/FastLED/wiki/Pixel-reference#chsv
 //                    LEDS[i] = CHSV(c, 255, 150);
-                    ledStrip.set(i, new FastLED.CHSV(c, 255, 150));
+                    ledStrip.set(i, new Display.CHSV(c, 255, 150));
                 }
             }
         } else if (mode == 1) {
@@ -486,7 +487,7 @@ public class MainActivity extends Activity {
                 if (random.nextInt(200) == 0) {
                     // TODO https://github.com/FastLED/FastLED/wiki/Pixel-reference#chsv
 //                    LEDS[i] = CHSV(25, 255, 100);
-                    ledStrip.set(i, new FastLED.CHSV(25, 255, 100));
+                    ledStrip.set(i, new Display.CHSV(25, 255, 100));
                 }
             }
         }
@@ -559,7 +560,7 @@ public class MainActivity extends Activity {
                     }
                     blue = (int) ((5 - n) / 2.0);
                     if (blue > 0) {
-                        ledStrip.set(led, new FastLED.CRGB(0, 0, blue));
+                        ledStrip.set(led, new Display.CRGB(0, 0, blue));
                     }
                 }
 
@@ -614,7 +615,7 @@ public class MainActivity extends Activity {
         if (boss.isAlive()) {
             boss.ticks++;
             for (int i = getLED(boss.position - BOSS_WIDTH / 2); i <= getLED(boss.position + BOSS_WIDTH / 2); i++) {
-                ledStrip.set(i, FastLED.CRGB.DARK_RED);
+                ledStrip.set(i, Display.CRGB.DARK_RED);
                 ledStrip.modifyMod(i, 100);
             }
             // CHECK COLLISION
@@ -656,7 +657,7 @@ public class MainActivity extends Activity {
                         LP.lastOn = mm;
                     }
                     for (p = A; p <= B; p++) {
-                        ledStrip.set(p, new FastLED.CRGB(3 + flicker, (int) ((3 + flicker) / 1.5), 0));
+                        ledStrip.set(p, new Display.CRGB(3 + flicker, (int) ((3 + flicker) / 1.5), 0));
                     }
                 } else if (LP.state.equals("ON")) {
                     if (LP.lastOn + LP.ontime < mm) {
@@ -664,7 +665,7 @@ public class MainActivity extends Activity {
                         LP.lastOn = mm;
                     }
                     for (p = A; p <= B; p++) {
-                        ledStrip.set(p, new FastLED.CRGB(150 + flicker, 100 + flicker, 0));
+                        ledStrip.set(p, new Display.CRGB(150 + flicker, 100 + flicker, 0));
                     }
                 }
             }
@@ -690,7 +691,7 @@ public class MainActivity extends Activity {
                 // Draw (if still alive)
                 if (enemyPool[i].isAlive()) {
                     int p = getLED(enemyPool[i].position);
-                    ledStrip.set(p, FastLED.CRGB.RED);
+                    ledStrip.set(p, Display.CRGB.RED);
                 }
                 // hit player?
                 if (
@@ -730,18 +731,18 @@ public class MainActivity extends Activity {
         int forwardPosition = playerPosition + (ATTACK_WIDTH / 2);
         int rearPosition = playerPosition - (ATTACK_WIDTH / 2);
         for (int i = getLED(rearPosition) + 1; i <= getLED(forwardPosition) - 1; i++) {
-            ledStrip.set(i, new FastLED.CRGB(0, 0, n));
+            ledStrip.set(i, new Display.CRGB(0, 0, n));
         }
         int i = getLED(playerPosition);
         if (n > 90) {
             n = 255;
-            ledStrip.set(i, FastLED.CRGB.WHITE);
+            ledStrip.set(i, Display.CRGB.WHITE);
         } else {
             n = 0;
-            ledStrip.set(i, FastLED.CRGB.GREEN);
+            ledStrip.set(i, Display.CRGB.GREEN);
         }
-        ledStrip.set(getLED(rearPosition), new FastLED.CRGB(n, n, 255));
-        ledStrip.set(getLED(forwardPosition), new FastLED.CRGB(n, n, 255));
+        ledStrip.set(getLED(rearPosition), new Display.CRGB(n, n, 255));
+        ledStrip.set(getLED(forwardPosition), new Display.CRGB(n, n, 255));
     }
 
     private void drawExit() {
@@ -749,7 +750,7 @@ public class MainActivity extends Activity {
             return;
         }
         int exitPosition = NUM_LEDS - 1;
-        ledStrip.set(exitPosition, new FastLED.CRGB(0, 0, 255));
+        ledStrip.set(exitPosition, new Display.CRGB(0, 0, 255));
     }
 
     void nextLevel() {
