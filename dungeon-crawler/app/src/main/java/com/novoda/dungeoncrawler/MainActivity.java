@@ -23,7 +23,7 @@ public class MainActivity extends Activity {
     private static final int BRIGHTNESS = 150;
     private static final int DIRECTION = 1;     // 0 = right to left, 1 = left to right
     private static final int MIN_REDRAW_INTERVAL = 16;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
-    private static final int USE_GRAVITY = 1;     // 0/1 use gravity (LED strip going up wall)
+    private static final boolean USE_GRAVITY = true;     // 0/1 use gravity (LED strip going up wall)
     private static final int BEND_POINT = 550;   // 0/1000 point at which the LED strip goes up the wall
 
     // GAME
@@ -239,8 +239,8 @@ public class MainActivity extends Activity {
 
     void spawnLava(int left, int right, int ontime, int offtime, int offset, String state) {
         for (int i = 0; i < LAVA_COUNT; i++) {
-            if (!lavaPool[i].Alive()) {
-                lavaPool[i].Spawn(left, right, ontime, offtime, offset, state);
+            if (!lavaPool[i].isAlive()) {
+                lavaPool[i].Spawn(left, right, ontime, offtime, offset, state, millis());
                 return;
             }
         }
@@ -545,8 +545,8 @@ public class MainActivity extends Activity {
         Lava LP;
         for (i = 0; i < LAVA_COUNT; i++) {
             LP = lavaPool[i];
-            if (LP.Alive() && LP._state.equals("ON")) {
-                if (LP._left < pos && LP._right > pos) {
+            if (LP.isAlive() && LP.state.equals("ON")) {
+                if (LP.left < pos && LP.right > pos) {
                     return true;
                 }
             }
@@ -565,7 +565,7 @@ public class MainActivity extends Activity {
             lives = 3;
         }
         for (int p = 0; p < PARTICLE_COUNT; p++) {
-            particlePool[p].Spawn(playerPosition);
+            particlePool[p].spawn(playerPosition);
         }
         stageStartTime = millis();
         stage = "DEAD";
@@ -679,21 +679,21 @@ public class MainActivity extends Activity {
         for (i = 0; i < LAVA_COUNT; i++) {
             flicker = new Random().nextInt(5);
             LP = lavaPool[i];
-            if (LP.Alive()) {
-                A = getLED(LP._left);
-                B = getLED(LP._right);
-                if (LP._state.equals("OFF")) {
-                    if (LP._lastOn + LP._offtime < mm) {
-                        LP._state = "ON";
-                        LP._lastOn = mm;
+            if (LP.isAlive()) {
+                A = getLED(LP.left);
+                B = getLED(LP.right);
+                if (LP.state.equals("OFF")) {
+                    if (LP.lastOn + LP.offtime < mm) {
+                        LP.state = "ON";
+                        LP.lastOn = mm;
                     }
                     for (p = A; p <= B; p++) {
                         leds[p] = CRGB.create(3 + flicker, (3 + flicker) / 1.5, 0);
                     }
-                } else if (LP._state.equals("ON")) {
-                    if (LP._lastOn + LP._ontime < mm) {
-                        LP._state = "OFF";
-                        LP._lastOn = mm;
+                } else if (LP.state.equals("ON")) {
+                    if (LP.lastOn + LP.ontime < mm) {
+                        LP.state = "OFF";
+                        LP.lastOn = mm;
                     }
                     for (p = A; p <= B; p++) {
                         leds[p] = CRGB.create(150 + flicker, 100 + flicker, 0);
@@ -738,9 +738,9 @@ public class MainActivity extends Activity {
     private boolean tickParticles() {
         boolean stillActive = false;
         for (int p = 0; p < PARTICLE_COUNT; p++) {
-            if (particlePool[p].Alive()) {
-                particlePool[p].Tick(USE_GRAVITY);
-//  TODO:       leds[getLED(particlePool[p].position)] += CRGB.(particlePool[p]._power, 0, 0);
+            if (particlePool[p].isAlive()) {
+                particlePool[p].tick(USE_GRAVITY);
+//  TODO:       leds[getLED(particlePool[p].position)] += CRGB.(particlePool[p].power, 0, 0);
                 stillActive = true;
             }
         }
