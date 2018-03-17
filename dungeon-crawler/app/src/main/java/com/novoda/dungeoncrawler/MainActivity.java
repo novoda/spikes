@@ -310,7 +310,7 @@ public class MainActivity extends Activity {
             }
             if (stage.equals("SCREENSAVER")) {
                 screenSaverTick();
-            } else if (stage == "PLAY") {
+            } else if (stage.equals("PLAY")) {
                 // PLAYING
                 if (attacking && attackMillis + ATTACK_DURATION < mm) {
                     attacking = false;
