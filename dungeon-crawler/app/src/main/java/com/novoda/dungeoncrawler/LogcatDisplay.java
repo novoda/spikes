@@ -26,7 +26,11 @@ class LogcatDisplay implements Display {
     @Override
     public void clear() {
         Log.d("TUT", "CLEAR");
+        int numberOfLeds = state.size();
         state.clear();
+        for (int i = 0; i < numberOfLeds; i++) {
+            state.add(0);
+        }
     }
 
     @Override

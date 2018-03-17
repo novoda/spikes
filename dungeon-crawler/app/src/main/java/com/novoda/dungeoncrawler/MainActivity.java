@@ -11,7 +11,7 @@ import java.util.Random;
 public class MainActivity extends Activity {
 
     // LED setup
-    private static final int NUM_LEDS = 20;//475;
+    private static final int NUM_LEDS = 10;//475;
     private static final int DATA_PIN = 3;
     private static final int CLOCK_PIN = 4;
     private static final int LED_COLOR_ORDER = 0;//BGR;//GBR
@@ -85,7 +85,8 @@ public class MainActivity extends Activity {
 
 //         Fast LED
 //        ledStrip = new FastLED(NUM_LEDS, LED_COLOR_ORDER, DATA_PIN, CLOCK_PIN);
-        ledStrip = new LogcatDisplay(NUM_LEDS);
+//        ledStrip = new LogcatDisplay(NUM_LEDS);
+        ledStrip = new AndroidDeviceDisplay(this, findViewById(R.id.scrollView), NUM_LEDS);
 //        ledStrip.setBrightness(BRIGHTNESS);
 //        ledStrip.setDither(1);
 
@@ -333,7 +334,7 @@ public class MainActivity extends Activity {
                 }
 
                 // Ticks and draw calls
-//                FastLED.clear(); TODO
+                ledStrip.clear(); 
                 tickConveyors();
                 tickSpawners();
                 tickBoss();
@@ -468,7 +469,7 @@ public class MainActivity extends Activity {
         for (i = 0; i < NUM_LEDS; i++) {
             ledStrip.modifyScale(i, 250);
         }
-        if (mode == 0) {
+        if (true) {
             // Marching green <> orange
             n = (int) ((mm / 250) % 10);
             b = (int) (10 + ((Math.sin(mm / 500.00) + 1) * 20.00));
