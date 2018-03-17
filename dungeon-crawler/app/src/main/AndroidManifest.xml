@@ -3,7 +3,9 @@
   package="com.novoda.dungeoncrawler">
 
   <application>
-    <uses-library android:name="com.google.android.things" />
+    <uses-library
+      android:name="com.google.android.things"
+      android:required="false" />
 
     <activity android:name=".MainActivity">
       <intent-filter>
