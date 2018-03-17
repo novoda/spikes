@@ -10,9 +10,6 @@ import java.util.Random;
 
 public class MainActivity extends Activity {
 
-    // MPU
-    private MPU6050 accelGyro;
-
     // LED setup
     private static final int NUM_LEDS = 475;
     private static final int DATA_PIN = 3;
@@ -31,14 +28,6 @@ public class MainActivity extends Activity {
     private long previousMillis = 0;           // Time of the last redraw
     private int levelNumber = 0;
     private long lastInputTime = 0;
-
-    // JOYSTICK
-    private static final int JOYSTICK_ORIENTATION = 1;     // 0, 1 or 2 to set the angle of the joystick
-    private static final int JOYSTICK_DIRECTION = 1;     // 0/1 to flip joystick direction
-    private static final int ATTACK_THRESHOLD = 30000; // The threshold that triggers an attack
-    private static final int JOYSTICK_DEADZONE = 5;     // Angle to ignore
-    private int joystickTilt = 0;              // Stores the angle of the joystick
-    private int joystickWobble = 0;            // Stores the max amount of acceleration (wobble)
 
     // WOBBLE ATTACK
     private static final int ATTACK_WIDTH = 70;     // Width of the wobble attack, world is 1000 wide
@@ -80,19 +69,18 @@ public class MainActivity extends Activity {
     };
     private static final Boss boss = new Boss();
 
-    private static final RunningMedian MPU_ANGLE_SAMPLES = new RunningMedian(5);
-    private static final RunningMedian MPU_WOBBLE_SAMPLES = new RunningMedian(5);
-
     private ArduinoLoop arduinoLoop = new ArduinoLoop();
     private FastLED ledStrip;
+    private Joystick joystick;
+    private Joystick.JoyState joyState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        accelGyro = new MPU6050();
-        accelGyro.initialize();
+        joystick = new Joystick(new MPU6050());
+        joystick.initialise();
 
 //         Fast LED
         ledStrip = new FastLED(NUM_LEDS, LED_COLOR_ORDER, DATA_PIN, CLOCK_PIN);
@@ -282,7 +270,7 @@ public class MainActivity extends Activity {
             if (attacking) {
                 SFXattacking();
             } else {
-                SFXtilt(joystickTilt);
+                SFXtilt(joyState.tilt);
             }
         } else if (stage.equals("DEAD")) {
             SFXdead();
@@ -293,7 +281,7 @@ public class MainActivity extends Activity {
             long frameTimer = mm;
             previousMillis = mm;
 
-            if (Math.abs(joystickTilt) > JOYSTICK_DEADZONE) {
+            if (Math.abs(joyState.tilt) > Joystick.DEADZONE) {
                 lastInputTime = mm;
                 if (stage.equals("SCREENSAVER")) {
                     levelNumber = -1;
@@ -314,7 +302,7 @@ public class MainActivity extends Activity {
                 }
 
                 // If not attacking, check if they should be
-                if (!attacking && joystickWobble > ATTACK_THRESHOLD) {
+                if (!attacking && joyState.wobble > Joystick.ATTACK_THRESHOLD) {
                     attackMillis = mm;
                     attacking = true;
                 }
@@ -322,7 +310,7 @@ public class MainActivity extends Activity {
                 // If still not attacking, move!
                 playerPosition += playerPositionModifier;
                 if (!attacking) {
-                    int moveAmount = (int) (joystickTilt / 6.0);
+                    int moveAmount = (int) (joyState.tilt / 6.0);
                     if (DIRECTION == 1) { // TODO check, could be == 0
                         moveAmount = -moveAmount;
                     }
@@ -461,38 +449,8 @@ public class MainActivity extends Activity {
         Log.d("TUT", "complete");
     }
 
-    // ---------------------------------
-// ----------- JOYSTICK ------------
-// ---------------------------------
     void getInput() {
-        // This is responsible for the player movement speed and attacking.
-        // You can replace it with anything you want that passes a -90>+90 value to joystickTilt
-        // and any value to joystickWobble that is greater than ATTACK_THRESHOLD (defined at start)
-        // For example you could use 3 momentery buttons:
-        // if(digitalRead(leftButtonPinNumber) == HIGH) joystickTilt = -90;
-        // if(digitalRead(rightButtonPinNumber) == HIGH) joystickTilt = 90;
-        // if(digitalRead(attackButtonPinNumber) == HIGH) joystickWobble = ATTACK_THRESHOLD;
-
-        MPU6050.Motion motion = accelGyro.getMotion6();
-        int a = (JOYSTICK_ORIENTATION == 0 ? motion.ax : (JOYSTICK_ORIENTATION == 1 ? motion.ay : motion.az)) / 166;
-        int g = (JOYSTICK_ORIENTATION == 0 ? motion.gx : (JOYSTICK_ORIENTATION == 1 ? motion.gy : motion.gz));
-        if (Math.abs(a) < JOYSTICK_DEADZONE) {
-            a = 0;
-        }
-        if (a > 0) {
-            a -= JOYSTICK_DEADZONE;
-        }
-        if (a < 0) {
-            a += JOYSTICK_DEADZONE;
-        }
-        MPU_ANGLE_SAMPLES.add(a);
-        MPU_WOBBLE_SAMPLES.add(g);
-
-        joystickTilt = MPU_ANGLE_SAMPLES.getMedian();
-        if (JOYSTICK_DIRECTION == 1) {
-            joystickTilt = 0 - joystickTilt;
-        }
-        joystickWobble = Math.abs(MPU_WOBBLE_SAMPLES.getHighest());
+        joyState = joystick.getInput();
     }
 
     // ---------------------------------
