@@ -64,25 +64,25 @@ public class MainActivity extends Activity {
     int[] lifeLEDs = new int[]{52, 50, 40};
 
     Enemy[] enemyPool = new Enemy[]{
-            new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy(),
-            new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy()
+        new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy(),
+        new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy()
     };
 
     private static final int enemyCount = 10;
     Particle[] particlePool = {
-            new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle()
+        new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle()
     };
     private static final int particleCount = 40;
     Spawner[] spawnPool = {
-            new Spawner(), new Spawner()
+        new Spawner(), new Spawner()
     };
     private static final int spawnCount = 2;
     Lava[] lavaPool = {
-            new Lava(), new Lava(), new Lava(), new Lava()
+        new Lava(), new Lava(), new Lava(), new Lava()
     };
     private static final int lavaCount = 4;
     Conveyor[] conveyorPool = {
-            new Conveyor(), new Conveyor()
+        new Conveyor(), new Conveyor()
     };
     private static final int conveyorCount = 2;
     Boss boss = new Boss();
@@ -365,21 +365,21 @@ public class MainActivity extends Activity {
                 // LEVEL COMPLETE
 //                FastLED.clear(); TODO
                 if (stageStartTime + 500 > mm) {
-                    int n = Math.max(map(((mm - stageStartTime)), 0, 500, NUM_LEDS, 0), 0);
+                    int n = (int) Math.max(map((int) (mm - stageStartTime), 0, 500, NUM_LEDS, 0), 0);
                     for (int i = NUM_LEDS; i >= n; i--) {
                         brightness = 255;
                         leds[i] = CRGB.create(0, brightness, 0); // TODO CRGB(0, brightness, 0)
                     }
                     SFXwin();
                 } else if (stageStartTime + 1000 > mm) {
-                    int n = Math.max(map(((mm - stageStartTime)), 500, 1000, NUM_LEDS, 0), 0);
+                    int n = (int) Math.max(map((int) (mm - stageStartTime), 500, 1000, NUM_LEDS, 0), 0);
                     for (int i = 0; i < n; i++) {
                         brightness = 255;
-                        leds[i] = CRGB(0, brightness, 0);
+                        leds[i] = CRGB.create(0, brightness, 0); // TODO
                     }
                     SFXwin();
                 } else if (stageStartTime + 1200 > mm) {
-                    leds[0] = CRGB(0, 255, 0);
+                    leds[0] = CRGB.create(0, 255, 0); // TODO
                 } else {
                     nextLevel();
                 }
@@ -387,7 +387,7 @@ public class MainActivity extends Activity {
 //                FastLED.clear();  TODO
                 SFXcomplete();
                 if (stageStartTime + 500 > mm) {
-                    int n = Math.max(map(((mm - stageStartTime)), 0, 500, NUM_LEDS, 0), 0);
+                    int n = (int) Math.max(map((int) (mm - stageStartTime), 0, 500, NUM_LEDS, 0), 0);
                     for (int i = NUM_LEDS; i >= n; i--) {
                         brightness = (int) ((Math.sin(((i * 10) + mm) / 500.0) + 1) * 255);
                         leds[i].setHSV(brightness, 255, 50);
@@ -398,7 +398,7 @@ public class MainActivity extends Activity {
                         leds[i].setHSV(brightness, 255, 50);
                     }
                 } else if (stageStartTime + 5500 > mm) {
-                    int n = Math.max(map(((mm - stageStartTime)), 5000, 5500, NUM_LEDS, 0), 0);
+                    int n = (int) Math.max(map((int) (mm - stageStartTime), 5000, 5500, NUM_LEDS, 0), 0);
                     for (int i = 0; i < n; i++) {
                         brightness = (int) ((Math.sin(((i * 10) + mm) / 500.0) + 1) * 255);
                         leds[i].setHSV(brightness, 255, 50);
@@ -657,9 +657,9 @@ public class MainActivity extends Activity {
             // CHECK FOR ATTACK
             if (attacking) {
                 if (
-                        (getLED(playerPosition + (ATTACK_WIDTH / 2)) >= getLED(boss._pos - BOSS_WIDTH / 2) && getLED(playerPosition + (ATTACK_WIDTH / 2)) <= getLED(boss._pos + BOSS_WIDTH / 2)) ||
-                                (getLED(playerPosition - (ATTACK_WIDTH / 2)) <= getLED(boss._pos + BOSS_WIDTH / 2) && getLED(playerPosition - (ATTACK_WIDTH / 2)) >= getLED(boss._pos - BOSS_WIDTH / 2))
-                        ) {
+                    (getLED(playerPosition + (ATTACK_WIDTH / 2)) >= getLED(boss._pos - BOSS_WIDTH / 2) && getLED(playerPosition + (ATTACK_WIDTH / 2)) <= getLED(boss._pos + BOSS_WIDTH / 2)) ||
+                        (getLED(playerPosition - (ATTACK_WIDTH / 2)) <= getLED(boss._pos + BOSS_WIDTH / 2) && getLED(playerPosition - (ATTACK_WIDTH / 2)) >= getLED(boss._pos - BOSS_WIDTH / 2))
+                    ) {
                     boss.Hit();
                     if (boss.Alive()) {
                         moveBoss();
@@ -725,9 +725,9 @@ public class MainActivity extends Activity {
                 }
                 // Hit player?
                 if (
-                        (enemyPool[i].playerSide == 1 && enemyPool[i]._pos <= playerPosition) ||
-                                (enemyPool[i].playerSide == -1 && enemyPool[i]._pos >= playerPosition)
-                        ) {
+                    (enemyPool[i].playerSide == 1 && enemyPool[i]._pos <= playerPosition) ||
+                        (enemyPool[i].playerSide == -1 && enemyPool[i]._pos >= playerPosition)
+                    ) {
                     die();
                     return;
                 }
@@ -735,4 +735,51 @@ public class MainActivity extends Activity {
         }
     }
 
+    private boolean tickParticles() {
+        boolean stillActive = false;
+        for (int p = 0; p < particleCount; p++) {
+            if (particlePool[p].Alive()) {
+                particlePool[p].Tick(USE_GRAVITY);
+//  TODO:       leds[getLED(particlePool[p]._pos)] += CRGB.(particlePool[p]._power, 0, 0);
+                stillActive = true;
+            }
+        }
+        return stillActive;
+    }
+
+    private void drawPlayer() {
+        leds[getLED(playerPosition)] = CRGB.create(0, 255, 0); // TODO
+    }
+
+    void drawAttack() {
+        if (!attacking) {
+            return;
+        }
+        // TODO check casts
+        int n = (int) map((int) (millis() - attackMillis), 0, ATTACK_DURATION, 100, 5);
+        for (int i = getLED(playerPosition - (ATTACK_WIDTH / 2)) + 1; i <= getLED(playerPosition + (ATTACK_WIDTH / 2)) - 1; i++) {
+            leds[i] = CRGB.create(0, 0, n); // TODO
+        }
+        if (n > 90) {
+            n = 255;
+            leds[getLED(playerPosition)] = CRGB.create(255, 255, 255);// TODO
+        } else {
+            n = 0;
+            leds[getLED(playerPosition)] = CRGB.create(0, 255, 0); // TODO
+        }
+        leds[getLED(playerPosition - (ATTACK_WIDTH / 2))] = CRGB.create(n, n, 255); // TODO
+        leds[getLED(playerPosition + (ATTACK_WIDTH / 2))] = CRGB.create(n, n, 255);     // TODO
+    }
+
+    private void drawExit() {
+        if (!boss.Alive()) {
+            leds[NUM_LEDS - 1] = CRGB.create(0, 0, 255); // TODO
+        }
+    }
+
+    void nextLevel() {
+        levelNumber++;
+        if (levelNumber > LEVEL_COUNT) levelNumber = 0;
+        loadLevel();
+    }
 }

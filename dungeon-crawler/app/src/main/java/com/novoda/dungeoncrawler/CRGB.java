@@ -14,4 +14,12 @@ public enum CRGB {
     public static CRGB create(int i, double v, int i1) {
         return null;
     }
+
+    public int asColor() {
+        return 0;
+    }
+
+    public void setHSV(int brightness, int i, int i1) {
+
+    }
 }
