@@ -133,12 +133,12 @@ public class MainActivity extends Activity {
                 break;
             case 2:
                 // Spawning enemies at exit every 2 seconds
-                spawnPool[0].Spawn(1000, 3000, 2, 0, 0);
+                spawnPool[0].spawn(1000, 3000, 2, 0, 0, millis());
                 break;
             case 3:
                 // Lava intro
                 spawnLava(400, 490, 2000, 2000, 0, "OFF");
-                spawnPool[0].Spawn(1000, 5500, 3, 0, 0);
+                spawnPool[0].spawn(1000, 5500, 3, 0, 0, millis());
                 break;
             case 4:
                 // Sin enemy
@@ -167,14 +167,14 @@ public class MainActivity extends Activity {
                 spawnLava(350, 455, 2000, 2000, 0, "OFF");
                 spawnLava(510, 610, 2000, 2000, 0, "OFF");
                 spawnLava(660, 760, 2000, 2000, 0, "OFF");
-                spawnPool[0].Spawn(1000, 3800, 4, 0, 0);
+                spawnPool[0].spawn(1000, 3800, 4, 0, 0, millis());
                 break;
             case 8:
                 // Sin enemy #2
                 spawnEnemy(700, 1, 7, 275);
                 spawnEnemy(500, 1, 5, 250);
-                spawnPool[0].Spawn(1000, 5500, 4, 0, 3000);
-                spawnPool[1].Spawn(0, 5500, 5, 1, 10000);
+                spawnPool[0].spawn(1000, 5500, 4, 0, 3000, millis());
+                spawnPool[1].spawn(0, 5500, 5, 1, 10000, millis());
                 spawnConveyor(100, 900, -1);
                 break;
             case 9:
@@ -268,8 +268,8 @@ public class MainActivity extends Activity {
         if (boss.lives == 1) {
             spawnSpeed = 1500;
         }
-        spawnPool[0].Spawn(boss.position, spawnSpeed, 3, 0, 0);
-        spawnPool[1].Spawn(boss.position, spawnSpeed, 3, 1, 0);
+        spawnPool[0].spawn(boss.position, spawnSpeed, 3, 0, 0, millis());
+        spawnPool[1].spawn(boss.position, spawnSpeed, 3, 1, 0, millis());
     }
 
     /**
@@ -632,10 +632,10 @@ public class MainActivity extends Activity {
     void tickSpawners() {
         long mm = millis();
         for (int s = 0; s < SPAWN_COUNT; s++) {
-            if (spawnPool[s].Alive() && spawnPool[s]._activate < mm) {
-                if (spawnPool[s]._lastSpawned + spawnPool[s]._rate < mm || spawnPool[s]._lastSpawned == 0) {
-                    spawnEnemy(spawnPool[s]._pos, spawnPool[s]._dir, spawnPool[s]._sp, 0);
-                    spawnPool[s]._lastSpawned = mm;
+            if (spawnPool[s].isAlive() && spawnPool[s].activate < mm) {
+                if (spawnPool[s].lastSpawned + spawnPool[s].rate < mm || spawnPool[s].lastSpawned == 0) {
+                    spawnEnemy(spawnPool[s].position, spawnPool[s].direction, spawnPool[s].sp, 0);
+                    spawnPool[s].lastSpawned = mm;
                 }
             }
         }
@@ -664,8 +664,8 @@ public class MainActivity extends Activity {
                     if (boss.isAlive()) {
                         moveBoss();
                     } else {
-                        spawnPool[0].Kill();
-                        spawnPool[1].Kill();
+                        spawnPool[0].kill();
+                        spawnPool[1].kill();
                     }
                 }
             }

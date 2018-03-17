@@ -1,27 +1,29 @@
 package com.novoda.dungeoncrawler;
 
 public class Spawner {
-    public long _activate;
-    public long _lastSpawned;
-    public long _rate;
-    public int _pos;
-    public int _dir;
-    public int _sp;
+    public long activate;
+    public long lastSpawned;
+    public long rate;
+    public int position;
+    public int direction;
+    public int sp;
+    private boolean alive;
+
+    public void spawn(int position, int rate, int sp, int direction, int activate, long millis) {
+        this.position = position;
+        this.rate = rate;
+        this.sp = sp;
+        this.direction = direction;
+        this.activate = millis + activate;
+        this.alive = true;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
 
     public void kill() {
-
-    }
-
-    public void Spawn(int i, int i1, int i2, int i3, int i4) {
-
-    }
-
-    public boolean Alive() {
-        return false;
-
-    }
-
-    public void Kill() {
-
+        this.alive = false;
+        this.lastSpawned = 0;
     }
 }
