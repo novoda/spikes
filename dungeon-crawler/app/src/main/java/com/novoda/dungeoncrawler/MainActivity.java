@@ -11,9 +11,7 @@ import java.util.Random;
 public class MainActivity extends Activity {
 
     // MPU
-    private MPU6050 accelgyro;
-    private int ax, ay, az;
-    private int gx, gy, gz;
+    private MPU6050 accelGyro;
 
     // LED setup
     private static final int NUM_LEDS = 475;
@@ -95,7 +93,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        accelgyro.initialize();
+        accelGyro.initialize();
 
 //         Fast LED
 //        FastLED.addLeds<APA102, DATA_PIN, CLOCK_PIN, LED_COLOR_ORDER> (leds, NUM_LEDS);
@@ -471,10 +469,9 @@ public class MainActivity extends Activity {
         // if(digitalRead(rightButtonPinNumber) == HIGH) joystickTilt = 90;
         // if(digitalRead(attackButtonPinNumber) == HIGH) joystickWobble = ATTACK_THRESHOLD;
 
-        // TODO modify values
-        accelgyro.getMotion6(ax, ay, az, gx, gy, gz);
-        int a = (JOYSTICK_ORIENTATION == 0 ? ax : (JOYSTICK_ORIENTATION == 1 ? ay : az)) / 166;
-        int g = (JOYSTICK_ORIENTATION == 0 ? gx : (JOYSTICK_ORIENTATION == 1 ? gy : gz));
+        MPU6050.Motion motion = accelGyro.getMotion6();
+        int a = (JOYSTICK_ORIENTATION == 0 ? motion.ax : (JOYSTICK_ORIENTATION == 1 ? motion.ay : motion.az)) / 166;
+        int g = (JOYSTICK_ORIENTATION == 0 ? motion.gx : (JOYSTICK_ORIENTATION == 1 ? motion.gy : motion.gz));
         if (Math.abs(a) < JOYSTICK_DEADZONE) {
             a = 0;
         }
