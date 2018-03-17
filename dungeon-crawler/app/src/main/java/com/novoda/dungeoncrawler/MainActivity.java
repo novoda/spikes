@@ -11,85 +11,85 @@ import java.util.Random;
 public class MainActivity extends Activity {
 
     // MPU
-    MPU6050 accelgyro;
-    int ax, ay, az;
-    int gx, gy, gz;
+    private MPU6050 accelgyro;
+    private int ax, ay, az;
+    private int gx, gy, gz;
 
     // LED setup
-    final int NUM_LEDS = 475;
-    final int DATA_PIN = 3;
-    final int CLOCK_PIN = 4;
-    final int LED_COLOR_ORDER = 0;//BGR;//GBR
-    final int BRIGHTNESS = 150;
-    final int DIRECTION = 1;     // 0 = right to left, 1 = left to right
-    final int MIN_REDRAW_INTERVAL = 16;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
-    final int USE_GRAVITY = 1;     // 0/1 use gravity (LED strip going up wall)
-    final int BEND_POINT = 550;   // 0/1000 point at which the LED strip goes up the wall
+    private static final int NUM_LEDS = 475;
+    private static final int DATA_PIN = 3;
+    private static final int CLOCK_PIN = 4;
+    private static final int LED_COLOR_ORDER = 0;//BGR;//GBR
+    private static final int BRIGHTNESS = 150;
+    private static final int DIRECTION = 1;     // 0 = right to left, 1 = left to right
+    private static final int MIN_REDRAW_INTERVAL = 16;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
+    private static final int USE_GRAVITY = 1;     // 0/1 use gravity (LED strip going up wall)
+    private static final int BEND_POINT = 550;   // 0/1000 point at which the LED strip goes up the wall
 
     // GAME
-    long previousMillis = 0;           // Time of the last redraw
-    int levelNumber = 0;
-    long lastInputTime = 0;
-    int TIMEOUT = 30000;
-    int LEVEL_COUNT = 9;
-    int MAX_VOLUME = 10;
-    iSin isin = new iSin();
+    private long previousMillis = 0;           // Time of the last redraw
+    private int levelNumber = 0;
+    private long lastInputTime = 0;
+    private static final int TIMEOUT = 30000;
+    private static final int LEVEL_COUNT = 9;
+    private static final int MAX_VOLUME = 10;
+    private iSin isin = new iSin();
 
     // JOYSTICK
-    int JOYSTICK_ORIENTATION = 1;     // 0, 1 or 2 to set the angle of the joystick
-    int JOYSTICK_DIRECTION = 1;     // 0/1 to flip joystick direction
-    int ATTACK_THRESHOLD = 30000; // The threshold that triggers an attack
-    int JOYSTICK_DEADZONE = 5;     // Angle to ignore
-    int joystickTilt = 0;              // Stores the angle of the joystick
-    int joystickWobble = 0;            // Stores the max amount of acceleration (wobble)
+    private static final int JOYSTICK_ORIENTATION = 1;     // 0, 1 or 2 to set the angle of the joystick
+    private static final int JOYSTICK_DIRECTION = 1;     // 0/1 to flip joystick direction
+    private static final int ATTACK_THRESHOLD = 30000; // The threshold that triggers an attack
+    private static final int JOYSTICK_DEADZONE = 5;     // Angle to ignore
+    private int joystickTilt = 0;              // Stores the angle of the joystick
+    private int joystickWobble = 0;            // Stores the max amount of acceleration (wobble)
 
     // WOBBLE ATTACK
-    int ATTACK_WIDTH = 70;     // Width of the wobble attack, world is 1000 wide
-    int ATTACK_DURATION = 500;    // Duration of a wobble attack (ms)
-    long attackMillis = 0;             // Time the attack started
-    boolean attacking = false;                // Is the attack in progress?
-    int BOSS_WIDTH = 40;
+    private static final int ATTACK_WIDTH = 70;     // Width of the wobble attack, world is 1000 wide
+    private static final int ATTACK_DURATION = 500;    // Duration of a wobble attack (ms)
+    private long attackMillis = 0;             // Time the attack started
+    private boolean attacking = false;                // Is the attack in progress?
+    private static final int BOSS_WIDTH = 40;
 
     // PLAYER
-    int MAX_PLAYER_SPEED = 10;     // Max move speed of the player
-    String stage;                       // what stage the game is at (PLAY/DEAD/WIN/GAMEOVER)
-    long stageStartTime;               // Stores the time the stage changed for stages that are time based
-    int playerPosition;                // Stores the player position
-    int playerPositionModifier;        // +/- adjustment to player position
-    boolean playerAlive;
-    long killTime;
-    int lives = 3;
+    private static final int MAX_PLAYER_SPEED = 10;     // Max move speed of the player
+    private String stage;                       // what stage the game is at (PLAY/DEAD/WIN/GAMEOVER)
+    private long stageStartTime;               // Stores the time the stage changed for stages that are time based
+    private int playerPosition;                // Stores the player position
+    private int playerPositionModifier;        // +/- adjustment to player position
+    private boolean playerAlive;
+    private long killTime;
+    private int lives = 3;
 
     // POOLS
-    int[] lifeLEDs = new int[]{52, 50, 40};
+    private final int[] lifeLEDs = new int[]{52, 50, 40};
 
-    Enemy[] enemyPool = new Enemy[]{
+    private final Enemy[] enemyPool = new Enemy[]{
         new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy(),
         new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy()
     };
 
-    private static final int enemyCount = 10;
-    Particle[] particlePool = {
+    private static final int ENEMY_COUNT = 10;
+    private Particle[] particlePool = {
         new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle()
     };
-    private static final int particleCount = 40;
-    Spawner[] spawnPool = {
+    private static final int PARTICLE_COUNT = 40;
+    private Spawner[] spawnPool = {
         new Spawner(), new Spawner()
     };
-    private static final int spawnCount = 2;
-    Lava[] lavaPool = {
+    private static final int SPAWN_COUNT = 2;
+    private Lava[] lavaPool = {
         new Lava(), new Lava(), new Lava(), new Lava()
     };
-    private static final int lavaCount = 4;
-    Conveyor[] conveyorPool = {
+    private static final int LAVA_COUNT = 4;
+    private Conveyor[] conveyorPool = {
         new Conveyor(), new Conveyor()
     };
-    private static final int conveyorCount = 2;
-    Boss boss = new Boss();
+    private static final int CONVEYOR_COUNT = 2;
+    private Boss boss = new Boss();
 
-    CRGB[] leds = new CRGB[NUM_LEDS];
-    RunningMedian MPUAngleSamples = new RunningMedian(5);
-    RunningMedian MPUWobbleSamples = new RunningMedian(5);
+    private CRGB[] leds = new CRGB[NUM_LEDS];
+    private RunningMedian MPUAngleSamples = new RunningMedian(5);
+    private RunningMedian MPUWobbleSamples = new RunningMedian(5);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,26 +209,26 @@ public class MainActivity extends Activity {
     }
 
     void cleanupLevel() {
-        for (int i = 0; i < enemyCount; i++) {
+        for (int i = 0; i < ENEMY_COUNT; i++) {
             enemyPool[i].kill();
         }
-        for (int i = 0; i < particleCount; i++) {
+        for (int i = 0; i < PARTICLE_COUNT; i++) {
             particlePool[i].kill();
         }
-        for (int i = 0; i < spawnCount; i++) {
+        for (int i = 0; i < SPAWN_COUNT; i++) {
             spawnPool[i].kill();
         }
-        for (int i = 0; i < lavaCount; i++) {
+        for (int i = 0; i < LAVA_COUNT; i++) {
             lavaPool[i].kill();
         }
-        for (int i = 0; i < conveyorCount; i++) {
+        for (int i = 0; i < CONVEYOR_COUNT; i++) {
             conveyorPool[i].kill();
         }
         boss.kill();
     }
 
     void spawnEnemy(int pos, int dir, int sp, int wobble) {
-        for (int e = 0; e < enemyCount; e++) {
+        for (int e = 0; e < ENEMY_COUNT; e++) {
             if (!enemyPool[e].Alive()) {
                 enemyPool[e].Spawn(pos, dir, sp, wobble);
                 enemyPool[e].playerSide = pos > playerPosition ? 1 : -1;
@@ -238,7 +238,7 @@ public class MainActivity extends Activity {
     }
 
     void spawnLava(int left, int right, int ontime, int offtime, int offset, String state) {
-        for (int i = 0; i < lavaCount; i++) {
+        for (int i = 0; i < LAVA_COUNT; i++) {
             if (!lavaPool[i].Alive()) {
                 lavaPool[i].Spawn(left, right, ontime, offtime, offset, state);
                 return;
@@ -247,7 +247,7 @@ public class MainActivity extends Activity {
     }
 
     void spawnConveyor(int startPoint, int endPoint, int dir) {
-        for (int i = 0; i < conveyorCount; i++) {
+        for (int i = 0; i < CONVEYOR_COUNT; i++) {
             if (!conveyorPool[i].Alive()) {
                 conveyorPool[i].Spawn(startPoint, endPoint, dir);
                 return;
@@ -543,7 +543,7 @@ public class MainActivity extends Activity {
         // Returns if the player is in active lava
         int i;
         Lava LP;
-        for (i = 0; i < lavaCount; i++) {
+        for (i = 0; i < LAVA_COUNT; i++) {
             LP = lavaPool[i];
             if (LP.Alive() && LP._state.equals("ON")) {
                 if (LP._left < pos && LP._right > pos) {
@@ -564,7 +564,7 @@ public class MainActivity extends Activity {
             levelNumber = 0;
             lives = 3;
         }
-        for (int p = 0; p < particleCount; p++) {
+        for (int p = 0; p < PARTICLE_COUNT; p++) {
             particlePool[p].Spawn(playerPosition);
         }
         stageStartTime = millis();
@@ -577,7 +577,7 @@ public class MainActivity extends Activity {
         long m = 10000 + millis();
         playerPositionModifier = 0;
 
-        for (i = 0; i < conveyorCount; i++) {
+        for (i = 0; i < CONVEYOR_COUNT; i++) {
             if (conveyorPool[i]._alive) {
                 dir = conveyorPool[i]._dir;
                 ss = getLED(conveyorPool[i]._startPoint);
@@ -631,7 +631,7 @@ public class MainActivity extends Activity {
 
     void tickSpawners() {
         long mm = millis();
-        for (int s = 0; s < spawnCount; s++) {
+        for (int s = 0; s < SPAWN_COUNT; s++) {
             if (spawnPool[s].Alive() && spawnPool[s]._activate < mm) {
                 if (spawnPool[s]._lastSpawned + spawnPool[s]._rate < mm || spawnPool[s]._lastSpawned == 0) {
                     spawnEnemy(spawnPool[s]._pos, spawnPool[s]._dir, spawnPool[s]._sp, 0);
@@ -676,7 +676,7 @@ public class MainActivity extends Activity {
         int A, B, p, i, brightness, flicker;
         long mm = millis();
         Lava LP;
-        for (i = 0; i < lavaCount; i++) {
+        for (i = 0; i < LAVA_COUNT; i++) {
             flicker = new Random().nextInt(5);
             LP = lavaPool[i];
             if (LP.Alive()) {
@@ -705,7 +705,7 @@ public class MainActivity extends Activity {
     }
 
     void tickEnemies() {
-        for (int i = 0; i < enemyCount; i++) {
+        for (int i = 0; i < ENEMY_COUNT; i++) {
             if (enemyPool[i].Alive()) {
                 enemyPool[i].Tick();
                 // Hit attack?
@@ -737,7 +737,7 @@ public class MainActivity extends Activity {
 
     private boolean tickParticles() {
         boolean stillActive = false;
-        for (int p = 0; p < particleCount; p++) {
+        for (int p = 0; p < PARTICLE_COUNT; p++) {
             if (particlePool[p].Alive()) {
                 particlePool[p].Tick(USE_GRAVITY);
 //  TODO:       leds[getLED(particlePool[p]._pos)] += CRGB.(particlePool[p]._power, 0, 0);
@@ -779,7 +779,9 @@ public class MainActivity extends Activity {
 
     void nextLevel() {
         levelNumber++;
-        if (levelNumber > LEVEL_COUNT) levelNumber = 0;
+        if (levelNumber > LEVEL_COUNT) {
+            levelNumber = 0;
+        }
         loadLevel();
     }
 }
