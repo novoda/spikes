@@ -88,6 +88,8 @@ public class MainActivity extends Activity {
     private static final RunningMedian MPU_ANGLE_SAMPLES = new RunningMedian(5);
     private static final RunningMedian MPU_WOBBLE_SAMPLES = new RunningMedian(5);
 
+    private ArduinoLoop arduinoLoop = new ArduinoLoop();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +109,8 @@ public class MainActivity extends Activity {
 //        }
 
         loadLevel();
-        // loop()
+
+        arduinoLoop.start(this::loop);
     }
 
     // ---------------------------------
@@ -269,12 +272,7 @@ public class MainActivity extends Activity {
         spawnPool[1].spawn(boss.position, spawnSpeed, 3, 1, 0, millis());
     }
 
-    /**
-     * After creating a setup() function, which initializes and sets the initial values, the loop() function does precisely what its name suggests, and loops consecutively, allowing your program to change and respond. Use it to actively control the Arduino board.
-     * https://www.arduino.cc/en/Reference/Loop/
-     * TODO Make this loop
-     */
-    public void loop() {
+    private void loop() {
         long mm = millis();
         int brightness = 0;
 
@@ -779,5 +777,11 @@ public class MainActivity extends Activity {
             levelNumber = 0;
         }
         loadLevel();
+    }
+
+    @Override
+    protected void onDestroy() {
+        arduinoLoop.stop();
+        super.onDestroy();
     }
 }
