@@ -33,7 +33,6 @@ public class MainActivity extends Activity {
     private static final int TIMEOUT = 30000;
     private static final int LEVEL_COUNT = 9;
     private static final int MAX_VOLUME = 10;
-    private iSin isin = new iSin();
 
     // JOYSTICK
     private static final int JOYSTICK_ORIENTATION = 1;     // 0, 1 or 2 to set the angle of the joystick
