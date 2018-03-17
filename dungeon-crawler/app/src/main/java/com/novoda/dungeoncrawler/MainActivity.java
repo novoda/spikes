@@ -181,6 +181,8 @@ public class MainActivity extends Activity {
         stage = "PLAY";
     }
 
+    private long millis = 0;
+
     /**
      * https://www.arduino.cc/reference/en/language/functions/time/millis/
      * TODO
@@ -188,7 +190,10 @@ public class MainActivity extends Activity {
      * @return Number of milliseconds since the program started (unsigned long)
      */
     private long millis() {
-        return 0;
+        if (millis == 0) {
+            millis = System.currentTimeMillis();
+        }
+        return millis - System.currentTimeMillis();
     }
 
     void updateLives() {
