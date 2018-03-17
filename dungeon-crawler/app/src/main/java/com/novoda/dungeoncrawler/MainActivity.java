@@ -264,7 +264,7 @@ public class MainActivity extends Activity {
     }
 
     private void loop() {
-        Log.d("TUT", "loop");
+//        Log.d("TUT", "loop");
         long mm = millis();
 
         if (stage.equals("PLAY")) {
@@ -421,7 +421,9 @@ public class MainActivity extends Activity {
 //        if (playerPositionModifier < 0) f -= 500;
 //        if (playerPositionModifier > 0) f += 200;
 //        toneAC(f, min(min(abs(amount) / 9, 5), MAX_VOLUME));
-        Log.d("TUT", "tilt " + amount);
+        if (amount != 0) {
+            Log.d("TUT", "tilt " + amount);
+        }
     }
 
     void SFXdead() {
