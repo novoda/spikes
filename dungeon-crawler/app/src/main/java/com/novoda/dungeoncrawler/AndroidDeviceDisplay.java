@@ -52,10 +52,15 @@ class AndroidDeviceDisplay implements Display {
 
     @Override
     public void show() {
+        List<Integer> current = new ArrayList<>(state.size());
+        for (int i = 0; i < state.size(); i++) {
+            current.add(i, state.get(i));
+        }
+        handler.removeCallbacksAndMessages(null);
         handler.post(() -> {
-            for (int i = 0; i < state.size(); i++) {
-                int integer = state.get(i);
-                String led = integer == 0 ? " " : "x";
+            for (int i = 0; i < current.size(); i++) {
+                int integer = current.get(i);
+                String led = integer == 0 ? "  " : "x";
                 TextView textView = (TextView) linearLayout.getChildAt(i);
                 if (textView != null) {
                     textView.setText("|" + led + "|");
