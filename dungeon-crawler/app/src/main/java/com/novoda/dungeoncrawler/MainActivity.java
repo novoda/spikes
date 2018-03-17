@@ -229,8 +229,8 @@ public class MainActivity extends Activity {
 
     void spawnEnemy(int pos, int dir, int sp, int wobble) {
         for (int e = 0; e < ENEMY_COUNT; e++) {
-            if (!enemyPool[e].Alive()) {
-                enemyPool[e].Spawn(pos, dir, sp, wobble);
+            if (!enemyPool[e].isAlive()) {
+                enemyPool[e].spawn(pos, dir, sp, wobble);
                 enemyPool[e].playerSide = pos > playerPosition ? 1 : -1;
                 return;
             }
@@ -706,27 +706,27 @@ public class MainActivity extends Activity {
 
     void tickEnemies() {
         for (int i = 0; i < ENEMY_COUNT; i++) {
-            if (enemyPool[i].Alive()) {
-                enemyPool[i].Tick();
+            if (enemyPool[i].isAlive()) {
+                enemyPool[i].tick(millis());
                 // hit attack?
                 if (attacking) {
-                    if (enemyPool[i]._pos > playerPosition - (ATTACK_WIDTH / 2) && enemyPool[i]._pos < playerPosition + (ATTACK_WIDTH / 2)) {
-                        enemyPool[i].Kill();
+                    if (enemyPool[i].position > playerPosition - (ATTACK_WIDTH / 2) && enemyPool[i].position < playerPosition + (ATTACK_WIDTH / 2)) {
+                        enemyPool[i].kill();
                         SFXkill();
                     }
                 }
-                if (inLava(enemyPool[i]._pos)) {
-                    enemyPool[i].Kill();
+                if (inLava(enemyPool[i].position)) {
+                    enemyPool[i].kill();
                     SFXkill();
                 }
                 // Draw (if still alive)
-                if (enemyPool[i].Alive()) {
-                    leds[getLED(enemyPool[i]._pos)] = CRGB.create(255, 0, 0); // TODO is create correct here? it was CRGB(255, 0, 0)
+                if (enemyPool[i].isAlive()) {
+                    leds[getLED(enemyPool[i].position)] = CRGB.create(255, 0, 0); // TODO is create correct here? it was CRGB(255, 0, 0)
                 }
                 // hit player?
                 if (
-                    (enemyPool[i].playerSide == 1 && enemyPool[i]._pos <= playerPosition) ||
-                        (enemyPool[i].playerSide == -1 && enemyPool[i]._pos >= playerPosition)
+                    (enemyPool[i].playerSide == 1 && enemyPool[i].position <= playerPosition) ||
+                        (enemyPool[i].playerSide == -1 && enemyPool[i].position >= playerPosition)
                     ) {
                     die();
                     return;
@@ -740,7 +740,7 @@ public class MainActivity extends Activity {
         for (int p = 0; p < PARTICLE_COUNT; p++) {
             if (particlePool[p].Alive()) {
                 particlePool[p].Tick(USE_GRAVITY);
-//  TODO:       leds[getLED(particlePool[p]._pos)] += CRGB.(particlePool[p]._power, 0, 0);
+//  TODO:       leds[getLED(particlePool[p].position)] += CRGB.(particlePool[p]._power, 0, 0);
                 stillActive = true;
             }
         }
