@@ -11,7 +11,7 @@ import java.util.Random;
 public class MainActivity extends Activity {
 
     // LED setup
-    private static final int NUM_LEDS = 10;//475;
+    private static final int NUM_LEDS = 25;//475;
     private static final int DATA_PIN = 3;
     private static final int CLOCK_PIN = 4;
     private static final int LED_COLOR_ORDER = 0;//BGR;//GBR
@@ -297,6 +297,7 @@ public class MainActivity extends Activity {
                 }
             }
             if (stage.equals("SCREENSAVER")) {
+                ledStrip.clear(); // TODO I added this
                 screenSaverTick();
             } else if (stage.equals("PLAY")) {
                 // PLAYING
