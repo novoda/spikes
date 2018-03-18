@@ -508,11 +508,11 @@ public class MainActivity extends Activity {
     boolean inLava(int pos) {
         // Returns if the player is in active lava
         int i;
-        Lava LP;
+        Lava lava;
         for (i = 0; i < lavaPool.length; i++) {
-            LP = lavaPool[i];
-            if (LP.isAlive() && LP.state.equals("ON")) {
-                if (LP.left < pos && LP.right > pos) {
+            lava = lavaPool[i];
+            if (lava.isAlive() && lava.state.equals("ON")) {
+                if (lava.left < pos && lava.right > pos) {
                     return true;
                 }
             }
