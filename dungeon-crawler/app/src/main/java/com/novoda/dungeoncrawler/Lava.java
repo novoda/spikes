@@ -1,12 +1,13 @@
 package com.novoda.dungeoncrawler;
 
 public class Lava {
-    public State state;
     public int left;
     public int right;
     public long lastOn;
     public long offtime;
     public long ontime;
+
+    private State state;
     private boolean alive;
 
     public void spawn(int left, int right, int ontime, int offtime, int offset, State state, long millis) {
@@ -25,6 +26,18 @@ public class Lava {
 
     public boolean isAlive() {
         return alive;
+    }
+
+    public boolean isEnabled() {
+        return state == Lava.State.ON;
+    }
+
+    public void disable() {
+        state = Lava.State.OFF;
+    }
+
+    public void enable() {
+        state = Lava.State.ON;
     }
 
     enum State {ON, OFF;}

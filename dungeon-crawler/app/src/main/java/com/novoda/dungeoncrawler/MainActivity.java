@@ -511,7 +511,7 @@ public class MainActivity extends Activity {
         Lava lava;
         for (i = 0; i < lavaPool.length; i++) {
             lava = lavaPool[i];
-            if (lava.isAlive() && lava.state == Lava.State.ON) {
+            if (lava.isAlive() && lava.isEnabled()) {
                 if (lava.left < pos && lava.right > pos) {
                     return true;
                 }
@@ -646,32 +646,32 @@ public class MainActivity extends Activity {
     void tickLava() {
         int A, B, p, i, brightness, flicker;
         long mm = millis();
-        Lava LP;
+        Lava lava;
         for (i = 0; i < lavaPool.length; i++) {
             flicker = new Random().nextInt(5);
-            LP = lavaPool[i];
-            if (LP.isAlive()) {
-                A = getLED(LP.left);
-                B = getLED(LP.right);
-                if (LP.state == Lava.State.OFF) {
-                    if (LP.lastOn + LP.offtime < mm) {
-                        LP.state = Lava.State.ON;
-                        LP.lastOn = mm;
-                    }
-                    for (p = A; p <= B; p++) {
-                        ledStrip.set(p, new Display.CRGB(3 + flicker, (int) ((3 + flicker) / 1.5), 0));
-                    }
-                } else if (LP.state == Lava.State.ON) {
-                    if (LP.lastOn + LP.ontime < mm) {
-                        LP.state = Lava.State.OFF;
-                        LP.lastOn = mm;
+            lava = lavaPool[i];
+            if (lava.isAlive()) {
+                A = getLED(lava.left);
+                B = getLED(lava.right);
+                if (lava.isEnabled()) {
+                    if (lava.lastOn + lava.ontime < mm) {
+                        lava.disable();
+                        lava.lastOn = mm;
                     }
                     for (p = A; p <= B; p++) {
                         ledStrip.set(p, new Display.CRGB(150 + flicker, 100 + flicker, 0));
                     }
+                } else {
+                    if (lava.lastOn + lava.offtime < mm) {
+                        lava.enable();
+                        lava.lastOn = mm;
+                    }
+                    for (p = A; p <= B; p++) {
+                        ledStrip.set(p, new Display.CRGB(3 + flicker, (int) ((3 + flicker) / 1.5), 0));
+                    }
                 }
             }
-            lavaPool[i] = LP;
+            lavaPool[i] = lava;
         }
     }
 
