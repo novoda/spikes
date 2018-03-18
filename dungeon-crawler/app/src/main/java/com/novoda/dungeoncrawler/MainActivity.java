@@ -592,7 +592,7 @@ public class MainActivity extends Activity {
         }
 
         double offset = startCoord2;
-        double ratio = (endCoord2 - startCoord2) / (endCoord1 - startCoord1);
+        float ratio = (float) (endCoord2 - startCoord2) / (endCoord1 - startCoord1);
         return ratio * (valueCoord1 - startCoord1) + offset;
     }
 
