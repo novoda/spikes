@@ -233,7 +233,7 @@ public class MainActivity extends Activity {
     void spawnLava(int left, int right, int ontime, int offtime, int offset, String state) {
         for (int i = 0; i < lavaPool.length; i++) {
             if (!lavaPool[i].isAlive()) {
-                lavaPool[i].Spawn(left, right, ontime, offtime, offset, state, millis());
+                lavaPool[i].spawn(left, right, ontime, offtime, offset, state, millis());
                 return;
             }
         }
