@@ -1,6 +1,6 @@
 package com.novoda.dungeoncrawler;
 
-public class Enemy {
+class Enemy {
     public int playerSide;
     public int position;
     private boolean alive;
@@ -9,7 +9,7 @@ public class Enemy {
     private int wobble;
     private int origin;
 
-    public void spawn(int pos, int dir, int sp, int wobble) {
+    void spawn(int pos, int dir, int sp, int wobble) {
         position = pos;
         direction = dir;          // 0 = left, 1 = right
         this.wobble = wobble;    // 0 = no, >0 = yes, value is width of wobble
@@ -18,11 +18,11 @@ public class Enemy {
         alive = true;
     }
 
-    public boolean isAlive() {
+    boolean isAlive() {
         return alive;
     }
 
-    public void tick(long millis) {
+    void tick(long millis) {
         if (alive) {
             if (wobble > 0) {
                 position = (int) (origin + (Math.sin((millis / 3000.0) * _sp) * wobble));
@@ -43,7 +43,7 @@ public class Enemy {
         }
     }
 
-    public void kill() {
+    void kill() {
         alive = false;
     }
 

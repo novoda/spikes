@@ -2,18 +2,18 @@ package com.novoda.dungeoncrawler;
 
 import java.util.Random;
 
-public class Particle {
+class Particle {
     public int position;
     public int power;
     private boolean alive;
     private int sp;
     private int life;
 
-    public void kill() {
+    void kill() {
         this.alive = false;
     }
 
-    public void spawn(int playerPosition) {
+    void spawn(int playerPosition) {
         this.position = playerPosition;
         this.power = 255;
         this.alive = true;
@@ -21,11 +21,11 @@ public class Particle {
         this.life = 220 - Math.abs(sp);
     }
 
-    public boolean isAlive() {
+    boolean isAlive() {
         return alive;
     }
 
-    public void tick(boolean useGravity) {
+    void tick(boolean useGravity) {
         if (alive) {
             life++;
             if (sp > 0) {

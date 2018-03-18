@@ -1,18 +1,18 @@
 package com.novoda.dungeoncrawler;
 
-public class Boss {
+class Boss {
     public int lives;
     public int position;
     public int ticks;
     private boolean alive;
 
-    public void spawn() {
+    void spawn() {
         position = 800;
         lives = 3;
         alive = true;
     }
 
-    public void hit() {
+    void hit() {
         lives--;
         if (lives == 0) {
             kill();
@@ -25,11 +25,11 @@ public class Boss {
         }
     }
 
-    public boolean isAlive() {
+    boolean isAlive() {
         return alive;
     }
 
-    public void kill() {
+    void kill() {
         alive = false;
     }
 }
