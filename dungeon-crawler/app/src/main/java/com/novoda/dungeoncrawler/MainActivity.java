@@ -221,28 +221,28 @@ public class MainActivity extends Activity {
     }
 
     void spawnEnemy(int pos, int dir, int sp, int wobble) {
-        for (int e = 0; e < enemyPool.length; e++) {
-            if (!enemyPool[e].isAlive()) {
-                enemyPool[e].spawn(pos, dir, sp, wobble);
-                enemyPool[e].playerSide = pos > playerPosition ? 1 : -1;
+        for (Enemy anEnemyPool : enemyPool) {
+            if (!anEnemyPool.isAlive()) {
+                anEnemyPool.spawn(pos, dir, sp, wobble);
+                anEnemyPool.playerSide = pos > playerPosition ? 1 : -1;
                 return;
             }
         }
     }
 
     void spawnLava(int left, int right, int ontime, int offtime, int offset) {
-        for (int i = 0; i < lavaPool.length; i++) {
-            if (!lavaPool[i].isAlive()) {
-                lavaPool[i].spawn(left, right, ontime, offtime, offset, Lava.State.OFF, millis());
+        for (Lava aLavaPool : lavaPool) {
+            if (!aLavaPool.isAlive()) {
+                aLavaPool.spawn(left, right, ontime, offtime, offset, Lava.State.OFF, millis());
                 return;
             }
         }
     }
 
     void spawnConveyor(int startPoint, int endPoint, int dir) {
-        for (int i = 0; i < conveyorPool.length; i++) {
-            if (!conveyorPool[i].isAlive()) {
-                conveyorPool[i].spawn(startPoint, endPoint, dir);
+        for (Conveyor aConveyorPool : conveyorPool) {
+            if (!aConveyorPool.isAlive()) {
+                aConveyorPool.spawn(startPoint, endPoint, dir);
                 return;
             }
         }
@@ -530,8 +530,8 @@ public class MainActivity extends Activity {
             levelNumber = 0;
             lives = 3;
         }
-        for (int p = 0; p < particlePool.length; p++) {
-            particlePool[p].spawn(playerPosition);
+        for (Particle aParticlePool : particlePool) {
+            aParticlePool.spawn(playerPosition);
         }
         stageStartTime = millis();
         stage = Stage.DEAD;
@@ -602,11 +602,11 @@ public class MainActivity extends Activity {
 
     void tickSpawners() {
         long mm = millis();
-        for (int s = 0; s < spawnPool.length; s++) {
-            if (spawnPool[s].isAlive() && spawnPool[s].activate < mm) {
-                if (spawnPool[s].lastSpawned + spawnPool[s].rate < mm || spawnPool[s].lastSpawned == 0) {
-                    spawnEnemy(spawnPool[s].position, spawnPool[s].direction, spawnPool[s].sp, 0);
-                    spawnPool[s].lastSpawned = mm;
+        for (Spawner aSpawnPool : spawnPool) {
+            if (aSpawnPool.isAlive() && aSpawnPool.activate < mm) {
+                if (aSpawnPool.lastSpawned + aSpawnPool.rate < mm || aSpawnPool.lastSpawned == 0) {
+                    spawnEnemy(aSpawnPool.position, aSpawnPool.direction, aSpawnPool.sp, 0);
+                    aSpawnPool.lastSpawned = mm;
                 }
             }
         }
@@ -676,29 +676,29 @@ public class MainActivity extends Activity {
     }
 
     void tickEnemies() {
-        for (int i = 0; i < enemyPool.length; i++) {
-            if (enemyPool[i].isAlive()) {
-                enemyPool[i].tick(millis());
+        for (Enemy anEnemyPool : enemyPool) {
+            if (anEnemyPool.isAlive()) {
+                anEnemyPool.tick(millis());
                 // hit attack?
                 if (attacking) {
-                    if (enemyPool[i].position > playerPosition - (ATTACK_WIDTH / 2) && enemyPool[i].position < playerPosition + (ATTACK_WIDTH / 2)) {
-                        enemyPool[i].kill();
+                    if (anEnemyPool.position > playerPosition - (ATTACK_WIDTH / 2) && anEnemyPool.position < playerPosition + (ATTACK_WIDTH / 2)) {
+                        anEnemyPool.kill();
                         SFXkill();
                     }
                 }
-                if (inLava(enemyPool[i].position)) {
-                    enemyPool[i].kill();
+                if (inLava(anEnemyPool.position)) {
+                    anEnemyPool.kill();
                     SFXkill();
                 }
                 // Draw (if still alive)
-                if (enemyPool[i].isAlive()) {
-                    int p = getLED(enemyPool[i].position);
+                if (anEnemyPool.isAlive()) {
+                    int p = getLED(anEnemyPool.position);
                     ledStrip.set(p, Display.CRGB.RED);
                 }
                 // hit player?
                 if (
-                    (enemyPool[i].playerSide == 1 && enemyPool[i].position <= playerPosition) ||
-                        (enemyPool[i].playerSide == -1 && enemyPool[i].position >= playerPosition)
+                    (anEnemyPool.playerSide == 1 && anEnemyPool.position <= playerPosition) ||
+                        (anEnemyPool.playerSide == -1 && anEnemyPool.position >= playerPosition)
                     ) {
                     die();
                     return;
@@ -709,9 +709,9 @@ public class MainActivity extends Activity {
 
     private boolean tickParticles() {
         boolean stillActive = false;
-        for (int p = 0; p < particlePool.length; p++) {
-            if (particlePool[p].isAlive()) {
-                particlePool[p].tick(USE_GRAVITY);
+        for (Particle aParticlePool : particlePool) {
+            if (aParticlePool.isAlive()) {
+                aParticlePool.tick(USE_GRAVITY);
 //  TODO:       LEDS[getLED(particlePool[p].position)] += CRGB.(particlePool[p].power, 0, 0);
                 stillActive = true;
             }
