@@ -202,20 +202,20 @@ public class MainActivity extends Activity {
     }
 
     void cleanupLevel() {
-        for (int i = 0; i < enemyPool.length; i++) {
-            enemyPool[i].kill();
+        for (Enemy anEnemyPool : enemyPool) {
+            anEnemyPool.kill();
         }
-        for (int i = 0; i < particlePool.length; i++) {
-            particlePool[i].kill();
+        for (Particle aParticlePool : particlePool) {
+            aParticlePool.kill();
         }
-        for (int i = 0; i < spawnPool.length; i++) {
-            spawnPool[i].kill();
+        for (Spawner aSpawnPool : spawnPool) {
+            aSpawnPool.kill();
         }
-        for (int i = 0; i < lavaPool.length; i++) {
-            lavaPool[i].kill();
+        for (Lava aLavaPool : lavaPool) {
+            aLavaPool.kill();
         }
-        for (int i = 0; i < conveyorPool.length; i++) {
-            conveyorPool[i].kill();
+        for (Conveyor aConveyorPool : conveyorPool) {
+            aConveyorPool.kill();
         }
         boss.kill();
     }
