@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
     // PLAYER
     private static final Display.CRGB PLAYER_COLOR = Display.CRGB.GREEN;
     private static final int MAX_PLAYER_SPEED = 10;     // Max move speed of the player
-    private String stage;                       // what stage the game is at (PLAY/DEAD/WIN/GAMEOVER)
+    private Stage stage;
     private long stageStartTime;               // Stores the time the stage changed for stages that are time based
     private int playerPosition;                // Stores the player position
     private int playerPositionModifier;        // +/- adjustment to player position
@@ -171,7 +171,7 @@ public class MainActivity extends Activity {
                 break;
         }
         stageStartTime = millis();
-        stage = "PLAY";
+        stage = Stage.PLAY;
     }
 
     private long millis = 0;
@@ -269,13 +269,13 @@ public class MainActivity extends Activity {
 //        Log.d("TUT", "loop");
         long mm = millis();
 
-        if (stage.equals("PLAY")) {
+        if (stage == Stage.PLAY) {
             if (attacking) {
                 SFXattacking();
             } else {
                 SFXtilt(joyState == null ? 0 : joyState.tilt);
             }
-        } else if (stage.equals("DEAD")) {
+        } else if (stage == Stage.DEAD) {
             SFXdead();
         }
 
@@ -286,20 +286,20 @@ public class MainActivity extends Activity {
 
             if (Math.abs(joyState.tilt) > Joystick.DEADZONE) {
                 lastInputTime = mm;
-                if (stage.equals("SCREENSAVER")) {
+                if (stage == Stage.SCREENSAVER) {
                     levelNumber = -1;
                     stageStartTime = mm;
-                    stage = "WIN";
+                    stage = Stage.WIN;
                 }
             } else {
                 if (lastInputTime + TIMEOUT < mm) {
-                    stage = "SCREENSAVER";
+                    stage = Stage.SCREENSAVER;
                 }
             }
-            if (stage.equals("SCREENSAVER")) {
+            if (stage == Stage.SCREENSAVER) {
                 ledStrip.clear(); // TODO I added this
                 screenSaverTick();
-            } else if (stage.equals("PLAY")) {
+            } else if (stage == Stage.PLAY) {
                 // PLAYING
                 if (attacking && attackMillis + ATTACK_DURATION < mm) {
                     attacking = false;
@@ -344,13 +344,13 @@ public class MainActivity extends Activity {
                 drawPlayer();
                 drawAttack();
                 drawExit();
-            } else if (stage.equals("DEAD")) {
+            } else if (stage == Stage.DEAD) {
                 // DEAD
                 ledStrip.clear();
                 if (!tickParticles()) {
                     loadLevel();
                 }
-            } else if (stage.equals("WIN")) {
+            } else if (stage == Stage.WIN) {
                 // LEVEL COMPLETE
                 ledStrip.clear();
                 if (stageStartTime + 500 > mm) {
@@ -370,7 +370,7 @@ public class MainActivity extends Activity {
                 } else {
                     nextLevel();
                 }
-            } else if (stage.equals("COMPLETE")) {
+            } else if (stage == Stage.GAME_COMPLETE) {
                 ledStrip.clear();
                 SFXcomplete();
                 if (stageStartTime + 500 > mm) {
@@ -393,7 +393,7 @@ public class MainActivity extends Activity {
                 } else {
                     nextLevel();
                 }
-            } else if (stage.equals("GAMEOVER")) {
+            } else if (stage == Stage.GAME_OVER) {
                 // GAME OVER!
                 ledStrip.clear();
                 stageStartTime = 0;
@@ -497,9 +497,9 @@ public class MainActivity extends Activity {
 
     void levelComplete() {
         stageStartTime = millis();
-        stage = "WIN";
+        stage = Stage.WIN;
         if (levelNumber == LEVEL_COUNT) {
-            stage = "COMPLETE";
+            stage = Stage.GAME_COMPLETE;
         }
         lives = 3;
         updateLives();
@@ -534,7 +534,7 @@ public class MainActivity extends Activity {
             particlePool[p].spawn(playerPosition);
         }
         stageStartTime = millis();
-        stage = "DEAD";
+        stage = Stage.DEAD;
         killTime = millis();
     }
 
