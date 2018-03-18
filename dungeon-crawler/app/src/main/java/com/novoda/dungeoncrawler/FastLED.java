@@ -33,13 +33,11 @@ class FastLED implements Display {
 
     @Override
     public void clear() {
-        Log.d("TUT", "CLEAR");
         state.clear();
     }
 
     @Override
     public void show() {
-        Log.d("TUT", "SHOW");
         for (Integer integer : state) {
             String led = integer == 0 ? " " : "x";
             Log.d("TUT", "|" + led + "|");

@@ -105,6 +105,7 @@ public class MainActivity extends Activity {
 // ------------ LEVELS -------------
 // ---------------------------------
     void loadLevel() {
+        Log.d("TUT", "Game Starting");
         updateLives();
         cleanupLevel();
         playerPosition = 0;
@@ -399,10 +400,10 @@ public class MainActivity extends Activity {
                 stageStartTime = 0;
             }
 
-            Log.d("TUT", "" + (millis() - mm));
-            Log.d("TUT", " - ");
+//            Log.d("TUT", "" + (millis() - mm));
+//            Log.d("TUT", " - ");
             ledStrip.show();
-            Log.d("TUT", "" + (millis() - mm));
+//            Log.d("TUT", "" + (millis() - mm));
         }
     }
 
