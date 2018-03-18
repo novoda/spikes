@@ -16,7 +16,7 @@ public class MainActivity extends Activity {
     private static final int CLOCK_PIN = 4;
     private static final int LED_COLOR_ORDER = 0;//BGR;//GBR
     private static final int BRIGHTNESS = 150;
-    private static final int DIRECTION = 1;     // 0 = right to left, 1 = left to right
+    private static final Direction DIRECTION = Direction.LEFT_TO_RIGHT;
     private static final int MIN_REDRAW_INTERVAL = 16;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
     private static final boolean USE_GRAVITY = true;     // 0/1 use gravity (LED strip going up wall)
     private static final int BEND_POINT = 550;   // 0/1000 point at which the LED strip goes up the wall
@@ -315,7 +315,7 @@ public class MainActivity extends Activity {
                 playerPosition += playerPositionModifier;
                 if (!attacking) {
                     int moveAmount = (int) (joyState.tilt / 6.0);
-                    if (DIRECTION == 1) { // TODO check, could be == 0
+                    if (DIRECTION == Direction.LEFT_TO_RIGHT) {
                         moveAmount = -moveAmount;
                     }
                     moveAmount = constrain(moveAmount, -MAX_PLAYER_SPEED, MAX_PLAYER_SPEED);
