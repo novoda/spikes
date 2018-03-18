@@ -470,7 +470,7 @@ public class MainActivity extends Activity {
         for (i = 0; i < NUM_LEDS; i++) {
             ledStrip.modifyScale(i, 250);
         }
-        if (true) {
+        if (mode == 0) {
             // Marching green <> orange
             n = (int) ((mm / 250) % 10);
             b = (int) (10 + ((Math.sin(mm / 500.00) + 1) * 20.00));
