@@ -52,21 +52,21 @@ public class MainActivity extends Activity {
     private static final int[] lifeLEDs = new int[]{52, 50, 40};
 
     private static final Enemy[] enemyPool = new Enemy[]{
-            new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy(),
-            new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy()
+        new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy(),
+        new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy()
     };
 
     private static final Particle[] particlePool = {
-            new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle()
+        new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle()
     };
     private static final Spawner[] spawnPool = {
-            new Spawner(), new Spawner()
+        new Spawner(), new Spawner()
     };
     private static final Lava[] lavaPool = {
-            new Lava(), new Lava(), new Lava(), new Lava()
+        new Lava(), new Lava(), new Lava(), new Lava()
     };
     private static final Conveyor[] conveyorPool = {
-            new Conveyor(), new Conveyor()
+        new Conveyor(), new Conveyor()
     };
     private static final Boss boss = new Boss();
 
@@ -125,7 +125,7 @@ public class MainActivity extends Activity {
                 break;
             case 3:
                 // Lava intro
-                spawnLava(400, 490, 2000, 2000, 0, "OFF");
+                spawnLava(400, 490, 2000, 2000, 0);
                 spawnPool[0].spawn(1000, 5500, 3, 0, 0, millis());
                 break;
             case 4:
@@ -151,10 +151,10 @@ public class MainActivity extends Activity {
                 break;
             case 7:
                 // Lava run
-                spawnLava(195, 300, 2000, 2000, 0, "OFF");
-                spawnLava(350, 455, 2000, 2000, 0, "OFF");
-                spawnLava(510, 610, 2000, 2000, 0, "OFF");
-                spawnLava(660, 760, 2000, 2000, 0, "OFF");
+                spawnLava(195, 300, 2000, 2000, 0);
+                spawnLava(350, 455, 2000, 2000, 0);
+                spawnLava(510, 610, 2000, 2000, 0);
+                spawnLava(660, 760, 2000, 2000, 0);
                 spawnPool[0].spawn(1000, 3800, 4, 0, 0, millis());
                 break;
             case 8:
@@ -230,10 +230,10 @@ public class MainActivity extends Activity {
         }
     }
 
-    void spawnLava(int left, int right, int ontime, int offtime, int offset, String state) {
+    void spawnLava(int left, int right, int ontime, int offtime, int offset) {
         for (int i = 0; i < lavaPool.length; i++) {
             if (!lavaPool[i].isAlive()) {
-                lavaPool[i].spawn(left, right, ontime, offtime, offset, state, millis());
+                lavaPool[i].spawn(left, right, ontime, offtime, offset, Lava.State.OFF, millis());
                 return;
             }
         }
@@ -335,7 +335,7 @@ public class MainActivity extends Activity {
                 }
 
                 // Ticks and draw calls
-                ledStrip.clear(); 
+                ledStrip.clear();
                 tickConveyors();
                 tickSpawners();
                 tickBoss();
@@ -511,7 +511,7 @@ public class MainActivity extends Activity {
         Lava lava;
         for (i = 0; i < lavaPool.length; i++) {
             lava = lavaPool[i];
-            if (lava.isAlive() && lava.state.equals("ON")) {
+            if (lava.isAlive() && lava.state == Lava.State.ON) {
                 if (lava.left < pos && lava.right > pos) {
                     return true;
                 }
@@ -627,10 +627,10 @@ public class MainActivity extends Activity {
             }
             // CHECK FOR ATTACK
             if (attacking) {
-                if (
-                        (getLED(playerPosition + (ATTACK_WIDTH / 2)) >= getLED(boss.position - BOSS_WIDTH / 2) && getLED(playerPosition + (ATTACK_WIDTH / 2)) <= getLED(boss.position + BOSS_WIDTH / 2)) ||
-                                (getLED(playerPosition - (ATTACK_WIDTH / 2)) <= getLED(boss.position + BOSS_WIDTH / 2) && getLED(playerPosition - (ATTACK_WIDTH / 2)) >= getLED(boss.position - BOSS_WIDTH / 2))
-                        ) {
+                if ((getLED(playerPosition + (ATTACK_WIDTH / 2)) >= getLED(boss.position - BOSS_WIDTH / 2)
+                    && getLED(playerPosition + (ATTACK_WIDTH / 2)) <= getLED(boss.position + BOSS_WIDTH / 2))
+                    || (getLED(playerPosition - (ATTACK_WIDTH / 2)) <= getLED(boss.position + BOSS_WIDTH / 2)
+                    && getLED(playerPosition - (ATTACK_WIDTH / 2)) >= getLED(boss.position - BOSS_WIDTH / 2))) {
                     boss.hit();
                     if (boss.isAlive()) {
                         moveBoss();
@@ -653,17 +653,17 @@ public class MainActivity extends Activity {
             if (LP.isAlive()) {
                 A = getLED(LP.left);
                 B = getLED(LP.right);
-                if (LP.state.equals("OFF")) {
+                if (LP.state == Lava.State.OFF) {
                     if (LP.lastOn + LP.offtime < mm) {
-                        LP.state = "ON";
+                        LP.state = Lava.State.ON;
                         LP.lastOn = mm;
                     }
                     for (p = A; p <= B; p++) {
                         ledStrip.set(p, new Display.CRGB(3 + flicker, (int) ((3 + flicker) / 1.5), 0));
                     }
-                } else if (LP.state.equals("ON")) {
+                } else if (LP.state == Lava.State.ON) {
                     if (LP.lastOn + LP.ontime < mm) {
-                        LP.state = "OFF";
+                        LP.state = Lava.State.OFF;
                         LP.lastOn = mm;
                     }
                     for (p = A; p <= B; p++) {
@@ -697,9 +697,9 @@ public class MainActivity extends Activity {
                 }
                 // hit player?
                 if (
-                        (enemyPool[i].playerSide == 1 && enemyPool[i].position <= playerPosition) ||
-                                (enemyPool[i].playerSide == -1 && enemyPool[i].position >= playerPosition)
-                        ) {
+                    (enemyPool[i].playerSide == 1 && enemyPool[i].position <= playerPosition) ||
+                        (enemyPool[i].playerSide == -1 && enemyPool[i].position >= playerPosition)
+                    ) {
                     die();
                     return;
                 }
