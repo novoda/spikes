@@ -3,8 +3,8 @@ package com.novoda.androidp
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.View
-import com.novoda.androidp.pt651_display_cutout.CutoutActivity
+import com.novoda.androidp.display_cutout.CutoutActivity
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 

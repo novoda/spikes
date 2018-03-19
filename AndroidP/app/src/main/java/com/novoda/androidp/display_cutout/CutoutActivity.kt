@@ -1,4 +1,4 @@
-package com.novoda.androidp.pt651_display_cutout
+package com.novoda.androidp.display_cutout
 
 import android.content.SharedPreferences
 import android.os.Bundle
