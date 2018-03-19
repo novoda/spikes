@@ -36,7 +36,6 @@ class CutoutActivity : AppCompatActivity() {
         setupTitleView(pref)
         setupRadioButtonForCutoutMode(pref)
         setupRadioButtonForInset(pref)
-
     }
 
     private fun setFullscreen() {
