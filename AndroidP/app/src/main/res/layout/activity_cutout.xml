@@ -9,7 +9,7 @@
   tools:context="com.novoda.androidp.pt651_display_cutout.CutoutActivity">
 
   <TextView
-    android:id="@+id/tv_cutout_title"
+    android:id="@+id/cutoutTitleView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentTop="true"

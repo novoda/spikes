@@ -8,6 +8,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.RadioGroup
 import com.novoda.androidp.R
+import kotlinx.android.synthetic.main.activity_cutout.*
 
 class CutoutActivity : AppCompatActivity() {
 
@@ -52,12 +53,11 @@ class CutoutActivity : AppCompatActivity() {
     }
 
     private fun setupTitleView(pref: SharedPreferences) {
-        val titleView = findViewById<View>(R.id.tv_cutout_title)
-        titleView.setOnApplyWindowInsetsListener { view, windowInsets ->
+        cutoutTitleView.setOnApplyWindowInsetsListener { _, windowInsets ->
             windowInsets.displayCutout?.let {
                 if (isUseInsetSelected(pref)) {
                     val safeInsetTop = windowInsets.displayCutout.safeInsetTop
-                    titleView.y = titleView.top + safeInsetTop.toFloat()
+                    cutoutTitleView.y = cutoutTitleView.top + safeInsetTop.toFloat()
                 }
             }
 
