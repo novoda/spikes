@@ -48,7 +48,8 @@ class CutoutActivity : AppCompatActivity() {
     }
 
     private fun setLayoutCutoutMode(pref: SharedPreferences) {
-        window.attributes.layoutInDisplayCutoutMode = cutoutModeMap[pref.getInt(CUTOUT_MODE, CUTOUT_MODE_DEFAULT)] ?: CUTOUT_MODE_DEFAULT
+        window.attributes.layoutInDisplayCutoutMode =
+                cutoutModeMap[pref.getInt(CUTOUT_MODE, CUTOUT_MODE_DEFAULT)] ?: CUTOUT_MODE_DEFAULT
     }
 
     private fun setupTitleView(pref: SharedPreferences) {
@@ -64,7 +65,8 @@ class CutoutActivity : AppCompatActivity() {
         }
     }
 
-    private fun isUseInsetSelected(pref: SharedPreferences) = cutoutUseInsetMap[pref.getInt(CUTOUT_USE_INSET, 0)] ?: false
+    private fun isUseInsetSelected(pref: SharedPreferences) =
+            cutoutUseInsetMap[pref.getInt(CUTOUT_USE_INSET, 0)] ?: false
 
     private fun setupRadioButtonForCutoutMode(pref: SharedPreferences) {
         val radioGroup = findViewById<RadioGroup>(R.id.rd_cutout_mode)
