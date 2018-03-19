@@ -1,5 +1,6 @@
 package com.novoda.sliceanddice
 
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.slice.SliceManager
+import androidx.slice.widget.SliceLiveData
 import com.novoda.sliceshost.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.settings_card.*
@@ -71,11 +73,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startObservingSliceLiveData(sliceUri: Uri) {
-        transitionUiTo(UiState.SliceContent)
-
-        val slice = sliceManager.bindSlice(sliceUri)
-        sliceView.setSlice(slice)
-
         if (sliceUri.path == sliceChoices[0].uri.path) {
             Toast.makeText(
                 this,
@@ -86,12 +83,11 @@ class MainActivity : AppCompatActivity() {
             ).show()
         }
 
-        // TODO due to a bug in 28.0.0-alpha1, we can't use the LiveData yet 😭
-//        SliceLiveData.fromUri(this, sliceUri)
-//            .observe(this, Observer({ sliceResult ->
-//                sliceView.setSlice(sliceResult)
-//                invalidateOptionsMenu()
-//            }))
+        SliceLiveData.fromUri(this, sliceUri)
+            .observe(this, Observer({ sliceResult ->
+                sliceView.setSlice(sliceResult)
+                transitionUiTo(UiState.SliceContent)
+            }))
     }
 
     private fun transitionUiTo(uiState: UiState, animate: Boolean = true) {
