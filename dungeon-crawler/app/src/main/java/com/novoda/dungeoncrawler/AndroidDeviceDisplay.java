@@ -3,16 +3,17 @@ package com.novoda.dungeoncrawler;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 class AndroidDeviceDisplay implements Display {
 
+    private static final int OPAQUE = 255;
     private final List<Integer> state;
     private final LinearLayout linearLayout;
     private final Handler handler;
@@ -23,11 +24,12 @@ class AndroidDeviceDisplay implements Display {
         linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         for (int i = 0; i < numberOfLeds; i++) {
-            TextView textView = new TextView(context);
-            textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            textView.setId(999 + i);
-            linearLayout.addView(textView, i);
-            state.add(i, 0);
+//            View ledView = new TextView(context);
+            View ledView = new AndroidLedView(context);
+            ledView.setLayoutParams(new LinearLayout.LayoutParams(60, 60));
+            ledView.setId(999 + i);
+            linearLayout.addView(ledView, i);
+            state.add(i, Color.BLACK);
         }
         scrollView.addView(linearLayout);
         handler = new Handler(context.getMainLooper());
@@ -43,7 +45,7 @@ class AndroidDeviceDisplay implements Display {
     public void clear() {
         int numberOfLeds = state.size();
         for (int i = 0; i < numberOfLeds; i++) {
-            state.set(i, 0);
+            state.set(i, Color.BLACK);
         }
     }
 
@@ -57,10 +59,12 @@ class AndroidDeviceDisplay implements Display {
         handler.post(() -> {
             for (int i = 0; i < current.size(); i++) {
                 int integer = current.get(i);
-                String led = integer == 0 ? "  " : "x";
-                TextView textView = (TextView) linearLayout.getChildAt(i);
-                if (textView != null) {
-                    textView.setText("|" + led + "|");
+//                String led = integer == 0 ? "  " : "x";
+//                TextView ledView = (TextView) linearLayout.getChildAt(i);
+                AndroidLedView ledView = (AndroidLedView) linearLayout.getChildAt(i);
+                if (ledView != null) {
+//                    ledView.setText("|" + led + "|");
+                    ledView.setBackgroundColor(integer);
                 }
             }
         });
@@ -68,27 +72,41 @@ class AndroidDeviceDisplay implements Display {
 
     @Override
     public void set(int position, CRGB rgb) {
-        state.set(position, Color.argb(0, rgb.red, rgb.blue, rgb.green));
+        state.set(position, Color.argb(OPAQUE, rgb.red, rgb.green, rgb.blue));
     }
 
     @Override
     public void set(int position, CHSV hsv) {
-        state.set(position, Color.HSVToColor(0, new float[]{hsv.hue, hsv.sat, hsv.val}));
+        state.set(position, Color.HSVToColor(OPAQUE, new float[]{hsv.hue, hsv.sat, hsv.val}));
     }
 
     @Override
     public void modifyHSV(int position, int hue, int saturation, int value) {
-        // TODO
+        // TODO is this correct
+        set(position, new CHSV(hue, saturation, value));
     }
 
     @Override
     public void modifyScale(int position, int scale) {
-        // TODO
+        transform(position, colourComponent -> (int) colourComponent); // TODO: Apply scale
+    }
+
+    private void transform(int position, Transformation transformation) {
+        float red = Color.valueOf(state.get(position)).red();
+        float green = Color.valueOf(state.get(position)).green();
+        float blue = Color.valueOf(state.get(position)).blue();
+        int scaled = Color.argb(OPAQUE, transformation.apply(red), transformation.apply(green), transformation.apply(blue));
+        state.set(position, scaled);
     }
 
     @Override
     public void modifyMod(int position, int mod) {
-        // TODO
+        transform(position, colourComponent -> (int) colourComponent % mod); // TODO is this correct
+    }
+
+    private interface Transformation {
+
+        int apply(float colourComponent);
     }
 
 }

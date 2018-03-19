@@ -19,10 +19,10 @@ public class MainActivity extends Activity {
     private static final Direction DIRECTION = Direction.LEFT_TO_RIGHT;
     private static final int MIN_REDRAW_INTERVAL = 16;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
     private static final boolean USE_GRAVITY = true;     // 0/1 use gravity (LED strip going up wall)
-    private static final int BEND_POINT = 550;   // 0/1000 point at which the LED strip goes up the wall
+    private static final int BEND_POINT = 550;   // 0/1000 point at which the LED strip goes up the wall // TODO not used
 
     // GAME
-    private static final int TIMEOUT = 10000;
+    private static final int TIMEOUT = 30000;
     private static final int LEVEL_COUNT = 9;
     private static final int MAX_VOLUME = 10;
     private long previousMillis = 0;           // Time of the last redraw
