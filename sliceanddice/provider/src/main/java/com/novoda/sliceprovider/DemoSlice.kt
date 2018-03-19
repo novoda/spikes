@@ -27,10 +27,7 @@ internal fun createDemoSlice(context: Context, sliceUri: Uri): Slice = ListBuild
                 .setPrimaryAction(sliceAction(context))
         )
         addRow(RowBuilder(context, sliceUri)
-            .setTitle("This is a row item title")
-            .setSubtitle("...and this is the subtitle")
             .setTitleItem(Icon.createWithResource(context, R.drawable.ic_sun))
-            .addEndItem(sliceAction(context, true))
         )
         addInputRange(
             InputRangeBuilder(this)
