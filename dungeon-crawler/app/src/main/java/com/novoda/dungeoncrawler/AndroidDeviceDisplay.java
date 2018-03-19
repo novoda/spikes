@@ -3,7 +3,6 @@ package com.novoda.dungeoncrawler;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -28,7 +27,7 @@ class AndroidDeviceDisplay implements Display {
             textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             textView.setId(999 + i);
             linearLayout.addView(textView, i);
-            state.add(0);
+            state.add(i, 0);
         }
         scrollView.addView(linearLayout);
         handler = new Handler(context.getMainLooper());
@@ -43,9 +42,8 @@ class AndroidDeviceDisplay implements Display {
     @Override
     public void clear() {
         int numberOfLeds = state.size();
-        state.clear();
         for (int i = 0; i < numberOfLeds; i++) {
-            state.add(0);
+            state.set(i, 0);
         }
     }
 
@@ -70,12 +68,12 @@ class AndroidDeviceDisplay implements Display {
 
     @Override
     public void set(int position, CRGB rgb) {
-        state.add(position, Color.argb(0, rgb.red, rgb.blue, rgb.green));
+        state.set(position, Color.argb(0, rgb.red, rgb.blue, rgb.green));
     }
 
     @Override
     public void set(int position, CHSV hsv) {
-        state.add(position, Color.HSVToColor(0, new float[]{hsv.hue, hsv.sat, hsv.val}));
+        state.set(position, Color.HSVToColor(0, new float[]{hsv.hue, hsv.sat, hsv.val}));
     }
 
     @Override

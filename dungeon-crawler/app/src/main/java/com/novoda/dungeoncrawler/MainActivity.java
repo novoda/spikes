@@ -22,7 +22,7 @@ public class MainActivity extends Activity {
     private static final int BEND_POINT = 550;   // 0/1000 point at which the LED strip goes up the wall
 
     // GAME
-    private static final int TIMEOUT = 30000;
+    private static final int TIMEOUT = 10000;
     private static final int LEVEL_COUNT = 9;
     private static final int MAX_VOLUME = 10;
     private long previousMillis = 0;           // Time of the last redraw
@@ -356,7 +356,7 @@ public class MainActivity extends Activity {
                 ledStrip.clear();
                 if (stageStartTime + 500 > mm) {
                     int n = (int) Math.max(map((int) (mm - stageStartTime), 0, 500, NUM_LEDS, 0), 0);
-                    for (int i = NUM_LEDS; i >= n; i--) {
+                    for (int i = NUM_LEDS - 1; i >= n; i--) {
                         ledStrip.set(i, PLAYER_COLOR);
                     }
                     SFXwin();
