@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        findViewById<View>(R.id.btn_cutout_activity).setOnClickListener {
+        btnCutoutActivity.setOnClickListener {
             startActivity(Intent(applicationContext, CutoutActivity::class.java))
         }
     }

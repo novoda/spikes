@@ -7,7 +7,7 @@
   tools:context="com.novoda.androidp.MainActivity">
 
   <Button
-    android:id="@+id/btn_cutout_activity"
+    android:id="@+id/btnCutoutActivity"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text="Cutout Support Spike" />
