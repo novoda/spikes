@@ -1,6 +1,6 @@
 package com.novoda.dungeoncrawler;
 
-class MPU6050Joystick implements Joystick {
+class MPU6050JoystickActuator implements JoystickActuator {
 
     // JOYSTICK
     private static final int JOYSTICK_ORIENTATION = 1;     // 0, 1 or 2 to set the angle of the joystick
@@ -14,7 +14,7 @@ class MPU6050Joystick implements Joystick {
     private static final RunningMedian MPU_ANGLE_SAMPLES = new RunningMedian(5);
     private static final RunningMedian MPU_WOBBLE_SAMPLES = new RunningMedian(5);
 
-    MPU6050Joystick(MPU6050 accelGyro) {
+    MPU6050JoystickActuator(MPU6050 accelGyro) {
         this.accelGyro = accelGyro;
         accelGyro.initialize();
     }

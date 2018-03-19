@@ -1,6 +1,6 @@
 package com.novoda.dungeoncrawler;
 
-class AndroidViewJoystick implements Joystick {
+class AndroidViewJoystickActuator implements JoystickActuator {
 
     private static final int MOVING_BACKWARD_ANGLE = -45;
     private static final int MOVING_FORWARD_ANGLE = 45;
@@ -9,7 +9,7 @@ class AndroidViewJoystick implements Joystick {
     private final JoyState joyState = new JoyState();
     private final JoystickView joystickView;
 
-    AndroidViewJoystick(JoystickView joystickView) {
+    AndroidViewJoystickActuator(JoystickView joystickView) {
         this.joystickView = joystickView;
     }
 

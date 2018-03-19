@@ -72,8 +72,8 @@ public class MainActivity extends Activity {
 
     private ArduinoLoop arduinoLoop = new ArduinoLoop();
     private Display ledStrip;
-    private Joystick joystick;
-    private Joystick.JoyState joyState;
+    private JoystickActuator joystickActuator;
+    private JoystickActuator.JoyState joyState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +81,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
 //        joystick = new MPU6050Joystick(new MPU6050());
-        joystick = new AndroidViewJoystick(findViewById(R.id.joystick));
+        joystickActuator = new AndroidViewJoystickActuator(findViewById(R.id.joystick));
 
 //         Fast LED
 //        ledStrip = new FastLED(NUM_LEDS, LED_COLOR_ORDER, DATA_PIN, CLOCK_PIN);
@@ -285,7 +285,7 @@ public class MainActivity extends Activity {
             long frameTimer = mm;
             previousMillis = mm;
 
-            if (Math.abs(joyState.tilt) > Joystick.DEADZONE) {
+            if (Math.abs(joyState.tilt) > JoystickActuator.DEADZONE) {
                 lastInputTime = mm;
                 if (stage == Stage.SCREENSAVER) {
                     levelNumber = -1;
@@ -457,7 +457,7 @@ public class MainActivity extends Activity {
     }
 
     void getInput() {
-        joyState = joystick.getInput();
+        joyState = joystickActuator.getInput();
     }
 
     // ---------------------------------

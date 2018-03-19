@@ -16,9 +16,10 @@ public class JoystickView extends FrameLayout {
     }
 
     private static final Handler MAIN_THREAD = new Handler(Looper.getMainLooper());
-    private static final long ACTION_RESET_DELAY_MS = 20; // random value ¯\_(ツ)_/¯
+    private static final long ACTION_ATTACK_DELAY_MS = 1000;
+    private static final long ACTION_MOVE_DELAY_MS = 20;
 
-    private Action lastAction = Action.NONE;
+    private Action userAction = Action.NONE;
 
     public JoystickView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -34,8 +35,8 @@ public class JoystickView extends FrameLayout {
     }
 
     private void onAttack(View _) {
-        lastAction = Action.ATTACK;
-        delayResetLastAction();
+        userAction = Action.ATTACK;
+        delayResetAction(ACTION_ATTACK_DELAY_MS);
     }
 
     private boolean onBackward(View _, MotionEvent motionEvent) {
@@ -48,31 +49,31 @@ public class JoystickView extends FrameLayout {
         return true;
     }
 
-    private void delayResetLastAction() {
+    private void delayResetAction(long actionResetDelayMs) {
         MAIN_THREAD.removeCallbacks(resetLastAction);
-        MAIN_THREAD.postDelayed(resetLastAction, ACTION_RESET_DELAY_MS);
+        MAIN_THREAD.postDelayed(resetLastAction, actionResetDelayMs);
     }
 
-    private final Runnable resetLastAction = () -> lastAction = Action.NONE;
+    private final Runnable resetLastAction = () -> userAction = Action.NONE;
 
     private void updateActionWith(MotionEvent motionEvent, Action thisAction) {
         int action = motionEvent.getActionMasked();
         if (action == MotionEvent.ACTION_DOWN) {
-            lastAction = thisAction;
+            userAction = thisAction;
         } else if (action == MotionEvent.ACTION_UP) {
-            delayResetLastAction();
+            delayResetAction(ACTION_MOVE_DELAY_MS);
         }
     }
 
     public boolean isMovingBackward() {
-        return lastAction == Action.BACKWARD;
+        return userAction == Action.BACKWARD;
     }
 
     public boolean isAttacking() {
-        return lastAction == Action.ATTACK;
+        return userAction == Action.ATTACK;
     }
 
     public boolean isMovingForward() {
-        return lastAction == Action.FORWARD;
+        return userAction == Action.FORWARD;
     }
 }
