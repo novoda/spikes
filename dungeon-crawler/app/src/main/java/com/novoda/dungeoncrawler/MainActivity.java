@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
     private long lastInputTime = 0;
 
     // WOBBLE ATTACK
-    private static final int ATTACK_THRESHOLD = 30000; // The threshold that triggers an attack // TODO DOESN'T BELONG HERE
+    static final int ATTACK_THRESHOLD = 30000; // The threshold that triggers an attack // TODO DOESN'T BELONG HERE
     private static final int ATTACK_WIDTH = 70;     // Width of the wobble attack, world is 1000 wide
     private static final int ATTACK_DURATION = 500;    // Duration of a wobble attack (ms)
     private static final int BOSS_WIDTH = 40;
@@ -80,8 +80,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        joystick = new Joystick(new MPU6050());
-        joystick.initialise();
+//        joystick = new MPU6050Joystick(new MPU6050());
+        joystick = new AndroidViewJoystick(findViewById(R.id.joystick));
 
 //         Fast LED
 //        ledStrip = new FastLED(NUM_LEDS, LED_COLOR_ORDER, DATA_PIN, CLOCK_PIN);
