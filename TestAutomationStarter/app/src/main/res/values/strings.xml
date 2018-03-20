@@ -9,4 +9,5 @@
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="basket">Basket</string>
+    <string name="to_the_basket">To the basket</string>
 </resources>

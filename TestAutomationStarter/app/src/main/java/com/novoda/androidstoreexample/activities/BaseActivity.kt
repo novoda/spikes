@@ -1,17 +1,13 @@
 package com.novoda.androidstoreexample.activities
 
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.novoda.androidstoreexample.dagger.App
 import com.novoda.androidstoreexample.dagger.component.AppComponent
 import com.novoda.androidstoreexample.mvp.view.BaseView
-import android.widget.RelativeLayout
-import android.widget.ProgressBar
 
 
-
-abstract class  BaseActivity: AppCompatActivity(), BaseView {
+abstract class BaseActivity : AppCompatActivity(), BaseView {
 
     abstract fun getActivityLayout(): Int
 

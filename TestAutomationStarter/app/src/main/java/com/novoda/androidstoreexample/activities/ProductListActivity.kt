@@ -3,6 +3,7 @@ package com.novoda.androidstoreexample.activities
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import com.novoda.androidstoreexample.R
@@ -58,7 +59,10 @@ class ProductListActivity : BaseActivity(), ProductListView {
 
     override fun hideProgress() {
         productListProgressView.visibility = GONE
+    }
 
-
+    override fun onBasketClicked(view: View) {
+        val basketIntent = Intent(this, BasketActivity::class.java)
+        startActivity(basketIntent)
     }
 }

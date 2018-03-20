@@ -15,10 +15,10 @@ class BasketService {
     }
 
     fun getBasket():List<Order>{
-        var orders = mutableListOf<Order>()
+        val orders = mutableListOf<Order>()
         basket.forEach {
             val order = Order(it.key, it.value)
-            orders.fill(order)
+            orders.add(order)
         }
         return orders
     }

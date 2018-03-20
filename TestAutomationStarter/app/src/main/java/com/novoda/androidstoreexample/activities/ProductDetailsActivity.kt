@@ -1,5 +1,6 @@
 package com.novoda.androidstoreexample.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
@@ -55,5 +56,10 @@ class ProductDetailsActivity : BaseActivity(), ProductDetailView {
 
     fun addToBasket(view: View) {
         presenter.addToBasket()
+    }
+
+    override fun onBasketClicked(view: View) {
+        val basketIntent = Intent(this, BasketActivity::class.java)
+        startActivity(basketIntent)
     }
 }
