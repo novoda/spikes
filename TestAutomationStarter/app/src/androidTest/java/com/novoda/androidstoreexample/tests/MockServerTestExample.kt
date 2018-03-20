@@ -1,4 +1,4 @@
-package com.novoda.androidstoreexample
+package com.novoda.androidstoreexample.tests
 
 import android.content.Intent
 import android.support.test.InstrumentationRegistry
@@ -8,6 +8,7 @@ import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.ViewMatchers.withText
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
+import com.novoda.androidstoreexample.EspressoHostModule
 import com.novoda.androidstoreexample.activities.MainActivity
 import com.novoda.androidstoreexample.dagger.App.Companion.component
 import com.novoda.androidstoreexample.dagger.component.DaggerAppComponent

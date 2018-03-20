@@ -1,9 +1,11 @@
-package com.novoda.androidstoreexample;
+package com.novoda.androidstoreexample.tests;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.RecyclerView;
 
+import com.novoda.androidstoreexample.R;
+import com.novoda.androidstoreexample.ViewMatchers;
 import com.novoda.androidstoreexample.activities.MainActivity;
 
 import org.hamcrest.Matcher;
@@ -29,7 +31,7 @@ public class EspressoJavaTestExample {
     public void firstNavigationTest() {
         Matcher<RecyclerView.ViewHolder> categoryMatcher = ViewMatchers.withCategoryTitle("HATS");
 
-        onView(withId(R.id.categoryListView)).perform(scrollToHolder(categoryMatcher), actionOnHolderItem(categoryMatcher, click()));
+        onView(android.support.test.espresso.matcher.ViewMatchers.withId(R.id.categoryListView)).perform(scrollToHolder(categoryMatcher), actionOnHolderItem(categoryMatcher, click()));
 
         Matcher<RecyclerView.ViewHolder> productMatcher = ViewMatchers.withProductTitle("hat white");
 

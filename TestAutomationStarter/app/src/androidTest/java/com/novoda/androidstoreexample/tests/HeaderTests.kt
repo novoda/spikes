@@ -1,4 +1,4 @@
-package com.novoda.androidstoreexample
+package com.novoda.androidstoreexample.tests
 
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
