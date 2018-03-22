@@ -96,6 +96,10 @@ public class MainActivity extends Activity {
             digitalWrite(lifeLEDs[i], Gpio.ACTIVE_HIGH);
         }
 
+        findViewById(R.id.button2).setOnClickListener(v -> {
+            loadLevel();
+        });
+
         loadLevel();
 
         arduinoLoop.start(this::loop);

@@ -17,7 +17,6 @@ public class JoystickView extends FrameLayout {
 
     private static final Handler MAIN_THREAD = new Handler(Looper.getMainLooper());
     private static final long ACTION_ATTACK_DELAY_MS = 1000;
-    private static final long ACTION_MOVE_DELAY_MS = 20;
 
     private Action userAction = Action.NONE;
 
@@ -39,6 +38,13 @@ public class JoystickView extends FrameLayout {
         delayResetAction(ACTION_ATTACK_DELAY_MS);
     }
 
+    private void delayResetAction(long actionResetDelayMs) {
+        MAIN_THREAD.removeCallbacks(resetLastAction);
+        MAIN_THREAD.postDelayed(resetLastAction, actionResetDelayMs);
+    }
+
+    private final Runnable resetLastAction = () -> userAction = Action.NONE;
+
     private boolean onBackward(View _, MotionEvent motionEvent) {
         updateActionWith(motionEvent, Action.BACKWARD);
         return true;
@@ -49,19 +55,12 @@ public class JoystickView extends FrameLayout {
         return true;
     }
 
-    private void delayResetAction(long actionResetDelayMs) {
-        MAIN_THREAD.removeCallbacks(resetLastAction);
-        MAIN_THREAD.postDelayed(resetLastAction, actionResetDelayMs);
-    }
-
-    private final Runnable resetLastAction = () -> userAction = Action.NONE;
-
     private void updateActionWith(MotionEvent motionEvent, Action thisAction) {
         int action = motionEvent.getActionMasked();
         if (action == MotionEvent.ACTION_DOWN) {
             userAction = thisAction;
         } else if (action == MotionEvent.ACTION_UP) {
-            delayResetAction(ACTION_MOVE_DELAY_MS);
+            userAction = Action.NONE;
         }
     }
 
