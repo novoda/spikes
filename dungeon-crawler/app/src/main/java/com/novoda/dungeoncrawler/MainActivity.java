@@ -19,7 +19,7 @@ public class MainActivity extends Activity {
     private static final Direction DIRECTION = Direction.LEFT_TO_RIGHT;
     private static final int MIN_REDRAW_INTERVAL = 16;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
     private static final boolean USE_GRAVITY = true;     // 0/1 use gravity (LED strip going up wall)
-    private static final int BEND_POINT = 550;   // 0/1000 point at which the LED strip goes up the wall
+    private static final int BEND_POINT = 550;   // 0/1000 point at which the LED strip goes up the wall // TODO not used
 
     // GAME
     private static final int TIMEOUT = 30000;
@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
     private long lastInputTime = 0;
 
     // WOBBLE ATTACK
-    private static final int ATTACK_THRESHOLD = 30000; // The threshold that triggers an attack // TODO DOESN'T BELONG HERE
+    static final int ATTACK_THRESHOLD = 30000; // The threshold that triggers an attack // TODO DOESN'T BELONG HERE
     private static final int ATTACK_WIDTH = 70;     // Width of the wobble attack, world is 1000 wide
     private static final int ATTACK_DURATION = 500;    // Duration of a wobble attack (ms)
     private static final int BOSS_WIDTH = 40;
@@ -72,16 +72,16 @@ public class MainActivity extends Activity {
 
     private ArduinoLoop arduinoLoop = new ArduinoLoop();
     private Display ledStrip;
-    private Joystick joystick;
-    private Joystick.JoyState joyState;
+    private JoystickActuator joystickActuator;
+    private JoystickActuator.JoyState joyState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        joystick = new Joystick(new MPU6050());
-        joystick.initialise();
+//        joystick = new MPU6050Joystick(new MPU6050());
+        joystickActuator = new AndroidViewJoystickActuator(findViewById(R.id.joystick));
 
 //         Fast LED
 //        ledStrip = new FastLED(NUM_LEDS, LED_COLOR_ORDER, DATA_PIN, CLOCK_PIN);
@@ -289,7 +289,7 @@ public class MainActivity extends Activity {
             long frameTimer = mm;
             previousMillis = mm;
 
-            if (Math.abs(joyState.tilt) > Joystick.DEADZONE) {
+            if (Math.abs(joyState.tilt) > JoystickActuator.DEADZONE) {
                 lastInputTime = mm;
                 if (stage == Stage.SCREENSAVER) {
                     levelNumber = -1;
@@ -360,7 +360,7 @@ public class MainActivity extends Activity {
                 ledStrip.clear();
                 if (stageStartTime + 500 > mm) {
                     int n = (int) Math.max(map((int) (mm - stageStartTime), 0, 500, NUM_LEDS, 0), 0);
-                    for (int i = NUM_LEDS; i >= n; i--) {
+                    for (int i = NUM_LEDS - 1; i >= n; i--) {
                         ledStrip.set(i, PLAYER_COLOR);
                     }
                     SFXwin();
@@ -461,7 +461,7 @@ public class MainActivity extends Activity {
     }
 
     void getInput() {
-        joyState = joystick.getInput();
+        joyState = joystickActuator.getInput();
     }
 
     // ---------------------------------

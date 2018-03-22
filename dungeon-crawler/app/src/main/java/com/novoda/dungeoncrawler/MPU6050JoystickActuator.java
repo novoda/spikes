@@ -1,11 +1,10 @@
 package com.novoda.dungeoncrawler;
 
-class Joystick {
+class MPU6050JoystickActuator implements JoystickActuator {
 
     // JOYSTICK
     private static final int JOYSTICK_ORIENTATION = 1;     // 0, 1 or 2 to set the angle of the joystick
     private static final int JOYSTICK_DIRECTION = 1;     // 0/1 to flip joystick direction
-    static final int DEADZONE = 5;     // Angle to ignore
 
     private static final JoyState JOY_STATE = new JoyState();
 
@@ -15,18 +14,13 @@ class Joystick {
     private static final RunningMedian MPU_ANGLE_SAMPLES = new RunningMedian(5);
     private static final RunningMedian MPU_WOBBLE_SAMPLES = new RunningMedian(5);
 
-    Joystick(MPU6050 accelGyro) {
+    MPU6050JoystickActuator(MPU6050 accelGyro) {
         this.accelGyro = accelGyro;
-    }
-
-    void initialise() {
         accelGyro.initialize();
     }
 
-    // ---------------------------------
-// ----------- JOYSTICK ------------
-// ---------------------------------
-    JoyState getInput() {
+    @Override
+    public JoyState getInput() {
         // This is responsible for the player movement speed and attacking.
         // You can replace it with anything you want that passes a -90>+90 value to tilt
         // and any value to wobble that is greater than ATTACK_THRESHOLD (defined at start)
@@ -58,8 +52,4 @@ class Joystick {
         return JOY_STATE;
     }
 
-    static class JoyState {
-        int tilt = 0;              // Stores the angle of the joystick
-        int wobble = 0;            // Stores the max amount of acceleration (wobble)
-    }
 }
