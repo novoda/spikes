@@ -80,7 +80,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        joystick = new MPU6050Joystick(new MPU6050());
+//        joystickActuator = new MPU6050JoystickActuator(MPU6050.create(PeripheralManager.getInstance()));
         joystickActuator = new AndroidViewJoystickActuator(findViewById(R.id.joystick));
 
 //         Fast LED
