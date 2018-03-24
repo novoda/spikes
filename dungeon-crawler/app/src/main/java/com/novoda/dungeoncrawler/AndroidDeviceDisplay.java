@@ -92,10 +92,8 @@ class AndroidDeviceDisplay implements Display {
     }
 
     private void transform(int position, Transformation transformation) {
-        float red = Color.valueOf(state.get(position)).red();
-        float green = Color.valueOf(state.get(position)).green();
-        float blue = Color.valueOf(state.get(position)).blue();
-        int scaled = Color.argb(OPAQUE, transformation.apply(red), transformation.apply(green), transformation.apply(blue));
+        Color color = Color.valueOf(state.get(position));
+        int scaled = Color.argb(OPAQUE, transformation.apply(color.red()), transformation.apply(color.green()), transformation.apply(color.blue()));
         state.set(position, scaled);
     }
 

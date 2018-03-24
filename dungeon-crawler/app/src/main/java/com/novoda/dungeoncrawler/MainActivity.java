@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.things.pio.Gpio;
+import com.xrigau.driver.ws2801.Ws2801;
 
+import java.io.IOException;
 import java.util.Random;
 
 public class MainActivity extends Activity {
@@ -20,6 +22,9 @@ public class MainActivity extends Activity {
     private static final int MIN_REDRAW_INTERVAL = 16;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
     private static final boolean USE_GRAVITY = true;     // 0/1 use gravity (LED strip going up wall)
     private static final int BEND_POINT = 550;   // 0/1000 point at which the LED strip goes up the wall // TODO not used
+
+    private static final String SPI_DEVICE_NAME = "SPI0.0";
+    private static final Ws2801.Mode WS2801_MODE = Ws2801.Mode.RBG;
 
     // GAME
     private static final int TIMEOUT = 30000;
@@ -74,6 +79,7 @@ public class MainActivity extends Activity {
     private Display ledStrip;
     private JoystickActuator joystickActuator;
     private JoystickActuator.JoyState joyState;
+    private Ws2801 ws2801;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +92,8 @@ public class MainActivity extends Activity {
 //         Fast LED
 //        ledStrip = new FastLED(NUM_LEDS, LED_COLOR_ORDER, DATA_PIN, CLOCK_PIN);
 //        ledStrip = new LogcatDisplay(NUM_LEDS);
+//        ws2801 = createWs2801();
+//        ledStrip = new Ws2801Display(ws2801, NUM_LEDS);
         ledStrip = new AndroidDeviceDisplay(this, findViewById(R.id.scrollView), NUM_LEDS);
 //        ledStrip.setBrightness(BRIGHTNESS);
 //        ledStrip.setDither(1);
@@ -103,6 +111,14 @@ public class MainActivity extends Activity {
         loadLevel();
 
         arduinoLoop.start(this::loop);
+    }
+
+    private Ws2801 createWs2801() {
+        try {
+            return Ws2801.create(SPI_DEVICE_NAME, WS2801_MODE);
+        } catch (IOException e) {
+            throw new IllegalStateException("Unable to create the Ws2801 driver", e);
+        }
     }
 
     // ---------------------------------
@@ -771,6 +787,17 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         arduinoLoop.stop();
+        safeCloseWs2801();
         super.onDestroy();
+    }
+
+    private void safeCloseWs2801() {
+        if (ws2801 != null) {
+            try {
+                ws2801.close();
+            } catch (IOException e) {
+                // ignore
+            }
+        }
     }
 }
