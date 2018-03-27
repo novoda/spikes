@@ -1,0 +1,15 @@
+pipeline {
+  agent {
+    docker {
+      image 'runmymind/docker-android-sdk:alpine-standalone'
+    }
+    
+  }
+  stages {
+    stage('build') {
+      steps {
+        sh './gradlew check'
+      }
+    }
+  }
+}
