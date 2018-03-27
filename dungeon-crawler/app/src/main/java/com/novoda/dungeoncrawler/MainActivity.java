@@ -4,11 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.android.things.pio.Gpio;
-import com.xrigau.driver.ws2801.Ws2801;
-
-import java.io.IOException;
 import java.util.Random;
+
 
 public class MainActivity extends Activity {
 
@@ -24,7 +21,7 @@ public class MainActivity extends Activity {
     private static final int BEND_POINT = 550;   // 0/1000 point at which the LED strip goes up the wall // TODO not used
 
     private static final String SPI_DEVICE_NAME = "SPI0.0";
-    private static final Ws2801.Mode WS2801_MODE = Ws2801.Mode.RBG;
+//    private static final Ws2801.Mode WS2801_MODE = Ws2801.Mode.RBG;
 
     // GAME
     private static final int TIMEOUT = 30000;
@@ -79,7 +76,7 @@ public class MainActivity extends Activity {
     private Display ledStrip;
     private JoystickActuator joystickActuator;
     private JoystickActuator.JoyState joyState;
-    private Ws2801 ws2801;
+//    private Ws2801 ws2801;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +98,7 @@ public class MainActivity extends Activity {
         // Life LEDs
         for (int i = 0; i < 3; i++) {
 //            pinMode(lifeLEDs[i], OUTPUT);
-            digitalWrite(lifeLEDs[i], Gpio.ACTIVE_HIGH);
+//            digitalWrite(lifeLEDs[i], Gpio.ACTIVE_HIGH);
         }
 
         findViewById(R.id.button2).setOnClickListener(v -> {
@@ -113,13 +110,13 @@ public class MainActivity extends Activity {
         arduinoLoop.start(this::loop);
     }
 
-    private Ws2801 createWs2801() {
-        try {
-            return Ws2801.create(SPI_DEVICE_NAME, WS2801_MODE);
-        } catch (IOException e) {
-            throw new IllegalStateException("Unable to create the Ws2801 driver", e);
-        }
-    }
+//    private Ws2801 createWs2801() {
+//        try {
+//            return Ws2801.create(SPI_DEVICE_NAME, WS2801_MODE);
+//        } catch (IOException e) {
+//            throw new IllegalStateException("Unable to create the Ws2801 driver", e);
+//        }
+//    }
 
     // ---------------------------------
 // ------------ LEVELS -------------
@@ -213,7 +210,7 @@ public class MainActivity extends Activity {
     void updateLives() {
         // Updates the life LEDs to show how many lives the player has left
         for (int i = 0; i < 3; i++) {
-            digitalWrite(lifeLEDs[i], lives > i ? Gpio.ACTIVE_HIGH : Gpio.ACTIVE_LOW);
+//            digitalWrite(lifeLEDs[i], lives > i ? Gpio.ACTIVE_HIGH : Gpio.ACTIVE_LOW);
         }
     }
 
@@ -787,17 +784,17 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         arduinoLoop.stop();
-        safeCloseWs2801();
+//        safeCloseWs2801();
         super.onDestroy();
     }
 
-    private void safeCloseWs2801() {
-        if (ws2801 != null) {
-            try {
-                ws2801.close();
-            } catch (IOException e) {
-                // ignore
-            }
-        }
-    }
+//    private void safeCloseWs2801() {
+//        if (ws2801 != null) {
+//            try {
+//                ws2801.close();
+//            } catch (IOException e) {
+//                 ignore
+//            }
+//        }
+//    }
 }

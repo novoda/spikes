@@ -33,7 +33,7 @@ public class JoystickView extends FrameLayout {
         findViewById(R.id.forward).setOnTouchListener(this::onForward);
     }
 
-    private void onAttack(View _) {
+    private void onAttack(View v) {
         userAction = Action.ATTACK;
         delayResetAction(ACTION_ATTACK_DELAY_MS);
     }
@@ -45,12 +45,12 @@ public class JoystickView extends FrameLayout {
 
     private final Runnable resetLastAction = () -> userAction = Action.NONE;
 
-    private boolean onBackward(View _, MotionEvent motionEvent) {
+    private boolean onBackward(View v, MotionEvent motionEvent) {
         updateActionWith(motionEvent, Action.BACKWARD);
         return true;
     }
 
-    private boolean onForward(View _, MotionEvent motionEvent) {
+    private boolean onForward(View v, MotionEvent motionEvent) {
         updateActionWith(motionEvent, Action.FORWARD);
         return true;
     }
