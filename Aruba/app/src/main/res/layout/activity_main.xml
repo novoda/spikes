@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent">
+
+  <com.arubanetworks.meridian.maps.MapView
+    android:id="@+id/map"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:accentColor="@color/colorAccent"
+    app:hideAccessibilityButton="true"
+    app:hideLevelsControl="true"
+    app:hideMenuButton="true" />
 
 </LinearLayout>
