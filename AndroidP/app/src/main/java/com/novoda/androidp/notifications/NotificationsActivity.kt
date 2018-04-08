@@ -34,46 +34,10 @@ class NotificationsActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         notifications_trigger.setOnClickListener {
-            //handleMessageNow()
             NotificationsIntentService.showNotification(this, "Title notif", "Body notif")
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         createNotificationChannelForAndroidOreo()
-    }
-
-    private fun handleMessageNow() {
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        //val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-
-        val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(ic_delete)
-                .setContentTitle("title")
-                .setContentText("body")
-                .setRemoteInputHistory(emptyArray())
-
-        addReplyAction(notificationBuilder)
-        createNotificationChannelForAndroidOreo()
-        notificationManager.notify(1234, notificationBuilder.build())
-    }
-
-
-    private fun addReplyAction(notificationBuilder: NotificationCompat.Builder) {
-        notificationBuilder.addAction(Builder(ic_media_rew, "Reply", createReplyPendingIntent())
-                .addRemoteInput(RemoteInput.Builder(KEY_TEXT_REPLY)
-                        .setLabel("Your inline response")
-                        .build())
-                .setAllowGeneratedReplies(true)
-                .build())
-    }
-
-    private fun createReplyPendingIntent(): PendingIntent? {
-        val intent = Intent(this, NotificationsIntentService::class.java)
-        intent.action = REPLY_ACTION
-        intent.putExtra(KEY_NOTIFICATION_ID, 1234)
-        intent.putExtra(KEY_MESSAGE_ID, 0)
-        return PendingIntent.getService(applicationContext, 100, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     private fun createNotificationChannelForAndroidOreo() {

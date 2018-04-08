@@ -23,17 +23,12 @@ class NotificationsIntentService : IntentService("NotificationsIntentService") {
     val replyHistory = ArrayList<CharSequence>()
 
     override fun onHandleIntent(intent: Intent?) {
-
-
         val notificationManager = NotificationManagerCompat.from(this)
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(android.R.drawable.ic_delete)
-                .setContentTitle("title")
-                .setContentText("body")
+                .setContentTitle(intent?.getStringExtra(EXTRA_TITLE))
+                .setContentText(intent?.getStringExtra(EXTRA_TEXT))
                 .setAutoCancel(true)
-
-        //      .setSound(defaultSoundUri)
-
 
         val resultsFromIntent = RemoteInput.getResultsFromIntent(intent)
         if (resultsFromIntent != null) {
@@ -70,14 +65,6 @@ class NotificationsIntentService : IntentService("NotificationsIntentService") {
 
 
     companion object {
-        /**
-         * Starts this service to perform action Foo with the given parameters. If
-         * the service is already performing a task this action will be queued.
-         *
-         * @see IntentService
-         */
-        // TODO: Customize helper method
-        @JvmStatic
         fun showNotification(context: Context, title: String, body: String) {
             val intent = Intent(context, NotificationsIntentService::class.java).apply {
                 action = ACTION_SHOW_NOTIFICATION
