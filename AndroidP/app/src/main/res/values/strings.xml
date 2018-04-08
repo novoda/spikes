@@ -1,3 +1,4 @@
 <resources>
-  <string name="app_name">Android P Spikes</string>
+    <string name="app_name">Android P Spikes</string>
+    <string name="title_activity_notifications">NotificationsActivity</string>
 </resources>

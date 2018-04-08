@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.novoda.androidp.display_cutout.CutoutActivity
+import com.novoda.androidp.notifications.NotificationsActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -14,6 +15,10 @@ class MainActivity : AppCompatActivity() {
 
         btnCutoutActivity.setOnClickListener {
             startActivity(Intent(applicationContext, CutoutActivity::class.java))
+        }
+
+        btnNotificationsActivity.setOnClickListener {
+            startActivity(Intent(applicationContext, NotificationsActivity::class.java))
         }
     }
 
