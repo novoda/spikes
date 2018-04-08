@@ -14,53 +14,58 @@ import android.support.v4.app.NotificationManagerCompat
 
 private const val ACTION_SHOW_NOTIFICATION = "com.novoda.androidp.notifications.action.SHOW_NOTIFICATION"
 private const val ACTION_REPLY_NOTIFICATION = "com.novoda.androidp.notifications.action.REPLY_NOTIFICATION"
+private const val NOTIFICATION_ID = 1234
+private val replyHistory = ArrayList<CharSequence>()
 
 class NotificationsIntentService : IntentService("NotificationsIntentService") {
-    private val REPLY_ACTION = "REPLY_ACTION"
     private val KEY_NOTIFICATION_ID = "KEY_NOTIFICATION_ID"
     private val KEY_MESSAGE_ID = "KEY_MESSAGE_ID"
 
-    val replyHistory = ArrayList<CharSequence>()
-
     override fun onHandleIntent(intent: Intent?) {
         val notificationManager = NotificationManagerCompat.from(this)
+        val notificationBuilder = builderFromIntent(intent)
+
+        addReplyHistory(notificationBuilder, intent)
+        addReplyAction(notificationBuilder, intent)
+
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
+    }
+
+    private fun addReplyHistory(builder: NotificationCompat.Builder, intent: Intent?) {
+        RemoteInput.getResultsFromIntent(intent)?.apply {
+            replyHistory.add(0, getCharSequence(KEY_TEXT_REPLY)) // most recent notification should be at index 0
+        }
+        builder.setRemoteInputHistory(replyHistory.toTypedArray())
+    }
+
+    private fun builderFromIntent(intent: Intent?): NotificationCompat.Builder {
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(android.R.drawable.ic_delete)
+                .setSmallIcon(R.drawable.ic_delete)
                 .setContentTitle(intent?.getStringExtra(EXTRA_TITLE))
                 .setContentText(intent?.getStringExtra(EXTRA_TEXT))
                 .setAutoCancel(true)
-
-        val resultsFromIntent = RemoteInput.getResultsFromIntent(intent)
-        if (resultsFromIntent != null) {
-            val charSequence = resultsFromIntent.getCharSequence(KEY_TEXT_REPLY)
-            replyHistory.add(charSequence)
-        }
-        notificationBuilder.setRemoteInputHistory(replyHistory.toTypedArray())
-
-
-        addReplyAction(notificationBuilder)
-        notificationManager.notify(1234, notificationBuilder.build())
-
+        return notificationBuilder
     }
 
-    private fun addReplyAction(notificationBuilder: NotificationCompat.Builder) {
-        notificationBuilder.addAction(NotificationCompat.Action.Builder(R.drawable.ic_media_rew, "Reply", createReplyPendingIntent())
+    private fun addReplyAction(notificationBuilder: NotificationCompat.Builder, intent: Intent?) {
+        notificationBuilder.addAction(NotificationCompat.Action.Builder(R.drawable.ic_media_rew, "Reply", createReplyPendingIntent(intent))
                 .addRemoteInput(android.support.v4.app.RemoteInput.Builder(KEY_TEXT_REPLY)
-                        .setLabel("Your inline response")
+                        .setLabel("Reply...")
                         .build())
                 .setAllowGeneratedReplies(true)
                 .build())
     }
 
-    private fun createReplyPendingIntent(): PendingIntent? {
-        val intent = Intent(this, NotificationsIntentService::class.java).apply {
+    private fun createReplyPendingIntent(intent: Intent?): PendingIntent? {
+        val replyIntent = Intent(this, NotificationsIntentService::class.java).apply {
             action = ACTION_REPLY_NOTIFICATION
-            putExtra(KEY_NOTIFICATION_ID, 1234)
+            putExtra(KEY_NOTIFICATION_ID, NOTIFICATION_ID)
             putExtra(KEY_MESSAGE_ID, 0)
+            putExtra(EXTRA_TITLE, intent?.getStringExtra(EXTRA_TITLE))
+            putExtra(EXTRA_TEXT, intent?.getStringExtra(EXTRA_TEXT))
         }
 
-        return PendingIntent.getService(applicationContext, 100, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getService(applicationContext, 100, replyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
 
@@ -73,8 +78,5 @@ class NotificationsIntentService : IntentService("NotificationsIntentService") {
             }
             context.startService(intent)
         }
-
-
     }
-
 }
