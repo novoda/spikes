@@ -1,5 +1,6 @@
 package com.novoda.spikes.arcore
 
+import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
@@ -7,13 +8,26 @@ import com.google.ar.core.Session
 import com.google.ar.core.exceptions.CameraNotAvailableException
 import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper
 import com.novoda.spikes.arcore.helper.CameraPermissionHelper
+import com.novoda.spikes.arcore.helper.NovodaSurfaceViewRenderer
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var arSession: Session
+    private lateinit var renderer: NovodaSurfaceViewRenderer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setupSurfaceView()
+    }
+
+    private fun setupSurfaceView() {
+        renderer = NovodaSurfaceViewRenderer(this)
+        surfaceView.preserveEGLContextOnPause = true
+        surfaceView.setEGLContextClientVersion(2)
+        surfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0) // Alpha used for plane blending.
+        surfaceView.setRenderer(renderer)
+        surfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
     }
 
     override fun onResume() {
@@ -34,21 +48,27 @@ class MainActivity : AppCompatActivity() {
     private fun createOrResumeARSession() {
         if (this::arSession.isInitialized.not()) {
             arSession = Session(this)
+            renderer.session = arSession
         }
+
+        // Note that order matters - see the note in onPause(), the reverse applies here.
         try {
             arSession.resume()
         } catch (e: CameraNotAvailableException) {
-            // In some cases (such as another camera app launching) the camera may be given to
-            // a different app instead. Handle this properly by showing a message and recreate the
-            // session at the next iteration.
+            // In some cases the camera may be given to a different app instead. Recreate the session at the next iteration.
             showMessage("Camera not available. Please restart the app.")
             return
         }
+        surfaceView.onResume()
     }
 
     public override fun onPause() {
         super.onPause()
         if (this::arSession.isInitialized) {
+            // Note that the order matters - GLSurfaceView is paused first so that it does not try
+            // to query the session. If Session is paused before GLSurfaceView, GLSurfaceView may
+            // still call session.update() and get a SessionPausedException.
+            surfaceView.onPause()
             arSession.pause()
         }
     }
