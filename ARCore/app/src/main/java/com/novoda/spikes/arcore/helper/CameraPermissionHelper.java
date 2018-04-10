@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.novoda.spikes.arcore;
+package com.novoda.spikes.arcore.helper;
 
 import android.Manifest;
 import android.app.Activity;
@@ -61,5 +61,14 @@ public final class CameraPermissionHelper {
         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         intent.setData(Uri.fromParts("package", activity.getPackageName(), null));
         activity.startActivity(intent);
+    }
+
+    // ARCore requires camera permissions to operate.
+    public static boolean isCameraPermissionGranted(Activity activity) {
+        if (!CameraPermissionHelper.hasCameraPermission(activity)) {
+            CameraPermissionHelper.requestCameraPermission(activity);
+            return false;
+        }
+        return true;
     }
 }
