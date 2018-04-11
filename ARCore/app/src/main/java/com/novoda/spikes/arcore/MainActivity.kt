@@ -6,10 +6,10 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.google.ar.core.Session
 import com.google.ar.core.exceptions.CameraNotAvailableException
+import com.novoda.spikes.arcore.google.helper.TapHelper
 import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper
 import com.novoda.spikes.arcore.helper.CameraPermissionHelper
 import com.novoda.spikes.arcore.rendering.NovodaSurfaceViewRenderer
-import com.novoda.spikes.arcore.google.helper.TapHelper
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -21,12 +21,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        debugViewDisplayer = DebugViewDisplayer(debugTextView)
         setupSurfaceView()
     }
 
     private fun setupSurfaceView() {
         tapHelper = TapHelper(this)
+        debugViewDisplayer = DebugViewDisplayer(debugTextView)
         renderer = NovodaSurfaceViewRenderer(this, debugViewDisplayer, tapHelper)
 
         surfaceView.preserveEGLContextOnPause = true

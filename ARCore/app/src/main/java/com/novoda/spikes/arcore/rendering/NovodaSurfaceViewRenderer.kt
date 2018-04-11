@@ -7,11 +7,12 @@ import com.google.ar.core.Session
 import com.novoda.spikes.arcore.DebugViewDisplayer
 import com.novoda.spikes.arcore.google.helper.TapHelper
 import com.novoda.spikes.arcore.google.rendering.BackgroundRenderer
-import com.novoda.spikes.arcore.visualiser.AnchorsVisualiser
+import com.novoda.spikes.arcore.visualiser.ModelVisualiser
 import com.novoda.spikes.arcore.visualiser.PlanesVisualiser
 import com.novoda.spikes.arcore.visualiser.TrackedPointsVisualiser
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
+
 
 class NovodaSurfaceViewRenderer(private val context: Activity,
                                 private val debugViewDisplayer: DebugViewDisplayer,
@@ -20,7 +21,7 @@ class NovodaSurfaceViewRenderer(private val context: Activity,
     private val backgroundRenderer = BackgroundRenderer()
     private val pointsVisualiser = TrackedPointsVisualiser(context)
     private val planesVisualiser = PlanesVisualiser(context)
-    private val modelsVisualiser = AnchorsVisualiser(context, tapHelper, debugViewDisplayer)
+    private val modelsVisualiser = ModelVisualiser(context, tapHelper, debugViewDisplayer)
     private val arCoreDataModel = ARCoreDataModel(context)
 
 

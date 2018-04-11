@@ -9,9 +9,9 @@ import com.novoda.spikes.arcore.rendering.ARCoreDataModel
 import java.util.*
 
 
-class AnchorsVisualiser(private val context: Context,
-                        private val tapHelper: TapHelper,
-                        private val debugViewDisplayer: DebugViewDisplayer) {
+class ModelVisualiser(private val context: Context,
+                      private val tapHelper: TapHelper,
+                      private val debugViewDisplayer: DebugViewDisplayer) {
 
     private val virtualObjectRenderer = ObjectRenderer()
     private val anchors = ArrayList<Anchor>() // Anchors created from taps used for object placing.
