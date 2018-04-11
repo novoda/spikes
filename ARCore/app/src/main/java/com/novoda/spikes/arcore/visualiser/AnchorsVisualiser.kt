@@ -2,8 +2,9 @@ package com.novoda.spikes.arcore.visualiser
 
 import android.content.Context
 import com.google.ar.core.*
-import com.novoda.spikes.arcore.helper.TapHelper
-import com.novoda.spikes.arcore.rendering.ObjectRenderer
+import com.novoda.spikes.arcore.google.helper.TapHelper
+import com.novoda.spikes.arcore.google.rendering.ObjectRenderer
+import com.novoda.spikes.arcore.rendering.ARCoreDataModel
 import java.util.ArrayList
 
 

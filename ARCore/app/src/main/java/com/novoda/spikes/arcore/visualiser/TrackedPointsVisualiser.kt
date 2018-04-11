@@ -2,7 +2,8 @@ package com.novoda.spikes.arcore.visualiser
 
 import android.content.Context
 import com.google.ar.core.Frame
-import com.novoda.spikes.arcore.rendering.PointCloudRenderer
+import com.novoda.spikes.arcore.google.rendering.PointCloudRenderer
+import com.novoda.spikes.arcore.rendering.ARCoreDataModel
 
 class TrackedPointsVisualiser(private val context: Context) {
     private val pointCloudRenderer = PointCloudRenderer()
@@ -15,7 +16,6 @@ class TrackedPointsVisualiser(private val context: Context) {
         visualiseTrackedPoints(model.frame, model.cameraViewMatrix, model.cameraProjectionMatrix)
     }
     fun visualiseTrackedPoints(frame: Frame, viewmtx: FloatArray, projmtx: FloatArray) {
-        // Visualize tracked points.
         val pointCloud = frame.acquirePointCloud()
         pointCloudRenderer.update(pointCloud)
         pointCloudRenderer.draw(viewmtx, projmtx)

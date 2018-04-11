@@ -4,9 +4,9 @@ import android.app.Activity
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import com.google.ar.core.Session
-import com.novoda.spikes.arcore.visualiser.ARCoreDataModel
 import com.novoda.spikes.arcore.DebugViewDisplayer
-import com.novoda.spikes.arcore.helper.TapHelper
+import com.novoda.spikes.arcore.google.helper.TapHelper
+import com.novoda.spikes.arcore.google.rendering.BackgroundRenderer
 import com.novoda.spikes.arcore.visualiser.AnchorsVisualiser
 import com.novoda.spikes.arcore.visualiser.PlanesVisualiser
 import com.novoda.spikes.arcore.visualiser.TrackedPointsVisualiser

@@ -1,4 +1,4 @@
-package com.novoda.spikes.arcore.visualiser
+package com.novoda.spikes.arcore.rendering
 
 import android.app.Activity
 import android.view.Display
@@ -44,6 +44,7 @@ class ARCoreDataModel(context: Activity) {
     fun onViewportChanged(width: Int, height: Int) {
         viewportWidth = width
         viewportHeight = height
+        viewportChanged = true
 
     }
 
