@@ -9,12 +9,14 @@ import com.google.ar.core.exceptions.CameraNotAvailableException
 import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper
 import com.novoda.spikes.arcore.helper.CameraPermissionHelper
 import com.novoda.spikes.arcore.helper.NovodaSurfaceViewRenderer
+import com.novoda.spikes.arcore.helper.TapHelper
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var arSession: Session
     private lateinit var renderer: NovodaSurfaceViewRenderer
     private lateinit var debugViewDisplayer: DebugViewDisplayer
+    private lateinit var tapHelper: TapHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,12 +26,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupSurfaceView() {
-        renderer = NovodaSurfaceViewRenderer(this, debugViewDisplayer)
+        tapHelper = TapHelper(this)
+        renderer = NovodaSurfaceViewRenderer(this, debugViewDisplayer, tapHelper)
+
         surfaceView.preserveEGLContextOnPause = true
         surfaceView.setEGLContextClientVersion(2)
         surfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0) // Alpha used for plane blending.
         surfaceView.setRenderer(renderer)
         surfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+        surfaceView.setOnTouchListener(tapHelper)
     }
 
     override fun onResume() {

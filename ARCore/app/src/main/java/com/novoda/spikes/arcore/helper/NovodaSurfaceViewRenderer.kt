@@ -8,18 +8,20 @@ import android.view.WindowManager
 import com.google.ar.core.*
 import com.novoda.spikes.arcore.DebugViewDisplayer
 import com.novoda.spikes.arcore.rendering.BackgroundRenderer
-import com.novoda.spikes.arcore.rendering.PlaneRenderer
-import com.novoda.spikes.arcore.rendering.PointCloudRenderer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class NovodaSurfaceViewRenderer(private val context: Activity, private val debugViewDisplayer: DebugViewDisplayer) : GLSurfaceView.Renderer {
+class NovodaSurfaceViewRenderer(private val context: Activity,
+                                private val debugViewDisplayer: DebugViewDisplayer,
+                                private val tapHelper: TapHelper) : GLSurfaceView.Renderer {
 
     private val TAG: String = "NovodaSurfaceViewRenderer"
     private val display: Display = context.getSystemService(WindowManager::class.java).defaultDisplay
     private val backgroundRenderer = BackgroundRenderer()
-    private val pointCloudRenderer = PointCloudRenderer()
-    private val planeRenderer = PlaneRenderer()
+    private val pointsVisualiser = TrackedPointsVisualiser(context)
+    private val planesVisualiser = PlanesVisualiser(context)
+    private val anchorsVisualiser = AnchorsVisualiser(context)
+
     private val cameraViewMatrix = FloatArray(16)
     private val cameraProjectionMatrix = FloatArray(16)
 
@@ -46,27 +48,18 @@ class NovodaSurfaceViewRenderer(private val context: Activity, private val debug
 
 
         val camera = frame.camera
-        // ARCore tracking status
-        debugViewDisplayer.append(when (camera.trackingState) {
-            TrackingState.TRACKING -> "Camera tracking"
-            TrackingState.STOPPED -> "Camera stopped"
-            TrackingState.PAUSED -> "Camera paused"
-            else -> "Camera tracking status unknown"
-        })
+
 
         camera.getProjectionMatrix(cameraProjectionMatrix, 0, 0.1f, 100.0f)
         camera.getViewMatrix(cameraViewMatrix, 0)
 
-        visualiseTrackedPoints(frame, cameraViewMatrix, cameraProjectionMatrix)
+        pointsVisualiser.visualiseTrackedPoints(frame, cameraViewMatrix, cameraProjectionMatrix)
+        planesVisualiser.visualisePlanes(session, camera, cameraProjectionMatrix)
 
-        debugViewDisplayer.append("Planes detected: " + frame.getUpdatedTrackables(Plane::class.java).size)
-        visualisePlanes(camera, cameraProjectionMatrix)
+        anchorsVisualiser.createTouchAnchors(camera, frame, tapHelper)
+        anchorsVisualiser.visualiseTouchAnchors(frame, cameraViewMatrix, cameraProjectionMatrix)
 
         debugViewDisplayer.display()
-    }
-
-    private fun visualisePlanes(camera: Camera, projmtx: FloatArray) {
-        planeRenderer.drawPlanes(session.getAllTrackables(Plane::class.java), camera.displayOrientedPose, projmtx)
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -78,8 +71,9 @@ class NovodaSurfaceViewRenderer(private val context: Activity, private val debug
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         GLES20.glClearColor(0.1f, 0.1f, 0.1f, 1.0f)
         backgroundRenderer.createOnGlThread(context)
-        planeRenderer.createOnGlThread(context, "models/trigrid.png")
-        pointCloudRenderer.createOnGlThread(context)
+        pointsVisualiser.init()
+        planesVisualiser.init()
+        anchorsVisualiser.init()
     }
 
     private fun updateSessionIfNeeded(session: Session) {
@@ -89,13 +83,6 @@ class NovodaSurfaceViewRenderer(private val context: Activity, private val debug
         }
     }
 
-    private fun visualiseTrackedPoints(frame: Frame, viewmtx: FloatArray, projmtx: FloatArray) {
-        // Visualize tracked points.
-        val pointCloud = frame.acquirePointCloud()
-        pointCloudRenderer.update(pointCloud)
-        pointCloudRenderer.draw(viewmtx, projmtx)
-        // Application is responsible for releasing the point cloud resources after using it.
-        pointCloud.release()
-    }
+
 
 }

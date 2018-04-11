@@ -17,7 +17,6 @@ class DebugViewDisplayer(private val textView: TextView) {
             scheduledMessage = true
             handler.postDelayed({
                 textView.text = buf.toString()
-                buf.setLength(0)
                 scheduledMessage = false
             }, interval)
         }
