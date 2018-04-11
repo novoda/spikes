@@ -8,7 +8,7 @@ import com.google.ar.core.Session
 import com.google.ar.core.exceptions.CameraNotAvailableException
 import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper
 import com.novoda.spikes.arcore.helper.CameraPermissionHelper
-import com.novoda.spikes.arcore.helper.NovodaSurfaceViewRenderer
+import com.novoda.spikes.arcore.rendering.NovodaSurfaceViewRenderer
 import com.novoda.spikes.arcore.helper.TapHelper
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
     private fun createOrResumeARSession() {
         if (this::arSession.isInitialized.not()) {
             arSession = Session(this)
-            renderer.session = arSession
+            renderer.setSession(arSession)
         }
 
         // Note that order matters - see the note in onPause(), the reverse applies here.

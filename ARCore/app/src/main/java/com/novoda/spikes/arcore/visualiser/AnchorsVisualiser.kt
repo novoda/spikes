@@ -1,24 +1,28 @@
-package com.novoda.spikes.arcore.helper
+package com.novoda.spikes.arcore.visualiser
 
 import android.content.Context
 import com.google.ar.core.*
+import com.novoda.spikes.arcore.helper.TapHelper
 import com.novoda.spikes.arcore.rendering.ObjectRenderer
 import java.util.ArrayList
 
 
-class AnchorsVisualiser(private val context: Context) {
+class AnchorsVisualiser(private val context: Context, private val tapHelper: TapHelper) {
 
     private val virtualObjectRenderer = ObjectRenderer()
     private val anchors = ArrayList<Anchor>() // Anchors created from taps used for object placing.
     private val anchorMatrix = FloatArray(16) // Temporary matrix allocated here to reduce number of allocations for each frame.
 
     fun init() {
-
         virtualObjectRenderer.createOnGlThread(context, "models/andy.obj", "models/andy.png")
         virtualObjectRenderer.setMaterialProperties(0.0f, 2.0f, 0.5f, 6.0f)
     }
 
-    fun createTouchAnchors(camera: Camera, frame: Frame, tapHelper: TapHelper) {
+    fun visualiseAnchors(model: ARCoreDataModel) {
+        createTouchAnchors(model.camera, model.frame)
+        addVirtualObjectModelToAnchor(model.frame, model.cameraViewMatrix, model.cameraProjectionMatrix)
+    }
+    private fun createTouchAnchors(camera: Camera, frame: Frame) {
         val tap = tapHelper.poll()
         if (tap != null && camera.trackingState == TrackingState.TRACKING) {
             for (hit in frame.hitTest(tap)) {
@@ -45,7 +49,7 @@ class AnchorsVisualiser(private val context: Context) {
         }
     }
 
-    fun visualiseTouchAnchors(frame: Frame, cameraViewMatrix: FloatArray, cameraProjectionMatrix: FloatArray) {
+    private fun addVirtualObjectModelToAnchor(frame: Frame, cameraViewMatrix: FloatArray, cameraProjectionMatrix: FloatArray) {
         // Visualize anchors created by touch.
         // Compute lighting from average intensity of the image.
         // The first three components are color scaling factors.

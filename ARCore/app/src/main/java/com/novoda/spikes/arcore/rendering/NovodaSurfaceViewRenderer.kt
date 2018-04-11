@@ -1,0 +1,60 @@
+package com.novoda.spikes.arcore.rendering
+
+import android.app.Activity
+import android.opengl.GLES20
+import android.opengl.GLSurfaceView
+import com.google.ar.core.Session
+import com.novoda.spikes.arcore.visualiser.ARCoreDataModel
+import com.novoda.spikes.arcore.DebugViewDisplayer
+import com.novoda.spikes.arcore.helper.TapHelper
+import com.novoda.spikes.arcore.visualiser.AnchorsVisualiser
+import com.novoda.spikes.arcore.visualiser.PlanesVisualiser
+import com.novoda.spikes.arcore.visualiser.TrackedPointsVisualiser
+import javax.microedition.khronos.egl.EGLConfig
+import javax.microedition.khronos.opengles.GL10
+
+class NovodaSurfaceViewRenderer(private val context: Activity,
+                                private val debugViewDisplayer: DebugViewDisplayer,
+                                tapHelper: TapHelper) : GLSurfaceView.Renderer {
+
+    private val backgroundRenderer = BackgroundRenderer()
+    private val pointsVisualiser = TrackedPointsVisualiser(context)
+    private val planesVisualiser = PlanesVisualiser(context)
+    private val anchorsVisualiser = AnchorsVisualiser(context, tapHelper)
+    private val arCoreDataModel = ARCoreDataModel(context)
+
+
+    override fun onDrawFrame(gl: GL10?) {
+        if (!arCoreDataModel.isSessionReady()) {
+            return
+        }
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
+
+        arCoreDataModel.update(backgroundRenderer.textureId)
+
+        backgroundRenderer.draw(arCoreDataModel.frame)
+        pointsVisualiser.visualiseTrackedPoints(arCoreDataModel)
+        planesVisualiser.visualisePlanes(arCoreDataModel)
+        anchorsVisualiser.visualiseAnchors(arCoreDataModel)
+
+        debugViewDisplayer.display()
+    }
+
+    override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
+        arCoreDataModel.onViewportChanged(width, height)
+        GLES20.glViewport(0, 0, width, height)
+    }
+
+    override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
+        GLES20.glClearColor(0.1f, 0.1f, 0.1f, 1.0f)
+        backgroundRenderer.createOnGlThread(context)
+        pointsVisualiser.init()
+        planesVisualiser.init()
+        anchorsVisualiser.init()
+    }
+
+    fun setSession(session: Session) {
+        arCoreDataModel.session = session
+    }
+
+}

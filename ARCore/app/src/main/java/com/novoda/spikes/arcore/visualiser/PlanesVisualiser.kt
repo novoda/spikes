@@ -1,4 +1,4 @@
-package com.novoda.spikes.arcore.helper
+package com.novoda.spikes.arcore.visualiser
 
 import android.content.Context
 import com.google.ar.core.Camera
@@ -14,6 +14,9 @@ class PlanesVisualiser(private val context: Context) {
         planeRenderer.createOnGlThread(context, "models/trigrid.png")
     }
 
+    fun visualisePlanes(model: ARCoreDataModel) {
+        visualisePlanes(model.session, model.camera, model.cameraProjectionMatrix)
+    }
     fun visualisePlanes(session: Session, camera: Camera, projmtx: FloatArray) {
         planeRenderer.drawPlanes(session.getAllTrackables(Plane::class.java), camera.displayOrientedPose, projmtx)
     }
