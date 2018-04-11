@@ -5,11 +5,10 @@ import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import android.view.Display
 import android.view.WindowManager
-import com.google.ar.core.Frame
-import com.google.ar.core.Session
-import com.google.ar.core.TrackingState
+import com.google.ar.core.*
 import com.novoda.spikes.arcore.DebugViewDisplayer
 import com.novoda.spikes.arcore.rendering.BackgroundRenderer
+import com.novoda.spikes.arcore.rendering.PlaneRenderer
 import com.novoda.spikes.arcore.rendering.PointCloudRenderer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
@@ -17,13 +16,16 @@ import javax.microedition.khronos.opengles.GL10
 class NovodaSurfaceViewRenderer(private val context: Activity, private val debugViewDisplayer: DebugViewDisplayer) : GLSurfaceView.Renderer {
 
     private val TAG: String = "NovodaSurfaceViewRenderer"
-    private var display: Display = context.getSystemService(WindowManager::class.java).defaultDisplay
-    private var viewportChanged: Boolean = true
-    private var viewportWidth: Int = 0
-
-    private var viewportHeight: Int = 0
+    private val display: Display = context.getSystemService(WindowManager::class.java).defaultDisplay
     private val backgroundRenderer = BackgroundRenderer()
     private val pointCloudRenderer = PointCloudRenderer()
+    private val planeRenderer = PlaneRenderer()
+    private val cameraViewMatrix = FloatArray(16)
+    private val cameraProjectionMatrix = FloatArray(16)
+
+    private var viewportChanged: Boolean = true
+    private var viewportWidth: Int = 0
+    private var viewportHeight: Int = 0
 
     lateinit var session: Session
 
@@ -52,17 +54,19 @@ class NovodaSurfaceViewRenderer(private val context: Activity, private val debug
             else -> "Camera tracking status unknown"
         })
 
-        // Get projection matrix.
-        val projmtx = FloatArray(16)
-        camera.getProjectionMatrix(projmtx, 0, 0.1f, 100.0f)
+        camera.getProjectionMatrix(cameraProjectionMatrix, 0, 0.1f, 100.0f)
+        camera.getViewMatrix(cameraViewMatrix, 0)
 
-        // Get camera matrix and draw.
-        val viewmtx = FloatArray(16)
-        camera.getViewMatrix(viewmtx, 0)
+        visualiseTrackedPoints(frame, cameraViewMatrix, cameraProjectionMatrix)
 
-        visualiseTrackedPoints(frame, viewmtx, projmtx)
+        debugViewDisplayer.append("Planes detected: " + frame.getUpdatedTrackables(Plane::class.java).size)
+        visualisePlanes(camera, cameraProjectionMatrix)
 
         debugViewDisplayer.display()
+    }
+
+    private fun visualisePlanes(camera: Camera, projmtx: FloatArray) {
+        planeRenderer.drawPlanes(session.getAllTrackables(Plane::class.java), camera.displayOrientedPose, projmtx)
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -74,6 +78,7 @@ class NovodaSurfaceViewRenderer(private val context: Activity, private val debug
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         GLES20.glClearColor(0.1f, 0.1f, 0.1f, 1.0f)
         backgroundRenderer.createOnGlThread(context)
+        planeRenderer.createOnGlThread(context, "models/trigrid.png")
         pointCloudRenderer.createOnGlThread(context)
     }
 
