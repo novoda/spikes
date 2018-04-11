@@ -14,15 +14,17 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
     private lateinit var arSession: Session
     private lateinit var renderer: NovodaSurfaceViewRenderer
+    private lateinit var debugViewDisplayer: DebugViewDisplayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        debugViewDisplayer = DebugViewDisplayer(debugTextView)
         setupSurfaceView()
     }
 
     private fun setupSurfaceView() {
-        renderer = NovodaSurfaceViewRenderer(this)
+        renderer = NovodaSurfaceViewRenderer(this, debugViewDisplayer)
         surfaceView.preserveEGLContextOnPause = true
         surfaceView.setEGLContextClientVersion(2)
         surfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0) // Alpha used for plane blending.
