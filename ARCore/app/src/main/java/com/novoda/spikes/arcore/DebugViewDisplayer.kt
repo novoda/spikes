@@ -8,7 +8,6 @@ import android.widget.TextView
 class DebugViewDisplayer(private val textView: TextView) {
     private val interval = 500L
     private val buffer = StringBuilder()
-    private val buf = StringBuilder()
     private val handler = Handler(Looper.getMainLooper())
     private var scheduledMessage = false
 
@@ -16,7 +15,7 @@ class DebugViewDisplayer(private val textView: TextView) {
         if (!scheduledMessage) {
             scheduledMessage = true
             handler.postDelayed({
-                textView.text = buf.toString()
+                textView.text = buffer.toString()
                 scheduledMessage = false
             }, interval)
         }
@@ -24,7 +23,7 @@ class DebugViewDisplayer(private val textView: TextView) {
     }
 
     fun append(message: String) {
-        buf.append(message)
-        buf.append("\n")
+        buffer.append(message)
+        buffer.append("\n")
     }
 }
