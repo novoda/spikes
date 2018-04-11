@@ -11,7 +11,7 @@ class TrackedPointsVisualiser(private val context: Context) {
         pointCloudRenderer.createOnGlThread(context)
     }
 
-    fun visualiseTrackedPoints(model: ARCoreDataModel) {
+    fun drawTrackedPoints(model: ARCoreDataModel) {
         val pointCloud = model.frame.acquirePointCloud()
         pointCloudRenderer.update(pointCloud)
         pointCloudRenderer.draw(model.cameraViewMatrix, model.cameraProjectionMatrix)

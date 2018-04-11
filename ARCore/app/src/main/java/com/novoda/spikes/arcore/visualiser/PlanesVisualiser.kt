@@ -12,7 +12,7 @@ class PlanesVisualiser(private val context: Context) {
         planeRenderer.createOnGlThread(context, "models/trigrid.png")
     }
 
-    fun visualisePlanes(model: ARCoreDataModel) {
+    fun drawPlanes(model: ARCoreDataModel) {
         planeRenderer.drawPlanes(
                 model.session.getAllTrackables(Plane::class.java),
                 model.camera.displayOrientedPose,

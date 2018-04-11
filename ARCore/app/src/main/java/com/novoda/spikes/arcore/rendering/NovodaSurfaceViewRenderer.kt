@@ -20,7 +20,7 @@ class NovodaSurfaceViewRenderer(private val context: Activity,
     private val backgroundRenderer = BackgroundRenderer()
     private val pointsVisualiser = TrackedPointsVisualiser(context)
     private val planesVisualiser = PlanesVisualiser(context)
-    private val anchorsVisualiser = AnchorsVisualiser(context, tapHelper)
+    private val modelsVisualiser = AnchorsVisualiser(context, tapHelper, debugViewDisplayer)
     private val arCoreDataModel = ARCoreDataModel(context)
 
 
@@ -31,11 +31,11 @@ class NovodaSurfaceViewRenderer(private val context: Activity,
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
 
         arCoreDataModel.update(backgroundRenderer.textureId)
-
         backgroundRenderer.draw(arCoreDataModel.frame)
-        pointsVisualiser.visualiseTrackedPoints(arCoreDataModel)
-        planesVisualiser.visualisePlanes(arCoreDataModel)
-        anchorsVisualiser.visualiseAnchors(arCoreDataModel)
+
+        pointsVisualiser.drawTrackedPoints(arCoreDataModel)
+        planesVisualiser.drawPlanes(arCoreDataModel)
+        modelsVisualiser.drawModels(arCoreDataModel)
 
         debugViewDisplayer.display()
     }
@@ -50,7 +50,7 @@ class NovodaSurfaceViewRenderer(private val context: Activity,
         backgroundRenderer.createOnGlThread(context)
         pointsVisualiser.init()
         planesVisualiser.init()
-        anchorsVisualiser.init()
+        modelsVisualiser.init()
     }
 
     fun setSession(session: Session) {
