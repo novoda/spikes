@@ -2,13 +2,17 @@ package com.novoda.spikes.arcore
 
 import android.opengl.GLSurfaceView
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.Toast
 import com.google.ar.core.Session
 import com.google.ar.core.exceptions.CameraNotAvailableException
 import com.novoda.spikes.arcore.google.helper.TapHelper
 import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper
 import com.novoda.spikes.arcore.helper.CameraPermissionHelper
+import com.novoda.spikes.arcore.poly.PolyAsset
+import com.novoda.spikes.arcore.poly.PolyAssetLoader
 import com.novoda.spikes.arcore.rendering.NovodaSurfaceViewRenderer
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -17,11 +21,32 @@ class MainActivity : AppCompatActivity() {
     private lateinit var renderer: NovodaSurfaceViewRenderer
     private lateinit var debugViewDisplayer: DebugViewDisplayer
     private lateinit var tapHelper: TapHelper
+    private lateinit var messageHandler: Handler;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        messageHandler = Handler()
         setupSurfaceView()
+        loadAssetFor("parrot")
+    }
+
+    private fun loadAssetFor(keywords: String) {
+        PolyAssetLoader().loadAssetFor(keywords, object : PolyAssetLoader.AssetListener {
+            override fun onAssetFound(asset: PolyAsset) {
+                showMessage("Loaded model: ${asset.displayName} by ${asset.authorName}")
+                renderer.setModel(asset)
+            }
+
+            override fun onAssetNotFound() {
+                showMessage("Not model found for: $keywords")
+            }
+
+            override fun onError(error: Exception) {
+                Log.e("ARCore", "Failed to load asset for: $keywords", error)
+                showMessage("Failed to load asset for: $keywords ${error.message}")
+            }
+        })
     }
 
     private fun setupSurfaceView() {
@@ -81,7 +106,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showMessage(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        messageHandler.post {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        }
     }
 
 }
