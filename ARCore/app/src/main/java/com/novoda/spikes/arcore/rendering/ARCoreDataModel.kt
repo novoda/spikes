@@ -33,7 +33,6 @@ class ARCoreDataModel(context: Activity) {
         camera.getViewMatrix(cameraViewMatrix, 0)
     }
 
-
     private fun updateSessionIfNeeded(session: Session) {
         if (viewportChanged) {
             session.setDisplayGeometry(display.rotation, viewportWidth, viewportHeight)
