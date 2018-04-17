@@ -4,9 +4,11 @@ import android.app.Activity
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import com.google.ar.core.Session
+import com.novoda.spikes.arcore.ARClassifier
 import com.novoda.spikes.arcore.DebugViewDisplayer
 import com.novoda.spikes.arcore.google.helper.TapHelper
 import com.novoda.spikes.arcore.google.rendering.BackgroundRenderer
+import com.novoda.spikes.arcore.google.tensorflow.ImageClassifierQuantizedMobileNet
 import com.novoda.spikes.arcore.poly.PolyAsset
 import com.novoda.spikes.arcore.visualiser.ModelVisualiser
 import com.novoda.spikes.arcore.visualiser.PlanesVisualiser
@@ -24,6 +26,7 @@ class NovodaSurfaceViewRenderer(private val context: Activity,
     private val planesVisualiser = PlanesVisualiser(context)
     private val modelsVisualiser = ModelVisualiser(context, tapHelper, debugViewDisplayer)
     private val arCoreDataModel = ARCoreDataModel(context)
+    private val classifier = ARClassifier(context, ImageClassifierQuantizedMobileNet(context))
 
 
     override fun onDrawFrame(gl: GL10?) {
@@ -33,6 +36,7 @@ class NovodaSurfaceViewRenderer(private val context: Activity,
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
 
         arCoreDataModel.update(backgroundRenderer.textureId)
+        classifier.handleFrame(backgroundRenderer.textureId)
         backgroundRenderer.draw(arCoreDataModel.frame)
 
         pointsVisualiser.drawTrackedPoints(arCoreDataModel)
@@ -53,6 +57,7 @@ class NovodaSurfaceViewRenderer(private val context: Activity,
         pointsVisualiser.init()
         planesVisualiser.init()
         modelsVisualiser.init()
+        classifier.init()
     }
 
     fun setSession(session: Session) {
@@ -63,4 +68,7 @@ class NovodaSurfaceViewRenderer(private val context: Activity,
         modelsVisualiser.setModel(asset)
     }
 
+    fun close() {
+        classifier.close()
+    }
 }

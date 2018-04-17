@@ -111,4 +111,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        renderer.close()
+        super.onDestroy()
+    }
+
 }
