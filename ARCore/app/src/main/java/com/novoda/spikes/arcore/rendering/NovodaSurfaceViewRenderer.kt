@@ -5,6 +5,7 @@ import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import com.google.ar.core.Session
 import com.novoda.spikes.arcore.DebugViewDisplayer
+import com.novoda.spikes.arcore.SoundPlayer
 import com.novoda.spikes.arcore.google.helper.TapHelper
 import com.novoda.spikes.arcore.google.rendering.BackgroundRenderer
 import com.novoda.spikes.arcore.visualiser.ModelVisualiser
@@ -16,12 +17,13 @@ import javax.microedition.khronos.opengles.GL10
 
 class NovodaSurfaceViewRenderer(private val context: Activity,
                                 private val debugViewDisplayer: DebugViewDisplayer,
-                                tapHelper: TapHelper) : GLSurfaceView.Renderer {
+                                tapHelper: TapHelper,
+                                soundPlayer: SoundPlayer) : GLSurfaceView.Renderer {
 
     private val backgroundRenderer = BackgroundRenderer()
     private val pointsVisualiser = TrackedPointsVisualiser(context)
     private val planesVisualiser = PlanesVisualiser(context)
-    private val modelsVisualiser = ModelVisualiser(context, tapHelper, debugViewDisplayer)
+    private val modelsVisualiser = ModelVisualiser(context, tapHelper, debugViewDisplayer, soundPlayer)
     private val arCoreDataModel = ARCoreDataModel(context)
 
 

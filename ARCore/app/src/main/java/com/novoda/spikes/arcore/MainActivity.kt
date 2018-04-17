@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.google.ar.core.Session
 import com.google.ar.core.exceptions.CameraNotAvailableException
+import com.google.vr.sdk.audio.GvrAudioEngine
 import com.novoda.spikes.arcore.google.helper.TapHelper
 import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper
 import com.novoda.spikes.arcore.helper.CameraPermissionHelper
@@ -17,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var renderer: NovodaSurfaceViewRenderer
     private lateinit var debugViewDisplayer: DebugViewDisplayer
     private lateinit var tapHelper: TapHelper
+    private lateinit var soundPlayer: SoundPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +29,8 @@ class MainActivity : AppCompatActivity() {
     private fun setupSurfaceView() {
         tapHelper = TapHelper(this)
         debugViewDisplayer = DebugViewDisplayer(debugTextView)
-        renderer = NovodaSurfaceViewRenderer(this, debugViewDisplayer, tapHelper)
+        soundPlayer = SoundPlayer(GvrAudioEngine(this, GvrAudioEngine.RenderingMode.BINAURAL_HIGH_QUALITY))
+        renderer = NovodaSurfaceViewRenderer(this, debugViewDisplayer, tapHelper, soundPlayer)
 
         surfaceView.preserveEGLContextOnPause = true
         surfaceView.setEGLContextClientVersion(2)
@@ -35,11 +38,14 @@ class MainActivity : AppCompatActivity() {
         surfaceView.setRenderer(renderer)
         surfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
         surfaceView.setOnTouchListener(tapHelper)
+
+        soundPlayer.init()
     }
 
     override fun onResume() {
         super.onResume()
         checkAREnvironment()
+        soundPlayer.resume()
     }
 
     private fun checkAREnvironment() {
@@ -71,6 +77,7 @@ class MainActivity : AppCompatActivity() {
 
     public override fun onPause() {
         super.onPause()
+        soundPlayer.pause()
         if (this::arSession.isInitialized) {
             // Note that the order matters - GLSurfaceView is paused first so that it does not try
             // to query the session. If Session is paused before GLSurfaceView, GLSurfaceView may

@@ -3,6 +3,7 @@ package com.novoda.spikes.arcore.visualiser
 import android.content.Context
 import com.google.ar.core.*
 import com.novoda.spikes.arcore.DebugViewDisplayer
+import com.novoda.spikes.arcore.SoundPlayer
 import com.novoda.spikes.arcore.google.helper.TapHelper
 import com.novoda.spikes.arcore.google.rendering.ObjectRenderer
 import com.novoda.spikes.arcore.rendering.ARCoreDataModel
@@ -11,7 +12,8 @@ import java.util.*
 
 class ModelVisualiser(private val context: Context,
                       private val tapHelper: TapHelper,
-                      private val debugViewDisplayer: DebugViewDisplayer) {
+                      private val debugViewDisplayer: DebugViewDisplayer,
+                      private val soundPlayer: SoundPlayer) {
 
     private val virtualObjectRenderer = ObjectRenderer()
     private val anchors = ArrayList<Anchor>() // Anchors created from taps used for object placing.
@@ -42,6 +44,7 @@ class ModelVisualiser(private val context: Context,
                         if (anchors.size >= 20) {
                             anchors.get(0).detach()
                             anchors.removeAt(0)
+                            soundPlayer.stopSoundAt(0)
                         }
                         // Adding an Anchor tells ARCore that it should track this position in
                         // space. This anchor is created on the Plane to place the 3D model
@@ -49,12 +52,14 @@ class ModelVisualiser(private val context: Context,
                         val anchor = hit.createAnchor()
                         anchors.add(anchor)
                         debugViewDisplayer.append(String.format("Anchor created: %.2f, %.2f, %.2f", anchor.pose.xAxis[0], anchor.pose.yAxis[0], anchor.pose.zAxis[0]))
+                        soundPlayer.playSound(hit)
                         break
                     }
                 }
             }
         }
 
+        soundPlayer.updateUserPosition(frame.camera.pose)
     }
 
     private fun addVirtualObjectModelToAnchor(frame: Frame, cameraViewMatrix: FloatArray, cameraProjectionMatrix: FloatArray) {
