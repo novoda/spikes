@@ -13,10 +13,21 @@ import com.novoda.spikes.arcore.rendering.NovodaSurfaceViewRenderer
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var arSession: Session
-    private lateinit var renderer: NovodaSurfaceViewRenderer
-    private lateinit var debugViewDisplayer: DebugViewDisplayer
-    private lateinit var tapHelper: TapHelper
+    private val arSession: Session by lazy {
+        Session(this).apply {
+            renderer.setSession(this)
+        }
+    }
+
+    private val renderer: NovodaSurfaceViewRenderer by lazy {
+        NovodaSurfaceViewRenderer(this, debugViewDisplayer, tapHelper)
+    }
+    private val debugViewDisplayer: DebugViewDisplayer by lazy {
+        DebugViewDisplayer(debugTextView)
+    }
+    private val tapHelper: TapHelper by lazy {
+        TapHelper(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,10 +36,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupSurfaceView() {
-        tapHelper = TapHelper(this)
-        debugViewDisplayer = DebugViewDisplayer(debugTextView)
-        renderer = NovodaSurfaceViewRenderer(this, debugViewDisplayer, tapHelper)
-
         surfaceView.preserveEGLContextOnPause = true
         surfaceView.setEGLContextClientVersion(2)
         surfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0) // Alpha used for plane blending.
@@ -53,11 +60,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createOrResumeARSession() {
-        if (this::arSession.isInitialized.not()) {
-            arSession = Session(this)
-            renderer.setSession(arSession)
-        }
-
         // Note that order matters - see the note in onPause(), the reverse applies here.
         try {
             arSession.resume()
@@ -71,13 +73,11 @@ class MainActivity : AppCompatActivity() {
 
     public override fun onPause() {
         super.onPause()
-        if (this::arSession.isInitialized) {
-            // Note that the order matters - GLSurfaceView is paused first so that it does not try
-            // to query the session. If Session is paused before GLSurfaceView, GLSurfaceView may
-            // still call session.update() and get a SessionPausedException.
-            surfaceView.onPause()
-            arSession.pause()
-        }
+        // Note that the order matters - GLSurfaceView is paused first so that it does not try
+        // to query the session. If Session is paused before GLSurfaceView, GLSurfaceView may
+        // still call session.update() and get a SessionPausedException.
+        surfaceView.onPause()
+        arSession.pause()
     }
 
     private fun showMessage(message: String) {
