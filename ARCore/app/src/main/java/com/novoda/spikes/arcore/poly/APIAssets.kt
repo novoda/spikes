@@ -1,6 +1,6 @@
 package com.novoda.spikes.arcore.poly
 
-data class APIAssets(val assets: List<APIAsset>)
+data class APIAssets(val assets: List<APIAsset>?)
 
 data class APIAsset(val name: String, val displayName: String, val authorName: String, val formats: List<APIFormat>)
 

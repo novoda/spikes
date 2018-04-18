@@ -7,7 +7,7 @@ import com.novoda.spikes.arcore.google.rendering.TextureReader
 import com.novoda.spikes.arcore.google.rendering.TextureReaderImage
 import com.novoda.spikes.arcore.google.tensorflow.ImageClassifier
 
-class ARClassifier(private val context: Context, private val classifier: ImageClassifier) {
+class ARClassifier(private val context: Context, private val classifier: ImageClassifier, private val listener: Listener) {
 
     private val textureReader = TextureReader()
     private var gpuDownloadFrameBufferIndex = -1
@@ -28,6 +28,10 @@ class ARClassifier(private val context: Context, private val classifier: ImageCl
 
     fun close() {
         classifier.close()
+    }
+
+    interface Listener {
+        fun onObjectClassified(label: String)
     }
 
     private fun classifyImageFromGPU(textureId: Int) {
@@ -58,8 +62,9 @@ class ARClassifier(private val context: Context, private val classifier: ImageCl
         if (frameModulo == 0) {
             Thread(Runnable {
                 //use image.buffer
-                val res = classifier.classifyFrame(image)
-                Log.e(TAG, "Got result:\n$res")
+                val label = classifier.classifyFrame(image)
+                Log.e(TAG, "Got result:\n$label")
+                listener.onObjectClassified(label)
             }).start()
         }
         frameModulo = (frameModulo + 1) % 5

@@ -6,10 +6,10 @@ import android.opengl.GLSurfaceView
 import com.google.ar.core.Session
 import com.novoda.spikes.arcore.ARClassifier
 import com.novoda.spikes.arcore.DebugViewDisplayer
+import com.novoda.spikes.arcore.ModelCollection
 import com.novoda.spikes.arcore.google.helper.TapHelper
 import com.novoda.spikes.arcore.google.rendering.BackgroundRenderer
 import com.novoda.spikes.arcore.google.tensorflow.ImageClassifierQuantizedMobileNet
-import com.novoda.spikes.arcore.poly.PolyAsset
 import com.novoda.spikes.arcore.visualiser.ModelVisualiser
 import com.novoda.spikes.arcore.visualiser.PlanesVisualiser
 import com.novoda.spikes.arcore.visualiser.TrackedPointsVisualiser
@@ -19,15 +19,15 @@ import javax.microedition.khronos.opengles.GL10
 
 class NovodaSurfaceViewRenderer(private val context: Activity,
                                 private val debugViewDisplayer: DebugViewDisplayer,
+                                private val modelCollection: ModelCollection,
                                 tapHelper: TapHelper) : GLSurfaceView.Renderer {
 
     private val backgroundRenderer = BackgroundRenderer()
     private val pointsVisualiser = TrackedPointsVisualiser(context)
     private val planesVisualiser = PlanesVisualiser(context)
-    private val modelsVisualiser = ModelVisualiser(context, tapHelper, debugViewDisplayer)
+    private val modelsVisualiser = ModelVisualiser(context, modelCollection, tapHelper, debugViewDisplayer)
     private val arCoreDataModel = ARCoreDataModel(context)
-    private val classifier = ARClassifier(context, ImageClassifierQuantizedMobileNet(context))
-
+    private val classifier = ARClassifier(context, ImageClassifierQuantizedMobileNet(context), modelCollection)
 
     override fun onDrawFrame(gl: GL10?) {
         if (!arCoreDataModel.isSessionReady()) {
@@ -62,10 +62,6 @@ class NovodaSurfaceViewRenderer(private val context: Activity,
 
     fun setSession(session: Session) {
         arCoreDataModel.session = session
-    }
-
-    fun setModel(asset: PolyAsset) {
-        modelsVisualiser.setModel(asset)
     }
 
     fun close() {
