@@ -12,6 +12,7 @@ import com.google.ar.core.exceptions.CameraNotAvailableException
 import com.novoda.spikes.arcore.google.helper.TapHelper
 import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper
 import com.novoda.spikes.arcore.helper.CameraPermissionHelper
+import com.novoda.spikes.arcore.poly.PolyAsset
 import com.novoda.spikes.arcore.poly.PolyAssetLoader
 import com.novoda.spikes.arcore.rendering.NovodaSurfaceViewRenderer
 import kotlinx.android.synthetic.main.activity_main.*
@@ -37,13 +38,13 @@ class MainActivity : AppCompatActivity(), MessageDisplayer, ModelsDisplayer, Mod
         modelsListView.adapter = modelsAdapter
     }
 
-    override fun displayModels(models: List<String>) {
+    override fun displayModels(models: List<PolyAsset>) {
         mainThreadHandler.post {
             modelsAdapter.setModels(models)
         }
     }
 
-    override fun onModelClicked(model: String) {
+    override fun onModelClicked(model: PolyAsset) {
         modelCollection.selectModel(model)
     }
 

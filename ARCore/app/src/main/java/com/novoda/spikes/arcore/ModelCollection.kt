@@ -11,9 +11,9 @@ class ModelCollection(
         private val modelsDisplayer: ModelsDisplayer
 ) : ARClassifier.Listener {
 
-    private val models = HashMap<String, PolyAssetRenderer>()
+    private val models = HashMap<PolyAsset, PolyAssetRenderer>()
 
-    private val modelLabels : List<String>
+    private val assets : List<PolyAsset>
         get() = models.keys.toList()
     
     var currentModel: PolyAssetRenderer? = null
@@ -21,13 +21,15 @@ class ModelCollection(
     private var modelModulo = 0
 
     override fun onObjectClassified(label: String) {
-        if (!models.containsKey(label) && modelModulo == 0) { //We start with a basic modulo, we could improve with a reliability based load
+        if (wasNotAlreadySearchedFor(label) && modelModulo == 0) { //We start with a basic modulo, we could improve with a reliability based load
             loadAssetFor(label)
         }
         modelModulo = (modelModulo + 1) % 30
     }
 
-    fun selectModel(model: String) {
+    private fun wasNotAlreadySearchedFor(label: String) = models.keys.none { it.representsLabel == label }
+
+    fun selectModel(model: PolyAsset) {
         currentModel = models[model]
     }
 
@@ -35,8 +37,8 @@ class ModelCollection(
         assetLoader.loadAssetFor(label, object : PolyAssetLoader.AssetListener {
             override fun onAssetFound(asset: PolyAsset) {
                 messageDisplayer.showMessage("Loaded model: ${asset.displayName} by ${asset.authorName}")
-                models[label] = PolyAssetRenderer(asset)
-                modelsDisplayer.displayModels(modelLabels)
+                models[asset] = PolyAssetRenderer(asset)
+                modelsDisplayer.displayModels(assets)
             }
 
             override fun onAssetNotFound() {
