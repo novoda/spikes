@@ -51,10 +51,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkAREnvironment() {
         ARCoreDependenciesHelper.isARCoreIsInstalled(this).apply {
-            if (isARCoreInstalled && CameraPermissionHelper.isCameraPermissionGranted(this@MainActivity)) {
-                createOrResumeARSession()
-            } else {
+            if (this is ARCoreDependenciesHelper.Result.Failure) {
                 showMessage(message)
+            } else if (CameraPermissionHelper.isCameraPermissionGranted(this@MainActivity)) {
+                createOrResumeARSession()
             }
         }
     }
