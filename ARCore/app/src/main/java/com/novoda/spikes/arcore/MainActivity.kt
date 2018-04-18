@@ -4,6 +4,8 @@ import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.view.LayoutInflater
 import android.widget.Toast
 import com.google.ar.core.Session
 import com.google.ar.core.exceptions.CameraNotAvailableException
@@ -14,21 +16,35 @@ import com.novoda.spikes.arcore.poly.PolyAssetLoader
 import com.novoda.spikes.arcore.rendering.NovodaSurfaceViewRenderer
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), MessageDisplayer {
+class MainActivity : AppCompatActivity(), MessageDisplayer, ModelsDisplayer, ModelsAdapter.Listener {
 
-    private val modelCollection = ModelCollection(PolyAssetLoader(), this)
+    private val modelCollection = ModelCollection(PolyAssetLoader(), this, this)
 
     private lateinit var arSession: Session
     private lateinit var renderer: NovodaSurfaceViewRenderer
     private lateinit var debugViewDisplayer: DebugViewDisplayer
     private lateinit var tapHelper: TapHelper
-    private lateinit var messageHandler: Handler;
+    private lateinit var mainThreadHandler: Handler;
+    private lateinit var modelsAdapter: ModelsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        messageHandler = Handler()
+        mainThreadHandler = Handler()
         setupSurfaceView()
+        modelsAdapter = ModelsAdapter(LayoutInflater.from(this), this)
+        modelsListView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        modelsListView.adapter = modelsAdapter
+    }
+
+    override fun displayModels(models: List<String>) {
+        mainThreadHandler.post {
+            modelsAdapter.setModels(models)
+        }
+    }
+
+    override fun onModelClicked(model: String) {
+        modelCollection.selectModel(model)
     }
 
     private fun setupSurfaceView() {
@@ -88,7 +104,7 @@ class MainActivity : AppCompatActivity(), MessageDisplayer {
     }
 
     override fun showMessage(message: String) {
-        messageHandler.post {
+        mainThreadHandler.post {
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }
     }
