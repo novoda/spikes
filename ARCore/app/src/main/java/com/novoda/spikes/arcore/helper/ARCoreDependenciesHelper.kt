@@ -20,7 +20,7 @@ object ARCoreDependenciesHelper {
         } catch (exception: Exception) {
             return Failure(messageFromExceptionType(exception))
         }
-        return Success()
+        return Result.Success
     }
 
     private fun messageFromExceptionType(exception: Exception): String {
@@ -35,7 +35,7 @@ object ARCoreDependenciesHelper {
     }
 
     sealed class Result {
-        class Success : Result()
+        object Success : Result()
         data class Failure(val message: String) : Result()
     }
 
