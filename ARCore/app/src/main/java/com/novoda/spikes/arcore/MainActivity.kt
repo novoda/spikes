@@ -8,17 +8,14 @@ import com.google.ar.core.Session
 import com.google.ar.core.exceptions.CameraNotAvailableException
 import com.novoda.spikes.arcore.google.helper.TapHelper
 import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper
+import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper.Result.Success
+import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper.Result.Failure
 import com.novoda.spikes.arcore.helper.CameraPermissionHelper
 import com.novoda.spikes.arcore.rendering.NovodaSurfaceViewRenderer
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private val arSession: Session by lazy {
-        Session(this).apply {
-            renderer.setSession(this)
-        }
-    }
-
+    private var session: Session? = null
     private val renderer: NovodaSurfaceViewRenderer by lazy {
         NovodaSurfaceViewRenderer(this, debugViewDisplayer, tapHelper)
     }
@@ -51,18 +48,23 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkAREnvironment() {
         ARCoreDependenciesHelper.isARCoreIsInstalled(this).apply {
-            if (this is ARCoreDependenciesHelper.Result.Failure) {
-                showMessage(message)
-            } else if (CameraPermissionHelper.isCameraPermissionGranted(this@MainActivity)) {
-                createOrResumeARSession()
+            when {
+                this is Failure -> showMessage(message)
+                this === Success && CameraPermissionHelper.isCameraPermissionGranted(this@MainActivity) -> createOrResumeARSession()
             }
         }
     }
 
     private fun createOrResumeARSession() {
+        if (session == null) {
+            session = Session(this).apply {
+                renderer.setSession(this)
+            }
+
+        }
         // Note that order matters - see the note in onPause(), the reverse applies here.
         try {
-            arSession.resume()
+            session?.resume()
         } catch (e: CameraNotAvailableException) {
             // In some cases the camera may be given to a different app instead. Recreate the session at the next iteration.
             showMessage("Camera not available. Please restart the app.")
@@ -73,11 +75,13 @@ class MainActivity : AppCompatActivity() {
 
     public override fun onPause() {
         super.onPause()
-        // Note that the order matters - GLSurfaceView is paused first so that it does not try
-        // to query the session. If Session is paused before GLSurfaceView, GLSurfaceView may
-        // still call session.update() and get a SessionPausedException.
-        surfaceView.onPause()
-        arSession.pause()
+        if (session != null) {
+            // Note that the order matters - GLSurfaceView is paused first so that it does not try
+            // to query the session. If Session is paused before GLSurfaceView, GLSurfaceView may
+            // still call session.update() and get a SessionPausedException.
+            surfaceView.onPause()
+            session?.pause()
+        }
     }
 
     private fun showMessage(message: String) {
