@@ -1,12 +1,17 @@
 package com.novoda.spikes.arcore.visualiser
 
 import android.content.Context
-import com.google.ar.core.*
+import com.google.ar.core.Anchor
+import com.google.ar.core.Camera
+import com.google.ar.core.Frame
+import com.google.ar.core.Plane
+import com.google.ar.core.Point
+import com.google.ar.core.TrackingState
 import com.novoda.spikes.arcore.DebugViewDisplayer
 import com.novoda.spikes.arcore.google.helper.TapHelper
 import com.novoda.spikes.arcore.google.rendering.ObjectRenderer
 import com.novoda.spikes.arcore.rendering.ARCoreDataModel
-import java.util.*
+import java.util.ArrayList
 
 
 class ModelVisualiser(private val context: Context,
@@ -30,8 +35,8 @@ class ModelVisualiser(private val context: Context,
     private fun createTouchAnchors(camera: Camera, frame: Frame) {
         tapHelper.poll()?.apply {
             if (camera.trackingState == TrackingState.TRACKING) {
-                for (hit in frame.hitTest(this)) {
                     // Check if any plane was hit, and if it was hit inside the plane polygon
+                for (hit in frame.hitTest(this)) {
                     val trackable = hit.trackable
                     // Creates an anchor if a plane or an oriented point was hit.
                     if (trackable is Plane && trackable.isPoseInPolygon(hit.hitPose) ||
