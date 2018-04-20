@@ -1,13 +1,18 @@
 package com.novoda.spikes.arcore.visualiser
 
 import android.content.Context
-import com.google.ar.core.*
+import com.google.ar.core.Anchor
+import com.google.ar.core.Camera
+import com.google.ar.core.Frame
+import com.google.ar.core.Plane
+import com.google.ar.core.Point
+import com.google.ar.core.TrackingState
 import com.novoda.spikes.arcore.DebugViewDisplayer
 import com.novoda.spikes.arcore.SoundPlayer
 import com.novoda.spikes.arcore.google.helper.TapHelper
 import com.novoda.spikes.arcore.google.rendering.ObjectRenderer
 import com.novoda.spikes.arcore.rendering.ARCoreDataModel
-import java.util.*
+import java.util.ArrayList
 
 
 class ModelVisualiser(private val context: Context,
@@ -42,9 +47,10 @@ class ModelVisualiser(private val context: Context,
                         // Cap the number of objects created. This avoids overloading both the
                         // rendering system and ARCore.
                         if (anchors.size >= 20) {
-                            anchors.get(0).detach()
+                            val anchor = anchors[0]
+                            anchor.detach()
                             anchors.removeAt(0)
-                            soundPlayer.stopSoundAt(0)
+                            soundPlayer.stopSound(anchor)
                         }
                         // Adding an Anchor tells ARCore that it should track this position in
                         // space. This anchor is created on the Plane to place the 3D model
@@ -52,7 +58,7 @@ class ModelVisualiser(private val context: Context,
                         val anchor = hit.createAnchor()
                         anchors.add(anchor)
                         debugViewDisplayer.append(String.format("Anchor created: %.2f, %.2f, %.2f", anchor.pose.xAxis[0], anchor.pose.yAxis[0], anchor.pose.zAxis[0]))
-                        soundPlayer.playSound(hit)
+                        soundPlayer.playSound(anchor)
                         break
                     }
                 }
@@ -82,6 +88,8 @@ class ModelVisualiser(private val context: Context,
             // Update and draw the model and its shadow.
             virtualObjectRenderer.updateModelMatrix(anchorMatrix, scaleFactor)
             virtualObjectRenderer.draw(cameraViewMatrix, cameraProjectionMatrix, colorCorrectionRgba)
+            // Update the audio source position since the anchor might have been refined
+            soundPlayer.updateSoundPosition(anchor)
         }
     }
 

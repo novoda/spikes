@@ -1,6 +1,6 @@
 package com.novoda.spikes.arcore
 
-import com.google.ar.core.HitResult
+import com.google.ar.core.Anchor
 import com.google.ar.core.Pose
 import com.google.vr.sdk.audio.GvrAudioEngine
 
@@ -9,7 +9,7 @@ private const val SOUND_FILE = "sounds/sams_song.wav"
 // From: http://www.hasper.info/combining-arcore-tracking-and-cardboard-spatial-audio/
 class SoundPlayer(private val audioEngine: GvrAudioEngine) {
 
-    private val soundIds = ArrayList<Int>()
+    private val anchoredSounds = HashMap<Anchor, Int>()
 
     fun init() {
         Thread(
@@ -30,21 +30,23 @@ class SoundPlayer(private val audioEngine: GvrAudioEngine) {
         audioEngine.pause()
     }
 
-    fun playSound(hit: HitResult) {
+    fun playSound(anchor: Anchor) {
         val soundId = audioEngine.createSoundObject(SOUND_FILE)
         val translation = FloatArray(3)
-        hit.hitPose.getTranslation(translation, 0)
+        anchor.pose.getTranslation(translation, 0)
         audioEngine.setSoundObjectPosition(soundId, translation[0], translation[1], translation[2])
         audioEngine.playSound(soundId, true)
         // Set a logarithmic rolloff model and mute after four meters to limit audio chaos
         audioEngine.setSoundObjectDistanceRolloffModel(soundId, GvrAudioEngine.DistanceRolloffModel.LOGARITHMIC, 0f, 4f)
-        soundIds.add(soundId)
+        anchoredSounds.put(anchor, soundId)
     }
 
-    fun stopSoundAt(position: Int) {
-        val soundId = soundIds[position]
-        audioEngine.stopSound(soundId)
-        soundIds.remove(soundId)
+    fun stopSound(anchor: Anchor) {
+        if (anchoredSounds.containsKey(anchor)) {
+            val soundId = anchoredSounds[anchor]
+            audioEngine.stopSound(soundId!!)
+            anchoredSounds.remove(anchor)
+        }
     }
 
     fun updateUserPosition(pose: Pose) {
@@ -58,6 +60,14 @@ class SoundPlayer(private val audioEngine: GvrAudioEngine) {
         audioEngine.setHeadPosition(translation[0], translation[1], translation[2])
         audioEngine.setHeadRotation(rotation[0], rotation[1], rotation[2], rotation[3])
         audioEngine.update()
+    }
+
+    fun updateSoundPosition(anchor: Anchor) {
+        if (anchoredSounds.containsKey(anchor)) {
+            val translation = FloatArray(3)
+            anchor.pose.getTranslation(translation, 0)
+            audioEngine.setSoundObjectPosition(anchoredSounds[anchor]!!, translation[0], translation[1], translation[2])
+        }
     }
 
 }
