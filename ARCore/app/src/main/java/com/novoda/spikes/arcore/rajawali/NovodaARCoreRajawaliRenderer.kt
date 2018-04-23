@@ -10,24 +10,28 @@ import com.novoda.spikes.arcore.DebugViewDisplayer
 import com.novoda.spikes.arcore.R
 import com.novoda.spikes.arcore.google.helper.DisplayRotationHelper
 import com.novoda.spikes.arcore.google.helper.TapHelper
-import com.novoda.spikes.arcore.visualiser.ModelVisualiserRajawali
+import com.novoda.spikes.arcore.google.rendering.PlaneRenderer
 import org.rajawali3d.Object3D
 import org.rajawali3d.loader.LoaderOBJ
 import org.rajawali3d.materials.Material
 import org.rajawali3d.materials.textures.StreamingTexture
 import org.rajawali3d.materials.textures.Texture
 import org.rajawali3d.math.Matrix4
+import org.rajawali3d.math.vector.Vector3
 import org.rajawali3d.renderer.Renderer
+import org.rajawali3d.util.ObjectColorPicker
+import org.rajawali3d.util.OnObjectPickedListener
 import javax.microedition.khronos.opengles.GL10
 
 
 open class NovodaARCoreRajawaliRenderer(context: Context,
                                         private val tapHelper: TapHelper,
                                         private val debugViewDisplayer: DebugViewDisplayer,
-                                        private val session: Session) : Renderer(context) {
+                                        private val session: Session) : Renderer(context), OnObjectPickedListener {
 
 
-    private val modelVisualiserRajawali = ModelVisualiserRajawali(this, tapHelper, debugViewDisplayer)
+    private val planeRenderer = PlaneRenderer()
+
     private lateinit var droid: Object3D
     private lateinit var backgroundTexture: StreamingTexture
     private val displayRotationHelper = DisplayRotationHelper(context)
@@ -37,6 +41,12 @@ open class NovodaARCoreRajawaliRenderer(context: Context,
     private val viewMatrixValues = FloatArray(16)
     private val projectionMatrix = Matrix4()
     private val viewMatrix = Matrix4()
+    private val allPlanes = ArrayList<Plane>()
+
+    val mPicker = ObjectColorPicker(this).apply {
+        setOnObjectPickedListener(this@NovodaARCoreRajawaliRenderer);
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -70,13 +80,13 @@ open class NovodaARCoreRajawaliRenderer(context: Context,
     override fun initScene() {
 
         // Create camera background
-        val plane = CameraBackground()
+        val cameraBackground = CameraBackground()
 
         // Keep texture to field for later update
-        backgroundTexture = plane.texture
+        backgroundTexture = cameraBackground.texture
 
         // Add to scene
-        currentScene.addChild(plane)
+        currentScene.addChild(cameraBackground)
 
         //  Spawn droid object in front of you
         val objParser = LoaderOBJ(this, R.raw.andy)
@@ -88,6 +98,11 @@ open class NovodaARCoreRajawaliRenderer(context: Context,
             color = Color.BLACK
         }
         currentScene.addChild(droid)
+
+
+        planeRenderer.createOnGlThread(context, "models/trigrid.png")
+
+
     }
 
     override fun onRender(ellapsedRealtime: Long, deltaTime: Double) {
@@ -113,7 +128,60 @@ open class NovodaARCoreRajawaliRenderer(context: Context,
             onTap(frame, tap)
         }
 
+
+        val cameraProjectionMatrix = FloatArray(16)
+        camera.getProjectionMatrix(cameraProjectionMatrix, 0, 0.1f, 100.0f)
+
+        planeRenderer.drawPlanes(
+                session.getAllTrackables(Plane::class.java),
+                camera.displayOrientedPose,
+                cameraProjectionMatrix
+        )
+
+
         // Update projection matrix.
+        updateCameraView(camera)
+
+
+        debugViewDisplayer.display()
+    }
+
+
+    private fun onTap(frame: Frame, tap: MotionEvent) {
+        for (hit in frame.hitTest(tap)) {
+
+            debugViewDisplayer.append("Hit")
+            // Check if any plane was hit, and if it was hit inside the plane polygon
+            val trackable = hit.trackable
+
+
+            // Creates an anchor if a plane or an oriented point was hit.
+            if (trackable is Plane && trackable.isPoseInPolygon(hit.hitPose) || trackable is Point && trackable.orientationMode == Point.OrientationMode.ESTIMATED_SURFACE_NORMAL) {
+
+                debugViewDisplayer.append("\t... on plane")
+
+
+                // Create anchor at touched place
+                val anchor = hit.createAnchor()
+//                val rot = FloatArray(4)
+//                anchor.pose.getRotationQuaternion(rot, 0)
+                val translation = FloatArray(3)
+                anchor.pose.getTranslation(translation, 0)
+
+
+                // Spawn new droid object at anchor position
+                val newDroid = droid.clone().apply {
+                    setPosition(translation[0].toDouble(), translation[1].toDouble(), translation[2].toDouble())
+                }
+                currentScene.addChild(newDroid)
+                mPicker.registerObject(newDroid)
+
+                break
+            }
+        }
+    }
+
+    private fun updateCameraView(camera: Camera) {
         camera.getProjectionMatrix(projectionMatrixValues, 0, 0.1f, 100.0f)
         projectionMatrix.setAll(projectionMatrixValues)
 
@@ -125,38 +193,25 @@ open class NovodaARCoreRajawaliRenderer(context: Context,
 
         currentScene.camera.setRotation(viewMatrix)
         currentScene.camera.position = viewMatrix.translation
-
-        debugViewDisplayer.display()
-    }
-
-    private fun onTap(frame: Frame, tap: MotionEvent) {
-        for (hit in frame.hitTest(tap)) {
-
-            debugViewDisplayer.append("Hit")
-            // Check if any plane was hit, and if it was hit inside the plane polygon
-            val trackable = hit.trackable
-
-            // Creates an anchor if a plane or an oriented point was hit.
-            if (trackable is Plane && trackable.isPoseInPolygon(hit.hitPose) || trackable is Point && trackable.orientationMode == Point.OrientationMode.ESTIMATED_SURFACE_NORMAL) {
-
-                debugViewDisplayer.append("\t... on plane")
-                // Create anchor at touched place
-                val anchor = hit.createAnchor()
-//                val rot = FloatArray(4)
-//                anchor.pose.getRotationQuaternion(rot, 0)
-                val translation = FloatArray(3)
-                anchor.pose.getTranslation(translation, 0)
-
-                // Spawn new droid object at anchor position
-                val newDroid = droid.clone().apply {
-                    setPosition(translation[0].toDouble(), translation[1].toDouble(), translation[2].toDouble())
-                }
-                currentScene.addChild(newDroid)
-                break
-            }
-        }
     }
 
     override fun onOffsetsChanged(xOffset: Float, yOffset: Float, xOffsetStep: Float, yOffsetStep: Float, xPixelOffset: Int, yPixelOffset: Int) {}
-    override fun onTouchEvent(event: MotionEvent?) {}
+    override fun onTouchEvent(event: MotionEvent?) {
+
+        if (event?.action == MotionEvent.ACTION_DOWN) {
+            mPicker.getObjectAt(event.x, event.y)
+        }
+
+
+    }
+
+    override fun onNoObjectPicked() {
+
+
+    }
+
+    override fun onObjectPicked(model: Object3D) {
+
+        model.rotate(Vector3.Axis.Y, 4.0)
+    }
 }

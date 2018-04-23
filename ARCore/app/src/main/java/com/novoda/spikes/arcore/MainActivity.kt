@@ -2,6 +2,7 @@ package com.novoda.spikes.arcore
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.MotionEvent
 import android.widget.Toast
 import com.google.ar.core.Session
 import com.novoda.spikes.arcore.google.helper.TapHelper
@@ -74,6 +75,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun showMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        render.onTouchEvent(event)
+        return super.onTouchEvent(event)
     }
 
 }
