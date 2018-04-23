@@ -1,24 +1,20 @@
 package com.novoda.spikes.arcore
 
-import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.google.ar.core.Session
-import com.google.ar.core.exceptions.CameraNotAvailableException
 import com.novoda.spikes.arcore.google.helper.TapHelper
 import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper
-import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper.Result.Success
 import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper.Result.Failure
+import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper.Result.Success
 import com.novoda.spikes.arcore.helper.CameraPermissionHelper
-import com.novoda.spikes.arcore.rendering.NovodaSurfaceViewRenderer
+import com.novoda.spikes.arcore.rajawali.NovodaARCoreRajawaliRenderer
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private var session: Session? = null
-    private val renderer: NovodaSurfaceViewRenderer by lazy {
-        NovodaSurfaceViewRenderer(this, debugViewDisplayer, tapHelper)
-    }
+    private lateinit var render: NovodaARCoreRajawaliRenderer
     private val debugViewDisplayer: DebugViewDisplayer by lazy {
         DebugViewDisplayer(debugTextView)
     }
@@ -33,11 +29,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupSurfaceView() {
-        surfaceView.preserveEGLContextOnPause = true
-        surfaceView.setEGLContextClientVersion(2)
-        surfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0) // Alpha used for plane blending.
-        surfaceView.setRenderer(renderer)
-        surfaceView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+//        surfaceView.setSurfaceRenderer(renderer)
         surfaceView.setOnTouchListener(tapHelper)
     }
 
@@ -55,21 +47,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun createOrResumeARSession() {
         if (session == null) {
             session = Session(this).apply {
-                renderer.setSession(this)
+                render = NovodaARCoreRajawaliRenderer(this@MainActivity, tapHelper, debugViewDisplayer, this)
+                surfaceView.setSurfaceRenderer(render)
+
             }
 
         }
-        // Note that order matters - see the note in onPause(), the reverse applies here.
-        try {
-            session?.resume()
-        } catch (e: CameraNotAvailableException) {
-            // In some cases the camera may be given to a different app instead. Recreate the session at the next iteration.
-            showMessage("Camera not available. Please restart the app.")
-            return
-        }
+        render?.onResume()
         surfaceView.onResume()
     }
 
@@ -80,7 +68,7 @@ class MainActivity : AppCompatActivity() {
             // to query the session. If Session is paused before GLSurfaceView, GLSurfaceView may
             // still call session.update() and get a SessionPausedException.
             surfaceView.onPause()
-            session?.pause()
+            render.onPause()
         }
     }
 

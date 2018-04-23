@@ -1,13 +1,13 @@
 package com.novoda.spikes.arcore.rendering
 
-import android.app.Activity
+import android.content.Context
 import android.view.Display
 import android.view.WindowManager
 import com.google.ar.core.Camera
 import com.google.ar.core.Frame
 import com.google.ar.core.Session
 
-class ARCoreDataModel(context: Activity) {
+class ARCoreDataModel(context: Context) {
     private val display: Display = context.getSystemService(WindowManager::class.java).defaultDisplay
     private var viewportChanged: Boolean = true
     private var viewportWidth: Int = 0
@@ -15,8 +15,8 @@ class ARCoreDataModel(context: Activity) {
     val cameraViewMatrix = FloatArray(16)
     val cameraProjectionMatrix = FloatArray(16)
     lateinit var session: Session
-    lateinit var frame : Frame
-    lateinit var camera : Camera
+    lateinit var frame: Frame
+    lateinit var camera: Camera
 
     fun isSessionReady(): Boolean {
         return this::session.isInitialized
