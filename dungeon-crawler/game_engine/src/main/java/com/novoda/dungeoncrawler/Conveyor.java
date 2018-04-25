@@ -2,11 +2,11 @@ package com.novoda.dungeoncrawler;
 
 class Conveyor {
     private boolean alive;
-    public int direction;
+    public Direction direction;
     public int startPoint;
     public int endPoint;
 
-    void spawn(int startPoint, int endPoint, int direction) {
+    void spawn(int startPoint, int endPoint, Direction direction) {
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.direction = direction;
@@ -19,5 +19,9 @@ class Conveyor {
 
     boolean isAlive() {
         return alive;
+    }
+
+    boolean contains(int point) {
+        return startPoint < point && point < endPoint;
     }
 }

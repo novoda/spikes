@@ -3,8 +3,8 @@ package com.novoda.dungeoncrawler;
 import java.util.Random;
 
 class Particle {
-    public int position;
-    public int power;
+    int position;
+    int power;
     private boolean alive;
     private int sp;
     private int life;
