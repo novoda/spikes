@@ -4,15 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.xrigau.driver.ws2801.Ws2801;
-
-import java.io.IOException;
 import java.util.Random;
 
 public class MainActivity extends Activity {
 
     // LED setup
-    private static final int NUM_LEDS = 300;//475;
+    private static final int NUM_LEDS = 25;//475;
     private static final int DATA_PIN = 3;
     private static final int CLOCK_PIN = 4;
     private static final int LED_COLOR_ORDER = 0;//BGR;//GBR
@@ -20,7 +17,7 @@ public class MainActivity extends Activity {
     private static final int BEND_POINT = 550;   // 0/1000 point at which the LED strip goes up the wall // TODO not used
 
     private static final String SPI_DEVICE_NAME = "SPI0.0";
-    private static final Ws2801.Mode WS2801_MODE = Ws2801.Mode.RBG;
+//    private static final Ws2801.Mode WS2801_MODE = Ws2801.Mode.RBG;
 
     // GAME
     private static final int MAX_VOLUME = 10;
@@ -28,12 +25,11 @@ public class MainActivity extends Activity {
     // PLAYER
     private static final Display.CRGB PLAYER_COLOR = Display.CRGB.GREEN;
 
-    // POOLS
     private static final int[] lifeLEDs = new int[]{52, 50, 40};
 
     private ArduinoLoop arduinoLoop = new ArduinoLoop();
     private Display ledStrip;
-    private Ws2801 ws2801;
+//    private Ws2801 ws2801;
     private GameEngine gameEngine;
 
     @Override
@@ -60,11 +56,9 @@ public class MainActivity extends Activity {
 //         Fast LED
 //        ledStrip = new FastLED(NUM_LEDS, LED_COLOR_ORDER, DATA_PIN, CLOCK_PIN);
 //        ledStrip = new LogcatDisplay(NUM_LEDS);
-        ws2801 = createWs2801();
-        ledStrip = new Ws2801Display(ws2801, NUM_LEDS);
-//        ledStrip = new AndroidDeviceDisplay(this, findViewById(R.id.scrollView), NUM_LEDS);
-//        ledStrip.setBrightness(BRIGHTNESS);
-//        ledStrip.setDither(1);
+//        ws2801 = createWs2801();
+//        ledStrip = new Ws2801Display(ws2801, NUM_LEDS);
+        ledStrip = new AndroidDeviceDisplay(this, findViewById(R.id.scrollView), NUM_LEDS);
 
         // Life LEDs
         for (int i = 0; i < 3; i++) {
@@ -81,13 +75,13 @@ public class MainActivity extends Activity {
         arduinoLoop.start(gameEngine::loop);
     }
 
-    private Ws2801 createWs2801() {
-        try {
-            return Ws2801.create(SPI_DEVICE_NAME, WS2801_MODE);
-        } catch (IOException e) {
-            throw new IllegalStateException("Unable to create the Ws2801 driver", e);
-        }
-    }
+//    private Ws2801 createWs2801() {
+//        try {
+//            return Ws2801.create(SPI_DEVICE_NAME, WS2801_MODE);
+//        } catch (IOException e) {
+//            throw new IllegalStateException("Unable to create the Ws2801 driver", e);
+//        }
+//    }
 
     private void loadLevel() {
         Log.d("TUT", "Game Starting");
@@ -328,13 +322,13 @@ public class MainActivity extends Activity {
     }
 
     private void safeCloseWs2801() {
-        if (ws2801 != null) {
-            try {
-                ws2801.close();
-            } catch (IOException e) {
-//                 ignore
-            }
-        }
+//        if (ws2801 != null) {
+//            try {
+//                ws2801.close();
+//            } catch (IOException e) {
+//                 // ignore
+//            }
+//        }
     }
 
     private void screenSaverTick(long frameTime) {
