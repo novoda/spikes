@@ -6,7 +6,6 @@ import android.view.WindowManager
 import com.google.ar.core.Camera
 import com.google.ar.core.Frame
 import com.google.ar.core.Session
-import com.google.ar.core.TrackingState
 import org.rajawali3d.math.Matrix4
 import org.rajawali3d.scene.Scene
 
@@ -25,24 +24,16 @@ class ARCoreDataModelRajawali(context: Context) {
     lateinit var frame: Frame
     lateinit var camera: Camera
 
-    // Notify ARCore session that the view size changed so that the perspective matrix and
-    // the video background can be properly adjusted.
-    fun update(session: Session, textureId: Int, currentScene: Scene) {
+
+    fun update(session: Session, currentScene: Scene, textureId: Int) {
         updateSessionIfNeeded(session)
-
         session.setCameraTextureName(textureId)
-
         frame = session.update()
         camera = frame.camera
 
-        // If not tracking, don't draw 3d objects.
-        if (camera.trackingState == TrackingState.PAUSED) {
-            return
-        }
 
-        val cameraProjectionMatrix = FloatArray(16)
         camera.getProjectionMatrix(cameraProjectionMatrix, 0, 0.1f, 100.0f)
-
+        // Update projection matrix.
         updateCameraView(camera, currentScene)
     }
 
@@ -65,5 +56,10 @@ class ARCoreDataModelRajawali(context: Context) {
             session.setDisplayGeometry(display.rotation, viewportWidth, viewportHeight)
             viewportChanged = false
         }
+    }
+
+    fun onSurfaceChanged(width: Int, height: Int) {
+        viewportWidth = width
+        viewportHeight = height
     }
 }

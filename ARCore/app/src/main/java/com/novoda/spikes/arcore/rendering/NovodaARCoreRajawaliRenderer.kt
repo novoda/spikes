@@ -3,10 +3,7 @@ package com.novoda.spikes.arcore.rendering
 import android.content.Context
 import android.util.Log
 import android.view.MotionEvent
-import com.google.ar.core.Camera
-import com.google.ar.core.Plane
-import com.google.ar.core.Session
-import com.google.ar.core.TrackingState
+import com.google.ar.core.*
 import com.google.ar.core.exceptions.CameraNotAvailableException
 import com.novoda.spikes.arcore.DebugViewDisplayer
 import com.novoda.spikes.arcore.google.helper.DisplayRotationHelper
@@ -17,12 +14,11 @@ import com.novoda.spikes.arcore.visualiser.ModelVisualiserRajawali
 import org.rajawali3d.materials.textures.StreamingTexture
 import org.rajawali3d.math.Matrix4
 import org.rajawali3d.renderer.Renderer
-import org.rajawali3d.scene.Scene
 import javax.microedition.khronos.opengles.GL10
 
 
 class NovodaARCoreRajawaliRenderer(context: Context,
-                                   private val tapHelper: TapHelper,
+                                   tapHelper: TapHelper,
                                    private val debugViewDisplayer: DebugViewDisplayer,
                                    private val session: Session) : Renderer(context) {
 
@@ -34,12 +30,6 @@ class NovodaARCoreRajawaliRenderer(context: Context,
     private val modelVisualiserRajawali = ModelVisualiserRajawali(this, context, currentScene, textureManager, tapHelper)
 
     private val arCoreDataModelRajawali = ARCoreDataModelRajawali(context)
-
-
-    private val projectionMatrix = Matrix4()
-    private val viewMatrix = Matrix4()
-    val cameraProjectionMatrix = FloatArray(16)
-    val cameraViewMatrix = FloatArray(16)
 
     override fun onResume() {
         super.onResume()
@@ -66,7 +56,7 @@ class NovodaARCoreRajawaliRenderer(context: Context,
 
     override fun onRenderSurfaceSizeChanged(gl: GL10?, width: Int, height: Int) {
         super.onRenderSurfaceSizeChanged(gl, width, height)
-        displayRotationHelper.onSurfaceChanged(width, height)
+        arCoreDataModelRajawali.onSurfaceChanged(width, height)
     }
 
 
@@ -90,57 +80,21 @@ class NovodaARCoreRajawaliRenderer(context: Context,
 
     override fun onRender(ellapsedRealtime: Long, deltaTime: Double) {
         super.onRender(ellapsedRealtime, deltaTime)
-
-
-//        arCoreDataModelRajawali.update(session, backgroundTexture.textureId, currentScene)
-        displayRotationHelper.updateSessionIfNeeded(session)
-
-        session.setCameraTextureName(backgroundTexture.textureId)
-
-        val frame = session.update()
-        val camera = frame.camera
-
+        arCoreDataModelRajawali.update(session, currentScene, backgroundTexture.textureId)
         // If not tracking, don't draw 3d objects.
-        if (camera.trackingState == TrackingState.PAUSED) {
+        if (arCoreDataModelRajawali.camera.trackingState == TrackingState.PAUSED) {
             return
         }
 
-
-        modelVisualiserRajawali.drawModels(frame)
-
-
-//        val cameraProjectionMatrix = FloatArray(16)
-//        camera.getProjectionMatrix(cameraProjectionMatrix, 0, 0.1f, 100.0f)
-
         planeRenderer.drawPlanes(
                 session.getAllTrackables(Plane::class.java),
-                camera.displayOrientedPose,
-                cameraProjectionMatrix
+                arCoreDataModelRajawali.camera.displayOrientedPose,
+                arCoreDataModelRajawali.cameraProjectionMatrix
         )
 
-
-        // Update projection matrix.
-        updateCameraView(camera, currentScene)
-
-
+        modelVisualiserRajawali.drawModels(arCoreDataModelRajawali.frame)
         debugViewDisplayer.display()
     }
-
-
-    private fun updateCameraView(camera: Camera, currentScene: Scene) {
-        camera.getProjectionMatrix(cameraProjectionMatrix, 0, 0.1f, 100.0f)
-        projectionMatrix.setAll(cameraProjectionMatrix)
-
-        currentScene.camera.projectionMatrix = projectionMatrix
-
-        // Update camera matrix.
-        camera.getViewMatrix(cameraViewMatrix, 0)
-        viewMatrix.setAll(cameraViewMatrix).inverse()
-
-        currentScene.camera.setRotation(viewMatrix)
-        currentScene.camera.position = viewMatrix.translation
-    }
-
 
     override fun onOffsetsChanged(xOffset: Float, yOffset: Float, xOffsetStep: Float, yOffsetStep: Float, xPixelOffset: Int, yPixelOffset: Int) {}
     override fun onTouchEvent(event: MotionEvent?) {
