@@ -10,8 +10,9 @@ import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper
 import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper.Result.Failure
 import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper.Result.Success
 import com.novoda.spikes.arcore.helper.CameraPermissionHelper
-import com.novoda.spikes.arcore.rajawali.NovodaARCoreRajawaliRenderer
+import com.novoda.spikes.arcore.rendering.NovodaARCoreRajawaliRenderer
 import kotlinx.android.synthetic.main.activity_main.*
+import org.rajawali3d.view.ISurface
 
 class MainActivity : AppCompatActivity() {
     private var session: Session? = null
@@ -32,6 +33,9 @@ class MainActivity : AppCompatActivity() {
     private fun setupSurfaceView() {
 //        surfaceView.setSurfaceRenderer(renderer)
         surfaceView.setOnTouchListener(tapHelper)
+        surfaceView.renderMode = ISurface.RENDERMODE_WHEN_DIRTY
+        surfaceView.setFrameRate(60.0)
+
     }
 
     override fun onResume() {
@@ -58,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
-        render?.onResume()
+        render.onResume()
         surfaceView.onResume()
     }
 
