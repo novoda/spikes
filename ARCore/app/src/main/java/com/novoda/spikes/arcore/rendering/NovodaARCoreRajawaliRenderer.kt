@@ -3,8 +3,10 @@ package com.novoda.spikes.arcore.rendering
 import android.content.Context
 import android.util.Log
 import android.view.MotionEvent
+import com.google.ar.core.Camera
 import com.google.ar.core.Plane
 import com.google.ar.core.Session
+import com.google.ar.core.TrackingState
 import com.google.ar.core.exceptions.CameraNotAvailableException
 import com.novoda.spikes.arcore.DebugViewDisplayer
 import com.novoda.spikes.arcore.google.helper.DisplayRotationHelper
@@ -13,7 +15,9 @@ import com.novoda.spikes.arcore.google.rendering.PlaneRenderer
 import com.novoda.spikes.arcore.rajawali.CameraBackground
 import com.novoda.spikes.arcore.visualiser.ModelVisualiserRajawali
 import org.rajawali3d.materials.textures.StreamingTexture
+import org.rajawali3d.math.Matrix4
 import org.rajawali3d.renderer.Renderer
+import org.rajawali3d.scene.Scene
 import javax.microedition.khronos.opengles.GL10
 
 
@@ -32,7 +36,10 @@ class NovodaARCoreRajawaliRenderer(context: Context,
     private val arCoreDataModelRajawali = ARCoreDataModelRajawali(context)
 
 
-
+    private val projectionMatrix = Matrix4()
+    private val viewMatrix = Matrix4()
+    val cameraProjectionMatrix = FloatArray(16)
+    val cameraViewMatrix = FloatArray(16)
 
     override fun onResume() {
         super.onResume()
@@ -85,21 +92,21 @@ class NovodaARCoreRajawaliRenderer(context: Context,
         super.onRender(ellapsedRealtime, deltaTime)
 
 
-        arCoreDataModelRajawali.update(session, backgroundTexture.textureId, currentScene)
-//        displayRotationHelper.updateSessionIfNeeded(session)
-//
-//        session.setCameraTextureName(backgroundTexture.textureId)
-//
-//        val frame = session.update()
-//        val camera = frame.camera
-//
-//        // If not tracking, don't draw 3d objects.
-//        if (camera.trackingState == TrackingState.PAUSED) {
-//            return
-//        }
+//        arCoreDataModelRajawali.update(session, backgroundTexture.textureId, currentScene)
+        displayRotationHelper.updateSessionIfNeeded(session)
+
+        session.setCameraTextureName(backgroundTexture.textureId)
+
+        val frame = session.update()
+        val camera = frame.camera
+
+        // If not tracking, don't draw 3d objects.
+        if (camera.trackingState == TrackingState.PAUSED) {
+            return
+        }
 
 
-        modelVisualiserRajawali.drawModels(arCoreDataModelRajawali.frame)
+        modelVisualiserRajawali.drawModels(frame)
 
 
 //        val cameraProjectionMatrix = FloatArray(16)
@@ -107,15 +114,32 @@ class NovodaARCoreRajawaliRenderer(context: Context,
 
         planeRenderer.drawPlanes(
                 session.getAllTrackables(Plane::class.java),
-                arCoreDataModelRajawali.camera.displayOrientedPose,
-                arCoreDataModelRajawali.cameraProjectionMatrix
+                camera.displayOrientedPose,
+                cameraProjectionMatrix
         )
+
+
+        // Update projection matrix.
+        updateCameraView(camera, currentScene)
 
 
         debugViewDisplayer.display()
     }
 
 
+    private fun updateCameraView(camera: Camera, currentScene: Scene) {
+        camera.getProjectionMatrix(cameraProjectionMatrix, 0, 0.1f, 100.0f)
+        projectionMatrix.setAll(cameraProjectionMatrix)
+
+        currentScene.camera.projectionMatrix = projectionMatrix
+
+        // Update camera matrix.
+        camera.getViewMatrix(cameraViewMatrix, 0)
+        viewMatrix.setAll(cameraViewMatrix).inverse()
+
+        currentScene.camera.setRotation(viewMatrix)
+        currentScene.camera.position = viewMatrix.translation
+    }
 
 
     override fun onOffsetsChanged(xOffset: Float, yOffset: Float, xOffsetStep: Float, yOffsetStep: Float, xPixelOffset: Int, yPixelOffset: Int) {}
