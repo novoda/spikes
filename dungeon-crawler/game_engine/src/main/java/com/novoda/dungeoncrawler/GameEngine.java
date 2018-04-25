@@ -5,7 +5,7 @@ import static com.novoda.dungeoncrawler.Direction.RIGHT_TO_LEFT;
 
 class GameEngine {
 
-    GameEngine(AttackMonitor attackMonitor, KillMonitor killMonitor, MovementMonitor movementMonitor, DeathMonitor deathMonitor, WinMonitor winMonitor, NoInputMonitor noInputMonitor, CompleteMonitor completeMonitor, GameOverMonitor gameOverMonitor, DrawCallback drawCallback) {
+    GameEngine(AttackMonitor attackMonitor, KillMonitor killMonitor, MovementMonitor movementMonitor, DeathMonitor deathMonitor, WinMonitor winMonitor, NoInputMonitor noInputMonitor, CompleteMonitor completeMonitor, GameOverMonitor gameOverMonitor, DrawCallback drawCallback, JoystickActuator inputActuator) {
         this.attackMonitor = attackMonitor;
         this.killMonitor = killMonitor;
         this.movementMonitor = movementMonitor;
@@ -15,6 +15,7 @@ class GameEngine {
         this.completeMonitor = completeMonitor;
         this.gameOverMonitor = gameOverMonitor;
         this.drawCallback = drawCallback;
+        this.inputActuator = inputActuator;
     }
 
     interface AttackMonitor {
@@ -83,12 +84,14 @@ class GameEngine {
     private final CompleteMonitor completeMonitor;
     private final GameOverMonitor gameOverMonitor;
     private final DrawCallback drawCallback;
+    private final JoystickActuator inputActuator;
 
     // GAME
     private static final int MIN_REDRAW_INTERVAL = 16;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
     private static final int TIMEOUT = 30000;
     private static final int LEVEL_COUNT = 9;
     private static final boolean USE_GRAVITY = true;     // 0/1 use gravity (LED strip going up wall)
+    private static final Direction DIRECTION = Direction.LEFT_TO_RIGHT;
 
     private int levelNumber = 0;
     private long previousFrameTime = 0;           // Time of the last redraw
@@ -98,9 +101,11 @@ class GameEngine {
     private static final int ATTACK_DURATION = 500;    // Duration of a wobble attack (ms)
     private static final int ATTACK_WIDTH = 70;     // Width of the wobble attack, world is 1000 wide
     private static final int BOSS_WIDTH = 40;
+    static final int ATTACK_THRESHOLD = 30000; // The threshold that triggers an attack // TODO DOESN'T BELONG HERE
 
     private long attackMillis = 0;             // Time the attack started
     private boolean attacking = false;                // Is the attack in progress?
+    private JoystickActuator.JoyState joyState;
 
     // PLAYER
     private static final int MAX_PLAYER_SPEED = 10;     // Max move speed of the player
@@ -297,7 +302,7 @@ class GameEngine {
         }
 
         if (frameTime - previousFrameTime >= MIN_REDRAW_INTERVAL) {
-            getInput();
+            joyState = inputActuator.getInput();
             previousFrameTime = frameTime;
 
             if (Math.abs(joyState.tilt) > JoystickActuator.DEADZONE) {

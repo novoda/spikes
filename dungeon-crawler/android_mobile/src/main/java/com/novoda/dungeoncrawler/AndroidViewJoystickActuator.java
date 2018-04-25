@@ -4,7 +4,7 @@ class AndroidViewJoystickActuator implements JoystickActuator {
 
     private static final int MOVING_BACKWARD_ANGLE = -45;
     private static final int MOVING_FORWARD_ANGLE = 45;
-    private static final int ATTACK_WOBBLE = MainActivity.ATTACK_THRESHOLD + 1;
+    private static final int ATTACK_WOBBLE = GameEngine.ATTACK_THRESHOLD + 1;
 
     private final JoyState joyState = new JoyState();
     private final JoystickView joystickView;

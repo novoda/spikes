@@ -17,7 +17,6 @@ public class MainActivity extends Activity {
     private static final int CLOCK_PIN = 4;
     private static final int LED_COLOR_ORDER = 0;//BGR;//GBR
     private static final int BRIGHTNESS = 150;
-    private static final Direction DIRECTION = Direction.LEFT_TO_RIGHT;
     private static final int BEND_POINT = 550;   // 0/1000 point at which the LED strip goes up the wall // TODO not used
 
     private static final String SPI_DEVICE_NAME = "SPI0.0";
@@ -25,9 +24,6 @@ public class MainActivity extends Activity {
 
     // GAME
     private static final int MAX_VOLUME = 10;
-
-    // WOBBLE ATTACK
-    static final int ATTACK_THRESHOLD = 30000; // The threshold that triggers an attack // TODO DOESN'T BELONG HERE
 
     // PLAYER
     private static final Display.CRGB PLAYER_COLOR = Display.CRGB.GREEN;
@@ -37,8 +33,6 @@ public class MainActivity extends Activity {
 
     private ArduinoLoop arduinoLoop = new ArduinoLoop();
     private Display ledStrip;
-    private JoystickActuator joystickActuator;
-    private JoystickActuator.JoyState joyState;
     private Ws2801 ws2801;
     private GameEngine gameEngine;
 
@@ -46,6 +40,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//      JoystickActuator joystickActuator = new MPU6050JoystickActuator(MPU6050.create(PeripheralManager.getInstance()));
+        JoystickActuator joystickActuator = new AndroidViewJoystickActuator(findViewById(R.id.joystick));
 
         gameEngine = new GameEngine(
                 this::SFXattacking,
@@ -56,11 +53,9 @@ public class MainActivity extends Activity {
                 this::screenSaverTick,
                 this::onCompleteGame,
                 this::onGameOver,
-                drawCallback
+                drawCallback,
+                joystickActuator
         );
-
-//        joystickActuator = new MPU6050JoystickActuator(MPU6050.create(PeripheralManager.getInstance()));
-        joystickActuator = new AndroidViewJoystickActuator(findViewById(R.id.joystick));
 
 //         Fast LED
 //        ledStrip = new FastLED(NUM_LEDS, LED_COLOR_ORDER, DATA_PIN, CLOCK_PIN);
@@ -94,9 +89,6 @@ public class MainActivity extends Activity {
         }
     }
 
-    // ---------------------------------
-// ------------ LEVELS -------------
-// ---------------------------------
     private void loadLevel() {
         Log.d("TUT", "Game Starting");
         updateLives(3);
@@ -114,10 +106,6 @@ public class MainActivity extends Activity {
     private void digitalWrite(int pin, int value) {
         Log.d("TUT", "Digital write pin " + pin + " value " + value);
     }
-
-    // ---------------------------------
-// ----------- Sound Effects ------------
-// ---------------------------------
 
     void SFXattacking() {
 //        int freq = map(sin(millis() / 2.0) * 1000.0, -1000, 1000, 500, 600);
@@ -203,10 +191,6 @@ public class MainActivity extends Activity {
     void SFXcomplete() {
 //        noToneAC();
         Log.d("TUT", "complete");
-    }
-
-    void getInput() {
-        joyState = joystickActuator.getInput();
     }
 
     int getLED(int pos) {
@@ -353,9 +337,6 @@ public class MainActivity extends Activity {
         }
     }
 
-    // ---------------------------------
-    // --------- SCREENSAVER -----------
-    // ---------------------------------
     private void screenSaverTick(long frameTime) {
         ledStrip.clear(); // TODO I added this
         int n, b, c, i;
