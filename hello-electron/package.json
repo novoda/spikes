@@ -9,6 +9,7 @@
   "author": "Tom McArdle",
   "devDependencies": {
     "electron": "^1.8.4",
+    "mocha": "^5.1.1",
     "spectron": "^3.8.0"
   }
 }
