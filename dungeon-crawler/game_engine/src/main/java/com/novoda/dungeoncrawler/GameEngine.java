@@ -205,7 +205,7 @@ class GameEngine {
         }
         stageStartTime = millis();
         stage = Stage.PLAY;
-
+        drawCallback.drawLives(lives);
     }
 
     private void cleanupLevel() {
