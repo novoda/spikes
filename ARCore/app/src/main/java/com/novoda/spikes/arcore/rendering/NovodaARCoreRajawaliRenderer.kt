@@ -3,7 +3,6 @@ package com.novoda.spikes.arcore.rendering
 import android.content.Context
 import android.view.MotionEvent
 import com.google.ar.core.Session
-import com.google.ar.core.TrackingState
 import com.novoda.spikes.arcore.DebugViewDisplayer
 import com.novoda.spikes.arcore.google.helper.TapHelper
 import com.novoda.spikes.arcore.rajawali.CameraBackground
@@ -18,7 +17,7 @@ import javax.microedition.khronos.opengles.GL10
 class NovodaARCoreRajawaliRenderer(context: Context,
                                    tapHelper: TapHelper,
                                    private val debugViewDisplayer: DebugViewDisplayer,
-                                   private val session: Session) : Renderer(context) {
+                                   session: Session) : Renderer(context) {
 
 
     private val pointsVisualiser = TrackedPointsVisualiser(context)
