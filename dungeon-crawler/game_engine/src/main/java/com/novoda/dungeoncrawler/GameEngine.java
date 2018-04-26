@@ -394,6 +394,7 @@ class GameEngine {
     }
 
     private void playingStateDraw() {
+        drawCallback.startDraw();
         long frame = 10000 + millis();
         for (Conveyor conveyor : conveyorPool) {
             if (conveyor.isAlive()) {
@@ -410,7 +411,6 @@ class GameEngine {
                 drawCallback.drawLava(lava.left, lava.right, lava.isEnabled());
             }
         }
-        drawCallback.startDraw();
         drawCallback.drawPlayer(playerPosition);
         if (attacking) {
             int startPoint = playerPosition + (ATTACK_WIDTH / 2);
