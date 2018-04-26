@@ -26,15 +26,12 @@ class NovodaARCoreRajawaliRenderer(context: Context,
     private val planeRenderer = PlaneRenderer()
 
     private lateinit var backgroundTexture: StreamingTexture
-    private val displayRotationHelper = DisplayRotationHelper(context)
-    private val modelVisualiserRajawali = ModelVisualiserRajawali(this, context, currentScene, textureManager, tapHelper)
-
+    private val modelVisualiserRajawali = ModelVisualiserRajawali(this, context, textureManager, tapHelper)
     private val arCoreDataModelRajawali = ARCoreDataModelRajawali(context)
 
     override fun onResume() {
         super.onResume()
 
-        displayRotationHelper.onResume()
 
         try {
             session.resume()
@@ -48,9 +45,6 @@ class NovodaARCoreRajawaliRenderer(context: Context,
 
     override fun onPause() {
         super.onPause()
-
-        displayRotationHelper.onPause()
-
         session.pause()
     }
 
@@ -62,19 +56,10 @@ class NovodaARCoreRajawaliRenderer(context: Context,
 
     override fun initScene() {
         planeRenderer.createOnGlThread(context, "models/trigrid.png")
-
-        // Create camera background
-        val cameraBackground = CameraBackground()
-
-        // Keep texture to field for later update
-        backgroundTexture = cameraBackground.texture
-
-        // Add to scene
-        currentScene.addChild(cameraBackground)
-
-        //  Spawn droid object in front of you
-
-
+        CameraBackground().apply {
+            backgroundTexture = texture
+            currentScene.addChild(this)
+        }
         modelVisualiserRajawali.init()
     }
 

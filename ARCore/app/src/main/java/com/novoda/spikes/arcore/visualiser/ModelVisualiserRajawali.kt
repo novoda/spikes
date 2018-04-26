@@ -3,10 +3,7 @@ package com.novoda.spikes.arcore.visualiser
 import android.content.Context
 import android.graphics.Color
 import android.view.MotionEvent
-import com.google.ar.core.Frame
-import com.google.ar.core.Plane
-import com.google.ar.core.Point
-import com.google.ar.core.TrackingState
+import com.google.ar.core.*
 import com.novoda.spikes.arcore.R
 import com.novoda.spikes.arcore.google.helper.TapHelper
 import org.rajawali3d.Object3D
@@ -17,16 +14,16 @@ import org.rajawali3d.materials.textures.Texture
 import org.rajawali3d.materials.textures.TextureManager
 import org.rajawali3d.math.vector.Vector3
 import org.rajawali3d.renderer.Renderer
-import org.rajawali3d.scene.Scene
 import org.rajawali3d.util.ObjectColorPicker
 import org.rajawali3d.util.OnObjectPickedListener
 
 class ModelVisualiserRajawali(
         private val renderer: Renderer,
         private val context: Context,
-        private val scene: Scene,
         private val textureManager: TextureManager,
-        private val tapHelper: TapHelper) : OnObjectPickedListener {
+        tapHelper: TapHelper) : BaseModelVisualiser(tapHelper), OnObjectPickedListener {
+
+
     private val mDirectionalLight = DirectionalLight(1.0, .2, -1.0).apply {
         setColor(1.0f, 1.0f, 1.0f)
         power = 2f
@@ -37,9 +34,10 @@ class ModelVisualiserRajawali(
         setOnObjectPickedListener(this@ModelVisualiserRajawali);
     }
 
+
     private lateinit var droid: Object3D
 
-    fun init() {
+    override fun init() {
 //        val objParser = LoaderOBJ(context.resources, textureManager, R.raw.trophy_obj) // TEXTURAS
 ////        val objParser = LoaderOBJ(this, R.raw.andy)
 //        objParser.parse()
@@ -72,50 +70,22 @@ class ModelVisualiserRajawali(
 
         }
 
-        scene.addChild(droid)
+        renderer.currentScene.addChild(droid)
     }
 
-    fun drawModels(frame: Frame) {
-        val tap = tapHelper.poll()
+    override fun onAnchorCreated(anchor: Anchor) {
 
-        if (tap != null && frame.camera.trackingState == TrackingState.TRACKING) {
-            onTap(frame, tap)
+        val translation = FloatArray(3)
+        anchor.pose.getTranslation(translation, 0)
+
+
+        // Spawn new droid object at anchor position
+        val newDroid = droid.clone().apply {
+            setPosition(translation[0].toDouble(), translation[1].toDouble(), translation[2].toDouble())
         }
-    }
+        renderer.currentScene.addChild(newDroid)
 
-    private fun onTap(frame: Frame, tap: MotionEvent) {
-        for (hit in frame.hitTest(tap)) {
-
-//            debugViewDisplayer.append("Hit")
-            // Check if any plane was hit, and if it was hit inside the plane polygon
-            val trackable = hit.trackable
-
-
-            // Creates an anchor if a plane or an oriented point was hit.
-            if (trackable is Plane && trackable.isPoseInPolygon(hit.hitPose) || trackable is Point && trackable.orientationMode == Point.OrientationMode.ESTIMATED_SURFACE_NORMAL) {
-
-//                debugViewDisplayer.append("\t... on plane")
-
-
-                // Create anchor at touched place
-                val anchor = hit.createAnchor()
-//                val rot = FloatArray(4)
-//                anchor.pose.getRotationQuaternion(rot, 0)
-                val translation = FloatArray(3)
-                anchor.pose.getTranslation(translation, 0)
-
-
-                // Spawn new droid object at anchor position
-                val newDroid = droid.clone().apply {
-                    setPosition(translation[0].toDouble(), translation[1].toDouble(), translation[2].toDouble())
-                }
-                scene.addChild(newDroid)
-
-                mPicker.registerObject(newDroid)
-
-                break
-            }
-        }
+        mPicker.registerObject(newDroid)
     }
 
     override fun onNoObjectPicked() {

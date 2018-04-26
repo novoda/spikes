@@ -31,22 +31,12 @@ class ARCoreDataModelRajawali(context: Context) {
         frame = session.update()
         camera = frame.camera
 
-
-        camera.getProjectionMatrix(cameraProjectionMatrix, 0, 0.1f, 100.0f)
         // Update projection matrix.
-        updateCameraView(camera, currentScene)
-    }
-
-    private fun updateCameraView(camera: Camera, currentScene: Scene) {
         camera.getProjectionMatrix(cameraProjectionMatrix, 0, 0.1f, 100.0f)
         projectionMatrix.setAll(cameraProjectionMatrix)
-
         currentScene.camera.projectionMatrix = projectionMatrix
-
-        // Update camera matrix.
         camera.getViewMatrix(cameraViewMatrix, 0)
         viewMatrix.setAll(cameraViewMatrix).inverse()
-
         currentScene.camera.setRotation(viewMatrix)
         currentScene.camera.position = viewMatrix.translation
     }

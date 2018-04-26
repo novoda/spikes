@@ -23,13 +23,13 @@ class ModelVisualiser(private val context: Context,
     }
 
     fun drawModels(model: ARCoreDataModel) {
-        createTouchAnchors(model.camera, model.frame)
+        createTouchAnchors(model.frame)
         addVirtualObjectModelToAnchor(model.frame, model.cameraViewMatrix, model.cameraProjectionMatrix)
     }
 
-    private fun createTouchAnchors(camera: Camera, frame: Frame) {
+    private fun createTouchAnchors(frame: Frame) {
         tapHelper.poll()?.apply {
-            if (camera.trackingState == TrackingState.TRACKING) {
+            if (frame.camera.trackingState == TrackingState.TRACKING) {
                 for (hit in frame.hitTest(this)) {
                     // Check if any plane was hit, and if it was hit inside the plane polygon
                     val trackable = hit.trackable
