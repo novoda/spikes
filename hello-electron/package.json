@@ -4,7 +4,8 @@
   "description": "An Electron demo application",
   "main": "./app/main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "test": "mocha"
   },
   "author": "Tom McArdle",
   "devDependencies": {
