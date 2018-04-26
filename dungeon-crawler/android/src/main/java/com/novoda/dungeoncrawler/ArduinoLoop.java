@@ -16,7 +16,7 @@ class ArduinoLoop {
      *
      * @param loopable the method to continuously lopp
      */
-    void start(Loopable loopable) {
+    void start(final Loopable loopable) {
         thread.start();
         final Looper looper = thread.getLooper();
         handler = new Handler(looper);

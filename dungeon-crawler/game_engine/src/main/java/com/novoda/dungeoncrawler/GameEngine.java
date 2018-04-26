@@ -560,7 +560,9 @@ class GameEngine {
                 enemy.tick(millis());
                 // hit attack?
                 if (attacking) {
-                    if (enemy.position > playerPosition - (ATTACK_WIDTH / 2) && enemy.position < playerPosition + (ATTACK_WIDTH / 2)) {
+                    int attackStartPosition = playerPosition - (ATTACK_WIDTH / 2);
+                    int attackEndPosition = playerPosition + (ATTACK_WIDTH / 2);
+                    if (enemy.position > attackStartPosition && enemy.position < attackEndPosition) {
                         enemy.kill();
                         killMonitor.onKill();
                     }
