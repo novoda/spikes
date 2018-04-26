@@ -19,9 +19,7 @@ abstract class BaseARCoreDataModel(context: Context) {
     lateinit var frame: Frame
     lateinit var camera: Camera
 
-    fun isSessionReady(): Boolean {
-        return this::session.isInitialized
-    }
+    abstract fun isSessionReady(): Boolean
 
     fun update(textureId: Int) {
         updateSessionIfNeeded(session)

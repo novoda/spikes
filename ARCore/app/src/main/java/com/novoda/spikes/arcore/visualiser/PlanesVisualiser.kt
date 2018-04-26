@@ -3,7 +3,7 @@ package com.novoda.spikes.arcore.visualiser
 import android.content.Context
 import com.google.ar.core.Plane
 import com.novoda.spikes.arcore.google.rendering.PlaneRenderer
-import com.novoda.spikes.arcore.rendering.ARCoreDataModel
+import com.novoda.spikes.arcore.rendering.BaseARCoreDataModel
 
 class PlanesVisualiser(private val context: Context) {
     private val planeRenderer = PlaneRenderer()
@@ -12,7 +12,7 @@ class PlanesVisualiser(private val context: Context) {
         planeRenderer.createOnGlThread(context, "models/trigrid.png")
     }
 
-    fun drawPlanes(model: ARCoreDataModel) {
+    fun drawPlanes(model: BaseARCoreDataModel) {
         planeRenderer.drawPlanes(
                 model.session.getAllTrackables(Plane::class.java),
                 model.camera.displayOrientedPose,
