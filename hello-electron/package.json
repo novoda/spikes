@@ -1,0 +1,13 @@
+{
+  "name": "hello-electron",
+  "version": "1.0.0",
+  "description": "An Electron demo application",
+  "main": "./app/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Tom McArdle",
+  "devDependencies": {
+    "electron": "^1.8.4"
+  }
+}
