@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
 import android.widget.Toast
 import com.google.ar.core.Session
+import com.google.ar.core.exceptions.CameraNotAvailableException
 import com.novoda.spikes.arcore.google.helper.TapHelper
 import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper
 import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper.Result.Failure
@@ -62,7 +63,14 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
-        render.onResume()
+        // Note that order matters - see the note in onPause(), the reverse applies here.
+        try {
+            session?.resume()
+        } catch (e: CameraNotAvailableException) {
+            // In some cases the camera may be given to a different app instead. Recreate the session at the next iteration.
+            showMessage("Camera not available. Please restart the app.")
+            return
+        }
         surfaceView.onResume()
     }
 
@@ -73,7 +81,7 @@ class MainActivity : AppCompatActivity() {
             // to query the session. If Session is paused before GLSurfaceView, GLSurfaceView may
             // still call session.update() and get a SessionPausedException.
             surfaceView.onPause()
-            render.onPause()
+            session?.pause()
         }
     }
 
