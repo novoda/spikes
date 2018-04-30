@@ -14,11 +14,8 @@ public class MainActivity extends Activity {
 
     // LED setup
     private static final int NUM_LEDS = 300;
-    private static final int DATA_PIN = 3;
-    private static final int CLOCK_PIN = 4;
-    private static final int LED_COLOR_ORDER = 0;//BGR;//GBR
 
-    private static final String SPI_DEVICE_NAME = "SPI0.0";
+    private static final String SPI_DEVICE_NAME = "SPI3.0";
     private static final Ws2801.Mode WS2801_MODE = Ws2801.Mode.RBG;
 
     private static final int[] lifeLEDs = new int[]{52, 50, 40};
@@ -29,16 +26,19 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("TUT", "Things game starting");
 
         ws2801 = createWs2801();
         Display ledStrip = new Ws2801Display(ws2801, NUM_LEDS);
         JoystickActuator joystickActuator = new MPU6050JoystickActuator(MPU6050.create(PeripheralManager.getInstance()));
+//        JoystickActuator joystickActuator = new FakeJoystickActuator();
         SpeakerSoundEffectsPlayer soundEffectsPlayer = new SpeakerSoundEffectsPlayer();
         Screensaver screensaver = new Screensaver(ledStrip, NUM_LEDS);
         ArduinoLoop looper = new ArduinoLoop();
         game = InitHack.newInstance(NUM_LEDS, ledStrip, this::updateLives, joystickActuator, soundEffectsPlayer, screensaver, looper);
 
         game.start();
+        Log.d("TUT", "Things game started");
     }
 
     private Ws2801 createWs2801() {

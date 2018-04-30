@@ -1,5 +1,7 @@
 package com.novoda.dungeoncrawler;
 
+import android.util.Log;
+
 class MPU6050JoystickActuator implements JoystickActuator {
 
     // JOYSTICK
@@ -49,6 +51,7 @@ class MPU6050JoystickActuator implements JoystickActuator {
             JOY_STATE.tilt = 0 - JOY_STATE.tilt;
         }
         JOY_STATE.wobble = Math.abs(MPU_WOBBLE_SAMPLES.getHighest());
+        Log.d("TUT", "Return " + JOY_STATE);
         return JOY_STATE;
     }
 

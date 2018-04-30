@@ -1,12 +1,9 @@
 package com.novoda.dungeoncrawler;
 
-import android.util.Log;
-
 import com.google.android.things.pio.I2cDevice;
 import com.google.android.things.pio.PeripheralManager;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Thanks to https://github.com/jrowberg/i2cdevlib/blob/master/Arduino/MPU6050/MPU6050.h
@@ -32,21 +29,12 @@ class MPU6050 {
 
     static MPU6050 create(PeripheralManager peripheralManager) {
         try {
-            List<String> deviceList = peripheralManager.getI2cBusList();
-            if (deviceList.isEmpty()) {
-                Log.i("TUT", "No I2C bus available on this device.");
-            } else {
-                Log.i("TUT", "List of available devices: " + deviceList);
-            }
-
             I2cDevice mpu6050 = peripheralManager.openI2cDevice("I2C1", 0x68);
 
             return new MPU6050(mpu6050);
-
         } catch (IOException e) {
             throw new IllegalStateException("Cannot open i2c device on address 0x68", e);
         }
-
     }
 
     MPU6050(I2cDevice i2cDevice) {
