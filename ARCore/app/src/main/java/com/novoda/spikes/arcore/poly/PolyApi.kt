@@ -12,7 +12,7 @@ class PolyApi {
     companion object {
         private const val HOST = "poly.googleapis.com"
         private const val VERSION = "v1"
-        private const val API_KEY = "AIzaSyAQpKu9l-EPs3VpmwDJNC3fIXxly7h5x2c"
+        private const val API_KEY = "API_KEY_HERE"
     }
 
     private val client = OkHttpClient()
