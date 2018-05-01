@@ -3,10 +3,9 @@ package com.novoda.spikes.arcore.helper
 import android.app.Activity
 import com.google.ar.core.ArCoreApk
 import com.google.ar.core.exceptions.*
+import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper.Result.*
 
 object ARCoreDependenciesHelper {
-    class Result(val isARCoreInstalled: Boolean, val message: String)
-
     private var shouldRequestARCoreInstall = true
 
     fun isARCoreIsInstalled(activity: Activity): Result {
@@ -15,13 +14,13 @@ object ARCoreDependenciesHelper {
             // We only care about 'INSTALL_REQUESTED'. Nothing to do if the returned value is 'INSTALLED'
             if (requestInstall == ArCoreApk.InstallStatus.INSTALL_REQUESTED) {
                 shouldRequestARCoreInstall = false
-                return Result(false, "ARCore SDK install requested")
+                return Failure("ARCore SDK install requested")
             }
 
         } catch (exception: Exception) {
-            return Result(false, messageFromExceptionType(exception))
+            return Failure(messageFromExceptionType(exception))
         }
-        return Result(true, "ARCore SDK installed")
+        return Result.Success
     }
 
     private fun messageFromExceptionType(exception: Exception): String {
@@ -34,4 +33,10 @@ object ARCoreDependenciesHelper {
             else -> "Failed to create AR session"
         }
     }
+
+    sealed class Result {
+        object Success : Result()
+        data class Failure(val message: String) : Result()
+    }
+
 }

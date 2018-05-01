@@ -11,6 +11,8 @@ import com.google.ar.core.Session
 import com.google.ar.core.exceptions.CameraNotAvailableException
 import com.novoda.spikes.arcore.google.helper.TapHelper
 import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper
+import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper.Result.Failure
+import com.novoda.spikes.arcore.helper.ARCoreDependenciesHelper.Result.Success
 import com.novoda.spikes.arcore.helper.CameraPermissionHelper
 import com.novoda.spikes.arcore.poly.PolyAsset
 import com.novoda.spikes.arcore.poly.PolyAssetLoader
@@ -19,21 +21,30 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), MessageDisplayer, ModelsDisplayer, ModelsAdapter.Listener {
 
-    private val modelCollection = ModelCollection(PolyAssetLoader(), this, this)
-
-    private lateinit var arSession: Session
-    private lateinit var renderer: NovodaSurfaceViewRenderer
-    private lateinit var debugViewDisplayer: DebugViewDisplayer
-    private lateinit var tapHelper: TapHelper
     private lateinit var mainThreadHandler: Handler;
-    private lateinit var modelsAdapter: ModelsAdapter
+
+    private var session: Session? = null
+    private val modelCollection: ModelCollection by lazy {
+        ModelCollection(PolyAssetLoader(), this, this)
+    }
+    private val renderer: NovodaSurfaceViewRenderer by lazy {
+        NovodaSurfaceViewRenderer(this, debugViewDisplayer, modelCollection, tapHelper)
+    }
+    private val debugViewDisplayer: DebugViewDisplayer by lazy {
+        DebugViewDisplayer(debugTextView)
+    }
+    private val tapHelper: TapHelper by lazy {
+        TapHelper(this)
+    }
+    private val modelsAdapter: ModelsAdapter by lazy {
+        ModelsAdapter(LayoutInflater.from(this), this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         mainThreadHandler = Handler()
         setupSurfaceView()
-        modelsAdapter = ModelsAdapter(LayoutInflater.from(this), this)
         modelsListView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         modelsListView.adapter = modelsAdapter
     }
@@ -49,10 +60,6 @@ class MainActivity : AppCompatActivity(), MessageDisplayer, ModelsDisplayer, Mod
     }
 
     private fun setupSurfaceView() {
-        tapHelper = TapHelper(this)
-        debugViewDisplayer = DebugViewDisplayer(debugTextView)
-        renderer = NovodaSurfaceViewRenderer(this, debugViewDisplayer, modelCollection, tapHelper)
-
         surfaceView.preserveEGLContextOnPause = true
         surfaceView.setEGLContextClientVersion(2)
         surfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0) // Alpha used for plane blending.
@@ -68,23 +75,23 @@ class MainActivity : AppCompatActivity(), MessageDisplayer, ModelsDisplayer, Mod
 
     private fun checkAREnvironment() {
         ARCoreDependenciesHelper.isARCoreIsInstalled(this).apply {
-            if (isARCoreInstalled && CameraPermissionHelper.isCameraPermissionGranted(this@MainActivity)) {
-                createOrResumeARSession()
-            } else {
-                showMessage(message)
+            when {
+                this is Failure -> showMessage(message)
+                this === Success && CameraPermissionHelper.isCameraPermissionGranted(this@MainActivity) -> createOrResumeARSession()
             }
         }
     }
 
     private fun createOrResumeARSession() {
-        if (this::arSession.isInitialized.not()) {
-            arSession = Session(this)
-            renderer.setSession(arSession)
-        }
+        if (session == null) {
+            session = Session(this).apply {
+                renderer.setSession(this)
+            }
 
+        }
         // Note that order matters - see the note in onPause(), the reverse applies here.
         try {
-            arSession.resume()
+            session?.resume()
         } catch (e: CameraNotAvailableException) {
             // In some cases the camera may be given to a different app instead. Recreate the session at the next iteration.
             showMessage("Camera not available. Please restart the app.")
@@ -95,12 +102,12 @@ class MainActivity : AppCompatActivity(), MessageDisplayer, ModelsDisplayer, Mod
 
     public override fun onPause() {
         super.onPause()
-        if (this::arSession.isInitialized) {
+        if (session != null) {
             // Note that the order matters - GLSurfaceView is paused first so that it does not try
             // to query the session. If Session is paused before GLSurfaceView, GLSurfaceView may
             // still call session.update() and get a SessionPausedException.
             surfaceView.onPause()
-            arSession.pause()
+            session?.pause()
         }
     }
 

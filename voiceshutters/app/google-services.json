@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "521251354620",
+    "firebase_url": "https://voice-shutters.firebaseio.com",
+    "project_id": "voice-shutters",
+    "storage_bucket": "voice-shutters.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:521251354620:android:123461fe89ba37c5",
+        "android_client_info": {
+          "package_name": "com.novoda.voiceshutters"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "521251354620-abpjfktkr4l3gvpj49s3kg4u6nbccfao.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.novoda.voiceshutters",
+            "certificate_hash": "fb9626a8c210f54c83f37ff87cbc190660e4f4e3"
+          }
+        },
+        {
+          "client_id": "521251354620-8ndie24atbbei6nggpbu4ajn1jqlbu50.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.novoda.voiceshutters",
+            "certificate_hash": "a79b26a3126b0ec826ad5ab7fad4a5806655602b"
+          }
+        },
+        {
+          "client_id": "521251354620-ou8f8o9k1lcv2fmtubaubasub23so0l0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBduQGHwBQDG8ASzKrB4Ih21rzKs8pLfgo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "521251354620-ou8f8o9k1lcv2fmtubaubasub23so0l0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
