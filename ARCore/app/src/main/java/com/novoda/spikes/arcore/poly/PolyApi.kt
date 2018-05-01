@@ -32,7 +32,7 @@ class PolyApi {
                 var assets: List<APIAsset>? = null
                 try {
                     val body = response.body()?.string()
-                    Log.e("WTF", "Got " + body)
+                    Log.e("WTF", "Got $body")
                     if (body == null) {
                         listener.onError(IOException("Empty body returned"))
                         return
