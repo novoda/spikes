@@ -1,0 +1,18 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'com.novoda.hermes.demo.Application'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':hermes-core')
+}
+
+run{
+    standardInput = System.in
+}

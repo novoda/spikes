@@ -1,0 +1,25 @@
+apply plugin: 'kotlin'
+apply plugin: 'application'
+
+mainClassName = 'com.novoda.hermes.demo.Application'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':hermes-core')
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+run{
+    standardInput = System.in
+}
