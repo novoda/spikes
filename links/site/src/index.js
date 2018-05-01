@@ -55,11 +55,11 @@ class App extends React.Component {
 
 const AuthComponent = ({ }) => {
     return (
-        <button onClick={onSignInClicked()}> Sign in</button>
+        <button onClick={onSignInClicked}> Sign in</button>
     )
 }
 
-const onSignInClicked = () => () => {
+const onSignInClicked = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithPopup(provider)
 }
