@@ -10,6 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    let torch = StrobeLights()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -21,5 +23,8 @@ class ViewController: UIViewController {
     }
 
 
+    @IBAction func toggleTorch(sender: UIButton) {
+        self.torch.toggleStrobe()
+    }
 }
 
