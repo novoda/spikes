@@ -1,7 +1,6 @@
 package com.novoda.spikes.arcore.poly
 
 import android.net.Uri
-import android.util.Log
 import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
 import okhttp3.*
@@ -28,11 +27,10 @@ class PolyApi {
 
         val response = client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                val adapter = moshi.adapter(APIAssets::class.java)
-                var assets: List<APIAsset>? = null
+                val adapter = moshi.adapter(ApiAssets::class.java)
+                var assets: List<ApiAsset>? = null
                 try {
                     val body = response.body()?.string()
-                    Log.e("WTF", "Got " + body)
                     if (body == null) {
                         listener.onError(IOException("Empty body returned"))
                         return
@@ -60,11 +58,11 @@ class PolyApi {
         })
     }
 
-    private fun findCompatibleAssetFormat(assets: List<APIAsset>): Pair<APIAsset, APIFormat>? {
-        return assets.fold(null, ::bar)
+    private fun findCompatibleAssetFormat(assets: List<ApiAsset>): Pair<ApiAsset, ApiFormat>? {
+        return assets.fold(null, ::findFirstCompatibleAssetFormat)
     }
 
-    private fun bar(acc: Pair<APIAsset, APIFormat>?, asset: APIAsset): Pair<APIAsset, APIFormat>? {
+    private fun findFirstCompatibleAssetFormat(acc: Pair<ApiAsset, ApiFormat>?, asset: ApiAsset): Pair<ApiAsset, ApiFormat>? {
         if (acc != null) {
             return acc
         }
@@ -76,11 +74,11 @@ class PolyApi {
         }
     }
 
-    private fun isFormatCompatible(format: APIFormat) =
+    private fun isFormatCompatible(format: ApiFormat) =
             format.formatType == "OBJ" && format.resources?.any { it.relativePath.endsWith(".png") } == true
 
     public interface APIAssetListener {
-        fun onAssetFound(asset: APIAsset, format: APIFormat)
+        fun onAssetFound(asset: ApiAsset, format: ApiFormat)
         fun onAssetNotFound()
         fun onError(error: Exception)
     }

@@ -4,7 +4,7 @@ import okhttp3.*
 import java.io.IOException
 import java.util.*
 
-class FormatDownloader(val format: APIFormat) {
+class FormatDownloader(val format: ApiFormat) {
 
     private val client = OkHttpClient()
 
@@ -41,7 +41,7 @@ class FormatDownloader(val format: APIFormat) {
                 { listener.onError(it) },
                 { listener.onDownloadFinished(Format(rootFile!!, resourcesDownloaded, format.formatType)) }
         )
-        resourcesToDownload.forEach { apiFile: APIFile ->
+        resourcesToDownload.forEach { apiFile: ApiFile ->
             downloadFile(
                     apiFile,
                     { resourcesDownloaded.add(it) },
@@ -51,14 +51,16 @@ class FormatDownloader(val format: APIFormat) {
         }
     }
 
-    private fun downloadFile(apiFile: APIFile, success: (File) -> Unit, failure: (Exception) -> Unit, over: () -> Unit) {
+    private fun downloadFile(apiFile: ApiFile, success: (File) -> Unit, failure: (Exception) -> Unit, over: () -> Unit) {
         val request = Request.Builder()
                 .url(apiFile.url)
                 .build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                if (state != State.STATE_DOWNLOADING) return
+                if (state != State.STATE_DOWNLOADING) {
+                    return
+                }
                 val responseBody = response.body()
                 if (responseBody == null) {
                     failure(Exception("No file content for file " + apiFile.relativePath))

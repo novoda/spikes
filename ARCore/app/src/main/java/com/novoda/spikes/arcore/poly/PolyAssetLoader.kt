@@ -6,7 +6,7 @@ class PolyAssetLoader() {
 
     fun loadAssetFor(keywords: String, listener: AssetListener) {
         polyApi.findAsset(keywords, object : PolyApi.APIAssetListener {
-            override fun onAssetFound(asset: APIAsset, format: APIFormat) {
+            override fun onAssetFound(asset: ApiAsset, format: ApiFormat) {
                 FormatDownloader(format).start(object : FormatDownloader.CompletionListener {
                     override fun onDownloadFinished(format: Format) {
                         listener.onAssetFound(PolyAsset(asset.name, asset.displayName, asset.authorName, format))
