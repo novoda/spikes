@@ -4,7 +4,8 @@ import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
+import android.support.v7.widget.LinearLayoutManager
+import android.view.LayoutInflater
 import android.widget.Toast
 import com.google.ar.core.Session
 import com.google.ar.core.exceptions.CameraNotAvailableException
@@ -18,13 +19,16 @@ import com.novoda.spikes.arcore.poly.PolyAssetLoader
 import com.novoda.spikes.arcore.rendering.NovodaSurfaceViewRenderer
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MessageDisplayer, ModelsDisplayer, ModelsAdapter.Listener {
 
-    private lateinit var messageHandler: Handler;
+    private lateinit var mainThreadHandler: Handler;
 
     private var session: Session? = null
+    private val modelCollection: ModelCollection by lazy {
+        ModelCollection(PolyAssetLoader(), this, this)
+    }
     private val renderer: NovodaSurfaceViewRenderer by lazy {
-        NovodaSurfaceViewRenderer(this, debugViewDisplayer, tapHelper)
+        NovodaSurfaceViewRenderer(this, debugViewDisplayer, modelCollection, tapHelper)
     }
     private val debugViewDisplayer: DebugViewDisplayer by lazy {
         DebugViewDisplayer(debugTextView)
@@ -32,31 +36,27 @@ class MainActivity : AppCompatActivity() {
     private val tapHelper: TapHelper by lazy {
         TapHelper(this)
     }
+    private val modelsAdapter: ModelsAdapter by lazy {
+        ModelsAdapter(LayoutInflater.from(this), this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        messageHandler = Handler()
+        mainThreadHandler = Handler()
         setupSurfaceView()
-        loadAssetFor("parrot")
+        modelsListView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        modelsListView.adapter = modelsAdapter
     }
 
-    private fun loadAssetFor(keywords: String) {
-        PolyAssetLoader().loadAssetFor(keywords, object : PolyAssetLoader.AssetListener {
-            override fun onAssetFound(asset: PolyAsset) {
-                showMessage("Loaded model: ${asset.displayName} by ${asset.authorName}")
-                renderer.setModel(asset)
-            }
+    override fun displayModels(models: List<PolyAsset>) {
+        mainThreadHandler.post {
+            modelsAdapter.setModels(models)
+        }
+    }
 
-            override fun onAssetNotFound() {
-                showMessage("Not model found for: $keywords")
-            }
-
-            override fun onError(error: Exception) {
-                Log.e("ARCore", "Failed to load asset for: $keywords", error)
-                showMessage("Failed to load asset for: $keywords ${error.message}")
-            }
-        })
+    override fun onModelClicked(model: PolyAsset) {
+        modelCollection.selectModel(model)
     }
 
     private fun setupSurfaceView() {
@@ -111,10 +111,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showMessage(message: String) {
-        messageHandler.post {
+    override fun showMessage(message: String) {
+        mainThreadHandler.post {
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onDestroy() {
+        renderer.close()
+        super.onDestroy()
     }
 
 }
