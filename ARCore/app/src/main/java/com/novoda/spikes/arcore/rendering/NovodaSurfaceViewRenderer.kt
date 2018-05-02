@@ -7,6 +7,7 @@ import com.google.ar.core.Session
 import com.novoda.spikes.arcore.DebugViewDisplayer
 import com.novoda.spikes.arcore.google.helper.TapHelper
 import com.novoda.spikes.arcore.google.rendering.BackgroundRenderer
+import com.novoda.spikes.arcore.poly.PolyAsset
 import com.novoda.spikes.arcore.visualiser.ModelVisualiser
 import com.novoda.spikes.arcore.visualiser.PlanesVisualiser
 import com.novoda.spikes.arcore.visualiser.TrackedPointsVisualiser
@@ -56,6 +57,10 @@ class NovodaSurfaceViewRenderer(private val context: Activity,
 
     fun setSession(session: Session) {
         arCoreDataModel.session = session
+    }
+
+    fun setModel(asset: PolyAsset) {
+        modelsVisualiser.setModel(asset)
     }
 
 }

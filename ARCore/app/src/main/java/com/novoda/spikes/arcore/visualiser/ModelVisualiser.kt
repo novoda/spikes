@@ -4,7 +4,8 @@ import android.content.Context
 import com.google.ar.core.*
 import com.novoda.spikes.arcore.DebugViewDisplayer
 import com.novoda.spikes.arcore.google.helper.TapHelper
-import com.novoda.spikes.arcore.google.rendering.ObjectRenderer
+import com.novoda.spikes.arcore.poly.PolyAsset
+import com.novoda.spikes.arcore.poly.copied.PolyObjectRenderer
 import com.novoda.spikes.arcore.rendering.ARCoreDataModel
 import java.util.*
 
@@ -13,18 +14,33 @@ class ModelVisualiser(private val context: Context,
                       private val tapHelper: TapHelper,
                       private val debugViewDisplayer: DebugViewDisplayer) {
 
-    private val virtualObjectRenderer = ObjectRenderer()
+    private lateinit var polyAsset: PolyAsset
+    private lateinit var virtualObjectRenderer: PolyObjectRenderer
+    private var shouldLoadAsset = false
     private val anchors = ArrayList<Anchor>() // Anchors created from taps used for object placing.
     private val anchorMatrix = FloatArray(16) // Temporary matrix allocated here to reduce number of allocations for each frame.
 
     fun init() {
-        virtualObjectRenderer.createOnGlThread(context, "models/andy.obj", "models/andy.png")
-        virtualObjectRenderer.setMaterialProperties(0.0f, 2.0f, 0.5f, 6.0f)
+    }
+
+    fun setModel(asset: PolyAsset) {
+        polyAsset = asset
+        shouldLoadAsset = true
     }
 
     fun drawModels(model: ARCoreDataModel) {
+        if (shouldLoadAsset) {
+            loadAsset()
+        }
         createTouchAnchors(model.camera, model.frame)
         addVirtualObjectModelToAnchor(model.frame, model.cameraViewMatrix, model.cameraProjectionMatrix)
+    }
+
+    private fun loadAsset() {
+        shouldLoadAsset = false
+        virtualObjectRenderer = PolyObjectRenderer()
+        virtualObjectRenderer.createOnGlThread(context, polyAsset.format.root.content, polyAsset.format.resources.first().content)
+        virtualObjectRenderer.setMaterialProperties(0.0f, 2.0f, 0.5f, 6.0f)
     }
 
     private fun createTouchAnchors(camera: Camera, frame: Frame) {
@@ -65,7 +81,6 @@ class ModelVisualiser(private val context: Context,
         val colorCorrectionRgba = FloatArray(4)
         frame.lightEstimate.getColorCorrection(colorCorrectionRgba, 0)
 
-        val scaleFactor = 1.0f
         for (anchor in anchors) {
             if (anchor.trackingState != TrackingState.TRACKING) {
                 continue
@@ -74,9 +89,11 @@ class ModelVisualiser(private val context: Context,
             // during calls to session.update() as ARCore refines its estimate of the world.
             anchor.pose.toMatrix(anchorMatrix, 0)
 
-            // Update and draw the model and its shadow.
-            virtualObjectRenderer.updateModelMatrix(anchorMatrix, scaleFactor)
-            virtualObjectRenderer.draw(cameraViewMatrix, cameraProjectionMatrix, colorCorrectionRgba)
+            if (this::virtualObjectRenderer.isInitialized) {
+                // Update and draw the model and its shadow.
+                virtualObjectRenderer.updateModelMatrix(anchorMatrix, 0.5f)
+                virtualObjectRenderer.draw(cameraViewMatrix, cameraProjectionMatrix, colorCorrectionRgba)
+            }
         }
     }
 
