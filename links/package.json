@@ -1,0 +1,19 @@
+{
+  "name": "links",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:site": "npm run build --prefix ./site; rm -r public/;mkdir -p public/admin; cp -r site/dist/* public/admin/",
+    "deploy:site": "npm run build:site; firebase deploy --only hosting",
+    "deploy:functions": "firebase deploy --only functions",
+    "deploy:database": "firebase deploy --only database",
+    "deploy": "npm run deploy:site;npm run deploy:functions;npm run deploy:database"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "firebase-tools": "^3.18.4"
+  }
+}
