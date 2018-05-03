@@ -19,3 +19,11 @@ Run the app as follows:
 ```bash
 npm start
 ```
+
+### Test
+
+Execute tests as follows:
+
+```bash
+npm test
+```
