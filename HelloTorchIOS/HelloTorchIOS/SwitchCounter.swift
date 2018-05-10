@@ -13,7 +13,7 @@ class SwitchCounter {
     
     // Start Strobe process
     func run () {
-        if (self.isCounting == true) {
+        if (self.isCounting) {
             print("Turning timer off")
             self.isCounting = false
             self.timer.invalidate()
