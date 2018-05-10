@@ -13,27 +13,27 @@ class SwitchCounter {
     
     // Start Strobe process
     func run () {
-        if (self.isCounting) {
+        if (isCounting) {
             print("Turning timer off")
-            self.isCounting = false
-            self.timer.invalidate()
+            isCounting = false
+            timer.invalidate()
             
-            self.end = DispatchTime.now()
+            end = DispatchTime.now()
             let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
             let timeInterval = Double(nanoTime) / 1_000_000_000
             print("I counted this high \(counter) in this many seconds \(timeInterval) ")
             counter = 0
         } else {
             print("Turning timer on")
-            self.isCounting = true
-            self.timer = Timer.scheduledTimer(timeInterval: 1/frequency, target: self, selector: #selector(incrementCounter), userInfo: nil, repeats: true)
-            self.start = DispatchTime.now()
+            isCounting = true
+            timer = Timer.scheduledTimer(timeInterval: 1/frequency, target: self, selector: #selector(incrementCounter), userInfo: nil, repeats: true)
+            start = DispatchTime.now()
         }
     }
     
     // Increase counter by one
     @objc func incrementCounter () {
-        self.lightsLogic.toggleStrobe()
-        self.counter += 1
+        lightsLogic.toggleStrobe()
+        counter += 1
     }
 }
