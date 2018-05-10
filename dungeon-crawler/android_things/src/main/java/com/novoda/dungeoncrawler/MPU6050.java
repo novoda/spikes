@@ -23,7 +23,7 @@ class MPU6050 {
     private static final int MPU6050_ACONFIG_AFS_SEL_BIT = 4;
     private static final int MPU6050_ACONFIG_AFS_SEL_LENGTH = 2;
     private static final int MPU6050_PWR1_SLEEP_BIT = 6;
-    private static final int MPU6050_RA_ACCEL_XOUT_H = 0x3;
+    private static final int MPU6050_RA_ACCEL_XOUT_H = 0x3B;
 
     private final I2cDevice i2cDevice;
 
