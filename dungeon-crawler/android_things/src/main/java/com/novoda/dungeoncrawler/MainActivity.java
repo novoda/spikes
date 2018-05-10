@@ -15,13 +15,11 @@ public class MainActivity extends Activity {
     // LED setup
     private static final int NUM_LEDS = 300;
 
-    private static final String SPI_DEVICE_NAME = "SPI0.0";
-    //    private static final Ws2801.Mode WS2801_MODE = Ws2801.Mode.RBG;
+    private static final String SPI_DEVICE_NAME = "SPI3.0";
     private static final Apa102.Mode APA102_MODE = Apa102.Mode.RBG;
 
     private static final int[] lifeLEDs = new int[]{52, 50, 40};
 
-    //    private Ws2801 ws2801;
     private Apa102 apa102;
     private DungeonCrawlerGame game;
 
@@ -30,12 +28,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         Log.d("TUT", "Things game starting");
 
-//        ws2801 = createWs2801();
         apa102 = createApa102();
-//        Display ledStrip = new Ws2801Display(ws2801, NUM_LEDS);
         Display ledStrip = new Apa102Display(apa102, NUM_LEDS);
         JoystickActuator joystickActuator = new MPU6050JoystickActuator(MPU6050.create(PeripheralManager.getInstance()));
-//        JoystickActuator joystickActuator = new FakeJoystickActuator();
         SpeakerSoundEffectsPlayer soundEffectsPlayer = new SpeakerSoundEffectsPlayer();
         Screensaver screensaver = new Screensaver(ledStrip, NUM_LEDS);
         ArduinoLoop looper = new ArduinoLoop();
