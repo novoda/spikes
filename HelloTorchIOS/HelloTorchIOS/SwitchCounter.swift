@@ -3,13 +3,13 @@ import AVFoundation
 
 class SwitchCounter {
     
-    let lightsLogic = LightsLogic()
-    var counter: Int = 0
-    var timer: Timer = Timer()
-    var frequency: Double = 500
-    var start = DispatchTime.now()
-    var end = DispatchTime.now()
-    var isCounting = false
+    private let lightsLogic = LightsLogic()
+    private var counter: Int = 0
+    private var timer: Timer = Timer()
+    private var frequency: Double = 500
+    private var start = DispatchTime.now()
+    private var end = DispatchTime.now()
+    private var isCounting = false
     
     // Start Strobe process
     func run () {
