@@ -9,7 +9,14 @@ class PolyAssetLoader() {
             override fun onAssetFound(asset: ApiAsset, format: ApiFormat) {
                 FormatDownloader(format).start(object : FormatDownloader.CompletionListener {
                     override fun onDownloadFinished(format: Format) {
-                        listener.onAssetFound(PolyAsset(asset.name, asset.displayName, asset.authorName, format))
+                        listener.onAssetFound(PolyAsset(
+                                asset.name,
+                                keywords,
+                                asset.displayName,
+                                asset.authorName,
+                                format,
+                                asset.thumbnail?.url
+                        ))
                     }
 
                     override fun onError(error: Exception) {
