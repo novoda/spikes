@@ -1,131 +1,81 @@
 package com.novoda.dungeoncrawler;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
-// https://playground.arduino.cc/Main/RunningMedian
 class RunningMedian {
 
-    private final MedianHeap heap;
+    private boolean _sorted;
+    private int _size;
+    private int _cnt;
+    private int _idx;
 
-    RunningMedian(int i) {
-        heap = new MedianHeap(i);
+    private final float[] _ar;
+    private final int[] _p;
+
+    RunningMedian(int size) {
+        _size = size;
+        _p = new int[size];
+        _ar = new float[size];
     }
 
-    public void add(int a) { // TODO I bet you read this after thinking wtf is wrong, why doesn't the joystick work
-        heap.insert(a);
+    // adds a new value to the data-set
+// or overwrites the oldest if full.
+    void add(float value) {
+        _ar[_idx++] = value;
+        if (_idx >= _size) {
+            _idx = 0; // wrap around
+        }
+        if (_cnt < _size) {
+            _cnt++;
+        }
+        _sorted = false;
     }
 
     int getMedian() {
-        return heap.median().intValue();
+        if (_cnt == 0) {
+            return 0;
+        }
+
+        if (!_sorted) {
+            sort();
+        }
+
+        if ((_cnt & 0x01) != 0) {
+            return (int) _ar[_p[_cnt / 2]];
+        } else {
+            return (int) ((_ar[_p[_cnt / 2]] + _ar[_p[_cnt / 2 - 1]]) / 2);
+        }
+    }
+
+    private float getSortedElement(int n) {
+        if ((_cnt == 0) || (n >= _cnt)) {
+            return 0;
+        }
+
+        if (!_sorted) {
+            sort();
+        }
+        return _ar[_p[n]];
+    }
+
+    private void sort() {
+        // bubble sort with flag
+        for (int i = 0; i < _cnt - 1; i++) {
+            boolean flag = true;
+            for (int j = 1; j < _cnt - i; j++) {
+                if (_ar[_p[j - 1]] > _ar[_p[j]]) {
+                    int t = _p[j - 1];
+                    _p[j - 1] = _p[j];
+                    _p[j] = t;
+                    flag = false;
+                }
+            }
+            if (flag) {
+                break;
+            }
+        }
+        _sorted = true;
     }
 
     int getHighest() {
-        return heap.max.max();
-    }
-
-    public static class MedianHeap implements Iterable<Integer> {
-
-        private final int size;
-        private final MinPQ<Integer> min;
-        private final MaxPQ<Integer> max;
-
-        MedianHeap(int i) {
-            size = i;
-            min = new MinPQ<>();
-            max = new MaxPQ<>();
-        }
-
-        void insert(Integer x) {
-            if (max.isEmpty()) {
-                max.insert(x);
-            } else if (lessOrEqual(x, max.max())) {
-                max.insert(x);
-            } else {
-                min.insert(x);
-            }
-            balance();
-        }
-
-        Double median() {
-            int left = max.size();
-            int right = min.size();
-            if (left == right) {
-                return (max.max() + min.min()) * 0.5;
-            }
-            if (left > right) {
-                return max.max().doubleValue();
-            }
-            return min.min().doubleValue();
-        }
-
-        public boolean isEmpty() {
-            return min.isEmpty() && max.isEmpty();
-        }
-
-        public Integer deleteMedian() {
-            int left = max.size();
-            int right = min.size();
-            if (left == right || left < right) {
-                return max.delMax();
-            }
-            return min.delMin();
-        }
-
-        public Iterator<Integer> iterator() {
-            return new HeapIterator();
-        }
-
-        private boolean lessOrEqual(Integer x, Integer y) {
-            return Integer.compare(x, y) <= 0;
-        }
-
-        private void balance() {
-            int left = max.size();
-            int right = min.size();
-            if ((left + 2) == right) {
-                max.insert(min.delMin());
-            } else if ((right + 2) == left) {
-                min.insert(max.delMax());
-            }
-            if(max.size() > size) {
-                max.deleteAt(1);
-            }
-            if (min.size() > size) {
-                min.deleteAt(1);
-            }
-        }
-
-        private class HeapIterator implements Iterator<Integer> {
-
-            // create a new pq
-            private MedianHeap copy;
-
-            // add all items to copy of heap
-            // takes linear time since already in heap order so no keys move
-            public HeapIterator() {
-                while (!max.isEmpty()) {
-                    copy.insert(max.delMax());
-                }
-                while (!min.isEmpty()) {
-                    copy.insert(min.delMin());
-                }
-            }
-
-            public boolean hasNext() {
-                return !copy.isEmpty();
-            }
-
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-
-            public Integer next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-                return copy.deleteMedian();
-            }
-        }
+        return (int) getSortedElement(_cnt - 1);
     }
 }
