@@ -1,7 +1,7 @@
 import Foundation
 import AVFoundation
 
-class StrobeLights {
+class SwitchCounter {
     
     let lightsLogic = LightsLogic()
     var counter: Int = 0
@@ -12,7 +12,7 @@ class StrobeLights {
     var isCounting = false
     
     // Start Strobe process
-    func toggleStrobe () {
+    func run () {
         if (self.isCounting == true) {
             print("Turning timer off")
             self.isCounting = false

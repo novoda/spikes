@@ -10,9 +10,9 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    let strobeLights = StrobeLights()
+    let switchCounter = SwitchCounter()
     
     @IBAction func toggleTorch(sender: UIButton) {
-        strobeLights.toggleStrobe()
+        switchCounter.run()
     }
 }
