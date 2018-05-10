@@ -157,7 +157,6 @@ class MPU6050 {
             motion.gx = ((buffer[8]) << 8) | buffer[9];
             motion.gy = ((buffer[10]) << 8) | buffer[11];
             motion.gz = ((buffer[12]) << 8) | buffer[13];
-
             return motion; // TODO check above
         } catch (IOException e) {
             throw new IllegalStateException("Could not read the accel/gyro readings.", e);
@@ -180,6 +179,18 @@ class MPU6050 {
         int gx;
         int gy;
         int gz;
+
+        @Override
+        public String toString() {
+            return "Motion{" +
+                    "ax=" + ax +
+                    ", ay=" + ay +
+                    ", az=" + az +
+                    ", gx=" + gx +
+                    ", gy=" + gy +
+                    ", gz=" + gz +
+                    '}';
+        }
     }
 
     static class I2Cdev {
