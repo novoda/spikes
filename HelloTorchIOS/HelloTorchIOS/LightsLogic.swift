@@ -22,7 +22,7 @@ class LightsLogic {
     }
     
     func toggleStrobe() {
-        if (device?.hasTorch == false) {
+        guard device?.hasTorch == true else {
             print( "torch unavailable")
             return
         }
