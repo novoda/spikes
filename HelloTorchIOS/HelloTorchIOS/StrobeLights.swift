@@ -3,7 +3,7 @@ import AVFoundation
 
 class StrobeLights {
     
-    let lightsController = LightsLogic()
+    let lightsLogic = LightsLogic()
     var counter: Int = 0
     var timer: Timer = Timer()
     var frequency: Double = 500
@@ -33,7 +33,7 @@ class StrobeLights {
     
     // Increase counter by one
     @objc func incrementCounter () {
-        self.lightsController.toggleStrobe()
+        self.lightsLogic.toggleStrobe()
         self.counter += 1
     }
 }
