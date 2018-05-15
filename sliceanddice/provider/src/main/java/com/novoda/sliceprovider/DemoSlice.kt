@@ -1,35 +1,38 @@
 package com.novoda.sliceprovider
 
-import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Icon
 import android.net.Uri
 import android.provider.Settings
+import androidx.core.graphics.drawable.IconCompat
 import androidx.slice.Slice
-import androidx.slice.builders.GridBuilder
+import androidx.slice.builders.GridRowBuilder
 import androidx.slice.builders.ListBuilder
 import androidx.slice.builders.ListBuilder.HeaderBuilder
+import androidx.slice.builders.ListBuilder.ICON_IMAGE
 import androidx.slice.builders.ListBuilder.InputRangeBuilder
+import androidx.slice.builders.ListBuilder.LARGE_IMAGE
 import androidx.slice.builders.ListBuilder.RangeBuilder
 import androidx.slice.builders.ListBuilder.RowBuilder
+import androidx.slice.builders.ListBuilder.SMALL_IMAGE
 import androidx.slice.builders.SliceAction
+import java.util.concurrent.TimeUnit
 
-@SuppressLint("RestrictedApi") // The GridBuilder's image size definitions shouldn't be restricted APIs
-internal fun createDemoSlice(context: Context, sliceUri: Uri): Slice = ListBuilder(context, sliceUri)
+private val TIME_TO_LIVE = TimeUnit.SECONDS.toMillis(10)
+
+internal fun createDemoSlice(context: Context, sliceUri: Uri): Slice = ListBuilder(context, sliceUri, TIME_TO_LIVE)
     .apply {
         setHeader(
             HeaderBuilder(this)
                 .setTitle("Header title")
                 .setSubtitle("Header subtitle")
-                .setSummarySubtitle("This is the summary subtitle")
+                .setSummary("This is the summary subtitle")
                 .setPrimaryAction(sliceAction(context))
         )
         addRow(RowBuilder(context, sliceUri)
             .setTitle("This is a row item title")
             .setSubtitle("...and this is the subtitle")
-            .setTitleItem(Icon.createWithResource(context, R.drawable.ic_sun))
             .addEndItem(sliceAction(context, true))
         )
         addInputRange(
@@ -37,7 +40,7 @@ internal fun createDemoSlice(context: Context, sliceUri: Uri): Slice = ListBuild
                 .setTitle("This is an input range item")
                 .setMax(7)
                 .setValue(5)
-                .setAction(pendingIntent(context, 86586))
+                .setInputAction(pendingIntent(context, 86586))
         )
         addRange(
             RangeBuilder(this)
@@ -48,28 +51,28 @@ internal fun createDemoSlice(context: Context, sliceUri: Uri): Slice = ListBuild
         addRow(RowBuilder(context, sliceUri)
             .setTitle("This next item is a grid item:")
         )
-        addGrid(
-            GridBuilder(this)
+        addGridRow(
+            GridRowBuilder(this)
                 .apply {
-                    addCell(GridBuilder.CellBuilder(this)
-                        .addImage(Icon.createWithResource(context, R.drawable.ic_android), GridBuilder.ICON_IMAGE)
+                    addCell(GridRowBuilder.CellBuilder(this)
+                        .addImage(IconCompat.createWithResource(context, R.drawable.ic_android), ICON_IMAGE)
                         .addText("Icon")
                         .addTitleText("Title text")
                         .setContentIntent(pendingIntent(context, 8456))
                     )
-                    addCell(GridBuilder.CellBuilder(this)
-                        .addImage(Icon.createWithResource(context, R.drawable.yucca), GridBuilder.SMALL_IMAGE)
+                    addCell(GridRowBuilder.CellBuilder(this)
+                        .addImage(IconCompat.createWithResource(context, R.drawable.yucca), SMALL_IMAGE)
                         .addText("Small")
                         .addTitleText("Title text")
                         .setContentIntent(pendingIntent(context, 8964))
                     )
-                    addCell(GridBuilder.CellBuilder(this)
-                        .addImage(Icon.createWithResource(context, R.drawable.dianella), GridBuilder.LARGE_IMAGE)
+                    addCell(GridRowBuilder.CellBuilder(this)
+                        .addImage(IconCompat.createWithResource(context, R.drawable.dianella), LARGE_IMAGE)
                         .addText("Large")
                         .addTitleText("Title text")
                         .setContentIntent(pendingIntent(context, 6585))
                     )
-                    addSeeMoreCell(GridBuilder.CellBuilder(this)
+                    setSeeMoreCell(GridRowBuilder.CellBuilder(this)
                         .addText("See more!")
                         .addTitleText("Title text")
                         .setContentIntent(pendingIntent(context, 3287))
@@ -77,7 +80,7 @@ internal fun createDemoSlice(context: Context, sliceUri: Uri): Slice = ListBuild
                 }
         )
     }
-    .addSeeMoreRow(
+    .setSeeMoreRow(
         RowBuilder(context, sliceUri)
             .setTitle("See more row item️")
     )
@@ -87,7 +90,7 @@ internal fun createDemoSlice(context: Context, sliceUri: Uri): Slice = ListBuild
 
 private fun sliceAction(context: Context, isChecked: Boolean = false) = SliceAction(
     pendingIntent(context, 1234),
-    Icon.createWithResource(context, R.drawable.ic_android),
+    IconCompat.createWithResource(context, R.drawable.ic_android),
     "actionnnnnn",
     isChecked
 )
@@ -108,6 +111,6 @@ private fun sliceAction2(context: Context) = SliceAction(
         Intent(Settings.ACTION_AIRPLANE_MODE_SETTINGS),
         PendingIntent.FLAG_UPDATE_CURRENT
     ),
-    Icon.createWithResource(context, R.drawable.ic_android),
+    IconCompat.createWithResource(context, R.drawable.ic_android),
     "a lie"
 )

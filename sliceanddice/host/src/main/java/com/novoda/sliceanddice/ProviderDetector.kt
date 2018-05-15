@@ -3,8 +3,9 @@ package com.novoda.sliceanddice
 import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.content.pm.PackageManager.NameNotFoundException
 import android.net.Uri
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import com.novoda.sliceshost.R
 
 internal fun providerAppNotInstalled(packageManager: PackageManager, providerAuthority: String): Boolean {
@@ -14,7 +15,7 @@ internal fun providerAppNotInstalled(packageManager: PackageManager, providerAut
 
         val contentProvider = packageInfo.providers.find { it.authority == providerAuthority }
         return contentProvider == null
-    } catch (e: PackageManager.NameNotFoundException) {
+    } catch (e: NameNotFoundException) {
         return true
     }
 }

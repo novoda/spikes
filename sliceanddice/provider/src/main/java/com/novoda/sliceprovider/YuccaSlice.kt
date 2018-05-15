@@ -1,17 +1,18 @@
 package com.novoda.sliceprovider
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.drawable.Icon
 import android.net.Uri
+import androidx.core.graphics.drawable.IconCompat
 import androidx.slice.Slice
-import androidx.slice.builders.GridBuilder
+import androidx.slice.builders.GridRowBuilder
 import androidx.slice.builders.ListBuilder
 import androidx.slice.builders.ListBuilder.HeaderBuilder
 import androidx.slice.builders.ListBuilder.RowBuilder
+import java.util.concurrent.TimeUnit
 
-@SuppressLint("RestrictedApi") // The GridBuilder's image size definitions shouldn't be restricted APIs
-internal fun createYuccaSlice(context: Context, sliceUri: Uri): Slice = ListBuilder(context, sliceUri)
+private val TIME_TO_LIVE = TimeUnit.SECONDS.toMillis(10)
+
+internal fun createYuccaSlice(context: Context, sliceUri: Uri): Slice = ListBuilder(context, sliceUri, TIME_TO_LIVE)
     .apply {
         setHeader(
             HeaderBuilder(this)
@@ -20,31 +21,31 @@ internal fun createYuccaSlice(context: Context, sliceUri: Uri): Slice = ListBuil
         addRow(
             RowBuilder(this)
                 .setTitle("This seems like a match")
-                .setTitleItem(Icon.createWithResource(context, R.drawable.assistant))
+                .setTitleItem(IconCompat.createWithResource(context, R.drawable.assistant), ListBuilder.ICON_IMAGE)
         )
-        addGrid(
-            GridBuilder(this).apply {
+        addGridRow(
+            GridRowBuilder(this).apply {
                 paddingCell(context)
                 paddingCell(context)
-                addCell(GridBuilder.CellBuilder(this)
-                    .addImage(Icon.createWithResource(context, R.drawable.pic), GridBuilder.LARGE_IMAGE)
+                addCell(GridRowBuilder.CellBuilder(this)
+                    .addImage(IconCompat.createWithResource(context, R.drawable.pic), ListBuilder.LARGE_IMAGE)
                 )
             }
         )
         addRow(
             RowBuilder(this)
                 .setTitle("It might be one of these")
-                .setTitleItem(Icon.createWithResource(context, R.drawable.assistant))
+                .setTitleItem(IconCompat.createWithResource(context, R.drawable.assistant), ListBuilder.ICON_IMAGE)
         )
-        addGrid(
-            GridBuilder(this).apply {
-                addCell(GridBuilder.CellBuilder(this)
+        addGridRow(
+            GridRowBuilder(this).apply {
+                addCell(GridRowBuilder.CellBuilder(this)
                     .addTitleText("Yucca")
-                    .addImage(Icon.createWithResource(context, R.drawable.yucca), GridBuilder.LARGE_IMAGE)
+                    .addImage(IconCompat.createWithResource(context, R.drawable.yucca), ListBuilder.LARGE_IMAGE)
                 )
-                addCell(GridBuilder.CellBuilder(this)
+                addCell(GridRowBuilder.CellBuilder(this)
                     .addTitleText("Dianella tasmanica")
-                    .addImage(Icon.createWithResource(context, R.drawable.dianella), GridBuilder.LARGE_IMAGE)
+                    .addImage(IconCompat.createWithResource(context, R.drawable.dianella), ListBuilder.LARGE_IMAGE)
                 )
                 paddingCell(context)
             }
@@ -52,14 +53,13 @@ internal fun createYuccaSlice(context: Context, sliceUri: Uri): Slice = ListBuil
     }
     .build()
 
-@SuppressLint("RestrictedApi") // The GridBuilder's image size definitions shouldn't be restricted APIs
-private fun GridBuilder.paddingCell(context: Context) {
+private fun GridRowBuilder.paddingCell(context: Context) {
     // We cheat here — we use cells with a transparent cell and an empty title and text so that
     // we can trick the GridRowView into allocating a taller height (abc_slice_grid_max_height: 140dp)
     // than we would get if the items had only an image (abc_slice_grid_image_only_height: 86dp)
     // or an image and one text item (abc_slice_grid_image_text_height: 120dp)
-    addCell(GridBuilder.CellBuilder(this)
-        .addImage(Icon.createWithResource(context, R.drawable.transparent), GridBuilder.LARGE_IMAGE)
+    addCell(GridRowBuilder.CellBuilder(this)
+        .addImage(IconCompat.createWithResource(context, R.drawable.transparent), ListBuilder.LARGE_IMAGE)
         .addTitleText("")
         .addText("")
     )
