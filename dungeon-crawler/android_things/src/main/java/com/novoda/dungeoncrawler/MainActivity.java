@@ -26,8 +26,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("TUT", "Things game starting");
-
         apa102 = createApa102();
         Display ledStrip = new Apa102Display(apa102, NUM_LEDS);
         JoystickActuator joystickActuator = new MPU6050JoystickActuator(MPU6050.create(PeripheralManager.getInstance()));
@@ -35,9 +33,7 @@ public class MainActivity extends Activity {
         Screensaver screensaver = new Screensaver(ledStrip, NUM_LEDS);
         ArduinoLoop looper = new ArduinoLoop();
         game = InitHack.newInstance(NUM_LEDS, ledStrip, this::updateLives, joystickActuator, soundEffectsPlayer, screensaver, looper);
-
         game.start();
-        Log.d("TUT", "Things game started");
     }
 
     private Apa102 createApa102() {
@@ -47,14 +43,6 @@ public class MainActivity extends Activity {
             throw new IllegalStateException("Unable to create the Apa102 driver", e);
         }
     }
-
-    // private Ws2801 createWs2801() {
-    //     try {
-    //         return Ws2801.create(SPI_DEVICE_NAME, WS2801_MODE);
-    //     } catch (IOException e) {
-    //         throw new IllegalStateException("Unable to create the Ws2801 driver", e);
-    //     }
-    // }
 
     private void updateLives(int lives) {
         for (int i = 0; i < lives; i++) {
@@ -70,20 +58,9 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         game.stop();
-//        safeCloseWs2801();
         safeCloseApa102();
         super.onDestroy();
     }
-
-    // private void safeCloseWs2801() {
-    //     if (ws2801 != null) {
-    //         try {
-    //             ws2801.close();
-    //         } catch (IOException e) {
-    //             // ignore
-    //         }
-    //     }
-    // }
 
     private void safeCloseApa102() {
         if (apa102 != null) {
