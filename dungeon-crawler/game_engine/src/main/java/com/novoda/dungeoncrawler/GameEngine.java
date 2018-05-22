@@ -110,6 +110,7 @@ class GameEngine {
 
     // PLAYER
     private static final int MAX_PLAYER_SPEED = 10;     // Max move speed of the player
+    private static final int CONVEYOR_SPEED = 4;
 
     private int playerPositionModifier;        // +/- adjustment to player position
     private int playerPosition;                // Stores the player position
@@ -169,12 +170,12 @@ class GameEngine {
                 break;
             case 5:
                 // Conveyor
-                spawnConveyor(100, 600, RIGHT_TO_LEFT);
+                spawnConveyor(100, 600, LEFT_TO_RIGHT, CONVEYOR_SPEED);
                 spawnEnemy(800, 0, 0, 0);
                 break;
             case 6:
                 // Conveyor of enemies
-                spawnConveyor(50, 1000, LEFT_TO_RIGHT);
+                spawnConveyor(50, 1000, RIGHT_TO_LEFT, CONVEYOR_SPEED);
                 spawnEnemy(300, 0, 0, 0);
                 spawnEnemy(400, 0, 0, 0);
                 spawnEnemy(500, 0, 0, 0);
@@ -197,7 +198,7 @@ class GameEngine {
                 spawnEnemy(500, 1, 5, 250);
                 spawnPool[0].spawn(1000, 5500, 4, 0, 3000, millis());
                 spawnPool[1].spawn(0, 5500, 5, 1, 10000, millis());
-                spawnConveyor(100, 900, RIGHT_TO_LEFT);
+                spawnConveyor(100, 900, RIGHT_TO_LEFT, CONVEYOR_SPEED);
                 break;
             case 9:
                 // Boss
@@ -247,10 +248,10 @@ class GameEngine {
         }
     }
 
-    private void spawnConveyor(int startPoint, int endPoint, Direction dir) {
+    private void spawnConveyor(int startPoint, int endPoint, Direction dir, int speed) {
         for (Conveyor aConveyorPool : conveyorPool) {
             if (!aConveyorPool.isAlive()) {
-                aConveyorPool.spawn(startPoint, endPoint, dir);
+                aConveyorPool.spawn(startPoint, endPoint, dir, speed);
                 return;
             }
         }
@@ -472,20 +473,11 @@ class GameEngine {
     }
 
     private void tickConveyors() {
-        playerPositionModifier = 0;
-
         for (Conveyor conveyor : conveyorPool) {
             if (!conveyor.isAlive()) {
                 continue;
             }
-            Direction direction = conveyor.direction;
-            if (conveyor.contains(playerPosition)) {
-                if (direction == RIGHT_TO_LEFT) {
-                    playerPositionModifier = -(MAX_PLAYER_SPEED - 4);
-                } else {
-                    playerPositionModifier = (MAX_PLAYER_SPEED - 4);
-                }
-            }
+            playerPositionModifier = (MAX_PLAYER_SPEED - conveyor.affect(playerPosition));
         }
     }
 
