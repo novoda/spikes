@@ -261,8 +261,8 @@ class GameEngine {
 
     private void moveBoss() {
         int spawnSpeed = boss.getSpeed();
-        spawnPool[0].spawn(boss.position, spawnSpeed, 3, 0, 0, millis());
-        spawnPool[1].spawn(boss.position, spawnSpeed, 3, 1, 0, millis());
+        spawnPool[0].spawn(boss.getPosition(), spawnSpeed, 3, 0, 0, millis());
+        spawnPool[1].spawn(boss.getPosition(), spawnSpeed, 3, 1, 0, millis());
     }
 
     private long millis = 0;
@@ -488,8 +488,8 @@ class GameEngine {
         if (!boss.isAlive()) {
             return;
         }
-        int bossStartPosition = boss.position - BOSS_WIDTH / 2;
-        int bossEndPosition = boss.position + BOSS_WIDTH / 2;
+        int bossStartPosition = boss.getPosition() - BOSS_WIDTH / 2;
+        int bossEndPosition = boss.getPosition() + BOSS_WIDTH / 2;
         drawCallback.drawBoss(bossStartPosition, bossEndPosition);
         // CHECK COLLISION
         if (playerPosition > bossStartPosition

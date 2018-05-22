@@ -1,7 +1,7 @@
 package com.novoda.dungeoncrawler;
 
 class Boss {
-    public int position;
+    private int position;
     private int lives;
     private boolean alive;
 
@@ -40,5 +40,9 @@ class Boss {
             return 1500;
         }
         return 2500;
+    }
+
+    public int getPosition() {
+        return position;
     }
 }
