@@ -478,7 +478,7 @@ class GameEngine {
             if (!conveyor.isAlive()) {
                 continue;
             }
-            playerPositionModifier = (MAX_PLAYER_SPEED - conveyor.affect(playerPosition));
+            playerPositionModifier = conveyor.affect(playerPosition);
         }
     }
 
