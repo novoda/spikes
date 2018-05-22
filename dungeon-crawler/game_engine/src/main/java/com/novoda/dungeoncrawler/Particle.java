@@ -3,22 +3,18 @@ package com.novoda.dungeoncrawler;
 import java.util.Random;
 
 class Particle {
-    int position;
-    int power;
     private boolean alive;
-    private int sp;
+    private int position;
+    private int power;
+    private int speed;
     private int life;
-
-    void kill() {
-        this.alive = false;
-    }
 
     void spawn(int playerPosition) {
         this.position = playerPosition;
         this.power = 255;
         this.alive = true;
-        this.sp = new Random().nextInt(400) + -200;
-        this.life = 220 - Math.abs(sp);
+        this.speed = new Random().nextInt(400) + -200;
+        this.life = 220 - Math.abs(speed);
     }
 
     boolean isAlive() {
@@ -28,27 +24,39 @@ class Particle {
     void tick(boolean useGravity) {
         if (alive) {
             life++;
-            if (sp > 0) {
-                sp -= life / 10;
+            if (speed > 0) {
+                speed -= life / 10;
             } else {
-                sp += life / 10;
+                speed += life / 10;
             }
             if (useGravity && position > 500) {
-                sp -= 10;
+                speed -= 10;
             }
             power = 100 - life;
-            if (power <= 0) {
+            if (getPower() <= 0) {
                 kill();
             } else {
-                position += sp / 7.0;
+                position += speed / 7.0;
                 if (position > 1000) {
                     position = 1000;
-                    sp = 0 - (sp / 2);
+                    speed = 0 - (speed / 2);
                 } else if (position < 0) {
                     position = 0;
-                    sp = 0 - (sp / 2);
+                    speed = 0 - (speed / 2);
                 }
             }
         }
+    }
+
+    public void kill() {
+        this.alive = false;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public int getPower() {
+        return power;
     }
 }

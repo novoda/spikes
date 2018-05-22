@@ -1,21 +1,31 @@
 package com.novoda.dungeoncrawler;
 
 class Enemy {
-    public int playerSide;
+    private final int speed;
+    private final int direction;
+    private final int wobble;
+    private final int playerSide;
+    private final int origin;
+
     public int position;
     private boolean alive;
-    private int speed;
-    private int direction;
-    private int wobble;
-    private int origin;
 
-    void spawn(int pos, int dir, int speed, int wobble) {
-        position = pos;
-        direction = dir;          // 0 = left, 1 = right
-        this.wobble = wobble;    // 0 = no, >0 = yes, value is width of wobble
-        origin = pos;
+    Enemy(int position, int direction, int speed, int wobble, int playerSide) {
+        this.position = position;
+        this.direction = direction; // 0 = left, 1 = right
         this.speed = speed;
-        alive = true;
+        this.wobble = wobble; // 0 = no, >0 = yes, value is width of wobble
+        this.origin = position;
+        this.playerSide = playerSide;
+        this.alive = true;
+    }
+
+    boolean hitPlayer(int playerPosition) {
+        return (playerSide == 1 && position <= playerPosition) || (playerSide == -1 && position >= playerPosition);
+    }
+
+    boolean hitAttack(int attackStartPosition, int attackEndPosition) {
+        return position > attackStartPosition && position < attackEndPosition;
     }
 
     boolean isAlive() {
@@ -46,5 +56,4 @@ class Enemy {
     void kill() {
         alive = false;
     }
-
 }

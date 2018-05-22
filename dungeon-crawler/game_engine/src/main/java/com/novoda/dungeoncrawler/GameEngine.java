@@ -1,5 +1,8 @@
 package com.novoda.dungeoncrawler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.novoda.dungeoncrawler.Direction.LEFT_TO_RIGHT;
 import static com.novoda.dungeoncrawler.Direction.RIGHT_TO_LEFT;
 
@@ -119,23 +122,13 @@ class GameEngine {
     private int lives = 3;
 
     // POOLS
-    private static final Enemy[] enemyPool = new Enemy[]{
-            new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy(),
-            new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy()
-    };
-
     private static final Particle[] particlePool = {
             new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle()
     };
-    private static final Spawner[] spawnPool = {
-            new Spawner(), new Spawner()
-    };
-    private static final Lava[] lavaPool = {
-            new Lava(), new Lava(), new Lava(), new Lava()
-    };
-    private static final Conveyor[] conveyorPool = {
-            new Conveyor(), new Conveyor()
-    };
+    private static final List<Enemy> enemyPool = new ArrayList<>();
+    private static final List<EnemySpawner> spawnPool = new ArrayList<>();
+    private static final List<Lava> lavaPool = new ArrayList<>();
+    private static final List<Conveyor> conveyorPool = new ArrayList<>();
     private static final Boss boss = new Boss();
 
     public void loadLevel() {
@@ -153,12 +146,12 @@ class GameEngine {
                 break;
             case 2:
                 // Spawning enemies at exit every 2 seconds
-                spawnPool[0].spawn(1000, 3000, 2, 0, 0, millis());
+                spawnSpawner(1000, 3000, 2, 0, 0, millis());
                 break;
             case 3:
                 // Lava intro
-                spawnLava(400, 490, 2000, 2000, 0);
-                spawnPool[0].spawn(1000, 5500, 3, 0, 0, millis());
+                spawnLava(400, 490, 2000, 2000);
+                spawnSpawner(1000, 5500, 3, 0, 0, millis());
                 break;
             case 4:
                 // Sin enemy
@@ -183,18 +176,18 @@ class GameEngine {
                 break;
             case 7:
                 // Lava run
-                spawnLava(195, 300, 2000, 2000, 0);
-                spawnLava(350, 455, 2000, 2000, 0);
-                spawnLava(510, 610, 2000, 2000, 0);
-                spawnLava(660, 760, 2000, 2000, 0);
-                spawnPool[0].spawn(1000, 3800, 4, 0, 0, millis());
+                spawnLava(195, 300, 2000, 2000);
+                spawnLava(350, 455, 2000, 2000);
+                spawnLava(510, 610, 2000, 2000);
+                spawnLava(660, 760, 2000, 2000);
+                spawnSpawner(1000, 3800, 4, 0, 0, millis());
                 break;
             case 8:
                 // Sin enemy #2
                 spawnEnemy(700, 1, 7, 275);
                 spawnEnemy(500, 1, 5, 250);
-                spawnPool[0].spawn(1000, 5500, 4, 0, 3000, millis());
-                spawnPool[1].spawn(0, 5500, 5, 1, 10000, millis());
+                spawnSpawner(1000, 5500, 4, 0, 3000, millis());
+                spawnSpawner(0, 5500, 5, 1, 10000, millis());
                 spawnConveyor(100, 900, RIGHT_TO_LEFT, CONVEYOR_SPEED);
                 break;
             case 9:
@@ -208,50 +201,31 @@ class GameEngine {
     }
 
     private void cleanupLevel() {
-        for (Enemy enemy : enemyPool) {
-            enemy.kill();
-        }
         for (Particle particle : particlePool) {
             particle.kill();
         }
-        for (Spawner spawner : spawnPool) {
-            spawner.kill();
-        }
-        for (Lava lava : lavaPool) {
-            lava.kill();
-        }
-        for (Conveyor conveyor : conveyorPool) {
-            conveyor.kill();
-        }
+        enemyPool.clear();
+        spawnPool.clear();
+        lavaPool.clear();
+        conveyorPool.clear();
         boss.kill();
     }
 
     private void spawnEnemy(int pos, int dir, int speed, int wobble) {
-        for (Enemy anEnemyPool : enemyPool) {
-            if (!anEnemyPool.isAlive()) {
-                anEnemyPool.spawn(pos, dir, speed, wobble);
-                anEnemyPool.playerSide = pos > playerPosition ? 1 : -1;
-                return;
-            }
-        }
+        int playerSide = pos > playerPosition ? 1 : -1;
+        enemyPool.add(new Enemy(pos, dir, speed, wobble, playerSide));
     }
 
-    private void spawnLava(int left, int right, int ontime, int offtime, int offset) {
-        for (Lava aLavaPool : lavaPool) {
-            if (!aLavaPool.isAlive()) {
-                aLavaPool.spawn(left, right, ontime, offtime, offset, Lava.State.OFF, millis());
-                return;
-            }
-        }
+    private void spawnLava(int left, int right, int ontime, int offtime) {
+        lavaPool.add(new Lava(left, right, ontime, offtime, Lava.State.OFF));
     }
 
     private void spawnConveyor(int startPoint, int endPoint, Direction dir, int speed) {
-        for (Conveyor aConveyorPool : conveyorPool) {
-            if (!aConveyorPool.isAlive()) {
-                aConveyorPool.spawn(startPoint, endPoint, dir, speed);
-                return;
-            }
-        }
+        conveyorPool.add(new Conveyor(startPoint, endPoint, dir, speed));
+    }
+
+    private void spawnSpawner(int position, int rate, int speed, int direction, int activate, long millis) {
+        spawnPool.add(new EnemySpawner(position, rate, speed, direction, activate, millis));
     }
 
     private void spawnBoss() {
@@ -261,15 +235,15 @@ class GameEngine {
 
     private void moveBoss() {
         int spawnSpeed = boss.getSpeed();
-        spawnPool[0].spawn(boss.getPosition(), spawnSpeed, 3, 0, 0, millis());
-        spawnPool[1].spawn(boss.getPosition(), spawnSpeed, 3, 1, 0, millis());
+        spawnPool.clear();
+        spawnSpawner(boss.getPosition(), spawnSpeed, 3, 0, 0, millis());
+        spawnSpawner(boss.getPosition(), spawnSpeed, 3, 1, 0, millis());
     }
 
     private long millis = 0;
 
     /**
      * https://www.arduino.cc/reference/en/language/functions/time/millis/
-     * TODO
      *
      * @return Number of milliseconds since the program started (unsigned long)
      */
@@ -349,7 +323,7 @@ class GameEngine {
 
                 // Ticks and draw calls
                 tickConveyors();
-                tickSpawners();
+                tickEnemySpawners();
                 tickBoss();
                 tickLava();
                 tickEnemies();
@@ -390,9 +364,7 @@ class GameEngine {
         drawCallback.startDraw();
         long frame = 10000 + millis();
         for (Conveyor conveyor : conveyorPool) {
-            if (conveyor.isAlive()) {
-                drawCallback.drawConveyor(conveyor.startPoint, conveyor.endPoint, conveyor.direction, frame);
-            }
+            drawCallback.drawConveyor(conveyor.getStartPoint(), conveyor.getEndPoint(), conveyor.getDirection(), frame);
         }
         for (Enemy enemy : enemyPool) { // TODO this is now after the check if the enemy has hit the player - just sanity test this doesn't cause weird state
             if (enemy.isAlive()) {
@@ -400,9 +372,7 @@ class GameEngine {
             }
         }
         for (Lava lava : lavaPool) {
-            if (lava.isAlive()) {
-                drawCallback.drawLava(lava.left, lava.right, lava.isEnabled());
-            }
+            drawCallback.drawLava(lava.getLeft(), lava.getRight(), lava.isEnabled());
         }
         drawCallback.drawPlayer(playerPosition);
         if (attacking) {
@@ -430,16 +400,13 @@ class GameEngine {
         drawCallback.drawLives(lives);
     }
 
+    /**
+     * Returns if the player is in active lava
+     */
     private boolean inLava(int pos) {
-        // Returns if the player is in active lava
-        int i;
-        Lava lava;
-        for (i = 0; i < lavaPool.length; i++) {
-            lava = lavaPool[i];
-            if (lava.isAlive() && lava.isEnabled()) {
-                if (lava.left < pos && lava.right > pos) {
-                    return true;
-                }
+        for (Lava lava : lavaPool) {
+            if (lava.consumes(pos)) {
+                return true;
             }
         }
         return false;
@@ -464,21 +431,16 @@ class GameEngine {
     private void tickConveyors() {
         playerPositionModifier = 0;
         for (Conveyor conveyor : conveyorPool) {
-            if (!conveyor.isAlive()) {
-                continue;
-            }
             playerPositionModifier = conveyor.affect(playerPosition);
         }
     }
 
-    private void tickSpawners() {
+    private void tickEnemySpawners() {
         long mm = millis();
-        for (Spawner aSpawnPool : spawnPool) {
-            if (aSpawnPool.isAlive() && aSpawnPool.activate < mm) {
-                if (aSpawnPool.lastSpawned + aSpawnPool.rate < mm || aSpawnPool.lastSpawned == 0) {
-                    spawnEnemy(aSpawnPool.position, aSpawnPool.direction, aSpawnPool.speed, 0);
-                    aSpawnPool.lastSpawned = mm;
-                }
+        for (EnemySpawner enemySpawner : spawnPool) {
+            if (enemySpawner.shouldSpawn(mm)) {
+                EnemySpawner.Spawn spawn = enemySpawner.spawn(mm);
+                spawnEnemy(spawn.getPosition(), spawn.getDirection(), spawn.getSpeed(), 0);
             }
         }
     }
@@ -509,8 +471,9 @@ class GameEngine {
                 if (boss.isAlive()) {
                     moveBoss();
                 } else {
-                    spawnPool[0].kill();
-                    spawnPool[1].kill();
+                    for (EnemySpawner enemySpawner : spawnPool) {
+                        enemySpawner.kill();
+                    }
                 }
             }
         }
@@ -519,20 +482,7 @@ class GameEngine {
     private void tickLava() {
         long mm = millis();
         for (Lava lava : lavaPool) {
-            if (lava.isAlive()) {
-
-                if (lava.isEnabled()) {
-                    if (lava.lastOn + lava.ontime < mm) {
-                        lava.disable();
-                        lava.lastOn = mm;
-                    }
-                } else {
-                    if (lava.lastOn + lava.offtime < mm) {
-                        lava.enable();
-                        lava.lastOn = mm;
-                    }
-                }
-            }
+            lava.toggleLava(mm);
         }
     }
 
@@ -544,7 +494,7 @@ class GameEngine {
                 if (attacking) {
                     int attackStartPosition = playerPosition - (ATTACK_WIDTH / 2);
                     int attackEndPosition = playerPosition + (ATTACK_WIDTH / 2);
-                    if (enemy.position > attackStartPosition && enemy.position < attackEndPosition) {
+                    if (enemy.hitAttack(attackStartPosition, attackEndPosition)) {
                         enemy.kill();
                         killMonitor.onKill();
                     }
@@ -554,10 +504,7 @@ class GameEngine {
                     killMonitor.onKill();
                 }
                 // hit player?
-                if ((enemy.playerSide == 1
-                        && enemy.position <= playerPosition)
-                        || (enemy.playerSide == -1
-                        && enemy.position >= playerPosition)) {
+                if (enemy.hitPlayer(playerPosition)) {
                     die();
                     return;
                 }
@@ -576,7 +523,7 @@ class GameEngine {
     private void drawParticles() {
         for (Particle particle : particlePool) {
             if (particle.isAlive()) {
-                drawCallback.drawParticle(particle.position, particle.power);
+                drawCallback.drawParticle(particle.getPosition(), particle.getPower());
             }
         }
     }
