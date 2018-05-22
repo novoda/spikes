@@ -310,7 +310,7 @@ class GameEngine {
             if (Math.abs(joyState.tilt) > JoystickActuator.DEADZONE) {
                 lastInputTime = frameTime;
                 if (stage == Stage.SCREENSAVER) {
-                    levelNumber = START_LEVEL;
+                    levelNumber = START_LEVEL - 1;
                     stageStartTime = frameTime;
                     stage = Stage.LEVEL_COMPLETE;
                 }
@@ -473,6 +473,7 @@ class GameEngine {
     }
 
     private void tickConveyors() {
+        playerPositionModifier = 0;
         for (Conveyor conveyor : conveyorPool) {
             if (!conveyor.isAlive()) {
                 continue;
