@@ -87,13 +87,13 @@ class GameEngine {
     private final JoystickActuator inputActuator;
 
     // GAME
-    private static final int MIN_REDRAW_INTERVAL = 16;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
+    private static final int MIN_REDRAW_INTERVAL = 33;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
     private static final int TIMEOUT = 30000;
     private static final int LEVEL_COUNT = 9;
     private static final boolean USE_GRAVITY = true;     // 0/1 use gravity (LED strip going up wall)
     private static final Direction DIRECTION = Direction.LEFT_TO_RIGHT;
 
-    private static final int START_LEVEL = 5;
+    private static final int START_LEVEL = 0;
     private int levelNumber = START_LEVEL;
     private long previousFrameTime = 0;           // Time of the last redraw
     private long lastInputTime = 0;
@@ -109,8 +109,8 @@ class GameEngine {
     private JoystickActuator.JoyState joyState;
 
     // PLAYER
-    private static final int MAX_PLAYER_SPEED = 10;     // Max move speed of the player
-    private static final int CONVEYOR_SPEED = 4;
+    private static final int MAX_PLAYER_SPEED = 15;     // Max move speed of the player
+    private static final int CONVEYOR_SPEED = 3;
 
     private int playerPositionModifier;        // +/- adjustment to player position
     private int playerPosition;                // Stores the player position
@@ -303,8 +303,8 @@ class GameEngine {
             deathMonitor.onDeath();
         }
 
+        joyState = inputActuator.getInput();
         if (frameTime - previousFrameTime >= MIN_REDRAW_INTERVAL) {
-            joyState = inputActuator.getInput();
             previousFrameTime = frameTime;
 
             if (Math.abs(joyState.tilt) > JoystickActuator.DEADZONE) {

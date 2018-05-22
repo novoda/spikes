@@ -1,7 +1,5 @@
 package com.novoda.dungeoncrawler;
 
-import android.util.Log;
-
 class MPU6050JoystickActuator implements JoystickActuator {
 
     // JOYSTICK
