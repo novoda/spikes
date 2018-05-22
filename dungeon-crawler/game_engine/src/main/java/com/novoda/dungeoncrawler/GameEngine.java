@@ -98,11 +98,11 @@ class GameEngine {
     private long previousFrameTime = 0;           // Time of the last redraw
     private long lastInputTime = 0;
 
-    // WOBBLE ATTACK
+    // WOBBLE ATTACK            
     private static final int ATTACK_DURATION = 500;    // Duration of a wobble attack (ms)
     private static final int ATTACK_WIDTH = 70;     // Width of the wobble attack, world is 1000 wide
     private static final int BOSS_WIDTH = 40;
-    static final int ATTACK_THRESHOLD = 30000; // The threshold that triggers an attack // TODO DOESN'T BELONG HERE
+    private static final int ATTACK_THRESHOLD = 30000; // The threshold that triggers an attack // TODO DOESN'T BELONG HERE
 
     private long attackMillis = 0;             // Time the attack started
     private boolean attacking = false;                // Is the attack in progress?
@@ -116,9 +116,7 @@ class GameEngine {
     private int playerPosition;                // Stores the player position
     private Stage stage;
     private long stageStartTime;               // Stores the time the stage changed for stages that are time based
-    private boolean playerAlive;
     private int lives = 3;
-    private long killTime;
 
     // POOLS
     private static final Enemy[] enemyPool = new Enemy[]{
@@ -143,7 +141,6 @@ class GameEngine {
     public void loadLevel() {
         cleanupLevel();
         playerPosition = 0;
-        playerAlive = true;
         switch (levelNumber) {
             case 0:
                 // Left or right?
@@ -263,13 +260,7 @@ class GameEngine {
     }
 
     private void moveBoss() {
-        int spawnSpeed = 2500;
-        if (boss.lives == 2) {
-            spawnSpeed = 2000;
-        }
-        if (boss.lives == 1) {
-            spawnSpeed = 1500;
-        }
+        int spawnSpeed = boss.getSpeed();
         spawnPool[0].spawn(boss.position, spawnSpeed, 3, 0, 0, millis());
         spawnPool[1].spawn(boss.position, spawnSpeed, 3, 1, 0, millis());
     }
@@ -455,7 +446,6 @@ class GameEngine {
     }
 
     private void die() {
-        playerAlive = false;
         if (levelNumber > 0) {
             lives--;
         }
@@ -469,7 +459,6 @@ class GameEngine {
         }
         stageStartTime = millis();
         stage = Stage.DEAD;
-        killTime = millis();
     }
 
     private void tickConveyors() {
@@ -499,7 +488,6 @@ class GameEngine {
         if (!boss.isAlive()) {
             return;
         }
-        boss.ticks++;
         int bossStartPosition = boss.position - BOSS_WIDTH / 2;
         int bossEndPosition = boss.position + BOSS_WIDTH / 2;
         drawCallback.drawBoss(bossStartPosition, bossEndPosition);

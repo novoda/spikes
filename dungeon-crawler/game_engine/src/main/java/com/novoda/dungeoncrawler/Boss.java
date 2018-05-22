@@ -1,9 +1,8 @@
 package com.novoda.dungeoncrawler;
 
 class Boss {
-    public int lives;
     public int position;
-    public int ticks;
+    private int lives;
     private boolean alive;
 
     void spawn() {
@@ -31,5 +30,15 @@ class Boss {
 
     void kill() {
         alive = false;
+    }
+
+    public int getSpeed() {
+        if (lives == 2) {
+            return 2000;
+        }
+        if (lives == 1) {
+            return 1500;
+        }
+        return 2500;
     }
 }
