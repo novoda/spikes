@@ -16,7 +16,7 @@ public class SpeakerSoundEffectsPlayer implements SoundEffectsPlayer {
 //            freq *= 3;
 //        }
 //        toneAC(freq, MAX_VOLUME);
-        Log.d("TUT", "attacking");
+//        Log.d("TUT", "attacking");
     }
 
     @Override
@@ -26,7 +26,7 @@ public class SpeakerSoundEffectsPlayer implements SoundEffectsPlayer {
 //        if (playerPositionModifier > 0) f += 200;
 //        toneAC(f, min(min(abs(amount) / 9, 5), MAX_VOLUME));
         if (amount != 0) {
-            Log.d("TUT", "tilt " + amount);
+//            Log.d("TUT", "tilt " + amount);
         }
     }
 
@@ -36,13 +36,13 @@ public class SpeakerSoundEffectsPlayer implements SoundEffectsPlayer {
 //        freq += random8(200);
 //        int vol = max(10 - (millis() - killTime) / 200, 0);
 //        toneAC(freq, MAX_VOLUME);
-        Log.d("TUT", "dead");
+//        Log.d("TUT", "dead");
     }
 
     @Override
     public void playKill() { // TODO
 //        toneAC(2000, MAX_VOLUME, 1000, true);
-        Log.d("TUT", "kill");
+//        Log.d("TUT", "kill");
     }
 
     @Override
