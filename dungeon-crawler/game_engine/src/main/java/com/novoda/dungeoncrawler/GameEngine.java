@@ -93,7 +93,8 @@ class GameEngine {
     private static final boolean USE_GRAVITY = true;     // 0/1 use gravity (LED strip going up wall)
     private static final Direction DIRECTION = Direction.LEFT_TO_RIGHT;
 
-    private int levelNumber = 0;
+    private static final int START_LEVEL = 5;
+    private int levelNumber = START_LEVEL;
     private long previousFrameTime = 0;           // Time of the last redraw
     private long lastInputTime = 0;
 
@@ -308,7 +309,7 @@ class GameEngine {
             if (Math.abs(joyState.tilt) > JoystickActuator.DEADZONE) {
                 lastInputTime = frameTime;
                 if (stage == Stage.SCREENSAVER) {
-                    levelNumber = -1;
+                    levelNumber = START_LEVEL;
                     stageStartTime = frameTime;
                     stage = Stage.LEVEL_COMPLETE;
                 }
@@ -459,7 +460,7 @@ class GameEngine {
         }
         drawCallback.drawLives(lives);
         if (lives == 0) {
-            levelNumber = 0;
+            levelNumber = START_LEVEL;
             lives = 3;
         }
         for (Particle particle : particlePool) {
@@ -611,7 +612,7 @@ class GameEngine {
     private void nextLevel() {
         levelNumber++;
         if (levelNumber > LEVEL_COUNT) {
-            levelNumber = 0;
+            levelNumber = START_LEVEL;
         }
         loadLevel();
     }
