@@ -168,7 +168,7 @@ class DungeonCrawlerGame implements
 
     @Override
     public void drawParticle(int position, int power) {
-        //  TODO: LEDS[getLED(position)] += CRGB.(power, 0, 0);
+        display.set(getLED(position), new Display.CRGB(power, 0, 0));
     }
 
     @Override
