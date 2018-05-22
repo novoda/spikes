@@ -146,7 +146,7 @@ class GameEngine {
             case 0:
                 // Left or right?
                 playerPosition = 200;
-                spawnEnemy(1, 0, 0, 0);
+                spawnEnemy(800, 0, 0, 0);
                 break;
             case 1:
                 // Slow moving enemy
@@ -227,10 +227,10 @@ class GameEngine {
         boss.kill();
     }
 
-    private void spawnEnemy(int pos, int dir, int sp, int wobble) {
+    private void spawnEnemy(int pos, int dir, int speed, int wobble) {
         for (Enemy anEnemyPool : enemyPool) {
             if (!anEnemyPool.isAlive()) {
-                anEnemyPool.spawn(pos, dir, sp, wobble);
+                anEnemyPool.spawn(pos, dir, speed, wobble);
                 anEnemyPool.playerSide = pos > playerPosition ? 1 : -1;
                 return;
             }
@@ -493,7 +493,7 @@ class GameEngine {
         for (Spawner aSpawnPool : spawnPool) {
             if (aSpawnPool.isAlive() && aSpawnPool.activate < mm) {
                 if (aSpawnPool.lastSpawned + aSpawnPool.rate < mm || aSpawnPool.lastSpawned == 0) {
-                    spawnEnemy(aSpawnPool.position, aSpawnPool.direction, aSpawnPool.sp, 0);
+                    spawnEnemy(aSpawnPool.position, aSpawnPool.direction, aSpawnPool.speed, 0);
                     aSpawnPool.lastSpawned = mm;
                 }
             }

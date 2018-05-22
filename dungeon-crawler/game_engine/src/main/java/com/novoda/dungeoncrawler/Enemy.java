@@ -4,17 +4,17 @@ class Enemy {
     public int playerSide;
     public int position;
     private boolean alive;
-    private int _sp;
+    private int speed;
     private int direction;
     private int wobble;
     private int origin;
 
-    void spawn(int pos, int dir, int sp, int wobble) {
+    void spawn(int pos, int dir, int speed, int wobble) {
         position = pos;
         direction = dir;          // 0 = left, 1 = right
         this.wobble = wobble;    // 0 = no, >0 = yes, value is width of wobble
         origin = pos;
-        _sp = sp;
+        this.speed = speed;
         alive = true;
     }
 
@@ -25,12 +25,12 @@ class Enemy {
     void tick(long millis) {
         if (alive) {
             if (wobble > 0) {
-                position = (int) (origin + (Math.sin((millis / 3000.0) * _sp) * wobble));
+                position = (int) (origin + (Math.sin((millis / 3000.0) * speed) * wobble));
             } else {
                 if (direction == 0) {
-                    position -= _sp;
+                    position -= speed;
                 } else {
-                    position += _sp;
+                    position += speed;
                 }
                 if (position > 1000) {
                     kill();

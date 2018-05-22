@@ -6,13 +6,13 @@ class Spawner {
     public long rate;
     public int position;
     public int direction;
-    public int sp;
+    public int speed;
     private boolean alive;
 
-    void spawn(int position, int rate, int sp, int direction, int activate, long millis) {
+    void spawn(int position, int rate, int speed, int direction, int activate, long millis) {
         this.position = position;
         this.rate = rate;
-        this.sp = sp;
+        this.speed = speed;
         this.direction = direction;
         this.activate = millis + activate;
         this.alive = true;
