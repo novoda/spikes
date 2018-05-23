@@ -8,18 +8,6 @@ import static com.novoda.dungeoncrawler.Direction.RIGHT_TO_LEFT;
 
 class GameEngine {
 
-    // Hooks
-    private final AttackMonitor attackMonitor;
-    private final KillMonitor killMonitor;
-    private final MovementMonitor movementMonitor;
-    private final DeathMonitor deathMonitor;
-    private final WinMonitor winMonitor;
-    private final NoInputMonitor noInputMonitor;
-    private final CompleteMonitor completeMonitor;
-    private final GameOverMonitor gameOverMonitor;
-    private final DrawCallback drawCallback;
-    private final JoystickActuator inputActuator;
-
     // GAME
     private static final int MIN_REDRAW_INTERVAL = 33;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
     private static final int TIMEOUT = 30000;
@@ -47,6 +35,18 @@ class GameEngine {
     private static final List<Lava> lavaPool = new ArrayList<>();
     private static final List<Conveyor> conveyorPool = new ArrayList<>();
     private static final Boss boss = new Boss();
+
+    // Hooks
+    private final AttackMonitor attackMonitor;
+    private final KillMonitor killMonitor;
+    private final MovementMonitor movementMonitor;
+    private final DeathMonitor deathMonitor;
+    private final WinMonitor winMonitor;
+    private final NoInputMonitor noInputMonitor;
+    private final CompleteMonitor completeMonitor;
+    private final GameOverMonitor gameOverMonitor;
+    private final DrawCallback drawCallback;
+    private final JoystickActuator inputActuator;
 
     private final StartClock clock;
 
