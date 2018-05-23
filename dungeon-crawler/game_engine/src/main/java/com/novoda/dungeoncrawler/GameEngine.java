@@ -31,7 +31,7 @@ class GameEngine {
             new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle()
     };
     private static final List<Enemy> enemyPool = new ArrayList<>();
-    private static final List<EnemySpawner> spawnPool = new ArrayList<>();
+    private static final List<EnemySpawner> enemySpawnerPool = new ArrayList<>();
     private static final List<Lava> lavaPool = new ArrayList<>();
     private static final List<Conveyor> conveyorPool = new ArrayList<>();
     private static final Boss boss = new Boss();
@@ -150,12 +150,12 @@ class GameEngine {
                 break;
             case 2:
                 // Spawning enemies at exit every 2 seconds
-                spawnSpawner(1000, 3000, 2, 0, 0, clock.millis());
+                spawnEnemySpawner(1000, 3000, 2, 0, 0, clock.millis());
                 break;
             case 3:
                 // Lava intro
                 spawnLava(400, 490, 2000, 2000);
-                spawnSpawner(1000, 5500, 3, 0, 0, clock.millis());
+                spawnEnemySpawner(1000, 5500, 3, 0, 0, clock.millis());
                 break;
             case 4:
                 // Sin enemy
@@ -184,14 +184,14 @@ class GameEngine {
                 spawnLava(350, 455, 2000, 2000);
                 spawnLava(510, 610, 2000, 2000);
                 spawnLava(660, 760, 2000, 2000);
-                spawnSpawner(1000, 3800, 4, 0, 0, clock.millis());
+                spawnEnemySpawner(1000, 3800, 4, 0, 0, clock.millis());
                 break;
             case 8:
                 // Sin enemy #2
                 spawnEnemy(700, 1, 7, 275);
                 spawnEnemy(500, 1, 5, 250);
-                spawnSpawner(1000, 5500, 4, 0, 3000, clock.millis());
-                spawnSpawner(0, 5500, 5, 1, 10000, clock.millis());
+                spawnEnemySpawner(1000, 5500, 4, 0, 3000, clock.millis());
+                spawnEnemySpawner(0, 5500, 5, 1, 10000, clock.millis());
                 spawnConveyor(100, 900, RIGHT_TO_LEFT, CONVEYOR_SPEED);
                 break;
             case 9:
@@ -211,7 +211,7 @@ class GameEngine {
             particle.kill();
         }
         enemyPool.clear();
-        spawnPool.clear();
+        enemySpawnerPool.clear();
         lavaPool.clear();
         conveyorPool.clear();
         boss.kill();
@@ -230,8 +230,8 @@ class GameEngine {
         conveyorPool.add(new Conveyor(startPoint, endPoint, dir, speed));
     }
 
-    private void spawnSpawner(int position, int rate, int speed, int direction, int activate, long millis) {
-        spawnPool.add(new EnemySpawner(position, rate, speed, direction, activate, millis));
+    private void spawnEnemySpawner(int position, int rate, int speed, int direction, int activate, long millis) {
+        enemySpawnerPool.add(new EnemySpawner(position, rate, speed, direction, activate, millis));
     }
 
     private void spawnBoss(int position, int lives) {
@@ -241,9 +241,9 @@ class GameEngine {
 
     private void moveBoss() {
         int spawnSpeed = boss.getSpeed();
-        spawnPool.clear();
-        spawnSpawner(boss.getPosition(), spawnSpeed, 3, 0, 0, clock.millis());
-        spawnSpawner(boss.getPosition(), spawnSpeed, 3, 1, 0, clock.millis());
+        enemySpawnerPool.clear();
+        spawnEnemySpawner(boss.getPosition(), spawnSpeed, 3, 0, 0, clock.millis());
+        spawnEnemySpawner(boss.getPosition(), spawnSpeed, 3, 1, 0, clock.millis());
     }
 
     void loop() {
@@ -429,7 +429,7 @@ class GameEngine {
 
     private void tickEnemySpawners() {
         long mm = clock.millis();
-        for (EnemySpawner enemySpawner : spawnPool) {
+        for (EnemySpawner enemySpawner : enemySpawnerPool) {
             if (enemySpawner.shouldSpawn(mm)) {
                 EnemySpawner.Spawn spawn = enemySpawner.spawn(mm);
                 spawnEnemy(spawn.getPosition(), spawn.getDirection(), spawn.getSpeed(), 0);
@@ -463,7 +463,7 @@ class GameEngine {
                 if (boss.isAlive()) {
                     moveBoss();
                 } else {
-                    for (EnemySpawner enemySpawner : spawnPool) {
+                    for (EnemySpawner enemySpawner : enemySpawnerPool) {
                         enemySpawner.kill();
                     }
                 }
