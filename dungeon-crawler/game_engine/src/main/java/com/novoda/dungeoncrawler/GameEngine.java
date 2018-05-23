@@ -194,6 +194,8 @@ class GameEngine {
                 // Boss
                 spawnBoss(800, 3);
                 break;
+            default:
+                throw new IllegalStateException("Unknown level {" + levelNumber + "}");
         }
         stageStartTime = millis();
         stage = Stage.PLAY;
