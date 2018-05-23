@@ -48,6 +48,8 @@ class GameEngine {
     private static final List<Conveyor> conveyorPool = new ArrayList<>();
     private static final Boss boss = new Boss();
 
+    private final StartClock clock;
+
     private int levelNumber = START_LEVEL;
     private long previousFrameTime = 0;           // Time of the last redraw
     private long lastInputTime = 0;
@@ -62,7 +64,7 @@ class GameEngine {
     private long stageStartTime;               // Stores the time the stage changed for stages that are time based
     private int lives = 3;
 
-    GameEngine(AttackMonitor attackMonitor, KillMonitor killMonitor, MovementMonitor movementMonitor, DeathMonitor deathMonitor, WinMonitor winMonitor, NoInputMonitor noInputMonitor, CompleteMonitor completeMonitor, GameOverMonitor gameOverMonitor, DrawCallback drawCallback, JoystickActuator inputActuator) {
+    GameEngine(AttackMonitor attackMonitor, KillMonitor killMonitor, MovementMonitor movementMonitor, DeathMonitor deathMonitor, WinMonitor winMonitor, NoInputMonitor noInputMonitor, CompleteMonitor completeMonitor, GameOverMonitor gameOverMonitor, DrawCallback drawCallback, JoystickActuator inputActuator, StartClock startClock) {
         this.attackMonitor = attackMonitor;
         this.killMonitor = killMonitor;
         this.movementMonitor = movementMonitor;
@@ -73,6 +75,7 @@ class GameEngine {
         this.gameOverMonitor = gameOverMonitor;
         this.drawCallback = drawCallback;
         this.inputActuator = inputActuator;
+        this.clock = startClock;
     }
 
     interface AttackMonitor {
@@ -132,6 +135,7 @@ class GameEngine {
     }
 
     public void loadLevel() {
+        clock.start();
         cleanupLevel();
         playerPosition = 0;
         switch (levelNumber) {
@@ -146,12 +150,12 @@ class GameEngine {
                 break;
             case 2:
                 // Spawning enemies at exit every 2 seconds
-                spawnSpawner(1000, 3000, 2, 0, 0, millis());
+                spawnSpawner(1000, 3000, 2, 0, 0, clock.millis());
                 break;
             case 3:
                 // Lava intro
                 spawnLava(400, 490, 2000, 2000);
-                spawnSpawner(1000, 5500, 3, 0, 0, millis());
+                spawnSpawner(1000, 5500, 3, 0, 0, clock.millis());
                 break;
             case 4:
                 // Sin enemy
@@ -180,14 +184,14 @@ class GameEngine {
                 spawnLava(350, 455, 2000, 2000);
                 spawnLava(510, 610, 2000, 2000);
                 spawnLava(660, 760, 2000, 2000);
-                spawnSpawner(1000, 3800, 4, 0, 0, millis());
+                spawnSpawner(1000, 3800, 4, 0, 0, clock.millis());
                 break;
             case 8:
                 // Sin enemy #2
                 spawnEnemy(700, 1, 7, 275);
                 spawnEnemy(500, 1, 5, 250);
-                spawnSpawner(1000, 5500, 4, 0, 3000, millis());
-                spawnSpawner(0, 5500, 5, 1, 10000, millis());
+                spawnSpawner(1000, 5500, 4, 0, 3000, clock.millis());
+                spawnSpawner(0, 5500, 5, 1, 10000, clock.millis());
                 spawnConveyor(100, 900, RIGHT_TO_LEFT, CONVEYOR_SPEED);
                 break;
             case 9:
@@ -197,7 +201,7 @@ class GameEngine {
             default:
                 throw new IllegalStateException("Unknown level {" + levelNumber + "}");
         }
-        stageStartTime = millis();
+        stageStartTime = clock.millis();
         stage = Stage.PLAY;
         drawCallback.drawLives(lives);
     }
@@ -238,27 +242,13 @@ class GameEngine {
     private void moveBoss() {
         int spawnSpeed = boss.getSpeed();
         spawnPool.clear();
-        spawnSpawner(boss.getPosition(), spawnSpeed, 3, 0, 0, millis());
-        spawnSpawner(boss.getPosition(), spawnSpeed, 3, 1, 0, millis());
-    }
-
-    private long millis = 0;
-
-    /**
-     * https://www.arduino.cc/reference/en/language/functions/time/millis/
-     *
-     * @return Number of milliseconds since the program started (unsigned long)
-     */
-    private long millis() {
-        if (millis == 0) {
-            millis = System.currentTimeMillis();
-        }
-        return System.currentTimeMillis() - millis;
+        spawnSpawner(boss.getPosition(), spawnSpeed, 3, 0, 0, clock.millis());
+        spawnSpawner(boss.getPosition(), spawnSpeed, 3, 1, 0, clock.millis());
     }
 
     void loop() {
 //        Log.d("TUT", "loop");
-        long frameTime = millis();
+        long frameTime = clock.millis();
 
         if (stage == Stage.PLAY) {
             if (attacking) {
@@ -364,7 +354,7 @@ class GameEngine {
 
     private void playingStateDraw() {
         drawCallback.startDraw();
-        long frame = 10000 + millis();
+        long frame = 10000 + clock.millis();
         for (Conveyor conveyor : conveyorPool) {
             drawCallback.drawConveyor(conveyor.getStartPoint(), conveyor.getEndPoint(), conveyor.getDirection(), frame);
         }
@@ -380,7 +370,7 @@ class GameEngine {
         if (attacking) {
             int startPoint = playerPosition + (ATTACK_WIDTH / 2);
             int endPoint = playerPosition - (ATTACK_WIDTH / 2);
-            int attackPower = (int) GameEngine.map((int) (millis() - attackMillis), 0, ATTACK_DURATION, 100, 5);
+            int attackPower = (int) GameEngine.map((int) (clock.millis() - attackMillis), 0, ATTACK_DURATION, 100, 5);
             drawCallback.drawAttack(startPoint, playerPosition, endPoint, attackPower);
         }
         if (!boss.isAlive()) {
@@ -393,7 +383,7 @@ class GameEngine {
     }
 
     private void levelComplete() {
-        stageStartTime = millis();
+        stageStartTime = clock.millis();
         stage = Stage.LEVEL_COMPLETE;
         if (levelNumber == LEVEL_COUNT) {
             stage = Stage.GAME_COMPLETE;
@@ -426,7 +416,7 @@ class GameEngine {
         for (Particle particle : particlePool) {
             particle.spawn(playerPosition);
         }
-        stageStartTime = millis();
+        stageStartTime = clock.millis();
         stage = Stage.DEAD;
     }
 
@@ -438,7 +428,7 @@ class GameEngine {
     }
 
     private void tickEnemySpawners() {
-        long mm = millis();
+        long mm = clock.millis();
         for (EnemySpawner enemySpawner : spawnPool) {
             if (enemySpawner.shouldSpawn(mm)) {
                 EnemySpawner.Spawn spawn = enemySpawner.spawn(mm);
@@ -482,7 +472,7 @@ class GameEngine {
     }
 
     private void tickLava() {
-        long mm = millis();
+        long mm = clock.millis();
         for (Lava lava : lavaPool) {
             lava.toggleLava(mm);
         }
@@ -491,7 +481,7 @@ class GameEngine {
     private void tickEnemies() {
         for (Enemy enemy : enemyPool) {
             if (enemy.isAlive()) {
-                enemy.tick(millis());
+                enemy.tick(clock.millis());
                 // hit attack?
                 if (attacking) {
                     int attackStartPosition = playerPosition - (ATTACK_WIDTH / 2);
