@@ -8,6 +8,60 @@ import static com.novoda.dungeoncrawler.Direction.RIGHT_TO_LEFT;
 
 class GameEngine {
 
+    // Hooks
+    private final AttackMonitor attackMonitor;
+    private final KillMonitor killMonitor;
+    private final MovementMonitor movementMonitor;
+    private final DeathMonitor deathMonitor;
+    private final WinMonitor winMonitor;
+    private final NoInputMonitor noInputMonitor;
+    private final CompleteMonitor completeMonitor;
+    private final GameOverMonitor gameOverMonitor;
+    private final DrawCallback drawCallback;
+    private final JoystickActuator inputActuator;
+
+    // GAME
+    private static final int MIN_REDRAW_INTERVAL = 33;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
+    private static final int TIMEOUT = 30000;
+    private static final int LEVEL_COUNT = 9;
+    private static final boolean USE_GRAVITY = true;     // 0/1 use gravity (LED strip going up wall)
+    private static final Direction DIRECTION = Direction.LEFT_TO_RIGHT;
+    private static final int START_LEVEL = 0;
+
+    // WOBBLE ATTACK
+    private static final int ATTACK_DURATION = 500;    // Duration of a wobble attack (ms)
+    private static final int ATTACK_WIDTH = 70;     // Width of the wobble attack, world is 1000 wide
+    private static final int BOSS_WIDTH = 40;
+    private static final int ATTACK_THRESHOLD = 30000; // The threshold that triggers an attack // TODO DOESN'T BELONG HERE
+
+    // PLAYER
+    private static final int MAX_PLAYER_SPEED = 15;     // Max move speed of the player
+    private static final int CONVEYOR_SPEED = 3;
+
+    // POOLS
+    private static final Particle[] particlePool = {
+            new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle()
+    };
+    private static final List<Enemy> enemyPool = new ArrayList<>();
+    private static final List<EnemySpawner> spawnPool = new ArrayList<>();
+    private static final List<Lava> lavaPool = new ArrayList<>();
+    private static final List<Conveyor> conveyorPool = new ArrayList<>();
+    private static final Boss boss = new Boss();
+
+    private int levelNumber = START_LEVEL;
+    private long previousFrameTime = 0;           // Time of the last redraw
+    private long lastInputTime = 0;
+
+    private long attackMillis = 0;             // Time the attack started
+    private boolean attacking = false;                // Is the attack in progress?
+    private JoystickActuator.JoyState joyState;
+
+    private int playerPositionModifier;        // +/- adjustment to player position
+    private int playerPosition;                // Stores the player position
+    private Stage stage;
+    private long stageStartTime;               // Stores the time the stage changed for stages that are time based
+    private int lives = 3;
+
     GameEngine(AttackMonitor attackMonitor, KillMonitor killMonitor, MovementMonitor movementMonitor, DeathMonitor deathMonitor, WinMonitor winMonitor, NoInputMonitor noInputMonitor, CompleteMonitor completeMonitor, GameOverMonitor gameOverMonitor, DrawCallback drawCallback, JoystickActuator inputActuator) {
         this.attackMonitor = attackMonitor;
         this.killMonitor = killMonitor;
@@ -76,60 +130,6 @@ class GameEngine {
 
         void finishDraw();
     }
-
-    // Hooks
-    private final AttackMonitor attackMonitor;
-    private final KillMonitor killMonitor;
-    private final MovementMonitor movementMonitor;
-    private final DeathMonitor deathMonitor;
-    private final WinMonitor winMonitor;
-    private final NoInputMonitor noInputMonitor;
-    private final CompleteMonitor completeMonitor;
-    private final GameOverMonitor gameOverMonitor;
-    private final DrawCallback drawCallback;
-    private final JoystickActuator inputActuator;
-
-    // GAME
-    private static final int MIN_REDRAW_INTERVAL = 33;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
-    private static final int TIMEOUT = 30000;
-    private static final int LEVEL_COUNT = 9;
-    private static final boolean USE_GRAVITY = true;     // 0/1 use gravity (LED strip going up wall)
-    private static final Direction DIRECTION = Direction.LEFT_TO_RIGHT;
-
-    private static final int START_LEVEL = 0;
-    private int levelNumber = START_LEVEL;
-    private long previousFrameTime = 0;           // Time of the last redraw
-    private long lastInputTime = 0;
-
-    // WOBBLE ATTACK            
-    private static final int ATTACK_DURATION = 500;    // Duration of a wobble attack (ms)
-    private static final int ATTACK_WIDTH = 70;     // Width of the wobble attack, world is 1000 wide
-    private static final int BOSS_WIDTH = 40;
-    private static final int ATTACK_THRESHOLD = 30000; // The threshold that triggers an attack // TODO DOESN'T BELONG HERE
-
-    private long attackMillis = 0;             // Time the attack started
-    private boolean attacking = false;                // Is the attack in progress?
-    private JoystickActuator.JoyState joyState;
-
-    // PLAYER
-    private static final int MAX_PLAYER_SPEED = 15;     // Max move speed of the player
-    private static final int CONVEYOR_SPEED = 3;
-
-    private int playerPositionModifier;        // +/- adjustment to player position
-    private int playerPosition;                // Stores the player position
-    private Stage stage;
-    private long stageStartTime;               // Stores the time the stage changed for stages that are time based
-    private int lives = 3;
-
-    // POOLS
-    private static final Particle[] particlePool = {
-            new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle()
-    };
-    private static final List<Enemy> enemyPool = new ArrayList<>();
-    private static final List<EnemySpawner> spawnPool = new ArrayList<>();
-    private static final List<Lava> lavaPool = new ArrayList<>();
-    private static final List<Conveyor> conveyorPool = new ArrayList<>();
-    private static final Boss boss = new Boss();
 
     public void loadLevel() {
         cleanupLevel();
