@@ -192,7 +192,7 @@ class GameEngine {
                 break;
             case 9:
                 // Boss
-                spawnBoss();
+                spawnBoss(800, 3);
                 break;
         }
         stageStartTime = millis();
@@ -228,8 +228,8 @@ class GameEngine {
         spawnPool.add(new EnemySpawner(position, rate, speed, direction, activate, millis));
     }
 
-    private void spawnBoss() {
-        boss.spawn();
+    private void spawnBoss(int position, int lives) {
+        boss.spawn(position, lives);
         moveBoss();
     }
 
