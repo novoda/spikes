@@ -30,8 +30,10 @@ class MPU6050JoystickActuator implements JoystickActuator {
         // if(digitalRead(attackButtonPinNumber) == HIGH) wobble = ATTACK_THRESHOLD;
 
         MPU6050.Motion motion = accelGyro.getMotion6();
-        int a = (JOYSTICK_ORIENTATION == 0 ? motion.ax : (JOYSTICK_ORIENTATION == 1 ? motion.ay : motion.az)) / 166;
-        int g = (JOYSTICK_ORIENTATION == 0 ? motion.gx : (JOYSTICK_ORIENTATION == 1 ? motion.gy : motion.gz));
+//        float a = (JOYSTICK_ORIENTATION == 0 ? motion.ax : (JOYSTICK_ORIENTATION == 1 ? motion.ay : motion.az)) / 166;
+//        float g = (JOYSTICK_ORIENTATION == 0 ? motion.gx : (JOYSTICK_ORIENTATION == 1 ? motion.gy : motion.gz));
+        float a = motion.ay * 150 + 10;
+        float g = motion.gy * 150;
         if (Math.abs(a) < DEADZONE) {
             a = 0;
         }
@@ -46,7 +48,7 @@ class MPU6050JoystickActuator implements JoystickActuator {
 
         JOY_STATE.tilt = MPU_ANGLE_SAMPLES.getMedian();
         if (JOYSTICK_DIRECTION == 1) {
-            JOY_STATE.tilt = 0 - JOY_STATE.tilt;
+            JOY_STATE.tilt = -JOY_STATE.tilt;
         }
         JOY_STATE.wobble = Math.abs(MPU_WOBBLE_SAMPLES.getHighest());
 //        Log.d("TUT", "Return " + JOY_STATE);
