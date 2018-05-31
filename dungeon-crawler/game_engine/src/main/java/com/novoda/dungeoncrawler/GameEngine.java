@@ -360,7 +360,7 @@ class GameEngine {
         }
         for (Enemy enemy : enemyPool) { // TODO this is now after the check if the enemy has hit the player - just sanity test this doesn't cause weird state
             if (enemy.isAlive()) {
-                drawCallback.drawEnemy(enemy.position);
+                drawCallback.drawEnemy(enemy.getPosition());
             }
         }
         for (Lava lava : lavaPool) {
@@ -495,7 +495,7 @@ class GameEngine {
                         killMonitor.onKill();
                     }
                 }
-                if (inLava(enemy.position)) {
+                if (inLava(enemy.getPosition())) {
                     enemy.kill();
                     killMonitor.onKill();
                 }

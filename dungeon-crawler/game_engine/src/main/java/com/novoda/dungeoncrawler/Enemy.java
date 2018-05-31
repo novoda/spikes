@@ -7,7 +7,7 @@ class Enemy {
     private final int playerSide;
     private final int origin;
 
-    public int position;
+    private int position;
     private boolean alive;
 
     Enemy(int position, int direction, int speed, int wobble, int playerSide) {
@@ -55,5 +55,9 @@ class Enemy {
 
     void kill() {
         alive = false;
+    }
+
+    public int getPosition() {
+        return position;
     }
 }
