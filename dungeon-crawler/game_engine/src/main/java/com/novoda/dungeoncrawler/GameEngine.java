@@ -24,6 +24,7 @@ class GameEngine {
     private static final int ATTACK_THRESHOLD = 30000; // The threshold that triggers an attack // TODO DOESN'T BELONG HERE
 
     // PLAYER
+    private static final int TOTAL_LIVES = 3;
     private static final int MAX_PLAYER_SPEED = 15;     // Max move speed of the player
     private static final int CONVEYOR_SPEED = 3;
 
@@ -61,7 +62,7 @@ class GameEngine {
     private int playerPosition;                // Stores the player position
     private Stage stage;
     private long stageStartTime;               // Stores the time the stage changed for stages that are time based
-    private int lives = 3;
+    private int lives = TOTAL_LIVES;
 
     GameEngine(AttackMonitor attackMonitor, KillMonitor killMonitor, MovementMonitor movementMonitor, DeathMonitor deathMonitor, WinMonitor winMonitor, NoInputMonitor noInputMonitor, CompleteMonitor completeMonitor, GameOverMonitor gameOverMonitor, DrawCallback drawCallback, JoystickActuator inputActuator, StartClock startClock) {
         this.attackMonitor = attackMonitor;
@@ -399,7 +400,7 @@ class GameEngine {
         if (levelNumber == LEVEL_COUNT) {
             stage = Stage.GAME_COMPLETE;
         }
-        lives = 3;
+        lives = TOTAL_LIVES;
         drawCallback.drawLives(lives);
     }
 
@@ -422,7 +423,7 @@ class GameEngine {
         drawCallback.drawLives(lives);
         if (lives == 0) {
             levelNumber = START_LEVEL;
-            lives = 3;
+            lives = TOTAL_LIVES;
         }
         for (Particle particle : particlePool) {
             particle.spawn(playerPosition);
