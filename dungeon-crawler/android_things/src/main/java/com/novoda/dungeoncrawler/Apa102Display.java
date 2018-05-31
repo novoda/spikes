@@ -60,7 +60,7 @@ public class Apa102Display implements Display {
     //
     @Override
     public void modifyScale(int position, int scale) {
-        transform(position, colourComponent -> (int) colourComponent); // TODO: Apply scale
+        transform(position, colourComponent -> (int) colourComponent * scale); // TODO: Apply scale
     }
 
     //
@@ -71,8 +71,8 @@ public class Apa102Display implements Display {
 
     private void transform(int position, Transformation transformation) {
         Color color = Color.valueOf(leds[position]);
-        int scaled = Color.argb(OPAQUE, transformation.apply(color.red()), transformation.apply(color.green()), transformation.apply(color.blue()));
-        leds[position] = scaled;
+        int transformed = Color.argb(OPAQUE, transformation.apply(color.red()), transformation.apply(color.green()), transformation.apply(color.blue()));
+        leds[position] = transformed;
     }
 
     private interface Transformation {
