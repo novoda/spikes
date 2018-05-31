@@ -25,12 +25,10 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.xrigau:ws2801-driver:0.0.5@aar'
     implementation 'com.google.android.things.contrib:driver-apa102:1.0'
-    implementation 'com.android.support:appcompat-v7:27.1.0'
-    compile project(path: ':android')
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation project(':android')
     compileOnly 'com.google.android.things:androidthings:1.0'
-//    compileOnly 'com.google.android.things:androidthings:0.8-devpreview'
 
     testImplementation 'junit:junit:4.12'
 
