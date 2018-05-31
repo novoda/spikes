@@ -490,7 +490,6 @@ class GameEngine {
     }
 
     private void tickBoss() {
-        // DRAW
         if (!boss.isAlive()) {
             return;
         }
