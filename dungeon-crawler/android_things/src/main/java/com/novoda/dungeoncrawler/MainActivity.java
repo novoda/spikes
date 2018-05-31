@@ -16,7 +16,7 @@ public class MainActivity extends Activity {
     private static final int NUM_LEDS = 300;
 
     private static final String SPI_DEVICE_NAME = "SPI3.0";
-    private static final Apa102.Mode APA102_MODE = Apa102.Mode.GBR;
+    private static final Apa102.Mode APA102_MODE = Apa102.Mode.BGR;
 
     private static final int[] lifeLEDs = new int[]{52, 50, 40};
 

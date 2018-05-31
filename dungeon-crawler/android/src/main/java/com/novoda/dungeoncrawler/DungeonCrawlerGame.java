@@ -88,12 +88,12 @@ class DungeonCrawlerGame implements
         soundEffectsPlayer.playComplete();
         if (levelStartTime + 500 > levelCurrentTime) {
             int n = (int) Math.max(GameEngine.map((int) (levelCurrentTime - levelStartTime), 0, 500, numLeds, 0), 0);
-            for (int i = numLeds; i >= n; i--) {
+            for (int i = numLeds - 1; i >= n; i--) {
                 int brightness = (int) ((Math.sin(((i * 10) + levelCurrentTime) / 500.0) + 1) * 255);
                 display.modifyHSV(i, brightness, 255, 50);
             }
         } else if (levelStartTime + 5000 > levelCurrentTime) {
-            for (int i = numLeds; i >= 0; i--) {
+            for (int i = numLeds - 1; i >= 0; i--) {
                 int brightness = (int) ((Math.sin(((i * 10) + levelCurrentTime) / 500.0) + 1) * 255);
                 display.modifyHSV(i, brightness, 255, 50);
             }
@@ -197,7 +197,7 @@ class DungeonCrawlerGame implements
     public void drawBoss(int startPosition, int endPosition) {
         for (int i = getLED(startPosition); i <= getLED(endPosition); i++) {
             display.set(i, Display.CRGB.DARK_RED);
-            display.modifyMod(i, 100);
+            // display.modifyMod(i, 100); // TODO: Investigate this! It prevents the boss from drawing
         }
     }
 
