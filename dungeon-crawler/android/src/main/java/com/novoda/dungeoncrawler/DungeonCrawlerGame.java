@@ -197,7 +197,7 @@ class DungeonCrawlerGame implements
     public void drawBoss(int startPosition, int endPosition) {
         for (int i = getLED(startPosition); i <= getLED(endPosition); i++) {
             display.set(i, Display.CRGB.DARK_RED);
-//            display.modifyMod(i, 100); // This prevents the boss from drawing
+            // display.modifyMod(i, 100); // TODO: Investigate this! It prevents the boss from drawing
         }
     }
 

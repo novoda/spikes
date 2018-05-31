@@ -60,13 +60,13 @@ public class Apa102Display implements Display {
     //
     @Override
     public void modifyScale(int position, int scale) {
-        transform(position, colourComponent -> (int) colourComponent * scale); // TODO: Apply scale
+        transform(position, colourComponent -> (int) colourComponent * scale); // TODO is this correct?
     }
 
     //
     @Override
     public void modifyMod(int position, int mod) {
-        transform(position, colourComponent -> (int) colourComponent % mod); // TODO is this correct
+        transform(position, colourComponent -> (int) colourComponent % mod); // TODO is this correct?
     }
 
     private void transform(int position, Transformation transformation) {
