@@ -1,11 +1,70 @@
 package com.novoda.dungeoncrawler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.novoda.dungeoncrawler.Direction.LEFT_TO_RIGHT;
 import static com.novoda.dungeoncrawler.Direction.RIGHT_TO_LEFT;
 
 class GameEngine {
 
-    GameEngine(AttackMonitor attackMonitor, KillMonitor killMonitor, MovementMonitor movementMonitor, DeathMonitor deathMonitor, WinMonitor winMonitor, NoInputMonitor noInputMonitor, CompleteMonitor completeMonitor, GameOverMonitor gameOverMonitor, DrawCallback drawCallback, JoystickActuator inputActuator) {
+    // GAME
+    private static final int MIN_REDRAW_INTERVAL = 33;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
+    private static final int TIMEOUT = 30000;
+    private static final int LEVEL_COUNT = 9;
+    private static final boolean USE_GRAVITY = true;     // 0/1 use gravity (LED strip going up wall)
+    private static final Direction DIRECTION = Direction.LEFT_TO_RIGHT;
+    private static final int START_LEVEL = 0;
+    private static final int TOTAL_DEATH_PARTICLES = 30;
+
+    // WOBBLE ATTACK
+    private static final int ATTACK_DURATION = 700;    // Duration of a wobble attack (ms)
+    private static final int ATTACK_WIDTH = 70;     // Width of the wobble attack, world is 1000 wide
+    private static final int BOSS_WIDTH = 40;
+    private static final int ATTACK_THRESHOLD = 30000; // The threshold that triggers an attack // TODO DOESN'T BELONG HERE
+
+    // PLAYER
+    private static final int TOTAL_LIVES = 3;
+    private static final int MAX_PLAYER_SPEED = 15;     // Max move speed of the player
+    private static final int CONVEYOR_SPEED = 3;
+
+    // POOLS
+    private static final List<Particle> particlePool = new ArrayList<>();
+    private static final List<Enemy> enemyPool = new ArrayList<>();
+    private static final List<EnemySpawner> enemySpawnerPool = new ArrayList<>();
+    private static final List<Lava> lavaPool = new ArrayList<>();
+    private static final List<Conveyor> conveyorPool = new ArrayList<>();
+    private static final Boss boss = new Boss();
+
+    // Hooks
+    private final AttackMonitor attackMonitor;
+    private final KillMonitor killMonitor;
+    private final MovementMonitor movementMonitor;
+    private final DeathMonitor deathMonitor;
+    private final WinMonitor winMonitor;
+    private final NoInputMonitor noInputMonitor;
+    private final CompleteMonitor completeMonitor;
+    private final GameOverMonitor gameOverMonitor;
+    private final DrawCallback drawCallback;
+    private final JoystickActuator inputActuator;
+
+    private final StartClock clock;
+
+    private int levelNumber = START_LEVEL;
+    private long previousFrameTime = 0;           // Time of the last redraw
+    private long lastInputTime = 0;
+
+    private long attackMillis = 0;             // Time the attack started
+    private boolean attacking = false;                // Is the attack in progress?
+    private JoystickActuator.JoyState joyState;
+
+    private int playerPositionModifier;        // +/- adjustment to player position
+    private int playerPosition;                // Stores the player position
+    private Stage stage;
+    private long stageStartTime;               // Stores the time the stage changed for stages that are time based
+    private int lives = TOTAL_LIVES;
+
+    GameEngine(AttackMonitor attackMonitor, KillMonitor killMonitor, MovementMonitor movementMonitor, DeathMonitor deathMonitor, WinMonitor winMonitor, NoInputMonitor noInputMonitor, CompleteMonitor completeMonitor, GameOverMonitor gameOverMonitor, DrawCallback drawCallback, JoystickActuator inputActuator, StartClock startClock) {
         this.attackMonitor = attackMonitor;
         this.killMonitor = killMonitor;
         this.movementMonitor = movementMonitor;
@@ -16,6 +75,7 @@ class GameEngine {
         this.gameOverMonitor = gameOverMonitor;
         this.drawCallback = drawCallback;
         this.inputActuator = inputActuator;
+        this.clock = startClock;
     }
 
     interface AttackMonitor {
@@ -74,72 +134,10 @@ class GameEngine {
         void finishDraw();
     }
 
-    // Hooks
-    private final AttackMonitor attackMonitor;
-    private final KillMonitor killMonitor;
-    private final MovementMonitor movementMonitor;
-    private final DeathMonitor deathMonitor;
-    private final WinMonitor winMonitor;
-    private final NoInputMonitor noInputMonitor;
-    private final CompleteMonitor completeMonitor;
-    private final GameOverMonitor gameOverMonitor;
-    private final DrawCallback drawCallback;
-    private final JoystickActuator inputActuator;
-
-    // GAME
-    private static final int MIN_REDRAW_INTERVAL = 33;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
-    private static final int TIMEOUT = 30000;
-    private static final int LEVEL_COUNT = 9;
-    private static final boolean USE_GRAVITY = true;     // 0/1 use gravity (LED strip going up wall)
-    private static final Direction DIRECTION = Direction.LEFT_TO_RIGHT;
-
-    private static final int START_LEVEL = 0;
-    private int levelNumber = START_LEVEL;
-    private long previousFrameTime = 0;           // Time of the last redraw
-    private long lastInputTime = 0;
-
-    // WOBBLE ATTACK            
-    private static final int ATTACK_DURATION = 700;    // Duration of a wobble attack (ms)
-    private static final int ATTACK_WIDTH = 70;     // Width of the wobble attack, world is 1000 wide
-    private static final int BOSS_WIDTH = 40;
-    private static final int ATTACK_THRESHOLD = 30000; // The threshold that triggers an attack // TODO DOESN'T BELONG HERE
-
-    private long attackMillis = 0;             // Time the attack started
-    private boolean attacking = false;                // Is the attack in progress?
-    private JoystickActuator.JoyState joyState;
-
-    // PLAYER
-    private static final int MAX_PLAYER_SPEED = 15;     // Max move speed of the player
-    private static final int CONVEYOR_SPEED = 3;
-
-    private int playerPositionModifier;        // +/- adjustment to player position
-    private int playerPosition;                // Stores the player position
-    private Stage stage;
-    private long stageStartTime;               // Stores the time the stage changed for stages that are time based
-    private int lives = 3;
-
-    // POOLS
-    private static final Enemy[] enemyPool = new Enemy[]{
-            new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy(),
-            new Enemy(), new Enemy(), new Enemy(), new Enemy(), new Enemy()
-    };
-
-    private static final Particle[] particlePool = {
-            new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle()
-    };
-    private static final Spawner[] spawnPool = {
-            new Spawner(), new Spawner()
-    };
-    private static final Lava[] lavaPool = {
-            new Lava(), new Lava(), new Lava(), new Lava()
-    };
-    private static final Conveyor[] conveyorPool = {
-            new Conveyor(), new Conveyor()
-    };
-    private static final Boss boss = new Boss();
-
     public void loadLevel() {
+        clock.start();
         cleanupLevel();
+        spawnDeathParticles(TOTAL_DEATH_PARTICLES);
         playerPosition = 0;
         switch (levelNumber) {
             case 0:
@@ -153,12 +151,12 @@ class GameEngine {
                 break;
             case 2:
                 // Spawning enemies at exit every 2 seconds
-                spawnPool[0].spawn(1000, 3000, 2, 0, 0, millis());
+                spawnEnemySpawner(1000, 3000, 2, 0, 0, clock.millis());
                 break;
             case 3:
                 // Lava intro
-                spawnLava(400, 490, 2000, 2000, 0);
-                spawnPool[0].spawn(1000, 5500, 3, 0, 0, millis());
+                spawnLava(400, 490, 2000, 2000);
+                spawnEnemySpawner(1000, 5500, 3, 0, 0, clock.millis());
                 break;
             case 4:
                 // Sin enemy
@@ -183,106 +181,80 @@ class GameEngine {
                 break;
             case 7:
                 // Lava run
-                spawnLava(195, 300, 2000, 2000, 0);
-                spawnLava(350, 455, 2000, 2000, 0);
-                spawnLava(510, 610, 2000, 2000, 0);
-                spawnLava(660, 760, 2000, 2000, 0);
-                spawnPool[0].spawn(1000, 3800, 4, 0, 0, millis());
+                spawnLava(195, 300, 2000, 2000);
+                spawnLava(350, 455, 2000, 2000);
+                spawnLava(510, 610, 2000, 2000);
+                spawnLava(660, 760, 2000, 2000);
+                spawnEnemySpawner(1000, 3800, 4, 0, 0, clock.millis());
                 break;
             case 8:
                 // Sin enemy #2
                 spawnEnemy(700, 1, 7, 275);
                 spawnEnemy(500, 1, 5, 250);
-                spawnPool[0].spawn(1000, 5500, 4, 0, 3000, millis());
-                spawnPool[1].spawn(0, 5500, 5, 1, 10000, millis());
+                spawnEnemySpawner(1000, 5500, 4, 0, 3000, clock.millis());
+                spawnEnemySpawner(0, 5500, 5, 1, 10000, clock.millis());
                 spawnConveyor(100, 900, RIGHT_TO_LEFT, CONVEYOR_SPEED);
                 break;
             case 9:
                 // Boss
-                spawnBoss();
+                spawnBoss(800, 3);
                 break;
+            default:
+                throw new IllegalStateException("Unknown level {" + levelNumber + "}");
         }
-        stageStartTime = millis();
+        stageStartTime = clock.millis();
         stage = Stage.PLAY;
         drawCallback.drawLives(lives);
     }
 
     private void cleanupLevel() {
-        for (Enemy enemy : enemyPool) {
-            enemy.kill();
-        }
-        for (Particle particle : particlePool) {
-            particle.kill();
-        }
-        for (Spawner spawner : spawnPool) {
-            spawner.kill();
-        }
-        for (Lava lava : lavaPool) {
-            lava.kill();
-        }
-        for (Conveyor conveyor : conveyorPool) {
-            conveyor.kill();
-        }
+        particlePool.clear();
+        enemyPool.clear();
+        enemySpawnerPool.clear();
+        lavaPool.clear();
+        conveyorPool.clear();
         boss.kill();
     }
 
-    private void spawnEnemy(int pos, int dir, int speed, int wobble) {
-        for (Enemy anEnemyPool : enemyPool) {
-            if (!anEnemyPool.isAlive()) {
-                anEnemyPool.spawn(pos, dir, speed, wobble);
-                anEnemyPool.playerSide = pos > playerPosition ? 1 : -1;
-                return;
-            }
+    private void spawnDeathParticles(int total) {
+        for (int i = 0; i < total; i++) {
+            Particle particle = new Particle();
+            particlePool.add(particle);
         }
     }
 
-    private void spawnLava(int left, int right, int ontime, int offtime, int offset) {
-        for (Lava aLavaPool : lavaPool) {
-            if (!aLavaPool.isAlive()) {
-                aLavaPool.spawn(left, right, ontime, offtime, offset, Lava.State.OFF, millis());
-                return;
-            }
-        }
+    private void spawnEnemy(int pos, int dir, int speed, int wobble) {
+        int playerSide = pos > playerPosition ? 1 : -1;
+        enemyPool.add(new Enemy(pos, dir, speed, wobble, playerSide));
+    }
+
+    private void spawnLava(int left, int right, int ontime, int offtime) {
+        lavaPool.add(new Lava(left, right, ontime, offtime, Lava.State.OFF));
     }
 
     private void spawnConveyor(int startPoint, int endPoint, Direction dir, int speed) {
-        for (Conveyor aConveyorPool : conveyorPool) {
-            if (!aConveyorPool.isAlive()) {
-                aConveyorPool.spawn(startPoint, endPoint, dir, speed);
-                return;
-            }
-        }
+        conveyorPool.add(new Conveyor(startPoint, endPoint, dir, speed));
     }
 
-    private void spawnBoss() {
-        boss.spawn();
+    private void spawnEnemySpawner(int position, int rate, int speed, int direction, int activate, long millis) {
+        enemySpawnerPool.add(new EnemySpawner(position, rate, speed, direction, activate, millis));
+    }
+
+    private void spawnBoss(int position, int lives) {
+        boss.spawn(position, lives);
         moveBoss();
     }
 
     private void moveBoss() {
         int spawnSpeed = boss.getSpeed();
-        spawnPool[0].spawn(boss.getPosition(), spawnSpeed, 3, 0, 0, millis());
-        spawnPool[1].spawn(boss.getPosition(), spawnSpeed, 3, 1, 0, millis());
-    }
-
-    private long millis = 0;
-
-    /**
-     * https://www.arduino.cc/reference/en/language/functions/time/millis/
-     * TODO
-     *
-     * @return Number of milliseconds since the program started (unsigned long)
-     */
-    private long millis() {
-        if (millis == 0) {
-            millis = System.currentTimeMillis();
-        }
-        return System.currentTimeMillis() - millis;
+        enemySpawnerPool.clear();
+        spawnEnemySpawner(boss.getPosition(), spawnSpeed, 3, 0, 0, clock.millis());
+        spawnEnemySpawner(boss.getPosition(), spawnSpeed, 3, 1, 0, clock.millis());
     }
 
     void loop() {
 //        Log.d("TUT", "loop");
-        long frameTime = millis();
+        long frameTime = clock.millis();
 
         if (stage == Stage.PLAY) {
             if (attacking) {
@@ -349,7 +321,7 @@ class GameEngine {
 
                 // Ticks and draw calls
                 tickConveyors();
-                tickSpawners();
+                tickEnemySpawners();
                 tickBoss();
                 tickLava();
                 tickEnemies();
@@ -388,21 +360,17 @@ class GameEngine {
 
     private void playingStateDraw() {
         drawCallback.startDraw();
-        long frame = 10000 + millis();
+        long frame = 10000 + clock.millis();
         for (Conveyor conveyor : conveyorPool) {
-            if (conveyor.isAlive()) {
-                drawCallback.drawConveyor(conveyor.startPoint, conveyor.endPoint, conveyor.direction, frame);
-            }
+            drawCallback.drawConveyor(conveyor.getStartPoint(), conveyor.getEndPoint(), conveyor.getDirection(), frame);
         }
         for (Enemy enemy : enemyPool) { // TODO this is now after the check if the enemy has hit the player - just sanity test this doesn't cause weird state
             if (enemy.isAlive()) {
-                drawCallback.drawEnemy(enemy.position);
+                drawCallback.drawEnemy(enemy.getPosition());
             }
         }
         for (Lava lava : lavaPool) {
-            if (lava.isAlive()) {
-                drawCallback.drawLava(lava.left, lava.right, lava.isEnabled());
-            }
+            drawCallback.drawLava(lava.getLeft(), lava.getRight(), lava.isEnabled());
         }
         if (boss.isAlive()) {
             int bossStartPosition = boss.getPosition() - BOSS_WIDTH / 2;
@@ -414,7 +382,7 @@ class GameEngine {
         if (attacking) {
             int startPoint = playerPosition + (ATTACK_WIDTH / 2);
             int endPoint = playerPosition - (ATTACK_WIDTH / 2);
-            int attackPower = (int) GameEngine.map((int) (millis() - attackMillis), 0, ATTACK_DURATION, 100, 5);
+            int attackPower = (int) GameEngine.map((int) (clock.millis() - attackMillis), 0, ATTACK_DURATION, 100, 5);
             drawCallback.drawAttack(startPoint, playerPosition, endPoint, attackPower);
         }
         if (!boss.isAlive()) {
@@ -427,25 +395,22 @@ class GameEngine {
     }
 
     private void levelComplete() {
-        stageStartTime = millis();
+        stageStartTime = clock.millis();
         stage = Stage.LEVEL_COMPLETE;
         if (levelNumber == LEVEL_COUNT) {
             stage = Stage.GAME_COMPLETE;
         }
-        lives = 3;
+        lives = TOTAL_LIVES;
         drawCallback.drawLives(lives);
     }
 
+    /**
+     * Returns if the player is in active lava
+     */
     private boolean inLava(int pos) {
-        // Returns if the player is in active lava
-        int i;
-        Lava lava;
-        for (i = 0; i < lavaPool.length; i++) {
-            lava = lavaPool[i];
-            if (lava.isAlive() && lava.isEnabled()) {
-                if (lava.left < pos && lava.right > pos) {
-                    return true;
-                }
+        for (Lava lava : lavaPool) {
+            if (lava.consumes(pos)) {
+                return true;
             }
         }
         return false;
@@ -458,33 +423,28 @@ class GameEngine {
         drawCallback.drawLives(lives);
         if (lives == 0) {
             levelNumber = START_LEVEL;
-            lives = 3;
+            lives = TOTAL_LIVES;
         }
         for (Particle particle : particlePool) {
             particle.spawn(playerPosition);
         }
-        stageStartTime = millis();
+        stageStartTime = clock.millis();
         stage = Stage.DEAD;
     }
 
     private void tickConveyors() {
         playerPositionModifier = 0;
         for (Conveyor conveyor : conveyorPool) {
-            if (!conveyor.isAlive()) {
-                continue;
-            }
             playerPositionModifier = conveyor.affect(playerPosition);
         }
     }
 
-    private void tickSpawners() {
-        long mm = millis();
-        for (Spawner aSpawnPool : spawnPool) {
-            if (aSpawnPool.isAlive() && aSpawnPool.activate < mm) {
-                if (aSpawnPool.lastSpawned + aSpawnPool.rate < mm || aSpawnPool.lastSpawned == 0) {
-                    spawnEnemy(aSpawnPool.position, aSpawnPool.direction, aSpawnPool.speed, 0);
-                    aSpawnPool.lastSpawned = mm;
-                }
+    private void tickEnemySpawners() {
+        long mm = clock.millis();
+        for (EnemySpawner enemySpawner : enemySpawnerPool) {
+            if (enemySpawner.shouldSpawn(mm)) {
+                EnemySpawner.Spawn spawn = enemySpawner.spawn(mm);
+                spawnEnemy(spawn.getPosition(), spawn.getDirection(), spawn.getSpeed(), 0);
             }
         }
     }
@@ -513,55 +473,40 @@ class GameEngine {
                 if (boss.isAlive()) {
                     moveBoss();
                 } else {
-                    spawnPool[0].kill();
-                    spawnPool[1].kill();
+                    for (EnemySpawner enemySpawner : enemySpawnerPool) {
+                        enemySpawner.kill();
+                    }
                 }
             }
         }
     }
 
     private void tickLava() {
-        long mm = millis();
+        long mm = clock.millis();
         for (Lava lava : lavaPool) {
-            if (lava.isAlive()) {
-
-                if (lava.isEnabled()) {
-                    if (lava.lastOn + lava.ontime < mm) {
-                        lava.disable();
-                        lava.lastOn = mm;
-                    }
-                } else {
-                    if (lava.lastOn + lava.offtime < mm) {
-                        lava.enable();
-                        lava.lastOn = mm;
-                    }
-                }
-            }
+            lava.toggleLava(mm);
         }
     }
 
     private void tickEnemies() {
         for (Enemy enemy : enemyPool) {
             if (enemy.isAlive()) {
-                enemy.tick(millis());
+                enemy.tick(clock.millis());
                 // hit attack?
                 if (attacking) {
                     int attackStartPosition = playerPosition - (ATTACK_WIDTH / 2);
                     int attackEndPosition = playerPosition + (ATTACK_WIDTH / 2);
-                    if (enemy.position > attackStartPosition && enemy.position < attackEndPosition) {
+                    if (enemy.hitAttack(attackStartPosition, attackEndPosition)) {
                         enemy.kill();
                         killMonitor.onKill();
                     }
                 }
-                if (inLava(enemy.position)) {
+                if (inLava(enemy.getPosition())) {
                     enemy.kill();
                     killMonitor.onKill();
                 }
                 // hit player?
-                if ((enemy.playerSide == 1
-                        && enemy.position <= playerPosition)
-                        || (enemy.playerSide == -1
-                        && enemy.position >= playerPosition)) {
+                if (enemy.hitPlayer(playerPosition)) {
                     die();
                     return;
                 }
@@ -580,7 +525,7 @@ class GameEngine {
     private void drawParticles() {
         for (Particle particle : particlePool) {
             if (particle.isAlive()) {
-                drawCallback.drawParticle(particle.position, particle.power);
+                drawCallback.drawParticle(particle.getPosition(), particle.getPower());
             }
         }
     }

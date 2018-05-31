@@ -5,10 +5,10 @@ class Boss {
     private int lives;
     private boolean alive;
 
-    void spawn() {
-        position = 800;
-        lives = 3;
-        alive = true;
+    void spawn(int position, int lives) {
+        this.position = position;
+        this.lives = lives;
+        this.alive = true;
     }
 
     void hit() {

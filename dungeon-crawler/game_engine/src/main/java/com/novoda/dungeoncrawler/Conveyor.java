@@ -3,26 +3,16 @@ package com.novoda.dungeoncrawler;
 import static com.novoda.dungeoncrawler.Direction.RIGHT_TO_LEFT;
 
 class Conveyor {
-    private boolean alive;
-    public Direction direction;
-    private int speed;
-    public int startPoint;
-    public int endPoint;
+    private final Direction direction;
+    private final int speed;
+    private final int startPoint;
+    private final int endPoint;
 
-    void spawn(int startPoint, int endPoint, Direction direction, int speed) {
+    Conveyor(int startPoint, int endPoint, Direction direction, int speed) {
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.direction = direction;
         this.speed = speed;
-        this.alive = true;
-    }
-
-    void kill() {
-        alive = false;
-    }
-
-    boolean isAlive() {
-        return alive;
     }
 
     public int affect(int position) {
@@ -38,5 +28,17 @@ class Conveyor {
 
     private boolean contains(int point) {
         return startPoint < point && point < endPoint;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public int getStartPoint() {
+        return startPoint;
+    }
+
+    public int getEndPoint() {
+        return endPoint;
     }
 }
