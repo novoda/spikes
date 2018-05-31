@@ -15,6 +15,7 @@ class GameEngine {
     private static final boolean USE_GRAVITY = true;     // 0/1 use gravity (LED strip going up wall)
     private static final Direction DIRECTION = Direction.LEFT_TO_RIGHT;
     private static final int START_LEVEL = 0;
+    private static final int TOTAL_DEATH_PARTICLES = 30;
 
     // WOBBLE ATTACK
     private static final int ATTACK_DURATION = 700;    // Duration of a wobble attack (ms)
@@ -27,9 +28,7 @@ class GameEngine {
     private static final int CONVEYOR_SPEED = 3;
 
     // POOLS
-    private static final Particle[] particlePool = {
-            new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle(), new Particle()
-    };
+    private static final List<Particle> particlePool = new ArrayList<>();
     private static final List<Enemy> enemyPool = new ArrayList<>();
     private static final List<EnemySpawner> enemySpawnerPool = new ArrayList<>();
     private static final List<Lava> lavaPool = new ArrayList<>();
@@ -137,6 +136,7 @@ class GameEngine {
     public void loadLevel() {
         clock.start();
         cleanupLevel();
+        spawnDeathParticles(TOTAL_DEATH_PARTICLES);
         playerPosition = 0;
         switch (levelNumber) {
             case 0:
@@ -207,14 +207,19 @@ class GameEngine {
     }
 
     private void cleanupLevel() {
-        for (Particle particle : particlePool) {
-            particle.kill();
-        }
+        particlePool.clear();
         enemyPool.clear();
         enemySpawnerPool.clear();
         lavaPool.clear();
         conveyorPool.clear();
         boss.kill();
+    }
+
+    private void spawnDeathParticles(int total) {
+        for (int i = 0; i < total; i++) {
+            Particle particle = new Particle();
+            particlePool.add(particle);
+        }
     }
 
     private void spawnEnemy(int pos, int dir, int speed, int wobble) {
