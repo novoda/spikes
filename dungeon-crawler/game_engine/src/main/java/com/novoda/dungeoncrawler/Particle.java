@@ -48,7 +48,7 @@ class Particle {
         }
     }
 
-    public void kill() {
+    private void kill() {
         this.alive = false;
     }
 
