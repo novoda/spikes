@@ -6,7 +6,7 @@ class Lava {
     private final long offTime;
     private final long onTime;
 
-    private long lastOn;
+    private long lastToggle;
     private State state;
 
     Lava(int left, int right, int onTime, int offTime, State state) {
@@ -28,26 +28,27 @@ class Lava {
             }
         } else {
             if (hasBeenOffLongEnough(currentTime)) {
-                enable();
+                enable(currentTime);
             }
         }
     }
 
     private void disable(long disabledAtTime) {
         state = Lava.State.OFF;
-        lastOn = disabledAtTime;
+        lastToggle = disabledAtTime;
     }
 
     private boolean hasBeenOnLongEnough(long currentTime) {
-        return lastOn + getOnTime() < currentTime;
+        return lastToggle + getOnTime() < currentTime;
     }
 
     private boolean hasBeenOffLongEnough(long currentTime) {
-        return lastOn + getOffTime() < currentTime;
+        return lastToggle + getOffTime() < currentTime;
     }
 
-    private void enable() {
+    private void enable(long enabledAtTime) {
         state = Lava.State.ON;
+        lastToggle = enabledAtTime;
     }
 
     public int getLeft() {
