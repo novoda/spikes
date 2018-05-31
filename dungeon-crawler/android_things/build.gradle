@@ -29,7 +29,6 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation project(':android')
     compileOnly 'com.google.android.things:androidthings:1.0'
-//    compileOnly 'com.google.android.things:androidthings:0.8-devpreview'
 
     testImplementation 'junit:junit:4.12'
 
