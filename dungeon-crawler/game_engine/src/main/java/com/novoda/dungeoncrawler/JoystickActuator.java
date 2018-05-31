@@ -2,7 +2,7 @@ package com.novoda.dungeoncrawler;
 
 interface JoystickActuator {
 
-    int DEADZONE = 25;     // Angle to ignore
+    int DEADZONE = 30;     // Angle to ignore
 
     JoyState getInput();
 

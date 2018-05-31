@@ -10,22 +10,48 @@ import java.io.IOException;
  */
 class MPU6050 {
 
-    private static final int MPU6050_CLOCK_PLL_XGYRO = 0x01;
-    private static final int MPU6050_GYRO_FS_250 = 0x00;
-    private static final int MPU6050_ACCEL_FS_2 = 0x00;
-    private static final int MPU6050_RA_PWR_MGMT_1 = 0x6B;
-    private static final int MPU6050_PWR1_CLKSEL_BIT = 2;
-    private static final int MPU6050_PWR1_CLKSEL_LENGTH = 3;
-    private static final int MPU6050_RA_GYRO_CONFIG = 0x1B;
-    private static final int MPU6050_GCONFIG_FS_SEL_BIT = 4;
-    private static final int MPU6050_GCONFIG_FS_SEL_LENGTH = 2;
-    private static final int MPU6050_RA_ACCEL_CONFIG = 0x1C;
-    private static final int MPU6050_ACONFIG_AFS_SEL_BIT = 4;
-    private static final int MPU6050_ACONFIG_AFS_SEL_LENGTH = 2;
-    private static final int MPU6050_PWR1_SLEEP_BIT = 6;
-    private static final int MPU6050_RA_ACCEL_XOUT_H = 0x3B;
+    public static final float SENSOR_RESOLUTION = 32768;
 
+    private static final byte MPU6050_CLOCK_PLL_INTERNAL = 0x00;
+    private static final byte MPU6050_CLOCK_PLL_XGYRO = 0x01;
+
+    private static final byte MPU6050_GYRO_FS_250 = 0x00;
+    private static final byte MPU6050_GYRO_FS_500 = 0x08;
+    private static final byte MPU6050_GYRO_FS_1000 = 0x10;
+    private static final byte MPU6050_GYRO_FS_2000 = 0x18;
+
+    private static final byte MPU6050_ACCEL_FS_2 = 0x00;
+    private static final byte MPU6050_ACCEL_FS_4 = 0x08;
+    private static final byte MPU6050_ACCEL_FS_8 = 0x10;
+    private static final byte MPU6050_ACCEL_FS_16 = 0x18;
+
+    private static final byte MPU6050_RA_PWR_MGMT_1 = 0x6B;
+    private static final byte MPU6050_PWR1_CLKSEL_BIT = 2;
+    private static final byte MPU6050_PWR1_CLKSEL_LENGTH = 3;
+    private static final byte MPU6050_RA_GYRO_CONFIG = 0x1B;
+    private static final byte MPU6050_GCONFIG_FS_SEL_BIT = 4;
+    private static final byte MPU6050_GCONFIG_FS_SEL_LENGTH = 2;
+    private static final byte MPU6050_RA_ACCEL_CONFIG = 0x1C;
+    private static final byte MPU6050_ACONFIG_AFS_SEL_BIT = 4;
+    private static final byte MPU6050_ACONFIG_AFS_SEL_LENGTH = 2;
+    private static final byte MPU6050_PWR1_SLEEP_BIT = 6;
+
+    private static final byte MPU6050_RA_ACCEL_XOUT_H = 0x3B;
+    private static final byte MPU6050_RA_ACCEL_YOUT_H = 0x3D;
+    private static final byte MPU6050_RA_ACCEL_ZOUT_H = 0x40;
+
+    private static final byte MPU6050_RA_GYRO_XOUT_H = 0x43;
+    private static final byte MPU6050_RA_GYRO_YOUT_H = 0x45;
+    private static final byte MPU6050_RA_GYRO_ZOUT_H = 0x47;
+    private static final int LOWER_BITS_MASK = 0x00ff;
+    private static final int UPPER_BITS_MASK = 0xff00;
+
+    private final Motion motion = new Motion();
+    private final byte[] mBuffer = new byte[2];
     private final I2cDevice i2cDevice;
+
+    private float gyroscopeCoef = 1;
+    private float accelerometerCoef = 1;
 
     static MPU6050 create(PeripheralManager peripheralManager) {
         try {
@@ -50,10 +76,9 @@ class MPU6050 {
      * the default internal clock source.
      */
     void initialize() {
-        setClockSource(MPU6050_CLOCK_PLL_XGYRO);
+        setClockSource(MPU6050_CLOCK_PLL_INTERNAL);
         setFullScaleGyroRange(MPU6050_GYRO_FS_250);
         setFullScaleAccelRange(MPU6050_ACCEL_FS_2);
-        setSleepEnabled(false);
     }
 
     /**
@@ -86,9 +111,9 @@ class MPU6050 {
      * @see #MPU6050_PWR1_CLKSEL_BIT
      * @see #MPU6050_PWR1_CLKSEL_LENGTH
      */
-    private void setClockSource(int source) {
+    private void setClockSource(byte source) {
         try {
-            I2Cdev.writeBits(i2cDevice, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_CLKSEL_BIT, MPU6050_PWR1_CLKSEL_LENGTH, source);
+            i2cDevice.writeRegByte(MPU6050_RA_PWR_MGMT_1, source);
         } catch (IOException e) {
             throw new IllegalStateException("Unable to set clock source", e);
         }
@@ -103,11 +128,27 @@ class MPU6050 {
      * @see #MPU6050_GCONFIG_FS_SEL_BIT
      * @see #MPU6050_GCONFIG_FS_SEL_LENGTH
      */
-    private void setFullScaleGyroRange(int range) {
+    private void setFullScaleGyroRange(byte range) {
+        gyroscopeCoef = getGyroscopeCoefficient(range);
         try {
-            I2Cdev.writeBits(i2cDevice, MPU6050_RA_GYRO_CONFIG, MPU6050_GCONFIG_FS_SEL_BIT, MPU6050_GCONFIG_FS_SEL_LENGTH, range);
+            i2cDevice.writeRegByte(MPU6050_RA_GYRO_CONFIG, range);
         } catch (IOException e) {
             throw new IllegalStateException("Unable to set gyro range", e);
+        }
+    }
+
+    private float getGyroscopeCoefficient(byte range) {
+        switch (range) {
+            case MPU6050_GYRO_FS_250:
+                return (float) 250. / SENSOR_RESOLUTION;
+            case MPU6050_GYRO_FS_500:
+                return (float) 500. / SENSOR_RESOLUTION;
+            case MPU6050_GYRO_FS_1000:
+                return (float) 1000. / SENSOR_RESOLUTION;
+            case MPU6050_GYRO_FS_2000:
+                return (float) 2000. / SENSOR_RESOLUTION;
+            default:
+                return 0;
         }
     }
 
@@ -116,26 +157,27 @@ class MPU6050 {
      *
      * @param range New full-scale accelerometer range setting
      */
-    private void setFullScaleAccelRange(int range) {
+    private void setFullScaleAccelRange(byte range) {
+        accelerometerCoef = getAccelerometerCoefficient(range);
         try {
-            I2Cdev.writeBits(i2cDevice, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_AFS_SEL_BIT, MPU6050_ACONFIG_AFS_SEL_LENGTH, range);
+            i2cDevice.writeRegByte(MPU6050_RA_ACCEL_CONFIG, range);
         } catch (IOException e) {
             throw new IllegalStateException("Unable to set accelerometer range", e);
         }
     }
 
-    /**
-     * Set sleep mode status.
-     *
-     * @param enabled New sleep mode enabled status
-     * @see #MPU6050_RA_PWR_MGMT_1
-     * @see #MPU6050_PWR1_SLEEP_BIT
-     */
-    private void setSleepEnabled(boolean enabled) {
-        try {
-            I2Cdev.writeBit(i2cDevice, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_SLEEP_BIT, enabled);
-        } catch (IOException e) {
-            throw new IllegalStateException("Unable to set sleep enabled", e);
+    private float getAccelerometerCoefficient(byte range) {
+        switch (range) {
+            case MPU6050_ACCEL_FS_2:
+                return (float) 2 / SENSOR_RESOLUTION;
+            case MPU6050_ACCEL_FS_4:
+                return (float) 4 / SENSOR_RESOLUTION;
+            case MPU6050_ACCEL_FS_8:
+                return (float) 8 / SENSOR_RESOLUTION;
+            case MPU6050_ACCEL_FS_16:
+                return (float) 16 / SENSOR_RESOLUTION;
+            default:
+                return 0;
         }
     }
 
@@ -146,24 +188,24 @@ class MPU6050 {
      * @see #MPU6050_RA_ACCEL_XOUT_H
      */
     Motion getMotion6() {
-        byte[] buffer = new byte[14];
         try {
-            i2cDevice.readRegBuffer(MPU6050_RA_ACCEL_XOUT_H, buffer, 14);
-
-            Motion motion = new Motion();
-            motion.ax = ((buffer[0]) << 8) | buffer[1];
-            motion.ay = ((buffer[2]) << 8) | buffer[3];
-            motion.az = ((buffer[4]) << 8) | buffer[5];
-            motion.gx = ((buffer[8]) << 8) | buffer[9];
-            motion.gy = ((buffer[10]) << 8) | buffer[11];
-            motion.gz = ((buffer[12]) << 8) | buffer[13];
-            return motion; // TODO check above
+            motion.ax = (float) readRegWord(MPU6050_RA_ACCEL_XOUT_H) * accelerometerCoef;
+            motion.ay = (float) readRegWord(MPU6050_RA_ACCEL_YOUT_H) * accelerometerCoef;
+            motion.az = (float) readRegWord(MPU6050_RA_ACCEL_ZOUT_H) * accelerometerCoef;
+            motion.gx = (float) readRegWord(MPU6050_RA_GYRO_XOUT_H) * gyroscopeCoef;
+            motion.gy = (float) readRegWord(MPU6050_RA_GYRO_YOUT_H) * gyroscopeCoef;
+            motion.gz = (float) readRegWord(MPU6050_RA_GYRO_ZOUT_H) * gyroscopeCoef;
+            return motion;
         } catch (IOException e) {
             throw new IllegalStateException("Could not read the accel/gyro readings.", e);
         }
     }
 
-    // TODO XXX close the i2c connection
+    private short readRegWord(int i) throws IOException {
+        i2cDevice.readRegBuffer(i, mBuffer, 2);
+        return (short) (((mBuffer[0] << 8) & UPPER_BITS_MASK) | (mBuffer[1] & LOWER_BITS_MASK));
+    }
+
     void close() {
         try {
             i2cDevice.close();
@@ -172,13 +214,13 @@ class MPU6050 {
         }
     }
 
-    class Motion {
-        int ax;
-        int ay;
-        int az;
-        int gx;
-        int gy;
-        int gz;
+    static class Motion {
+        float ax;
+        float ay;
+        float az;
+        float gx;
+        float gy;
+        float gz;
 
         @Override
         public String toString() {
@@ -193,37 +235,4 @@ class MPU6050 {
         }
     }
 
-    static class I2Cdev {
-
-        static void writeBit(I2cDevice device, int regAddr, int bitStart, boolean data) throws IOException {
-            writeBits(device, regAddr, bitStart, 1, data ? 1 : 0);
-        }
-
-        /**
-         * Write multiple bits in an 8-bit device register.
-         *
-         * @param device   I2C slave device
-         * @param regAddr  Register regAddr to write to
-         * @param bitStart First bit position to write (0-7)
-         * @param length   Number of bits to write (not more than 8)
-         * @param data     Right-aligned value to write
-         */
-        static void writeBits(I2cDevice device, int regAddr, int bitStart, int length, int data) throws IOException {
-            //      010 value to write
-            // 76543210 bit numbers
-            //    xxx   args: bitStart=4, length=3
-            // 00011100 mask byte
-            // 10101111 original value (sample)
-            // 10100011 original & ~mask
-            // 10101011 masked | value
-            int b = device.readRegByte(regAddr);
-            int mask = ((1 << length) - 1) << (bitStart - length + 1);
-            data <<= (bitStart - length + 1); // shift data into correct position
-            data &= mask; // zero all non-important bits in data
-            b &= ~(mask); // zero all important bits in existing byte
-            b |= data; // combine data with existing byte
-            device.writeRegByte(regAddr, (byte) b); // TODO check cast
-        }
-
-    }
 }

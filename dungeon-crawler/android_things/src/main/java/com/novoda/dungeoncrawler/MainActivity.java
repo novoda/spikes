@@ -16,19 +16,21 @@ public class MainActivity extends Activity {
     private static final int NUM_LEDS = 300;
 
     private static final String SPI_DEVICE_NAME = "SPI3.0";
-    private static final Apa102.Mode APA102_MODE = Apa102.Mode.GBR;
+    private static final Apa102.Mode APA102_MODE = Apa102.Mode.BGR;
 
     private static final int[] lifeLEDs = new int[]{52, 50, 40};
 
     private Apa102 apa102;
     private DungeonCrawlerGame game;
+    private MPU6050 mpu6050;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         apa102 = createApa102();
         Display ledStrip = new Apa102Display(apa102, NUM_LEDS);
-        JoystickActuator joystickActuator = new MPU6050JoystickActuator(MPU6050.create(PeripheralManager.getInstance()));
+        mpu6050 = MPU6050.create(PeripheralManager.getInstance());
+        JoystickActuator joystickActuator = new MPU6050JoystickActuator(mpu6050);
         SpeakerSoundEffectsPlayer soundEffectsPlayer = new SpeakerSoundEffectsPlayer();
         Screensaver screensaver = new Screensaver(ledStrip, NUM_LEDS);
         ArduinoLoop looper = new ArduinoLoop();
@@ -63,6 +65,9 @@ public class MainActivity extends Activity {
     }
 
     private void safeCloseApa102() {
+        if (mpu6050 != null) {
+            mpu6050.close();
+        }
         if (apa102 != null) {
             try {
                 apa102.close();

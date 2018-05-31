@@ -17,7 +17,7 @@ class GameEngine {
     private static final int START_LEVEL = 0;
 
     // WOBBLE ATTACK
-    private static final int ATTACK_DURATION = 500;    // Duration of a wobble attack (ms)
+    private static final int ATTACK_DURATION = 700;    // Duration of a wobble attack (ms)
     private static final int ATTACK_WIDTH = 70;     // Width of the wobble attack, world is 1000 wide
     private static final int BOSS_WIDTH = 40;
     private static final int ATTACK_THRESHOLD = 30000; // The threshold that triggers an attack // TODO DOESN'T BELONG HERE
@@ -366,6 +366,12 @@ class GameEngine {
         for (Lava lava : lavaPool) {
             drawCallback.drawLava(lava.getLeft(), lava.getRight(), lava.isEnabled());
         }
+        if (boss.isAlive()) {
+            int bossStartPosition = boss.getPosition() - BOSS_WIDTH / 2;
+            int bossEndPosition = boss.getPosition() + BOSS_WIDTH / 2;
+            drawCallback.drawBoss(bossStartPosition, bossEndPosition);
+        }
+
         drawCallback.drawPlayer(playerPosition);
         if (attacking) {
             int startPoint = playerPosition + (ATTACK_WIDTH / 2);
@@ -438,13 +444,11 @@ class GameEngine {
     }
 
     private void tickBoss() {
-        // DRAW
         if (!boss.isAlive()) {
             return;
         }
         int bossStartPosition = boss.getPosition() - BOSS_WIDTH / 2;
         int bossEndPosition = boss.getPosition() + BOSS_WIDTH / 2;
-        drawCallback.drawBoss(bossStartPosition, bossEndPosition);
         // CHECK COLLISION
         if (playerPosition > bossStartPosition
                 && playerPosition < bossEndPosition) {
