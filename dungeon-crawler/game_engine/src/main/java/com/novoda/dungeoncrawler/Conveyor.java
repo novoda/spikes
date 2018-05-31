@@ -19,7 +19,7 @@ class Conveyor {
         if (!contains(position)) {
             return 0;
         }
-        if (getDirection() == RIGHT_TO_LEFT) {
+        if (direction == RIGHT_TO_LEFT) {
             return -speed;
         } else {
             return speed;
@@ -27,7 +27,7 @@ class Conveyor {
     }
 
     private boolean contains(int point) {
-        return getStartPoint() < point && point < getEndPoint();
+        return startPoint < point && point < endPoint;
     }
 
     public Direction getDirection() {
