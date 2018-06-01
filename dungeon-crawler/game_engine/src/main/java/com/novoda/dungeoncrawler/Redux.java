@@ -13,13 +13,13 @@ public interface Redux {
 
     class GameState {
 
-        StartClock clock = new StartClock();
+        static StartClock clock = new StartClock();
 
-        final List<Particle> particlePool = new ArrayList<>();
-        final List<Enemy> enemyPool = new ArrayList<>();
-        final List<EnemySpawner> enemySpawnerPool = new ArrayList<>();
-        final List<Lava> lavaPool = new ArrayList<>();
-        final List<Conveyor> conveyorPool = new ArrayList<>();
+        static final List<Particle> particlePool = new ArrayList<>();
+        static final List<Enemy> enemyPool = new ArrayList<>();
+        static final List<EnemySpawner> enemySpawnerPool = new ArrayList<>();
+        static final List<Lava> lavaPool = new ArrayList<>();
+        static final List<Conveyor> conveyorPool = new ArrayList<>();
 
         Boss boss = new Boss();
         int levelNumber;
@@ -39,7 +39,7 @@ public interface Redux {
             GameState gameState = new GameState();
             gameState.clock = new StartClock();
             gameState.clock.start(); // Hack
-            gameState.levelNumber = 3;
+            gameState.levelNumber = -1;
             gameState.previousFrameTime = 0;
             gameState.lastInputTime = 0;
             gameState.attackMillis = 0;
@@ -103,10 +103,10 @@ public interface Redux {
         private GameState nextFrame(GameState gameState, double joyTilt, double joyWobble) {
             GameState newGameState = new GameState();
             newGameState.stage = gameState.stage;
-            newGameState.enemyPool.addAll(gameState.enemyPool);
-            newGameState.enemySpawnerPool.addAll(gameState.enemySpawnerPool);
-            newGameState.lavaPool.addAll(gameState.lavaPool);
-            newGameState.conveyorPool.addAll(gameState.conveyorPool);
+//            newGameState.enemyPool.addAll(gameState.enemyPool);
+//            newGameState.enemySpawnerPool.addAll(gameState.enemySpawnerPool);
+//            newGameState.lavaPool.addAll(gameState.lavaPool);
+//            newGameState.conveyorPool.addAll(gameState.conveyorPool);
 
             long frameTime = gameState.clock.millis();
             newGameState.previousFrameTime = frameTime;

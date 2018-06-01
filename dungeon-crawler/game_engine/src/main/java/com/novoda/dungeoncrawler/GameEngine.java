@@ -193,6 +193,7 @@ class GameEngine {
 
     void loop() {
         Redux.GameState state = store.getState();
+        state.clock.start();
         long frameTime = state.clock.millis();
 
         if (state.stage == Stage.PLAY) {

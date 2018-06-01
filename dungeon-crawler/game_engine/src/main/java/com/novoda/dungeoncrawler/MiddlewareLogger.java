@@ -8,7 +8,7 @@ import com.yheriatovych.reductor.Store;
 
 public class MiddlewareLogger implements Middleware<Redux.GameState> {
 
-    long timeOfLastAction = 0;
+    private long timeOfLastAction = 0;
 
     @Override
     public Dispatcher create(Store<Redux.GameState> store, Dispatcher nextDispatcher) {
