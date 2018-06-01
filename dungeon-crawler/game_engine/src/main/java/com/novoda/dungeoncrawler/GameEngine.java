@@ -1,12 +1,12 @@
 package com.novoda.dungeoncrawler;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.yheriatovych.reductor.Store;
 
 import static com.novoda.dungeoncrawler.Direction.LEFT_TO_RIGHT;
-import static com.novoda.dungeoncrawler.Direction.RIGHT_TO_LEFT;
 
 class GameEngine {
+
+    private static final Store<Redux.GameState> store = Store.create(new Redux.GameReducer(), Redux.GameState.getInitialState());
 
     // GAME
     private static final int MIN_REDRAW_INTERVAL = 33;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
@@ -15,7 +15,7 @@ class GameEngine {
     private static final boolean USE_GRAVITY = true;     // 0/1 use gravity (LED strip going up wall)
     private static final Direction DIRECTION = Direction.LEFT_TO_RIGHT;
     private static final int START_LEVEL = 0;
-    private static final int TOTAL_DEATH_PARTICLES = 30;
+
 
     // WOBBLE ATTACK
     private static final int ATTACK_DURATION = 700;    // Duration of a wobble attack (ms)
@@ -26,15 +26,6 @@ class GameEngine {
     // PLAYER
     private static final int TOTAL_LIVES = 3;
     private static final int MAX_PLAYER_SPEED = 15;     // Max move speed of the player
-    private static final int CONVEYOR_SPEED = 3;
-
-    // POOLS
-    private static final List<Particle> particlePool = new ArrayList<>();
-    private static final List<Enemy> enemyPool = new ArrayList<>();
-    private static final List<EnemySpawner> enemySpawnerPool = new ArrayList<>();
-    private static final List<Lava> lavaPool = new ArrayList<>();
-    private static final List<Conveyor> conveyorPool = new ArrayList<>();
-    private static final Boss boss = new Boss();
 
     // Hooks
     private final AttackMonitor attackMonitor;
@@ -48,23 +39,9 @@ class GameEngine {
     private final DrawCallback drawCallback;
     private final JoystickActuator inputActuator;
 
-    private final StartClock clock;
-
-    private int levelNumber = START_LEVEL;
-    private long previousFrameTime = 0;           // Time of the last redraw
-    private long lastInputTime = 0;
-
-    private long attackMillis = 0;             // Time the attack started
-    private boolean attacking = false;                // Is the attack in progress?
     private JoystickActuator.JoyState joyState;
 
-    private int playerPositionModifier;        // +/- adjustment to player position
-    private int playerPosition;                // Stores the player position
-    private Stage stage;
-    private long stageStartTime;               // Stores the time the stage changed for stages that are time based
-    private int lives = TOTAL_LIVES;
-
-    GameEngine(AttackMonitor attackMonitor, KillMonitor killMonitor, MovementMonitor movementMonitor, DeathMonitor deathMonitor, WinMonitor winMonitor, NoInputMonitor noInputMonitor, CompleteMonitor completeMonitor, GameOverMonitor gameOverMonitor, DrawCallback drawCallback, JoystickActuator inputActuator, StartClock startClock) {
+    GameEngine(AttackMonitor attackMonitor, KillMonitor killMonitor, MovementMonitor movementMonitor, DeathMonitor deathMonitor, WinMonitor winMonitor, NoInputMonitor noInputMonitor, CompleteMonitor completeMonitor, GameOverMonitor gameOverMonitor, DrawCallback drawCallback, JoystickActuator inputActuator) {
         this.attackMonitor = attackMonitor;
         this.killMonitor = killMonitor;
         this.movementMonitor = movementMonitor;
@@ -75,7 +52,6 @@ class GameEngine {
         this.gameOverMonitor = gameOverMonitor;
         this.drawCallback = drawCallback;
         this.inputActuator = inputActuator;
-        this.clock = startClock;
     }
 
     interface AttackMonitor {
@@ -134,188 +110,97 @@ class GameEngine {
         void finishDraw();
     }
 
-    public void loadLevel() {
-        clock.start();
-        cleanupLevel();
-        spawnDeathParticles(TOTAL_DEATH_PARTICLES);
-        playerPosition = 0;
-        switch (levelNumber) {
-            case 0:
-                // Left or right?
-                playerPosition = 200;
-                spawnEnemy(800, 0, 0, 0);
-                break;
-            case 1:
-                // Slow moving enemy
-                spawnEnemy(900, 0, 1, 0);
-                break;
-            case 2:
-                // Spawning enemies at exit every 2 seconds
-                spawnEnemySpawner(1000, 3000, 2, 0, 0, clock.millis());
-                break;
-            case 3:
-                // Lava intro
-                spawnLava(400, 490, 2000, 2000);
-                spawnEnemySpawner(1000, 5500, 3, 0, 0, clock.millis());
-                break;
-            case 4:
-                // Sin enemy
-                spawnEnemy(700, 1, 7, 275);
-                spawnEnemy(500, 1, 5, 250);
-                break;
-            case 5:
-                // Conveyor
-                spawnConveyor(100, 600, LEFT_TO_RIGHT, CONVEYOR_SPEED);
-                spawnEnemy(800, 0, 0, 0);
-                break;
-            case 6:
-                // Conveyor of enemies
-                spawnConveyor(50, 1000, RIGHT_TO_LEFT, CONVEYOR_SPEED);
-                spawnEnemy(300, 0, 0, 0);
-                spawnEnemy(400, 0, 0, 0);
-                spawnEnemy(500, 0, 0, 0);
-                spawnEnemy(600, 0, 0, 0);
-                spawnEnemy(700, 0, 0, 0);
-                spawnEnemy(800, 0, 0, 0);
-                spawnEnemy(900, 0, 0, 0);
-                break;
-            case 7:
-                // Lava run
-                spawnLava(195, 300, 2000, 2000);
-                spawnLava(350, 455, 2000, 2000);
-                spawnLava(510, 610, 2000, 2000);
-                spawnLava(660, 760, 2000, 2000);
-                spawnEnemySpawner(1000, 3800, 4, 0, 0, clock.millis());
-                break;
-            case 8:
-                // Sin enemy #2
-                spawnEnemy(700, 1, 7, 275);
-                spawnEnemy(500, 1, 5, 250);
-                spawnEnemySpawner(1000, 5500, 4, 0, 3000, clock.millis());
-                spawnEnemySpawner(0, 5500, 5, 1, 10000, clock.millis());
-                spawnConveyor(100, 900, RIGHT_TO_LEFT, CONVEYOR_SPEED);
-                break;
-            case 9:
-                // Boss
-                spawnBoss(800, 3);
-                break;
-            default:
-                throw new IllegalStateException("Unknown level {" + levelNumber + "}");
-        }
-        stageStartTime = clock.millis();
-        stage = Stage.PLAY;
-        drawCallback.drawLives(lives);
-    }
-
-    private void cleanupLevel() {
-        particlePool.clear();
-        enemyPool.clear();
-        enemySpawnerPool.clear();
-        lavaPool.clear();
-        conveyorPool.clear();
-        boss.kill();
-    }
-
-    private void spawnDeathParticles(int total) {
-        for (int i = 0; i < total; i++) {
-            Particle particle = new Particle();
-            particlePool.add(particle);
-        }
+    void loadLevel() {
+        store.getState().clock.start();
+        store.dispatch(Redux.GameActions.nextLevel());
+        drawCallback.drawLives(store.getState().lives);
     }
 
     private void spawnEnemy(int pos, int dir, int speed, int wobble) {
-        int playerSide = pos > playerPosition ? 1 : -1;
-        enemyPool.add(new Enemy(pos, dir, speed, wobble, playerSide));
-    }
-
-    private void spawnLava(int left, int right, int ontime, int offtime) {
-        lavaPool.add(new Lava(left, right, ontime, offtime, Lava.State.OFF));
-    }
-
-    private void spawnConveyor(int startPoint, int endPoint, Direction dir, int speed) {
-        conveyorPool.add(new Conveyor(startPoint, endPoint, dir, speed));
+        int playerSide = pos > store.getState().playerPosition ? 1 : -1;
+        store.getState().enemyPool.add(new Enemy(pos, dir, speed, wobble, playerSide));
     }
 
     private void spawnEnemySpawner(int position, int rate, int speed, int direction, int activate, long millis) {
-        enemySpawnerPool.add(new EnemySpawner(position, rate, speed, direction, activate, millis));
-    }
-
-    private void spawnBoss(int position, int lives) {
-        boss.spawn(position, lives);
-        moveBoss();
+        store.getState().enemySpawnerPool.add(new EnemySpawner(position, rate, speed, direction, activate, millis));
     }
 
     private void moveBoss() {
+        Boss boss = store.getState().boss;
+        StartClock clock = store.getState().clock;
         int spawnSpeed = boss.getSpeed();
-        enemySpawnerPool.clear();
+        store.getState().enemySpawnerPool.clear();
         spawnEnemySpawner(boss.getPosition(), spawnSpeed, 3, 0, 0, clock.millis());
         spawnEnemySpawner(boss.getPosition(), spawnSpeed, 3, 1, 0, clock.millis());
     }
 
     void loop() {
 //        Log.d("TUT", "loop");
-        long frameTime = clock.millis();
+        long frameTime = store.getState().clock.millis();
 
-        if (stage == Stage.PLAY) {
-            if (attacking) {
+        if (store.getState().stage == Stage.PLAY) {
+            if (store.getState().attacking) {
                 attackMonitor.onAttack();
             } else {
                 movementMonitor.onMove(joyState == null ? 0 : joyState.tilt);
             }
-        } else if (stage == Stage.DEAD) {
+        } else if (store.getState().stage == Stage.DEAD) {
             deathMonitor.onDeath();
         }
 
         joyState = inputActuator.getInput();
-        if (frameTime - previousFrameTime >= MIN_REDRAW_INTERVAL) {
-            previousFrameTime = frameTime;
+        if (frameTime - store.getState().previousFrameTime >= MIN_REDRAW_INTERVAL) {
+//            int joyTilt = Math.abs(joyState.tilt);
+//            store.dispatch(Redux.GameActions.nextFrame(joyTilt));
+            
+            store.getState().previousFrameTime = frameTime;
 
             if (Math.abs(joyState.tilt) > JoystickActuator.DEADZONE) {
-                lastInputTime = frameTime;
-                if (stage == Stage.SCREENSAVER) {
-                    levelNumber = START_LEVEL - 1;
-                    stageStartTime = frameTime;
-                    stage = Stage.LEVEL_COMPLETE;
+                store.getState().lastInputTime = frameTime;
+                if (store.getState().stage == Stage.SCREENSAVER) {
+                    store.getState().levelNumber = START_LEVEL - 1;
+                    store.getState().stageStartTime = frameTime;
+                    store.getState().stage = Stage.LEVEL_COMPLETE;
                 }
             } else {
-                if (lastInputTime + TIMEOUT < frameTime) {
-                    stage = Stage.SCREENSAVER;
+                if (store.getState().lastInputTime + TIMEOUT < frameTime) {
+                    store.getState().stage = Stage.SCREENSAVER;
                 }
             }
-            if (stage == Stage.SCREENSAVER) {
+            if (store.getState().stage == Stage.SCREENSAVER) {
                 noInputMonitor.onNoInput(frameTime);
-            } else if (stage == Stage.PLAY) {
+            } else if (store.getState().stage == Stage.PLAY) {
                 // PLAYING
-                if (attacking && attackMillis + ATTACK_DURATION < frameTime) {
-                    attacking = false;
+                if (store.getState().attacking && store.getState().attackMillis + ATTACK_DURATION < frameTime) {
+                    store.getState().attacking = false;
                 }
 
                 // If not attacking, check if they should be
-                if (!attacking && joyState.wobble > ATTACK_THRESHOLD) {
-                    attackMillis = frameTime;
-                    attacking = true;
+                if (!store.getState().attacking && joyState.wobble > ATTACK_THRESHOLD) {
+                    store.getState().attackMillis = frameTime;
+                    store.getState().attacking = true;
                 }
 
                 // If still not attacking, move!
-                playerPosition += playerPositionModifier;
-                if (!attacking) {
+                store.getState().playerPosition += store.getState().playerPositionModifier;
+                if (!store.getState().attacking) {
                     int moveAmount = (int) (joyState.tilt / 6.0);
                     if (DIRECTION == LEFT_TO_RIGHT) {
                         moveAmount = -moveAmount;
                     }
                     moveAmount = constrain(moveAmount, -MAX_PLAYER_SPEED, MAX_PLAYER_SPEED);
-                    playerPosition -= moveAmount;
-                    if (playerPosition < 0) {
-                        playerPosition = 0;
+                    store.getState().playerPosition -= moveAmount;
+                    if (store.getState().playerPosition < 0) {
+                        store.getState().playerPosition = 0;
                     }
-                    if (playerPosition >= 1000 && !boss.isAlive()) {
+                    if (store.getState().playerPosition >= 1000 && !store.getState().boss.isAlive()) {
                         // Reached exit!
                         levelComplete();
                         return;
                     }
                 }
 
-                if (inLava(playerPosition)) {
+                if (inLava(store.getState().playerPosition)) {
                     die();
                 }
 
@@ -327,7 +212,7 @@ class GameEngine {
                 tickEnemies();
                 playingStateDraw();
 
-            } else if (stage == Stage.DEAD) {
+            } else if (store.getState().stage == Stage.DEAD) {
                 // DEAD
                 drawCallback.startDraw();
 
@@ -335,22 +220,23 @@ class GameEngine {
                 drawParticles();
 
                 if (areAllParticlesDeactive()) {
-                    loadLevel();
+                    // used to be loadLevel()
+                    store.dispatch(Redux.GameActions.restartLevel());
                 }
-            } else if (stage == Stage.LEVEL_COMPLETE) {
-                if (frameTime < stageStartTime + 1200) {
-                    winMonitor.onWin(stageStartTime, frameTime);
+            } else if (store.getState().stage == Stage.LEVEL_COMPLETE) {
+                if (frameTime < store.getState().stageStartTime + 1200) {
+                    winMonitor.onWin(store.getState().stageStartTime, frameTime);
                 } else {
                     nextLevel();
                 }
-            } else if (stage == Stage.GAME_COMPLETE) {
-                if (frameTime < stageStartTime + 5500) {
-                    completeMonitor.onGameComplete(stageStartTime, frameTime);
+            } else if (store.getState().stage == Stage.GAME_COMPLETE) {
+                if (frameTime < store.getState().stageStartTime + 5500) {
+                    completeMonitor.onGameComplete(store.getState().stageStartTime, frameTime);
                 } else {
                     nextLevel();
                 }
-            } else if (stage == Stage.GAME_OVER) {
-                stageStartTime = 0;
+            } else if (store.getState().stage == Stage.GAME_OVER) {
+                store.getState().stageStartTime = 0;
                 gameOverMonitor.onGameOver();
             }
 
@@ -360,32 +246,32 @@ class GameEngine {
 
     private void playingStateDraw() {
         drawCallback.startDraw();
-        long frame = 10000 + clock.millis();
-        for (Conveyor conveyor : conveyorPool) {
+        long frame = 10000 + store.getState().clock.millis();
+        for (Conveyor conveyor : store.getState().conveyorPool) {
             drawCallback.drawConveyor(conveyor.getStartPoint(), conveyor.getEndPoint(), conveyor.getDirection(), frame);
         }
-        for (Enemy enemy : enemyPool) { // TODO this is now after the check if the enemy has hit the player - just sanity test this doesn't cause weird state
+        for (Enemy enemy : store.getState().enemyPool) { // TODO this is now after the check if the enemy has hit the player - just sanity test this doesn't cause weird state
             if (enemy.isAlive()) {
                 drawCallback.drawEnemy(enemy.getPosition());
             }
         }
-        for (Lava lava : lavaPool) {
+        for (Lava lava : store.getState().lavaPool) {
             drawCallback.drawLava(lava.getLeft(), lava.getRight(), lava.isEnabled());
         }
-        if (boss.isAlive()) {
-            int bossStartPosition = boss.getPosition() - BOSS_WIDTH / 2;
-            int bossEndPosition = boss.getPosition() + BOSS_WIDTH / 2;
+        if (store.getState().boss.isAlive()) {
+            int bossStartPosition = store.getState().boss.getPosition() - BOSS_WIDTH / 2;
+            int bossEndPosition = store.getState().boss.getPosition() + BOSS_WIDTH / 2;
             drawCallback.drawBoss(bossStartPosition, bossEndPosition);
         }
 
-        drawCallback.drawPlayer(playerPosition);
-        if (attacking) {
-            int startPoint = playerPosition + (ATTACK_WIDTH / 2);
-            int endPoint = playerPosition - (ATTACK_WIDTH / 2);
-            int attackPower = (int) GameEngine.map((int) (clock.millis() - attackMillis), 0, ATTACK_DURATION, 100, 5);
-            drawCallback.drawAttack(startPoint, playerPosition, endPoint, attackPower);
+        drawCallback.drawPlayer(store.getState().playerPosition);
+        if (store.getState().attacking) {
+            int startPoint = store.getState().playerPosition + (ATTACK_WIDTH / 2);
+            int endPoint = store.getState().playerPosition - (ATTACK_WIDTH / 2);
+            int attackPower = (int) GameEngine.map((int) (store.getState().clock.millis() - store.getState().attackMillis), 0, ATTACK_DURATION, 100, 5);
+            drawCallback.drawAttack(startPoint, store.getState().playerPosition, endPoint, attackPower);
         }
-        if (!boss.isAlive()) {
+        if (!store.getState().boss.isAlive()) {
             drawCallback.drawExit();
         }
     }
@@ -395,20 +281,20 @@ class GameEngine {
     }
 
     private void levelComplete() {
-        stageStartTime = clock.millis();
-        stage = Stage.LEVEL_COMPLETE;
-        if (levelNumber == LEVEL_COUNT) {
-            stage = Stage.GAME_COMPLETE;
+        store.getState().stageStartTime = store.getState().clock.millis();
+        store.getState().stage = Stage.LEVEL_COMPLETE;
+        if (store.getState().levelNumber == LEVEL_COUNT) {
+            store.getState().stage = Stage.GAME_COMPLETE;
         }
-        lives = TOTAL_LIVES;
-        drawCallback.drawLives(lives);
+        store.getState().lives = TOTAL_LIVES;
+        drawCallback.drawLives(store.getState().lives);
     }
 
     /**
      * Returns if the player is in active lava
      */
     private boolean inLava(int pos) {
-        for (Lava lava : lavaPool) {
+        for (Lava lava : store.getState().lavaPool) {
             if (lava.consumes(pos)) {
                 return true;
             }
@@ -417,31 +303,31 @@ class GameEngine {
     }
 
     private void die() {
-        if (levelNumber > 0) {
-            lives--;
+        if (store.getState().levelNumber > 0) {
+            store.getState().lives--;
         }
-        drawCallback.drawLives(lives);
-        if (lives == 0) {
-            levelNumber = START_LEVEL;
-            lives = TOTAL_LIVES;
+        drawCallback.drawLives(store.getState().lives);
+        if (store.getState().lives == 0) {
+            store.getState().levelNumber = START_LEVEL;
+            store.getState().lives = TOTAL_LIVES;
         }
-        for (Particle particle : particlePool) {
-            particle.spawn(playerPosition);
+        for (Particle particle : store.getState().particlePool) {
+            particle.spawn(store.getState().playerPosition);
         }
-        stageStartTime = clock.millis();
-        stage = Stage.DEAD;
+        store.getState().stageStartTime = store.getState().clock.millis();
+        store.getState().stage = Stage.DEAD;
     }
 
     private void tickConveyors() {
-        playerPositionModifier = 0;
-        for (Conveyor conveyor : conveyorPool) {
-            playerPositionModifier = conveyor.affect(playerPosition);
+        store.getState().playerPositionModifier = 0;
+        for (Conveyor conveyor : store.getState().conveyorPool) {
+            store.getState().playerPositionModifier = conveyor.affect(store.getState().playerPosition);
         }
     }
 
     private void tickEnemySpawners() {
-        long mm = clock.millis();
-        for (EnemySpawner enemySpawner : enemySpawnerPool) {
+        long mm = store.getState().clock.millis();
+        for (EnemySpawner enemySpawner : store.getState().enemySpawnerPool) {
             if (enemySpawner.shouldSpawn(mm)) {
                 EnemySpawner.Spawn spawn = enemySpawner.spawn(mm);
                 spawnEnemy(spawn.getPosition(), spawn.getDirection(), spawn.getSpeed(), 0);
@@ -450,30 +336,30 @@ class GameEngine {
     }
 
     private void tickBoss() {
-        if (!boss.isAlive()) {
+        if (!store.getState().boss.isAlive()) {
             return;
         }
-        int bossStartPosition = boss.getPosition() - BOSS_WIDTH / 2;
-        int bossEndPosition = boss.getPosition() + BOSS_WIDTH / 2;
+        int bossStartPosition = store.getState().boss.getPosition() - BOSS_WIDTH / 2;
+        int bossEndPosition = store.getState().boss.getPosition() + BOSS_WIDTH / 2;
         // CHECK COLLISION
-        if (playerPosition > bossStartPosition
-                && playerPosition < bossEndPosition) {
+        if (store.getState().playerPosition > bossStartPosition
+            && store.getState().playerPosition < bossEndPosition) {
             die();
             return;
         }
         // CHECK FOR ATTACK
-        if (attacking) {
-            int attackStartPosition = playerPosition + (ATTACK_WIDTH / 2);
-            int attackEndPosition = playerPosition - (ATTACK_WIDTH / 2);
+        if (store.getState().attacking) {
+            int attackStartPosition = store.getState().playerPosition + (ATTACK_WIDTH / 2);
+            int attackEndPosition = store.getState().playerPosition - (ATTACK_WIDTH / 2);
             if ((attackStartPosition >= bossStartPosition
-                    && attackStartPosition <= bossEndPosition)
-                    || attackEndPosition <= bossEndPosition
-                    && attackEndPosition >= bossStartPosition) {
-                boss.hit();
-                if (boss.isAlive()) {
+                && attackStartPosition <= bossEndPosition)
+                || attackEndPosition <= bossEndPosition
+                && attackEndPosition >= bossStartPosition) {
+                store.getState().boss.hit();
+                if (store.getState().boss.isAlive()) {
                     moveBoss();
                 } else {
-                    for (EnemySpawner enemySpawner : enemySpawnerPool) {
+                    for (EnemySpawner enemySpawner : store.getState().enemySpawnerPool) {
                         enemySpawner.kill();
                     }
                 }
@@ -482,20 +368,20 @@ class GameEngine {
     }
 
     private void tickLava() {
-        long mm = clock.millis();
-        for (Lava lava : lavaPool) {
+        long mm = store.getState().clock.millis();
+        for (Lava lava : store.getState().lavaPool) {
             lava.toggleLava(mm);
         }
     }
 
     private void tickEnemies() {
-        for (Enemy enemy : enemyPool) {
+        for (Enemy enemy : store.getState().enemyPool) {
             if (enemy.isAlive()) {
-                enemy.tick(clock.millis());
+                enemy.tick(store.getState().clock.millis());
                 // hit attack?
-                if (attacking) {
-                    int attackStartPosition = playerPosition - (ATTACK_WIDTH / 2);
-                    int attackEndPosition = playerPosition + (ATTACK_WIDTH / 2);
+                if (store.getState().attacking) {
+                    int attackStartPosition = store.getState().playerPosition - (ATTACK_WIDTH / 2);
+                    int attackEndPosition = store.getState().playerPosition + (ATTACK_WIDTH / 2);
                     if (enemy.hitAttack(attackStartPosition, attackEndPosition)) {
                         enemy.kill();
                         killMonitor.onKill();
@@ -506,7 +392,7 @@ class GameEngine {
                     killMonitor.onKill();
                 }
                 // hit player?
-                if (enemy.hitPlayer(playerPosition)) {
+                if (enemy.hitPlayer(store.getState().playerPosition)) {
                     die();
                     return;
                 }
@@ -515,7 +401,7 @@ class GameEngine {
     }
 
     private void tickParticles() {
-        for (Particle particle : particlePool) {
+        for (Particle particle : store.getState().particlePool) {
             if (particle.isAlive()) {
                 particle.tick(USE_GRAVITY);
             }
@@ -523,7 +409,7 @@ class GameEngine {
     }
 
     private void drawParticles() {
-        for (Particle particle : particlePool) {
+        for (Particle particle : store.getState().particlePool) {
             if (particle.isAlive()) {
                 drawCallback.drawParticle(particle.getPosition(), particle.getPower());
             }
@@ -531,7 +417,7 @@ class GameEngine {
     }
 
     private boolean areAllParticlesDeactive() {
-        for (Particle particle : particlePool) {
+        for (Particle particle : store.getState().particlePool) {
             if (particle.isAlive()) {
                 return false;
             }
@@ -540,10 +426,6 @@ class GameEngine {
     }
 
     private void nextLevel() {
-        levelNumber++;
-        if (levelNumber > LEVEL_COUNT) {
-            levelNumber = START_LEVEL;
-        }
         loadLevel();
     }
 

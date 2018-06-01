@@ -77,7 +77,7 @@ class InitHack {
                         game.finishDraw();
                     }
                 },
-                joystickActuator, new StartClock()
+                joystickActuator
         );
         game = new DungeonCrawlerGame(
                 numOfSquares,
