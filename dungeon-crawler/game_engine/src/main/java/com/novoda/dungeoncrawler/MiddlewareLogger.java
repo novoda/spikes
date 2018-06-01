@@ -14,7 +14,7 @@ public class MiddlewareLogger implements Middleware<Redux.GameState> {
     public Dispatcher create(Store<Redux.GameState> store, Dispatcher nextDispatcher) {
         return action -> {
             long diff = System.currentTimeMillis() - timeOfLastAction;
-            Log.d("TUT", "action " + store.getState().stage + "[" + diff + "]");
+//            Log.d("TUT", "action " + store.getState().stage + "[" + diff + "]");
             nextDispatcher.dispatch(action);
             timeOfLastAction = System.currentTimeMillis();
         };

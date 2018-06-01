@@ -31,40 +31,36 @@ class GameEngine {
         this.inputActuator = inputActuator;
 
         store.subscribe(gameState -> {
-            gameState.clock.start();
-            new Thread(() -> { // TODO might not be neccessary ( i thought we where already on another thread - but thats the mobile module I think)
-                long frameTime = gameState.clock.millis();
-                if (gameState.stage == Stage.GAME_OVER) {
-                    gameOverMonitor.onGameOver();
-                } else if (gameState.stage == Stage.LEVEL_COMPLETE) {
-                    drawCallback.drawLives(gameState.lives);
-                } else if (gameState.stage == Stage.DEAD) {
-                    drawCallback.drawLives(gameState.lives);
-                }
+            long frameTime = gameState.clock.millis();
+            if (gameState.stage == Stage.GAME_OVER) {
+                gameOverMonitor.onGameOver();
+            } else if (gameState.stage == Stage.LEVEL_COMPLETE) {
+                drawCallback.drawLives(gameState.lives);
+            } else if (gameState.stage == Stage.DEAD) {
+                drawCallback.drawLives(gameState.lives);
+            }
 
-                drawCallback.startDraw();
-                if (gameState.stage == Stage.SCREENSAVER) {
-                    noInputMonitor.onNoInput(frameTime);
-                } else if (gameState.stage == Stage.PLAY) {
-                    playingStateDraw(gameState, frameTime);
-                } else if (gameState.stage == Stage.DEAD) {
-                    deadStateDraw(gameState);
-                } else if (gameState.stage == Stage.LEVEL_COMPLETE) {
-                    if (frameTime < gameState.stageStartTime + 1200) {
-                        winMonitor.onWin(gameState.stageStartTime, frameTime);
-                    } else {
-                        nextLevel();
-                    }
-                } else if (gameState.stage == Stage.LEVEL_COMPLETE) {
-                    if (frameTime < gameState.stageStartTime + 5500) {
-                        completeMonitor.onGameComplete(gameState.stageStartTime, frameTime);
-                    } else {
-                        nextLevel();
-                    }
+            drawCallback.startDraw();
+            if (gameState.stage == Stage.SCREENSAVER) {
+                noInputMonitor.onNoInput(frameTime);
+            } else if (gameState.stage == Stage.PLAY) {
+                playingStateDraw(gameState, frameTime);
+            } else if (gameState.stage == Stage.DEAD) {
+                deadStateDraw(gameState);
+            } else if (gameState.stage == Stage.LEVEL_COMPLETE) {
+                if (frameTime < gameState.stageStartTime + 1200) {
+                    winMonitor.onWin(gameState.stageStartTime, frameTime);
+                } else {
+                    nextLevel();
                 }
-                drawCallback.finishDraw();
-
-            }).start();
+            } else if (gameState.stage == Stage.LEVEL_COMPLETE) {
+                if (frameTime < gameState.stageStartTime + 5500) {
+                    completeMonitor.onGameComplete(gameState.stageStartTime, frameTime);
+                } else {
+                    nextLevel();
+                }
+            }
+            drawCallback.finishDraw();
         });
     }
 
@@ -186,14 +182,12 @@ class GameEngine {
     }
 
     void loadLevel() {
-        store.getState().clock.start();
         store.dispatch(Redux.GameActions.nextLevel());
         drawCallback.drawLives(store.getState().lives);
     }
 
     void loop() {
         Redux.GameState state = store.getState();
-        state.clock.start();
         long frameTime = state.clock.millis();
 
         if (state.stage == Stage.PLAY) {
@@ -206,8 +200,8 @@ class GameEngine {
             deathMonitor.onDeath();
         }
 
+        joyState = inputActuator.getInput();
         if (frameTime - state.previousFrameTime >= MIN_REDRAW_INTERVAL) {
-            joyState = inputActuator.getInput();
             int joyTilt = Math.abs(joyState.tilt);
             int joyWobble = Math.abs(joyState.wobble);
             store.dispatch(Redux.GameActions.nextFrame(joyTilt, joyWobble));
