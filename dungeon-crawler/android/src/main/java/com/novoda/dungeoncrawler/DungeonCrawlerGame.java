@@ -7,9 +7,10 @@ class DungeonCrawlerGame implements
         GameEngine.KillMonitor,
         GameEngine.MovementMonitor,
         GameEngine.DeathMonitor,
-        GameEngine.WinMonitor,
-        GameEngine.CompleteMonitor,
-        GameEngine.DrawCallback, GameEngine.GameOverMonitor {
+        GameDrawer.WinMonitor,
+        GameDrawer.CompleteMonitor,
+        GameDrawer.DrawCallback,
+        GameDrawer.GameOverMonitor {
 
     interface HudDisplayer {
         void displayLives(int total);
@@ -66,7 +67,6 @@ class DungeonCrawlerGame implements
     @Override
     public void onWin(long levelStartTime, long levelCurrentTime) {
         // LEVEL COMPLETE
-        display.clear();
         if (levelStartTime + 500 > levelCurrentTime) {
             int n = (int) Math.max(GameEngine.map((int) (levelCurrentTime - levelStartTime), 0, 500, numLeds, 0), 0);
             for (int i = numLeds - 1; i >= n; i--) {
@@ -84,7 +84,6 @@ class DungeonCrawlerGame implements
 
     @Override
     public void onGameComplete(long levelStartTime, long levelCurrentTime) {
-        display.clear();
         soundEffectsPlayer.playComplete();
         if (levelStartTime + 500 > levelCurrentTime) {
             int n = (int) Math.max(GameEngine.map((int) (levelCurrentTime - levelStartTime), 0, 500, numLeds, 0), 0);
@@ -108,7 +107,7 @@ class DungeonCrawlerGame implements
 
     @Override
     public void onGameOver() {
-        display.clear();
+        // TODO do something
     }
 
     @Override

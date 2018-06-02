@@ -31,6 +31,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.yheriatovych:reductor:0.13.2'
     api project(':game_engine')
 
     testImplementation 'junit:junit:4.12'
