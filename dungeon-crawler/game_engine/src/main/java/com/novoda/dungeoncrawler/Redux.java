@@ -103,6 +103,15 @@ public interface Redux {
         private GameState nextFrame(GameState gameState, double joyTilt, double joyWobble) {
             GameState newGameState = new GameState();
             newGameState.stage = gameState.stage;
+            newGameState.lives = gameState.lives;
+            newGameState.levelNumber = gameState.levelNumber;
+            newGameState.stageStartTime = gameState.stageStartTime;
+            newGameState.lastInputTime = gameState.lastInputTime;
+            newGameState.playerPosition = gameState.playerPosition;
+            newGameState.playerPositionModifier = gameState.playerPositionModifier;
+            newGameState.attacking = gameState.attacking;
+            newGameState.attackMillis = gameState.attackMillis;
+            newGameState.boss = gameState.boss;
 //            newGameState.enemyPool.addAll(gameState.enemyPool);
 //            newGameState.enemySpawnerPool.addAll(gameState.enemySpawnerPool);
 //            newGameState.lavaPool.addAll(gameState.lavaPool);
@@ -113,21 +122,21 @@ public interface Redux {
 
             if (joyTilt > JoystickActuator.DEADZONE) {
                 newGameState.lastInputTime = frameTime;
-                if (gameState.stage == Stage.SCREENSAVER) {
+                if (newGameState.stage == Stage.SCREENSAVER) {
                     newGameState.levelNumber = -1;
                     newGameState.stageStartTime = frameTime;
                     newGameState.stage = Stage.LEVEL_COMPLETE;
                 }
             } else {
-                if (gameState.lastInputTime + TIMEOUT < frameTime) {
-                    gameState.stage = Stage.SCREENSAVER;
+                if (newGameState.lastInputTime + TIMEOUT < frameTime) {
+                    newGameState.stage = Stage.SCREENSAVER;
                 }
             }
 
-            if (gameState.stage == Stage.PLAY) {
+            if (newGameState.stage == Stage.PLAY) {
 
-                if (gameState.attacking) {
-                    if (gameState.attackMillis + ATTACK_DURATION < frameTime) {
+                if (newGameState.attacking) {
+                    if (newGameState.attackMillis + ATTACK_DURATION < frameTime) {
                         newGameState.attacking = false;
                     } else {
                         newGameState.attacking = true;
@@ -139,8 +148,8 @@ public interface Redux {
                     }
                 }
 
-                int playerPosition = gameState.playerPosition;
-                playerPosition += gameState.playerPositionModifier;
+                int playerPosition = newGameState.playerPosition;
+                playerPosition += newGameState.playerPositionModifier;
                 if (!newGameState.attacking) {
                     int moveAmount = (int) (joyTilt / 6.0);
                     if (DIRECTION == LEFT_TO_RIGHT) {
@@ -152,14 +161,14 @@ public interface Redux {
                 }
                 newGameState.playerPosition = playerPosition;
 
-                if (inLava(gameState.lavaPool, gameState.playerPosition)) { // TODO first class collection might be nice for the lava pool
-                    die(newGameState, gameState.lives);
+                if (inLava(newGameState.lavaPool, newGameState.playerPosition)) { // TODO first class collection might be nice for the lava pool
+                    die(newGameState, newGameState.lives);
                 }
 
-                if (newGameState.playerPosition == 1000 && !gameState.boss.isAlive()) {
+                if (newGameState.playerPosition == 1000 && !newGameState.boss.isAlive()) {
                     // Reached exit!
 //                    newGameState.stageStartTime = gameState.clock.millis();  TODO not sure if needed, as also done when level is loaded
-                    if (gameState.levelNumber == LEVEL_COUNT) {
+                    if (newGameState.levelNumber == LEVEL_COUNT) {
                         newGameState.stage = Stage.GAME_COMPLETE;
                     } else {
                         newGameState.stage = Stage.LEVEL_COMPLETE;
@@ -170,10 +179,10 @@ public interface Redux {
                 // Ticks and draw calls
                 tickConveyors(newGameState, newGameState.playerPosition);
                 tickEnemySpawners(newGameState, frameTime);
-                tickBoss(newGameState, gameState);
+                tickBoss(newGameState);
                 tickLava(newGameState, frameTime);
                 tickEnemies(newGameState, frameTime);
-            } else if (gameState.stage == Stage.DEAD) {
+            } else if (newGameState.stage == Stage.DEAD) {
                 tickParticles(newGameState);
             }
 
@@ -235,8 +244,8 @@ public interface Redux {
             gameState.enemyPool.add(new Enemy(pos, dir, speed, wobble, playerSide));
         }
 
-        private void tickBoss(GameState newGameState, GameState gameState) {
-            Boss boss = newGameState.boss = gameState.boss;
+        private void tickBoss(GameState newGameState) {
+            Boss boss = newGameState.boss;
             if (!boss.isAlive()) {
                 return;
             }
@@ -327,25 +336,27 @@ public interface Redux {
         private static final int TOTAL_DEATH_PARTICLES = 30;
 
         static GameState nextLevel(GameState gameState) {
-            GameState newGameState = new GameState();
-            newGameState.clock = gameState.clock; // hack
 
-            int levelNumber = gameState.levelNumber;
-            newGameState.levelNumber = levelNumber + 1;
-            if (newGameState.levelNumber > 9) { // was LEVEL_COUNT
-                newGameState.levelNumber = 0;  // was START_LEVEL
+            gameState.levelNumber = gameState.levelNumber + 1;
+            if (gameState.levelNumber > 9) { // was LEVEL_COUNT
+                gameState.levelNumber = 0;  // was START_LEVEL
             }
 
-            return loadLevel(newGameState);
+            return loadLevel(gameState);
         }
 
         static GameState loadLevel(GameState gameState) {
             GameState newGameState = new GameState();
 
+            newGameState.particlePool.clear();
+            newGameState.enemyPool.clear();
+            newGameState.enemySpawnerPool.clear();
+            newGameState.lavaPool.clear();
+            newGameState.conveyorPool.clear();
+
             spawnDeathParticles(newGameState, TOTAL_DEATH_PARTICLES);
             newGameState.playerPosition = 0;
 
-            newGameState.clock = gameState.clock;
             StartClock clock = newGameState.clock;
 
             switch (gameState.levelNumber) {
@@ -414,6 +425,9 @@ public interface Redux {
 
             newGameState.stageStartTime = clock.millis();
             newGameState.stage = Stage.PLAY;
+            newGameState.lastInputTime = gameState.lastInputTime;
+            newGameState.levelNumber = gameState.levelNumber;
+            newGameState.lives = gameState.lives;
 
             return newGameState;
         }
