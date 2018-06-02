@@ -7,9 +7,10 @@ class DungeonCrawlerGame implements
         GameEngine.KillMonitor,
         GameEngine.MovementMonitor,
         GameEngine.DeathMonitor,
-        GameEngine.WinMonitor,
-        GameEngine.CompleteMonitor,
-        GameEngine.DrawCallback, GameEngine.GameOverMonitor {
+        GameDrawer.WinMonitor,
+        GameDrawer.CompleteMonitor,
+        GameDrawer.DrawCallback,
+        GameDrawer.GameOverMonitor {
 
     interface HudDisplayer {
         void displayLives(int total);
@@ -106,7 +107,7 @@ class DungeonCrawlerGame implements
 
     @Override
     public void onGameOver() {
-        display.clear();
+        // TODO do something
     }
 
     @Override

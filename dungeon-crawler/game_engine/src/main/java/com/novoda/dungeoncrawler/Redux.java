@@ -193,10 +193,11 @@ public interface Redux {
             if (lives == 0) {
                 newGameState.levelNumber = START_LEVEL;
                 newGameState.lives = TOTAL_LIVES;
+                newGameState.stage = Stage.GAME_OVER;
             } else {
                 newGameState.lives = lives;
+                newGameState.stage = Stage.DEAD;
             }
-            newGameState.stage = Stage.DEAD;
             for (Particle particle : newGameState.PARTICLE_POOL) {
                 particle.spawn(newGameState.playerPosition);
             }
