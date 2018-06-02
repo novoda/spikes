@@ -53,7 +53,7 @@ class GameEngine {
                 } else {
                     nextLevel();
                 }
-            } else if (gameState.stage == Stage.LEVEL_COMPLETE) {
+            } else if (gameState.stage == Stage.GAME_COMPLETE) {
                 if (frameTime < gameState.stageStartTime + 5500) {
                     completeMonitor.onGameComplete(gameState.stageStartTime, frameTime);
                 } else {
