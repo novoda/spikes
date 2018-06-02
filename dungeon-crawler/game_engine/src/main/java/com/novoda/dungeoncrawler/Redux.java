@@ -38,7 +38,7 @@ public interface Redux {
         static GameState getInitialState() {
             GameState gameState = new GameState();
             gameState.clock = new StartClock();
-            gameState.clock.start(); // Hack
+            gameState.clock.start();
             gameState.levelNumber = -1;
             gameState.previousFrameTime = 0;
             gameState.lastInputTime = 0;
