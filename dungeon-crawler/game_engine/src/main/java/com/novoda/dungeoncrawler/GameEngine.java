@@ -66,10 +66,10 @@ class GameEngine {
     // outside of the state changing, aka an observer on state change
     private void playingStateDraw(Redux.GameState newGameState, long frameTime) {
         long frame = 10000 + frameTime;
-        for (Conveyor conveyor : newGameState.conveyorPool) {
+        for (Conveyor conveyor : newGameState.CONVEYOR_POOL) {
             drawCallback.drawConveyor(conveyor.getStartPoint(), conveyor.getEndPoint(), conveyor.getDirection(), frame);
         }
-        for (Enemy enemy : newGameState.enemyPool) {
+        for (Enemy enemy : newGameState.ENEMY_POOL) {
             if (enemy.isAlive()) {
                 drawCallback.drawEnemy(enemy.getPosition());
             }
@@ -78,7 +78,7 @@ class GameEngine {
             // except that it would play the sound on every frame
             // rather than only at the time of death :-)
         }
-        for (Lava lava : newGameState.lavaPool) {
+        for (Lava lava : newGameState.LAVA_POOL) {
             drawCallback.drawLava(lava.getLeft(), lava.getRight(), lava.isEnabled());
         }
         Boss boss = newGameState.boss;
@@ -102,7 +102,7 @@ class GameEngine {
     }
 
     private void deadStateDraw(Redux.GameState gameState) {
-        for (Particle particle : gameState.particlePool) {
+        for (Particle particle : gameState.PARTICLE_POOL) {
             if (particle.isAlive()) {
                 drawCallback.drawParticle(particle.getPosition(), particle.getPower());
             }
@@ -115,7 +115,7 @@ class GameEngine {
     }
 
     private static boolean areAllParticlesDeactive(Redux.GameState gameState) {
-        for (Particle particle : gameState.particlePool) {
+        for (Particle particle : gameState.PARTICLE_POOL) {
             if (particle.isAlive()) {
                 return false;
             }

@@ -13,11 +13,11 @@ public interface Redux {
 
     class GameState {
 
-        static final List<Particle> particlePool = new ArrayList<>();
-        static final List<Enemy> enemyPool = new ArrayList<>();
-        static final List<EnemySpawner> enemySpawnerPool = new ArrayList<>();
-        static final List<Lava> lavaPool = new ArrayList<>();
-        static final List<Conveyor> conveyorPool = new ArrayList<>();
+        static final List<Particle> PARTICLE_POOL = new ArrayList<>();
+        static final List<Enemy> ENEMY_POOL = new ArrayList<>();
+        static final List<EnemySpawner> ENEMY_SPAWNER_POOL = new ArrayList<>();
+        static final List<Lava> LAVA_POOL = new ArrayList<>();
+        static final List<Conveyor> CONVEYOR_POOL = new ArrayList<>();
 
         Boss boss = new Boss();
         int levelNumber;
@@ -36,10 +36,6 @@ public interface Redux {
         static GameState getInitialState() {
             GameState gameState = new GameState();
             gameState.levelNumber = -1;
-            gameState.previousFrameTime = 0;
-            gameState.lastInputTime = 0;
-            gameState.attackMillis = 0;
-            gameState.attacking = false;
             gameState.lives = 3;
             return gameState;
         }
@@ -99,6 +95,7 @@ public interface Redux {
 
         private GameState nextFrame(GameState gameState, long frameTime, double joyTilt, double joyWobble) {
             GameState newGameState = new GameState();
+            newGameState.previousFrameTime = frameTime;
             newGameState.stage = gameState.stage;
             newGameState.lives = gameState.lives;
             newGameState.levelNumber = gameState.levelNumber;
@@ -109,12 +106,6 @@ public interface Redux {
             newGameState.attacking = gameState.attacking;
             newGameState.attackMillis = gameState.attackMillis;
             newGameState.boss = gameState.boss;
-//            newGameState.enemyPool.addAll(gameState.enemyPool);
-//            newGameState.enemySpawnerPool.addAll(gameState.enemySpawnerPool);
-//            newGameState.lavaPool.addAll(gameState.lavaPool);
-//            newGameState.conveyorPool.addAll(gameState.conveyorPool);
-
-            newGameState.previousFrameTime = frameTime;
 
             if (joyTilt > JoystickActuator.DEADZONE) {
                 newGameState.lastInputTime = frameTime;
@@ -132,11 +123,7 @@ public interface Redux {
             if (newGameState.stage == Stage.PLAY) {
 
                 if (newGameState.attacking) {
-                    if (newGameState.attackMillis + ATTACK_DURATION < frameTime) {
-                        newGameState.attacking = false;
-                    } else {
-                        newGameState.attacking = true;
-                    }
+                    newGameState.attacking = newGameState.attackMillis + ATTACK_DURATION >= frameTime;
                 } else {
                     if (joyWobble > ATTACK_THRESHOLD) {
                         newGameState.attacking = true;
@@ -157,7 +144,7 @@ public interface Redux {
                 }
                 newGameState.playerPosition = playerPosition;
 
-                if (inLava(newGameState.lavaPool, newGameState.playerPosition)) { // TODO first class collection might be nice for the lava pool
+                if (inLava(newGameState.LAVA_POOL, newGameState.playerPosition)) { // TODO first class collection might be nice for the lava pool
                     die(newGameState, newGameState.lives);
                 }
 
@@ -210,7 +197,7 @@ public interface Redux {
                 newGameState.lives = lives;
             }
             newGameState.stage = Stage.DEAD;
-            for (Particle particle : newGameState.particlePool) {
+            for (Particle particle : newGameState.PARTICLE_POOL) {
                 particle.spawn(newGameState.playerPosition);
             }
         }
@@ -218,7 +205,7 @@ public interface Redux {
         // GameState is an outputvariable, so gross
         private static void tickConveyors(GameState newGameState, int playerPosition) {
             int playerPositionModifier = 0;
-            for (Conveyor conveyor : newGameState.conveyorPool) {
+            for (Conveyor conveyor : newGameState.CONVEYOR_POOL) {
                 playerPositionModifier = conveyor.affect(playerPosition);
             }
             newGameState.playerPositionModifier = playerPositionModifier;
@@ -226,7 +213,7 @@ public interface Redux {
 
         // GameState is an outputvariable, so gross
         private static void tickEnemySpawners(GameState newGameState, long frameTime) {
-            for (EnemySpawner enemySpawner : newGameState.enemySpawnerPool) {
+            for (EnemySpawner enemySpawner : newGameState.ENEMY_SPAWNER_POOL) {
                 if (enemySpawner.shouldSpawn(frameTime)) {
                     EnemySpawner.Spawn spawn = enemySpawner.spawn(frameTime);
                     spawnEnemy(newGameState, spawn.getPosition(), spawn.getDirection(), spawn.getSpeed(), 0);
@@ -236,7 +223,7 @@ public interface Redux {
 
         private static void spawnEnemy(GameState gameState, int pos, int dir, int speed, int wobble) {
             int playerSide = pos > gameState.playerPosition ? 1 : -1;
-            gameState.enemyPool.add(new Enemy(pos, dir, speed, wobble, playerSide));
+            gameState.ENEMY_POOL.add(new Enemy(pos, dir, speed, wobble, playerSide));
         }
 
         private void tickBoss(GameState newGameState, long frameTime) {
@@ -265,7 +252,7 @@ public interface Redux {
                     if (boss.isAlive()) {
                         moveBoss(newGameState, frameTime);
                     } else {
-                        for (EnemySpawner enemySpawner : newGameState.enemySpawnerPool) {
+                        for (EnemySpawner enemySpawner : newGameState.ENEMY_SPAWNER_POOL) {
                             enemySpawner.kill();
                         }
                     }
@@ -276,23 +263,23 @@ public interface Redux {
 
         private static void moveBoss(GameState newGameState, long frameTime) {
             int spawnSpeed = newGameState.boss.getSpeed();
-            newGameState.enemySpawnerPool.clear();
+            newGameState.ENEMY_SPAWNER_POOL.clear();
             spawnEnemySpawner(newGameState, newGameState.boss.getPosition(), spawnSpeed, 3, 0, 0, frameTime);
             spawnEnemySpawner(newGameState, newGameState.boss.getPosition(), spawnSpeed, 3, 1, 0, frameTime);
         }
 
         private static void spawnEnemySpawner(GameState newGameState, int position, int rate, int speed, int direction, int activate, long millis) {
-            newGameState.enemySpawnerPool.add(new EnemySpawner(position, rate, speed, direction, activate, millis));
+            newGameState.ENEMY_SPAWNER_POOL.add(new EnemySpawner(position, rate, speed, direction, activate, millis));
         }
 
         private static void tickLava(GameState newGameState, long frameTime) {
-            for (Lava lava : newGameState.lavaPool) {
+            for (Lava lava : newGameState.LAVA_POOL) {
                 lava.toggleLava(frameTime);
             }
         }
 
         private static void tickEnemies(GameState newGameState, long frameTime) {
-            for (Enemy enemy : newGameState.enemyPool) {
+            for (Enemy enemy : newGameState.ENEMY_POOL) {
                 if (enemy.isAlive()) {
                     enemy.tick(frameTime);
                     int playerPosition = newGameState.playerPosition;
@@ -304,7 +291,7 @@ public interface Redux {
 //                            killMonitor.onKill(); TODO think about this
                         }
                     }
-                    if (inLava(newGameState.lavaPool, enemy.getPosition())) {
+                    if (inLava(newGameState.LAVA_POOL, enemy.getPosition())) {
                         enemy.kill();
 //                        killMonitor.onKill();
                     }
@@ -318,7 +305,7 @@ public interface Redux {
         }
 
         private static void tickParticles(GameState newGameState) {
-            for (Particle particle : newGameState.particlePool) {
+            for (Particle particle : newGameState.PARTICLE_POOL) {
                 if (particle.isAlive()) {
                     particle.tick(USE_GRAVITY);
                 }
@@ -343,11 +330,11 @@ public interface Redux {
         static GameState loadLevel(GameState gameState, long frameTime) {
             GameState newGameState = new GameState();
 
-            newGameState.particlePool.clear();
-            newGameState.enemyPool.clear();
-            newGameState.enemySpawnerPool.clear();
-            newGameState.lavaPool.clear();
-            newGameState.conveyorPool.clear();
+            newGameState.PARTICLE_POOL.clear();
+            newGameState.ENEMY_POOL.clear();
+            newGameState.ENEMY_SPAWNER_POOL.clear();
+            newGameState.LAVA_POOL.clear();
+            newGameState.CONVEYOR_POOL.clear();
 
             spawnDeathParticles(newGameState, TOTAL_DEATH_PARTICLES);
             newGameState.playerPosition = 0;
@@ -428,37 +415,33 @@ public interface Redux {
         private static void spawnDeathParticles(GameState gameState, int total) {
             for (int i = 0; i < total; i++) {
                 Particle particle = new Particle();
-                gameState.particlePool.add(particle);
+                gameState.PARTICLE_POOL.add(particle);
             }
         }
 
         private static void spawnEnemy(GameState gameState, int pos, int dir, int speed, int wobble) {
             int playerSide = pos > gameState.playerPosition ? 1 : -1;
-            gameState.enemyPool.add(new Enemy(pos, dir, speed, wobble, playerSide));
+            gameState.ENEMY_POOL.add(new Enemy(pos, dir, speed, wobble, playerSide));
         }
 
         private static void spawnLava(GameState gameState, int left, int right, int ontime, int offtime) {
-            gameState.lavaPool.add(new Lava(left, right, ontime, offtime, Lava.State.OFF));
+            gameState.LAVA_POOL.add(new Lava(left, right, ontime, offtime, Lava.State.OFF));
         }
 
         private static void spawnEnemySpawner(GameState gameState, int position, int rate, int speed, int direction, int activate, long millis) {
-            gameState.enemySpawnerPool.add(new EnemySpawner(position, rate, speed, direction, activate, millis));
+            gameState.ENEMY_SPAWNER_POOL.add(new EnemySpawner(position, rate, speed, direction, activate, millis));
         }
 
         private static void spawnConveyor(GameState gameState, int startPoint, int endPoint, Direction dir, int speed) {
-            gameState.conveyorPool.add(new Conveyor(startPoint, endPoint, dir, speed));
+            gameState.CONVEYOR_POOL.add(new Conveyor(startPoint, endPoint, dir, speed));
         }
 
         private static void spawnBoss(GameState gameState, int position, int lives, long frameTime) {
-            gameState.boss.spawn(position, lives);
-            moveBoss(gameState, frameTime);
+            Boss boss = gameState.boss;
+            boss.spawn(position, lives);
+            spawnEnemySpawner(gameState, boss.getPosition(), boss.getSpeed(), 3, 0, 0, frameTime);
+            spawnEnemySpawner(gameState, boss.getPosition(), boss.getSpeed(), 3, 1, 0, frameTime);
         }
 
-        private static void moveBoss(GameState gameState, long frameTime) { // TODO why do we need to move the boss straight away?
-            int spawnSpeed = gameState.boss.getSpeed();
-            gameState.enemySpawnerPool.clear();
-            spawnEnemySpawner(gameState, gameState.boss.getPosition(), spawnSpeed, 3, 0, 0, frameTime);
-            spawnEnemySpawner(gameState, gameState.boss.getPosition(), spawnSpeed, 3, 1, 0, frameTime);
-        }
     }
 }
