@@ -1,0 +1,107 @@
+{
+  "project_info": {
+    "project_number": "96016852055",
+    "firebase_url": "https://dungeon-crawler-fd403.firebaseio.com",
+    "project_id": "dungeon-crawler-fd403",
+    "storage_bucket": "dungeon-crawler-fd403.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:96016852055:android:a0677b2cb6c246d3",
+        "android_client_info": {
+          "package_name": "com.novoda.dungeoncrawler"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "96016852055-72bcsd5b6q561v1ee248aqhfn56bbbqv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.novoda.dungeoncrawler",
+            "certificate_hash": "5d0d8f7774350fe339d4211df20da42951ac56c8"
+          }
+        },
+        {
+          "client_id": "96016852055-k4qdrhmk9ijjac1squ24655b6vnc4kov.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "96016852055-k4qdrhmk9ijjac1squ24655b6vnc4kov.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzggqkqD6cuAYyFAlBmlzmm0d5tBJg7mU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "96016852055-k4qdrhmk9ijjac1squ24655b6vnc4kov.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:96016852055:android:efe133b5fcff9ac5",
+        "android_client_info": {
+          "package_name": "com.novoda.dungeoncrawlercompanion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "96016852055-cp969uch1tttgiqnsvjnqp4l3mimsr64.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.novoda.dungeoncrawlercompanion",
+            "certificate_hash": "5d0d8f7774350fe339d4211df20da42951ac56c8"
+          }
+        },
+        {
+          "client_id": "96016852055-k4qdrhmk9ijjac1squ24655b6vnc4kov.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "96016852055-k4qdrhmk9ijjac1squ24655b6vnc4kov.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzggqkqD6cuAYyFAlBmlzmm0d5tBJg7mU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "96016852055-k4qdrhmk9ijjac1squ24655b6vnc4kov.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

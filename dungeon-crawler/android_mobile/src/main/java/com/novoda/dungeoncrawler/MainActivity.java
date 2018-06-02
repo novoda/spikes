@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements GamePauseObservable.OnToggleListener {
 
     private static final int NUM_OF_SQUARES = 25;
 
     private DungeonCrawlerGame game;
+    private GamePauseObservable gamePauseObservable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,9 @@ public class MainActivity extends Activity {
 
         game.start();
         Log.d("TUT", "Game starting");
+
+        gamePauseObservable = new GamePauseObservable(this);
+        gamePauseObservable.startObserving();
     }
 
     private void updateLives(int lives) {
@@ -37,9 +42,19 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onDestroy() {
-        game.stop();
-        super.onDestroy();
+    public void onPauseGame() {
+        Toast.makeText(this, "Game Paused", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onResumeGame() {
+        Toast.makeText(this, "Game Resumed", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        game.stop();
+        gamePauseObservable.stopObserving();
+        super.onDestroy();
+    }
 }
