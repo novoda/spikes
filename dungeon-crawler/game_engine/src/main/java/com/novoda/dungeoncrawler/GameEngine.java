@@ -183,7 +183,6 @@ class GameEngine {
 
     void loadLevel() {
         store.dispatch(Redux.GameActions.nextLevel());
-        drawCallback.drawLives(store.getState().lives);
     }
 
     void loop() {
