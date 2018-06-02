@@ -13,8 +13,6 @@ public interface Redux {
 
     class GameState {
 
-        static StartClock clock = new StartClock();
-
         static final List<Particle> particlePool = new ArrayList<>();
         static final List<Enemy> enemyPool = new ArrayList<>();
         static final List<EnemySpawner> enemySpawnerPool = new ArrayList<>();
@@ -37,8 +35,6 @@ public interface Redux {
 
         static GameState getInitialState() {
             GameState gameState = new GameState();
-            gameState.clock = new StartClock();
-            gameState.clock.start();
             gameState.levelNumber = -1;
             gameState.previousFrameTime = 0;
             gameState.lastInputTime = 0;
@@ -52,16 +48,16 @@ public interface Redux {
     enum GameActions {
         GOTO_NEXT_LEVEL, RESTART_LEVEL, GOTO_NEXT_FRAME;
 
-        public static Action nextLevel() {
-            return new Action(GOTO_NEXT_LEVEL.toString());
+        public static Action nextLevel(long frameTime) {
+            return new Action(GOTO_NEXT_LEVEL.toString(), new Object[]{frameTime});
         }
 
-        public static Action restartLevel() {
-            return new Action(RESTART_LEVEL.toString());
+        public static Action restartLevel(long frameTime) {
+            return new Action(RESTART_LEVEL.toString(), new Object[]{frameTime});
         }
 
-        public static Action nextFrame(double joyTilt, double joyWobble) {
-            return new Action(GOTO_NEXT_FRAME.toString(), new Object[]{joyTilt, joyWobble});
+        public static Action nextFrame(long frameTime, double joyTilt, double joyWobble) {
+            return new Action(GOTO_NEXT_FRAME.toString(), new Object[]{frameTime, joyTilt, joyWobble});
         }
     }
 
@@ -74,15 +70,16 @@ public interface Redux {
             } catch (IllegalArgumentException e) { // hack cos i'm tired
                 return GameState.getInitialState();
             }
+            long frameTime = action.getValue(0);
             switch (GameActions.valueOf(action.type)) {
                 case GOTO_NEXT_LEVEL:
-                    return LevelReducer.nextLevel(gameState);
+                    return LevelReducer.nextLevel(gameState, frameTime);
                 case RESTART_LEVEL:
-                    return LevelReducer.loadLevel(gameState);
+                    return LevelReducer.loadLevel(gameState, frameTime);
                 case GOTO_NEXT_FRAME:
-                    double tilt = action.getValue(0);
-                    double wobble = action.getValue(1);
-                    return nextFrame(gameState, tilt, wobble);
+                    double tilt = action.getValue(1);
+                    double wobble = action.getValue(2);
+                    return nextFrame(gameState, frameTime, tilt, wobble);
                 default:
                     throw new IllegalStateException(action.type + " is unknown.");
             }
@@ -100,7 +97,7 @@ public interface Redux {
         private static final boolean USE_GRAVITY = true;
         private static final Direction DIRECTION = Direction.LEFT_TO_RIGHT;
 
-        private GameState nextFrame(GameState gameState, double joyTilt, double joyWobble) {
+        private GameState nextFrame(GameState gameState, long frameTime, double joyTilt, double joyWobble) {
             GameState newGameState = new GameState();
             newGameState.stage = gameState.stage;
             newGameState.lives = gameState.lives;
@@ -117,7 +114,6 @@ public interface Redux {
 //            newGameState.lavaPool.addAll(gameState.lavaPool);
 //            newGameState.conveyorPool.addAll(gameState.conveyorPool);
 
-            long frameTime = gameState.clock.millis();
             newGameState.previousFrameTime = frameTime;
 
             if (joyTilt > JoystickActuator.DEADZONE) {
@@ -167,7 +163,6 @@ public interface Redux {
 
                 if (newGameState.playerPosition == 1000 && !newGameState.boss.isAlive()) {
                     // Reached exit!
-//                    newGameState.stageStartTime = gameState.clock.millis();  TODO not sure if needed, as also done when level is loaded
                     if (newGameState.levelNumber == LEVEL_COUNT) {
                         newGameState.stage = Stage.GAME_COMPLETE;
                     } else {
@@ -179,7 +174,7 @@ public interface Redux {
                 // Ticks and draw calls
                 tickConveyors(newGameState, newGameState.playerPosition);
                 tickEnemySpawners(newGameState, frameTime);
-                tickBoss(newGameState);
+                tickBoss(newGameState, frameTime);
                 tickLava(newGameState, frameTime);
                 tickEnemies(newGameState, frameTime);
             } else if (newGameState.stage == Stage.DEAD) {
@@ -244,7 +239,7 @@ public interface Redux {
             gameState.enemyPool.add(new Enemy(pos, dir, speed, wobble, playerSide));
         }
 
-        private void tickBoss(GameState newGameState) {
+        private void tickBoss(GameState newGameState, long frameTime) {
             Boss boss = newGameState.boss;
             if (!boss.isAlive()) {
                 return;
@@ -268,7 +263,7 @@ public interface Redux {
                     && attackEndPosition >= bossStartPosition) {
                     boss.hit();
                     if (boss.isAlive()) {
-                        moveBoss(newGameState);
+                        moveBoss(newGameState, frameTime);
                     } else {
                         for (EnemySpawner enemySpawner : newGameState.enemySpawnerPool) {
                             enemySpawner.kill();
@@ -279,11 +274,11 @@ public interface Redux {
             newGameState.boss = boss;
         }
 
-        private static void moveBoss(GameState newGameState) {
+        private static void moveBoss(GameState newGameState, long frameTime) {
             int spawnSpeed = newGameState.boss.getSpeed();
             newGameState.enemySpawnerPool.clear();
-            spawnEnemySpawner(newGameState, newGameState.boss.getPosition(), spawnSpeed, 3, 0, 0, newGameState.clock.millis());
-            spawnEnemySpawner(newGameState, newGameState.boss.getPosition(), spawnSpeed, 3, 1, 0, newGameState.clock.millis());
+            spawnEnemySpawner(newGameState, newGameState.boss.getPosition(), spawnSpeed, 3, 0, 0, frameTime);
+            spawnEnemySpawner(newGameState, newGameState.boss.getPosition(), spawnSpeed, 3, 1, 0, frameTime);
         }
 
         private static void spawnEnemySpawner(GameState newGameState, int position, int rate, int speed, int direction, int activate, long millis) {
@@ -335,17 +330,17 @@ public interface Redux {
     class LevelReducer {
         private static final int TOTAL_DEATH_PARTICLES = 30;
 
-        static GameState nextLevel(GameState gameState) {
+        static GameState nextLevel(GameState gameState, long frameTime) {
 
             gameState.levelNumber = gameState.levelNumber + 1;
             if (gameState.levelNumber > 9) { // was LEVEL_COUNT
                 gameState.levelNumber = 0;  // was START_LEVEL
             }
 
-            return loadLevel(gameState);
+            return loadLevel(gameState, frameTime);
         }
 
-        static GameState loadLevel(GameState gameState) {
+        static GameState loadLevel(GameState gameState, long frameTime) {
             GameState newGameState = new GameState();
 
             newGameState.particlePool.clear();
@@ -356,8 +351,6 @@ public interface Redux {
 
             spawnDeathParticles(newGameState, TOTAL_DEATH_PARTICLES);
             newGameState.playerPosition = 0;
-
-            StartClock clock = newGameState.clock;
 
             switch (gameState.levelNumber) {
                 case 0:
@@ -371,12 +364,12 @@ public interface Redux {
                     break;
                 case 2:
                     // Spawning enemies at exit every 2 seconds
-                    spawnEnemySpawner(newGameState, 1000, 3000, 2, 0, 0, clock.millis());
+                    spawnEnemySpawner(newGameState, 1000, 3000, 2, 0, 0, frameTime);
                     break;
                 case 3:
                     // Lava intro
                     spawnLava(newGameState, 400, 490, 2000, 2000);
-                    spawnEnemySpawner(newGameState, 1000, 5500, 3, 0, 0, clock.millis());
+                    spawnEnemySpawner(newGameState, 1000, 5500, 3, 0, 0, frameTime);
                     break;
                 case 4:
                     // Sin enemy
@@ -405,25 +398,25 @@ public interface Redux {
                     spawnLava(newGameState, 350, 455, 2000, 2000);
                     spawnLava(newGameState, 510, 610, 2000, 2000);
                     spawnLava(newGameState, 660, 760, 2000, 2000);
-                    spawnEnemySpawner(newGameState, 1000, 3800, 4, 0, 0, clock.millis());
+                    spawnEnemySpawner(newGameState, 1000, 3800, 4, 0, 0, frameTime);
                     break;
                 case 8:
                     // Sin enemy #2
                     spawnEnemy(newGameState, 700, 1, 7, 275);
                     spawnEnemy(newGameState, 500, 1, 5, 250);
-                    spawnEnemySpawner(newGameState, 1000, 5500, 4, 0, 3000, clock.millis());
-                    spawnEnemySpawner(newGameState, 0, 5500, 5, 1, 10000, clock.millis());
+                    spawnEnemySpawner(newGameState, 1000, 5500, 4, 0, 3000, frameTime);
+                    spawnEnemySpawner(newGameState, 0, 5500, 5, 1, 10000, frameTime);
                     spawnConveyor(newGameState, 100, 900, RIGHT_TO_LEFT, 3);
                     break;
                 case 9:
                     // Boss
-                    spawnBoss(newGameState, 800, 3);
+                    spawnBoss(newGameState, 800, 3, frameTime);
                     break;
                 default:
                     throw new IllegalStateException("Unknown level {" + gameState.levelNumber + "}");
             }
 
-            newGameState.stageStartTime = clock.millis();
+            newGameState.stageStartTime = frameTime;
             newGameState.stage = Stage.PLAY;
             newGameState.lastInputTime = gameState.lastInputTime;
             newGameState.levelNumber = gameState.levelNumber;
@@ -456,16 +449,16 @@ public interface Redux {
             gameState.conveyorPool.add(new Conveyor(startPoint, endPoint, dir, speed));
         }
 
-        private static void spawnBoss(GameState gameState, int position, int lives) {
+        private static void spawnBoss(GameState gameState, int position, int lives, long frameTime) {
             gameState.boss.spawn(position, lives);
-            moveBoss(gameState);
+            moveBoss(gameState, frameTime);
         }
 
-        private static void moveBoss(GameState gameState) { // TODO why do we need to move the boss straight away?
+        private static void moveBoss(GameState gameState, long frameTime) { // TODO why do we need to move the boss straight away?
             int spawnSpeed = gameState.boss.getSpeed();
             gameState.enemySpawnerPool.clear();
-            spawnEnemySpawner(gameState, gameState.boss.getPosition(), spawnSpeed, 3, 0, 0, gameState.clock.millis());
-            spawnEnemySpawner(gameState, gameState.boss.getPosition(), spawnSpeed, 3, 1, 0, gameState.clock.millis());
+            spawnEnemySpawner(gameState, gameState.boss.getPosition(), spawnSpeed, 3, 0, 0, frameTime);
+            spawnEnemySpawner(gameState, gameState.boss.getPosition(), spawnSpeed, 3, 1, 0, frameTime);
         }
     }
 }

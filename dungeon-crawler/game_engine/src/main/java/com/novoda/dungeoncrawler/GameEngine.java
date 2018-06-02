@@ -6,32 +6,30 @@ class GameEngine {
 
     private static final Store<Redux.GameState> store = Store.create(new Redux.GameReducer(), Redux.GameState.getInitialState(), new MiddlewareLogger());
 
-    // GAME
     private static final int MIN_REDRAW_INTERVAL = 33;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
 
-    // WOBBLE ATTACK
     private static final int ATTACK_DURATION = 700;    // Duration of a wobble attack (ms)
     private static final int ATTACK_WIDTH = 70;     // Width of the wobble attack, world is 1000 wide
     private static final int BOSS_WIDTH = 40;
 
-    // Hooks
     private final AttackMonitor attackMonitor;
     private final MovementMonitor movementMonitor;
     private final DeathMonitor deathMonitor;
     private final DrawCallback drawCallback;
     private final JoystickActuator inputActuator;
+    private final StartClock clock;
 
     private JoystickActuator.JoyState joyState;
 
-    GameEngine(AttackMonitor attackMonitor, KillMonitor killMonitor, MovementMonitor movementMonitor, DeathMonitor deathMonitor, WinMonitor winMonitor, NoInputMonitor noInputMonitor, CompleteMonitor completeMonitor, GameOverMonitor gameOverMonitor, DrawCallback drawCallback, JoystickActuator inputActuator) {
+    GameEngine(AttackMonitor attackMonitor, KillMonitor killMonitor, MovementMonitor movementMonitor, DeathMonitor deathMonitor, WinMonitor winMonitor, NoInputMonitor noInputMonitor, CompleteMonitor completeMonitor, GameOverMonitor gameOverMonitor, DrawCallback drawCallback, JoystickActuator inputActuator, StartClock clock) {
         this.attackMonitor = attackMonitor;
         this.movementMonitor = movementMonitor;
         this.deathMonitor = deathMonitor;
         this.drawCallback = drawCallback;
         this.inputActuator = inputActuator;
-
+        this.clock = clock;
         store.subscribe(gameState -> {
-            long frameTime = gameState.clock.millis();
+            long frameTime = this.clock.millis();
             if (gameState.stage == Stage.GAME_OVER) {
                 gameOverMonitor.onGameOver();
             } else if (gameState.stage == Stage.LEVEL_COMPLETE) {
@@ -112,7 +110,7 @@ class GameEngine {
 
         if (areAllParticlesDeactive(gameState)) {
             // used to be loadLevel()
-            store.dispatch(Redux.GameActions.restartLevel());
+            store.dispatch(Redux.GameActions.restartLevel(clock.millis()));
         }
     }
 
@@ -182,12 +180,12 @@ class GameEngine {
     }
 
     void loadLevel() {
-        store.dispatch(Redux.GameActions.nextLevel());
+        store.dispatch(Redux.GameActions.nextLevel(clock.millis()));
     }
 
     void loop() {
         Redux.GameState state = store.getState();
-        long frameTime = state.clock.millis();
+        long frameTime = clock.millis();
 
         if (state.stage == Stage.PLAY) {
             if (state.attacking) {
@@ -203,7 +201,7 @@ class GameEngine {
         if (frameTime - state.previousFrameTime >= MIN_REDRAW_INTERVAL) {
             int joyTilt = Math.abs(joyState.tilt);
             int joyWobble = Math.abs(joyState.wobble);
-            store.dispatch(Redux.GameActions.nextFrame(joyTilt, joyWobble));
+            store.dispatch(Redux.GameActions.nextFrame(frameTime, joyTilt, joyWobble));
         }
     }
 
