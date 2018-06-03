@@ -7,19 +7,11 @@ class GameEngine {
     private static final int MIN_REDRAW_INTERVAL = 33;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
 
     private final Store<Redux.GameState> store;
-    private final AttackMonitor attackMonitor;
-    private final MovementMonitor movementMonitor;
-    private final DeathMonitor deathMonitor;
     private final JoystickActuator inputActuator;
     private final StartClock clock;
 
-    private JoystickActuator.JoyState joyState;
-
-    GameEngine(Store<Redux.GameState> store, AttackMonitor attackMonitor, MovementMonitor movementMonitor, DeathMonitor deathMonitor, JoystickActuator inputActuator, StartClock clock) {
+    GameEngine(Store<Redux.GameState> store, JoystickActuator inputActuator, StartClock clock) {
         this.store = store;
-        this.attackMonitor = attackMonitor;
-        this.movementMonitor = movementMonitor;
-        this.deathMonitor = deathMonitor;
         this.inputActuator = inputActuator;
         this.clock = clock;
         store.subscribe(gameState -> {
@@ -32,7 +24,7 @@ class GameEngine {
                 if (frameTime > gameState.stageStartTime + 5500) {
                     store.dispatch(Redux.GameActions.nextLevel(clock.millis()));
                 }
-            } else if(gameState.stage == Stage.DEAD) {
+            } else if (gameState.stage == Stage.DEAD) {
                 if (areAllParticlesDeactive(gameState)) {
                     store.dispatch(Redux.GameActions.restartLevel(clock.millis()));
                 }
@@ -49,22 +41,6 @@ class GameEngine {
         return true;
     }
 
-    interface AttackMonitor {
-        void onAttack();
-    }
-
-    interface KillMonitor {
-        void onKill();
-    }
-
-    interface MovementMonitor {
-        void onMove(int velocity);
-    }
-
-    interface DeathMonitor {
-        void onDeath();
-    }
-
     void loadLevel() {
         store.dispatch(Redux.GameActions.nextLevel(clock.millis()));
     }
@@ -72,19 +48,8 @@ class GameEngine {
     void loop() {
         Redux.GameState state = store.getState();
         long frameTime = clock.millis();
-
-        if (state.stage == Stage.PLAY) {
-            if (state.attacking) {
-                attackMonitor.onAttack();
-            } else {
-                movementMonitor.onMove(joyState == null ? 0 : joyState.tilt);
-            }
-        } else if (state.stage == Stage.DEAD) {
-            deathMonitor.onDeath();
-        }
-
-        joyState = inputActuator.getInput();
         if (frameTime - state.previousFrameTime >= MIN_REDRAW_INTERVAL) {
+            JoystickActuator.JoyState joyState = inputActuator.getInput();
             int joyTilt = Math.abs(joyState.tilt);
             int joyWobble = Math.abs(joyState.wobble);
             store.dispatch(Redux.GameActions.nextFrame(frameTime, joyTilt, joyWobble));

@@ -3,14 +3,14 @@ package com.novoda.dungeoncrawler;
 import java.util.Random;
 
 class DungeonCrawlerGame implements
-        GameEngine.AttackMonitor,
-        GameEngine.KillMonitor,
-        GameEngine.MovementMonitor,
-        GameEngine.DeathMonitor,
-        GameDrawer.WinMonitor,
-        GameDrawer.CompleteMonitor,
-        GameDrawer.DrawCallback,
-        GameDrawer.GameOverMonitor {
+        LoopObserver.AttackMonitor,
+        LoopObserver.KillMonitor,
+        LoopObserver.MovementMonitor,
+        LoopObserver.DeathMonitor,
+        FrameObserver.WinMonitor,
+        FrameObserver.CompleteMonitor,
+        FrameObserver.DrawCallback,
+        FrameObserver.GameOverMonitor {
 
     interface HudDisplayer {
         void displayLives(int total);

@@ -2,7 +2,7 @@ package com.novoda.dungeoncrawler;
 
 import com.yheriatovych.reductor.Store;
 
-class GameDrawer {
+class FrameObserver {
 
     private static final int ATTACK_DURATION = 700;    // Duration of a wobble attack (ms)
     private static final int ATTACK_WIDTH = 70;     // Width of the wobble attack, world is 1000 wide
@@ -10,13 +10,13 @@ class GameDrawer {
 
     private DrawCallback drawCallback;
 
-    GameDrawer(Store<Redux.GameState> store,
-               NoInputMonitor noInputMonitor,
-               WinMonitor winMonitor,
-               CompleteMonitor completeMonitor,
-               GameOverMonitor gameOverMonitor,
-               DrawCallback drawCallback,
-               StartClock clock) {
+    FrameObserver(Store<Redux.GameState> store,
+                  NoInputMonitor noInputMonitor,
+                  WinMonitor winMonitor,
+                  CompleteMonitor completeMonitor,
+                  GameOverMonitor gameOverMonitor,
+                  DrawCallback drawCallback,
+                  StartClock clock) {
         this.drawCallback = drawCallback;
         store.subscribe(gameState -> {
             long frameTime = clock.millis();
@@ -43,8 +43,6 @@ class GameDrawer {
         });
     }
 
-    // TODO I think all of the drawing callbacks need to be
-    // outside of the state changing, aka an observer on state change
     private void playingStateDraw(Redux.GameState newGameState, long frameTime) {
         long frame = 10000 + frameTime;
         for (Conveyor conveyor : newGameState.CONVEYOR_POOL) {

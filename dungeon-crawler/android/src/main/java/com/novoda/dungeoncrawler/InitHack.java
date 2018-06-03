@@ -15,13 +15,21 @@ class InitHack {
                                           SoundEffectsPlayer soundEffectsPlayer,
                                           Screensaver screensaver, ArduinoLoop looper) {
         StartClock clock = new StartClock();
-        new GameDrawer(
+        new LoopObserver(
+            store,
+            joystickActuator,
+            () -> game.onAttack(),
+            v -> game.onMove(v),
+            () -> game.onDeath(),
+            () -> game.onKill()
+        );
+        new FrameObserver(
             store,
             screensaver::draw,
             (l, l2) -> game.onWin(l, l2),
             (s, c) -> game.onGameComplete(s, c),
             () -> game.onGameOver(),
-            new GameDrawer.DrawCallback() {
+            new FrameObserver.DrawCallback() {
                 @Override
                 public void startDraw() {
                     game.startDraw();
@@ -81,9 +89,6 @@ class InitHack {
         );
         GameEngine gameEngine = new GameEngine(
             store,
-            () -> game.onAttack(),
-            v -> game.onMove(v),
-            () -> game.onDeath(),
             joystickActuator,
             clock
         );
