@@ -21,7 +21,7 @@ public interface Redux {
 
         Boss boss = new Boss();
         int levelNumber;
-        long previousFrameTime;
+        long frameTime;
         long lastInputTime;
 
         long attackMillis; // Better name would be attackStartedTime
@@ -95,7 +95,7 @@ public interface Redux {
 
         private GameState nextFrame(GameState gameState, long frameTime, double joyTilt, double joyWobble) {
             GameState newGameState = new GameState();
-            newGameState.previousFrameTime = frameTime;
+            newGameState.frameTime = frameTime;
             newGameState.stage = gameState.stage;
             newGameState.lives = gameState.lives;
             newGameState.levelNumber = gameState.levelNumber;

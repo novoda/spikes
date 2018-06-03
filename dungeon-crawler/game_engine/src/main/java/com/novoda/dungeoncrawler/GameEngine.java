@@ -48,7 +48,7 @@ class GameEngine {
     void loop() {
         Redux.GameState state = store.getState();
         long frameTime = clock.millis();
-        if (frameTime - state.previousFrameTime >= MIN_REDRAW_INTERVAL) {
+        if (frameTime - state.frameTime >= MIN_REDRAW_INTERVAL) {
             JoystickActuator.JoyState joyState = inputActuator.getInput();
             int joyTilt = Math.abs(joyState.tilt);
             int joyWobble = Math.abs(joyState.wobble);
