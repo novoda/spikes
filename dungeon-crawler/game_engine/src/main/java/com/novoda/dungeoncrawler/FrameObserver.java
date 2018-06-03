@@ -76,7 +76,7 @@ class FrameObserver {
         if (newGameState.attacking) {
             int startPoint = playerPosition + (ATTACK_WIDTH / 2);
             int endPoint = playerPosition - (ATTACK_WIDTH / 2);
-            int attackPower = (int) GameEngine.map((int) (frameTime - newGameState.attackMillis), 0, ATTACK_DURATION, 100, 5);
+            int attackPower = (int) GameEngine.map((int) (frameTime - newGameState.attackStartedTime), 0, ATTACK_DURATION, 100, 5);
             drawCallback.drawAttack(startPoint, playerPosition, endPoint, attackPower);
         }
     }

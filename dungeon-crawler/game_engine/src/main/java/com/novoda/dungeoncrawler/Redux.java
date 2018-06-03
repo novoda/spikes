@@ -24,7 +24,7 @@ public interface Redux {
         long frameTime;
         long lastInputTime;
 
-        long attackMillis; // Better name would be attackStartedTime
+        long attackStartedTime;
         boolean attacking;
 
         int playerPositionModifier;
@@ -104,7 +104,7 @@ public interface Redux {
             newGameState.playerPosition = gameState.playerPosition;
             newGameState.playerPositionModifier = gameState.playerPositionModifier;
             newGameState.attacking = gameState.attacking;
-            newGameState.attackMillis = gameState.attackMillis;
+            newGameState.attackStartedTime = gameState.attackStartedTime;
             newGameState.boss = gameState.boss;
 
             if (joyTilt > JoystickActuator.DEADZONE) {
@@ -123,11 +123,11 @@ public interface Redux {
             if (newGameState.stage == Stage.PLAY) {
 
                 if (newGameState.attacking) {
-                    newGameState.attacking = newGameState.attackMillis + ATTACK_DURATION >= frameTime;
+                    newGameState.attacking = newGameState.attackStartedTime + ATTACK_DURATION >= frameTime;
                 } else {
                     if (joyWobble > ATTACK_THRESHOLD) {
                         newGameState.attacking = true;
-                        newGameState.attackMillis = frameTime;
+                        newGameState.attackStartedTime = frameTime;
                     }
                 }
 
