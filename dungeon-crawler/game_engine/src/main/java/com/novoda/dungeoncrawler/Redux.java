@@ -20,13 +20,13 @@ public interface Redux {
         static final List<Conveyor> CONVEYOR_POOL = new ArrayList<>();
 
         Boss boss = new Boss();
-        int levelNumber;
         long frameTime;
         long lastInputTime;
 
         long attackStartedTime;
         boolean attacking;
 
+        int levelNumber;
         int playerPositionModifier;
         int playerPosition;
         Stage stage;
@@ -116,6 +116,7 @@ public interface Redux {
                 }
             } else {
                 if (newGameState.lastInputTime + TIMEOUT < frameTime) {
+                    newGameState.stageStartTime = frameTime;
                     newGameState.stage = Stage.SCREENSAVER;
                 }
             }
@@ -145,14 +146,16 @@ public interface Redux {
                 newGameState.playerPosition = playerPosition;
 
                 if (inLava(newGameState.LAVA_POOL, newGameState.playerPosition)) { // TODO first class collection might be nice for the lava pool
-                    die(newGameState, newGameState.lives);
+                    die(newGameState, newGameState.lives, frameTime);
                 }
 
                 if (newGameState.playerPosition == 1000 && !newGameState.boss.isAlive()) {
                     // Reached exit!
                     if (newGameState.levelNumber == LEVEL_COUNT) {
+                        newGameState.stageStartTime = frameTime;
                         newGameState.stage = Stage.GAME_COMPLETE;
                     } else {
+                        newGameState.stageStartTime = frameTime;
                         newGameState.stage = Stage.LEVEL_COMPLETE;
                     }
                     newGameState.lives = TOTAL_LIVES;
@@ -188,14 +191,16 @@ public interface Redux {
         }
 
         // GameState is an outputvariable, so gross
-        private static void die(GameState newGameState, int currentLives) {
+        private static void die(GameState newGameState, int currentLives, long frameTime) {
             int lives = currentLives - 1;
             if (lives == 0) {
                 newGameState.levelNumber = START_LEVEL;
                 newGameState.lives = TOTAL_LIVES;
+                newGameState.stageStartTime = frameTime;
                 newGameState.stage = Stage.GAME_OVER;
             } else {
                 newGameState.lives = lives;
+                newGameState.stageStartTime = frameTime;
                 newGameState.stage = Stage.DEAD;
             }
             for (Particle particle : newGameState.PARTICLE_POOL) {
@@ -238,7 +243,7 @@ public interface Redux {
             // CHECK COLLISION
             if (playerPosition > bossStartPosition
                 && playerPosition < bossEndPosition) {
-                die(newGameState, newGameState.lives);
+                die(newGameState, newGameState.lives, frameTime);
                 return;
             }
             // CHECK FOR ATTACK
@@ -298,7 +303,7 @@ public interface Redux {
                     }
                     // hit player?
                     if (enemy.hitPlayer(playerPosition)) {
-                        die(newGameState, newGameState.lives);
+                        die(newGameState, newGameState.lives, frameTime);
                         return;
                     }
                 }
