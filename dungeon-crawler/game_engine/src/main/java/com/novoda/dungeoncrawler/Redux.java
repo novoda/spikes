@@ -190,7 +190,6 @@ public interface Redux {
             return false;
         }
 
-        // GameState is an outputvariable, so gross
         private static void die(GameState newGameState, int currentLives, long frameTime) {
             int lives = currentLives - 1;
             if (lives == 0) {
@@ -208,7 +207,6 @@ public interface Redux {
             }
         }
 
-        // GameState is an outputvariable, so gross
         private static void tickConveyors(GameState newGameState, int playerPosition) {
             int playerPositionModifier = 0;
             for (Conveyor conveyor : newGameState.CONVEYOR_POOL) {
@@ -217,7 +215,6 @@ public interface Redux {
             newGameState.playerPositionModifier = playerPositionModifier;
         }
 
-        // GameState is an outputvariable, so gross
         private static void tickEnemySpawners(GameState newGameState, long frameTime) {
             for (EnemySpawner enemySpawner : newGameState.ENEMY_SPAWNER_POOL) {
                 if (enemySpawner.shouldSpawn(frameTime)) {
