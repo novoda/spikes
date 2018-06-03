@@ -16,11 +16,12 @@ class FrameObserver {
                   CompleteMonitor completeMonitor,
                   GameOverMonitor gameOverMonitor,
                   DrawCallback drawCallback,
+                  FrameCallback frameCallback,
                   StartClock clock) {
         this.drawCallback = drawCallback;
         store.subscribe(gameState -> {
             long frameTime = clock.millis();
-            drawCallback.startDraw();
+            frameCallback.onFrameStart();
             drawCallback.drawLives(gameState.lives);
             if (gameState.stage == Stage.SCREENSAVER) {
                 noInputMonitor.onNoInput(frameTime);
@@ -39,7 +40,7 @@ class FrameObserver {
             } else if (gameState.stage == Stage.GAME_OVER) {
                 gameOverMonitor.onGameOver();
             }
-            drawCallback.finishDraw();
+            frameCallback.onFrameEnd();
         });
     }
 
@@ -104,9 +105,12 @@ class FrameObserver {
         void onGameOver();
     }
 
-    interface DrawCallback {
-        void startDraw();
+    interface FrameCallback {
+        void onFrameStart();
+        void onFrameEnd();
+    }
 
+    interface DrawCallback {
         void drawPlayer(int position);
 
         void drawConveyor(int startPoint, int endPoint, Direction direction, long frame);
@@ -124,7 +128,5 @@ class FrameObserver {
         void drawExit();
 
         void drawLives(int lives);
-
-        void finishDraw();
     }
 }

@@ -3,14 +3,15 @@ package com.novoda.dungeoncrawler;
 import java.util.Random;
 
 class DungeonCrawlerGame implements
-        LoopObserver.AttackMonitor,
-        LoopObserver.KillMonitor,
-        LoopObserver.MovementMonitor,
-        LoopObserver.DeathMonitor,
-        FrameObserver.WinMonitor,
-        FrameObserver.CompleteMonitor,
-        FrameObserver.DrawCallback,
-        FrameObserver.GameOverMonitor {
+    LoopObserver.AttackMonitor,
+    LoopObserver.KillMonitor,
+    LoopObserver.MovementMonitor,
+    LoopObserver.DeathMonitor,
+    FrameObserver.WinMonitor,
+    FrameObserver.CompleteMonitor,
+    FrameObserver.DrawCallback,
+    FrameObserver.FrameCallback,
+    FrameObserver.GameOverMonitor {
 
     interface HudDisplayer {
         void displayLives(int total);
@@ -111,8 +112,13 @@ class DungeonCrawlerGame implements
     }
 
     @Override
-    public void startDraw() {
+    public void onFrameStart() {
         display.clear();
+    }
+
+    @Override
+    public void onFrameEnd() {
+        display.show();
     }
 
     @Override
@@ -209,14 +215,6 @@ class DungeonCrawlerGame implements
     @Override
     public void drawLives(int lives) {
         hud.displayLives(lives);
-    }
-
-    @Override
-    public void finishDraw() {
-//      Log.d("TUT", "" + (millis() - frameTime));
-//      Log.d("TUT", " - ");
-        display.show();
-//      Log.d("TUT", "" + (millis() - frameTime));
     }
 
     public void stop() {

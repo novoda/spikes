@@ -30,10 +30,6 @@ class InitHack {
             (s, c) -> game.onGameComplete(s, c),
             () -> game.onGameOver(),
             new FrameObserver.DrawCallback() {
-                @Override
-                public void startDraw() {
-                    game.startDraw();
-                }
 
                 @Override
                 public void drawPlayer(int position) {
@@ -80,9 +76,16 @@ class InitHack {
                     game.drawLives(lives);
                 }
 
+            },
+            new FrameObserver.FrameCallback() {
                 @Override
-                public void finishDraw() {
-                    game.finishDraw();
+                public void onFrameStart() {
+                    game.onFrameStart();
+                }
+
+                @Override
+                public void onFrameEnd() {
+                    game.onFrameEnd();
                 }
             },
             clock
