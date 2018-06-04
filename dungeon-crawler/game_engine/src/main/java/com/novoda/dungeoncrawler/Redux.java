@@ -29,14 +29,15 @@ public interface Redux {
         int levelNumber;
         int playerPositionModifier;
         int playerPosition;
-        Stage stage;
         long stageStartTime;
+        Stage stage;
         int lives;
 
         static GameState getInitialState() {
             GameState gameState = new GameState();
             gameState.levelNumber = -1;
             gameState.lives = 3;
+            gameState.stage = Stage.SCREENSAVER;
             return gameState;
         }
     }
