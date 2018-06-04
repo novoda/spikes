@@ -34,6 +34,7 @@ class ArduinoLoop {
             return;
         }
         handler.removeCallbacksAndMessages(null);
+        thread.quit();
     }
 
     interface Loopable {

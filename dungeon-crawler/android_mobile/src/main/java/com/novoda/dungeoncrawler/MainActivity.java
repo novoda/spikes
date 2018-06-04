@@ -27,9 +27,6 @@ public class MainActivity extends Activity {
             game.start();
             Log.d("TUT", "Game restarting");
         });
-
-        game.start();
-        Log.d("TUT", "Game starting");
     }
 
     private void updateLives(int lives) {
@@ -37,9 +34,17 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onResume() {
+        super.onResume();
+        game.start();
+        Log.d("TUT", "Game starting");
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d("TUT", "Game stopping");
         game.stop();
-        super.onDestroy();
+        super.onPause();
     }
 
 }
