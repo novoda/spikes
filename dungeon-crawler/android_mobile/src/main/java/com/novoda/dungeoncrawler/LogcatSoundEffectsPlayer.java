@@ -6,33 +6,33 @@ public class LogcatSoundEffectsPlayer implements SoundEffectsPlayer {
     @Override
     public void playComplete() {
         //        noToneAC();
-        Log.d("TUT", "complete");
+        Log.v("TUT", "complete");
     }
 
     @Override
     public void playAttack() {
-        Log.d("TUT", "attacking");
+        Log.v("TUT", "attacking");
     }
 
     @Override
     public void playMove(int amount) {
         if (amount != 0) {
-            Log.d("TUT", "tilt " + amount);
+            Log.v("TUT", "tilt " + amount);
         }
     }
 
     @Override
     public void playDie() {
-        Log.d("TUT", "dead");
+        Log.v("TUT", "dead");
     }
 
     @Override
     public void playKill() {
-        Log.d("TUT", "kill");
+        Log.v("TUT", "kill");
     }
 
     @Override
     public void playWin() {
-        Log.d("TUT", "win");
+        Log.v("TUT", "win");
     }
 }

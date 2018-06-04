@@ -7,13 +7,12 @@ class Screensaver {
     private final Display display;
     private final int numOfSquares;
 
-    public Screensaver(Display display, int numOfSquares) {
+    Screensaver(Display display, int numOfSquares) {
         this.display = display;
         this.numOfSquares = numOfSquares;
     }
 
-    public void draw(long frameTime) {
-        display.clear(); // TODO I added this
+    void draw(long frameTime) {
         int n, b, c, i;
         int mode = (int) ((frameTime / 20000) % 2);
 
@@ -27,7 +26,9 @@ class Screensaver {
             c = (int) (20 + ((Math.sin(frameTime / 5000.00) + 1) * 33));
             for (i = 0; i < numOfSquares; i++) {
                 if (i % 10 == n) {
-                    display.set(i, new Display.CHSV(c, 255, 150));
+                    display.set(i, new Display.CHSV(b, 255, 150));
+                } else {
+                    display.set(i, new Display.CHSV(c, 255, 75));
                 }
             }
         } else if (mode == 1) {

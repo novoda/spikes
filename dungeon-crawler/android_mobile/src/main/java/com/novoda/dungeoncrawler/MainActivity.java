@@ -52,9 +52,18 @@ public class MainActivity extends Activity implements GamePauseObservable.OnTogg
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onResume() {
+        super.onResume();
+        game.start();
+        Log.d("TUT", "Game starting");
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d("TUT", "Game stopping");
         game.stop();
         gamePauseObservable.stopObserving();
-        super.onDestroy();
+        super.onPause();
     }
+
 }

@@ -3,13 +3,15 @@ package com.novoda.dungeoncrawler;
 import java.util.Random;
 
 class DungeonCrawlerGame implements
-        GameEngine.AttackMonitor,
-        GameEngine.KillMonitor,
-        GameEngine.MovementMonitor,
-        GameEngine.DeathMonitor,
-        GameEngine.WinMonitor,
-        GameEngine.CompleteMonitor,
-        GameEngine.DrawCallback, GameEngine.GameOverMonitor {
+    LoopObserver.AttackMonitor,
+    LoopObserver.KillMonitor,
+    LoopObserver.MovementMonitor,
+    LoopObserver.DeathMonitor,
+    FrameObserver.WinMonitor,
+    FrameObserver.CompleteMonitor,
+    FrameObserver.DrawCallback,
+    FrameObserver.FrameCallback,
+    FrameObserver.GameOverMonitor {
 
     interface HudDisplayer {
         void displayLives(int total);
@@ -66,7 +68,6 @@ class DungeonCrawlerGame implements
     @Override
     public void onWin(long levelStartTime, long levelCurrentTime) {
         // LEVEL COMPLETE
-        display.clear();
         if (levelStartTime + 500 > levelCurrentTime) {
             int n = (int) Math.max(GameEngine.map((int) (levelCurrentTime - levelStartTime), 0, 500, numLeds, 0), 0);
             for (int i = numLeds - 1; i >= n; i--) {
@@ -84,7 +85,6 @@ class DungeonCrawlerGame implements
 
     @Override
     public void onGameComplete(long levelStartTime, long levelCurrentTime) {
-        display.clear();
         soundEffectsPlayer.playComplete();
         if (levelStartTime + 500 > levelCurrentTime) {
             int n = (int) Math.max(GameEngine.map((int) (levelCurrentTime - levelStartTime), 0, 500, numLeds, 0), 0);
@@ -108,12 +108,17 @@ class DungeonCrawlerGame implements
 
     @Override
     public void onGameOver() {
+        // TODO do something
+    }
+
+    @Override
+    public void onFrameStart() {
         display.clear();
     }
 
     @Override
-    public void startDraw() {
-        display.clear();
+    public void onFrameEnd() {
+        display.show();
     }
 
     @Override
@@ -210,14 +215,6 @@ class DungeonCrawlerGame implements
     @Override
     public void drawLives(int lives) {
         hud.displayLives(lives);
-    }
-
-    @Override
-    public void finishDraw() {
-//      Log.d("TUT", "" + (millis() - frameTime));
-//      Log.d("TUT", " - ");
-        display.show();
-//      Log.d("TUT", "" + (millis() - frameTime));
     }
 
     public void stop() {
