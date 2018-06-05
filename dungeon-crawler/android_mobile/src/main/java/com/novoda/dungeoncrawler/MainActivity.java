@@ -44,10 +44,12 @@ public class MainActivity extends Activity implements GamePauseObservable.OnTogg
     @Override
     public void onPauseGame() {
         Toast.makeText(this, "Game Paused", Toast.LENGTH_SHORT).show();
+        game.onPauseGame();
     }
 
     @Override
     public void onResumeGame() {
+        game.onResumeGame();
         Toast.makeText(this, "Game Resumed", Toast.LENGTH_SHORT).show();
     }
 

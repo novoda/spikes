@@ -42,7 +42,7 @@ public interface Redux {
     }
 
     enum GameActions {
-        GOTO_NEXT_LEVEL, RESTART_LEVEL, GOTO_NEXT_FRAME;
+        GOTO_NEXT_LEVEL, RESTART_LEVEL, GOTO_NEXT_FRAME, PAUSE_GAME, RESUME_GAME;
 
         public static Action nextLevel(long frameTime) {
             return new Action(GOTO_NEXT_LEVEL.toString(), new Object[]{frameTime});
@@ -54,6 +54,14 @@ public interface Redux {
 
         public static Action nextFrame(long frameTime, double joyTilt, double joyWobble) {
             return new Action(GOTO_NEXT_FRAME.toString(), new Object[]{frameTime, joyTilt, joyWobble});
+        }
+
+        public static Action pauseGame(long frameTime) {
+            return new Action(PAUSE_GAME.toString(), new Object[]{frameTime});
+        }
+
+        public static Action resumeGame(long frameTime) {
+            return new Action(RESUME_GAME.toString(), new Object[]{frameTime});
         }
     }
 
@@ -76,6 +84,22 @@ public interface Redux {
                     double tilt = action.getValue(1);
                     double wobble = action.getValue(2);
                     return nextFrame(gameState, frameTime, tilt, wobble);
+                case PAUSE_GAME:
+                    if (gameState.stage == Stage.PLAY) {
+                        GameState newGameState = copyOf(gameState, frameTime);
+                        newGameState.stage = Stage.PAUSE;
+                        return newGameState;
+                    } else {
+                        return gameState;
+                    }
+                case RESUME_GAME:
+                    if (gameState.stage == Stage.PAUSE) {
+                        GameState newGameState = copyOf(gameState, frameTime);
+                        newGameState.stage = Stage.PLAY;
+                        return newGameState;
+                    } else {
+                        return gameState;
+                    }
                 default:
                     throw new IllegalStateException(action.type + " is unknown.");
             }
@@ -93,7 +117,7 @@ public interface Redux {
         private static final boolean USE_GRAVITY = true;
         private static final Direction DIRECTION = Direction.LEFT_TO_RIGHT;
 
-        private GameState nextFrame(GameState gameState, long frameTime, double joyTilt, double joyWobble) {
+        private GameState copyOf(GameState gameState, long frameTime) {
             GameState newGameState = new GameState();
             newGameState.frameTime = frameTime;
             newGameState.stage = gameState.stage;
@@ -106,6 +130,12 @@ public interface Redux {
             newGameState.attacking = gameState.attacking;
             newGameState.attackStartedTime = gameState.attackStartedTime;
             newGameState.boss = gameState.boss;
+            return newGameState;
+        }
+
+        private GameState nextFrame(GameState gameState, long frameTime, double joyTilt, double joyWobble) {
+            GameState newGameState = copyOf(gameState, frameTime);
+            newGameState.frameTime = frameTime;
 
             if (joyTilt > JoystickActuator.DEADZONE) {
                 newGameState.lastInputTime = frameTime;

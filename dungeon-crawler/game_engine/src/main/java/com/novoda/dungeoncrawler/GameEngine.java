@@ -8,9 +8,9 @@ class GameEngine {
 
     private final Store<Redux.GameState> store;
     private final JoystickActuator inputActuator;
-    private final StartClock clock;
+    private final PausableStartClock clock;
 
-    GameEngine(Store<Redux.GameState> store, JoystickActuator inputActuator, StartClock clock) {
+    GameEngine(Store<Redux.GameState> store, JoystickActuator inputActuator, PausableStartClock clock) {
         this.store = store;
         this.inputActuator = inputActuator;
         this.clock = clock;
@@ -68,5 +68,13 @@ class GameEngine {
         double offset = startCoord2;
         float ratio = (float) (endCoord2 - startCoord2) / (endCoord1 - startCoord1);
         return ratio * (valueCoord1 - startCoord1) + offset;
+    }
+
+    void pause() {
+        store.dispatch(Redux.GameActions.pauseGame(clock.millis()));
+    }
+
+    void resume() {
+        store.dispatch(Redux.GameActions.resumeGame(clock.millis()));
     }
 }
