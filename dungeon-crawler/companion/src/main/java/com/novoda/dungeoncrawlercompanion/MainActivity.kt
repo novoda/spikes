@@ -7,29 +7,28 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        navigation.selectedItemId = R.id.navigation_game
+    }
+
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
-            R.id.navigation_home -> {
-//                message.setText(R.string.play_pause)
+            R.id.navigation_game -> {
+                supportFragmentManager.beginTransaction().replace(R.id.content, GameFragment()).commit()
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_dashboard -> {
-//                message.setText(R.string.title_dashboard)
+            R.id.navigation_game_complete -> {
+                supportFragmentManager.beginTransaction().replace(R.id.content, GameCompleteFragment()).commit()
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_notifications -> {
-//                message.setText(R.string.title_notifications)
+            R.id.navigation_about -> {
+                supportFragmentManager.beginTransaction().replace(R.id.content, AboutFragment()).commit()
                 return@OnNavigationItemSelectedListener true
             }
         }
         false
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        play_pause.setOnClickListener { GamePauser().toggle() }
     }
 }

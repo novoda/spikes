@@ -44,6 +44,13 @@ public class MainActivity extends Activity implements GamePauseObservable.OnTogg
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        game.start();
+        Log.d("TUT", "Game starting");
+    }
+
+    @Override
     public void onPauseGame() {
         Toast.makeText(this, "Game Paused", Toast.LENGTH_SHORT).show();
         game.onPauseGame();
@@ -56,17 +63,11 @@ public class MainActivity extends Activity implements GamePauseObservable.OnTogg
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        game.start();
-        Log.d("TUT", "Game starting");
-    }
-
-    @Override
     protected void onPause() {
         Log.d("TUT", "Game stopping");
         game.stop();
         gamePauseObservable.stopObserving();
         super.onPause();
     }
+
 }

@@ -14,10 +14,9 @@ import java.io.IOException;
 public class MainActivity extends Activity implements GamePauseObservable.OnToggleListener {
 
     // LED setup
-//    private static final int NUM_LEDS = 300;
-    private static final int NUM_LEDS = 100;
+    private static final int NUM_LEDS = 300;
 
-    //    private static final String SPI_DEVICE_NAME = "SPI3.0"; // NXP
+//        private static final String SPI_DEVICE_NAME = "SPI3.0"; // NXP
     private static final String SPI_DEVICE_NAME = "SPI0.0"; // RPi
     private static final Apa102.Mode APA102_MODE = Apa102.Mode.BGR;
 
