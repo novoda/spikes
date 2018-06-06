@@ -11,9 +11,9 @@ class GamePauseObservable {
     private final FirebaseDatabase database;
     private final OnToggleListener onToggleListener;
 
-    GamePauseObservable(OnToggleListener onToggleListener) {
+    GamePauseObservable(FirebaseDatabase database, OnToggleListener onToggleListener) {
+        this.database = database;
         this.onToggleListener = onToggleListener;
-        database = FirebaseDatabase.getInstance();
     }
 
     private final ValueEventListener toggleListener = new ValueEventListener() {

@@ -7,6 +7,7 @@ import android.util.Log;
 import com.google.android.things.contrib.driver.apa102.Apa102;
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.PeripheralManager;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 
@@ -41,7 +42,7 @@ public class MainActivity extends Activity implements GamePauseObservable.OnTogg
         game = InitHack.newInstance(NUM_LEDS, ledStrip, this::updateLives, joystickActuator, soundEffectsPlayer, screensaver, looper);
         game.start();
 
-        gamePauseObservable = new GamePauseObservable(this);
+        gamePauseObservable = new GamePauseObservable(FirebaseDatabase.getInstance(), this);
         gamePauseObservable.startObserving();
     }
 

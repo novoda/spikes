@@ -6,6 +6,8 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 public class MainActivity extends Activity implements GamePauseObservable.OnToggleListener {
 
     private static final int NUM_OF_SQUARES = 25;
@@ -33,7 +35,7 @@ public class MainActivity extends Activity implements GamePauseObservable.OnTogg
         game.start();
         Log.d("TUT", "Game starting");
 
-        gamePauseObservable = new GamePauseObservable(this);
+        gamePauseObservable = new GamePauseObservable(FirebaseDatabase.getInstance(), this);
         gamePauseObservable.startObserving();
     }
 
@@ -67,5 +69,4 @@ public class MainActivity extends Activity implements GamePauseObservable.OnTogg
         gamePauseObservable.stopObserving();
         super.onPause();
     }
-
 }
