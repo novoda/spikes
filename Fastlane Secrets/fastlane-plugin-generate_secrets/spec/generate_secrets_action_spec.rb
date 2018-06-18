@@ -1,9 +1,11 @@
 describe Fastlane::Actions::GenerateSecretsAction do
   describe '#run' do
-    it 'prints a message' do
-      expect(Fastlane::UI).to receive(:message).with("The generate_secrets plugin is working!")
+    it 'writes a file to the correct place' do
+      Fastlane::Actions::GenerateSecretsAction.run({
+        file_name: "foobar.swift"
+      })
 
-      Fastlane::Actions::GenerateSecretsAction.run(nil)
+      expect(File.exists?("foobar.swift")).to be(true)
     end
   end
 end

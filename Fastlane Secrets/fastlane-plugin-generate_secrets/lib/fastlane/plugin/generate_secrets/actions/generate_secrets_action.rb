@@ -5,7 +5,8 @@ module Fastlane
   module Actions
     class GenerateSecretsAction < Action
       def self.run(params)
-        UI.message("The generate_secrets plugin is working!")
+        file_name = params[:file_name]
+        f = File.open("./#{file_name}", "w") { |file| file.write("1234") }
       end
 
       def self.description
