@@ -18,13 +18,11 @@ module Fastlane
         declaration = params[:use_extension] ? "extension" : "class"
 
         path = params[:path]
-        if path
-          FileUtils.mkdir_p(File.expand_path(Dir.pwd, path))
-        else
-          ileUtils.mkdir_p(File.expand_path(Dir.pwd, "./"))
-        end
+        directory = path ? File.expand_path(path, Dir.pwd) : Dir.pwd
+        finalPath = File.join(directory, "#{file_name}.swift")
+        FileUtils.mkdir_p(directory)
 
-        File.open("#{path}#{file_name}.swift", "w") { |file| 
+        File.open(finalPath, "w") { |file| 
           file.write("import Foundation\n")
           file.write("\n")
           file.write("#{access_modifier}#{declaration} #{class_name} {\n")
