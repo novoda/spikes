@@ -1,3 +1,8 @@
+PATH
+  remote: fastlane-plugin-generate_secrets
+  specs:
+    fastlane-plugin-generate_secrets (0.1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -147,6 +152,7 @@ PLATFORMS
 
 DEPENDENCIES
   fastlane
+  fastlane-plugin-generate_secrets!
 
 BUNDLED WITH
    1.16.0
