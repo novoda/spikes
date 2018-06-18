@@ -12,15 +12,16 @@ module Fastlane
         end
 
         file_name = params[:file_name].nil? ? params[:class_name] : params[:file_name]
+        public_modifier = params[:public] ? "public " : ""
         class_name = params[:class_name]
         f = File.open("./#{file_name}.swift", "w") { |file| 
           file.write("import Foundation\n")
           file.write("\n")
-          file.write("class #{class_name} {\n")
+          file.write("#{public_modifier}class #{class_name} {\n")
           file.write("\n")
           ENV.each do |key, value|
             if key.to_s.start_with?(params[:key_prefix])
-              file.write("static let #{key.sub(params[:key_prefix], "")} = \"12345\"")
+              file.write("  #{public_modifier}static let #{key.sub(params[:key_prefix], "")} = \"12345\"")
               file.write("\n")
             end
           end
@@ -61,7 +62,12 @@ module Fastlane
                                   env_name: "GENERATE_SECRETS_KEY_PREFIX",
                                 description: "The prefix that each ENV property to extract as a key starts with",
                                   optional: false,
-                                      type: String)                   
+                                      type: String),
+          FastlaneCore::ConfigItem.new(key: :public,
+                                  env_name: "GENERATE_SECRETS_PUBLIC",
+                                description: "Whether the class and keys should be `public` accessible in Swift",
+                                  optional: true,
+                                      type: Bool)                   
         ]
       end
 

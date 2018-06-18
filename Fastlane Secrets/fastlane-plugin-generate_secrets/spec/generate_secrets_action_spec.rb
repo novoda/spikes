@@ -105,5 +105,22 @@ class ApiKeys {
         Fastlane::Actions::GenerateSecretsAction.run(parameters)
       end.to raise_error("class_name is a required parameter for generate_secrets")
     end
+
+    it 'makes everything public when it is specified to do so' do
+      ENV["PREFIX_apiKey"] = "12345"
+      Fastlane::Actions::GenerateSecretsAction.run({
+        class_name: "ApiKeys",
+        key_prefix: "PREFIX_",
+        public: true
+      })
+
+      expect(File.open("ApiKeys.swift", "r").read).to eq("import Foundation
+
+public class ApiKeys {
+
+  public static let apiKey = \"12345\"
+}
+")
+    end
   end
 end
