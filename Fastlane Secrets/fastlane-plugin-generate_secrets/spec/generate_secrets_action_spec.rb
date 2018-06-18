@@ -12,6 +12,10 @@ describe Fastlane::Actions::GenerateSecretsAction do
       if File.exists?("#{test_file_name}.swift")
         File.delete("#{test_file_name}.swift")
       end
+
+      if File.exists?("ApiKeys.swift")
+        File.delete("ApiKeys.swift")
+      end
     end
 
     it 'writes a file to the correct place' do
