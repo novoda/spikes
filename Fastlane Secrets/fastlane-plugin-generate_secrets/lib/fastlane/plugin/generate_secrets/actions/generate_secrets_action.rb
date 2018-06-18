@@ -13,8 +13,9 @@ module Fastlane
         end
 
         file_name = params[:file_name].nil? ? params[:class_name] : params[:file_name]
-        public_modifier = params[:public] ? "public " : ""
+        access_modifier = params[:public] ? "public " : ""
         class_name = params[:class_name]
+        declaration = params[:use_extension] ? "extension" : "class"
 
         path = params[:path]
         if path
@@ -26,11 +27,11 @@ module Fastlane
         File.open("#{path}#{file_name}.swift", "w") { |file| 
           file.write("import Foundation\n")
           file.write("\n")
-          file.write("#{public_modifier}class #{class_name} {\n")
+          file.write("#{access_modifier}#{declaration} #{class_name} {\n")
           file.write("\n")
           ENV.each do |key, value|
             if key.to_s.start_with?(params[:key_prefix])
-              file.write("  #{public_modifier}static let #{key.sub(params[:key_prefix], "")} = \"12345\"")
+              file.write("  #{access_modifier}static let #{key.sub(params[:key_prefix], "")} = \"12345\"")
               file.write("\n")
             end
           end
@@ -81,7 +82,12 @@ module Fastlane
                                   env_name: "GENERATE_SECRETS_PATH",
                                description: "The path of the file to create",
                                   optional: true,
-                                      type: String)                  
+                                      type: String),
+          FastlaneCore::ConfigItem.new(key: :use_extension,
+                                  env_name: "GENERATE_SECRETS_USE_EXTENSION",
+                               description: "Whether the declarations are a class, or an extension",
+                                  optional: true,
+                                      type: Boolean)                 
         ]
       end
 

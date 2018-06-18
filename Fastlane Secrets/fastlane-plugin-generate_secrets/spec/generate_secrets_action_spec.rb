@@ -130,5 +130,23 @@ public class ApiKeys {
 
       expect(File.exists?("./Resources/TestBuildSecrets.swift")).to be(true)
     end
+
+    it 'makes an extension when it is specified to do so' do
+      ENV["PREFIX_apiKey"] = "12345"
+      Fastlane::Actions::GenerateSecretsAction.run({
+        class_name: "ApiKeys",
+        key_prefix: "PREFIX_",
+        public: true,
+        use_extension: true
+      })
+
+      expect(File.open("ApiKeys.swift", "r").read).to eq("import Foundation
+
+public extension ApiKeys {
+
+  public static let apiKey = \"12345\"
+}
+")
+    end
   end
 end
