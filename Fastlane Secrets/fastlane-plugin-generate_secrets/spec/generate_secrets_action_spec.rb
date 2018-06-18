@@ -64,7 +64,9 @@ class ApiKeys {
     end
 
     it 'writes a file with only prefixed inputs from env' do
-      ENV["PREFIX_crashlyticsKey"] = "12345"
+      ENV["FOO_crashlyticsKey"] = "12345"
+      parameters = defaultParameters
+      parameters[:key_prefix] = "FOO_"
       Fastlane::Actions::GenerateSecretsAction.run(defaultParameters)
 
       file_content = File.open("#{test_file_name}.swift", "r").read
