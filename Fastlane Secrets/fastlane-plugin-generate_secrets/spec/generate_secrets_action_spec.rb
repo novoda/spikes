@@ -24,6 +24,14 @@ describe Fastlane::Actions::GenerateSecretsAction do
       expect(File.exists?("#{test_file_name}.swift")).to be(true)
     end
 
+    it 'writes a file to the correct directory' do
+      parameters = defaultParameters.clone
+      parameters[:path] = "./Resources/"
+      Fastlane::Actions::GenerateSecretsAction.run(parameters)
+
+      expect(File.exists?("./Resources/TestBuildSecrets.swift")).to be(true)
+    end
+
     it 'writes an empty Swift class' do
       Fastlane::Actions::GenerateSecretsAction.run({
         file_name: test_file_name,
@@ -67,7 +75,7 @@ class ApiKeys {
       expect(file_content).to include("static let apiKey = \"12345\"")
     end
 
-    it 'writes a file with prefixed inputs from env' do
+    it 'writes a key from env' do
       ENV["FOO_crashlyticsKey"] = "12345"
       parameters = defaultParameters.clone
       parameters[:key_prefix] = "FOO_"
@@ -77,7 +85,7 @@ class ApiKeys {
       expect(file_content).to include("static let crashlyticsKey = \"12345\"")
     end
 
-    it 'writes a file with prefixed inputs from env and their value' do
+    it 'writes a string value from env' do
       ENV["FOO_crashlyticsKey"] = "ABCDE"
       parameters = defaultParameters.clone
       parameters[:key_prefix] = "FOO_"
@@ -87,7 +95,7 @@ class ApiKeys {
       expect(file_content).to include("static let crashlyticsKey = \"ABCDE\"")
     end
 
-    it 'writes a file excluding non-prefixed inputs from env' do
+    it 'does not write non-prefixed keys from env' do
       ENV["FOO_crashlyticsKey"] = "12345"
       ENV["BAR_fabricKey"] = "12345"
       parameters = defaultParameters.clone
@@ -131,14 +139,6 @@ public class ApiKeys {
   public static let apiKey = \"12345\"
 }
 ")
-    end
-
-    it 'writes a file to the correct directory' do
-      parameters = defaultParameters.clone
-      parameters[:path] = "./Resources/"
-      Fastlane::Actions::GenerateSecretsAction.run(parameters)
-
-      expect(File.exists?("./Resources/TestBuildSecrets.swift")).to be(true)
     end
 
     it 'makes an extension when it is specified to do so' do
