@@ -4,12 +4,15 @@ describe Fastlane::Actions::GenerateSecretsAction do
     test_file_name = "TestBuildSecrets"
 
     after(:each) do
-      File.delete("#{test_file_name}.swift")
+      if File.exists?("#{test_file_name}.swift")
+        File.delete("#{test_file_name}.swift")
+      end
     end
 
     it 'writes a file to the correct place' do
       Fastlane::Actions::GenerateSecretsAction.run({
-        file_name: test_file_name
+        file_name: test_file_name,
+        class_name: "ApiKeys"
       })
 
       expect(File.exists?("#{test_file_name}.swift")).to be(true)
@@ -17,7 +20,8 @@ describe Fastlane::Actions::GenerateSecretsAction do
 
     it 'writes an empty Swift class' do
       Fastlane::Actions::GenerateSecretsAction.run({
-        file_name: test_file_name
+        file_name: test_file_name,
+        class_name: "BuildConfig"
       })
 
       expect(File.open("#{test_file_name}.swift", "r").read).to eq("import Foundation
@@ -40,6 +44,14 @@ class ApiKeys {
 
 }
 ")
+    end
+
+    it 'writes an empty Swift class with the correct file if no file specified' do
+      Fastlane::Actions::GenerateSecretsAction.run({
+        class_name: "ApiKeys"
+      })
+
+      expect(File.exists?("ApiKeys.swift")).to be(true)
     end
   end
 end
