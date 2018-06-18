@@ -31,7 +31,8 @@ module Fastlane
           file.write("\n")
           ENV.each do |key, value|
             if key.to_s.start_with?(params[:key_prefix])
-              file.write("  #{access_modifier}static let #{key.sub(params[:key_prefix], "")} = \"12345\"")
+              extractedKey = key.sub(params[:key_prefix], "")
+              file.write("  #{access_modifier}static let #{extractedKey} = \"#{value}\"")
               file.write("\n")
             end
           end
