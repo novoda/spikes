@@ -19,7 +19,7 @@ platform :ios do
   desc "Description of what the lane does"
   lane :custom_lane do
     generate_secrets(
-      key_prefix: "secret_",
+      key_prefix: "SECRET_",
       path: "./Resources/",
       class_name: "Secrets"
     )
