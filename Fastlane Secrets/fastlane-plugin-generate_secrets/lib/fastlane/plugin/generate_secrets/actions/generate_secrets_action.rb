@@ -19,9 +19,9 @@ module Fastlane
 
         path = params[:path]
         if path
-          FileUtils.mkdir_p(path)
+          FileUtils.mkdir_p(File.expand_path(Dir.pwd, path))
         else
-          path = ""
+          ileUtils.mkdir_p(File.expand_path(Dir.pwd, "./"))
         end
 
         File.open("#{path}#{file_name}.swift", "w") { |file| 
@@ -78,17 +78,20 @@ module Fastlane
                                   env_name: "GENERATE_SECRETS_PUBLIC",
                                description: "Whether the class and keys should be `public` accessible in Swift",
                                   optional: true,
-                                      type: Boolean),
+                                      type: Boolean,
+                             default_value: false),
           FastlaneCore::ConfigItem.new(key: :path,
                                   env_name: "GENERATE_SECRETS_PATH",
                                description: "The path of the file to create",
                                   optional: true,
-                                      type: String),
+                                      type: String,
+                             default_value: "./"),
           FastlaneCore::ConfigItem.new(key: :use_extension,
                                   env_name: "GENERATE_SECRETS_USE_EXTENSION",
                                description: "Whether the declarations are a class, or an extension",
                                   optional: true,
-                                      type: Boolean)                 
+                                      type: Boolean,
+                             default_value: false)                 
         ]
       end
 
