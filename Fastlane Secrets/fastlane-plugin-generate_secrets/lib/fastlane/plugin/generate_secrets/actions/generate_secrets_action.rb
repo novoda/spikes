@@ -6,7 +6,7 @@ module Fastlane
     class GenerateSecretsAction < Action
       def self.run(params)
         file_name = params[:file_name]
-        f = File.open("./#{file_name}", "w") { |file| file.write("1234") }
+        f = File.open("./#{file_name}.swift", "w") { |file| file.write("1234") }
       end
 
       def self.description
@@ -28,11 +28,11 @@ module Fastlane
 
       def self.available_options
         [
-          # FastlaneCore::ConfigItem.new(key: :your_option,
-          #                         env_name: "GENERATE_SECRETS_YOUR_OPTION",
-          #                      description: "A description of your option",
-          #                         optional: false,
-          #                             type: String)
+          FastlaneCore::ConfigItem.new(key: :file_name,
+                                  env_name: "GENERATE_SECRETS_FILE_NAME",
+                               description: "A file name to write the output to, excluding the file extension",
+                                  optional: false,
+                                      type: String)
         ]
       end
 
