@@ -27,5 +27,19 @@ class BuildConfig {
 }
 ")
     end
+
+    it 'writes an empty Swift class with the correct name' do
+      Fastlane::Actions::GenerateSecretsAction.run({
+        file_name: test_file_name,
+        class_name: "ApiKeys"
+      })
+
+      expect(File.open("#{test_file_name}.swift", "r").read).to eq("import Foundation
+
+class ApiKeys {
+
+}
+")
+    end
   end
 end

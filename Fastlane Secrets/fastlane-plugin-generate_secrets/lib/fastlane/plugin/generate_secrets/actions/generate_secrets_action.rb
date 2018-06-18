@@ -6,10 +6,11 @@ module Fastlane
     class GenerateSecretsAction < Action
       def self.run(params)
         file_name = params[:file_name]
+        class_name = params[:class_name].nil? ? "BuildConfig" : params[:class_name]
         f = File.open("./#{file_name}.swift", "w") { |file| 
           file.write("import Foundation\n")
           file.write("\n")
-          file.write("class BuildConfig {\n")
+          file.write("class #{class_name} {\n")
           file.write("\n")
           file.write("}\n") 
         }
@@ -38,7 +39,12 @@ module Fastlane
                                   env_name: "GENERATE_SECRETS_FILE_NAME",
                                description: "A file name to write the output to, excluding the file extension",
                                   optional: false,
-                                      type: String)
+                                      type: String),
+          FastlaneCore::ConfigItem.new(key: :class_name,
+                                  env_name: "GENERATE_SECRETS_CLASS_NAME",
+                               description: "The class name which the generated secrets will be a part of",
+                                  optional: false,
+                                      type: String)                    
         ]
       end
 
