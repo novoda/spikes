@@ -1,4 +1,5 @@
 require 'fastlane/action'
+require 'fileutils'
 require_relative '../helper/generate_secrets_helper'
 
 module Fastlane
@@ -14,7 +15,15 @@ module Fastlane
         file_name = params[:file_name].nil? ? params[:class_name] : params[:file_name]
         public_modifier = params[:public] ? "public " : ""
         class_name = params[:class_name]
-        f = File.open("./#{file_name}.swift", "w") { |file| 
+
+        path = params[:path]
+        if path
+          FileUtils.mkdir_p(path)
+        else
+          path = ""
+        end
+
+        File.open("#{path}#{file_name}.swift", "w") { |file| 
           file.write("import Foundation\n")
           file.write("\n")
           file.write("#{public_modifier}class #{class_name} {\n")
@@ -65,9 +74,14 @@ module Fastlane
                                       type: String),
           FastlaneCore::ConfigItem.new(key: :public,
                                   env_name: "GENERATE_SECRETS_PUBLIC",
-                                description: "Whether the class and keys should be `public` accessible in Swift",
+                               description: "Whether the class and keys should be `public` accessible in Swift",
                                   optional: true,
-                                      type: Boolean)                   
+                                      type: Boolean),
+          FastlaneCore::ConfigItem.new(key: :path,
+                                  env_name: "GENERATE_SECRETS_PATH",
+                               description: "The path of the file to create",
+                                  optional: true,
+                                      type: String)                  
         ]
       end
 

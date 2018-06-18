@@ -122,5 +122,13 @@ public class ApiKeys {
 }
 ")
     end
+
+    it 'writes a file to the correct directory' do
+      parameters = defaultParameters.clone
+      parameters[:path] = "./Resources/"
+      Fastlane::Actions::GenerateSecretsAction.run(parameters)
+
+      expect(File.exists?("./Resources/TestBuildSecrets.swift")).to be(true)
+    end
   end
 end
