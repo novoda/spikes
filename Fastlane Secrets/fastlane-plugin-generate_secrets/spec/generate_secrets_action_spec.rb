@@ -83,5 +83,16 @@ class ApiKeys {
       file_content = File.open("#{test_file_name}.swift", "r").read
       expect(file_content).to_not include("static let fabricKey = \"12345\"")
     end
+
+    it 'writes a file excluding non-prefixed inputs from env' do
+      ENV["FOO_crashlyticsKey"] = "12345"
+      ENV["BAR_fabricKey"] = "12345"
+      parameters = defaultParameters
+      parameters[:key_prefix] = "FOO_"
+      Fastlane::Actions::GenerateSecretsAction.run(defaultParameters)
+
+      file_content = File.open("#{test_file_name}.swift", "r").read
+      expect(file_content).to_not include("static let fabricKey = \"12345\"")
+    end
   end
 end

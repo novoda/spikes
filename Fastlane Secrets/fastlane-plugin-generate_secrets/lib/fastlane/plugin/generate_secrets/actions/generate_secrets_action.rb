@@ -20,7 +20,7 @@ module Fastlane
           end
           file.write("}\n") 
         }
-        
+
       end
 
       def self.description
@@ -36,7 +36,6 @@ module Fastlane
       end
 
       def self.details
-        # Optional:
         "Use this plugin to build a file which contains secret or confidential keys, which can be supplied by your CI environment to avoid leaking secrets!"
       end
 
