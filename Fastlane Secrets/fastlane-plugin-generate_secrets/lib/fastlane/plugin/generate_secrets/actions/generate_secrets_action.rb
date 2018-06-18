@@ -67,7 +67,7 @@ module Fastlane
                                   env_name: "GENERATE_SECRETS_PUBLIC",
                                 description: "Whether the class and keys should be `public` accessible in Swift",
                                   optional: true,
-                                      type: Bool)                   
+                                      type: Boolean)                   
         ]
       end
 
