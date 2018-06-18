@@ -7,7 +7,7 @@ module Fastlane
     class GenerateSecretsAction < Action
       def self.run(params)
         [:key_prefix, :class_name].each do |required_parameter|
-          if params[required_parameter].nil? 
+          if params[required_parameter].nil?
             UI.user_error!("#{required_parameter} is a required parameter for generate_secrets")
           end
         end
@@ -19,24 +19,22 @@ module Fastlane
 
         path = params[:path]
         directory = path ? File.expand_path(path, Dir.pwd) : Dir.pwd
-        finalPath = File.join(directory, "#{file_name}.swift")
+        final_path = File.join(directory, "#{file_name}.swift")
         FileUtils.mkdir_p(directory)
 
-        File.open(finalPath, "w") { |file| 
+        File.open(final_path, "w") do |file|
           file.write("import Foundation\n")
           file.write("\n")
           file.write("#{access_modifier}#{declaration} #{class_name} {\n")
           file.write("\n")
           ENV.each do |key, value|
-            if key.to_s.start_with?(params[:key_prefix])
-              extractedKey = key.sub(params[:key_prefix], "")
-              file.write("  #{access_modifier}static let #{extractedKey} = \"#{value}\"")
-              file.write("\n")
-            end
+            next unless key.to_s.start_with?(params[:key_prefix])
+            extracted_key = key.sub(params[:key_prefix], "")
+            file.write("  #{access_modifier}static let #{extracted_key} = \"#{value}\"")
+            file.write("\n")
           end
-          file.write("}\n") 
-        }
-
+          file.write("}\n")
+        end
       end
 
       def self.description
@@ -89,7 +87,7 @@ module Fastlane
                                description: "Whether the declarations are a class, or an extension",
                                   optional: true,
                                       type: Boolean,
-                             default_value: false)                 
+                             default_value: false)
         ]
       end
 

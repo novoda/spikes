@@ -1,35 +1,34 @@
 describe Fastlane::Actions::GenerateSecretsAction do
   describe '#run' do
-    
     test_file_name = "TestBuildSecrets"
-    defaultParameters = {
+    default_parameters = {
       file_name: test_file_name,
       key_prefix: "PREFIX_",
       class_name: "ApiKeys"
     }
 
     after(:each) do
-      if File.exists?("#{test_file_name}.swift")
+      if File.exist?("#{test_file_name}.swift")
         File.delete("#{test_file_name}.swift")
       end
 
-      if File.exists?("ApiKeys.swift")
+      if File.exist?("ApiKeys.swift")
         File.delete("ApiKeys.swift")
       end
     end
 
     it 'writes a file to the correct place' do
-      Fastlane::Actions::GenerateSecretsAction.run(defaultParameters)
+      Fastlane::Actions::GenerateSecretsAction.run(default_parameters)
 
-      expect(File.exists?("#{test_file_name}.swift")).to be(true)
+      expect(File.exist?("#{test_file_name}.swift")).to be(true)
     end
 
     it 'writes a file to the correct directory' do
-      parameters = defaultParameters.clone
+      parameters = default_parameters.clone
       parameters[:path] = "./Resources/"
       Fastlane::Actions::GenerateSecretsAction.run(parameters)
 
-      expect(File.exists?("./Resources/TestBuildSecrets.swift")).to be(true)
+      expect(File.exist?("./Resources/TestBuildSecrets.swift")).to be(true)
     end
 
     it 'writes an empty Swift class' do
@@ -48,7 +47,7 @@ class BuildConfig {
     end
 
     it 'writes an empty Swift class with the correct name' do
-      Fastlane::Actions::GenerateSecretsAction.run(defaultParameters)
+      Fastlane::Actions::GenerateSecretsAction.run(default_parameters)
 
       expect(File.open("#{test_file_name}.swift", "r").read).to eq("import Foundation
 
@@ -64,12 +63,12 @@ class ApiKeys {
         key_prefix: "PREFIX_"
       })
 
-      expect(File.exists?("ApiKeys.swift")).to be(true)
+      expect(File.exist?("ApiKeys.swift")).to be(true)
     end
 
     it 'writes a file with inputs from env' do
       ENV["PREFIX_apiKey"] = "12345"
-      Fastlane::Actions::GenerateSecretsAction.run(defaultParameters)
+      Fastlane::Actions::GenerateSecretsAction.run(default_parameters)
 
       file_content = File.open("#{test_file_name}.swift", "r").read
       expect(file_content).to include("static let apiKey = \"12345\"")
@@ -77,7 +76,7 @@ class ApiKeys {
 
     it 'writes a key from env' do
       ENV["FOO_crashlyticsKey"] = "12345"
-      parameters = defaultParameters.clone
+      parameters = default_parameters.clone
       parameters[:key_prefix] = "FOO_"
       Fastlane::Actions::GenerateSecretsAction.run(parameters)
 
@@ -87,7 +86,7 @@ class ApiKeys {
 
     it 'writes a string value from env' do
       ENV["FOO_crashlyticsKey"] = "ABCDE"
-      parameters = defaultParameters.clone
+      parameters = default_parameters.clone
       parameters[:key_prefix] = "FOO_"
       Fastlane::Actions::GenerateSecretsAction.run(parameters)
 
@@ -98,16 +97,16 @@ class ApiKeys {
     it 'does not write non-prefixed keys from env' do
       ENV["FOO_crashlyticsKey"] = "12345"
       ENV["BAR_fabricKey"] = "12345"
-      parameters = defaultParameters.clone
+      parameters = default_parameters.clone
       parameters[:key_prefix] = "FOO_"
       Fastlane::Actions::GenerateSecretsAction.run(parameters)
 
       file_content = File.open("#{test_file_name}.swift", "r").read
-      expect(file_content).to_not include("static let fabricKey = \"12345\"")
+      expect(file_content).to_not(include("static let fabricKey = \"12345\""))
     end
 
     it 'throws a descriptive error when missing key_prefix parameter' do
-      parameters = defaultParameters.clone
+      parameters = default_parameters.clone
       parameters[:key_prefix] = nil
 
       expect do
@@ -116,7 +115,7 @@ class ApiKeys {
     end
 
     it 'throws a descriptive error when missing class_name parameter' do
-      parameters = defaultParameters.clone
+      parameters = default_parameters.clone
       parameters[:class_name] = nil
 
       expect do
