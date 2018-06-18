@@ -53,5 +53,16 @@ class ApiKeys {
 
       expect(File.exists?("ApiKeys.swift")).to be(true)
     end
+
+    it 'writes a file with inputs from env' do
+      ENV["apiKey"] = "12345"
+      Fastlane::Actions::GenerateSecretsAction.run({
+        file_name: test_file_name,
+        class_name: "ApiKeys"
+      })
+
+      file_content = File.open("#{test_file_name}.swift", "r").read
+      expect(file_content).to include("static let apiKey = \"12345\"")
+    end
   end
 end

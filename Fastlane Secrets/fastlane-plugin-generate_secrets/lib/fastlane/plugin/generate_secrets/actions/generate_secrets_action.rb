@@ -12,8 +12,22 @@ module Fastlane
           file.write("\n")
           file.write("class #{class_name} {\n")
           file.write("\n")
+          ENV.each do |key, value|
+            if key == "apiKey"
+              file.write("static let apiKey = \"12345\"")
+              file.write("\n")
+            end
+          end
           file.write("}\n") 
         }
+
+        foo = ENV["foo"]
+        
+        # if foo.nil? 
+          UI.important(foo)
+        # else 
+          # UI.success("#{foo}")
+        # end
       end
 
       def self.description
