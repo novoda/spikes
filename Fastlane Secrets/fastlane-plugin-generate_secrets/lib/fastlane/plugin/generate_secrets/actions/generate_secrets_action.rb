@@ -5,14 +5,11 @@ module Fastlane
   module Actions
     class GenerateSecretsAction < Action
       def self.run(params)
-        if params[:key_prefix].nil? 
-            UI.user_error!("key_prefix is a required parameter for generate_secrets")
-            return
+        [:key_prefix, :class_name].each do |required_parameter|
+          if params[required_parameter].nil? 
+            UI.user_error!("#{required_parameter} is a required parameter for generate_secrets")
+          end
         end
-        if params[:class_name].nil? 
-          UI.user_error!("class_name is a required parameter for generate_secrets")
-          return
-      end
 
         file_name = params[:file_name].nil? ? params[:class_name] : params[:file_name]
         class_name = params[:class_name]
