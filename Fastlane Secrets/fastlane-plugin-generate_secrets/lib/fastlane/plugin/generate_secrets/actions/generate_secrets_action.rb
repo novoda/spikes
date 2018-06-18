@@ -20,14 +20,7 @@ module Fastlane
           end
           file.write("}\n") 
         }
-
-        foo = ENV["foo"]
         
-        # if foo.nil? 
-          UI.important(foo)
-        # else 
-          # UI.success("#{foo}")
-        # end
       end
 
       def self.description
