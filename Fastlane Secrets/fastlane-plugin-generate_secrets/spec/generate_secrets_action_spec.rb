@@ -65,9 +65,9 @@ class ApiKeys {
 
     it 'writes a file with prefixed inputs from env' do
       ENV["FOO_crashlyticsKey"] = "12345"
-      parameters = defaultParameters
+      parameters = defaultParameters.clone
       parameters[:key_prefix] = "FOO_"
-      Fastlane::Actions::GenerateSecretsAction.run(defaultParameters)
+      Fastlane::Actions::GenerateSecretsAction.run(parameters)
 
       file_content = File.open("#{test_file_name}.swift", "r").read
       expect(file_content).to include("static let crashlyticsKey = \"12345\"")
@@ -76,23 +76,30 @@ class ApiKeys {
     it 'writes a file excluding non-prefixed inputs from env' do
       ENV["FOO_crashlyticsKey"] = "12345"
       ENV["BAR_fabricKey"] = "12345"
-      parameters = defaultParameters
+      parameters = defaultParameters.clone
       parameters[:key_prefix] = "FOO_"
-      Fastlane::Actions::GenerateSecretsAction.run(defaultParameters)
+      Fastlane::Actions::GenerateSecretsAction.run(parameters)
 
       file_content = File.open("#{test_file_name}.swift", "r").read
       expect(file_content).to_not include("static let fabricKey = \"12345\"")
     end
 
-    it 'writes a file excluding non-prefixed inputs from env' do
-      ENV["FOO_crashlyticsKey"] = "12345"
-      ENV["BAR_fabricKey"] = "12345"
-      parameters = defaultParameters
-      parameters[:key_prefix] = "FOO_"
-      Fastlane::Actions::GenerateSecretsAction.run(defaultParameters)
+    it 'throws a descriptive error when missing key_prefix parameter' do
+      parameters = defaultParameters.clone
+      parameters[:key_prefix] = nil
 
-      file_content = File.open("#{test_file_name}.swift", "r").read
-      expect(file_content).to_not include("static let fabricKey = \"12345\"")
+      expect do
+        Fastlane::Actions::GenerateSecretsAction.run(parameters)
+      end.to raise_error("key_prefix is a required parameter for generate_secrets")
+    end
+
+    it 'throws a descriptive error when missing class_name parameter' do
+      parameters = defaultParameters.clone
+      parameters[:class_name] = nil
+
+      expect do
+        Fastlane::Actions::GenerateSecretsAction.run(parameters)
+      end.to raise_error("class_name is a required parameter for generate_secrets")
     end
   end
 end

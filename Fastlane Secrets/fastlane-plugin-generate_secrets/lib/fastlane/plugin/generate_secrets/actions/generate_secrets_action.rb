@@ -5,6 +5,15 @@ module Fastlane
   module Actions
     class GenerateSecretsAction < Action
       def self.run(params)
+        if params[:key_prefix].nil? 
+            UI.user_error!("key_prefix is a required parameter for generate_secrets")
+            return
+        end
+        if params[:class_name].nil? 
+          UI.user_error!("class_name is a required parameter for generate_secrets")
+          return
+      end
+
         file_name = params[:file_name].nil? ? params[:class_name] : params[:file_name]
         class_name = params[:class_name]
         f = File.open("./#{file_name}.swift", "w") { |file| 
