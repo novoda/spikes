@@ -6,7 +6,13 @@ module Fastlane
     class GenerateSecretsAction < Action
       def self.run(params)
         file_name = params[:file_name]
-        f = File.open("./#{file_name}.swift", "w") { |file| file.write("1234") }
+        f = File.open("./#{file_name}.swift", "w") { |file| 
+          file.write("import Foundation\n")
+          file.write("\n")
+          file.write("class BuildConfig {\n")
+          file.write("\n")
+          file.write("}\n") 
+        }
       end
 
       def self.description

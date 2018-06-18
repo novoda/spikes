@@ -14,5 +14,18 @@ describe Fastlane::Actions::GenerateSecretsAction do
 
       expect(File.exists?("#{test_file_name}.swift")).to be(true)
     end
+
+    it 'writes an empty Swift class' do
+      Fastlane::Actions::GenerateSecretsAction.run({
+        file_name: test_file_name
+      })
+
+      expect(File.open("#{test_file_name}.swift", "r").read).to eq("import Foundation
+
+class BuildConfig {
+
+}
+")
+    end
   end
 end
