@@ -13,8 +13,8 @@ module Fastlane
           file.write("class #{class_name} {\n")
           file.write("\n")
           ENV.each do |key, value|
-            if key == "apiKey"
-              file.write("static let apiKey = \"12345\"")
+            if key.to_s.start_with?(params[:key_prefix])
+              file.write("static let #{key.sub(params[:key_prefix], "")} = \"12345\"")
               file.write("\n")
             end
           end
@@ -58,7 +58,12 @@ module Fastlane
                                   env_name: "GENERATE_SECRETS_CLASS_NAME",
                                description: "The class name which the generated secrets will be a part of",
                                   optional: false,
-                                      type: String)                    
+                                      type: String),
+          FastlaneCore::ConfigItem.new(key: :key_prefix,
+                                  env_name: "GENERATE_SECRETS_KEY_PREFIX",
+                                description: "The prefix that each ENV property to extract as a key starts with",
+                                  optional: false,
+                                      type: String)                   
         ]
       end
 
