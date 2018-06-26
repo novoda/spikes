@@ -6,12 +6,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-class GamePauseObservable {
+class RemoteGamePauseObservable {
 
     private final FirebaseDatabase database;
     private final OnToggleListener onToggleListener;
 
-    GamePauseObservable(FirebaseDatabase database, OnToggleListener onToggleListener) {
+    RemoteGamePauseObservable(FirebaseDatabase database, OnToggleListener onToggleListener) {
         this.database = database;
         this.onToggleListener = onToggleListener;
     }

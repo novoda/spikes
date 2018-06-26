@@ -11,7 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 
-public class MainActivity extends Activity implements GamePauseObservable.OnToggleListener {
+public class MainActivity extends Activity implements RemoteGamePauseObservable.OnToggleListener {
 
     // LED setup
     private static final int NUM_LEDS = 300;
@@ -26,7 +26,7 @@ public class MainActivity extends Activity implements GamePauseObservable.OnTogg
     private DungeonCrawlerGame game;
     private MPU6050 mpu6050;
 
-    private GamePauseObservable gamePauseObservable;
+    private RemoteGamePauseObservable remoteGamePauseObservable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +41,8 @@ public class MainActivity extends Activity implements GamePauseObservable.OnTogg
         game = InitHack.newInstance(NUM_LEDS, ledStrip, this::updateLives, joystickActuator, soundEffectsPlayer, screensaver, looper);
         game.start();
 
-        gamePauseObservable = new GamePauseObservable(FirebaseDatabase.getInstance(), this);
-        gamePauseObservable.startObserving();
+        remoteGamePauseObservable = new RemoteGamePauseObservable(FirebaseDatabase.getInstance(), this);
+        remoteGamePauseObservable.startObserving();
     }
 
     private Apa102 createApa102() {
@@ -76,7 +76,7 @@ public class MainActivity extends Activity implements GamePauseObservable.OnTogg
 
     @Override
     protected void onDestroy() {
-        gamePauseObservable.stopObserving();
+        remoteGamePauseObservable.stopObserving();
         game.stop();
         safeCloseApa102();
         super.onDestroy();

@@ -8,12 +8,12 @@ import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
 
-public class MainActivity extends Activity implements GamePauseObservable.OnToggleListener {
+public class MainActivity extends Activity implements RemoteGamePauseObservable.OnToggleListener {
 
     private static final int NUM_OF_SQUARES = 25;
 
     private DungeonCrawlerGame game;
-    private GamePauseObservable gamePauseObservable;
+    private RemoteGamePauseObservable remoteGamePauseObservable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +35,8 @@ public class MainActivity extends Activity implements GamePauseObservable.OnTogg
         game.start();
         Log.d("TUT", "Game starting");
 
-        gamePauseObservable = new GamePauseObservable(FirebaseDatabase.getInstance(), this);
-        gamePauseObservable.startObserving();
+        remoteGamePauseObservable = new RemoteGamePauseObservable(FirebaseDatabase.getInstance(), this);
+        remoteGamePauseObservable.startObserving();
     }
 
     private void updateLives(int lives) {
@@ -66,7 +66,7 @@ public class MainActivity extends Activity implements GamePauseObservable.OnTogg
     protected void onPause() {
         Log.d("TUT", "Game stopping");
         game.stop();
-        gamePauseObservable.stopObserving();
+        remoteGamePauseObservable.stopObserving();
         super.onPause();
     }
 
