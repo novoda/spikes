@@ -6,7 +6,7 @@ import com.yheriatovych.reductor.Store;
 class InitHack {
 
     private static DungeonCrawlerGame game;
-    private static final Store<Redux.GameState> store = Store.create(new Redux.GameReducer(), Redux.GameState.getInitialState(), new MiddlewareLogger());
+    private static final Store<Redux.GameState> store = Store.create(new Redux.GameReducer(), Redux.GameState.getInitialState(), new FirebaseGameStateLogger());
 
     static DungeonCrawlerGame newInstance(int numOfSquares,
                                           Display display,

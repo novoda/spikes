@@ -1,7 +1,12 @@
 package com.novoda.dungeoncrawler;
 
+import android.support.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.moshi.FromJson;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
@@ -15,29 +20,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MiddlewareLogger implements Middleware<Redux.GameState> {
+public class FirebaseGameStateLogger implements Middleware<Redux.GameState> {
 
     private final List<String> frames;
-    private final List<List<String>> historyOfGames;
-
-    private Stage lastStage;
-
-    MiddlewareLogger() {
-        this.frames = new ArrayList<>();
-        this.historyOfGames = new ArrayList<>();
-    }
-
-    @Override
-    public Dispatcher create(Store<Redux.GameState> store, Dispatcher nextDispatcher) {
-        return action -> {
-            Redux.GameState state = store.getState();
-//            new Thread(() -> jsonize(state, lastStage)).start();
-            jsonize(state, lastStage);
-            nextDispatcher.dispatch(action);
-            lastStage = state.stage;
-        };
-    }
-
     private final Moshi moshi = new Moshi.Builder()
             .add(new GameStateAdapter())
             .build();
@@ -45,26 +30,54 @@ public class MiddlewareLogger implements Middleware<Redux.GameState> {
     private final Type type = Types.newParameterizedType(List.class, String.class);
     private final JsonAdapter<List<String>> framesAdapter = moshi.adapter(type);
 
-    // Thread this
-    private void jsonize(Redux.GameState state, Stage lastStage) {
+    private Stage lastStage;
+
+    FirebaseGameStateLogger() {
+        this.frames = new ArrayList<>();
+    }
+
+    @Override
+    public Dispatcher create(Store<Redux.GameState> store, Dispatcher nextDispatcher) {
+        return action -> {
+            Redux.GameState state = store.getState();
+//            new Thread(() -> jsonize(state, lastStage)).start();
+            jsonize(state);
+            log(state);
+            nextDispatcher.dispatch(action);
+            lastStage = state.stage;
+        };
+    }
+
+    private void jsonize(Redux.GameState state) {
+        String json = adapter.toJson(state);
+        frames.add(json);
+    }
+
+    private void log(Redux.GameState state) {
         Stage stage = state.stage;
         if (!stage.equals(lastStage)) {
-            if (stage == Stage.GAME_OVER || stage == Stage.SCREENSAVER) {
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference gamerTag = database.getReference("gamerTag");
+            if (stage == Stage.GAME_OVER) {
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference();
                 long timeStamp = System.currentTimeMillis();
-                database.getReference("games/" + timeStamp + "/frames")
-                        .setValue(framesAdapter.toJson(frames));
-                database.getReference("games/" + timeStamp + "/gamerTag")
-                        .setValue(gamerTag);
-                historyOfGames.add(frames);
+                database.child("currentGamerTag").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        database.child("games").child(String.valueOf(timeStamp)).child("frames")
+                                .setValue(framesAdapter.toJson(frames));
+                        database.child("games").child(String.valueOf(timeStamp)).child("gamerTag")
+                                .setValue(dataSnapshot.getValue());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        // do nothing
+                    }
+                });
+            }
+            if (stage == Stage.SCREENSAVER) {
                 frames.clear();
             }
         }
-
-        String json = adapter.toJson(state);
-//        System.out.println("XXX " + json);
-        frames.add(json);
     }
 
     static class GameStateAdapter {
