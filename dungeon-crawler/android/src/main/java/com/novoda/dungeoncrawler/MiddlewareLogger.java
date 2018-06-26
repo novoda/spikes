@@ -19,6 +19,12 @@ public class MiddlewareLogger implements Middleware<Redux.GameState> {
 
     private final List<String> frames;
     private final List<List<String>> historyOfGames;
+    private final Moshi moshi = new Moshi.Builder()
+            .add(new GameStateAdapter())
+            .build();
+    private final JsonAdapter<Redux.GameState> adapter = moshi.adapter(Redux.GameState.class);
+    private final Type type = Types.newParameterizedType(List.class, String.class);
+    private final JsonAdapter<List<String>> framesAdapter = moshi.adapter(type);
 
     private Stage lastStage;
 
@@ -38,13 +44,6 @@ public class MiddlewareLogger implements Middleware<Redux.GameState> {
         };
     }
 
-    private final Moshi moshi = new Moshi.Builder()
-            .add(new GameStateAdapter())
-            .build();
-    private final JsonAdapter<Redux.GameState> adapter = moshi.adapter(Redux.GameState.class);
-    private final Type type = Types.newParameterizedType(List.class, String.class);
-    private final JsonAdapter<List<String>> framesAdapter = moshi.adapter(type);
-
     // Thread this
     private void jsonize(Redux.GameState state, Stage lastStage) {
         Stage stage = state.stage;
@@ -61,9 +60,7 @@ public class MiddlewareLogger implements Middleware<Redux.GameState> {
                 frames.clear();
             }
         }
-
         String json = adapter.toJson(state);
-//        System.out.println("XXX " + json);
         frames.add(json);
     }
 
