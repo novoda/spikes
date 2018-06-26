@@ -5,6 +5,7 @@ import com.yheriatovych.reductor.Reducer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.novoda.dungeoncrawler.Direction.LEFT_TO_RIGHT;
 import static com.novoda.dungeoncrawler.Direction.RIGHT_TO_LEFT;
@@ -29,14 +30,15 @@ public interface Redux {
         int levelNumber;
         int playerPositionModifier;
         int playerPosition;
-        Stage stage;
         long stageStartTime;
+        Stage stage;
         int lives;
 
         static GameState getInitialState() {
             GameState gameState = new GameState();
             gameState.levelNumber = -1;
             gameState.lives = 3;
+            gameState.stage = Stage.SCREENSAVER;
             return gameState;
         }
     }
@@ -105,7 +107,7 @@ public interface Redux {
             }
         }
 
-        private static final int TIMEOUT = 30000;
+        private static final long SCREENSAVER_TIMEOUT = TimeUnit.SECONDS.toMillis(10);
         private static final int ATTACK_DURATION = 700;
         private static final int ATTACK_THRESHOLD = 30000;
         private static final int MAX_PLAYER_SPEED = 15;     // Max move speed of the player
@@ -144,8 +146,13 @@ public interface Redux {
                     newGameState.stageStartTime = frameTime;
                     newGameState.stage = Stage.LEVEL_COMPLETE;
                 }
+                if (newGameState.stage == Stage.GAME_OVER) {
+                    newGameState.levelNumber = -1;
+                    newGameState.stageStartTime = frameTime;
+                    newGameState.stage = Stage.SCREENSAVER;
+                }
             } else {
-                if (newGameState.lastInputTime + TIMEOUT < frameTime) {
+                if (newGameState.lastInputTime + SCREENSAVER_TIMEOUT < frameTime) {
                     newGameState.stageStartTime = frameTime;
                     newGameState.stage = Stage.SCREENSAVER;
                 }
@@ -269,7 +276,7 @@ public interface Redux {
             int bossEndPosition = boss.getPosition() + BOSS_WIDTH / 2;
             // CHECK COLLISION
             if (playerPosition > bossStartPosition
-                && playerPosition < bossEndPosition) {
+                    && playerPosition < bossEndPosition) {
                 die(newGameState, newGameState.lives, frameTime);
                 return;
             }
@@ -278,9 +285,9 @@ public interface Redux {
                 int attackStartPosition = playerPosition + (ATTACK_WIDTH / 2);
                 int attackEndPosition = playerPosition - (ATTACK_WIDTH / 2);
                 if ((attackStartPosition >= bossStartPosition
-                    && attackStartPosition <= bossEndPosition)
-                    || attackEndPosition <= bossEndPosition
-                    && attackEndPosition >= bossStartPosition) {
+                        && attackStartPosition <= bossEndPosition)
+                        || attackEndPosition <= bossEndPosition
+                        && attackEndPosition >= bossStartPosition) {
                     boss.hit();
                     if (boss.isAlive()) {
                         moveBoss(newGameState, frameTime);
