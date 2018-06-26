@@ -1,7 +1,12 @@
 package com.novoda.dungeoncrawler;
 
+import android.support.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.moshi.FromJson;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
@@ -46,14 +51,25 @@ public class MiddlewareLogger implements Middleware<Redux.GameState> {
     private void jsonize(Redux.GameState state, Stage lastStage) {
         Stage stage = state.stage;
         if (!stage.equals(lastStage)) {
-            if (stage == Stage.GAME_OVER || stage == Stage.SCREENSAVER) {
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference gamerTag = database.getReference("gamerTag");
+            if (stage == Stage.GAME_OVER) {
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference();
                 long timeStamp = System.currentTimeMillis();
-                database.getReference("games/" + timeStamp + "/frames")
-                        .setValue(framesAdapter.toJson(frames));
-                database.getReference("games/" + timeStamp + "/gamerTag")
-                        .setValue(gamerTag);
+                database.child("currentGamerTag").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        database.child("games").child(String.valueOf(timeStamp)).child("frames")
+                                .setValue(framesAdapter.toJson(frames));
+                        database.child("games").child(String.valueOf(timeStamp)).child("gamerTag")
+                                .setValue(dataSnapshot.getValue());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        // do nothing
+                    }
+                });
+            }
+            if (stage == Stage.SCREENSAVER) {
                 frames.clear();
             }
         }
