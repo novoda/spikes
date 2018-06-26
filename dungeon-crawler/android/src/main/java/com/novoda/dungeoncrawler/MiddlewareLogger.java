@@ -1,26 +1,30 @@
 package com.novoda.dungeoncrawler;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.moshi.FromJson;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.ToJson;
+import com.squareup.moshi.Types;
 import com.yheriatovych.reductor.Dispatcher;
 import com.yheriatovych.reductor.Middleware;
 import com.yheriatovych.reductor.Store;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MiddlewareLogger implements Middleware<Redux.GameState> {
 
-    private final List<String> history;
-    private final List<List<String>> historyOfHistories;
+    private final List<String> frames;
+    private final List<List<String>> historyOfGames;
 
     private Stage lastStage;
 
     MiddlewareLogger() {
-        this.history = new ArrayList<>();
-        this.historyOfHistories = new ArrayList<>();
+        this.frames = new ArrayList<>();
+        this.historyOfGames = new ArrayList<>();
     }
 
     @Override
@@ -35,24 +39,32 @@ public class MiddlewareLogger implements Middleware<Redux.GameState> {
     }
 
     private final Moshi moshi = new Moshi.Builder()
-        .add(new GameStateAdapter())
-        .build();
+            .add(new GameStateAdapter())
+            .build();
     private final JsonAdapter<Redux.GameState> adapter = moshi.adapter(Redux.GameState.class);
+    private final Type type = Types.newParameterizedType(List.class, String.class);
+    private final JsonAdapter<List<String>> framesAdapter = moshi.adapter(type);
 
     // Thread this
     private void jsonize(Redux.GameState state, Stage lastStage) {
         Stage stage = state.stage;
         if (!stage.equals(lastStage)) {
             if (stage == Stage.GAME_OVER || stage == Stage.SCREENSAVER) {
-                historyOfHistories.add(history);
-                history.clear();
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference gamerTag = database.getReference("gamerTag");
+                long timeStamp = System.currentTimeMillis();
+                database.getReference("games/" + timeStamp + "/frames")
+                        .setValue(framesAdapter.toJson(frames));
+                database.getReference("games/" + timeStamp + "/gamerTag")
+                        .setValue(gamerTag);
+                historyOfGames.add(frames);
+                frames.clear();
             }
         }
 
         String json = adapter.toJson(state);
-        System.out.println("XXX " + json);
-
-        history.add(json);
+//        System.out.println("XXX " + json);
+        frames.add(json);
     }
 
     static class GameStateAdapter {
