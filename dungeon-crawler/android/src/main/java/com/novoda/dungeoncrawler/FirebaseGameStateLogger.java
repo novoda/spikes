@@ -20,7 +20,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MiddlewareLogger implements Middleware<Redux.GameState> {
+public class FirebaseGameStateLogger implements Middleware<Redux.GameState> {
 
     private final List<String> frames;
     private final Moshi moshi = new Moshi.Builder()
@@ -32,7 +32,7 @@ public class MiddlewareLogger implements Middleware<Redux.GameState> {
 
     private Stage lastStage;
 
-    MiddlewareLogger() {
+    FirebaseGameStateLogger() {
         this.frames = new ArrayList<>();
     }
 
