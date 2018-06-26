@@ -17,7 +17,7 @@ class FrameObserver {
                   GameOverMonitor gameOverMonitor,
                   DrawCallback drawCallback,
                   FrameCallback frameCallback,
-                  StartClock clock) {
+                  PausableStartClock clock) {
         this.drawCallback = drawCallback;
         store.subscribe(gameState -> {
             long frameTime = clock.millis();
@@ -26,6 +26,8 @@ class FrameObserver {
             if (gameState.stage == Stage.SCREENSAVER) {
                 noInputMonitor.onNoInput(frameTime);
             } else if (gameState.stage == Stage.PLAY) {
+                playingStateDraw(gameState, frameTime);
+            } else if (gameState.stage == Stage.PAUSE) {
                 playingStateDraw(gameState, frameTime);
             } else if (gameState.stage == Stage.DEAD) {
                 deadStateDraw(gameState);

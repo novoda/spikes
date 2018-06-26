@@ -7,15 +7,17 @@ import android.util.Log;
 import com.google.android.things.contrib.driver.apa102.Apa102;
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.PeripheralManager;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements RemoteGamePauseObservable.OnToggleListener {
 
     // LED setup
     private static final int NUM_LEDS = 300;
 
-    private static final String SPI_DEVICE_NAME = "SPI3.0";
+//        private static final String SPI_DEVICE_NAME = "SPI3.0"; // NXP
+    private static final String SPI_DEVICE_NAME = "SPI0.0"; // RPi
     private static final Apa102.Mode APA102_MODE = Apa102.Mode.BGR;
 
     private static final int[] lifeLEDs = new int[]{52, 50, 40};
@@ -23,6 +25,8 @@ public class MainActivity extends Activity {
     private Apa102 apa102;
     private DungeonCrawlerGame game;
     private MPU6050 mpu6050;
+
+    private RemoteGamePauseObservable remoteGamePauseObservable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,9 @@ public class MainActivity extends Activity {
         ArduinoLoop looper = new ArduinoLoop();
         game = InitHack.newInstance(NUM_LEDS, ledStrip, this::updateLives, joystickActuator, soundEffectsPlayer, screensaver, looper);
         game.start();
+
+        remoteGamePauseObservable = new RemoteGamePauseObservable(FirebaseDatabase.getInstance(), this);
+        remoteGamePauseObservable.startObserving();
     }
 
     private Apa102 createApa102() {
@@ -58,7 +65,18 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    public void onPauseGame() {
+        game.pause();
+    }
+
+    @Override
+    public void onResumeGame() {
+        game.resume();
+    }
+
+    @Override
     protected void onDestroy() {
+        remoteGamePauseObservable.stopObserving();
         game.stop();
         safeCloseApa102();
         super.onDestroy();

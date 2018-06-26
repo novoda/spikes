@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class MainActivity extends Activity {
+import com.google.firebase.database.FirebaseDatabase;
+
+public class MainActivity extends Activity implements RemoteGamePauseObservable.OnToggleListener {
 
     private static final int NUM_OF_SQUARES = 25;
 
     private DungeonCrawlerGame game;
+    private RemoteGamePauseObservable remoteGamePauseObservable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,12 @@ public class MainActivity extends Activity {
             game.start();
             Log.d("TUT", "Game restarting");
         });
+
+        game.start();
+        Log.d("TUT", "Game starting");
+
+        remoteGamePauseObservable = new RemoteGamePauseObservable(FirebaseDatabase.getInstance(), this);
+        remoteGamePauseObservable.startObserving();
     }
 
     private void updateLives(int lives) {
@@ -41,9 +51,22 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    public void onPauseGame() {
+        Toast.makeText(this, "Game Paused", Toast.LENGTH_SHORT).show();
+        game.pause();
+    }
+
+    @Override
+    public void onResumeGame() {
+        game.resume();
+        Toast.makeText(this, "Game Resumed", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     protected void onPause() {
         Log.d("TUT", "Game stopping");
         game.stop();
+        remoteGamePauseObservable.stopObserving();
         super.onPause();
     }
 

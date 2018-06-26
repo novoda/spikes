@@ -1,0 +1,15 @@
+<resources>
+  <string name="app_name">Dungeon Crawler Companion</string>
+
+  <string name="title_game">Game</string>
+  <string name="title_game_complete">Game complete</string>
+  <string name="title_about">About</string>
+
+  <string name="play_pause">Play/Pause</string>
+  <string name="save">Save</string>
+
+  <string name="set">SET</string>
+  <string name="gamer_tag">Gamer tag</string>
+  <string name="current_gamer_tag">Current gamer tag: %s</string>
+  <string name="error_updating_gamer_tag">Error updating gamer tag</string>
+</resources>

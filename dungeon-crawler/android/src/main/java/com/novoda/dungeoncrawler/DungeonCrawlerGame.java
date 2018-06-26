@@ -11,7 +11,9 @@ class DungeonCrawlerGame implements
     FrameObserver.CompleteMonitor,
     FrameObserver.DrawCallback,
     FrameObserver.FrameCallback,
-    FrameObserver.GameOverMonitor {
+    FrameObserver.GameOverMonitor,
+    TimeObserver.PauseMonitor,
+    TimeObserver.ResumeMonitor {
 
     interface HudDisplayer {
         void displayLives(int total);
@@ -220,4 +222,15 @@ class DungeonCrawlerGame implements
     public void stop() {
         looper.stop();
     }
+
+    @Override
+    public void pause() {
+        gameEngine.pause();
+    }
+
+    @Override
+    public void resume() {
+        gameEngine.resume();
+    }
+
 }

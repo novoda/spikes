@@ -14,7 +14,7 @@ class InitHack {
                                           JoystickActuator joystickActuator,
                                           SoundEffectsPlayer soundEffectsPlayer,
                                           Screensaver screensaver, ArduinoLoop looper) {
-        StartClock clock = new StartClock();
+        PausableStartClock clock = new PausableStartClock(new StartClock());
         new LoopObserver(
             store,
             joystickActuator,
@@ -90,6 +90,7 @@ class InitHack {
             },
             clock
         );
+        new TimeObserver(store, clock);
         GameEngine gameEngine = new GameEngine(
             store,
             joystickActuator,
