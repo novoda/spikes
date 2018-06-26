@@ -30,9 +30,9 @@
     android:id="@+id/current_gamer_tag"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:text="Current gamer tag: Foo"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/gamer_tag" />
+    app:layout_constraintTop_toBottomOf="@id/gamer_tag"
+    tools:text="Current gamer tag: Foo" />
 
   <Button
     android:id="@+id/play_pause"
@@ -40,6 +40,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/standard_margin"
     android:text="@string/play_pause"
+    android:visibility="gone"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent" />
 
