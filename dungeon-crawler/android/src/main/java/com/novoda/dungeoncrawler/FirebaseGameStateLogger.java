@@ -41,14 +41,19 @@ public class FirebaseGameStateLogger implements Middleware<Redux.GameState> {
         return action -> {
             Redux.GameState state = store.getState();
 //            new Thread(() -> jsonize(state, lastStage)).start();
-            jsonize(state, lastStage);
+            jsonize(state);
+            log(state);
             nextDispatcher.dispatch(action);
             lastStage = state.stage;
         };
     }
 
-    // Thread this
-    private void jsonize(Redux.GameState state, Stage lastStage) {
+    private void jsonize(Redux.GameState state) {
+        String json = adapter.toJson(state);
+        frames.add(json);
+    }
+
+    private void log(Redux.GameState state) {
         Stage stage = state.stage;
         if (!stage.equals(lastStage)) {
             if (stage == Stage.GAME_OVER) {
@@ -73,8 +78,6 @@ public class FirebaseGameStateLogger implements Middleware<Redux.GameState> {
                 frames.clear();
             }
         }
-        String json = adapter.toJson(state);
-        frames.add(json);
     }
 
     static class GameStateAdapter {
