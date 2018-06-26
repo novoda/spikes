@@ -18,7 +18,6 @@ import java.util.List;
 public class MiddlewareLogger implements Middleware<Redux.GameState> {
 
     private final List<String> frames;
-    private final List<List<String>> historyOfGames;
     private final Moshi moshi = new Moshi.Builder()
             .add(new GameStateAdapter())
             .build();
@@ -30,7 +29,6 @@ public class MiddlewareLogger implements Middleware<Redux.GameState> {
 
     MiddlewareLogger() {
         this.frames = new ArrayList<>();
-        this.historyOfGames = new ArrayList<>();
     }
 
     @Override
@@ -56,7 +54,6 @@ public class MiddlewareLogger implements Middleware<Redux.GameState> {
                         .setValue(framesAdapter.toJson(frames));
                 database.getReference("games/" + timeStamp + "/gamerTag")
                         .setValue(gamerTag);
-                historyOfGames.add(frames);
                 frames.clear();
             }
         }
