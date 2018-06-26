@@ -224,12 +224,12 @@ class DungeonCrawlerGame implements
     }
 
     @Override
-    public void onPauseGame() {
+    public void pause() {
         gameEngine.pause();
     }
 
     @Override
-    public void onResumeGame() {
+    public void resume() {
         gameEngine.resume();
     }
 

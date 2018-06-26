@@ -53,12 +53,12 @@ public class MainActivity extends Activity implements RemoteGamePauseObservable.
     @Override
     public void onPauseGame() {
         Toast.makeText(this, "Game Paused", Toast.LENGTH_SHORT).show();
-        game.onPauseGame();
+        game.pause();
     }
 
     @Override
     public void onResumeGame() {
-        game.onResumeGame();
+        game.resume();
         Toast.makeText(this, "Game Resumed", Toast.LENGTH_SHORT).show();
     }
 

@@ -15,11 +15,11 @@ public class TimeObserver {
     }
 
     interface PauseMonitor {
-        void onPauseGame();
+        void pause();
     }
 
     interface ResumeMonitor {
-        void onResumeGame();
+        void resume();
     }
 
 }
