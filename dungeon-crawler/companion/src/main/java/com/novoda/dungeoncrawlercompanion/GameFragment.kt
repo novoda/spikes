@@ -11,18 +11,17 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_game.*
 
 class GameFragment : Fragment() {
+
+    private val gamerTagService : GamerTagService by lazy { GamerTagService() }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_game, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         play_pause.setOnClickListener { GamePauser().toggle() }
-
-        val gamerTagService = GamerTagService()
-
-        gamerTagService.onChange { current_gamer_tag.text = getString(R.string.current_gamer_tag, it) }
-
         gamer_tag.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 // not needed
@@ -49,6 +48,16 @@ class GameFragment : Fragment() {
                     }
             )
         }
-
     }
+
+    override fun onResume() {
+        super.onResume()
+        gamerTagService.onChange { current_gamer_tag.text = getString(R.string.current_gamer_tag, it) }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        gamerTagService.disconnect()
+    }
+
 }
