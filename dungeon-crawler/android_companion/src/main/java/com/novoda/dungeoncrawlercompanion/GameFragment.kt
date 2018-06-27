@@ -12,10 +12,7 @@ import android.widget.EditText
 import android.widget.Toast
 import com.novoda.dungeoncrawler.ArduinoLoop
 import com.novoda.dungeoncrawler.DungeonCrawlerGame
-import com.novoda.dungeoncrawler.InitHack
-import com.novoda.dungeoncrawler.JoystickActuator
 import com.novoda.dungeoncrawler.ReplayDisplay
-import com.novoda.dungeoncrawler.Screensaver
 import kotlinx.android.synthetic.main.fragment_game.*
 
 private const val NUM_OF_SQUARES = 300
@@ -32,9 +29,9 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val display = ReplayDisplay(view.context, replay_container, NUM_OF_SQUARES)
-        val screensaver = Screensaver(display, NUM_OF_SQUARES)
+        val replayScreensaver = ReplayScreensaver(display, NUM_OF_SQUARES)
         val looper = ArduinoLoop()
-        game = InitHack.newInstance(NUM_OF_SQUARES, display, { /* no-op */ }, { JoystickActuator.JoyState() }, NoOpSoundEffectsPlayer(), screensaver, looper)
+        game = InitHack.newInstance(NUM_OF_SQUARES, display, DungeonCrawlerGame.HudDisplayer { /* no-op */ }, replayScreensaver, looper)
 
         play_pause.setOnClickListener { GamePauser().toggle() }
         gamer_tag.onTextChanged { update_gamer_tag.enable() }

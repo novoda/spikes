@@ -39,7 +39,7 @@ public interface Display {
         final int sat;
         final int val;
 
-        CHSV(int hue, int sat, int val) {
+        public CHSV(int hue, int sat, int val) {
             this.hue = hue;
             this.sat = sat;
             this.val = val;

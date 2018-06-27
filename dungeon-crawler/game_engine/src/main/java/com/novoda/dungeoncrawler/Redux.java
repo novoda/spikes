@@ -34,7 +34,7 @@ public interface Redux {
         Stage stage;
         int lives;
 
-        static GameState getInitialState() {
+        public static GameState getInitialState() {
             GameState gameState = new GameState();
             gameState.levelNumber = -1;
             gameState.lives = 3;

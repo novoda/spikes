@@ -28,7 +28,7 @@ public class DungeonCrawlerGame implements
     private final HudDisplayer hud;
     private final SoundEffectsPlayer soundEffectsPlayer;
 
-    DungeonCrawlerGame(int numLeds,
+    public DungeonCrawlerGame(int numLeds,
                        GameEngine gameEngine,
                        Display display,
                        HudDisplayer hud,

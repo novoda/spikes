@@ -2,15 +2,15 @@ package com.novoda.dungeoncrawler;
 
 import com.yheriatovych.reductor.Store;
 
-class GameEngine {
+public class GameEngine {
 
     private static final int MIN_REDRAW_INTERVAL = 33;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
 
     private final Store<Redux.GameState> store;
     private final JoystickActuator inputActuator;
-    private final PausableStartClock clock;
+    private final StartClock clock;
 
-    GameEngine(Store<Redux.GameState> store, JoystickActuator inputActuator, PausableStartClock clock) {
+    public GameEngine(Store<Redux.GameState> store, JoystickActuator inputActuator, StartClock clock) {
         this.store = store;
         this.inputActuator = inputActuator;
         this.clock = clock;

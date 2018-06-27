@@ -2,7 +2,7 @@ package com.novoda.dungeoncrawler;
 
 import com.yheriatovych.reductor.Store;
 
-class FrameObserver {
+public class FrameObserver {
 
     private static final int ATTACK_DURATION = 700;    // Duration of a wobble attack (ms)
     private static final int ATTACK_WIDTH = 70;     // Width of the wobble attack, world is 1000 wide
@@ -10,14 +10,14 @@ class FrameObserver {
 
     private DrawCallback drawCallback;
 
-    FrameObserver(Store<Redux.GameState> store,
-                  NoInputMonitor noInputMonitor,
-                  WinMonitor winMonitor,
-                  CompleteMonitor completeMonitor,
-                  GameOverMonitor gameOverMonitor,
-                  DrawCallback drawCallback,
-                  FrameCallback frameCallback,
-                  PausableStartClock clock) {
+    public FrameObserver(Store<Redux.GameState> store,
+                         NoInputMonitor noInputMonitor,
+                         WinMonitor winMonitor,
+                         CompleteMonitor completeMonitor,
+                         GameOverMonitor gameOverMonitor,
+                         DrawCallback drawCallback,
+                         FrameCallback frameCallback,
+                         StartClock clock) {
         this.drawCallback = drawCallback;
         store.subscribe(gameState -> {
             long frameTime = clock.millis();
@@ -91,28 +91,29 @@ class FrameObserver {
         }
     }
 
-    interface NoInputMonitor {
+    public interface NoInputMonitor {
         void onNoInput(long frameTime);
     }
 
-    interface WinMonitor {
+    public interface WinMonitor {
         void onWin(long levelStartTime, long levelCurrentTime);
     }
 
-    interface CompleteMonitor {
+    public interface CompleteMonitor {
         void onGameComplete(long levelStartTime, long levelCurrentTime);
     }
 
-    interface GameOverMonitor {
+    public interface GameOverMonitor {
         void onGameOver();
     }
 
-    interface FrameCallback {
+    public interface FrameCallback {
         void onFrameStart();
+
         void onFrameEnd();
     }
 
-    interface DrawCallback {
+    public interface DrawCallback {
         void drawPlayer(int position);
 
         void drawConveyor(int startPoint, int endPoint, Direction direction, long frame);
