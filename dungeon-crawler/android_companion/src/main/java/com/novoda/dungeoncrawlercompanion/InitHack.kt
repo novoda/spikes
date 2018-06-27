@@ -11,8 +11,6 @@ import com.novoda.dungeoncrawler.JoystickActuator
 import com.novoda.dungeoncrawler.Redux
 import com.yheriatovych.reductor.Store
 
-private val JOYSTICK_NO_OP = JoystickActuator.JoyState()
-
 object InitHack {
 
     private val store = Store.create(Redux.GameReducer(), Redux.GameState.getInitialState())
@@ -23,8 +21,8 @@ object InitHack {
                     looper: ArduinoLoop): DungeonCrawlerGame {
         val clock = DefaultStartClock()
         val gameEngine = ReplayGameEngine(
+                ReplayFetcher(),
                 store,
-                JoystickActuator { JOYSTICK_NO_OP },
                 clock
         )
         val game = DungeonCrawlerGame(
