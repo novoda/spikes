@@ -19,7 +19,7 @@ class ReplayFetcher(private val firebaseDatabase: FirebaseDatabase = FirebaseDat
     private val framesAdapter = moshi.adapter<List<String>>(type)
 
     fun fetchRandomReplay(callback: (List<Redux.GameState>) -> Unit) {
-        firebaseDatabase.getReference("games/1530139479786").addListenerForSingleValueEvent(object: ValueEventListener {
+        firebaseDatabase.getReference("games/1530140868461").addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 if (p0.exists()) {
                     val map = p0.value as HashMap<String, *>

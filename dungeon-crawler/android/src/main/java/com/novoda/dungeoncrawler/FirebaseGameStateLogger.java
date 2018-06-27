@@ -63,9 +63,11 @@ public class FirebaseGameStateLogger implements Middleware<Redux.GameState> {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         database.child("games").child(String.valueOf(timeStamp)).child("frames")
-                                .setValue(framesAdapter.toJson(frames));
+                                .setValue(framesAdapter.toJson(new ArrayList<>(frames)));
                         database.child("games").child(String.valueOf(timeStamp)).child("gamerTag")
                                 .setValue(dataSnapshot.getValue());
+
+                        frames.clear();
                     }
 
                     @Override
@@ -75,7 +77,8 @@ public class FirebaseGameStateLogger implements Middleware<Redux.GameState> {
                 });
             }
             if (stage == Stage.SCREENSAVER) {
-                frames.clear();
+                // TODO: not quite right
+//                frames.clear();
             }
         }
     }
@@ -92,10 +95,15 @@ public class FirebaseGameStateLogger implements Middleware<Redux.GameState> {
             // I'm worried about threading...
             // this is another thread, so the static collection
             // could be read before we have pasted to it
+            Redux.GameState.PARTICLE_POOL.clear();
             Redux.GameState.PARTICLE_POOL.addAll(gameStateJson.particlePool);
+            Redux.GameState.ENEMY_POOL.clear();
             Redux.GameState.ENEMY_POOL.addAll(gameStateJson.enemyPool);
+            Redux.GameState.ENEMY_SPAWNER_POOL.clear();
             Redux.GameState.ENEMY_SPAWNER_POOL.addAll(gameStateJson.enemySpawnerPool);
+            Redux.GameState.LAVA_POOL.clear();
             Redux.GameState.LAVA_POOL.addAll(gameStateJson.lavaPool);
+            Redux.GameState.CONVEYOR_POOL.clear();
             Redux.GameState.CONVEYOR_POOL.addAll(gameStateJson.conveyorPool);
 
             gameState.boss = gameStateJson.boss;

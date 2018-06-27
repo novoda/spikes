@@ -16,6 +16,8 @@ class ReplayGameEngine(
         private val clock: StartClock
 ) : GameEngine {
 
+    private var gameStates : List<Redux.GameState> = emptyList()
+
 //    init {
 //        store.subscribe { gameState ->
 //            val frameTime = clock.millis()
@@ -37,18 +39,27 @@ class ReplayGameEngine(
 
     override fun loadLevel() {
         replayFetcher.fetchRandomReplay { gameStates ->
-            gameStates.forEach {
-                SystemClock.sleep(30)
-                Log.e("foo", "dispatch " + it.stage)
-                store.dispatch(Action("NextFrame", arrayOf(it)))
-            }
+            this.gameStates = gameStates
+//            gameStates.forEach {
+//                SystemClock.sleep(30)
+//                Log.e("foo", "dispatch " + it.stage)
+//                store.dispatch(Action("NextFrame", arrayOf(it)))
+//            }
         }
     }
 
     override fun loop() {
-//        val state = store.state
-//        val frameTime = clock.millis()
+        if (gameStates.isEmpty()) {
+            return
+        }
+
+        val state = gameStates[0]
+        gameStates = gameStates.drop(1)
+        val frameTime = clock.millis()
 //        if (frameTime - state.frameTime >= MIN_REDRAW_INTERVAL) {
+        SystemClock.sleep(10)
+        Log.e("foo", "loop " + state.stage)
+            store.dispatch(Action("NextFrame", arrayOf(state)))
 //            nextJoyState()?.let {
 //                store.dispatch(Action())
 //            }
