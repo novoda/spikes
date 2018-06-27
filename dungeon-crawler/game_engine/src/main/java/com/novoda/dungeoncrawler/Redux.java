@@ -14,14 +14,14 @@ public interface Redux {
 
     class GameState {
 
-        static final List<Particle> PARTICLE_POOL = new ArrayList<>();
+        public static final List<Particle> PARTICLE_POOL = new ArrayList<>();
         static final List<Enemy> ENEMY_POOL = new ArrayList<>();
         static final List<EnemySpawner> ENEMY_SPAWNER_POOL = new ArrayList<>();
         static final List<Lava> LAVA_POOL = new ArrayList<>();
         static final List<Conveyor> CONVEYOR_POOL = new ArrayList<>();
 
         Boss boss = new Boss();
-        long frameTime;
+        public long frameTime;
         long lastInputTime;
 
         long attackStartedTime;
@@ -30,8 +30,8 @@ public interface Redux {
         int levelNumber;
         int playerPositionModifier;
         int playerPosition;
-        long stageStartTime;
-        Stage stage;
+        public long stageStartTime;
+        public Stage stage;
         int lives;
 
         public static GameState getInitialState() {

@@ -29,9 +29,8 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val display = ReplayDisplay(view.context, replay_container, NUM_OF_SQUARES)
-        val replayScreensaver = ReplayScreensaver(display, NUM_OF_SQUARES)
         val looper = ArduinoLoop()
-        game = InitHack.newInstance(NUM_OF_SQUARES, display, DungeonCrawlerGame.HudDisplayer { /* no-op */ }, replayScreensaver, looper)
+        game = InitHack.newInstance(NUM_OF_SQUARES, display, DungeonCrawlerGame.HudDisplayer { /* no-op */ }, looper)
 
         play_pause.setOnClickListener { GamePauser().toggle() }
         gamer_tag.onTextChanged { update_gamer_tag.enable() }

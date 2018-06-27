@@ -7,7 +7,6 @@ import com.novoda.dungeoncrawler.Display
 import com.novoda.dungeoncrawler.DungeonCrawlerGame
 import com.novoda.dungeoncrawler.DungeonCrawlerGame.HudDisplayer
 import com.novoda.dungeoncrawler.FrameObserver
-import com.novoda.dungeoncrawler.GameEngine
 import com.novoda.dungeoncrawler.JoystickActuator
 import com.novoda.dungeoncrawler.Redux
 import com.yheriatovych.reductor.Store
@@ -21,10 +20,9 @@ object InitHack {
     fun newInstance(numOfSquares: Int,
                     display: Display,
                     hudDisplayer: HudDisplayer,
-                    replayScreensaver: ReplayScreensaver,
                     looper: ArduinoLoop): DungeonCrawlerGame {
         val clock = DefaultStartClock()
-        val gameEngine = GameEngine(
+        val gameEngine = ReplayGameEngine(
                 store,
                 JoystickActuator { JOYSTICK_NO_OP },
                 clock
@@ -40,7 +38,7 @@ object InitHack {
 
         FrameObserver(
                 store,
-                FrameObserver.NoInputMonitor { replayScreensaver.draw(it) },
+                FrameObserver.NoInputMonitor { },
                 FrameObserver.WinMonitor { l, l2 -> Unit },
                 FrameObserver.CompleteMonitor { s, c -> Unit },
                 FrameObserver.GameOverMonitor { Unit },
