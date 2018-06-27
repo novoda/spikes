@@ -7,13 +7,12 @@ import com.novoda.dungeoncrawler.Display
 import com.novoda.dungeoncrawler.DungeonCrawlerGame
 import com.novoda.dungeoncrawler.DungeonCrawlerGame.HudDisplayer
 import com.novoda.dungeoncrawler.FrameObserver
-import com.novoda.dungeoncrawler.JoystickActuator
 import com.novoda.dungeoncrawler.Redux
 import com.yheriatovych.reductor.Store
 
 object InitHack {
 
-    private val store = Store.create(Redux.GameReducer(), Redux.GameState.getInitialState())
+    private val store = Store.create(ReplayReducer(), Redux.GameState.getInitialState())
 
     fun newInstance(numOfSquares: Int,
                     display: Display,
@@ -93,7 +92,7 @@ object InitHack {
     private fun createFrameCallback(game: DungeonCrawlerGame): FrameObserver.FrameCallback {
         return object : FrameObserver.FrameCallback {
             override fun onFrameStart() {
-                //                        game.onFrameStart()
+                                        game.onFrameStart()
             }
 
             override fun onFrameEnd() {

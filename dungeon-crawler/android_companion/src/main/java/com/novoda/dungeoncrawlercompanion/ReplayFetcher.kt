@@ -1,19 +1,32 @@
 package com.novoda.dungeoncrawlercompanion
 
-import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.novoda.dungeoncrawler.FirebaseGameStateLogger
+import com.novoda.dungeoncrawler.Redux
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 
 class ReplayFetcher(private val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()) {
 
-    fun fetchRandomReplay(callback: () -> Unit) {
-        firebaseDatabase.getReference("games/1530035201458").addListenerForSingleValueEvent(object: ValueEventListener {
+    private val moshi = Moshi.Builder()
+            .add(FirebaseGameStateLogger.GameStateAdapter())
+            .build()
+    private val adapter = moshi.adapter(Redux.GameState::class.java)
+    private val type = Types.newParameterizedType(List::class.java, String::class.java)
+    private val framesAdapter = moshi.adapter<List<String>>(type)
+
+    fun fetchRandomReplay(callback: (List<Redux.GameState>) -> Unit) {
+        firebaseDatabase.getReference("games/1530139479786").addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 if (p0.exists()) {
-                    Log.e("foo", "" + p0.value)
-                    callback()
+                    val map = p0.value as HashMap<String, *>
+                    val rawFrames = map["frames"] as String
+                    val frames = framesAdapter.fromJson(rawFrames) as List<String>
+                    val states = frames.map(adapter::fromJson)
+                    callback(states as List<Redux.GameState>)
                 }
             }
 

@@ -30,7 +30,7 @@ public interface Redux {
         int levelNumber;
         int playerPositionModifier;
         int playerPosition;
-        public long stageStartTime;
+        long stageStartTime;
         public Stage stage;
         int lives;
 

@@ -80,13 +80,13 @@ public class FirebaseGameStateLogger implements Middleware<Redux.GameState> {
         }
     }
 
-    static class GameStateAdapter {
+    public static class GameStateAdapter {
 
         // GameStateJson is the ideal way to store it
         // GameState is our performance class with the static enemy collections
 
         @FromJson
-        Redux.GameState gameStateFromJson(GameStateJson gameStateJson) {
+        public Redux.GameState gameStateFromJson(GameStateJson gameStateJson) {
             Redux.GameState gameState = new Redux.GameState();
 
             // I'm worried about threading...
@@ -114,7 +114,7 @@ public class FirebaseGameStateLogger implements Middleware<Redux.GameState> {
         }
 
         @ToJson
-        GameStateJson gameStateToJson(Redux.GameState gameState) {
+        public GameStateJson gameStateToJson(Redux.GameState gameState) {
             GameStateJson gameStateJson = new GameStateJson();
 
             // I'm worried about threading...

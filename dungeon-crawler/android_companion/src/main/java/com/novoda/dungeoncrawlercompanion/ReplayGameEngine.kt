@@ -1,9 +1,11 @@
 package com.novoda.dungeoncrawlercompanion
 
+import android.os.SystemClock
+import android.util.Log
 import com.novoda.dungeoncrawler.GameEngine
-import com.novoda.dungeoncrawler.JoystickActuator
 import com.novoda.dungeoncrawler.Redux
 import com.novoda.dungeoncrawler.StartClock
+import com.yheriatovych.reductor.Action
 import com.yheriatovych.reductor.Store
 
 private const val MIN_REDRAW_INTERVAL = 33    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
@@ -34,27 +36,23 @@ class ReplayGameEngine(
 //    }
 
     override fun loadLevel() {
-        replayFetcher.fetchRandomReplay {
-            // TODO
-            // convert ? store in a field?
-            store.dispatch(Redux.GameActions.nextLevel(clock.millis()))
-        }
-    }
-
-    override fun loop() {
-        val state = store.state
-        val frameTime = clock.millis()
-        if (frameTime - state.frameTime >= MIN_REDRAW_INTERVAL) {
-            nextJoyState()?.let {
-                val joyTilt = it.tilt
-                val joyWobble = it.wobble
-                store.dispatch(Redux.GameActions.nextFrame(frameTime, joyTilt.toDouble(), joyWobble.toDouble()))
+        replayFetcher.fetchRandomReplay { gameStates ->
+            gameStates.forEach {
+                SystemClock.sleep(30)
+                Log.e("foo", "dispatch " + it.stage)
+                store.dispatch(Action("NextFrame", arrayOf(it)))
             }
         }
     }
 
-    private fun nextJoyState(): JoystickActuator.JoyState? {
-        // TODO
-        return null
+    override fun loop() {
+//        val state = store.state
+//        val frameTime = clock.millis()
+//        if (frameTime - state.frameTime >= MIN_REDRAW_INTERVAL) {
+//            nextJoyState()?.let {
+//                store.dispatch(Action())
+//            }
+//        }
     }
+
 }
