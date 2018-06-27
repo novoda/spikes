@@ -8,21 +8,17 @@ import com.google.firebase.database.ValueEventListener
 private const val GAMER_REFERENCE: String = "currentGamerTag"
 
 class GamerTagService(private val database: FirebaseDatabase = FirebaseDatabase.getInstance()) {
-    private var listener: ValueEventListener? = null
 
-    fun onChange(callback: (String) -> Unit) {
-        val reference = database.getReference(GAMER_REFERENCE)
-        listener = callback.asValueEventListener()
-        reference.addValueEventListener(listener)
-    }
+    private val listener: ValueEventListener = createListener()
+    private var callback: (String) -> Unit = {}
 
-    private fun ((String) -> Unit).asValueEventListener(): ValueEventListener {
+    private fun createListener(): ValueEventListener {
         return object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (!dataSnapshot.exists() || dataSnapshot.value == null) {
                     return
                 }
-                this@asValueEventListener(dataSnapshot.value as String)
+                callback(dataSnapshot.value as String)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -31,11 +27,16 @@ class GamerTagService(private val database: FirebaseDatabase = FirebaseDatabase.
         }
     }
 
+    fun onChange(callback: (String) -> Unit) {
+        this.callback = callback
+        val reference = database.getReference(GAMER_REFERENCE)
+        reference.addValueEventListener(listener)
+    }
+
     fun disconnect() {
-        if (listener != null) {
-            val reference = database.getReference(GAMER_REFERENCE)
-            reference.removeEventListener(listener)
-        }
+        this.callback = {}
+        val reference = database.getReference(GAMER_REFERENCE)
+        reference.removeEventListener(listener)
     }
 
     fun set(gamerTag: String, onSuccess: () -> Unit, onError: () -> Unit) {
