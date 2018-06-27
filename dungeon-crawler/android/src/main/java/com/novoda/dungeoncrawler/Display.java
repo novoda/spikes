@@ -1,6 +1,6 @@
 package com.novoda.dungeoncrawler;
 
-interface Display {
+public interface Display {
     void clear();
 
     void show();

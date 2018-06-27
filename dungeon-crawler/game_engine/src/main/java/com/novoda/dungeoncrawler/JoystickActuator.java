@@ -1,6 +1,6 @@
 package com.novoda.dungeoncrawler;
 
-interface JoystickActuator {
+public interface JoystickActuator {
 
     int DEADZONE = 30;     // Angle to ignore
 

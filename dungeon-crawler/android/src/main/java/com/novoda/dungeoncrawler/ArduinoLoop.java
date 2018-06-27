@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 
-class ArduinoLoop {
+public class ArduinoLoop {
 
     private final HandlerThread thread = new HandlerThread("Arudino Loop Mimic");
 
