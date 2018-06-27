@@ -20,10 +20,6 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager.beginTransaction().replace(R.id.content, GameFragment()).commit()
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_game_complete -> {
-                supportFragmentManager.beginTransaction().replace(R.id.content, GameCompleteFragment()).commit()
-                return@OnNavigationItemSelectedListener true
-            }
             R.id.navigation_about -> {
                 supportFragmentManager.beginTransaction().replace(R.id.content, AboutFragment()).commit()
                 return@OnNavigationItemSelectedListener true
