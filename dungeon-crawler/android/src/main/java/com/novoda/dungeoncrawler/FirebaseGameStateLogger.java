@@ -56,14 +56,15 @@ public class FirebaseGameStateLogger implements Middleware<Redux.GameState> {
     private void log(Redux.GameState state) {
         Stage stage = state.stage;
         if (!stage.equals(lastStage)) {
-            if (stage == Stage.GAME_OVER) {
+            if (stage == Stage.GAME_OVER || stage == Stage.GAME_COMPLETE) {
                 DatabaseReference database = FirebaseDatabase.getInstance().getReference();
                 long timeStamp = System.currentTimeMillis();
+                final List<String> tmpFrames = new ArrayList<>(frames);
                 database.child("currentGamerTag").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         database.child("games").child(String.valueOf(timeStamp)).child("frames")
-                                .setValue(framesAdapter.toJson(new ArrayList<>(frames)));
+                                .setValue(framesAdapter.toJson(tmpFrames));
                         database.child("games").child(String.valueOf(timeStamp)).child("gamerTag")
                                 .setValue(dataSnapshot.getValue());
 
@@ -76,9 +77,8 @@ public class FirebaseGameStateLogger implements Middleware<Redux.GameState> {
                     }
                 });
             }
-            if (stage == Stage.SCREENSAVER) {
-                // TODO: not quite right
-//                frames.clear();
+            if (stage == Stage.SCREENSAVER || lastStage == Stage.SCREENSAVER && stage == Stage.PLAY) {
+                frames.clear();
             }
         }
     }
