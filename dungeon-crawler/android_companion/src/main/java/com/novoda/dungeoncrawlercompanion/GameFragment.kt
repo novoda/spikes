@@ -30,7 +30,7 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val display = ReplayDisplay(view.context, replay_container, NUM_OF_SQUARES)
         val looper = ArduinoLoop()
-        game = InitHack.newInstance(NUM_OF_SQUARES, display, this::updateLives, looper)
+        game = InitHack.newInstance(NUM_OF_SQUARES, display, this::updateLives, this::displayGamerTag, looper)
 
         play_pause.setOnClickListener { GamePauser().toggle() }
         gamer_tag.onTextChanged { update_gamer_tag.enable() }
@@ -40,6 +40,12 @@ class GameFragment : Fragment() {
     private fun updateLives(lives: Int) {
         activity?.runOnUiThread {
             lives_count.text = getString(R.string.number_of_lives, lives)
+        }
+    }
+
+    private fun displayGamerTag(gamerTag: String) {
+        activity?.runOnUiThread {
+            replay_gamer_tag.text = getString(R.string.replay_from, gamerTag)
         }
     }
 

@@ -8,12 +8,19 @@ import com.yheriatovych.reductor.Store
 
 private const val MIN_REDRAW_INTERVAL = 33.toLong()    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
 
-class ReplayGameEngine(private val replayFetcher: ReplayFetcher, private val store: Store<Redux.GameState>) : GameEngine {
+class ReplayGameEngine(
+        private val replayFetcher: ReplayFetcher,
+        private val gamerTagDisplayer: GamerTagDisplayer,
+        private val store: Store<Redux.GameState>
+) : GameEngine {
 
     private var gameStates: List<Redux.GameState> = emptyList()
 
     override fun loadLevel() {
-        replayFetcher.fetchRandomReplay { gameStates -> this.gameStates = gameStates }
+        replayFetcher.fetchRandomReplay { gameStates, gamerTag ->
+            this.gameStates = gameStates
+            gamerTagDisplayer.invoke(gamerTag)
+        }
     }
 
     override fun loop() {

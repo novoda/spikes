@@ -9,16 +9,21 @@ import com.novoda.dungeoncrawler.FrameObserver
 import com.novoda.dungeoncrawler.Redux
 import com.yheriatovych.reductor.Store
 
+typealias GamerTagDisplayer = (String) -> Unit
+typealias HudDisplayer = (Int) -> Unit
+
 object InitHack {
 
     private val store = Store.create(ReplayReducer(), Redux.GameState.getInitialState())
 
     fun newInstance(numOfSquares: Int,
                     display: Display,
-                    hudDisplayer: (Int) -> Unit,
+                    hudDisplayer: HudDisplayer,
+                    gamerTagDisplayer: GamerTagDisplayer,
                     looper: ArduinoLoop): DungeonCrawlerGame {
         val gameEngine = ReplayGameEngine(
                 ReplayFetcher(),
+                gamerTagDisplayer,
                 store
         )
         val game = DungeonCrawlerGame(

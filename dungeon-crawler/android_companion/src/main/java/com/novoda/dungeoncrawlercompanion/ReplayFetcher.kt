@@ -18,15 +18,15 @@ class ReplayFetcher(private val firebaseDatabase: FirebaseDatabase = FirebaseDat
     private val type = Types.newParameterizedType(List::class.java, String::class.java)
     private val framesAdapter = moshi.adapter<List<String>>(type)
 
-    fun fetchRandomReplay(callback: (List<Redux.GameState>) -> Unit) {
-        firebaseDatabase.getReference("games/1530211792148").addListenerForSingleValueEvent(object : ValueEventListener {
+    fun fetchRandomReplay(callback: (List<Redux.GameState>, String) -> Unit) {
+        firebaseDatabase.getReference("games/1530230241504").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 if (p0.exists()) {
                     val map = p0.value as HashMap<String, *>
                     val rawFrames = map["frames"] as String
                     val frames = framesAdapter.fromJson(rawFrames) as List<String>
                     val states = frames.map(adapter::fromJson) as List<Redux.GameState>
-                    callback(states) // need to store those pools somehow :(
+                    callback(states, map["gamerTag"] as String) // need to store those pools somehow :(
                 }
             }
 

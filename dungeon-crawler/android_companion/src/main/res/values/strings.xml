@@ -12,4 +12,5 @@
   <string name="current_gamer_tag">Current gamer tag: %s</string>
   <string name="error_updating_gamer_tag">Error updating gamer tag</string>
   <string name="number_of_lives">Number of lives: %d</string>
+  <string name="replay_from">Replay from: %s</string>
 </resources>
