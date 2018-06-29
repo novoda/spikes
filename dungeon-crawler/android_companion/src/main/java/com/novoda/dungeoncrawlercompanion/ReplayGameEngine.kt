@@ -1,69 +1,30 @@
 package com.novoda.dungeoncrawlercompanion
 
 import android.os.SystemClock
-import android.util.Log
 import com.novoda.dungeoncrawler.GameEngine
 import com.novoda.dungeoncrawler.Redux
-import com.novoda.dungeoncrawler.StartClock
 import com.yheriatovych.reductor.Action
 import com.yheriatovych.reductor.Store
 
-private const val MIN_REDRAW_INTERVAL = 33    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
+private const val MIN_REDRAW_INTERVAL = 33.toLong()    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
 
-class ReplayGameEngine(
-        private val replayFetcher: ReplayFetcher,
-        private val store: Store<Redux.GameState>,
-        private val clock: StartClock
-) : GameEngine {
+class ReplayGameEngine(private val replayFetcher: ReplayFetcher, private val store: Store<Redux.GameState>) : GameEngine {
 
-    private var gameStates : List<Redux.GameState> = emptyList()
-
-//    init {
-//        store.subscribe { gameState ->
-//            val frameTime = clock.millis()
-//            if (gameState.stage == Stage.LEVEL_COMPLETE) {
-//                if (frameTime > gameState.stageStartTime + 1200) {
-//                    store.dispatch(Redux.GameActions.nextLevel(clock.millis()))
-//                }
-//            } else if (gameState.stage == Stage.GAME_COMPLETE) {
-//                if (frameTime > gameState.stageStartTime + 5500) {
-//                    store.dispatch(Redux.GameActions.nextLevel(clock.millis()))
-//                }
-//            } else if (gameState.stage == Stage.DEAD) {
-//                if (areAllParticlesDeactive()) {
-//                    store.dispatch(Redux.GameActions.restartLevel(clock.millis()))
-//                }
-//            }
-//        }
-//    }
+    private var gameStates: List<Redux.GameState> = emptyList()
 
     override fun loadLevel() {
-        replayFetcher.fetchRandomReplay { gameStates ->
-            this.gameStates = gameStates
-//            gameStates.forEach {
-//                SystemClock.sleep(30)
-//                Log.e("foo", "dispatch " + it.stage)
-//                store.dispatch(Action("NextFrame", arrayOf(it)))
-//            }
-        }
+        replayFetcher.fetchRandomReplay { gameStates -> this.gameStates = gameStates }
     }
 
     override fun loop() {
         if (gameStates.isEmpty()) {
             return
         }
+        SystemClock.sleep(MIN_REDRAW_INTERVAL)
 
-        val state = gameStates[0]
+        val state = gameStates.first()
         gameStates = gameStates.drop(1)
-        val frameTime = clock.millis()
-//        if (frameTime - state.frameTime >= MIN_REDRAW_INTERVAL) {
-        SystemClock.sleep(10)
-        Log.e("foo", "loop " + state.stage)
-            store.dispatch(Action("NextFrame", arrayOf(state)))
-//            nextJoyState()?.let {
-//                store.dispatch(Action())
-//            }
-//        }
+        store.dispatch(Action(NEXT_FRAME_ACTION, arrayOf(state)))
     }
 
 }

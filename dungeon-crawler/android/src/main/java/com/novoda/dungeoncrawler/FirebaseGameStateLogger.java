@@ -89,22 +89,18 @@ public class FirebaseGameStateLogger implements Middleware<Redux.GameState> {
         // GameState is our performance class with the static enemy collections
 
         @FromJson
+        @SuppressWarnings("unused")
         public Redux.GameState gameStateFromJson(GameStateJson gameStateJson) {
             Redux.GameState gameState = new Redux.GameState();
 
             // I'm worried about threading...
             // this is another thread, so the static collection
             // could be read before we have pasted to it
-            Redux.GameState.PARTICLE_POOL.clear();
-            Redux.GameState.PARTICLE_POOL.addAll(gameStateJson.particlePool);
-            Redux.GameState.ENEMY_POOL.clear();
-            Redux.GameState.ENEMY_POOL.addAll(gameStateJson.enemyPool);
-            Redux.GameState.ENEMY_SPAWNER_POOL.clear();
-            Redux.GameState.ENEMY_SPAWNER_POOL.addAll(gameStateJson.enemySpawnerPool);
-            Redux.GameState.LAVA_POOL.clear();
-            Redux.GameState.LAVA_POOL.addAll(gameStateJson.lavaPool);
-            Redux.GameState.CONVEYOR_POOL.clear();
-            Redux.GameState.CONVEYOR_POOL.addAll(gameStateJson.conveyorPool);
+            gameState.particlePool = gameStateJson.particlePool;
+            gameState.enemyPool = gameStateJson.enemyPool;
+            gameState.enemySpawnerPool = gameStateJson.enemySpawnerPool;
+            gameState.lavaPool = gameStateJson.lavaPool;
+            gameState.conveyorPool = gameStateJson.conveyorPool;
 
             gameState.boss = gameStateJson.boss;
             gameState.frameTime = gameStateJson.frameTime;
@@ -122,17 +118,18 @@ public class FirebaseGameStateLogger implements Middleware<Redux.GameState> {
         }
 
         @ToJson
+        @SuppressWarnings("unused")
         public GameStateJson gameStateToJson(Redux.GameState gameState) {
             GameStateJson gameStateJson = new GameStateJson();
 
             // I'm worried about threading...
             // this is another thread, so the static collection
             // could be updated before we have copied it
-            gameStateJson.particlePool = copyList(Redux.GameState.PARTICLE_POOL);
-            gameStateJson.enemyPool = copyList(Redux.GameState.ENEMY_POOL);
-            gameStateJson.enemySpawnerPool = copyList(Redux.GameState.ENEMY_SPAWNER_POOL);
-            gameStateJson.lavaPool = copyList(Redux.GameState.LAVA_POOL);
-            gameStateJson.conveyorPool = copyList(Redux.GameState.CONVEYOR_POOL);
+            gameStateJson.particlePool = gameState.particlePool;
+            gameStateJson.enemyPool = gameState.enemyPool;
+            gameStateJson.enemySpawnerPool = gameState.enemySpawnerPool;
+            gameStateJson.lavaPool = gameState.lavaPool;
+            gameStateJson.conveyorPool = gameState.conveyorPool;
 
             gameStateJson.boss = gameState.boss;
             gameStateJson.frameTime = gameState.frameTime;
@@ -147,12 +144,6 @@ public class FirebaseGameStateLogger implements Middleware<Redux.GameState> {
             gameStateJson.lives = gameState.lives;
 
             return gameStateJson;
-        }
-
-        private <T> List<T> copyList(List<T> enemyPool) {
-            List<T> pool = new ArrayList<>();
-            pool.addAll(enemyPool);
-            return pool;
         }
 
     }

@@ -1,6 +1,6 @@
 package com.novoda.dungeoncrawler;
 
-class Enemy {
+public class Enemy {
     private final int speed;
     private final int direction;
     private final int wobble;

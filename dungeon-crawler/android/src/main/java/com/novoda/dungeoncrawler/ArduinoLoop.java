@@ -6,8 +6,7 @@ import android.os.Looper;
 
 public class ArduinoLoop {
 
-    private final HandlerThread thread = new HandlerThread("Arudino Loop Mimic");
-
+    private HandlerThread thread;
     private Handler handler;
 
     /**
@@ -17,6 +16,7 @@ public class ArduinoLoop {
      * @param loopable the method to continuously lopp
      */
     void start(Loopable loopable) {
+        thread = new HandlerThread("Arudino Loop Mimic");
         thread.start();
         final Looper looper = thread.getLooper();
         handler = new Handler(looper);

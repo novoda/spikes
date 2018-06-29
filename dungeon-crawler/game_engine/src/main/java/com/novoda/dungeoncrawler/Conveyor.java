@@ -2,7 +2,7 @@ package com.novoda.dungeoncrawler;
 
 import static com.novoda.dungeoncrawler.Direction.RIGHT_TO_LEFT;
 
-class Conveyor {
+public class Conveyor {
     private final Direction direction;
     private final int speed;
     private final int startPoint;

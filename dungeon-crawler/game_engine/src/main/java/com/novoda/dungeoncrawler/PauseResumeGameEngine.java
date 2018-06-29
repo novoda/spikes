@@ -33,7 +33,7 @@ class PauseResumeGameEngine implements GameEngine {
     }
 
     private static boolean areAllParticlesDeactive(Redux.GameState gameState) {
-        for (Particle particle : gameState.PARTICLE_POOL) {
+        for (Particle particle : gameState.particlePool) {
             if (particle.isAlive()) {
                 return false;
             }

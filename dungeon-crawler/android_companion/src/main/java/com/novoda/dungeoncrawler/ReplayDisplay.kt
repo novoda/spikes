@@ -20,9 +20,8 @@ class ReplayDisplay(context: Context, containerView: ViewGroup, numberOfLeds: In
         linearLayout.layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         linearLayout.orientation = LinearLayout.HORIZONTAL
         for (i in 0 until numberOfLeds) {
-            //            View ledView = new TextView(context);
             val ledView = AndroidLedView(context)
-            ledView.layoutParams = LinearLayout.LayoutParams(60, 60)
+            ledView.layoutParams = LinearLayout.LayoutParams(24, 24)
             ledView.id = 999 + i
             linearLayout.addView(ledView, i)
             state.add(i, Color.BLACK)
@@ -44,14 +43,14 @@ class ReplayDisplay(context: Context, containerView: ViewGroup, numberOfLeds: In
             current.add(i, state[i])
         }
         handler.removeCallbacksAndMessages(null)
-        handler.post {
-            for (i in current.indices) {
-                val integer = current[i]
-                //                String led = integer == 0 ? "  " : "x";
-                //                TextView ledView = (TextView) linearLayout.getChildAt(i);
-                val ledView = linearLayout.getChildAt(i) as AndroidLedView
-                ledView.setBackgroundColor(integer)
-            }
+        handler.post { updateGameMap(current) }
+    }
+
+    private fun updateGameMap(current: List<Int>) {
+        for (i in current.indices) {
+            val integer = current[i]
+            val ledView = linearLayout.getChildAt(i) as AndroidLedView
+            ledView.setBackgroundColor(integer)
         }
     }
 

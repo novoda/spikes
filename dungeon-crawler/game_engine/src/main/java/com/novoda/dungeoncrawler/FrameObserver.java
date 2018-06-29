@@ -48,10 +48,10 @@ public class FrameObserver {
 
     private void playingStateDraw(Redux.GameState newGameState, long frameTime) {
         long frame = 10000 + frameTime;
-        for (Conveyor conveyor : newGameState.CONVEYOR_POOL) {
+        for (Conveyor conveyor : newGameState.conveyorPool) {
             drawCallback.drawConveyor(conveyor.getStartPoint(), conveyor.getEndPoint(), conveyor.getDirection(), frame);
         }
-        for (Enemy enemy : newGameState.ENEMY_POOL) {
+        for (Enemy enemy : newGameState.enemyPool) {
             if (enemy.isAlive()) {
                 drawCallback.drawEnemy(enemy.getPosition());
             }
@@ -60,7 +60,7 @@ public class FrameObserver {
             // except that it would play the sound on every frame
             // rather than only at the time of death :-)
         }
-        for (Lava lava : newGameState.LAVA_POOL) {
+        for (Lava lava : newGameState.lavaPool) {
             drawCallback.drawLava(lava.getLeft(), lava.getRight(), lava.isEnabled());
         }
         Boss boss = newGameState.boss;
@@ -84,7 +84,7 @@ public class FrameObserver {
     }
 
     private void deadStateDraw(Redux.GameState gameState) {
-        for (Particle particle : gameState.PARTICLE_POOL) {
+        for (Particle particle : gameState.particlePool) {
             if (particle.isAlive()) {
                 drawCallback.drawParticle(particle.getPosition(), particle.getPower());
             }

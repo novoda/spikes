@@ -1,6 +1,6 @@
 package com.novoda.dungeoncrawler;
 
-class EnemySpawner {
+public class EnemySpawner {
     private final long activate;
     private final long rate;
     private final int position;

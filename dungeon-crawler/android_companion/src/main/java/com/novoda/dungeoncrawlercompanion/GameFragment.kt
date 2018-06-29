@@ -15,7 +15,7 @@ import com.novoda.dungeoncrawler.DungeonCrawlerGame
 import com.novoda.dungeoncrawler.ReplayDisplay
 import kotlinx.android.synthetic.main.fragment_game.*
 
-private const val NUM_OF_SQUARES = 300
+private const val NUM_OF_SQUARES = 100
 
 class GameFragment : Fragment() {
 
@@ -30,11 +30,17 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val display = ReplayDisplay(view.context, replay_container, NUM_OF_SQUARES)
         val looper = ArduinoLoop()
-        game = InitHack.newInstance(NUM_OF_SQUARES, display, DungeonCrawlerGame.HudDisplayer { /* no-op */ }, looper)
+        game = InitHack.newInstance(NUM_OF_SQUARES, display, this::updateLives, looper)
 
         play_pause.setOnClickListener { GamePauser().toggle() }
         gamer_tag.onTextChanged { update_gamer_tag.enable() }
         update_gamer_tag.setOnClickListener { updateGamerTag() }
+    }
+
+    private fun updateLives(lives: Int) {
+        activity?.runOnUiThread {
+            lives_count.text = getString(R.string.number_of_lives, lives)
+        }
     }
 
     private fun Button.enable() {

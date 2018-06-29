@@ -6,15 +6,24 @@
   android:layout_height="match_parent"
   tools:context="com.novoda.dungeoncrawler.MainActivity">
 
+  <FrameLayout
+    android:id="@+id/leds_container"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:paddingTop="32dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent" />
+
   <Button
-    android:id="@+id/button2"
+    android:id="@+id/restart"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginEnd="8dp"
     android:layout_marginTop="8dp"
     android:text="restart"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent" />
 
   <TextView
     android:id="@+id/lives_text_view"
@@ -22,23 +31,15 @@
     android:layout_height="wrap_content"
     android:layout_marginEnd="8dp"
     android:layout_marginTop="8dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/button2" />
-
-  <ScrollView
-    android:id="@+id/scrollView"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    app:layout_constraintBottom_toTopOf="@id/restart"
+    app:layout_constraintEnd_toEndOf="parent" />
 
   <com.novoda.dungeoncrawler.JoystickView
     android:id="@+id/joystick"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintRight_toRightOf="parent" />
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

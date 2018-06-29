@@ -1,16 +1,16 @@
 package com.novoda.dungeoncrawler;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
 
-public class MainActivity extends Activity implements RemoteGamePauseObservable.OnToggleListener {
+public class MainActivity extends AppCompatActivity implements RemoteGamePauseObservable.OnToggleListener {
 
-    private static final int NUM_OF_SQUARES = 25;
+    private static final int NUM_OF_SQUARES = 100;
 
     private DungeonCrawlerGame game;
     private RemoteGamePauseObservable remoteGamePauseObservable;
@@ -19,7 +19,7 @@ public class MainActivity extends Activity implements RemoteGamePauseObservable.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Display display = new AndroidDeviceDisplay(this, findViewById(R.id.scrollView), NUM_OF_SQUARES);
+        Display display = new AndroidDeviceDisplay(this, findViewById(R.id.leds_container), NUM_OF_SQUARES);
 
         Screensaver screensaver = new Screensaver(display, NUM_OF_SQUARES);
         JoystickActuator joystickActuator = new AndroidViewJoystickActuator(findViewById(R.id.joystick));
@@ -27,12 +27,11 @@ public class MainActivity extends Activity implements RemoteGamePauseObservable.
         ArduinoLoop looper = new ArduinoLoop();
         game = InitHack.newInstance(NUM_OF_SQUARES, display, this::updateLives, joystickActuator, soundEffectsPlayer, screensaver, looper);
 
-        findViewById(R.id.button2).setOnClickListener(v -> {
+        findViewById(R.id.restart).setOnClickListener(v -> {
             game.start();
             Log.d("TUT", "Game restarting");
         });
 
-        game.start();
         Log.d("TUT", "Game starting");
 
         remoteGamePauseObservable = new RemoteGamePauseObservable(FirebaseDatabase.getInstance(), this);
