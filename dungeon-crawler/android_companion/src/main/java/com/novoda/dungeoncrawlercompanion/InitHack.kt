@@ -22,7 +22,7 @@ object InitHack {
                     gamerTagDisplayer: GamerTagDisplayer,
                     looper: ArduinoLoop): DungeonCrawlerGame {
         val gameEngine = ReplayGameEngine(
-                ReplayFetcher(),
+                NewReplayObserver(),
                 gamerTagDisplayer,
                 store
         )

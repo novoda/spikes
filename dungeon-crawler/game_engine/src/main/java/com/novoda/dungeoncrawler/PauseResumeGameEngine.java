@@ -4,7 +4,7 @@ import com.yheriatovych.reductor.Store;
 
 class PauseResumeGameEngine implements GameEngine {
 
-    private static final int MIN_REDRAW_INTERVAL = 33;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
+    private static final int MIN_REDRAW_INTERVAL = 30;    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
 
     private final Store<Redux.GameState> store;
     private final JoystickActuator inputActuator;
