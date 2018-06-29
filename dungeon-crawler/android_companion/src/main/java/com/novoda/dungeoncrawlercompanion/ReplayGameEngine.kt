@@ -7,6 +7,7 @@ import com.yheriatovych.reductor.Action
 import com.yheriatovych.reductor.Store
 
 private const val MIN_REDRAW_INTERVAL = 33.toLong()    // Min redraw interval (ms) 33 = 30fps / 16 = 63fps
+private const val GAME_OVER_PAUSE = 3000.toLong()    // Pause between replay repetition - 3 seconds
 
 class ReplayGameEngine(
         private val replayFetcher: ReplayFetcher,
@@ -15,6 +16,7 @@ class ReplayGameEngine(
 ) : GameEngine {
 
     private var gameStates: List<Redux.GameState> = emptyList()
+    private var currentFrameIndex = 0
 
     override fun loadLevel() {
         replayFetcher.fetchRandomReplay { gameStates, gamerTag ->
@@ -29,9 +31,13 @@ class ReplayGameEngine(
         }
         SystemClock.sleep(MIN_REDRAW_INTERVAL)
 
-        val state = gameStates.first()
-        gameStates = gameStates.drop(1)
+        val state = gameStates[currentFrameIndex++]
         store.dispatch(Action(NEXT_FRAME_ACTION, arrayOf(state)))
+
+        if (currentFrameIndex >= gameStates.size) {
+            SystemClock.sleep(GAME_OVER_PAUSE)
+            currentFrameIndex = 0
+        }
     }
 
 }
