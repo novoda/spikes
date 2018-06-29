@@ -1,16 +1,17 @@
 package com.novoda.dungeoncrawler;
 
-class PausableStartClock {
+class PausableStartClock implements StartClock {
 
-    private final StartClock startClock;
+    private final DefaultStartClock startClock;
     private long currentPauseStart = 0;
     private long pausedTimeAccumulator = 0;
 
-    PausableStartClock(StartClock startClock) {
+    PausableStartClock(DefaultStartClock startClock) {
         this.startClock = startClock;
     }
 
-    long millis() {
+    @Override
+    public long millis() {
         if (currentPauseStart != 0) {
             return currentPauseStart;
         }

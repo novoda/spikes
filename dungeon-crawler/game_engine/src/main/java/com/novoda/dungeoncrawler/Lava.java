@@ -1,6 +1,6 @@
 package com.novoda.dungeoncrawler;
 
-class Lava {
+public class Lava {
     private final int left;
     private final int right;
     private final long offTime;

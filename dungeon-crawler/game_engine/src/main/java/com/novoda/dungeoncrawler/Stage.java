@@ -1,6 +1,6 @@
 package com.novoda.dungeoncrawler;
 
-enum Stage {
+public enum Stage {
 
     PLAY, DEAD, LEVEL_COMPLETE, GAME_OVER, GAME_COMPLETE, SCREENSAVER, PAUSE
 

@@ -2,12 +2,12 @@ package com.novoda.dungeoncrawler;
 
 import java.util.Random;
 
-class Screensaver {
+public class Screensaver {
 
     private final Display display;
     private final int numOfSquares;
 
-    Screensaver(Display display, int numOfSquares) {
+    public Screensaver(Display display, int numOfSquares) {
         this.display = display;
         this.numOfSquares = numOfSquares;
     }

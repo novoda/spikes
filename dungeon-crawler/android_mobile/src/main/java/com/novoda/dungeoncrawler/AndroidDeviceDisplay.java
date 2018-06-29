@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,31 +13,25 @@ import java.util.List;
 class AndroidDeviceDisplay implements Display {
 
     private static final int OPAQUE = 255;
+    private static final int LED_SIZE = 24;
     private final List<Integer> state;
     private final LinearLayout linearLayout;
     private final Handler handler;
 
-    AndroidDeviceDisplay(Context context, ScrollView scrollView, int numberOfLeds) {
+    AndroidDeviceDisplay(Context context, ViewGroup ledsContainer, int numberOfLeds) {
         this.state = new ArrayList<>(numberOfLeds);
         linearLayout = new LinearLayout(context);
-        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         for (int i = 0; i < numberOfLeds; i++) {
-//            View ledView = new TextView(context);
             View ledView = new AndroidLedView(context);
-            ledView.setLayoutParams(new LinearLayout.LayoutParams(60, 60));
+            ledView.setLayoutParams(new LinearLayout.LayoutParams(LED_SIZE, LED_SIZE));
             ledView.setId(999 + i);
             linearLayout.addView(ledView, i);
             state.add(i, Color.BLACK);
         }
-        scrollView.addView(linearLayout);
+        ledsContainer.addView(linearLayout);
         handler = new Handler(context.getMainLooper());
-    }
-
-    void setBrightness(int brightness) {
-    }
-
-    void setDither(int dither) {
     }
 
     @Override
@@ -59,11 +52,8 @@ class AndroidDeviceDisplay implements Display {
         handler.post(() -> {
             for (int i = 0; i < current.size(); i++) {
                 int integer = current.get(i);
-//                String led = integer == 0 ? "  " : "x";
-//                TextView ledView = (TextView) linearLayout.getChildAt(i);
                 AndroidLedView ledView = (AndroidLedView) linearLayout.getChildAt(i);
                 if (ledView != null) {
-//                    ledView.setText("|" + led + "|");
                     ledView.setBackgroundColor(integer);
                 }
             }

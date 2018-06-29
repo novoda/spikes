@@ -3,18 +3,18 @@ package com.novoda.dungeoncrawler;
 import com.novoda.dungeoncrawler.DungeonCrawlerGame.HudDisplayer;
 import com.yheriatovych.reductor.Store;
 
-class InitHack {
+public class InitHack {
 
     private static DungeonCrawlerGame game;
     private static final Store<Redux.GameState> store = Store.create(new Redux.GameReducer(), Redux.GameState.getInitialState(), new FirebaseGameStateLogger());
 
-    static DungeonCrawlerGame newInstance(int numOfSquares,
-                                          Display display,
-                                          HudDisplayer hudDisplayer,
-                                          JoystickActuator joystickActuator,
-                                          SoundEffectsPlayer soundEffectsPlayer,
-                                          Screensaver screensaver, ArduinoLoop looper) {
-        PausableStartClock clock = new PausableStartClock(new StartClock());
+    public static DungeonCrawlerGame newInstance(int numOfSquares,
+                                                 Display display,
+                                                 HudDisplayer hudDisplayer,
+                                                 JoystickActuator joystickActuator,
+                                                 SoundEffectsPlayer soundEffectsPlayer,
+                                                 Screensaver screensaver, ArduinoLoop looper) {
+        StartClock clock = new PausableStartClock(new DefaultStartClock());
         new LoopObserver(
             store,
             joystickActuator,
@@ -91,7 +91,7 @@ class InitHack {
             clock
         );
         new TimeObserver(store, clock);
-        GameEngine gameEngine = new GameEngine(
+        GameEngine gameEngine = new PauseResumeGameEngine(
             store,
             joystickActuator,
             clock

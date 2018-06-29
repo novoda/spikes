@@ -1,14 +1,14 @@
 package com.novoda.dungeoncrawler;
 
-interface JoystickActuator {
+public interface JoystickActuator {
 
     int DEADZONE = 30;     // Angle to ignore
 
     JoyState getInput();
 
     class JoyState {
-        int tilt = 0;              // Stores the angle of the joystick
-        int wobble = 0;            // Stores the max amount of acceleration (wobble)
+        public int tilt = 0;              // Stores the angle of the joystick
+        public int wobble = 0;            // Stores the max amount of acceleration (wobble)
 
         @Override
         public String toString() {

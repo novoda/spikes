@@ -2,7 +2,7 @@ package com.novoda.dungeoncrawler;
 
 import java.util.Random;
 
-class Particle {
+public class Particle {
     private boolean alive;
     private int position;
     private int power;
@@ -17,7 +17,7 @@ class Particle {
         this.life = 220 - Math.abs(speed);
     }
 
-    boolean isAlive() {
+    public boolean isAlive() {
         return alive;
     }
 

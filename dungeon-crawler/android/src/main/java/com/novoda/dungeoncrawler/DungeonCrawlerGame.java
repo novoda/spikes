@@ -2,7 +2,7 @@ package com.novoda.dungeoncrawler;
 
 import java.util.Random;
 
-class DungeonCrawlerGame implements
+public class DungeonCrawlerGame implements
     LoopObserver.AttackMonitor,
     LoopObserver.KillMonitor,
     LoopObserver.MovementMonitor,
@@ -15,7 +15,7 @@ class DungeonCrawlerGame implements
     TimeObserver.PauseMonitor,
     TimeObserver.ResumeMonitor {
 
-    interface HudDisplayer {
+    public interface HudDisplayer {
         void displayLives(int total);
     }
 
@@ -28,7 +28,7 @@ class DungeonCrawlerGame implements
     private final HudDisplayer hud;
     private final SoundEffectsPlayer soundEffectsPlayer;
 
-    DungeonCrawlerGame(int numLeds,
+    public DungeonCrawlerGame(int numLeds,
                        GameEngine gameEngine,
                        Display display,
                        HudDisplayer hud,
@@ -225,12 +225,12 @@ class DungeonCrawlerGame implements
 
     @Override
     public void pause() {
-        gameEngine.pause();
+//        gameEngine.pause();
     }
 
     @Override
     public void resume() {
-        gameEngine.resume();
+//        gameEngine.resume();
     }
 
 }
