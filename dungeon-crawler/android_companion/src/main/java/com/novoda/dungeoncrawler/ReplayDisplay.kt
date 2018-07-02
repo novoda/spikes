@@ -21,7 +21,7 @@ class ReplayDisplay(context: Context, containerView: ViewGroup, numberOfLeds: In
         linearLayout.orientation = LinearLayout.HORIZONTAL
         for (i in 0 until numberOfLeds) {
             val ledView = AndroidLedView(context)
-            ledView.layoutParams = LinearLayout.LayoutParams(24, 24)
+            ledView.layoutParams = LinearLayout.LayoutParams(24, 96)
             ledView.id = 999 + i
             linearLayout.addView(ledView, i)
             state.add(i, Color.BLACK)

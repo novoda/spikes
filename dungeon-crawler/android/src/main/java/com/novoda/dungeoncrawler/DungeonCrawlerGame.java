@@ -225,12 +225,12 @@ public class DungeonCrawlerGame implements
 
     @Override
     public void pause() {
-//        gameEngine.pause();
+        // no-op - Will implement this later
     }
 
     @Override
     public void resume() {
-//        gameEngine.resume();
+        // no-op - Will implement this later
     }
 
 }

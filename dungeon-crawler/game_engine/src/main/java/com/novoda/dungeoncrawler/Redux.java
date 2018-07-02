@@ -112,7 +112,7 @@ public interface Redux {
             }
         }
 
-        private static final long SCREENSAVER_TIMEOUT = TimeUnit.SECONDS.toMillis(10);
+        private static final long SCREENSAVER_TIMEOUT = TimeUnit.SECONDS.toMillis(20);
         private static final int ATTACK_DURATION = 700;
         private static final int ATTACK_THRESHOLD = 30000;
         private static final int MAX_PLAYER_SPEED = 15;     // Max move speed of the player

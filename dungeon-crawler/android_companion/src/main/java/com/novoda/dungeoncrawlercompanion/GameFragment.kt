@@ -15,7 +15,7 @@ import com.novoda.dungeoncrawler.DungeonCrawlerGame
 import com.novoda.dungeoncrawler.ReplayDisplay
 import kotlinx.android.synthetic.main.fragment_game.*
 
-private const val NUM_OF_SQUARES = 100
+private const val NUM_OF_SQUARES = 105
 
 class GameFragment : Fragment() {
 

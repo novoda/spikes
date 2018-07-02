@@ -2,7 +2,6 @@ package com.novoda.dungeoncrawler;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.android.things.contrib.driver.apa102.Apa102;
 import com.google.android.things.pio.Gpio;
@@ -61,7 +60,7 @@ public class MainActivity extends Activity implements RemoteGamePauseObservable.
 
     // TODO GPIO
     private void digitalWrite(int pin, int value) {
-        Log.d("TUT", "Digital write pin " + pin + " value " + value);
+//        Log.d("TUT", "Digital write pin " + pin + " value " + value);
     }
 
     @Override

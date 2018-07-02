@@ -6,6 +6,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 private const val GAMER_REFERENCE: String = "currentGamerTag"
+private const val GAMER_LIST_REFERENCE: String = "allGamerTags"
 
 class GamerTagService(private val database: FirebaseDatabase = FirebaseDatabase.getInstance()) {
 
@@ -47,6 +48,8 @@ class GamerTagService(private val database: FirebaseDatabase = FirebaseDatabase.
                 else -> onError()
             }
         }
+
+        database.getReference(GAMER_LIST_REFERENCE).child(System.currentTimeMillis().toString()).setValue(gamerTag)
     }
 
 }

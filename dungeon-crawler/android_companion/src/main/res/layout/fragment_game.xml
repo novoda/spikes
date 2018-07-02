@@ -22,7 +22,8 @@
       android:id="@+id/lives_count"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
+      android:layout_marginTop="70dp"
+      android:textAppearance="?android:textAppearanceLarge"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       tools:text="Number of lives: 3" />
@@ -31,8 +32,9 @@
       android:id="@+id/replay_gamer_tag"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="32dp"
-      app:layout_constraintEnd_toEndOf="parent"
+      android:layout_marginTop="70dp"
+      android:textAppearance="?android:textAppearanceLarge"
+      app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       tools:text="Replay from: ninja123" />
   </android.support.constraint.ConstraintLayout>
@@ -68,6 +70,7 @@
       android:id="@+id/current_gamer_tag"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:textAppearance="?android:textAppearanceLarge"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@id/gamer_tag"
       tools:text="Current gamer tag: Foo" />

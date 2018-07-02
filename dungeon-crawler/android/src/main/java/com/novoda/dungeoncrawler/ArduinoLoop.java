@@ -16,8 +16,11 @@ public class ArduinoLoop {
      * @param loopable the method to continuously lopp
      */
     void start(Loopable loopable) {
+        stopSafely();
+
         thread = new HandlerThread("Arudino Loop Mimic");
         thread.start();
+        
         final Looper looper = thread.getLooper();
         handler = new Handler(looper);
         handler.post(new Runnable() {
@@ -30,11 +33,16 @@ public class ArduinoLoop {
     }
 
     void stop() {
-        if (handler == null) {
-            return;
+        stopSafely();
+    }
+
+    private void stopSafely() {
+        if (thread != null) {
+            thread.quitSafely();
         }
-        handler.removeCallbacksAndMessages(null);
-        thread.quit();
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+        }
     }
 
     interface Loopable {
