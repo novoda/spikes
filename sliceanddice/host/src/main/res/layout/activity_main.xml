@@ -10,21 +10,21 @@
 
   <include layout="@layout/settings_card" />
 
-  <androidx.constraintlayout.ConstraintLayout
+  <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/sliceContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.slice.widget.SliceView
       android:id="@+id/sliceView"
-      android:layout_width="0dp"
+      android:layout_width="@dimen/match_constraint"
       android:layout_height="wrap_content"
-      android:layout_margin="16dp"
+      android:layout_margin="@dimen/slices_margin"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintBottom_toBottomOf="parent" />
 
-  </androidx.constraintlayout.ConstraintLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

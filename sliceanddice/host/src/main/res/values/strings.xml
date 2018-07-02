@@ -1,6 +1,8 @@
 <resources>
+
   <string name="app_name">Slice&amp;Dice</string>
   <string name="explanation_auth">In order to display slices from SliceProvider, you need to grant Slice&amp;Dice the permission to do so.</string>
   <string name="slices_title">Slices:</string>
   <string name="grant_permission">Grant permission</string>
+
 </resources>
