@@ -18,8 +18,8 @@ internal data class SliceChoice(val uri: Uri, val text: String) {
 }
 
 internal fun sliceSelectionListener(
-    onItemSelected: (adapterView: AdapterView<*>, selectedView: View, selectedPosition: Int, selectedId: Long) -> Unit,
-    onNothingSelected: ((adapterView: AdapterView<*>) -> Unit)? = null
+    onNothingSelected: ((adapterView: AdapterView<*>) -> Unit)? = null,
+    onItemSelected: (adapterView: AdapterView<*>, selectedView: View, selectedPosition: Int, selectedId: Long) -> Unit
 ) = object : AdapterView.OnItemSelectedListener {
 
     override fun onNothingSelected(adapterView: AdapterView<*>) {

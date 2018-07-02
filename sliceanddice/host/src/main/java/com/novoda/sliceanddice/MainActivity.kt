@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.slice.SliceManager
+import androidx.slice.SliceViewManager
 import androidx.slice.widget.SliceLiveData
 import com.novoda.sliceshost.R
 import kotlinx.android.synthetic.main.activity_main.*
@@ -13,13 +13,13 @@ import kotlinx.android.synthetic.main.settings_card.*
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var sliceManager: SliceManager
+    private lateinit var sliceManager: SliceViewManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        sliceManager = SliceManager.getInstance(this)
+        sliceManager = SliceViewManager.getInstance(this)
         sliceSelector.adapter = ArrayAdapter<SliceChoice>(this, android.R.layout.simple_list_item_1, sliceChoices)
     }
 
@@ -31,9 +31,9 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        sliceSelector.onItemSelectedListener = sliceSelectionListener({ _, _, selectedPosition, _ ->
+        sliceSelector.onItemSelectedListener = sliceSelectionListener { _, _, selectedPosition, _ ->
             onSliceSelectionChanged(sliceChoices[selectedPosition].uri)
-        })
+        }
 
         sliceSelector.setSelection(0)
     }
@@ -47,9 +47,9 @@ class MainActivity : AppCompatActivity() {
         sliceView.slice = slice
 
         SliceLiveData.fromUri(this, sliceUri)
-            .observe(this, Observer({ sliceResult ->
+            .observe(this, Observer { sliceResult ->
                 sliceView.slice = sliceResult
                 invalidateOptionsMenu()
-            }))
+            })
     }
 }
