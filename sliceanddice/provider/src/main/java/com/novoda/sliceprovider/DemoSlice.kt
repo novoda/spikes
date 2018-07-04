@@ -7,70 +7,71 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.core.graphics.drawable.IconCompat
 import androidx.slice.Slice
-import androidx.slice.builders.ListBuilder
+import androidx.slice.builders.*
 import androidx.slice.builders.ListBuilder.*
-import androidx.slice.builders.SliceAction
 import java.util.concurrent.TimeUnit
 
 private val TIME_TO_LIVE = TimeUnit.SECONDS.toMillis(10)
 
-internal fun createDemoSlice(context: Context, sliceUri: Uri): Slice =
-    ListBuilder(context, sliceUri, TIME_TO_LIVE)
-        .setHeader {
-            it.setTitle("Header title")
-                .setSubtitle("Header subtitle")
-                .setSummary("This is the summary subtitle").primaryAction = sliceAction(context)
+internal fun createDemoSlice(context: Context, sliceUri: Uri): Slice = list(context, sliceUri, TIME_TO_LIVE) {
+    header {
+        title = "Header title"
+        subtitle = "Header subtitle"
+        summary = "This is the summary subtitle"
+        primaryAction = sliceAction(context)
+    }
+    row {
+        title = "This is a row item title"
+        subtitle = "...and this is the subtitle"
+        addEndItem(sliceAction(context))
+    }
+    inputRange {
+        title = "This is an input range item"
+        max = 7
+        value = 5
+        inputAction = pendingIntent(context, 86586)
+    }
+    range {
+        title = "This is a range item"
+        max = 7
+        value = 2
+    }
+    row { title = "This next item is a grid item:" }
+    gridRow {
+        cell {
+            addImage(IconCompat.createWithResource(context, R.drawable.ic_android), ICON_IMAGE)
+            addText("Icon")
+            addTitleText("Title text")
+            contentIntent = pendingIntent(context, 8456)
         }
-        .addRow {
-            it.setTitle("This is a row item title")
-                .setSubtitle("...and this is the subtitle")
-                .addEndItem(sliceAction(context, true))
+        cell {
+            addImage(IconCompat.createWithResource(context, R.drawable.yucca), SMALL_IMAGE)
+            addText("Small")
+            addTitleText("Title text")
+            contentIntent = pendingIntent(context, 8964)
         }
-        .addInputRange {
-            it.setTitle("This is an input range item")
-                .setMax(7)
-                .setValue(5).inputAction = pendingIntent(context, 86586)
+        cell {
+            addImage(IconCompat.createWithResource(context, R.drawable.dianella), LARGE_IMAGE)
+            addText("Large")
+            addTitleText("Title text")
+            contentIntent = pendingIntent(context, 6585)
         }
-        .addRange {
-            it.setTitle("This is a range item")
-                .setMax(7).value = 2
+        seeMoreCell {
+            addText("See more!")
+            addTitleText("Title text")
+            contentIntent = pendingIntent(context, 3287)
         }
-        .addRow { it.title = "This next item is a grid item:" }
-        .addGridRow {
-            it.addCell {
-                it.addImage(IconCompat.createWithResource(context, R.drawable.ic_android), ICON_IMAGE)
-                    .addText("Icon")
-                    .addTitleText("Title text")
-                    .contentIntent = pendingIntent(context, 8456)
-            }
-                .addCell {
-                    it.addImage(IconCompat.createWithResource(context, R.drawable.yucca), SMALL_IMAGE)
-                        .addText("Small")
-                        .addTitleText("Title text")
-                        .contentIntent = pendingIntent(context, 8964)
-                }
-                .addCell {
-                    it.addImage(IconCompat.createWithResource(context, R.drawable.dianella), LARGE_IMAGE)
-                        .addText("Large")
-                        .addTitleText("Title text")
-                        .contentIntent = pendingIntent(context, 6585)
-                }
-                .setSeeMoreCell {
-                    it.addText("See more!")
-                        .addTitleText("Title text")
-                        .contentIntent = pendingIntent(context, 3287)
-                }
-        }
-        .setSeeMoreRow { it.title = "See more row item️" }
-        .addAction(sliceAction(context))
-        .addAction(sliceAction2(context))
-        .build()
+    }
+    seeMoreRow { title = "See more row item️" }
+    addAction(sliceAction(context))
+    addAction(sliceAction2(context))
+}
 
-private fun sliceAction(context: Context, isChecked: Boolean = false) = SliceAction(
+private fun sliceAction(context: Context) = SliceAction.create(
     pendingIntent(context, 1234),
     IconCompat.createWithResource(context, R.drawable.ic_android),
-    "actionnnnnn",
-    isChecked
+    ICON_IMAGE,
+    "actionnnnnn"
 )
 
 private fun pendingIntent(context: Context, reqCode: Int): PendingIntent {
@@ -82,7 +83,7 @@ private fun pendingIntent(context: Context, reqCode: Int): PendingIntent {
     )
 }
 
-private fun sliceAction2(context: Context) = SliceAction(
+private fun sliceAction2(context: Context) = SliceAction.create(
     PendingIntent.getActivity(
         context,
         546754,
@@ -90,5 +91,6 @@ private fun sliceAction2(context: Context) = SliceAction(
         PendingIntent.FLAG_UPDATE_CURRENT
     ),
     IconCompat.createWithResource(context, R.drawable.ic_android),
+    ICON_IMAGE,
     "a lie"
 )
