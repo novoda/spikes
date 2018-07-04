@@ -10,7 +10,10 @@ import java.util.concurrent.TimeUnit
 private val TIME_TO_LIVE = TimeUnit.SECONDS.toMillis(10)
 
 internal fun createYuccaSlice(context: Context, sliceUri: Uri): Slice = list(context, sliceUri, TIME_TO_LIVE) {
-    header { title = "Image search" }
+    header {
+        title = "Image search"
+        primaryAction = sliceAction(context)
+    }
     row {
         title = "This seems like a match"
         setTitleItem(IconCompat.createWithResource(context, R.drawable.assistant), ListBuilder.ICON_IMAGE)

@@ -24,7 +24,10 @@ private const val wikipediaExcerpt = "<b>Rick and Morty</b> is an American adult
     "block <b>Adult Swim</b>."
 
 internal fun createSearchSlice(context: Context, sliceUri: Uri): Slice = list(context, sliceUri, TIME_TO_LIVE) {
-    header { title = "What's up with Rick and Morty" }
+    header {
+        title = "What's up with Rick and Morty"
+        primaryAction = sliceAction(context)
+    }
     row {
         title = "Here are some results. The first is from Reddit"
         setTitleItem(IconCompat.createWithResource(context, R.drawable.assistant), ICON_IMAGE)
@@ -67,6 +70,7 @@ internal fun createSearchSlice(context: Context, sliceUri: Uri): Slice = list(co
             contentIntent = webPendingIntent(context, "https://en.wikipedia.org/wiki/Rick_and_Morty")
         }
     }
+    (sliceAction(context))
 }
 
 private fun webPendingIntent(context: Context, url: String) =

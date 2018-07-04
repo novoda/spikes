@@ -1,10 +1,7 @@
 package com.novoda.sliceprovider
 
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
-import android.provider.Settings
 import androidx.core.graphics.drawable.IconCompat
 import androidx.slice.Slice
 import androidx.slice.builders.*
@@ -66,31 +63,3 @@ internal fun createDemoSlice(context: Context, sliceUri: Uri): Slice = list(cont
     addAction(sliceAction(context))
     addAction(sliceAction2(context))
 }
-
-private fun sliceAction(context: Context) = SliceAction.create(
-    pendingIntent(context, 1234),
-    IconCompat.createWithResource(context, R.drawable.ic_android),
-    ICON_IMAGE,
-    "actionnnnnn"
-)
-
-private fun pendingIntent(context: Context, reqCode: Int): PendingIntent {
-    return PendingIntent.getActivity(
-        context,
-        reqCode,
-        Intent(Settings.ACTION_SETTINGS),
-        PendingIntent.FLAG_UPDATE_CURRENT
-    )
-}
-
-private fun sliceAction2(context: Context) = SliceAction.create(
-    PendingIntent.getActivity(
-        context,
-        546754,
-        Intent(Settings.ACTION_AIRPLANE_MODE_SETTINGS),
-        PendingIntent.FLAG_UPDATE_CURRENT
-    ),
-    IconCompat.createWithResource(context, R.drawable.ic_android),
-    ICON_IMAGE,
-    "a lie"
-)
