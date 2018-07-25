@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <dimen name="match_constraint">0dp</dimen>
+  <dimen name="slices_margin">16dp</dimen>
+
+</resources>

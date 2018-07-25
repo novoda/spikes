@@ -3,11 +3,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 'android-P'
+    compileSdkVersion 28
 
     defaultConfig {
         applicationId 'com.novoda.sliceprovider'
-        minSdkVersion 24
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName '1.0'
@@ -16,7 +16,8 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.0-alpha1'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.0'
-    implementation 'androidx.slice:slice-builders:1.0.0-alpha1'
+    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
+    implementation 'androidx.slice:slice-builders:1.0.0-beta01'
+    implementation 'androidx.slice:slice-builders-ktx:1.0.0-alpha3'
 }
