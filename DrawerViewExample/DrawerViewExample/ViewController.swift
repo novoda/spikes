@@ -29,16 +29,21 @@ class ViewController: UIViewController, DrawerViewDelegate {
         dimmingView.edgesToSuperview()
         
         let drawerView = DrawerView(peekView: peekView, contentView: contentView)
-        view.addSubview(drawerView)
-        drawerView.edgesToSuperview(excluding: [.top])
         drawerView.delegate = self
+        view.addSubview(drawerView)
         
-        peekView.edgesToSuperview(excluding: [.top, .bottom])
+        // Constrain the drawer to everything except the top, so it is draggable
+        drawerView.edgesToSuperview(excluding: [.top])
+        
+        // The user of the drawer view is required to set up the peek view's constraints
+        peekView.leadingToSuperview()
+        peekView.trailingToSuperview()
         let animatingConstraint = peekView.bottom(to: view)
         
         contentView.height(600)
         peekView.height(56)
         
+        // Set the constraint that will be animated as part of the interaction
         drawerView.animatingConstraint = animatingConstraint
     }
 
