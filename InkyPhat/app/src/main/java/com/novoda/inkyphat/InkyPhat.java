@@ -3,7 +3,7 @@ package com.novoda.inkyphat;
 import android.graphics.Bitmap;
 
 import com.google.android.things.pio.Gpio;
-import com.google.android.things.pio.PeripheralManagerService;
+import com.google.android.things.pio.PeripheralManager;
 import com.google.android.things.pio.SpiDevice;
 
 import java.io.IOException;
@@ -87,22 +87,35 @@ public interface InkyPhat extends AutoCloseable {
         public static InkyPhat create(String spiBus,
                                       String gpioBusyPin, String gpioResetPin, String gpioCommandPin,
                                       Orientation orientation) {
-            PeripheralManagerService service = new PeripheralManagerService();
+            PeripheralManager peripheralManager = PeripheralManager.getInstance();
+            VersionChecker versionChecker = new VersionChecker(peripheralManager);
             try {
-                SpiDevice device = service.openSpiDevice(spiBus);
+                VersionChecker.Version version = versionChecker.checkVersion(gpioBusyPin, gpioResetPin);
+                SpiDevice device = peripheralManager.openSpiDevice(spiBus);
 
-                Gpio chipBusyPin = service.openGpio(gpioBusyPin);
-                Gpio chipResetPin = service.openGpio(gpioResetPin);
-                Gpio chipCommandPin = service.openGpio(gpioCommandPin);
+                Gpio chipBusyPin = peripheralManager.openGpio(gpioBusyPin);
+                Gpio chipResetPin = peripheralManager.openGpio(gpioResetPin);
+                Gpio chipCommandPin = peripheralManager.openGpio(gpioCommandPin);
 
                 PixelBuffer pixelBuffer = new PixelBuffer(orientation);
                 ImageConverter imageConverter = new ImageConverter(orientation);
-                return new InkyPhatTriColourDisplay(device,
-                                                    chipBusyPin, chipResetPin, chipCommandPin,
-                                                    pixelBuffer,
-                                                    imageConverter,
-                                                    new ColorConverter()
-                );
+                if (version == VersionChecker.Version.ONE) {
+                    return new InkyPhatV1(device,
+                                          chipBusyPin, chipResetPin, chipCommandPin,
+                                          pixelBuffer,
+                                          imageConverter,
+                                          new ColorConverter()
+                    );
+                } else if (version == VersionChecker.Version.TWO) {
+                    return new InkyPhatV2(device,
+                                          chipBusyPin, chipResetPin, chipCommandPin,
+                                          pixelBuffer,
+                                          imageConverter,
+                                          new ColorConverter()
+                    );
+                } else {
+                    throw new IllegalStateException(version + " is not developed or tested yet.");
+                }
             } catch (IOException e) {
                 throw new IllegalStateException("InkyPhat connection cannot be opened.", e);
             }

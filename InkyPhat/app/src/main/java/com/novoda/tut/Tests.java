@@ -15,7 +15,7 @@ class Tests {
     static void drawWholeScreen(InkyPhat inkyPhat) {
         for (int row = 0; row < InkyPhat.HEIGHT; row++) {
             for (int col = 0; col < InkyPhat.WIDTH; col++) {
-                inkyPhat.setPixel(row, col, Color.WHITE);
+                inkyPhat.setPixel(row, col, Color.BLACK);
             }
         }
     }
@@ -89,8 +89,8 @@ class Tests {
     }
 
     static void drawImage(InkyPhat inkyPhat, Resources resources) {
-        Bitmap bitmap = BitmapFactory.decodeResource(resources, R.drawable.logo);
         inkyPhat.setBorder(InkyPhat.Palette.RED);
+        Bitmap bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_test_4);
         inkyPhat.setImage(0, 0, bitmap, InkyPhat.Scale.FIT_X_OR_Y);
     }
 

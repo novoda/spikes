@@ -7,6 +7,7 @@ import com.novoda.inkyphat.InkyPhat;
 
 public class MainActivity extends Activity {
 
+    // RPI (is not pin compatible with the NXP imx7d)
     private static final String INKY_PHAT_DISPLAY = "SPI0.0";
     private static final String COMMAND_PIN = "BCM22";
     private static final String RESET_PIN = "BCM27";
@@ -24,6 +25,7 @@ public class MainActivity extends Activity {
 //        Tests.drawHelloWorldText(inkyPhat);
 //        Tests.drawNameBadge(inkyPhat, getResources());
         inkyPhat.refresh();
+        inkyPhat.close();
     }
 
     @Override

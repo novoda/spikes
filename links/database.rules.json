@@ -1,0 +1,6 @@
+{
+  "rules": {
+    ".read": true,
+    ".write": "auth != null && auth.provider == 'google' && auth.token.email.matches(/.*@novoda.com$/)"
+  }
+}

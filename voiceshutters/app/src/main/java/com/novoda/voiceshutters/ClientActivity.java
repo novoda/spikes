@@ -1,6 +1,7 @@
 package com.novoda.voiceshutters;
 
 import android.Manifest;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
@@ -9,12 +10,13 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-public class ClientActivity extends AppCompatActivity {
+import com.google.firebase.auth.FirebaseAuth;
+
+public class ClientActivity extends Activity {
 
     private static final int REQUEST_ENABLE_BT = 123;
     private static final int REQUEST_FINE_LOCATION = 1234;
@@ -74,14 +76,22 @@ public class ClientActivity extends AppCompatActivity {
     private void startScan() {
         new Thread(() -> {
             ClientActivity context = ClientActivity.this;
-            clientWrangler.scanForDevices(devices -> clientWrangler.sendData(
-                    context,
-                    devices.get(0),
-                    "TestWifiSSID",
-                    "Password 123",
-                    "testUserIdFromPhone",
-                    "testDeviceIdFromPhone"
-            ));
+            clientWrangler.scanForDevices(
+                    devices -> {
+                        if (devices.isEmpty()) {
+                            Log.e("TUT", "no devices found");
+                            return;
+                        }
+
+                        clientWrangler.sendData(
+                                context,
+                                devices.get(0),
+                                "TestWifiSSID",
+                                "Password 123",
+                                FirebaseAuth.getInstance().getUid()
+                        );
+                    }
+            );
         }).start();
     }
 

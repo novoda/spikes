@@ -27,15 +27,21 @@ class VoiceShuttersClientWrangler {
         clientWrangler.stopScan();
     }
 
-    void sendData(Context context, BluetoothDevice device, String ssid, String password, String userId, String deviceId) {
+    void sendData(Context context, BluetoothDevice device, String ssid, String password, String userId) {
+
+        // TODO generate device id (cloud function?) then save it to firestore
+        // we then need to confirm it has been used for a device or not (and remove if not)
 
         ClientWrangler.Data data = new ClientWrangler.Data(SERVICE_UUID_VOICE_SHUTTER);
         data.put(CHAR_UUID_WIFI_SSID, ssid)
                 .put(CHAR_UUID_WIFI_PASS, password)
                 .put(CHAR_UUID_USER_ID, userId)
-                .put(CHAR_UUID_DEVICE_ID, deviceId);
+                .put(CHAR_UUID_DEVICE_ID, "deviceId-TODO generate this");
 
         clientWrangler.sendData(context, device, data);
+
+        // TODO after this data has been sent to the device, we need to save the device id to Firestore
+
     }
 
 }

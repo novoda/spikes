@@ -48,12 +48,12 @@ public class InkyPhatTest {
     @Rule
     public ExpectedException mExpectedException = ExpectedException.none();
 
-    private InkyPhatTriColourDisplay inkyPhat;
+    private InkyPhatV1 inkyPhat;
 
     @Before
     public void setUp() throws Exception {
         InkyPhat.Orientation orientation = InkyPhat.Orientation.LANDSCAPE;
-        inkyPhat = new InkyPhatTriColourDisplay(
+        inkyPhat = new InkyPhatV1(
                 mSpi,
                 mBusyGpio,
                 mResetGpio,
