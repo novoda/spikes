@@ -28,3 +28,6 @@ local.properties
 .gradle/
 # Mac OS
 .DS_Store
+
+# iOS files
+*.xcuserdatad/
