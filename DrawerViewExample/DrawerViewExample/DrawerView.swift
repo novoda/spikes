@@ -6,11 +6,13 @@
 import UIKit
 import TinyConstraints
 
+@available(iOS 10, *)
 public protocol DrawerViewDelegate: class {
   func filterViewDidCollapse(_ filterView: DrawerView)
   func filterViewWillExpand(_ filterView: DrawerView)
 }
 
+@available(iOS 10, *)
 // swiftlint:disable:next type_body_length we will revisit the internals of this class when adding more functionality
 open class DrawerView: UIView {
   public let peekView: UIView
