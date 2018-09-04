@@ -55,6 +55,7 @@ open class DrawerView: UIView {
     peekView.addGestureRecognizer(panToExpandGestureRecogniser)
     peekView.addGestureRecognizer(panToCollapseGestureRecogniser)
     panToCollapseGestureRecogniser.isEnabled = false
+    peekView.isUserInteractionEnabled = true
   }
 
   public required init?(coder aDecoder: NSCoder) {
