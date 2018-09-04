@@ -146,7 +146,7 @@ open class DrawerView: UIView {
     let fullLength: CGFloat = .initialOffset - upperAnimationLimit
     let currentFraction = (initialTouchPosition - gestureRecogniser.translation(in: superView).y)
       .asProportion(of: fullLength)
-      .clamped(between: 0.01, and: 0.99)
+      .clamped(to: 0.01...0.99)
     propertyAnimator.fractionComplete = currentFraction
   }
 
@@ -225,7 +225,7 @@ open class DrawerView: UIView {
     let fullLength: CGFloat = .initialOffset - upperAnimationLimit
     let currentFraction = (gestureRecogniser.translation(in: superView).y - initialTouchPosition)
       .asProportion(of: fullLength)
-      .clamped(between: 0.01, and: 0.99)
+      .clamped(to: 0.01...0.99)
     propertyAnimator.fractionComplete = currentFraction
   }
 
@@ -269,8 +269,12 @@ private extension CGFloat {
         return self / value
     }
     
-    func clamped(between minimum: CGFloat, and maximum: CGFloat) -> CGFloat {
-        return Swift.min(Swift.max(minimum, self), self)
+}
+
+private extension Comparable {
+    
+    func clamped(to limits: ClosedRange<Self>) -> Self {
+        return min(max(self, limits.lowerBound), limits.upperBound)
     }
     
 }
