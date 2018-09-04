@@ -13,6 +13,7 @@
 		9F7F4DAE213EC27A008D1933 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F7F4DAC213EC27A008D1933 /* Main.storyboard */; };
 		9F7F4DB0213EC27B008D1933 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F7F4DAF213EC27B008D1933 /* Assets.xcassets */; };
 		9F7F4DB3213EC27B008D1933 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F7F4DB1213EC27B008D1933 /* LaunchScreen.storyboard */; };
+		9F7F4DBB213EC347008D1933 /* DrawerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7F4DBA213EC347008D1933 /* DrawerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		9F7F4DAF213EC27B008D1933 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9F7F4DB2213EC27B008D1933 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9F7F4DB4213EC27B008D1933 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9F7F4DBA213EC347008D1933 /* DrawerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 			children = (
 				9F7F4DA8213EC27A008D1933 /* AppDelegate.swift */,
 				9F7F4DAA213EC27A008D1933 /* ViewController.swift */,
+				9F7F4DBA213EC347008D1933 /* DrawerView.swift */,
 				9F7F4DAC213EC27A008D1933 /* Main.storyboard */,
 				9F7F4DAF213EC27B008D1933 /* Assets.xcassets */,
 				9F7F4DB1213EC27B008D1933 /* LaunchScreen.storyboard */,
@@ -200,6 +203,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F7F4DBB213EC347008D1933 /* DrawerView.swift in Sources */,
 				9F7F4DAB213EC27A008D1933 /* ViewController.swift in Sources */,
 				9F7F4DA9213EC27A008D1933 /* AppDelegate.swift in Sources */,
 			);
@@ -348,7 +352,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = DrawerViewExample/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.oetkerdigital.backen.DrawerViewExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -363,7 +370,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = DrawerViewExample/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.oetkerdigital.backen.DrawerViewExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
