@@ -10,23 +10,16 @@ import UIKit
 
 class ViewController: UIViewController, DrawerViewDelegate {
     
-    let dimmingView = UIView()
+    private let peekView = UILabel()
+    private let contentView = UILabel()
+    private let dimmingView = UIView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let peekView = UILabel()
-        peekView.text = "Tap or drag to expand"
-        peekView.textAlignment = .center
-        peekView.backgroundColor = .red
-        
-        let contentView = UIView()
-        contentView.backgroundColor = .green
-        
-        view.addSubview(dimmingView)
-        dimmingView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
-        dimmingView.alpha = 0
-        dimmingView.edgesToSuperview()
+        setUpPeekView()
+        setUpContentView()
+        setUpDimmingView()
         
         let drawerView = DrawerView(peekView: peekView, contentView: contentView)
         drawerView.delegate = self
@@ -40,16 +33,10 @@ class ViewController: UIViewController, DrawerViewDelegate {
         peekView.trailingToSuperview()
         let animatingConstraint = peekView.bottom(to: view)
         
-        contentView.height(600)
         peekView.height(56)
         
         // Set the constraint that will be animated as part of the interaction
         drawerView.animatingConstraint = animatingConstraint
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func filterViewDidCollapse(_ filterView: DrawerView) {
@@ -63,7 +50,40 @@ class ViewController: UIViewController, DrawerViewDelegate {
             self.dimmingView.alpha = 1
         }.startAnimation()
     }
+    
+    private func setUpPeekView() {
+        peekView.text = "Tap or drag to expand"
+        peekView.textAlignment = .center
+        peekView.backgroundColor = .red
+    }
+    
+    private func setUpContentView() {
+        contentView.backgroundColor = .green
+        contentView.text = loremIpsum()
+        contentView.numberOfLines = 0
+    }
 
+    private func setUpDimmingView() {
+        view.addSubview(dimmingView)
+        dimmingView.backgroundColor = UIColor.black.withAlphaComponent(0.2)
+        dimmingView.alpha = 0
+        dimmingView.edgesToSuperview()
+    }
+    
+    private func loremIpsum() -> String {
+        return """
+        This adds a simple "DrawerView" or bottom sheet behaviour to iOS projects.
+        
+        The integration is relatively simple, and relies on constraints making it a bit more robust.
+        
+        To integrate it you must:
+        - Add a "peek view" which is the view always shown (red in the movie)
+        - Add a "content view" which can be shown when dragged (green; this is automatically scrollable)
+        - Set the constraint which will be animatable.
+        
+        The API includes a basic delegate which can be used to add a dimming background view, as shown.
+        """
+    }
 
 }
 
