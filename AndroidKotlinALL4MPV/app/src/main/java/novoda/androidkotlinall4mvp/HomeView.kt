@@ -7,33 +7,28 @@ import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.activity_main.view.*
 
 class HomeView @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr), Displayer {
-
-    private lateinit var displayerActions: DisplayerActions
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : LinearLayout(context, attrs, defStyleAttr) {
 
     override fun onFinishInflate() {
         super.onFinishInflate()
         orientation = VERTICAL
         gravity = Gravity.CENTER
-
-        button.setOnClickListener { displayerActions.requestLoad() }
     }
 
-    fun attach(displayerActions: DisplayerActions) {
-        this.displayerActions = displayerActions
+    fun display(model: HomeModel) {
+        when (model) {
+            is HomeModel.Loading -> label.text == "Loading..."
+            is HomeModel.Idle -> label.text = model.text
+            is HomeModel.Error -> label.text = "Error, sorry!"
+        }
     }
 
-    override fun displayContent(text: String) {
-        label.text = text
+    fun setEventReporter(report: (MainActivity.HomeEvent) -> Unit) {
+        button.setOnClickListener {
+            report(MainActivity.HomeEvent.SelectedLoadButton)
+        }
     }
 
-    override fun displayLoading() {
-        label.text = "Loading..."
-    }
-
-    override fun displayError() {
-        label.text = "Error, sorry!"
-    }
 }
 

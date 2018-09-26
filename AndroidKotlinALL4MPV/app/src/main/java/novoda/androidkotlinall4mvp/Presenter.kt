@@ -3,32 +3,29 @@ package novoda.androidkotlinall4mvp
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModel
 
-class Presenter(private val serviceClient: ServiceClient = ServiceClient()) {
+class Presenter(private val serviceClient: ServiceClient = ServiceClient()) : ViewModel() {
 
-    private val liveDataHomeModel: MutableLiveData<HomeModel> = MutableLiveData()
+    private val homeModel = object : MutableLiveData<HomeModel>() {
 
-    fun attach(displayer: Displayer, lifeCycleOwner: LifecycleOwner) {
-        liveDataHomeModel.observe(lifeCycleOwner, homeModelResponse(displayer))
-        serviceClient.attach(liveDataHomeModel)
-        displayer.attach(displayerActions())
+        init {
+            serviceClient.attach { postValue(it) }
+        }
+
     }
 
-    private fun displayerActions(): DisplayerActions {
-        return object : DisplayerActions {
-            override fun requestLoad() {
+    fun foo(lifecycleOwner: LifecycleOwner, display: (HomeModel) -> Unit) {
+        homeModel.observe(lifecycleOwner, Observer { display(it!!) })
+    }
+
+    fun reportEvent(event: HomeEvent) {
+        when (event) {
+            is HomeEvent.SelectedLoadButton -> {
+                homeModel.postValue(HomeModel.Loading)
                 serviceClient.loadContent()
             }
         }
     }
 
-    private fun homeModelResponse(displayer: Displayer): Observer<HomeModel> {
-        return Observer {
-            when (it) {
-                is HomeModel.Loading -> displayer.displayLoading()
-                is HomeModel.Idle -> displayer.displayContent(it.text)
-                is HomeModel.Error -> displayer.displayError()
-            }
-        }
-    }
 }

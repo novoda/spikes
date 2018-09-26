@@ -6,14 +6,15 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val presenter: Presenter = Presenter()
+    private val presenter: Presenter = TODO()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        presenter.attach(displayer = home_view, lifeCycleOwner = this)
+        presenter.foo(this, home_view::display)
 
-        button.setOnClickListener { presenter.loadContent() }
+        home_view.setEventReporter(presenter::reportEvent)
     }
+
 }
