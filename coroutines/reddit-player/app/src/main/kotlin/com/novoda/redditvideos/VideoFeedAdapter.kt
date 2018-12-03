@@ -7,6 +7,7 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
+import com.novoda.redditvideos.model.VideoEntry
 import com.novoda.redditvideos.support.view.revealDelayed
 import com.novoda.redditvideos.support.view.inflateDetached
 import com.novoda.redditvideos.support.view.load

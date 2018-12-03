@@ -3,15 +3,16 @@ package com.novoda.redditvideos
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.novoda.reddit.data.ApiAware
-import com.novoda.reddit.data.Listing
-import com.novoda.reddit.data.Thing
 import com.novoda.redditvideos.VideoFeedState.*
-import kotlinx.coroutines.*
-import retrofit2.Response
+import com.novoda.redditvideos.model.CombinedLiveData
+import com.novoda.redditvideos.model.Result
+import com.novoda.redditvideos.model.networkFetch
+import com.novoda.redditvideos.support.lifecycle.map
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import retrofit2.Retrofit
-import java.net.URLEncoder
 
 class VideoFeedModel @JvmOverloads constructor(
     application: Application,
@@ -22,24 +23,19 @@ class VideoFeedModel @JvmOverloads constructor(
 
     override val coroutineContext = GlobalScope.coroutineContext + job
 
-    private val _state = MutableLiveData<VideoFeedState>().apply {
-        value = Loading
-        reload()
+    private val data = CombinedLiveData(Result.Pending, job, { networkFetch(listing) })
+        .also { it.load() }
+
+    val state: LiveData<VideoFeedState> = data.map { result ->
+        when (result) {
+            is Result.Pending -> Loading
+            is Result.Success -> Idle(videos = result.value)
+            is Result.Failure -> Failure(result.exception.message ?: "Unknown error")
+        }
     }
 
-    val state: LiveData<VideoFeedState> = _state
-
     fun reload() {
-        launch {
-            val response = listing.videos().execute()
-            val newState = when {
-                response.isSuccessful -> Idle(videos = response.posts.map { it.toVideoEntry() })
-                else -> Failure(response.message())
-            }
-            withContext(Dispatchers.Main) {
-                _state.value = newState
-            }
-        }
+        data.load()
     }
 
     override fun onCleared() {
@@ -48,12 +44,3 @@ class VideoFeedModel @JvmOverloads constructor(
     }
 
 }
-
-private val Response<Listing<Thing.Post>>.posts get() = body()?.children ?: emptyList()
-
-private fun Thing.Post.toVideoEntry() = VideoEntry(
-    title = title,
-    thumbnail = Thumbnail(preview.images.getOrNull(0)?.source?.url?.decode() ?: "No image") // TODO() improve with error image
-)
-
-private fun String.decode() = replace("&amp;", "&")

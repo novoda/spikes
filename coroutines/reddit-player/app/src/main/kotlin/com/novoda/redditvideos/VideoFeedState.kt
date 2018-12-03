@@ -1,5 +1,7 @@
 package com.novoda.redditvideos
 
+import com.novoda.redditvideos.model.VideoEntry
+
 sealed class VideoFeedState {
 
     object Loading : VideoFeedState()
@@ -14,9 +16,3 @@ sealed class VideoFeedState {
 
 }
 
-data class VideoEntry(
-    val title: String,
-    val thumbnail: Thumbnail
-)
-
-inline class Thumbnail(val value: String)
