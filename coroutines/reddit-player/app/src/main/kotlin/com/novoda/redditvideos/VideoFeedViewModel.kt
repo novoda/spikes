@@ -14,7 +14,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import retrofit2.Retrofit
 
-class VideoFeedModel @JvmOverloads constructor(
+class VideoFeedViewModel @JvmOverloads constructor(
     application: Application,
     override val retrofit: Retrofit = application.retrofit
 ) : AndroidViewModel(application), CoroutineScope, ApiAware {

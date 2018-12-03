@@ -13,7 +13,7 @@ class VideoFeedActivity : AppCompatActivity() {
 
     private val feedAdapter = VideoFeedAdapter()
 
-    private val viewModel by lazy { ViewModelProviders.of(this).get<VideoFeedModel>() }
+    private val viewModel by lazy { ViewModelProviders.of(this).get<VideoFeedViewModel>() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

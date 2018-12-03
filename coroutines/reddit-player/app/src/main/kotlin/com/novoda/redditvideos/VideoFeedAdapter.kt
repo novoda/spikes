@@ -63,7 +63,7 @@ private fun VideoItemViewHolder.bind(videoEntry: VideoEntry) {
 
 private fun FailureViewHolder.bind(failure: VideoFeedState.Failure) {
     errorMessage.text = failure.message
-    val viewModel by lazy { ViewModelProviders.of(itemView.context as FragmentActivity).get<VideoFeedModel>() }
+    val viewModel by lazy { ViewModelProviders.of(itemView.context as FragmentActivity).get<VideoFeedViewModel>() }
     retryButton.setOnClickListener {
         viewModel.reload()
     }
