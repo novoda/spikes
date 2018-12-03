@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import com.novoda.reddit.data.ApiAware
 import com.novoda.redditvideos.VideoFeedState.*
 import com.novoda.redditvideos.model.*
-import com.novoda.redditvideos.support.functional.then
+import com.novoda.redditvideos.support.functional.andThen
 import com.novoda.redditvideos.support.lifecycle.map
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
@@ -20,14 +20,19 @@ class VideoFeedViewModel @JvmOverloads constructor(
 ) : AndroidViewModel(application), CoroutineScope, ApiAware, DatabaseAware {
 
     private val job = Job()
-
     override val coroutineContext = GlobalScope.coroutineContext + job
 
+    private val localVideos = { localFetch(videos) }
+    private val networkVideos = { networkFetch(listing) }
+    private val refreshCacheOnSuccess = { result: Result<List<Video>> ->
+        if (result is Result.Success) videos.replaceCache(result.value)
+    }
+
     private val data = CombinedLiveData(
-        Result.Pending,
-        job,
-        { localFetch(application.database.videoDao()) },
-        { networkFetch(listing) }.then { if(it is Result.Success) persist(videos, it.value) }
+        initialValue = Result.Pending,
+        job = job,
+        getFirst = localVideos,
+        getSecond = networkVideos.andThen(refreshCacheOnSuccess)
     ).also { it.load() }
 
     val state: LiveData<VideoFeedState> = data.map { result ->

@@ -21,8 +21,9 @@ fun localFetch(videoDao: VideoDao) : Result<List<Video>> = try {
     Result.Failure(e)
 }
 
-fun persist(videoDao: VideoDao, videos: List<Video>) {
-    videoDao.insertAll(videos.map { it.toVideoEntity() })
+fun VideoDao.replaceCache(videos: List<Video>) {
+    clear()
+    insertAll(videos.map { it.toVideoEntity() })
 }
 
 data class NetworkError(val code: Int, val errorMessage: String) : RuntimeException(errorMessage)
