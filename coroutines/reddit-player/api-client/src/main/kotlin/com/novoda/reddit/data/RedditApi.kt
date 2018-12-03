@@ -10,11 +10,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
-interface ApiAware {
+class RedditApi(private val retrofit: Retrofit) {
 
-    val retrofit: Retrofit
-
-    val listing: ListingService get() = retrofit.create(ListingService::class.java)
+    val listingService: ListingService get() = retrofit.create(ListingService::class.java)
 
 }
 

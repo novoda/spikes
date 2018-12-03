@@ -34,10 +34,11 @@ class VideoFeedActivity : AppCompatActivity() {
     private fun render(state: VideoFeedState) {
         feedAdapter.state = state
         when (state) {
-            is VideoFeedState.Failure -> Log.e("TAG", state.message, state.exception)
+            is VideoFeedState.Failure -> Log.e(TAG, state.message, state.exception)
             !is VideoFeedState.Loading -> refresh.isRefreshing = false
         }
     }
 
 }
 
+private val TAG = VideoFeedActivity::class.java.simpleName

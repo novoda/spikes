@@ -27,11 +27,3 @@ data class VideoEntity(
     val title: String,
     val thumbnail: String
 )
-
-interface DatabaseAware {
-
-    val database: AppDatabase
-
-    val videos: VideoDao get() = database.videoDao()
-
-}

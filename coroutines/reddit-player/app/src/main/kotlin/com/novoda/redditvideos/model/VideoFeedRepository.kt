@@ -5,18 +5,19 @@ import com.novoda.reddit.data.ListingService
 import com.novoda.reddit.data.Thing
 import retrofit2.Response
 
-fun networkFetch(listing: ListingService): Result<List<Video>> = try {
-    val response: Response<Listing<Thing.Post>> = listing.videos().execute()
-    when {
-        response.isSuccessful -> Result.Success(response.posts.map { it.toVideoEntry() })
-        else -> Result.Failure(NetworkError(response.code(), response.message()))
+fun ListingService.findRemoveVideos(): Result<List<Video>> = try {
+    videos().execute().run {
+        when {
+            isSuccessful -> Result.Success(posts.map { it.toVideoEntry() })
+            else -> Result.Failure(NetworkError(code(), message()))
+        }
     }
 } catch (e: Exception) {
     Result.Failure(e)
 }
 
-fun localFetch(videoDao: VideoDao) : Result<List<Video>> = try {
-    Result.Success(videoDao.getAll().map { it.toVideoEntry() })
+fun VideoDao.findLocalVideos(): Result<List<Video>> = try {
+    Result.Success(getAll().map { it.toVideoEntry() })
 } catch (e: Exception) {
     Result.Failure(e)
 }

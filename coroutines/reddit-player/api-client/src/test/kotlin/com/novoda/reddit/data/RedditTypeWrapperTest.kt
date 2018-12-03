@@ -7,13 +7,11 @@ internal class RedditTypeWrapperTest {
 
     @Test
     fun `loads list of videos`() {
-        val videos = TestApiAware.listing.videos().execute().body()
+        val videos = testRedditApi.listingService.videos().execute().body()
 
         assertThat(videos).isNotNull()
     }
 
 }
 
-object TestApiAware : ApiAware {
-    override val retrofit = createRetrofit(baseUrl = "https://reddit.com")
-}
+private val testRedditApi = RedditApi(createRetrofit(baseUrl = "https://reddit.com"))
