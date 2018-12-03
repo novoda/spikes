@@ -6,10 +6,10 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 
 class CombinedLiveData<T>(
-    private val initialValue: T,
+    initialValue: T,
     job: Job,
-    val getFirst: () -> T,
-    val getSecond: () -> T
+    val getLocal: () -> T,
+    val getRemote: () -> T
 ) : LiveData<T>(), CoroutineScope {
 
     override val coroutineContext = GlobalScope.coroutineContext + job
@@ -18,14 +18,13 @@ class CombinedLiveData<T>(
         value = initialValue
     }
 
-    fun reload() {
-        value = initialValue
-        load()
+    fun reload() = launch(Main) {
+        value = async(IO) { getRemote() }.await()
     }
 
     fun load() = launch(Main) {
-        value = async(IO) { getFirst() }.await()
-        value = async(IO) { getSecond() }.await()
+        value = async(IO) { getLocal() }.await()
+        value = async(IO) { getRemote() }.await()
     }
 
 }

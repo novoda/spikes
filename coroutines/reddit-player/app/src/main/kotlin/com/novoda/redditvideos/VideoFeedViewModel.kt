@@ -31,8 +31,8 @@ class VideoFeedViewModel @JvmOverloads constructor(
     private val data = CombinedLiveData(
         initialValue = Result.Pending,
         job = job,
-        getFirst = localVideos,
-        getSecond = networkVideos.andThen(refreshCacheOnSuccess)
+        getLocal = localVideos,
+        getRemote = networkVideos.andThen(refreshCacheOnSuccess)
     ).also { it.load() }
 
     val state: LiveData<VideoFeedState> = data.map { result ->

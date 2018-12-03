@@ -24,11 +24,18 @@ class VideoFeedActivity : AppCompatActivity() {
         content.layoutManager = LinearLayoutManager(this)
         content.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
-        viewModel.state.observe(this) { newState ->
-            feedAdapter.state = newState
-            if (newState is VideoFeedState.Failure) {
-                Log.e("TAG", newState.message, newState.exception)
-            }
+        refresh.setOnRefreshListener {
+            viewModel.reload()
+        }
+
+        viewModel.state.observe(this, ::render)
+    }
+
+    private fun render(state: VideoFeedState) {
+        feedAdapter.state = state
+        when (state) {
+            is VideoFeedState.Failure -> Log.e("TAG", state.message, state.exception)
+            !is VideoFeedState.Loading -> refresh.isRefreshing = false
         }
     }
 
