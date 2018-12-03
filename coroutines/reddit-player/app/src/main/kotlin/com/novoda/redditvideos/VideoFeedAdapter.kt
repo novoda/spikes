@@ -7,7 +7,7 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
-import com.novoda.redditvideos.model.VideoEntry
+import com.novoda.redditvideos.model.Video
 import com.novoda.redditvideos.support.view.revealDelayed
 import com.novoda.redditvideos.support.view.inflateDetached
 import com.novoda.redditvideos.support.view.load
@@ -56,9 +56,9 @@ private class LoadingViewHolder(parent: ViewGroup) : VideoFeedViewHolder(parent,
 private class VideoItemViewHolder(parent: ViewGroup) : VideoFeedViewHolder(parent, R.layout.item_video_entry)
 private class FailureViewHolder(parent: ViewGroup) : VideoFeedViewHolder(parent, R.layout.state_failure)
 
-private fun VideoItemViewHolder.bind(videoEntry: VideoEntry) {
-    title.text = videoEntry.title
-    thumbnail.load(videoEntry.thumbnail)
+private fun VideoItemViewHolder.bind(video: Video) {
+    title.text = video.title
+    thumbnail.load(video.thumbnail)
 }
 
 private fun FailureViewHolder.bind(failure: VideoFeedState.Failure) {

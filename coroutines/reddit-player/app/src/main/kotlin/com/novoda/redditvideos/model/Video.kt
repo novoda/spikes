@@ -1,6 +1,7 @@
 package com.novoda.redditvideos.model
 
-data class VideoEntry(
+data class Video(
+    val id : String,
     val title: String,
     val thumbnail: Thumbnail
 )

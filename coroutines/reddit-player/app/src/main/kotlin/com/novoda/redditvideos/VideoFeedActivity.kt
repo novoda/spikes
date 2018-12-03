@@ -1,6 +1,7 @@
 package com.novoda.redditvideos
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
@@ -25,6 +26,9 @@ class VideoFeedActivity : AppCompatActivity() {
 
         viewModel.state.observe(this) { newState ->
             feedAdapter.state = newState
+            if (newState is VideoFeedState.Failure) {
+                Log.e("TAG", newState.message, newState.exception)
+            }
         }
     }
 

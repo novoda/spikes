@@ -2,11 +2,14 @@ package com.novoda.redditvideos.model
 
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 
 class CombinedLiveData<T>(
     private val initialValue: T,
     job: Job,
-    private vararg val sources: () -> T
+    val getFirst: () -> T,
+    val getSecond: () -> T
 ) : LiveData<T>(), CoroutineScope {
 
     override val coroutineContext = GlobalScope.coroutineContext + job
@@ -15,18 +18,14 @@ class CombinedLiveData<T>(
         value = initialValue
     }
 
-    fun load(reset: Boolean = false) {
-        if (reset) {
-            value = initialValue
-        }
-        sources.forEach { fetch ->
-            launch {
-                val result = fetch()
-                withContext(Dispatchers.Main) {
-                    value = result
-                }
-            }
-        }
+    fun reload() {
+        value = initialValue
+        load()
+    }
+
+    fun load() = launch(Main) {
+        value = async(IO) { getFirst() }.await()
+        value = async(IO) { getSecond() }.await()
     }
 
 }
