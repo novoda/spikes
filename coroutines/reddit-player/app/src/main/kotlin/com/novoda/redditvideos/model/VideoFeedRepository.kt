@@ -31,7 +31,7 @@ data class NetworkError(val code: Int, val errorMessage: String) : RuntimeExcept
 
 sealed class Result<out T> {
     object Pending : Result<Nothing>()
-    data class Success<T>(val value: T) : Result<T>()
+    data class Success<T>(val success: T) : Result<T>()
     data class Failure(val exception: Exception) : Result<Nothing>()
 }
 

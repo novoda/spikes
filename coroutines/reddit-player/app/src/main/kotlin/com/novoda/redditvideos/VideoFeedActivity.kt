@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.novoda.redditvideos.VideoFeedState.Loading
+import com.novoda.redditvideos.VideoFeedState.LoadingWithCache
 import com.novoda.redditvideos.support.lifecycle.observe
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -33,10 +35,8 @@ class VideoFeedActivity : AppCompatActivity() {
 
     private fun render(state: VideoFeedState) {
         feedAdapter.state = state
-        when (state) {
-            is VideoFeedState.Failure -> Log.e(TAG, state.message, state.exception)
-            !is VideoFeedState.Loading -> refresh.isRefreshing = false
-        }
+        if (state is VideoFeedState.Failure) Log.e(TAG, state.message, state.exception)
+        refresh.isRefreshing = state is VideoFeedState.LoadingWithCache
     }
 
 }

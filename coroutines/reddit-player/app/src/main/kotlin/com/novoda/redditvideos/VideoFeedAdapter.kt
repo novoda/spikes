@@ -26,21 +26,21 @@ internal class VideoFeedAdapter : RecyclerView.Adapter<VideoFeedViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, position: Int) = when (state) {
         is VideoFeedState.Loading -> LoadingViewHolder(parent)
-        is VideoFeedState.Idle -> VideoItemViewHolder(parent)
+        is VideoFeedState.Idle, is VideoFeedState.LoadingWithCache -> VideoItemViewHolder(parent)
         is VideoFeedState.Failure -> FailureViewHolder(parent)
     }
 
     override fun getItemCount() = (state as? VideoFeedState.HasVideos)?.videos?.size ?: 1
 
     override fun onBindViewHolder(viewHolder: VideoFeedViewHolder, position: Int) = when (viewHolder) {
-        is VideoItemViewHolder -> viewHolder.bind((state as VideoFeedState.Idle).videos[position])
+        is VideoItemViewHolder -> viewHolder.bind((state as VideoFeedState.HasVideos).videos[position])
         is LoadingViewHolder -> viewHolder.bind()
         is FailureViewHolder -> viewHolder.bind(state as VideoFeedState.Failure)
     }
 
     override fun getItemViewType(position: Int) = when(state) {
         is VideoFeedState.Loading -> 0
-        is VideoFeedState.Idle -> 1
+        is VideoFeedState.Idle, is VideoFeedState.LoadingWithCache -> 1
         is VideoFeedState.Failure -> 2
     }
 
