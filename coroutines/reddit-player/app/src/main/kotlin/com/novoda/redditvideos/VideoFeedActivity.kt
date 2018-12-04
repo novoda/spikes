@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.novoda.redditvideos.VideoFeedState.Loading
 import com.novoda.redditvideos.VideoFeedState.LoadingWithCache
 import com.novoda.redditvideos.support.lifecycle.observe
@@ -35,7 +36,14 @@ class VideoFeedActivity : AppCompatActivity() {
 
     private fun render(state: VideoFeedState) {
         feedAdapter.state = state
-        if (state is VideoFeedState.Failure) Log.e(TAG, state.message, state.exception)
+        if (state is VideoFeedState.HasFailure) {
+            Log.e(TAG, state.exception.message, state.exception)
+        }
+        if (state is VideoFeedState.FailureWithCache) {
+            Snackbar.make(content, state.exception.message ?: "Unknonw error", Snackbar.LENGTH_INDEFINITE)
+                .setAction("Retry") { viewModel.reload() }
+                .show()
+        }
         refresh.isRefreshing = state is VideoFeedState.LoadingWithCache
     }
 

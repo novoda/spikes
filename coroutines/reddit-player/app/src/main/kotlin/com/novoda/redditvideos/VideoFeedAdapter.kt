@@ -27,7 +27,7 @@ internal class VideoFeedAdapter : RecyclerView.Adapter<VideoFeedViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, position: Int) = when (state) {
         is Loading -> LoadingViewHolder(parent)
-        is Idle, is VideoFeedState.LoadingWithCache -> VideoItemViewHolder(parent)
+        is Idle, is LoadingWithCache, is FailureWithCache -> VideoItemViewHolder(parent)
         is Failure -> FailureViewHolder(parent)
     }
 
@@ -41,8 +41,8 @@ internal class VideoFeedAdapter : RecyclerView.Adapter<VideoFeedViewHolder>() {
 
     override fun getItemViewType(position: Int) = when (state) {
         is Loading -> 0
-        is Idle, is VideoFeedState.LoadingWithCache -> 1
-        is Failure -> 2
+        is Failure -> 1
+        is Idle, is LoadingWithCache, is FailureWithCache -> 2
     }
 
 }
@@ -64,7 +64,7 @@ private fun VideoItemViewHolder.bind(video: Video) {
 }
 
 private fun FailureViewHolder.bind(failure: Failure) {
-    errorMessage.text = failure.message
+    errorMessage.text = failure.exception.message
     retryButton.setOnClickListener {
         viewModel.reload()
     }

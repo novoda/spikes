@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.novoda.reddit.data.ListingService
+import com.novoda.redditvideos.VideoFeedState.*
 import com.novoda.redditvideos.model.*
 import com.novoda.redditvideos.support.functional.andThen
 import kotlinx.coroutines.*
@@ -49,15 +50,13 @@ private class VideoLiveData(
     override val coroutineContext = GlobalScope.coroutineContext + job
 
     init {
-        value = VideoFeedState.Loading
+        value = Loading
     }
 
     fun reload() = launch(Dispatchers.Main) {
         value = when(val state = value) {
-            is VideoFeedState.HasVideos -> VideoFeedState.LoadingWithCache(
-                state.videos
-            )
-            else -> VideoFeedState.Loading
+            is VideoFeedState.HasVideos -> LoadingWithCache(state.videos)
+            else -> Loading
         }
         value = async(Dispatchers.IO) { getRemote().toState(VideoFeedState::Idle) }.await()
     }
@@ -67,12 +66,11 @@ private class VideoLiveData(
         value = async(Dispatchers.IO) { getRemote().toState(VideoFeedState::Idle) }.await()
     }
 
-    private fun Result<List<Video>>.toState(onSuccess: (List<Video>) -> VideoFeedState) = when(this) {
-        is Result.Pending -> VideoFeedState.Loading
+    private fun Result<List<Video>>.toState(onSuccess: (List<Video>) -> VideoFeedState): VideoFeedState = when(this) {
+        is Result.Pending -> Loading
         is Result.Success -> onSuccess(success)
-        is Result.Failure -> VideoFeedState.Failure(
-            exception.message ?: "Unknown", exception
-        )
+        is Result.Failure -> value.let { it as? HasVideos }
+            ?.let { FailureWithCache(it.videos, exception) } ?: Failure(exception)
     }
 
 }
