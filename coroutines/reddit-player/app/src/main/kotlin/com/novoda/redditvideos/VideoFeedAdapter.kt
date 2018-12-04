@@ -25,11 +25,14 @@ internal class VideoFeedAdapter : RecyclerView.Adapter<VideoFeedViewHolder>() {
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, position: Int) = when (state) {
-        is Loading -> LoadingViewHolder(parent)
-        is Idle, is LoadingWithCache, is FailureWithCache -> VideoItemViewHolder(parent)
-        is Failure -> FailureViewHolder(parent)
+    private val stateType get() = when (state) {
+        is VideoFeedState.Loading -> StateType.Loading
+        is Idle, is LoadingWithCache, is FailureWithCache -> StateType.VideoItem
+        is VideoFeedState.Failure -> StateType.Failure
     }
+
+    override fun onCreateViewHolder(parent: ViewGroup, position: Int) =
+        stateType.createViewHolder(parent)
 
     override fun getItemCount() = (state as? VideoFeedState.HasVideos)?.videos?.size ?: 1
 
@@ -39,11 +42,7 @@ internal class VideoFeedAdapter : RecyclerView.Adapter<VideoFeedViewHolder>() {
         is FailureViewHolder -> viewHolder.bind(state as Failure)
     }
 
-    override fun getItemViewType(position: Int) = when (state) {
-        is Loading -> 0
-        is Failure -> 1
-        is Idle, is LoadingWithCache, is FailureWithCache -> 2
-    }
+    override fun getItemViewType(position: Int) = stateType.ordinal
 
 }
 
@@ -53,10 +52,13 @@ sealed class VideoFeedViewHolder(
     override val containerView: View = parent.inflateDetached(layoutId)
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer
 
+private enum class StateType(val createViewHolder: (parent: ViewGroup) -> VideoFeedViewHolder) {
+    Loading(::LoadingViewHolder), VideoItem(::VideoItemViewHolder), Failure(::FailureViewHolder)
+}
+
 private class LoadingViewHolder(parent: ViewGroup) : VideoFeedViewHolder(parent, R.layout.state_loading)
 private class VideoItemViewHolder(parent: ViewGroup) : VideoFeedViewHolder(parent, R.layout.item_video_entry)
 private class FailureViewHolder(parent: ViewGroup) : VideoFeedViewHolder(parent, R.layout.state_failure)
-
 
 private fun VideoItemViewHolder.bind(video: Video) {
     title.text = video.title
