@@ -11,6 +11,8 @@ import com.novoda.reddit.data.Thing
 import com.novoda.redditvideos.model.VideoFeedState.LoadState.Loading
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.consume
+import kotlinx.coroutines.channels.consumeEach
 import retrofit2.Call
 import retrofit2.Response
 import kotlin.coroutines.CoroutineContext
@@ -20,7 +22,8 @@ interface DataContext : CoroutineScope {
     val mainDispatcher: CoroutineDispatcher
     val ioDispatcher: CoroutineDispatcher
     val listingService: ListingService
-    override val coroutineContext: CoroutineContext get() = ioDispatcher
+    val job: Job
+    override val coroutineContext: CoroutineContext get() = ioDispatcher + job
 
     fun <K, V> DataSource<K, V>.toPagedList() =
         PagedList.Builder(this@toPagedList, 25)
@@ -34,10 +37,8 @@ fun DataContext.videoFeed(): LiveData<VideoFeedState> = MutableLiveData<VideoFee
     launch {
         val remoteDataSource = NetworkDataSource(listingService, CoroutineScope(ioDispatcher))
         val remoteVideos = remoteDataSource.map { it.toVideo() }.toPagedList()
-        withContext(mainDispatcher) {
-            value = VideoFeedState(Loading, remoteVideos)
-        }
-        for (loadState in remoteDataSource.loadState) {
+        while (isActive) {
+            val loadState = remoteDataSource.loadState.receive()
             withContext(mainDispatcher) {
                 value = VideoFeedState(loadState, remoteVideos)
             }

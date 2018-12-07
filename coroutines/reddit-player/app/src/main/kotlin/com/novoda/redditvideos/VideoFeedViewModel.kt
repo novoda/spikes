@@ -15,10 +15,10 @@ internal class VideoFeedViewModel @JvmOverloads constructor(
     videoDao: VideoDao = app.database.videoDao(),
     override val listingService: ListingService = app.apiClient.listingService,
     override val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
-    override val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    override val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    override val job: Job = Job()
 ) : AndroidViewModel(app), DataContext {
 
-    private val job = Job()
     override val coroutineContext = GlobalScope.coroutineContext + job
 
     val state: LiveData<VideoFeedState> = videoFeed()

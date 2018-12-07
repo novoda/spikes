@@ -1,5 +1,6 @@
 package com.novoda.redditvideos
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.KStubbing
 import com.nhaarman.mockitokotlin2.doReturn
@@ -9,17 +10,24 @@ import com.novoda.reddit.data.ListingService
 import com.novoda.reddit.data.Preview
 import com.novoda.reddit.data.Thing
 import com.novoda.redditvideos.model.VideoDao
+import com.novoda.redditvideos.model.VideoFeedState
+import com.novoda.redditvideos.model.VideoFeedState.LoadState.Idle
+import com.novoda.redditvideos.model.VideoFeedState.LoadState.Loading
 import com.novoda.testsupport.stub
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.runBlocking
+import org.junit.Rule
 import org.junit.Test
 import retrofit2.Call
 import retrofit2.Response
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.novoda.redditvideos.model.VideoFeedState
-import org.junit.Rule
 
 class VideoFeedViewModelTest {
 
-    @Rule @JvmField val instantExecutorRule = InstantTaskExecutorRule()
+    @Rule
+    @JvmField
+    val instantExecutorRule = InstantTaskExecutorRule()
 
     @Test
     fun `should load data from the network`() = givenAViewModel(
@@ -28,11 +36,13 @@ class VideoFeedViewModelTest {
             on { videos() } doReturn successCall
         }
     ) { viewModel ->
+        runBlocking {
+            val statesChannel = Channel<VideoFeedState.LoadState>()
+            viewModel.state.observeForever { statesChannel.offer(it.loadState) }
+            val states = listOf(statesChannel.receive(), statesChannel.receive())
 
-        assertThat(viewModel.state.value).isEqualTo(VideoFeedState(
-            data = mock(),
-            loadState = VideoFeedState.LoadState.Idle
-        ))
+            assertThat(states).containsExactly(Loading, Idle)
+        }
     }
 
 
@@ -61,7 +71,13 @@ private fun givenAViewModel(
     withListingService: ListingService = stub(),
     f: (VideoFeedViewModel) -> Unit
 ) {
-    val viewModel = VideoFeedViewModel(stub(), withVideoDao, withListingService)
+    val viewModel = VideoFeedViewModel(
+        app = stub(),
+        videoDao = withVideoDao,
+        job = Job(),
+        listingService = withListingService,
+        mainDispatcher = Dispatchers.Default
+    )
     f(viewModel)
 }
 
