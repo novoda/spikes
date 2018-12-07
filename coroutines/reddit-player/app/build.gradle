@@ -36,7 +36,8 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "com.google.android.material:material:1.0.0-rc01"
+    implementation "androidx.paging:paging-runtime:$paging_version"
+    implementation "com.google.android.material:material:1.1.0-alpha01"
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
@@ -47,10 +48,24 @@ dependencies {
     }
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.3.2"
+    testImplementation "androidx.paging:paging-common:$paging_version"
+    testImplementation "androidx.arch.core:core-testing:$lifecycle_version"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
+    testImplementation "com.google.truth:truth:0.42"
 
     androidTestImplementation 'androidx.test:runner:1.1.1-alpha01'
     androidTestImplementation 'androidx.test:core:1.1.0-alpha01'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1-alpha01'
+}
+
+
+configurations.all { config ->
+    config.resolutionStrategy.dependencySubstitution {
+        if (config.name.toLowerCase().contains('test')) {
+
+            substitute module('org.slf4j:slf4j-simple:1.6.1') with module('org.slf4j:slf4j-nop:1.6.1')
+        }
+    }
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {

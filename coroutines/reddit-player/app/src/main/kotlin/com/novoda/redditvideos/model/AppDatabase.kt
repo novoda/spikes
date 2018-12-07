@@ -1,5 +1,6 @@
 package com.novoda.redditvideos.model
 
+import androidx.paging.DataSource
 import androidx.room.*
 
 @Database(entities = [VideoEntity::class], version = 1)
@@ -11,7 +12,7 @@ abstract class AppDatabase : RoomDatabase() {
 interface VideoDao {
 
     @Query("SELECT * FROM video_entry")
-    fun getAll(): List<VideoEntity>
+    fun findVideos(): DataSource.Factory<Int, VideoEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(entries: List<VideoEntity>)

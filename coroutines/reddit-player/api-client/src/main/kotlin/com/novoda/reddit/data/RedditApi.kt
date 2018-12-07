@@ -9,6 +9,7 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 class RedditApi(private val retrofit: Retrofit) {
 
@@ -19,7 +20,10 @@ class RedditApi(private val retrofit: Retrofit) {
 interface ListingService {
 
     @GET("/r/videos.json")
-    fun videos(): Call<Listing<Thing.Post>>
+    fun videos(
+        @Query("after") after: String? = null,
+        @Query("before") before: String? = null
+    ): Call<Listing<Thing.Post>>
 
 }
 
@@ -73,7 +77,11 @@ sealed class RedditType
 
 data class Unknown(val kind: String, val data: JsonElement) : RedditType()
 
-data class Listing<T : Thing>(val children: List<T>) : RedditType()
+data class Listing<T : Thing>(
+    val children: List<T>,
+    val after: String? = null,
+    val before: String? = null
+) : RedditType()
 
 sealed class Thing : RedditType() {
     data class Post(
