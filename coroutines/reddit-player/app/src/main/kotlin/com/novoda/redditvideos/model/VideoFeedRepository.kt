@@ -98,7 +98,7 @@ private val Response<Listing<Thing.Post>>.posts get() = body()?.children ?: empt
 
 private fun Thing.Post.toVideo() = Video(
     title = title,
-    thumbnail = Thumbnail(
+    previewUrl = PreviewUrl(
         preview.images.getOrNull(0)?.source?.url?.decode() ?: "No image"
     ),
     id = name

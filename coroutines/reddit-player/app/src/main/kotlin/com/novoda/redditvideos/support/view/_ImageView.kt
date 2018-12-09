@@ -2,10 +2,10 @@ package com.novoda.redditvideos.support.view
 
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-import com.novoda.redditvideos.model.Thumbnail
+import com.novoda.redditvideos.model.PreviewUrl
 
-fun ImageView.load(thumbnail: Thumbnail) {
+fun ImageView.load(previewUrl: PreviewUrl) {
     Glide.with(this)
-        .load(thumbnail.value)
+        .load(previewUrl.value)
         .into(this)
 }

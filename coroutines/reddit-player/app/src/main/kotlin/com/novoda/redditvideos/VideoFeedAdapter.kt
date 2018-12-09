@@ -8,7 +8,6 @@ import androidx.lifecycle.get
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.novoda.redditvideos.model.Thumbnail
 import com.novoda.redditvideos.model.Video
 import com.novoda.redditvideos.support.view.inflateDetached
 import com.novoda.redditvideos.support.view.load
@@ -37,5 +36,5 @@ class VideoFeedViewHolder(
 
 private fun VideoFeedViewHolder.bind(video: Video) {
     title.text = video.title
-    thumbnail.load(video.thumbnail)
+    thumbnail.load(video.previewUrl)
 }
