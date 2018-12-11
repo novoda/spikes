@@ -39,7 +39,7 @@ fun createRetrofit(
 private fun createOkHttpClient() = OkHttpClient.Builder()
     .build()
 
-private fun createGson() = GsonBuilder()
+fun createGson() = GsonBuilder()
     .registerTypeAdapterFactory(KindAdapterFactory)
     .create()
 

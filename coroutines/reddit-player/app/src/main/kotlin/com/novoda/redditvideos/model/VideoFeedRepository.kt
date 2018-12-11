@@ -11,8 +11,6 @@ import com.novoda.reddit.data.Thing
 import com.novoda.redditvideos.model.VideoFeedState.LoadState.Loading
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.consume
-import kotlinx.coroutines.channels.consumeEach
 import retrofit2.Call
 import retrofit2.Response
 import kotlin.coroutines.CoroutineContext
@@ -39,7 +37,7 @@ fun DataContext.videoFeed(): LiveData<VideoFeedState> = MutableLiveData<VideoFee
         val remoteVideos = remoteDataSource.map { it.toVideo() }.toPagedList()
         while (isActive) {
             val loadState = remoteDataSource.loadState.receive()
-            withContext(mainDispatcher) {
+            if (loadState != value?.loadState) withContext(mainDispatcher) {
                 value = VideoFeedState(loadState, remoteVideos)
             }
         }
@@ -57,6 +55,7 @@ data class VideoFeedState(
     }
 }
 
+
 private class NetworkDataSource(
     private val listingService: ListingService,
     private val coroutineScope: CoroutineScope
@@ -64,29 +63,53 @@ private class NetworkDataSource(
 
     val loadState = Channel<VideoFeedState.LoadState>()
 
-    override fun loadInitial(params: LoadInitialParams<String>, callback: LoadInitialCallback<Thing.Post>) =
-        listingService.videos().load { callback.onResult(it) }
+    override fun loadInitial(
+        params: LoadInitialParams<String>,
+        callback: LoadInitialCallback<Thing.Post>
+    ) = load(
+        createCall = { listingService.videos() },
+        onResult = { callback.onResult(it) }
+    )
 
-    override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<Thing.Post>) =
-        listingService.videos(after = params.key).load(callback::onResult)
+    override fun loadAfter(
+        params: LoadParams<String>,
+        callback: LoadCallback<Thing.Post>
+    ) = load(
+        createCall = { listingService.videos(after = params.key) },
+        onResult = callback::onResult
+    )
 
-    override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<Thing.Post>) =
-        listingService.videos(before = params.key).load(callback::onResult)
+    override fun loadBefore(
+        params: LoadParams<String>,
+        callback: LoadCallback<Thing.Post>
+    ) = Unit
+    // Not supported
+//    = load(
+//        createCall = { listingService.videos(before = params.key) },
+//        onResult = callback::onResult
+//    )
 
     override fun getKey(item: Thing.Post) = item.name
 
-    private fun Call<Listing<Thing.Post>>.load(onResult: (List<Thing.Post>) -> Unit) {
+    private fun load(
+        createCall: () -> Call<Listing<Thing.Post>>,
+        onResult: (List<Thing.Post>) -> Unit
+    ) {
         coroutineScope.launch {
-            loadState.send(Loading)
-            val response = execute()
-            val newState = when {
-                response.isSuccessful -> {
-                    onResult(response.posts)
-                    VideoFeedState.LoadState.Idle
+            try {
+                loadState.send(Loading)
+                val response = createCall().execute()
+                val newState = when {
+                    response.isSuccessful -> {
+                        onResult(response.posts)
+                        VideoFeedState.LoadState.Idle
+                    }
+                    else -> VideoFeedState.LoadState.Failure(NetworkError(response.code(), response.message()))
                 }
-                else -> VideoFeedState.LoadState.Failure(NetworkError(response.code(), response.message()))
+                loadState.send(newState)
+            } catch (e: Exception) {
+                loadState.send(VideoFeedState.LoadState.Failure(e))
             }
-            loadState.send(newState)
         }
     }
 
@@ -105,3 +128,6 @@ private fun Thing.Post.toVideo() = Video(
 )
 
 private fun String.decode() = replace("&amp;", "&")
+
+private val TAG = "VideoFeedRepository"
+
