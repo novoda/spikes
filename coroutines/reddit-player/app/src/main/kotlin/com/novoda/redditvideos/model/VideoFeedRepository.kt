@@ -20,6 +20,7 @@ interface DataContext : CoroutineScope {
     val mainDispatcher: CoroutineDispatcher
     val ioDispatcher: CoroutineDispatcher
     val listingService: ListingService
+    val videoDao: VideoDao
     val job: Job
     override val coroutineContext: CoroutineContext get() = ioDispatcher + job
 
@@ -33,6 +34,11 @@ interface DataContext : CoroutineScope {
 
 fun DataContext.videoFeed(): LiveData<VideoFeedState> = MutableLiveData<VideoFeedState>().apply {
     launch {
+        val localDataSource = videoDao.findVideos().create()
+        val localVideos = localDataSource.map { it.toVideo() }.toPagedList()
+        withContext(mainDispatcher) {
+            value = VideoFeedState(Loading, localVideos)
+        }
         val remoteDataSource = NetworkDataSource(listingService, CoroutineScope(ioDispatcher))
         val remoteVideos = remoteDataSource.map { it.toVideo() }.toPagedList()
         while (isActive) {
@@ -54,7 +60,6 @@ data class VideoFeedState(
         data class Failure(val exception: Exception) : LoadState()
     }
 }
-
 
 private class NetworkDataSource(
     private val listingService: ListingService,
@@ -82,12 +87,7 @@ private class NetworkDataSource(
     override fun loadBefore(
         params: LoadParams<String>,
         callback: LoadCallback<Thing.Post>
-    ) = Unit
-    // Not supported
-//    = load(
-//        createCall = { listingService.videos(before = params.key) },
-//        onResult = callback::onResult
-//    )
+    ) = Unit // Not supported
 
     override fun getKey(item: Thing.Post) = item.name
 
@@ -125,6 +125,12 @@ private fun Thing.Post.toVideo() = Video(
         preview.images.getOrNull(0)?.source?.url?.decode() ?: "No image"
     ),
     id = name
+)
+
+private fun VideoEntity.toVideo() = Video(
+    title = title,
+    previewUrl = PreviewUrl(previewUrl),
+    id = id
 )
 
 private fun String.decode() = replace("&amp;", "&")

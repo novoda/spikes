@@ -6,6 +6,7 @@ import com.novoda.reddit.data.Thing
 import com.novoda.reddit.data.createGson
 import com.novoda.redditvideos.model.PreviewUrl
 import com.novoda.redditvideos.model.Video
+import com.novoda.redditvideos.model.VideoEntity
 
 private fun loadResource(path: String): String = VideoFeedViewModelTest::class.java.getResource(path)!!.readText()
 
@@ -275,3 +276,11 @@ val expectedSecondListings = listOf(
     )
 
 )
+
+val daoEntries = expectedInitialListings.map { VideoEntity(
+    id = it.id,
+    title = "[restored]${it.title}",
+    previewUrl = it.previewUrl.value
+) }
+
+val expectedDaoVideos = expectedInitialListings.map { it.copy(title = "[restored]${it.title}") }

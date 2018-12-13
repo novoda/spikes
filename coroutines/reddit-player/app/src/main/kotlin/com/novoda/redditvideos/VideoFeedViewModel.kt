@@ -12,14 +12,12 @@ import kotlinx.coroutines.*
 
 internal class VideoFeedViewModel @JvmOverloads constructor(
     app: Application,
-    videoDao: VideoDao = app.database.videoDao(),
+    override val videoDao: VideoDao = app.database.videoDao(),
     override val listingService: ListingService = app.apiClient.listingService,
     override val mainDispatcher: CoroutineDispatcher = Dispatchers.Main,
     override val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     override val job: Job = Job()
 ) : AndroidViewModel(app), DataContext {
-
-    override val coroutineContext = GlobalScope.coroutineContext + job
 
     val state: LiveData<VideoFeedState> = videoFeed()
 

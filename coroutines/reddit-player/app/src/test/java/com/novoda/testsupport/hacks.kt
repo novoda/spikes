@@ -1,8 +1,11 @@
 package com.novoda.testsupport
 
-fun waitFor(timeout: Int = 1_000, condition: () -> Boolean) {
-    val start = System.currentTimeMillis()
-    while (!condition()) {
-        check(System.currentTimeMillis() - start < timeout) { "Timed out" }
-    }
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import org.mockito.invocation.InvocationOnMock
+import org.mockito.stubbing.OngoingStubbing
+
+fun <T> withDelay(delayInMillis: Long = 100, block: () -> T) : T = runBlocking {
+    delay(delayInMillis)
+    block()
 }

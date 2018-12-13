@@ -3,16 +3,13 @@ package com.novoda.redditvideos
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.doAnswer
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.novoda.reddit.data.ListingService
 import com.novoda.redditvideos.model.VideoDao
 import com.novoda.redditvideos.model.VideoFeedState
-import com.novoda.redditvideos.model.VideoFeedState.LoadState.Idle
-import com.novoda.redditvideos.model.VideoFeedState.LoadState.Loading
-import com.novoda.testsupport.does
-import com.novoda.testsupport.stub
-import com.novoda.testsupport.successCall
-import com.novoda.testsupport.waitFor
+import com.novoda.redditvideos.model.VideoFeedState.LoadState.*
+import com.novoda.testsupport.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -22,8 +19,7 @@ import org.junit.Test
 
 class VideoFeedViewModelTest {
 
-    @Rule
-    @JvmField
+    @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
     @Test
@@ -31,13 +27,16 @@ class VideoFeedViewModelTest {
         withListingServiceThat = mock {
             on { videos() } doAnswer { successCall(initialPageResults) }
         }
-    ) { viewModel, stateChannel ->
+    ) {
+        receive().apply {
+            assertThat(loadState).isEqualTo(Loading)
+            assertThat(data).isEmpty()
+        }
 
-        val states = listOf(stateChannel.receive(), stateChannel.receive())
-        val actualVideos = viewModel.state.value?.data
-
-        assertThat(states.map { it.loadState }).containsExactly(Loading, Idle)
-        assertThat(actualVideos).containsAllIn(expectedInitialListings)
+        receive().apply {
+            assertThat(loadState).isEqualTo(Idle)
+            assertThat(data).containsExactlyElementsIn(expectedInitialListings).inOrder()
+        }
     }
 
     @Test
@@ -45,35 +44,65 @@ class VideoFeedViewModelTest {
         withListingServiceThat = mock {
             on { videos() } doAnswer { throw TestException }
         }
-    ) { viewModel, states ->
-        val (firstState, secondState) = listOf(states.receive(), states.receive())
-        val actualVideos = viewModel.state.value?.data
+    ) {
+        receive().apply {
+            assertThat(loadState).isEqualTo(Loading)
+            assertThat(data).isEmpty()
+        }
 
-        assertThat(firstState.loadState).isEqualTo(Loading)
-        assertThat((secondState.loadState as VideoFeedState.LoadState.Failure).exception).isEqualTo(TestException)
-        assertThat(actualVideos).isEmpty()
+        receive().apply {
+            assertThat(loadState).isEqualTo(Failure(TestException))
+            assertThat(data).isEmpty()
+        }
     }
 
     @Test
     fun `should load next network page`() = givenAViewModel(
         withListingServiceThat = mock {
-            on { videos() } doAnswer { successCall(initialPageResults) }
-            on { videos(after = "t3_a4hjzs") } doAnswer { successCall(secondPageResults) }
+            on { videos() } doAnswer { withDelay { successCall(initialPageResults) } }
+            on { videos(after = "t3_a4hjzs") } doAnswer { withDelay { successCall(secondPageResults) } }
         }
-    ) { viewModel, stateChannel ->
-        val states = listOf(stateChannel.receive(), stateChannel.receive())
-        val actualVideos = viewModel.state.value?.data!!
-        actualVideos.loadAround(24)
-        val newPageStates = listOf(stateChannel.receive(), stateChannel.receive())
+    ) {
 
-        waitFor { actualVideos.size >= 50 }
+        receive().apply {
+            assertThat(loadState).isEqualTo(Loading)
+            assertThat(data).isEmpty()
+        }
 
-        assertThat(states.map { it.loadState }).containsExactly(Loading, Idle)
-        assertThat(newPageStates.map { it.loadState }).containsExactly(Loading, Idle)
-        assertThat(actualVideos).does {
-            hasSize(50)
-            containsNoDuplicates()
-            containsExactlyElementsIn(expectedInitialListings + expectedSecondListings).inOrder()
+        receive().apply {
+            assertThat(loadState).isEqualTo(Idle)
+            assertThat(data).containsExactlyElementsIn(expectedInitialListings).inOrder()
+        }.data.loadAround(24)
+
+        receive().apply {
+            assertThat(loadState).isEqualTo(Loading)
+            assertThat(data).containsExactlyElementsIn(expectedInitialListings).inOrder()
+        }
+
+        receive().apply {
+            assertThat(loadState).isEqualTo(Idle)
+            assertThat(data).containsExactlyElementsIn(expectedInitialListings + expectedSecondListings).inOrder()
+        }
+    }
+
+
+    @Test
+    fun `should load data from database before the network`() = givenAViewModel(
+        withVideoDao = mock {
+            on { findVideos() } doReturn testDataSourceFactory(daoEntries)
+        },
+        withListingServiceThat = mock {
+            on { videos() } doAnswer { withDelay { successCall(initialPageResults) } }
+        }
+    ) {
+        receive().apply {
+            assertThat(loadState).isEqualTo(Loading)
+            assertThat(data).containsAllIn(expectedDaoVideos).inOrder()
+        }
+
+        receive().apply {
+            assertThat(loadState).isEqualTo(Idle)
+            assertThat(data).containsAllIn(expectedInitialListings).inOrder()
         }
     }
 
@@ -82,9 +111,11 @@ class VideoFeedViewModelTest {
 private object TestException : Exception()
 
 private fun givenAViewModel(
-    withVideoDao: VideoDao = stub(),
+    withVideoDao: VideoDao = mock {
+        on { findVideos() } doReturn testDataSourceFactory(emptyList())
+    },
     withListingServiceThat: ListingService = stub(),
-    block: suspend (VideoFeedViewModel, Channel<VideoFeedState>) -> Unit
+    block: suspend Channel<VideoFeedState>.() -> Unit
 ) {
     val viewModel = VideoFeedViewModel(
         app = stub(),
@@ -95,11 +126,12 @@ private fun givenAViewModel(
     )
     val states = Channel<VideoFeedState>(Channel.UNLIMITED).apply {
         viewModel.state.observeForever {
+            println("New state: $it")
             offer(it)
         }
     }
     runBlocking {
-        block(viewModel, states)
+        states.block()
     }
 }
 
