@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="common-js">
+    <output-path>$PROJECT_DIR$/common/build/libs</output-path>
+    <root id="archive" name="common-js.jar">
+      <element id="module-output" name="common_jsMain" />
+    </root>
+  </artifact>
+</component>
