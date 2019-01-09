@@ -1,4 +1,0 @@
-#!/bin/bash
-export 'JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/jre'
-cd '/Users/tobiasheine/Documents/repos/spikes/multiplatform-movies'
-./gradlew $@
