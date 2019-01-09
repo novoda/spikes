@@ -5,8 +5,8 @@
       <configuration version="3" platform="Native " useProjectSettings="false" isTestModule="true" externalProjectId=":common">
         <sourceSets>
           <sourceSet>common_iOSMain</sourceSet>
-          <sourceSet>common_commonMain</sourceSet>
           <sourceSet>common_commonTest</sourceSet>
+          <sourceSet>common_commonMain</sourceSet>
         </sourceSets>
         <newMppModelJpsModuleKind>COMPILATION_AND_SOURCE_SET_HOLDER</newMppModelJpsModuleKind>
         <compilerSettings />
