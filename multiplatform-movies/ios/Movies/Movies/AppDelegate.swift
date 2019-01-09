@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  Movies
 //
-//  Created by Tobias Heine on 21.12.18.
-//  Copyright © 2018 Novoda. All rights reserved.
+//  Created by Tobias Heine on 09.01.19.
+//  Copyright © 2019 Novoda. All rights reserved.
 //
 
 import UIKit

@@ -2,25 +2,25 @@
 //  ViewController.swift
 //  Movies
 //
-//  Created by Tobias Heine on 21.12.18.
-//  Copyright © 2018 Novoda. All rights reserved.
+//  Created by Tobias Heine on 09.01.19.
+//  Copyright © 2019 Novoda. All rights reserved.
 //
 
 import UIKit
+import common
 
 class ViewController: UIViewController {
+    
+    private let label = UILabel(frame: CGRect(x: 0, y: 0, width: 300, height: 21))
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let label = UILabel(frame: .zero)
+        label.center = CGPoint(x: 160, y: 285)
+        label.textAlignment = .center
+        label.font = label.font.withSize(25)
         view.addSubview(label)
         
-        label.pinToSuperviewEdges()
-        label.textAlignment = .center
-        label.text = "Foo"
-        
-        
-        // Do any additional setup after loading the view, typically from a nib.
+        label.text = Platform().name
     }
 
     override func didReceiveMemoryWarning() {
