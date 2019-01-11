@@ -1,5 +1,10 @@
 apply plugin: 'kotlin-multiplatform'
 
+// TODO work around for https://youtrack.jetbrains.com/issue/KT-27170
+configurations {
+    compileClasspath
+}
+
 kotlin {
     targets {
         fromPreset(presets.jvm, 'jvm')
