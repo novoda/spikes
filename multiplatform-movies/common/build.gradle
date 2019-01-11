@@ -1,4 +1,5 @@
 apply plugin: 'kotlin-multiplatform'
+apply plugin: 'kotlinx-serialization'
 
 // TODO work around for https://youtrack.jetbrains.com/issue/KT-27170
 configurations {

@@ -1,3 +1,5 @@
 package com.novoda.movies.gallery
 
-data class MoviePoster(val movieId: Long, val thumbnailUrl: String)
+import io.ktor.http.Url
+
+data class MoviePoster(val movieId: Long, val thumbnailUrl: Url)
