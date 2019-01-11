@@ -1,4 +1,4 @@
-package com.novoda.movies.gallery
+package com.novoda.movies.core
 
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
@@ -9,7 +9,7 @@ private const val KEY_API_SECRET: String = "api_key"
 private const val API_SECRET: String = "your themoviedb api secret" //https://developers.themoviedb.org/3
 private const val KEY_AUTH_INTERCEPTOR = "auth_interceptor"
 
-class HttpClientProvider {
+class NetworkingDependencyProvider {
 
     fun provideAuthenticatedClient() = HttpClient {
         authenticatedRequestsEngine()
