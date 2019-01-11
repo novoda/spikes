@@ -1,16 +1,14 @@
 package com.novoda.movies.core
 
-import com.novoda.movies.gallery.ApiGallery
-import com.novoda.movies.gallery.ApiMoviePoster
+import com.novoda.movies.gallery.Gallery
+import com.novoda.movies.gallery.GalleryFetcher
 import com.novoda.movies.gallery.KtorGalleryBackend
+import com.novoda.movies.gallery.MoviePoster
 import io.ktor.client.HttpClient
 import io.ktor.client.call.ReceivePipelineException
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockHttpResponse
-import io.ktor.http.ContentType
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.fullPath
-import io.ktor.http.headersOf
+import io.ktor.http.*
 import kotlinx.coroutines.io.ByteReadChannel
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
@@ -19,30 +17,33 @@ import kotlin.test.assertEquals
 private const val API_GALLERY_JSON = "{\"results\": [{\"id\":1, \"poster_path\":\"https://api.themoviedb.org/3/asset/1\"}]}"
 
 //TODO: this test should be in the commonMain source set, but MockEngine can't be resolved as a dependency
-class KtorGalleryBackendTest {
+class GalleryFetcherTest {
 
     @Test
-    fun `should deserialize ApiGallery`() {
-        val expectedGallery = ApiGallery(listOf(ApiMoviePoster(1, "https://api.themoviedb.org/3/asset/1")))
-
+    fun `should fetch Gallery`() {
+        val expectedGallery = Gallery(listOf(MoviePoster(1, Url("https://api.themoviedb.org/3/asset/1"))))
         val client = HttpClient(engineReturningResponse(API_GALLERY_JSON))
+        val galleryFetcher = galleryFetcher(client)
 
         runBlocking {
-            val popularMoviesGallery = KtorGalleryBackend(client).popularMoviesGallery()
+            val popularMoviesGallery = galleryFetcher.fetchGallery()
             assertEquals(popularMoviesGallery, expectedGallery)
         }
     }
 
     @Test(expected = ReceivePipelineException::class)
     fun `should error when json is malformed`() {
-        val expectedGallery = ApiGallery(listOf(ApiMoviePoster(1, "https://api.themoviedb.org/3/asset/1")))
-
-        val client = HttpClient(engineReturningResponse("some bad json"))
+        val client = HttpClient(engineReturningResponse("some bad formatted json"))
+        val galleryFetcher = galleryFetcher(client)
 
         runBlocking {
-            val popularMoviesGallery = KtorGalleryBackend(client).popularMoviesGallery()
-            assertEquals(popularMoviesGallery, expectedGallery)
+            galleryFetcher.fetchGallery()
         }
+    }
+
+    private fun galleryFetcher(client: HttpClient): GalleryFetcher {
+        val galleryBackend = KtorGalleryBackend(client)
+        return GalleryFetcher(galleryBackend)
     }
 
     private fun engineReturningResponse(jsonString: String): MockEngine {
