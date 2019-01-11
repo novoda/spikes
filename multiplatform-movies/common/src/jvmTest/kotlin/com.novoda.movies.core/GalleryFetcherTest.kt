@@ -11,12 +11,15 @@ import io.ktor.client.engine.mock.MockHttpResponse
 import io.ktor.http.*
 import kotlinx.coroutines.io.ByteReadChannel
 import kotlinx.coroutines.runBlocking
+import kotlinx.io.charsets.Charsets
+import kotlinx.io.core.toByteArray
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 private const val API_GALLERY_JSON = "{\"results\": [{\"id\":1, \"poster_path\":\"https://api.themoviedb.org/3/asset/1\"}]}"
 
-//TODO: this test should be in the commonMain source set, but MockEngine can't be resolved as a dependency
+//TODO: This test should be in the commonMain source set, but runBlocking is not available. So we can't easily wait until the coroutine completes.
+//
 class GalleryFetcherTest {
 
     @Test
