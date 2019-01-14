@@ -3,7 +3,7 @@ package com.novoda.movies.gallery
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.novoda.movies.R
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_gallery.*
 
 class GalleryActivity : AppCompatActivity(), GalleryPresenter.View {
 
@@ -11,7 +11,7 @@ class GalleryActivity : AppCompatActivity(), GalleryPresenter.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_gallery)
     }
 
     override fun onStart() {
