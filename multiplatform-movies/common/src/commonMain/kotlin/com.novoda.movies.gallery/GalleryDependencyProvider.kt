@@ -3,7 +3,7 @@ package com.novoda.movies.gallery
 import com.novoda.movies.core.NetworkingDependencyProvider
 import com.novoda.movies.core.UI
 
-class GalleryDependencyProvider(private val networkingDependencyProvider: NetworkingDependencyProvider) {
+class GalleryDependencyProvider(private val networkingDependencyProvider: NetworkingDependencyProvider = NetworkingDependencyProvider()) {
 
     private fun provideGalleryBackend(): GalleryBackend = KtorGalleryBackend(networkingDependencyProvider.provideAuthenticatedClient())
 
