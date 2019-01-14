@@ -19,7 +19,6 @@ import kotlin.test.assertEquals
 private const val API_GALLERY_JSON = "{\"results\": [{\"id\":1, \"poster_path\":\"https://api.themoviedb.org/3/asset/1\"}]}"
 private const val GALLERY_PATH = "/3/movie/popular"
 
-//TODO: This test should be in the commonMain source set, but runBlocking is not available. So we can't easily wait until the coroutine completes.
 class GalleryFetcherTest {
 
     @Test
