@@ -17,8 +17,12 @@ class GalleryPresenter internal constructor(private val uiContext: CoroutineCont
         job = Job()
 
         launch {
-            val gallery = galleryFetcher.fetchGallery()
-            view.render(gallery)
+            try {
+                val gallery = galleryFetcher.fetchGallery()
+                view.render(gallery)
+            } catch (e: Exception) {
+                view.renderError(e.message.orEmpty())
+            }
         }
     }
 

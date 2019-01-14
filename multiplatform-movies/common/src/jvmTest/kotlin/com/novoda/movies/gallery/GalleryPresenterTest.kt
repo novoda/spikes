@@ -24,4 +24,13 @@ class GalleryPresenterTest {
 
         verify(view).render(expectedGalley)
     }
+
+    @Test
+    fun `renders error message when fetching gallery fails`() = runBlocking<Unit> {
+        whenever(fetcher.fetchGallery()).thenThrow(IllegalStateException("Something went wrong"))
+
+        presenter.startPresenting(view)
+
+        verify(view).renderError("Something went wrong")
+    }
 }
