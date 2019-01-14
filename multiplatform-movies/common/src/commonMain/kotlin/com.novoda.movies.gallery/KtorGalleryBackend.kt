@@ -8,7 +8,7 @@ import io.ktor.client.request.url
 
 private const val BASE_URL: String = "https://api.themoviedb.org"
 
-class KtorGalleryBackend(authenticatedClient: HttpClient) : GalleryBackend {
+internal class KtorGalleryBackend(authenticatedClient: HttpClient) : GalleryBackend {
 
     private val galleryClient: HttpClient = authenticatedClient.config {
         install(JsonFeature) {

@@ -2,7 +2,7 @@ package com.novoda.movies.gallery
 
 import io.ktor.http.Url
 
-class GalleryFetcher(private val galleryBackend: GalleryBackend) {
+internal class GalleryFetcher(private val galleryBackend: GalleryBackend) {
 
     suspend fun fetchGallery(): Gallery {
         val apiGallery = galleryBackend.popularMoviesGallery()

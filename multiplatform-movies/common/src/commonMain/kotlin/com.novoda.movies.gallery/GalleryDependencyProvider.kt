@@ -6,6 +6,6 @@ class GalleryDependencyProvider(private val networkingDependencyProvider: Networ
 
     private fun provideGalleryBackend(): GalleryBackend = KtorGalleryBackend(networkingDependencyProvider.provideAuthenticatedClient())
 
-    fun provideGalleryFetcher(): GalleryFetcher = GalleryFetcher(provideGalleryBackend())
+    private fun provideGalleryFetcher(): GalleryFetcher = GalleryFetcher(provideGalleryBackend())
 
 }

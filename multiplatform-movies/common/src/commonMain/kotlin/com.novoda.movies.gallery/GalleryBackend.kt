@@ -1,5 +1,5 @@
 package com.novoda.movies.gallery
 
-interface GalleryBackend {
+internal interface GalleryBackend {
     suspend fun popularMoviesGallery(): ApiGallery
 }
