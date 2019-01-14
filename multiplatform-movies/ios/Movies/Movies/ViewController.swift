@@ -11,7 +11,6 @@ import common
 
 class ViewController: UIViewController, GalleryPresenterView {
     
-    
     private let presenter = GalleryDependencyProvider(networkingDependencyProvider: NetworkingDependencyProvider()).providerPresenter()
     private let label = UILabel(frame: CGRect(x: 0, y: 0, width: 300, height: 21))
 
@@ -36,7 +35,6 @@ class ViewController: UIViewController, GalleryPresenterView {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
 
 }
 
