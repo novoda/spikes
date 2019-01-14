@@ -55,7 +55,6 @@ class GalleryFetcherTest {
 
     private fun engineReturningResponse(jsonString: String): MockEngine {
         return MockEngine {
-            // this: HttpRequest, call: HttpClientCall
             when (url.fullPath) {
                 GALLERY_PATH -> {
                     MockHttpResponse(
