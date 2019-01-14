@@ -17,29 +17,34 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 private const val API_GALLERY_JSON = "{\"results\": [{\"id\":1, \"poster_path\":\"https://api.themoviedb.org/3/asset/1\"}]}"
+private const val GALLERY_PATH = "/3/movie/popular"
 
 //TODO: This test should be in the commonMain source set, but runBlocking is not available. So we can't easily wait until the coroutine completes.
-//
 class GalleryFetcherTest {
 
     @Test
     fun `should fetch Gallery`() {
+        // given
         val expectedGallery = Gallery(listOf(MoviePoster(1, Url("https://api.themoviedb.org/3/asset/1"))))
         val client = HttpClient(engineReturningResponse(API_GALLERY_JSON))
         val galleryFetcher = galleryFetcher(client)
 
         runBlocking {
+            // when
             val popularMoviesGallery = galleryFetcher.fetchGallery()
+            // then
             assertEquals(popularMoviesGallery, expectedGallery)
         }
     }
 
     @Test(expected = ReceivePipelineException::class)
     fun `should error when json is malformed`() {
+        // given
         val client = HttpClient(engineReturningResponse("some bad formatted json"))
         val galleryFetcher = galleryFetcher(client)
 
         runBlocking {
+            // when
             galleryFetcher.fetchGallery()
         }
     }
@@ -53,7 +58,7 @@ class GalleryFetcherTest {
         return MockEngine {
             // this: HttpRequest, call: HttpClientCall
             when (url.fullPath) {
-                "/3/movie/popular" -> {
+                GALLERY_PATH -> {
                     MockHttpResponse(
                             call,
                             HttpStatusCode.OK,
