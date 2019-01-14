@@ -9,8 +9,10 @@
 import UIKit
 import common
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, GalleryPresenterView {
     
+    
+    private let presenter = GalleryDependencyProvider(networkingDependencyProvider: NetworkingDependencyProvider()).providerPresenter()
     private let label = UILabel(frame: CGRect(x: 0, y: 0, width: 300, height: 21))
 
     override func viewDidLoad() {
@@ -19,8 +21,15 @@ class ViewController: UIViewController {
         label.textAlignment = .center
         label.font = label.font.withSize(25)
         view.addSubview(label)
-        
-        label.text = Platform().name
+        presenter.startPresenting(view: self)
+    }
+    
+    func render(gallery: Gallery) {
+        label.text = "Gallery with \(gallery.moviePosters.count) posters"
+    }
+    
+    func renderError(exception: KotlinException) {
+        label.text = exception.message
     }
 
     override func didReceiveMemoryWarning() {

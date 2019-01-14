@@ -24,8 +24,8 @@ class GalleryActivity : AppCompatActivity(), GalleryPresenter.View {
         super.onStop()
     }
 
-    override fun renderError(message: String) {
-        label.text = message
+    override fun renderError(exception: Exception) {
+        label.text = exception.message
     }
 
     override fun render(gallery: Gallery) {

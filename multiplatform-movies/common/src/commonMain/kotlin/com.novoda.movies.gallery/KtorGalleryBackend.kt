@@ -14,7 +14,7 @@ internal class KtorGalleryBackend(authenticatedClient: HttpClient) : GalleryBack
     private val galleryClient: HttpClient = authenticatedClient.config {
         install(JsonFeature) {
             serializer = KotlinxSerializer(JSON.nonstrict).apply {
-                setMapper(ApiMoviePoster::class, ApiMoviePoster.serializer())
+                setMapper(ApiGallery::class, ApiGallery.serializer())
             }
         }
     }

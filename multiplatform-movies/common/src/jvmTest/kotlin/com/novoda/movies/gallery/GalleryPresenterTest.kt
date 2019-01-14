@@ -27,10 +27,11 @@ class GalleryPresenterTest {
 
     @Test
     fun `renders error message when fetching gallery fails`() = runBlocking<Unit> {
-        whenever(fetcher.fetchGallery()).thenThrow(IllegalStateException("Something went wrong"))
+        val exception = IllegalStateException("Something went wrong")
+        whenever(fetcher.fetchGallery()).thenThrow(exception)
 
         presenter.startPresenting(view)
 
-        verify(view).renderError("Something went wrong")
+        verify(view).renderError(exception)
     }
 }

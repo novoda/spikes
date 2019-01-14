@@ -20,8 +20,8 @@ class GalleryPresenter internal constructor(private val uiContext: CoroutineCont
             try {
                 val gallery = galleryFetcher.fetchGallery()
                 view.render(gallery)
-            } catch (e: Exception) {
-                view.renderError(e.message.orEmpty())
+            } catch (exception: Exception) {
+                view.renderError(exception)
             }
         }
     }
@@ -32,6 +32,6 @@ class GalleryPresenter internal constructor(private val uiContext: CoroutineCont
 
     interface View {
         fun render(gallery: Gallery)
-        fun renderError(message: String)
+        fun renderError(exception: Exception)
     }
 }
