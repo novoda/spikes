@@ -48,6 +48,8 @@ kotlin {
                 implementation 'org.jetbrains.kotlin:kotlin-test'
                 implementation 'org.jetbrains.kotlin:kotlin-test-junit'
                 api "io.ktor:ktor-client-mock-jvm:$ktor_version"
+                implementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
+                implementation "org.mockito:mockito-inline:2.22.0"
             }
         }
         iOSMain {
