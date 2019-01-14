@@ -25,8 +25,7 @@ class GalleryFetcherTest {
     fun `should fetch Gallery`() {
         // given
         val expectedGallery = Gallery(listOf(MoviePoster(1, Url("https://api.themoviedb.org/3/asset/1"))))
-        val client = HttpClient(engineReturningResponse(API_GALLERY_JSON))
-        val galleryFetcher = galleryFetcher(client)
+        val galleryFetcher = galleryFetcherUsing(API_GALLERY_JSON)
 
         runBlocking {
             // when
@@ -39,8 +38,7 @@ class GalleryFetcherTest {
     @Test(expected = ReceivePipelineException::class)
     fun `should error when json is malformed`() {
         // given
-        val client = HttpClient(engineReturningResponse("some bad formatted json"))
-        val galleryFetcher = galleryFetcher(client)
+        val galleryFetcher = galleryFetcherUsing("some bad formatted json")
 
         runBlocking {
             // when
@@ -48,12 +46,13 @@ class GalleryFetcherTest {
         }
     }
 
-    private fun galleryFetcher(client: HttpClient): GalleryFetcher {
+    private fun galleryFetcherUsing(fixture: String): GalleryFetcher {
+        val client = HttpClient(usingFixedResponse(fixture))
         val galleryBackend = KtorGalleryBackend(client)
         return GalleryFetcher(galleryBackend)
     }
 
-    private fun engineReturningResponse(jsonString: String): MockEngine {
+    private fun usingFixedResponse(jsonString: String): MockEngine {
         return MockEngine {
             when (url.fullPath) {
                 GALLERY_PATH -> {
