@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="EHf-IW-A2E">
+            <objects>
+                <viewController id="01J-lp-oVM" sceneMemberID="viewController">
+                    <view key="view" autoresizesSubviews="NO" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash-screen-background" translatesAutoresizingMaskIntoConstraints="NO" id="MOx-GM-Hrz">
+                                <rect key="frame" x="-187.5" y="-62.5" width="750" height="812"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lufthansa-logo" translatesAutoresizingMaskIntoConstraints="NO" id="0YU-Pa-hwe">
+                                <rect key="frame" x="35" y="204" width="305" height="56"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="56" id="7bD-8Z-uqm"/>
+                                    <constraint firstAttribute="width" constant="305" id="hNE-uf-36I"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="novoda-logo" translatesAutoresizingMaskIntoConstraints="NO" id="sye-Bw-mbM">
+                                <rect key="frame" x="124" y="507" width="127" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="127" id="9s6-CE-yOx"/>
+                                    <constraint firstAttribute="height" constant="34" id="D1x-6F-upk"/>
+                                </constraints>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="grV-7K-gEs" userLabel="line">
+                                <rect key="frame" x="35" y="279" width="305" height="1"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="CO4-le-LHd"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="All aboARd" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ABM-0b-iTf">
+                                <rect key="frame" x="89.5" y="289" width="196" height="45"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="37"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aHa-ff-Pa6">
+                                <rect key="frame" x="62.5" y="601" width="250" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="24" id="qEo-ot-d3l"/>
+                                </constraints>
+                                <string key="text">© 2018 Novoda.
+Lufthansa name and logo are © Deutsche Lufthansa AG</string>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="10"/>
+                                <color key="textColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="augmented experiences" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1uF-rU-VsE">
+                                <rect key="frame" x="130" y="548" width="115" height="12"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="10"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="0YU-Pa-hwe" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="17V-sk-WED"/>
+                            <constraint firstItem="0YU-Pa-hwe" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="184" id="1mu-Ze-6nj"/>
+                            <constraint firstItem="sye-Bw-mbM" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="4ZQ-mR-WGw"/>
+                            <constraint firstItem="aHa-ff-Pa6" firstAttribute="top" secondItem="1uF-rU-VsE" secondAttribute="bottom" constant="41" id="5Op-dG-Tiy"/>
+                            <constraint firstItem="1uF-rU-VsE" firstAttribute="top" secondItem="sye-Bw-mbM" secondAttribute="bottom" constant="7" id="Dc1-OU-uh2"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="aHa-ff-Pa6" secondAttribute="bottom" constant="42" id="Mem-vl-Dg7"/>
+                            <constraint firstItem="ABM-0b-iTf" firstAttribute="top" secondItem="grV-7K-gEs" secondAttribute="bottom" constant="9" id="N4R-yj-nZu"/>
+                            <constraint firstItem="grV-7K-gEs" firstAttribute="trailing" secondItem="0YU-Pa-hwe" secondAttribute="trailing" id="P6t-fa-q6P"/>
+                            <constraint firstItem="ABM-0b-iTf" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="Tc1-Lb-WWM"/>
+                            <constraint firstItem="MOx-GM-Hrz" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="Wxb-yZ-yec"/>
+                            <constraint firstItem="grV-7K-gEs" firstAttribute="leading" secondItem="0YU-Pa-hwe" secondAttribute="leading" id="Xaw-uK-DQa"/>
+                            <constraint firstItem="aHa-ff-Pa6" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="ZnT-3z-DvO"/>
+                            <constraint firstItem="grV-7K-gEs" firstAttribute="top" secondItem="0YU-Pa-hwe" secondAttribute="bottom" constant="19" id="jy4-hc-Wtc"/>
+                            <constraint firstItem="1uF-rU-VsE" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="muc-b2-dce"/>
+                            <constraint firstItem="MOx-GM-Hrz" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="xBc-f7-6wl"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="53" y="375"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="lufthansa-logo" width="305" height="56"/>
+        <image name="novoda-logo" width="127" height="34"/>
+        <image name="splash-screen-background" width="750" height="812"/>
+    </resources>
+</document>
