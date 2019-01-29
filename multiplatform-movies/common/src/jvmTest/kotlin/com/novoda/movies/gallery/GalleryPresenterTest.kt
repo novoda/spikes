@@ -5,9 +5,11 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import io.ktor.http.Url
 import kotlinx.coroutines.Dispatchers.Unconfined
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class GalleryPresenterTest {
 
     private val view: GalleryPresenter.View = mock()
@@ -32,6 +34,6 @@ class GalleryPresenterTest {
 
         presenter.startPresenting(view)
 
-        verify(view).renderError(exception)
+        verify(view).renderError("Something went wrong")
     }
 }

@@ -27,14 +27,12 @@ class GalleryViewController: UIViewController, GalleryPresenterView {
         label.text = "Gallery with \(gallery.moviePosters.count) posters"
     }
     
-    func renderError(exception: KotlinException) {
-        label.text = exception.message
+    func renderError(message: String?) {
+        guard let errorMessage = message else {
+            label.text = "Something went wrong"
+            return 
+        }
+        label.text = errorMessage
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 }
 

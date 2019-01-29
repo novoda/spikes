@@ -24,11 +24,11 @@ class GalleryActivity : AppCompatActivity(), GalleryPresenter.View {
         super.onStop()
     }
 
-    override fun renderError(exception: Exception) {
-        label.text = exception.message
+    override fun renderError(message: String?) {
+        label.text = message ?: getString(R.string.gallery_error)
     }
 
     override fun render(gallery: Gallery) {
-        label.text = "Gallery with ${gallery.moviePosters.size} posters"
+        label.text = resources.getString(R.string.gallery_items, gallery.moviePosters.size)
     }
 }
