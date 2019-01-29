@@ -1,4 +1,5 @@
 apply plugin: 'kotlin-multiplatform'
+apply plugin: 'kotlinx-serialization'
 
 // TODO work around for https://youtrack.jetbrains.com/issue/KT-27170
 configurations {
@@ -18,27 +19,48 @@ kotlin {
         commonMain {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutines_version"
+                implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serialization_version"
+
+                implementation "io.ktor:ktor-client-core:$ktor_version"
+                implementation "io.ktor:ktor-client-json:$ktor_version"
             }
         }
         commonTest {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-test-common'
                 implementation 'org.jetbrains.kotlin:kotlin-test-annotations-common'
+                api "io.ktor:ktor-client-mock:$ktor_version"
             }
         }
         jvmMain {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+                implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
+
+                implementation "io.ktor:ktor-client-core-jvm:$ktor_version"
+                implementation "io.ktor:ktor-client-json-jvm:$ktor_version"
             }
         }
         jvmTest {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-test'
                 implementation 'org.jetbrains.kotlin:kotlin-test-junit'
+                api "io.ktor:ktor-client-mock-jvm:$ktor_version"
+                implementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
+                implementation "org.mockito:mockito-inline:2.22.0"
             }
         }
         iOSMain {
-           
+            dependencies {
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-native:$coroutines_version"
+                implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:$serialization_version"
+
+                implementation "io.ktor:ktor-client-ios:$ktor_version"
+                implementation "io.ktor:ktor-client-core-ios:$ktor_version"
+                implementation "io.ktor:ktor-client-json-ios:$ktor_version"  
+            }
         }
     }
 
