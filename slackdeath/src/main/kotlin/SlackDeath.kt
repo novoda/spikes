@@ -42,7 +42,7 @@ fun main(args: Array<String>) {
 
     val list = get("https://slack.com/api/channels.list?token=$slackToken&exclude_archived=true&pretty=1")
 
-    val jsonChannelsList: JsonChannelsList = jsonChannelsAdapter.fromJson(list.jsonObject.toString()) as JsonChannelsList;
+    val jsonChannelsList = jsonChannelsAdapter.fromJson(list.jsonObject.toString()) as JsonChannelsList
     debugPrint("${list.statusCode} - ${list.jsonObject}")
     val channels = jsonChannelsList.channels
     val channelsToArchive = arrayListOf<ArchiveableChannel>()
@@ -62,7 +62,7 @@ fun main(args: Array<String>) {
         val channelId = c.id
         val messages = get("https://slack.com/api/channels.history?token=$slackToken&channel=$channelId&oldest=$threeMonthsAgo&count=1")
 
-        val jsonMessages: JsonMessages = jsonMessagesAdapter.fromJson(messages.jsonObject.toString()) as JsonMessages
+        val jsonMessages = jsonMessagesAdapter.fromJson(messages.jsonObject.toString()) as JsonMessages
         if (jsonMessages.messages.isEmpty()) {
             channelsToArchive.add(ArchiveableChannel(c.id, c.name_normalized))
         }
