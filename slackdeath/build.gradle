@@ -1,0 +1,24 @@
+group 'com.blundell'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.3"
+    }
+}
+
+apply plugin: 'kotlin'
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:1.0.3"
+    compile 'khttp:khttp:0.1.0'
+    compile("com.squareup.moshi:moshi-kotlin:1.8.0")
+}
