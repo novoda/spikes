@@ -1,9 +1,11 @@
 import com.squareup.moshi.Moshi
 import khttp.get
+import java.lang.IllegalArgumentException
+import java.lang.NullPointerException
 import java.time.ZonedDateTime
 
 data class JsonChannelsList(
-        val channels: List<JsonChannel>
+        val channels: List<JsonChannel>?
 )
 
 data class JsonChannel(
@@ -28,8 +30,6 @@ data class ArchiveableChannel(
         val name: String
 )
 
-private var isDebug = true
-
 /**
  * Arg 0 is your slack api token with user access (to be able to read channels)
  */
@@ -38,13 +38,16 @@ fun main(args: Array<String>) {
     val jsonChannelsAdapter = moshi.adapter(JsonChannelsList::class.java)
     val jsonMessagesAdapter = moshi.adapter(JsonMessages::class.java)
 
-    val slackToken = args[0]
+    val slackToken = args.getOrNull(0)
+            ?: throw IllegalArgumentException("Needs a slack token as the first argument")
 
     val list = get("https://slack.com/api/channels.list?token=$slackToken&exclude_archived=true&pretty=1")
 
-    val jsonChannelsList = jsonChannelsAdapter.fromJson(list.jsonObject.toString()) as JsonChannelsList
     debugPrint("${list.statusCode} - ${list.jsonObject}")
-    val channels = jsonChannelsList.channels
+    val jsonChannelsList = jsonChannelsAdapter.fromJson(list.jsonObject.toString())
+            ?: throw NullPointerException("No channels list could be parsed from response ${list.jsonObject}")
+    val channels: List<JsonChannel> = jsonChannelsList.channels
+            ?: throw NullPointerException("No channels list could be parsed from response ${list.jsonObject}")
     val channelsToArchive = arrayListOf<ArchiveableChannel>()
 
     val threeMonthsAgo = ZonedDateTime.now().minusMonths(3).toEpochSecond()
@@ -70,8 +73,9 @@ fun main(args: Array<String>) {
 
     println("Archiving channels")
     for (archiveChannel in channelsToArchive) {
-        println(archiveChannel)
+        debugPrint("About to archive ${archiveChannel.name}")
         val archivedResult = get("https://slack.com/api/channels.archive?token=$slackToken&channel=${archiveChannel.id}&pretty=1")
+        println("Archived ${archiveChannel.name}")
         debugPrint("${archivedResult.statusCode} ")
         debugPrint("${archiveChannel.name} ")
         debugPrint("${archivedResult.jsonObject}.")
@@ -80,8 +84,6 @@ fun main(args: Array<String>) {
 }
 
 private fun debugPrint(string: String) {
-    if (isDebug) {
-        println(string)
-    }
+    println(string)
 }
 
