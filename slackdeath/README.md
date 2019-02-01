@@ -1,6 +1,6 @@
 `main` method is in SlackDeath.kt 
 
-arg0 is your slack token with the correct user privalidges to read messages in channels
+arg0 is your [slack token with the correct user privalidges to read messages in channels](https://api.slack.com/custom-integrations/legacy-tokens)
 
 This hacky script will query the slack API to find all channels that haven't had a message posted in 3 months. It will then archive each of these channels.
 
