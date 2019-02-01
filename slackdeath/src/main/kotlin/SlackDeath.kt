@@ -1,7 +1,6 @@
 import com.squareup.moshi.Moshi
 import khttp.get
 import java.time.ZonedDateTime
-import java.util.*
 
 data class JsonChannelsList(
         val channels: List<JsonChannel>
@@ -46,7 +45,7 @@ fun main(args: Array<String>) {
     val jsonChannelsList: JsonChannelsList = jsonChannelsAdapter.fromJson(list.jsonObject.toString()) as JsonChannelsList;
     debugPrint("${list.statusCode} - ${list.jsonObject}")
     val channels = jsonChannelsList.channels
-    val archivable = arrayListOf<ArchiveableChannel>()
+    val channelsToArchive = arrayListOf<ArchiveableChannel>()
 
     val threeMonthsAgo = ZonedDateTime.now().minusMonths(3).toEpochSecond()
     println("Finding channels to archive")
@@ -65,19 +64,19 @@ fun main(args: Array<String>) {
 
         val jsonMessages: JsonMessages = jsonMessagesAdapter.fromJson(messages.jsonObject.toString()) as JsonMessages
         if (jsonMessages.messages.isEmpty()) {
-            archivable.add(ArchiveableChannel(c.id, c.name_normalized))
+            channelsToArchive.add(ArchiveableChannel(c.id, c.name_normalized))
         }
     }
 
-    println("Archive Channels")
-    for (archiveChannel in archivable) {
+    println("Archiving channels")
+    for (archiveChannel in channelsToArchive) {
         println(archiveChannel)
         val archivedResult = get("https://slack.com/api/channels.archive?token=$slackToken&channel=${archiveChannel.id}&pretty=1")
         debugPrint("${archivedResult.statusCode} ")
         debugPrint("${archiveChannel.name} ")
         debugPrint("${archivedResult.jsonObject}.")
     }
-    println("Done. Archived ${archivable.size} channels.")
+    println("Done. Archived ${channelsToArchive.size} channels.")
 }
 
 private fun debugPrint(string: String) {
