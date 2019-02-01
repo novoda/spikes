@@ -1,6 +1,7 @@
 import com.squareup.moshi.Moshi
 import khttp.get
 import java.time.ZonedDateTime
+import java.util.*
 
 data class JsonChannelsList(
         val channels: List<JsonChannel>
@@ -28,6 +29,8 @@ data class ArchiveableChannel(
         val name: String
 )
 
+private var isDebug = true
+
 /**
  * Arg 0 is your slack api token with user access (to be able to read channels)
  */
@@ -41,28 +44,26 @@ fun main(args: Array<String>) {
     val list = get("https://slack.com/api/channels.list?token=$slackToken&exclude_archived=true&pretty=1")
 
     val jsonChannelsList: JsonChannelsList = jsonChannelsAdapter.fromJson(list.jsonObject.toString()) as JsonChannelsList;
-    println("${list.statusCode} - ${list.jsonObject}")
+    debugPrint("${list.statusCode} - ${list.jsonObject}")
     val channels = jsonChannelsList.channels
     val archivable = arrayListOf<ArchiveableChannel>()
 
-    println("Finding Archiveable Channels")
+    val threeMonthsAgo = ZonedDateTime.now().minusMonths(3).toEpochSecond()
+    println("Finding channels to archive")
     for (c in channels) {
-        println("Channel ${c.name_normalized} ")
+        debugPrint("Channel ${c.name_normalized} ")
         if (c.is_private) {
-            println("private, skipped.")
+            debugPrint("private, skipped.")
             continue
         }
         if (c.is_archived) {
-            println("archived already.")
+            debugPrint("archived already.")
             continue
         }
-        val channelId = c.id;
-        val THREE_MONTHS_AGO = ZonedDateTime.now().minusMonths(3).toEpochSecond()
-        val msgs = get("https://slack.com/api/channels.history?token=$slackToken&channel=$channelId&oldest=$THREE_MONTHS_AGO&count=1")
-//        print("messages ")
-//        println(msgs.jsonObject)
+        val channelId = c.id
+        val messages = get("https://slack.com/api/channels.history?token=$slackToken&channel=$channelId&oldest=$threeMonthsAgo&count=1")
 
-        val jsonMessages: JsonMessages = jsonMessagesAdapter.fromJson(msgs.jsonObject.toString()) as JsonMessages
+        val jsonMessages: JsonMessages = jsonMessagesAdapter.fromJson(messages.jsonObject.toString()) as JsonMessages
         if (jsonMessages.messages.isEmpty()) {
             archivable.add(ArchiveableChannel(c.id, c.name_normalized))
         }
@@ -72,16 +73,16 @@ fun main(args: Array<String>) {
     for (archiveChannel in archivable) {
         println(archiveChannel)
         val archivedResult = get("https://slack.com/api/channels.archive?token=$slackToken&channel=${archiveChannel.id}&pretty=1")
-        print("${archivedResult.statusCode} ")
-        print("${archiveChannel.name} ")
-        print("${archivedResult.jsonObject}.")
+        debugPrint("${archivedResult.statusCode} ")
+        debugPrint("${archiveChannel.name} ")
+        debugPrint("${archivedResult.jsonObject}.")
     }
-    println("done.")
-    println("Archived ${archivable.size} channels.")
-    println("Archived $archivable")
+    println("Done. Archived ${archivable.size} channels.")
 }
 
-private fun archiveAction() {
-
+private fun debugPrint(string: String) {
+    if (isDebug) {
+        println(string)
+    }
 }
 
