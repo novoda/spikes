@@ -1,9 +1,30 @@
 apply plugin: 'kotlin-multiplatform'
 apply plugin: 'kotlinx-serialization'
+apply plugin: 'com.codingfeline.buildkonfig'
 
 // TODO work around for https://youtrack.jetbrains.com/issue/KT-27170
 configurations {
     compileClasspath
+}
+
+buildkonfig {
+    packageName = 'com.novoda.movies'
+
+    // default config is required
+    defaultConfigs {
+        buildConfigField 'STRING', 'name', 'value'
+    }
+
+    targetConfigs {
+        // this name should be same as target names you specified
+        jvm {
+            buildConfigField 'STRING', 'name2', 'value2'
+        }
+
+        ios {
+            buildConfigField 'STRING', 'name', 'valueForNative'
+        }
+    }
 }
 
 kotlin {
