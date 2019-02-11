@@ -17,8 +17,8 @@ class NetworkingDependencyProvider {
 
     private fun HttpClientConfig<*>.authenticatedRequestsEngine() {
         engine {
-            install(KEY_AUTH_INTERCEPTOR) {
-                defaultRequest {
+            this@authenticatedRequestsEngine.install(KEY_AUTH_INTERCEPTOR) {
+                this@authenticatedRequestsEngine.defaultRequest {
                     parameter(KEY_API_SECRET, API_SECRET)
                 }
             }
