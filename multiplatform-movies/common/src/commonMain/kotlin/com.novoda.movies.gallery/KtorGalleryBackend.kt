@@ -5,7 +5,7 @@ import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.client.request.get
 import io.ktor.client.request.url
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json
 
 private const val BASE_URL: String = "https://api.themoviedb.org"
 
@@ -13,7 +13,7 @@ internal class KtorGalleryBackend(authenticatedClient: HttpClient) : GalleryBack
 
     private val galleryClient: HttpClient = authenticatedClient.config {
         install(JsonFeature) {
-            serializer = KotlinxSerializer(JSON.nonstrict).apply {
+            serializer = KotlinxSerializer(Json.nonstrict).apply {
                 setMapper(ApiGallery::class, ApiGallery.serializer())
             }
         }
