@@ -9,12 +9,12 @@ import io.ktor.client.call.ReceivePipelineException
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockHttpResponse
 import io.ktor.http.*
+import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.io.ByteReadChannel
 import kotlinx.coroutines.runBlocking
 import kotlinx.io.charsets.Charsets
 import kotlinx.io.core.toByteArray
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import org.junit.Test
 
 private const val API_GALLERY_JSON = "{\"results\": [{\"id\":1, \"poster_path\":\"https://api.themoviedb.org/3/asset/1\"}]}"
 private const val GALLERY_PATH = "/3/movie/popular"
