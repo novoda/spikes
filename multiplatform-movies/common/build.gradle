@@ -1,45 +1,45 @@
 apply plugin: 'kotlin-multiplatform'
 apply plugin: 'kotlinx-serialization'
 apply plugin: 'com.codingfeline.buildkonfig'
-apply plugin: 'com.android.library'
+//apply plugin: 'com.android.library'
 
 // TODO work around for https://youtrack.jetbrains.com/issue/KT-27170
 configurations {
     compileClasspath
 }
 
-android {
-    compileSdkVersion 28
-
-    defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-        multiDexEnabled true
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        debug {
-        }
-        release {
-        }
-    }
-
-    sourceSets {
-        main {
-            manifest.srcFile 'src/androidMain/AndroidManifest.xml'
-            java.srcDirs = ['src/androidMain/kotlin']
-            res.srcDirs = ['src/androidMain/res']
-        }
-        test {
-            java.srcDirs = ['src/androidTest/kotlin']
-            res.srcDirs = ['src/androidTest/res']
-        }
-    }
-
-}
+//android {
+//    compileSdkVersion 28
+//
+//    defaultConfig {
+//        minSdkVersion 15
+//        targetSdkVersion 28
+//        versionCode 1
+//        versionName "1.0"
+//        multiDexEnabled true
+//        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+//    }
+//
+//    buildTypes {
+//        debug {
+//        }
+//        release {
+//        }
+//    }
+//
+//    sourceSets {
+//        main {
+//            manifest.srcFile 'src/androidMain/AndroidManifest.xml'
+//            java.srcDirs = ['src/androidMain/kotlin']
+//            res.srcDirs = ['src/androidMain/res']
+//        }
+//        test {
+//            java.srcDirs = ['src/androidTest/kotlin']
+//            res.srcDirs = ['src/androidTest/res']
+//        }
+//    }
+//
+//}
 
 buildkonfig {
     packageName = 'com.novoda.movies'
@@ -63,7 +63,7 @@ buildkonfig {
 
 kotlin {
     targets {
-        fromPreset(presets.android, 'android')
+        fromPreset(presets.jvm, 'jvm')
 
         // Change to `presets.iosArm64` to deploy the app to iPhone
         fromPreset(presets.iosX64, 'iOS') {
@@ -87,7 +87,7 @@ kotlin {
                 implementation 'org.jetbrains.kotlin:kotlin-test-annotations-common'
             }
         }
-        androidMain {
+        jvmMain {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
@@ -98,7 +98,7 @@ kotlin {
                 implementation "io.ktor:ktor-client-okhttp:$ktor_version"
             }
         }
-        androidTest {
+        jvmTest {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-test'
                 implementation 'org.jetbrains.kotlin:kotlin-test-junit'
