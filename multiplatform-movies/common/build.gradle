@@ -1,10 +1,20 @@
 apply plugin: 'kotlin-multiplatform'
 apply plugin: 'kotlinx-serialization'
 apply plugin: 'com.codingfeline.buildkonfig'
+apply plugin: 'com.novoda.build-properties'
 
 // TODO work around for https://youtrack.jetbrains.com/issue/KT-27170
 configurations {
     compileClasspath
+}
+
+buildProperties {
+    android {
+        using project.file('android-secrets.properties')
+    }
+    ios {
+        using project.file('ios-secrets.properties')
+    }
 }
 
 buildkonfig {
@@ -16,13 +26,12 @@ buildkonfig {
     }
 
     targetConfigs {
-        // this name should be same as target names you specified
-        android {
-            buildConfigField 'STRING', 'API_KEY', 'valueForAndroid'
+        jvm {
+            buildConfigField 'STRING', 'API_KEY', buildProperties.android['api_key'].string
         }
 
-        ios {
-            buildConfigField 'STRING', 'API_KEY', 'valueForNative'
+        iOS {
+            buildConfigField 'STRING', 'API_KEY', buildProperties.ios['api_key'].string
         }
     }
 }
