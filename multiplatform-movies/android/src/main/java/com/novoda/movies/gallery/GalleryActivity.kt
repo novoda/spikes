@@ -8,10 +8,12 @@ import kotlinx.android.synthetic.main.activity_gallery.*
 class GalleryActivity : AppCompatActivity(), GalleryPresenter.View {
 
     private val presenter = GalleryDependencyProvider().providerPresenter()
+    private val galleryAdapter = GalleryAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
+        movie_collection.adapter = galleryAdapter
     }
 
     override fun onStart() {
@@ -25,10 +27,11 @@ class GalleryActivity : AppCompatActivity(), GalleryPresenter.View {
     }
 
     override fun renderError(message: String?) {
-        label.text = message ?: getString(R.string.gallery_error)
+        // label.text = message ?: getString(R.string.gallery_error)
     }
 
     override fun render(gallery: Gallery) {
-        label.text = resources.getString(R.string.gallery_items, gallery.moviePosters.size)
+        // label.text = resources.getString(R.string.gallery_items, gallery.moviePosters.size)
+        galleryAdapter.updateWith(gallery)
     }
 }
