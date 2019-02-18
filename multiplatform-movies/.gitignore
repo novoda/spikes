@@ -7,3 +7,4 @@
 /common/build
 /captures
 .externalNativeBuild
+*.properties
