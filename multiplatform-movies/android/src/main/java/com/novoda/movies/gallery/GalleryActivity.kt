@@ -2,6 +2,7 @@ package com.novoda.movies.gallery
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import com.novoda.movies.R
 import kotlinx.android.synthetic.main.activity_gallery.*
 
@@ -14,6 +15,7 @@ class GalleryActivity : AppCompatActivity(), GalleryPresenter.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
         movie_collection.adapter = galleryAdapter
+        movie_collection.layoutManager = LinearLayoutManager(this)
     }
 
     override fun onStart() {

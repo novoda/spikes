@@ -4,4 +4,7 @@ import io.ktor.http.Url
 
 data class Gallery(val moviePosters: List<MoviePoster>)
 
-data class MoviePoster(val movieId: Long, val thumbnailUrl: Url)
+data class MoviePoster(val movieId: Long, val thumbnailUrl: Url) {
+
+    fun thumbnilUrlAsString(): String = thumbnailUrl.toString()
+}
