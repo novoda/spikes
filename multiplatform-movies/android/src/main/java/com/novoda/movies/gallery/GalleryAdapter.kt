@@ -1,6 +1,5 @@
 package com.novoda.movies.gallery
 
-import android.media.Image
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -37,6 +36,6 @@ class GalleryItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
 
     fun bind(movie: MoviePoster) {
         val imageView = itemView.findViewById<ImageView>(R.id.poster_image)
-        Glide.with(imageView.context).load(movie.thumbnilUrlAsString()).into(imageView)
+        Glide.with(imageView.context).load(movie.thumbnailUrl).into(imageView)
     }
 }
