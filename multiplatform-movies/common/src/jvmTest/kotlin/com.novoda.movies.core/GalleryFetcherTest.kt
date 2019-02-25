@@ -8,7 +8,10 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.ReceivePipelineException
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockHttpResponse
-import io.ktor.http.*
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.fullPath
+import io.ktor.http.headersOf
 import kotlinx.coroutines.io.ByteReadChannel
 import kotlinx.coroutines.runBlocking
 import kotlinx.io.charsets.Charsets
@@ -16,7 +19,7 @@ import kotlinx.io.core.toByteArray
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-private const val API_GALLERY_JSON = "{\"results\": [{\"id\":1, \"poster_path\":\"https://api.themoviedb.org/3/asset/1\"}]}"
+private const val API_GALLERY_JSON = "{\"results\": [{\"id\":1, \"poster_path\":\"/some_image.jpg\"}]}"
 private const val GALLERY_PATH = "/3/movie/popular"
 
 class GalleryFetcherTest {
@@ -24,7 +27,7 @@ class GalleryFetcherTest {
     @Test
     fun `should fetch Gallery`() {
         // given
-        val expectedGallery = Gallery(listOf(MoviePoster(1, Url("https://api.themoviedb.org/3/asset/1"))))
+        val expectedGallery = Gallery(listOf(MoviePoster(1, "https://image.tmdb.org/t/p/w1280/some_image.jpg")))
         val galleryFetcher = galleryFetcherUsing(API_GALLERY_JSON)
 
         runBlocking {

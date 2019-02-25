@@ -1,7 +1,5 @@
 package com.novoda.movies.gallery
 
-import io.ktor.http.Url
-
 internal class GalleryFetcher(private val galleryBackend: GalleryBackend) {
 
     suspend fun fetchGallery(): Gallery {
@@ -11,7 +9,7 @@ internal class GalleryFetcher(private val galleryBackend: GalleryBackend) {
 
     private fun toGallery(apiGallery: ApiGallery): List<MoviePoster> {
         return apiGallery.apiMoviePosters.map {
-            MoviePoster(it.movieId, Url(it.thumbnailUrl))
+            MoviePoster(it.movieId, "https://image.tmdb.org/t/p/w1280${it.thumbnailUrl}")
         }
     }
 }
