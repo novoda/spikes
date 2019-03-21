@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import common
+import main
 
 class GalleryViewController: UIViewController, GalleryPresenterView {
     

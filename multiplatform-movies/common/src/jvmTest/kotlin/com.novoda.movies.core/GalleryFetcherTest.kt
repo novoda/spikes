@@ -16,8 +16,8 @@ import kotlinx.coroutines.io.ByteReadChannel
 import kotlinx.coroutines.runBlocking
 import kotlinx.io.charsets.Charsets
 import kotlinx.io.core.toByteArray
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import org.junit.Assert.assertEquals
+import org.junit.Test
 
 private const val API_GALLERY_JSON = "{\"results\": [{\"id\":1, \"poster_path\":\"/some_image.jpg\"}]}"
 private const val GALLERY_PATH = "/3/movie/popular"
