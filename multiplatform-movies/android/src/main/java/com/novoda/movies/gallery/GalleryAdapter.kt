@@ -15,29 +15,31 @@ class GalleryAdapter(private val moviePosterWidthInPixels: Int) : RecyclerView.A
 
     override fun onCreateViewHolder(parent: ViewGroup, position: Int): GalleryItemViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
-
-        return GalleryItemViewHolder(view)
+        return GalleryItemViewHolder(view, moviePosterWidthInPixels)
     }
 
     override fun getItemCount(): Int = moviePosters.size
 
     override fun onBindViewHolder(viewHolder: GalleryItemViewHolder, position: Int) {
         val movie = moviePosters[position]
-        viewHolder.bind(movie, moviePosterWidthInPixels)
+        viewHolder.bind(movie)
     }
 
     fun updateWith(gallery: Gallery) {
         moviePosters = gallery.moviePosters
         notifyDataSetChanged()
     }
-
 }
 
-class GalleryItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class GalleryItemViewHolder(itemView: View, moviePosterWidthInPixels: Int) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(movie: MoviePoster, moviePosterWidthInPixels: Int) {
-        val imageView = itemView.findViewById<ImageView>(R.id.poster_image)
+    private val imageView = itemView.findViewById<ImageView>(R.id.poster_image)
+
+    init {
         imageView.layoutParams = ViewGroup.LayoutParams(moviePosterWidthInPixels, ViewGroup.LayoutParams.WRAP_CONTENT)
+    }
+
+    fun bind(movie: MoviePoster) {
         Glide.with(imageView.context).load(movie.thumbnailUrl).into(imageView)
     }
 }
