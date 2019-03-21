@@ -1,9 +1,39 @@
 apply plugin: 'kotlin-multiplatform'
 apply plugin: 'kotlinx-serialization'
+apply plugin: 'com.codingfeline.buildkonfig'
+apply plugin: 'com.novoda.build-properties'
 
 // TODO work around for https://youtrack.jetbrains.com/issue/KT-27170
 configurations {
     compileClasspath
+}
+
+buildProperties {
+    android {
+        using project.file('android-secrets.properties')
+    }
+    ios {
+        using project.file('ios-secrets.properties')
+    }
+}
+
+buildkonfig {
+    packageName = 'com.novoda.movies'
+
+    // default config is required
+    defaultConfigs {
+        buildConfigField 'STRING', 'API_KEY', 'value'
+    }
+
+    targetConfigs {
+        jvm {
+            buildConfigField 'STRING', 'API_KEY', buildProperties.android['api_key'].string
+        }
+
+        iOS {
+            buildConfigField 'STRING', 'API_KEY', buildProperties.ios['api_key'].string
+        }
+    }
 }
 
 kotlin {
@@ -30,7 +60,6 @@ kotlin {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-test-common'
                 implementation 'org.jetbrains.kotlin:kotlin-test-annotations-common'
-                api "io.ktor:ktor-client-mock:$ktor_version"
             }
         }
         jvmMain {
@@ -41,6 +70,7 @@ kotlin {
 
                 implementation "io.ktor:ktor-client-core-jvm:$ktor_version"
                 implementation "io.ktor:ktor-client-json-jvm:$ktor_version"
+                implementation "io.ktor:ktor-client-okhttp:$ktor_version"
             }
         }
         jvmTest {
@@ -58,8 +88,8 @@ kotlin {
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:$serialization_version"
 
                 implementation "io.ktor:ktor-client-ios:$ktor_version"
-                implementation "io.ktor:ktor-client-core-ios:$ktor_version"
-                implementation "io.ktor:ktor-client-json-ios:$ktor_version"  
+                implementation "io.ktor:ktor-client-core-native:$ktor_version"
+                implementation "io.ktor:ktor-client-json-native:$ktor_version"  
             }
         }
     }

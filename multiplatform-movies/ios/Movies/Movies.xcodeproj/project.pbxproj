@@ -12,18 +12,18 @@
 		AE43CC8121E5EA4E00D3496F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE43CC7F21E5EA4E00D3496F /* Main.storyboard */; };
 		AE43CC8321E5EA4F00D3496F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AE43CC8221E5EA4F00D3496F /* Assets.xcassets */; };
 		AE43CC8621E5EA4F00D3496F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE43CC8421E5EA4F00D3496F /* LaunchScreen.storyboard */; };
-		AE43CC8E21E5EA6600D3496F /* common.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE43CC8D21E5EA6600D3496F /* common.framework */; };
-		AE43CC8F21E5EA6600D3496F /* common.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AE43CC8D21E5EA6600D3496F /* common.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		AE80F0C72211D47C0032AC63 /* main.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE80F0C62211D47B0032AC63 /* main.framework */; };
+		AE80F0C82211D47C0032AC63 /* main.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AE80F0C62211D47B0032AC63 /* main.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		AE43CC9021E5EA6600D3496F /* Embed Frameworks */ = {
+		AE80F0C92211D47C0032AC63 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				AE43CC8F21E5EA6600D3496F /* common.framework in Embed Frameworks */,
+				AE80F0C82211D47C0032AC63 /* main.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -38,7 +38,7 @@
 		AE43CC8221E5EA4F00D3496F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AE43CC8521E5EA4F00D3496F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AE43CC8721E5EA4F00D3496F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AE43CC8D21E5EA6600D3496F /* common.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = common.framework; path = "../../common/build/xcode-frameworks/common.framework"; sourceTree = "<group>"; };
+		AE80F0C62211D47B0032AC63 /* main.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = main.framework; path = "../../common/build/xcode-frameworks/main.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,7 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AE43CC8E21E5EA6600D3496F /* common.framework in Frameworks */,
+				AE80F0C72211D47C0032AC63 /* main.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,7 +64,7 @@
 		AE43CC6F21E5EA4E00D3496F = {
 			isa = PBXGroup;
 			children = (
-				AE43CC8D21E5EA6600D3496F /* common.framework */,
+				AE80F0C62211D47B0032AC63 /* main.framework */,
 				AE43CC7A21E5EA4E00D3496F /* Movies */,
 				AE43CC7921E5EA4E00D3496F /* Products */,
 			);
@@ -101,7 +101,7 @@
 				AE43CC7421E5EA4E00D3496F /* Sources */,
 				AE43CC7521E5EA4E00D3496F /* Frameworks */,
 				AE43CC7621E5EA4E00D3496F /* Resources */,
-				AE43CC9021E5EA6600D3496F /* Embed Frameworks */,
+				AE80F0C92211D47C0032AC63 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

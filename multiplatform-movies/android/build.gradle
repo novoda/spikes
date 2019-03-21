@@ -22,6 +22,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/ktor-http.kotlin_module'
+        exclude 'META-INF/kotlinx-io.kotlin_module'
+        exclude 'META-INF/atomicfu.kotlin_module'
+        exclude 'META-INF/ktor-utils.kotlin_module'
+        exclude 'META-INF/kotlinx-coroutines-io.kotlin_module'
+        exclude 'META-INF/ktor-client-json.kotlin_module'
+        exclude 'META-INF/ktor-client-core.kotlin_module'
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
 }
 
 dependencies {
@@ -30,8 +45,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation "io.ktor:ktor-client-okhttp:$ktor_version"
-    implementation "io.ktor:ktor-client-json-jvm:$ktor_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
