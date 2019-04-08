@@ -1,7 +1,5 @@
 package com.novoda.ksigner.hash
 
-import kotlin.experimental.and
-
 // IntArray
 
 /**
@@ -89,13 +87,5 @@ internal fun Array<Byte>.toInt(): Int {
 /**
  * Converts byte array to hex String
  */
-internal fun Array<Byte>.toHexString(): String {
-    val hexChars = CharArray(this.size * 2)
-    for (j in this.indices) {
-        val v = (this[j] and 0xFF.toByte()).toInt()
-
-        hexChars[j * 2] = hexDigitsCharArray[v ushr 4]
-        hexChars[j * 2 + 1] = hexDigitsCharArray[v and 0x0F]
-    }
-    return String(hexChars)
-}
+@ExperimentalUnsignedTypes
+fun ByteArray.toHexString() = asUByteArray().joinToString("") { it.toString(16).padStart(2, '0') }
