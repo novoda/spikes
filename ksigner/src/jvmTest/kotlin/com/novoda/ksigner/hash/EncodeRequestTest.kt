@@ -4,7 +4,7 @@ import okio.ByteString.Companion.encode
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class DecodeRequestTest {
+class EncodeRequestTest {
     private val canonicalRequest = "PUT\n" +
             "/-/vaults/examplevault\n" +
             "\n" +
@@ -18,7 +18,7 @@ class DecodeRequestTest {
 
     @ExperimentalUnsignedTypes
     @Test
-    fun decodesRawCanonicalRequestToLowercaseHex() {
+    fun encodeRawCanonicalRequestToLowercaseHex() {
         val actual = canonicalRequest.encode().sha256().hex()
         val expected = "5f1da1a2d0feb614dd03d71e87928b8e449ac87614479332aced3a701f916743"
 
