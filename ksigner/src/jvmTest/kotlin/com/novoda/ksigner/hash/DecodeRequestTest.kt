@@ -1,5 +1,6 @@
 package com.novoda.ksigner.hash
 
+import okio.ByteString.Companion.encode
 import org.junit.Test
 import kotlin.test.assertEquals
 
@@ -18,8 +19,7 @@ class DecodeRequestTest {
     @ExperimentalUnsignedTypes
     @Test
     fun decodesRawCanonicalRequestToLowercaseHex() {
-        val digest = Sha256.digest(canonicalRequest.toByteArray())
-        val actual = digest.toHexString()
+        val actual = canonicalRequest.encode().sha256().hex()
         val expected = "5f1da1a2d0feb614dd03d71e87928b8e449ac87614479332aced3a701f916743"
 
         assertEquals(expected, actual)
