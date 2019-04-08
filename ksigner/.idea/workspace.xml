@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleLocalSettings">
+    <option name="projectSyncType">
+      <map>
+        <entry key="$PROJECT_DIR$/../../ArrowInPractice" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../CoroutinesWorkshop" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../KotlinAcademyApp" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../KotlinMultiplatformPlayground" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../bintray-examples/gradle-bintray-plugin-examples/configurations-example" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../bintray-examples/gradle-bintray-plugin-examples/publications-example" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../bintray-release" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../bintray-release/samples/jvm" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../dojos" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../dojos/bankAccount" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../dojos/bankAccount/default" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../gradle-bintray-plugin" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../gradle-build-properties-plugin" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../gradle-static-analysis-plugin" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../gradle-static-analysis-plugin/sample" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../gradle/subprojects/docs/src/samples/compositeBuilds/plugin-dev/consumer" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../gradle/subprojects/docs/src/samples/compositeBuilds/plugin-dev/greeting-plugin" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../kotlin-native/samples/nonBlockingEchoServer" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../kotlinconf-app" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../ktor-issue" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../ktor-samples" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../../novoda/scaffolding" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../game-of-life-multiplatform" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../game-of-life-native" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../gradle-plugin-release-plugin" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../gradle-pluglin-release-plugin" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../multiplatform-http" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../multiplatform-movies" value="PREVIEW" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="y" value="23" />
+    <option name="width" value="1920" />
+    <option name="height" value="1057" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="GoToClass.includeLibraries" value="false" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="settings.editor.selected.configurable" value="android.sdk-updates" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
+  </component>
+  <component name="RunManager">
+    <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
+      <Host>localhost</Host>
+      <Port>5050</Port>
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <predefined_log_file id="idea.log" enabled="true" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.19949281" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
