@@ -17,7 +17,7 @@ class EncodeRequestTest {
 
     @ExperimentalUnsignedTypes
     @Test
-    fun decodesRawCanonicalRequestToLowercaseHex() {
+    fun encodesRawCanonicalRequestToLowercaseHex() {
         val digest = Sha256.digest(canonicalRequest.toByteArray())
         val actual = digest.toHexString()
         val expected = "5f1da1a2d0feb614dd03d71e87928b8e449ac87614479332aced3a701f916743"
