@@ -19,13 +19,15 @@ internal class CanonicalHeaders private constructor(
         }
 
         fun build(): CanonicalHeaders {
-            val names = internalMap
-                .keys
+            val names = internalMap.keys
                 .toTypedArray()
                 .sortedArray()
                 .joinToString(separator = ";") { it.toLowerCase() }
 
+            return CanonicalHeaders(names, canonicalizedHeaders(), internalMap)
+        }
 
+        private fun canonicalizedHeaders(): String {
             val canonicalizedHeadersBuilder = StringBuilder()
             internalMap.entries
                 .sortedBy { it.key }
@@ -33,16 +35,13 @@ internal class CanonicalHeaders private constructor(
                     canonicalizedHeadersBuilder
                         .append(header.key.toLowerCase())
                         .append(':')
-                        .append(
-                            header
-                                .value
-                                .map { normalizeHeaderValue(it) }
-                                .joinToString(separator = ",")
-                        )
+                        .append(header.value
+                            .map { normalizeHeaderValue(it) }
+                            .joinToString(separator = ","))
                         .append("\n")
                 }
 
-            return CanonicalHeaders(names, canonicalizedHeadersBuilder.toString(), internalMap)
+            return canonicalizedHeadersBuilder.toString()
         }
 
         private fun normalizeHeaderValue(value: String): String {
