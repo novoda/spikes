@@ -1,12 +1,12 @@
 package com.novoda.ksigner
 
-internal class CanonicalHeaders private constructor(
+internal data class CanonicalHeaders constructor(
     val names: String,
     val canonicalizedHeaders: String,
     private val internalMap: Map<String, List<String>>
 ) {
 
-    fun getFirstValue(name: String): String? = internalMap[name.toLowerCase()]?.get(0)
+    fun getFirstValue(headerName: String): String? = internalMap[headerName.toLowerCase()]?.get(0)
 
     internal class Builder {
 
