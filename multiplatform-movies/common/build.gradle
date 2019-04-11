@@ -44,6 +44,16 @@ kotlin {
         fromPreset(presets.iosX64, 'iOS') {
             compilations.main.outputKinds('FRAMEWORK')
         }
+        
+        fromPreset(presets.js, "js") {
+            compileKotlinJs {
+                kotlinOptions.metaInfo = true
+                kotlinOptions.outputFile = "$project.buildDir.path/js/${project.name}.js"
+                kotlinOptions.sourceMap = true
+                kotlinOptions.moduleKind = "commonjs"
+                kotlinOptions.main = "call"
+            }
+        }
     }
     sourceSets {
         commonMain {
@@ -90,6 +100,16 @@ kotlin {
                 implementation "io.ktor:ktor-client-ios:$ktor_version"
                 implementation "io.ktor:ktor-client-core-native:$ktor_version"
                 implementation "io.ktor:ktor-client-json-native:$ktor_version"  
+            }
+        }
+        jsMain {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-js"
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$coroutines_version"
+
+                implementation "io.ktor:ktor-client-core-js:$ktor_version"
+                implementation "io.ktor:ktor-client-json-js:$ktor_version"
+                implementation "io.ktor:ktor-client-okhttp:$ktor_version"
             }
         }
     }
