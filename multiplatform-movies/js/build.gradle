@@ -13,7 +13,6 @@ dependencies {
     implementation 'org.jetbrains:kotlin-react-dom:16.6.0-pre.70-kotlin-1.3.21'
     implementation "io.ktor:ktor-client-js:$ktor_version"
     implementation "io.ktor:ktor-client-json-js:$ktor_version"
-    implementation "io.ktor:ktor-client-okhttp:$ktor_version"
 }
 
 compileKotlin2Js {
