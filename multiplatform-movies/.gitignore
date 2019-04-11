@@ -4,7 +4,6 @@ local.properties
 /.idea
 .DS_Store
 build
-/common/build
 /captures
 /out
 .externalNativeBuild
