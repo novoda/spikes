@@ -4,6 +4,10 @@ plugins {
     id("org.jetbrains.kotlin.frontend")
 }
 
+repositories {
+    maven { url "https://dl.bintray.com/kotlin/kotlin-js-wrappers" }
+}
+
 dependencies {
     implementation project(':common')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
