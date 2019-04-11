@@ -37,7 +37,7 @@ private class App : RComponent<RProps, AppState>(), GalleryPresenter.View {
     }
 
     override fun RBuilder.render() {
-        state.gallery?.let { h2 { "${it.moviePosters.size} movies" } }
+        state.gallery?.let { h2 { +"${it.moviePosters.size} movies" } }
         state.message?.let { h2 { +it } }
     }
 }
