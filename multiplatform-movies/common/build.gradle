@@ -15,6 +15,9 @@ buildProperties {
     ios {
         using project.file('ios-secrets.properties')
     }
+    js {
+        using project.file('js-secrets.properties')
+    }
 }
 
 buildkonfig {
@@ -32,6 +35,10 @@ buildkonfig {
 
         iOS {
             buildConfigField 'STRING', 'API_KEY', buildProperties.ios['api_key'].string
+        }
+
+        js {
+            buildConfigField 'STRING', 'API_KEY', buildProperties.js['api_key'].string
         }
     }
 }
