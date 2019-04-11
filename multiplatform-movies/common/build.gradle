@@ -113,7 +113,6 @@ kotlin {
 
                 implementation "io.ktor:ktor-client-js:$ktor_version"
                 implementation "io.ktor:ktor-client-json-js:$ktor_version"
-                implementation "io.ktor:ktor-client-okhttp:$ktor_version"
             }
         }
     }
