@@ -3,7 +3,6 @@ package com.novoda.movies.gallery
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import io.ktor.http.Url
 import kotlinx.coroutines.Dispatchers.Unconfined
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -19,7 +18,7 @@ class GalleryPresenterTest {
 
     @Test
     fun `renders gallery when data available`() = runBlocking {
-        val expectedGalley = Gallery(listOf(MoviePoster(1L, Url("http://www.google.com"))))
+        val expectedGalley = Gallery(listOf(MoviePoster(1L, "http://www.google.com")))
         whenever(fetcher.fetchGallery()).thenReturn(expectedGalley)
 
         presenter.startPresenting(view)
