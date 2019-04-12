@@ -1,11 +1,17 @@
 package com.novoda.movies.gallery
 
+import kotlinx.css.Display
+import kotlinx.css.FlexDirection
+import kotlinx.css.px
 import react.RBuilder
 import react.RComponent
 import react.RProps
 import react.RState
 import react.dom.h2
 import react.setState
+import styled.css
+import styled.styledDiv
+import styled.styledImg
 
 interface AppState : RState {
     var gallery: Gallery?
@@ -37,7 +43,22 @@ private class App : RComponent<RProps, AppState>(), GalleryPresenter.View {
     }
 
     override fun RBuilder.render() {
-        state.gallery?.let { h2 { +"${it.moviePosters.size} movies" } }
+        state.gallery?.let {
+            styledDiv {
+                css {
+                    display = Display.flex
+                    flexDirection = FlexDirection.row
+                }
+            }
+            h2 { +"${it.moviePosters.size} movies" }
+            it.moviePosters.forEach { poster ->
+                styledImg(src = poster.thumbnailUrl) {
+                    css {
+                        width = 200.px
+                    }
+                }
+            }
+        }
         state.message?.let { h2 { +it } }
     }
 }
