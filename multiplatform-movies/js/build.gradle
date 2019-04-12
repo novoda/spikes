@@ -6,6 +6,7 @@ plugins {
 
 repositories {
     maven { url "https://dl.bintray.com/kotlin/kotlin-js-wrappers" }
+    maven { url "https://bintray.com/kotlin/kotlin-js-wrappers/kotlin-styled" }
 }
 
 dependencies {
@@ -15,6 +16,7 @@ dependencies {
 
     implementation 'org.jetbrains:kotlin-react:16.6.0-pre.70-kotlin-1.3.21'
     implementation 'org.jetbrains:kotlin-react-dom:16.6.0-pre.70-kotlin-1.3.21'
+    implementation 'org.jetbrains:kotlin-styled:1.0.0-pre.70-kotlin-1.3.21'
     implementation "io.ktor:ktor-client-js:$ktor_version"
     implementation "io.ktor:ktor-client-json-js:$ktor_version"
 }
@@ -38,6 +40,8 @@ kotlinFrontend {
         dependency("material-components-web")
         dependency("kotlinx-serialization-runtime-js")
         dependency("text-encoding")
+        dependency("inline-style-prefixer")
+        dependency("styled-components")
     }
 
     webpackBundle {
