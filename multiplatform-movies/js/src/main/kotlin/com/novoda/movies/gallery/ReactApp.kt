@@ -49,6 +49,7 @@ private class App : RComponent<RProps, AppState>(), GalleryPresenter.View {
         state.gallery?.let {
             styledDiv {
                 css {
+                    classes = mutableListOf("mdc-top-app-bar--fixed-adjust")
                     display = Display.grid
                     gridTemplateColumns = GridTemplateColumns("repeat(auto-fill, minmax(200px, 1fr))")
                 }
