@@ -1,13 +1,8 @@
 package com.novoda.movies.gallery
 
-import kotlinx.css.*
-import react.RBuilder
-import react.RComponent
-import react.RProps
-import react.RState
-import react.dom.*
-import react.setState
-import styled.*
+import react.*
+import react.dom.div
+import react.dom.h2
 
 interface AppState : RState {
     var gallery: Gallery?
@@ -40,28 +35,10 @@ private class App : RComponent<RProps, AppState>(), GalleryPresenter.View {
 
     override fun RBuilder.render() {
         topAppBar("Movies")
-        state.gallery?.let {
-            styledDiv {
-                css {
-                    classes = mutableListOf("mdc-top-app-bar--fixed-adjust")
-                    display = Display.grid
-                    gridTemplateColumns = GridTemplateColumns("repeat(auto-fill, minmax(200px, 1fr))")
-                }
-                it.moviePosters.forEach { poster ->
-                    styledA {
-                        css {
-                        }
-                        styledImg(src = poster.thumbnailUrl) {
-                            css {
-                                width = 100.pct
-                                height = 100.pct
-                            }
-                        }
-                    }
-                }
-            }
+        div("mdc-top-app-bar--fixed-adjust") {
+            state.gallery?.let(this::postersGallery)
+            state.message?.let { h2 { +it } }
         }
-        state.message?.let { h2 { +it } }
     }
 }
 
