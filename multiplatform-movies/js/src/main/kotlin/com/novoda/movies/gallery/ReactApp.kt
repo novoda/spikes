@@ -1,17 +1,13 @@
 package com.novoda.movies.gallery
 
-import kotlinx.css.Display
-import kotlinx.css.FlexDirection
-import kotlinx.css.px
+import kotlinx.css.*
 import react.RBuilder
 import react.RComponent
 import react.RProps
 import react.RState
 import react.dom.*
 import react.setState
-import styled.css
-import styled.styledDiv
-import styled.styledImg
+import styled.*
 
 interface AppState : RState {
     var gallery: Gallery?
@@ -53,14 +49,19 @@ private class App : RComponent<RProps, AppState>(), GalleryPresenter.View {
         state.gallery?.let {
             styledDiv {
                 css {
-                    display = Display.flex
-                    flexDirection = FlexDirection.row
+                    display = Display.grid
+                    gridTemplateColumns = GridTemplateColumns("repeat(auto-fill, minmax(200px, 1fr))")
                 }
-            }
-            it.moviePosters.forEach { poster ->
-                styledImg(src = poster.thumbnailUrl) {
-                    css {
-                        width = 200.px
+                it.moviePosters.forEach { poster ->
+                    styledA {
+                        css {
+                        }
+                        styledImg(src = poster.thumbnailUrl) {
+                            css {
+                                width = 100.pct
+                                height = 100.pct
+                            }
+                        }
                     }
                 }
             }
