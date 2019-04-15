@@ -39,13 +39,7 @@ private class App : RComponent<RProps, AppState>(), GalleryPresenter.View {
     }
 
     override fun RBuilder.render() {
-        header(classes = "mdc-top-app-bar mdc-top-app-bar--fixed") {
-            div(classes = "mdc-top-app-bar__row") {
-                section(classes = "mdc-top-app-bar__section mdc-top-app-bar__section--align-start") {
-                    span(classes = "mdc-top-app-bar__title") { +"Movies" }
-                }
-            }
-        }
+        topAppBar("Movies")
         state.gallery?.let {
             styledDiv {
                 css {
