@@ -1,11 +1,8 @@
 package com.novoda.movies.gallery
 
-import react.RBuilder
-import react.RComponent
-import react.RProps
-import react.RState
+import react.*
+import react.dom.div
 import react.dom.h2
-import react.setState
 
 interface AppState : RState {
     var gallery: Gallery?
@@ -37,8 +34,11 @@ private class App : RComponent<RProps, AppState>(), GalleryPresenter.View {
     }
 
     override fun RBuilder.render() {
-        state.gallery?.let { h2 { +"${it.moviePosters.size} movies" } }
-        state.message?.let { h2 { +it } }
+        topAppBar("Movies")
+        div("mdc-top-app-bar--fixed-adjust") {
+            state.gallery?.let(this::postersGallery)
+            state.message?.let { h2 { +it } }
+        }
     }
 }
 
