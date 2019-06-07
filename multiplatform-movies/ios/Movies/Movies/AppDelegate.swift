@@ -14,10 +14,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        let galleryViewController = GalleryViewController()
-        self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window?.rootViewController = galleryViewController
-        self.window?.makeKeyAndVisible()        
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.makeKeyAndVisible()
+        let flowLayout = UICollectionViewFlowLayout()
+        let galleryViewController = GalleryViewController(collectionViewLayout: flowLayout)
+        window?.rootViewController = galleryViewController
+        
         return true
     }
 

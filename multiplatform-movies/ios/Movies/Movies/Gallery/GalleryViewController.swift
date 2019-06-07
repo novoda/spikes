@@ -12,26 +12,24 @@ import main
 class GalleryViewController: UICollectionViewController, GalleryPresenterView {
     
     private let presenter = GalleryDependencyProvider(networkingDependencyProvider: NetworkingDependencyProvider()).providerPresenter()
-
-    private var movies : [MoviePoster] = []
+    private let cellIdentifier = "movie_poster"
     
-    override func loadView() {
-        let layout = UICollectionViewFlowLayout()
-        view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        
-        super.loadView()        
-    }
+    private var movies : [MoviePoster] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        collectionView?.backgroundColor = .white
+        collectionView?.register(MoviePosterCell.self, forCellWithReuseIdentifier: cellIdentifier)
         presenter.startPresenting(view: self)
     }
     
     func render(gallery: Gallery) {
         movies = gallery.moviePosters
+        collectionView?.reloadData()
     }
     
     func renderError(message: String?) {
+        print(message)
 //        guard let errorMessage = message else {
 //            label.text = "Something went wrong"
 //            return
@@ -39,7 +37,7 @@ class GalleryViewController: UICollectionViewController, GalleryPresenterView {
 //        label.text = errorMessage
     }
 }
-
+//MARK: - UICollectionViewDatasource
 extension GalleryViewController {
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -47,8 +45,24 @@ extension GalleryViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "movie_poster", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! MoviePosterCell
         cell.backgroundColor = .green
+        cell.thumbnailUrl.text = movies[indexPath.row].thumbnailUrl
         return cell
+    }
+    
+}
+
+class MoviePosterCell: UICollectionViewCell {
+    let thumbnailUrl = UILabel()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubview(thumbnailUrl)
+    }
+    
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
