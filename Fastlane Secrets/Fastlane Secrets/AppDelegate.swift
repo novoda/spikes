@@ -22,8 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         label.trailingAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         label.topAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.topAnchor).isActive = true
 
-        label.text = "Secret key will go here!"
+        label.text = Secrets.apiKey
         return viewController
     }
 
 }
+

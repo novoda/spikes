@@ -1,2 +1,4 @@
 xcuserdata/
 fastlane/report.xml
+
+Resources/Secrets.swift
