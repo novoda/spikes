@@ -31,11 +31,6 @@ class GalleryViewController: UICollectionViewController, GalleryPresenterView {
     
     func renderError(message: String?) {
         print(message)
-//        guard let errorMessage = message else {
-//            label.text = "Something went wrong"
-//            return
-//        }
-//        label.text = errorMessage
     }
 }
 //MARK: - UICollectionViewDatasource
