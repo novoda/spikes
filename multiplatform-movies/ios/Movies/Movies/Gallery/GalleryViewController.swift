@@ -49,9 +49,17 @@ extension GalleryViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! MoviePosterCell
         let movie = movies[indexPath.row]
         cell.posterImage.sd_setImage(with: URL(string: movie.thumbnailUrl), placeholderImage: nil)
+        cell.backgroundColor = .blue
         return cell
     }
     
+}
+
+extension GalleryViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.frame.width/2, height: 310)
+    }
 }
 
 class MoviePosterCell: UICollectionViewCell {
