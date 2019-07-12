@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 import main
 
 class GalleryViewController: UICollectionViewController, GalleryPresenterView {
@@ -46,23 +47,31 @@ extension GalleryViewController {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! MoviePosterCell
-        cell.backgroundColor = .green
-        cell.thumbnailUrl.text = movies[indexPath.row].thumbnailUrl
+        let movie = movies[indexPath.row]
+        cell.posterImage.sd_setImage(with: URL(string: movie.thumbnailUrl), placeholderImage: nil)
         return cell
     }
     
 }
 
 class MoviePosterCell: UICollectionViewCell {
-    let thumbnailUrl = UILabel()
+    let posterImage = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(thumbnailUrl)
+        posterImage.contentMode = .scaleAspectFit
+        posterImage.clipsToBounds = true
+        posterImage.isUserInteractionEnabled = false
+        
+        contentView.addSubview(posterImage)
     }
-    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        posterImage.frame = contentView.frame
     }
 }
