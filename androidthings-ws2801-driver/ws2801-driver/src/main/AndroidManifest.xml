@@ -1,0 +1,11 @@
+<manifest package="com.xrigau.driver.ws2801"
+
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+
+        <uses-library android:name="com.google.android.things" />
+
+    </application>
+
+</manifest>

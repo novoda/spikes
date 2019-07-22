@@ -1,0 +1,12 @@
+apply plugin: 'kotlin-platform-jvm'
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.1'
+    expectedBy project(":common")
+    testCompile "junit:junit:4.12"
+
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+    testCompile 'io.mockk:mockk:1.6.3'
+}

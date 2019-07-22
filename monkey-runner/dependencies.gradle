@@ -1,13 +1,12 @@
 ext {
     gradlePlugins = [
-            gradle                    : 'com.android.tools.build:gradle:2.1.3',
-            gradleAndroidCommandPlugin: 'com.novoda:gradle-android-command-plugin:1.6.2',
-            bintrayRelease            : 'com.novoda:bintray-release:0.3.4'
+            gradle              : 'com.android.tools.build:gradle:3.0.1',
+            androidCommandPlugin: 'com.novoda:gradle-android-command-plugin:2.0',
+            bintrayRelease      : 'com.novoda:bintray-release:0.8.0'
     ]
 
     versions = [
-            androidBuildTools : '24.0.1',
-            androidSupportLibs: '24.1.1'
+            androidSupportLibs: '25.1.0'
     ]
 
     libraries = [

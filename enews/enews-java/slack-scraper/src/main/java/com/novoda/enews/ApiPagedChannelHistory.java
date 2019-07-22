@@ -1,6 +1,7 @@
 package com.novoda.enews;
 
 import com.google.gson.annotations.SerializedName;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -35,12 +36,34 @@ class ApiPagedChannelHistory {
         @SerializedName("ts")
         public String timeStamp;
 
+        @Nullable
+        @SerializedName("attachments")
+        public List<ApiAttachment> attachments;
+
         @Override
         public String toString() {
-            return "\nApiMessage{" +
+            return "ApiMessage{" +
                     "text='" + text + '\'' +
                     ", type='" + type + '\'' +
                     ", timeStamp='" + timeStamp + '\'' +
+                    ", attachments=" + attachments +
+                    '}';
+        }
+    }
+
+    public static class ApiAttachment {
+
+        @SerializedName("image_url")
+        public String imageUrl;
+
+        @SerializedName("thumb_url")
+        public String thumbnailUrl;
+
+        @Override
+        public String toString() {
+            return "ApiAttachment{" +
+                    "imageUrl='" + imageUrl + '\'' +
+                    ", thumbnailUrl='" + thumbnailUrl + '\'' +
                     '}';
         }
     }

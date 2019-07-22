@@ -1,0 +1,76 @@
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath 'com.android.tools.build:gradle:2.2.3'
+    classpath 'com.novoda:gradle-android-command-plugin:1.7.1'
+    classpath 'com.novoda:gradle-build-properties-plugin:0.2'
+    classpath 'com.google.gms:google-services:3.0.0'
+  }
+}
+repositories {
+  mavenCentral()
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'com.novoda.android-command'
+apply plugin: 'com.novoda.build-properties'
+
+buildProperties {
+  secrets {
+    file project.file('secrets.properties')
+  }
+}
+
+android {
+  compileSdkVersion 23
+  buildToolsVersion "25.0.2"
+
+  defaultConfig {
+    minSdkVersion 21
+    targetSdkVersion 23
+
+    buildConfigProperty 'IDENTITY_POOL', buildProperties.secrets['identity_pool']
+    buildConfigProperty 'DEVELOPER_PROVIDER', buildProperties.secrets['developer_provider']
+    buildConfigProperty 'AUTHENTICATION_ENDPOINT', buildProperties.secrets['authentication_endpoint']
+    buildConfigProperty 'REGION', buildProperties.secrets['region']
+  }
+
+  sourceSets {
+    main {
+      manifest.srcFile 'AndroidManifest.xml'
+      java.srcDirs = ['src']
+      resources.srcDirs = ['resources']
+      res.srcDirs = ['res']
+      assets.srcDirs = ['assets']
+    }
+  }
+  buildTypes {}
+
+  lintOptions {
+    abortOnError false
+  }
+}
+
+ext {
+  versions = [
+      firebase: '10.0.1',
+      aws     : '2.2.22'
+  ]
+}
+
+dependencies {
+  compile "com.google.firebase:firebase-core:${versions.firebase}"
+  compile "com.google.firebase:firebase-auth:${versions.firebase}"
+  compile "com.google.firebase:firebase-database:${versions.firebase}"
+  compile "com.amazonaws:aws-android-sdk-core:${versions.aws}"
+  compile "com.amazonaws:aws-android-sdk-cognito:${versions.aws}"
+  compile "com.amazonaws:aws-android-sdk-lambda:${versions.aws}"
+  compile 'commons-codec:commons-codec:1.10'
+  compile 'com.squareup.okhttp3:okhttp:3.6.0'
+  compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+  compile 'io.reactivex.rxjava2:rxjava:2.0.6'
+}
+
+apply plugin: 'com.google.gms.google-services'

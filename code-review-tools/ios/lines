@@ -1,0 +1,11 @@
+#!/bin/bash
+
+find . -path ./Pods -prune -o -name "*\.m" -exec wc -l {} +
+
+TOTAL=$(find . -path ./Pods -prune -o -name "*\.m" | wc -l)
+printf "Total number of *.m files: %s \n" $TOTAL
+
+find . -path ./Pods -prune -o -name "*\.swift" -exec wc -l {} +
+
+SWIFT_TOTAL=$(find . -path ./Pods -prune -o -name "*\.swift" | wc -l)
+printf "Total number of Swift files: %s \n" $SWIFT_TOTAL

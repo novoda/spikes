@@ -1,0 +1,64 @@
+buildscript {
+    ext { springBootVersion = '1.5.1.RELEASE' }
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+group = 'com.amazonaws.cognito'
+
+jar {
+    baseName = 'server'
+    version = '1.0'
+}
+
+description = "Cognito Developer Identity Management"
+
+repositories {
+    mavenCentral()
+    maven { url "https://repo.spring.io/libs-milestone" }
+    maven { url "https://repository.jboss.org/nexus/content/repositories/releases/" }
+    maven { url "http://repo.maven.apache.org/maven2" }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+ext {
+    versions = [
+            amazon_sdk: '1.11.86',
+            jetty_jsp:  '9.4.1.v20170120'
+    ]
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    compile "com.amazonaws:aws-java-sdk-cognitoidentity:$versions.amazon_sdk"
+    compile "com.amazonaws:aws-java-sdk-dynamodb:$versions.amazon_sdk"
+    compile 'com.google.firebase:firebase-admin:4.1.1'
+    compile('org.springframework.boot:spring-boot-starter-web') {
+        exclude(module: 'spring-boot-starter-tomcat')
+    }
+    compile 'org.springframework.boot:spring-boot-starter-jetty'
+    compile "org.eclipse.jetty:apache-jsp:$versions.jetty_jsp"
+    compile "org.eclipse.jetty:apache-jstl:$versions.jetty_jsp"
+
+    testCompile('org.springframework.boot:spring-boot-starter-test') {
+        exclude(module: 'commons-logging')
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
+}

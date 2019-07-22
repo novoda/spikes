@@ -1,9 +1,8 @@
 package com.novoda.enews;
 
-import com.googlecode.jatl.Html;
-
 import java.io.IOException;
-import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
@@ -19,11 +18,16 @@ public class MainHtml {
         }
         String slackToken = args[0];
         Scraper scraper = new Scraper.Factory().newInstance(slackToken);
-        LocalDateTime start = LocalDateTime.now();
-        LocalDateTime end = LocalDateTime.now().minusDays(7);
-        Stream<ChannelHistory.Message> messageStream = scraper.scrape(start, end);
+        HtmlGenerator htmlGenerator = new HtmlGenerator.Factory().newInstance();
+        ArticleEditor articleEditor = new ArticleEditor.Factory().newInstance();
 
-        String html = new NewsletterGenerator().generate(messageStream);
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = LocalDateTime.now().minusDays(6);
+        Stream<ChannelHistory.Message> messageStream = scraper.scrape(start, end);
+        Stream<Article> articleStream = articleEditor.generateArticle(messageStream);
+        String html = htmlGenerator.generate(articleStream);
+
         System.out.println(html);
+        Files.write(Paths.get("./build/enews-debug.html"), html.getBytes());
     }
 }

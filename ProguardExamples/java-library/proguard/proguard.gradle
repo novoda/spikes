@@ -1,0 +1,31 @@
+task prepareProguard(type: Copy) {
+    destinationDir = file("$buildDir/assemble")
+    includeEmptyDirs = true
+    into('dependencies') {
+        from configurations.compile
+    }
+}
+
+def jarDependencies() {
+    def runtimeJar = file("${System.getProperty('java.home')}/lib/rt.jar")
+    def dependencyJars = files("$buildDir/assemble/dependencies/").first().listFiles()
+    def dependencies = new HashSet<File>()
+    dependencies.add(runtimeJar)
+    dependencyJars.each {
+        dependencies.add(it)
+    }
+    return dependencies
+}
+
+def inJarName() {
+    return "build/libs/my-library-${project.version}.jar"
+}
+def outJarName() {
+    return "build/libs/my-library-${project.version}.proguarded.jar"
+}
+
+ext {
+    jarDependencies = this.&jarDependencies
+    inJarName = this.&inJarName
+    outJarName = this.&outJarName
+}

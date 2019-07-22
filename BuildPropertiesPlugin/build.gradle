@@ -1,5 +1,0 @@
-ext {
-  pluginGroup = 'com.novoda'
-  pluginVersion = '1.2.1'
-  pluginId = 'build-properties-plugin'
-}

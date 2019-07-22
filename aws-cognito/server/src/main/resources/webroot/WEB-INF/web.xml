@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright 2010-2015 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+-->
+<web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    <display-name>Cognito Developer Authentication Sample</display-name>
+    
+    <welcome-file-list>
+        <welcome-file>/jsp/home.jsp</welcome-file>
+    </welcome-file-list>
+    
+    <error-page>
+        <!-- Page not found -->
+	    <error-code>404</error-code>
+	    <location>/jsp/pagenotfounderror.jsp</location>
+    </error-page>
+	
+	<error-page>
+		<!-- Uncaught exception -->
+		<error-code>500</error-code>
+		<location>/jsp/error.jsp</location>
+	</error-page>
+	
+	<error-page>
+		<!-- Unsupported servlet method -->
+		<error-code>503</error-code>
+		<location>/jsp/error.jsp</location>
+	</error-page>
+	
+    <!-- ========================================================================================================== -->
+    <!-- Servlet for GetToken -->
+    <!-- ========================================================================================================== -->	
+	<servlet>
+		<display-name>GetTokenServlet</display-name>
+		<servlet-name>GetTokenServlet</servlet-name>
+		<servlet-class>com.amazonaws.cognito.devauthsample.servlet.GetCognitoTokenServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetTokenServlet</servlet-name>
+		<url-pattern>/gettoken/*</url-pattern>
+	</servlet-mapping>
+	
+    
+	<!-- ========================================================================================================== -->
+    <!-- Servlet for UserRegisterServlet -->
+    <!-- ========================================================================================================== -->		
+	<servlet>
+		<servlet-name>RegisterUserServlet</servlet-name>
+		<servlet-class>com.amazonaws.cognito.devauthsample.servlet.RegisterUserServlet</servlet-class>
+		<init-param>
+            <param-name>success</param-name>
+            <param-value>/jsp/register-success.jsp</param-value>
+        </init-param>
+		<init-param>
+            <param-name>error</param-name>
+            <param-value>/jsp/register-failure.jsp</param-value>
+        </init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RegisterUserServlet</servlet-name>
+		<url-pattern>/registeruser/*</url-pattern>
+	</servlet-mapping>
+    
+    
+    <!-- ========================================================================================================== -->
+    <!-- Servlet for LoginServlet -->
+    <!-- ========================================================================================================== -->	
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>com.amazonaws.cognito.devauthsample.servlet.LoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/login/*</url-pattern>
+    </servlet-mapping>     
+</web-app>

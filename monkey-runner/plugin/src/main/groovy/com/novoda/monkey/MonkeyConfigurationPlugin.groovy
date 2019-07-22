@@ -4,13 +4,15 @@ import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-public class MonkeyConfigurationPlugin implements Plugin<Project> {
+class MonkeyConfigurationPlugin implements Plugin<Project> {
 
     private static final String TASK_NAME = 'runMonkeyAll'
 
     @Override
-    public void apply(Project project) {
+    void apply(Project project) {
         ensureAndroidPluginAppliedTo(project)
+        ensureCommandPluginAppliedTo(project)
+
         MonkeyRunnerExtension extension = project.extensions.create(MonkeyRunnerExtension.NAME, MonkeyRunnerExtension)
         extension.setDefaultsForOptionalProperties()
 
@@ -24,24 +26,32 @@ public class MonkeyConfigurationPlugin implements Plugin<Project> {
     }
 
     private static void ensureAndroidPluginAppliedTo(Project project) {
-        boolean missingAndroidPlugin = !project.plugins.hasPlugin('com.android.application')
-        if (missingAndroidPlugin) {
-            throw new GradleException('monkey runner plugin can only be applied after the Android plugin')
+        ensurePluginIsApplied('com.android.application', project)
+    }
+
+    private static void ensureCommandPluginAppliedTo(Project project) {
+        ensurePluginIsApplied('android-command', project)
+    }
+
+    private static void ensurePluginIsApplied(String plugin, Project project) {
+        boolean isMissingPlugin = !project.plugins.hasPlugin(plugin)
+        if (isMissingPlugin) {
+            throw new GradleException("monkey runner plugin can only be applied after the ${plugin} plugin.\n" +
+                    "In your build.gradle: apply plugin: '${plugin}'")
         }
     }
 
     private void configureTask(Project project, MonkeyRunnerExtension extension) {
         def runMonkeyAllTask = project.task(TASK_NAME)
 
-        def android = project.extensions.findByName("android")
+        def android = project.android
         android.command.devices().eachWithIndex { device, index ->
 
             def monkeyTask = project.task("runMonkeyDevice${index}", type: TargetedMonkey) {
                 packageName = extension.packageNameFilter
-                events = extension.eventsCount
                 deviceId = device.id
                 logFileName = extension.logFileName
-                categories = extension.categories
+                monkey = [events: extension.eventsCount, categories: extension.categories]
             }
 
             def uninstallApp = project.task("uninstallMonkeyDevice${index}", type: TargetedUninstall) {

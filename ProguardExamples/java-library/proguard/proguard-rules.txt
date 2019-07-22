@@ -1,0 +1,23 @@
+# Output a source map file
+-printmapping proguard.map
+
+# Keep filenames and line numbers
+-keepattributes SourceFile, LineNumberTable
+-renamesourcefileattribute SourceFile
+
+# typical library configuration
+-keepparameternames
+-renamesourcefileattribute SourceFile
+-keepattributes Exceptions, InnerClasses, Signature, Deprecated, SourceFile, LineNumberTable, *Annotation*, EnclosingMethod
+
+-keepattributes Signature
+
+# keep serializable classes
+-keep class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    private static final java.io.ObjectStreamField[] serialPersistentFields;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}

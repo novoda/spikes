@@ -1,0 +1,5 @@
+<tr><td colspan="2">
+<p style="font-family:Comic Sans MS"><i>{{originalMessage}}</i><br>{{title}}</p>
+<br><a style="font-family:Comic Sans MS" href="{{link}">{{link}}</a>
+<br><p style="font-family:Comic Sans MS">{{poster}}</p>
+</td></tr>

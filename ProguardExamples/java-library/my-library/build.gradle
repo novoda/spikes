@@ -1,0 +1,31 @@
+apply plugin: 'java'
+
+buildscript {
+    repositories {
+        flatDir dirs: "../proguard"
+        jcenter()
+    }
+    dependencies {
+        classpath ':proguard:'
+    }
+}
+
+dependencies {
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.0.52-beta'
+}
+
+project.version = '1.2.3'
+project.group = 'com.novoda'
+
+apply from: '../proguard/proguard.gradle'
+
+task proguard(type: proguard.gradle.ProGuardTask) {
+    dependsOn prepareProguard
+    configuration '../proguard/proguard-rules.txt'
+    libraryjars jarDependencies()
+    injars inJarName()
+    outjars outJarName()
+}

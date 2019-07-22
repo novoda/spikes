@@ -1,0 +1,11 @@
+{
+  "name": "artifact-collect",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "archiver": "^2.0.0",
+    "fs-extra": "^4.0.1"
+  }
+}

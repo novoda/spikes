@@ -1,0 +1,10 @@
+#!/bin/bash
+
+printf "Imports in header files: \n"
+fgrep -e "#import" --include '*.h' --exclude './Pods/*' -rc . | grep -v ':0$'
+
+printf "Imports in implementation files: \n"
+fgrep -e "#import" --include '*.m' --exclude './Pods/*' -rc . | grep -v ':0$'
+
+printf "Module imports in Swift files: \n"
+fgrep -e "import " --include '*.swift' --exclude './Pods/*' -rc . | grep -v ':0$'
