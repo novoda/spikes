@@ -7,7 +7,7 @@ repositories {
 
 dependencies {
     compile gradleApi()
-    compile gradlePlugins.gradleAndroidCommandPlugin
+    compile gradlePlugins.androidCommandPlugin
 
     testCompile gradleTestKit()
     testCompile gradlePlugins.gradle
@@ -18,7 +18,7 @@ publish {
     userOrg = 'novoda'
     groupId = 'com.novoda'
     artifactId = 'monkey-runner'
-    version = project.version
-    description = 'Super duper easy way to configure and run your monkey'
+    publishVersion = project.version
+    desc = 'Super duper easy way to configure and run your monkey'
     website = "https://github.com/novoda/spikes/tree/master/monkey-runner"
 }

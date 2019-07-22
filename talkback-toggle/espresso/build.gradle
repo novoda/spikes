@@ -1,0 +1,33 @@
+apply plugin: 'com.android.library'
+apply plugin: 'bintray-release'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        minSdkVersion 16
+    }
+
+    lintOptions {
+        lintConfig file("../lint-config.xml")
+    }
+}
+
+dependencies {
+    compile('com.android.support.test:rules:0.5') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+}
+
+publish {
+    userOrg = 'novoda'
+    repoName = 'maven'
+    groupId = 'com.novoda'
+    artifactId = 'talkback-toggle-espresso'
+    version = project.version
+
+    uploadName = 'talkback-toggle-espresso'
+    description = 'Espresso ActivityTestRule for use with Novoda\'s talkback-toggle'
+    website = 'https://github.com/novoda/spikes/tree/master/talkback-toggle'
+}

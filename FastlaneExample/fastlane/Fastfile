@@ -1,0 +1,94 @@
+# https://github.com/fastlane/fastlane/tree/master/fastlane/docs
+# All available actions: https://docs.fastlane.tools/actions
+# can also be listed using the `fastlane actions` command
+# To edit any of the Enviroment variables please do so from the .env files
+
+fastlane_version "2.14.2"
+default_platform :ios
+
+platform :ios do
+
+  ### Define Enviroment variables ###
+  ENV["SCHEME_BETA"] = "Beta"
+
+  desc "Runs all the tests"
+  lane :test do
+    run_tests(scheme: 'FastlaneExampleTests')
+  end
+
+  desc "Runs all the UI tests"
+  lane :ui_tests do
+    run_tests(scheme: 'UITests')
+  end
+
+  desc "Build Beta version and send to internal testing"
+  lane :beta_release do
+    build_ios_app
+  end
+
+  desc "Build "
+  lane :release_dev do
+    ensure_git_status_clean
+    increment_build_number
+    increment_version_number
+    commit_version_bump
+    custom_overlay
+    build_ios_app
+    reset_git_repo
+  end
+
+  desc "Test, Build and send a release to Testflight"
+  lane :release_testflight do
+    build_ios_app(configuration: 'Release')
+    testflight
+  end
+
+  desc "Generate Unit Test Code Coverage"
+  lane :code_coverage do
+    run_tests
+    xcov(scheme: 'MyScheme', only_project_targets: true)
+  end
+
+  desc "Update the version number for a new sprint"
+  lane :new_sprint do
+    ensure_git_status_clean
+    get_version_number
+    current_version = lane_context[SharedValues::VERSION_NUMBER]
+    version_array = current_version.split(".").map(&:to_i)
+
+    new_sprint_number = version_array[1] + 1
+
+    version_array[1] = new_sprint_number
+    version_array[2] = 0
+
+    new_version = version_array.join(".")
+    increment_version_number(
+      version_number: new_version
+    )
+    commit_version_bump
+  end
+
+  desc "Install developer certificates and provisioning profiles"
+  lane :install_certificates do
+    match(type: 'development')
+  end
+
+  desc "Generate a custom icon overlay"
+  private_lane :custom_overlay do
+    git_commit = last_git_commit[:abbreviated_commit_hash]
+    get_version_number
+    version_number = lane_context[SharedValues::VERSION_NUMBER]
+    badge(
+     shield: "#{version_number}-#{git_commit}-blue",
+     alpha: true
+    )
+  end
+
+  desc "Generate release notes"
+  private_lane :release_notes do
+    get_version_number
+    changelog = changelog_from_git_commits
+    version_number = lane_context[SharedValues::VERSION_NUMBER]
+    "Release notes #{version_number} Automatic build (Last 5 PR):\n#{changelog}"
+  end
+end

@@ -1,16 +1,15 @@
 apply plugin: 'com.android.application'
-apply plugin: 'android-command'
+apply plugin: 'com.novoda.android-command'
 
 apply plugin: com.novoda.monkey.MonkeyConfigurationPlugin
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion versions.androidBuildTools
+    compileSdkVersion 25
 
     defaultConfig {
         applicationId "com.novoda.monkey"
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
     }

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp"
+    android:height="640dp"
+    android:viewportWidth="360"
+    android:viewportHeight="640">
+
+    <path
+        android:name="path-1"
+        android:fillColor="#FFFFFF"
+        android:fillType="evenOdd"
+        android:strokeWidth="1"
+        android:pathData="M270,180 L360,180 L360,450 L270,450 L270,180 Z" />
+    <path
+        android:fillType="evenOdd"
+        android:strokeColor="#000000"
+        android:strokeWidth="4"
+        android:pathData="M272,182 L358,182 L358,448 L272,448 L272,182 Z" />
+    <path
+        android:name="path-2"
+        android:fillColor="#FFFFFF"
+        android:fillType="evenOdd"
+        android:strokeWidth="1"
+        android:pathData="M270,90 L360,90 L360,180 L270,180 L270,90 Z" />
+    <path
+        android:fillType="evenOdd"
+        android:strokeColor="#000000"
+        android:strokeWidth="4"
+        android:pathData="M272,92 L358,92 L358,178 L272,178 L272,92 Z" />
+    <path
+        android:name="path-3"
+        android:fillColor="#FFFFFF"
+        android:fillType="evenOdd"
+        android:strokeWidth="1"
+        android:pathData="M90,450 L180,450 L180,720 L90,720 L90,450 Z" />
+    <path
+        android:fillType="evenOdd"
+        android:strokeColor="#000000"
+        android:strokeWidth="4"
+        android:pathData="M92,452 L178,452 L178,718 L92,718 L92,452 Z" />
+    <path
+        android:name="path-4"
+        android:fillColor="#FFFFFF"
+        android:fillType="evenOdd"
+        android:strokeWidth="1"
+        android:pathData="M0,0 L270,0 L270,90 L0,90 L0,0 Z" />
+    <path
+        android:fillType="evenOdd"
+        android:strokeColor="#000000"
+        android:strokeWidth="4"
+        android:pathData="M2,2 L268,2 L268,88 L2,88 L2,2 Z" />
+    <path
+        android:name="Rectangle"
+        android:fillColor="#000000"
+        android:fillType="evenOdd"
+        android:strokeWidth="1"
+        android:pathData="M182,266 L270,266 L270,270 L182,270 L182,266 Z" />
+    <path
+        android:name="Rectangle"
+        android:fillColor="#000000"
+        android:fillType="evenOdd"
+        android:strokeWidth="1"
+        android:pathData="M182,356 L270,356 L270,360 L182,360 L182,356 Z" />
+    <path
+        android:name="Rectangle"
+        android:fillColor="#000000"
+        android:fillType="evenOdd"
+        android:strokeWidth="1"
+        android:pathData="M48,581 L136,581 L136,585 L48,585 L48,581 Z" />
+    <path
+        android:name="Rectangle"
+        android:fillColor="#000000"
+        android:fillType="evenOdd"
+        android:strokeWidth="1"
+        android:pathData="M-42,581 L46,581 L46,585 L-42,585 L-42,581 Z" />
+    <path
+        android:name="Rectangle"
+        android:fillColor="#000000"
+        android:fillType="evenOdd"
+        android:strokeWidth="1"
+        android:pathData="M48,42 L136,42 L136,46 L48,46 L48,42 Z" />
+    <path
+        android:name="Rectangle"
+        android:fillColor="#000000"
+        android:fillType="evenOdd"
+        android:strokeWidth="1"
+        android:pathData="M-42,42 L46,42 L46,46 L-42,46 L-42,42 Z" />
+    <path
+        android:name="path-5"
+        android:fillColor="#FFFFFF"
+        android:fillType="evenOdd"
+        android:strokeWidth="1"
+        android:pathData="M0,233 L12,233 L12,397 L0,397 L0,233 Z" />
+    <path
+        android:fillType="evenOdd"
+        android:strokeColor="#000000"
+        android:strokeWidth="4"
+        android:pathData="M2,235 L10,235 L10,395 L2,395 L2,235 Z" />
+    <path
+        android:name="path-6"
+        android:fillColor="#FFFFFF"
+        android:fillType="evenOdd"
+        android:strokeWidth="1"
+        android:pathData="M34,250 L106,250 L106,380 L34,380 L34,250 Z" />
+    <path
+        android:fillType="evenOdd"
+        android:strokeColor="#000000"
+        android:strokeWidth="4"
+        android:pathData="M36,252 L104,252 L104,378 L36,378 L36,252 Z" />
+</vector>

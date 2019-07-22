@@ -1,0 +1,2 @@
+<h1 style="font-family:serif">#enews {{formattedTodaysDate}}</h1>
+<p style="font-family:Comic Sans MS"><i>External news from the past 7 days!</i></p>

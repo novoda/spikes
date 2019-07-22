@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="treble_clef_margin_left">48sp</dimen>
+    <dimen name="treble_clef_width">100sp</dimen>
+    <dimen name="treble_clef_height">288sp</dimen>
+    <dimen name="note_width">64sp</dimen>
+    <dimen name="note_height">40sp</dimen>
+    <dimen name="sharp_width">36sp</dimen>
+    <dimen name="sharp_height">112sp</dimen>
+    <dimen name="timer_widget">160sp</dimen>
+    <dimen name="margin">24sp</dimen>
+</resources>

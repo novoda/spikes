@@ -1,4 +1,7 @@
 rootProject.name = 'enews-letter'
 include 'slack-scraper'
 include 'html-generator'
+include 'newsletter-publisher'
+include 'aws-runner'
+include 'article-editor'
 

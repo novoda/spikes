@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/margin">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.novoda.pianohero.TimerWidget
+            android:id="@+id/game_timer_widget"
+            android:layout_width="@dimen/timer_widget"
+            android:layout_height="@dimen/timer_widget" />
+
+        <TextView
+            android:id="@+id/game_text_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="casual"
+            android:textColor="@color/text"
+            android:textSize="48sp"
+            tools:text="Excellent, you're doing well!" />
+
+        <TextView
+            android:id="@+id/score_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:fontFamily="casual"
+            android:gravity="center"
+            android:minHeight="@dimen/timer_widget"
+            android:minWidth="@dimen/timer_widget"
+            android:textColor="@color/text"
+            android:textSize="48sp"
+            tools:text="500" />
+
+    </FrameLayout>
+
+    <com.novoda.pianohero.C4ToB5TrebleStaffWidget
+        android:id="@+id/game_widget_treble_staff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin" />
+
+    <com.novoda.pianohero.C4ToB5ViewPiano
+        android:id="@+id/piano_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin" />
+
+</LinearLayout>

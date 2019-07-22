@@ -3,13 +3,20 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -p .",
+    "node": " node build/Main.js",
+    "build_run": "npm run build && npm run node"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@slack/client": "^3.6.0",
     "github-api": "^2.3.0"
+  },
+  "devDependencies": {
+    "typescript": "^2.3.4"
   }
 }

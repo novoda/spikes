@@ -1,0 +1,17 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+dependencies {
+    compile libraries.jsr305
+    testCompile libraries.jUnit
+    testCompile libraries.festAssertCore
+    testCompile libraries.mockitoCore
+}

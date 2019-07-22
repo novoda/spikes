@@ -1,0 +1,5 @@
+<tr>
+<td><a href="{{link}}"><img src={{imageUrl}} height="150" width="150" alt="{{title}}"/></td><a/>
+<td><p style="font-family:Comic Sans MS"><i>{{originalMessage}}</i><br>{{title}}</p>
+<br><p style="font-family:Comic Sans MS">{{each.poster}}</p></td>
+</tr>

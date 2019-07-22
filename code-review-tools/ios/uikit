@@ -1,0 +1,19 @@
+#!/bin/bash
+
+printf "Swift files importing UIKit:           "
+SWIFT=$(fgrep -e "import UIKit" --include '*.swift' --exclude './Pods/*' -rl . | wc -l)
+SWIFT_TOTAL=$(find . -path ./Pods -prune -o -name "*\.swift" -print | wc -l)
+printf "%d / %d" $SWIFT $SWIFT_TOTAL
+printf "\n"
+
+printf "Header files importing UIKit:          "
+HEADER=$(fgrep -e "#import <UIKit/UIKit.h>" --include '*.h' --exclude './Pods/*' -rl . | wc -l)
+HEADER_TOTAL=$(find . -path ./Pods -prune -o -name "*\.h" -print | wc -l)
+printf "%s / %s" $HEADER $HEADER_TOTAL
+printf "\n"
+
+printf "Implementation files importing UIKit:  "
+IMPL=$(fgrep -e "#import <UIKit/UIKit.h>" --include '*.m' --exclude './Pods/*' -rl . | wc -l)
+IMPL_TOTAL=$(find . -path ./Pods -prune -o -name "*\.m" -print | wc -l)
+printf "%s / %s" $IMPL $IMPL_TOTAL
+printf "\n"

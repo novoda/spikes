@@ -1,0 +1,4 @@
+rootProject.name = 'game-of-life'
+
+include 'common', 'common-jvm', 'common-js', 'terminal-jvm', 'android', 'web', 'desktop-jvm', 'ios'
+

@@ -5,11 +5,13 @@ Provides gradle closure to configure the monkey runner.
 
 ## Description
 
-Decorates the [Android monkey](https://developer.android.com/studio/test/monkey.html) with the [monkey trap](https://github.com/novoda/spikes/tree/master/MonkeyTrap/), which is designed to block the monkey from accessing the system notifications tray (and the quick toggles).
+Decorates the [Android monkey](https://developer.android.com/studio/test/monkey.html) with the [monkey trap](https://github.com/novoda/spikes/tree/master/MonkeyTrap/),
+ which is designed to block the monkey from accessing the system notifications tray (and the quick toggles).
 
 ## Adding to project
 
-It's necessary to have the monkey trap installed on all the devices you want to use this monkey runner on:
+In case you want the monkey trap running, it's necessary to have it installed on all the devices you want to use 
+monkey runner with. You can easily ensure this with:
 
 ```bash
 wget https://raw.githubusercontent.com/novoda/spikes/master/MonkeyTrap/apk/app-debug.apk
@@ -22,7 +24,8 @@ rm app-debug.apk
 
 You can run this as part of your CI job before starting the monkey runner.
 
-In your Android module's `build.gradle`:
+In your Android module's `build.gradle`, add this plugin as a dependency, apply it and configure it. Be sure you also apply
+ the `android-command` plugin (which `monkey-runner` depends on):
 
 ```groovy
 buildscript {
@@ -41,6 +44,7 @@ buildscript {
 
 ...
 
+apply plugin: 'com.novoda.android-command'
 apply plugin: 'com.novoda.monkey-runner'
 
 ...
@@ -70,6 +74,18 @@ Run the following to start the monkey on all connected devices:
 ```bash
 ./gradlew runMonkeyAll
 ```
+
+## Changelog
+
+### 0.0.1
+
+- initial release
+
+### 1.0.0
+
+- Make categories optional & introduce `useMonkeyTrap` property in order to control whether the session should use the trap or not ([#155](https://github.com/novoda/spikes/pull/155))
+- Update command plugin ([#251](https://github.com/novoda/spikes/pull/251))
+- Ensure command plugin applied ([#260](https://github.com/novoda/spikes/pull/260))
 
 ## Links
 

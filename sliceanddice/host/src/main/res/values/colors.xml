@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <color name="colorPrimary">#2e7d32</color>
+  <color name="colorPrimaryDark">#005005</color>
+  <color name="colorAccent">#fbc02d</color>
+  <color name="textColorPrimary">#00251a</color>
+  <color name="textColorSecondary">#004d40</color>
+  <color name="tintOverrideColor">#e65100</color>
+
+  <color name="ic_launcher_background">@color/colorAccent</color>
+
+</resources>

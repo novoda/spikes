@@ -1,0 +1,41 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.3'
+    }
+}
+
+apply plugin: 'com.android.application'
+// apply android-nonnull AFTER android plugin
+apply plugin: com.novoda.gradle.nonnull.AndroidNonNullPlugin
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
+    defaultConfig {
+        applicationId "com.novoda.gradle.nonnull"
+        minSdkVersion 19
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    sourceSets {
+        main.java.srcDirs 'src/common/java'
+    }
+
+    productFlavors {
+        custom {
+        }
+        custom2 {
+        }
+    }
+}
+
+dependencies {
+    compile 'com.google.code.findbugs:jsr305:3.0.1'
+}
+

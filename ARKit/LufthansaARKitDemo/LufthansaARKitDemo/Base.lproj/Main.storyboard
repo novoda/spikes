@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tXr-a1-R10">
+            <objects>
+                <viewController id="BV1-FR-VrT" customClass="ViewController" customModule="LufthansaARKitDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="U0K-SW-4ec">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BrB-h1-WRS">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </arscnView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7qq-QV-EOk" userLabel="container view">
+                                <rect key="frame" x="52.5" y="583" width="270" height="44"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fr5-eE-vV1" customClass="BetterSegmentedControl" customModule="LufthansaARKitDemo" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="150" height="44"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="150" id="AiW-8G-LZt"/>
+                                            <constraint firstAttribute="height" constant="44" id="NuH-jG-OA8"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="14"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ycO-ih-dv6">
+                                        <rect key="frame" x="226" y="0.0" width="44" height="44"/>
+                                        <color key="backgroundColor" red="0.30588235294117649" green="0.63529411764705879" blue="0.83921568627450982" alpha="0.90000000000000002" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="44" id="5lH-Rt-Iqp"/>
+                                            <constraint firstAttribute="height" constant="44" id="ZRb-L3-05e"/>
+                                        </constraints>
+                                        <state key="normal">
+                                            <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="22"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
+                                                <real key="value" value="14"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
+                                                <real key="value" value="0.0"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="resetExperience" destination="BV1-FR-VrT" eventType="touchUpInside" id="dah-pt-woK"/>
+                                        </connections>
+                                    </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iconRefresh" translatesAutoresizingMaskIntoConstraints="NO" id="4QP-8h-iqE">
+                                        <rect key="frame" x="236" y="10" width="24" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="24" id="HHL-92-SeZ"/>
+                                            <constraint firstAttribute="width" constant="24" id="jgQ-Ok-hNH"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="270" id="Lz3-po-4rJ"/>
+                                    <constraint firstItem="Fr5-eE-vV1" firstAttribute="leading" secondItem="7qq-QV-EOk" secondAttribute="leading" id="MzK-B9-IKT"/>
+                                    <constraint firstAttribute="bottom" secondItem="Fr5-eE-vV1" secondAttribute="bottom" id="OVY-Cm-UR3"/>
+                                    <constraint firstItem="Fr5-eE-vV1" firstAttribute="top" secondItem="7qq-QV-EOk" secondAttribute="top" id="SQ3-oo-HpX"/>
+                                    <constraint firstAttribute="bottom" secondItem="ycO-ih-dv6" secondAttribute="bottom" id="WSh-jw-5E0"/>
+                                    <constraint firstAttribute="trailing" secondItem="ycO-ih-dv6" secondAttribute="trailing" id="YXL-sb-fd0"/>
+                                    <constraint firstItem="4QP-8h-iqE" firstAttribute="centerY" secondItem="ycO-ih-dv6" secondAttribute="centerY" id="cq0-Wi-3Pm"/>
+                                    <constraint firstItem="4QP-8h-iqE" firstAttribute="centerX" secondItem="ycO-ih-dv6" secondAttribute="centerX" id="kTT-eb-Lec"/>
+                                    <constraint firstItem="ycO-ih-dv6" firstAttribute="top" secondItem="7qq-QV-EOk" secondAttribute="top" id="z2e-pz-2gx"/>
+                                    <constraint firstAttribute="height" constant="44" id="z9z-dX-Ba6"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="U0K-SW-4ec" secondAttribute="leading" id="GsS-dJ-CKf"/>
+                            <constraint firstItem="BrB-h1-WRS" firstAttribute="bottom" secondItem="U0K-SW-4ec" secondAttribute="bottom" id="VpT-BR-CcM"/>
+                            <constraint firstItem="BrB-h1-WRS" firstAttribute="trailing" secondItem="U0K-SW-4ec" secondAttribute="trailing" id="XyZ-9z-H8e"/>
+                            <constraint firstItem="7qq-QV-EOk" firstAttribute="centerX" secondItem="fQZ-KI-GVf" secondAttribute="centerX" id="lTq-Ce-2GG"/>
+                            <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="rJc-2c-zQA"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="bottom" secondItem="7qq-QV-EOk" secondAttribute="bottom" constant="40" id="x4q-6U-k00"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="fQZ-KI-GVf"/>
+                    </view>
+                    <connections>
+                        <outlet property="containerView" destination="7qq-QV-EOk" id="xiW-tW-sAB"/>
+                        <outlet property="customSwitch" destination="Fr5-eE-vV1" id="fTy-Xc-Vfn"/>
+                        <outlet property="sceneView" destination="BrB-h1-WRS" id="HBD-Ej-s59"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="iconRefresh" width="24" height="24"/>
+    </resources>
+</document>

@@ -6,25 +6,37 @@ import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Before
 import org.junit.Test
 
-public class MonkeyConfigurationPluginTest {
+class MonkeyConfigurationPluginTest {
 
     private Project project
 
     @Before
-    public void setUp() {
+    void setUp() {
         project = ProjectBuilder.builder().build()
-        project.apply plugin: 'com.android.application'
     }
 
     @Test(expected = GradleException.class)
-    public void givenAndroidPluginNotApplied_whenApplyingMonkey_thenItThrowsException() {
-        project = ProjectBuilder.builder().build()
+    void givenAndroidPluginNotApplied_whenApplyingMonkey_thenItThrowsException() {
+        project.apply plugin: 'android-command'
 
         project.apply plugin: MonkeyConfigurationPlugin
+
+    }
+
+    @Test(expected = GradleException.class)
+    void givenCommandPluginNotApplied_whenApplyingMonkey_thenItThrowsException() {
+        project.apply plugin: 'com.android.application'
+
+        project.apply plugin: MonkeyConfigurationPlugin
+
     }
 
     @Test
-    public void givenAndroidPluginApplied_whenApplyingMonkey_thenItDoesNotThrowException() {
+    void givenPluginsApplied_whenApplyingMonkey_thenItDoesNotThrowException() {
+        project.apply plugin: 'com.android.application'
+        project.apply plugin: 'com.novoda.android-command'
+
         project.apply plugin: MonkeyConfigurationPlugin
+
     }
 }

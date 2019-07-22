@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:layout_height="match_parent"
+    tools:layout_width="match_parent"
+    tools:parentTag="android.support.percent.PercentRelativeLayout">
+
+    <View
+        android:id="@+id/piano_octave_c4"
+        android:layout_height="match_parent"
+        android:background="@drawable/key_white_background"
+        app:layout_widthPercent="7.14285714285%" />
+
+    <View
+        android:id="@+id/piano_octave_d4"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/piano_octave_c4"
+        android:background="@drawable/key_white_background"
+        app:layout_widthPercent="7.14285714285%" />
+
+    <View
+        android:id="@+id/piano_octave_e4"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/piano_octave_d4"
+        android:background="@drawable/key_white_background"
+        app:layout_widthPercent="7.14285714285%" />
+
+    <View
+        android:id="@+id/piano_octave_f4"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/piano_octave_e4"
+        android:background="@drawable/key_white_background"
+        app:layout_widthPercent="7.14285714285%" />
+
+    <View
+        android:id="@+id/piano_octave_g4"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/piano_octave_f4"
+        android:background="@drawable/key_white_background"
+        app:layout_widthPercent="7.14285714285%" />
+
+    <View
+        android:id="@+id/piano_octave_a4"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/piano_octave_g4"
+        android:background="@drawable/key_white_background"
+        app:layout_widthPercent="7.14285714285%" />
+
+    <View
+        android:id="@+id/piano_octave_b4"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/piano_octave_a4"
+        android:background="@drawable/key_white_background"
+        app:layout_widthPercent="7.14285714285%" />
+
+    <View
+        android:id="@+id/piano_octave_c5"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/piano_octave_b4"
+        android:background="@drawable/key_white_background"
+        app:layout_widthPercent="7.14285714285%" />
+
+    <View
+        android:id="@+id/piano_octave_d5"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/piano_octave_c5"
+        android:background="@drawable/key_white_background"
+        app:layout_widthPercent="7.14285714285%" />
+
+    <View
+        android:id="@+id/piano_octave_e5"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/piano_octave_d5"
+        android:background="@drawable/key_white_background"
+        app:layout_widthPercent="7.14285714285%" />
+
+    <View
+        android:id="@+id/piano_octave_f5"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/piano_octave_e5"
+        android:background="@drawable/key_white_background"
+        app:layout_widthPercent="7.14285714285%" />
+
+    <View
+        android:id="@+id/piano_octave_g5"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/piano_octave_f5"
+        android:background="@drawable/key_white_background"
+        app:layout_widthPercent="7.14285714285%" />
+
+    <View
+        android:id="@+id/piano_octave_a5"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/piano_octave_g5"
+        android:background="@drawable/key_white_background"
+        app:layout_widthPercent="7.14285714285%" />
+
+    <View
+        android:id="@+id/piano_octave_b5"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/piano_octave_a5"
+        android:background="@drawable/key_white_background"
+        app:layout_widthPercent="7.14285714285%" />
+
+    <View
+        android:id="@+id/piano_octave_c4_s"
+        android:background="@drawable/key_black_background"
+        app:layout_heightPercent="50%"
+        app:layout_widthPercent="4.1641337386%" />
+
+    <View
+        android:id="@+id/piano_octave_d4_s"
+        android:background="@drawable/key_black_background"
+        app:layout_heightPercent="50%"
+        app:layout_widthPercent="4.1641337386%" />
+
+    <View
+        android:id="@+id/piano_octave_f4_s"
+        android:background="@drawable/key_black_background"
+        app:layout_heightPercent="50%"
+        app:layout_widthPercent="4.1641337386%" />
+
+    <View
+        android:id="@+id/piano_octave_g4_s"
+        android:background="@drawable/key_black_background"
+        app:layout_heightPercent="50%"
+        app:layout_widthPercent="4.1641337386%" />
+
+    <View
+        android:id="@+id/piano_octave_a4_s"
+        android:background="@drawable/key_black_background"
+        app:layout_heightPercent="50%"
+        app:layout_widthPercent="4.1641337386%" />
+
+    <View
+        android:id="@+id/piano_octave_c5_s"
+        android:background="@drawable/key_black_background"
+        app:layout_heightPercent="50%"
+        app:layout_widthPercent="4.1641337386%" />
+
+    <View
+        android:id="@+id/piano_octave_d5_s"
+        android:background="@drawable/key_black_background"
+        app:layout_heightPercent="50%"
+        app:layout_widthPercent="4.1641337386%" />
+
+    <View
+        android:id="@+id/piano_octave_f5_s"
+        android:background="@drawable/key_black_background"
+        app:layout_heightPercent="50%"
+        app:layout_widthPercent="4.1641337386%" />
+
+    <View
+        android:id="@+id/piano_octave_g5_s"
+        android:background="@drawable/key_black_background"
+        app:layout_heightPercent="50%"
+        app:layout_widthPercent="4.1641337386%" />
+
+    <View
+        android:id="@+id/piano_octave_a5_s"
+        android:background="@drawable/key_black_background"
+        app:layout_heightPercent="50%"
+        app:layout_widthPercent="4.1641337386%" />
+
+</merge>

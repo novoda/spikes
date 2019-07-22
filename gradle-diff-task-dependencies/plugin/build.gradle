@@ -2,4 +2,8 @@ apply plugin: 'groovy'
 
 dependencies {
     compile gradleApi()
+
+    testCompile gradleTestKit()
+    testCompile 'org.mockito:mockito-core:2.5.3'
+    testCompile 'com.google.truth:truth:0.30'
 }

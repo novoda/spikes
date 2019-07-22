@@ -1,0 +1,3 @@
+rootProject.name = 'gradle-plugin-release-plugin'
+include 'plugin'
+
