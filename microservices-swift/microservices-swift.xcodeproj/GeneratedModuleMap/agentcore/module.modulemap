@@ -1,0 +1,4 @@
+module agentcore {
+    umbrella "/Users/gbasile/src/spikes/microservices-swift/.build/checkouts/omr-agentcore/src/agentcore/include"
+    export *
+}

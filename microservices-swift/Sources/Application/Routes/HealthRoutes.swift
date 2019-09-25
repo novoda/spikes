@@ -12,4 +12,11 @@ func initializeHealthRoutes(app: App) {
         }
     }
     
+    app.router.get("/boardgames") { (respondWith: ([Boardgame]?, RequestError?) -> Void) -> Void in
+        let boardgame1 = Boardgame(id: 1, name: "Risk", emoji: "💣")
+        let boardgame2 = Boardgame(id: 2, name: "Uno", emoji: "1️⃣")
+        
+        respondWith([boardgame1, boardgame2], nil)
+    }
+    
 }
