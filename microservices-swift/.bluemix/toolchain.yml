@@ -1,0 +1,62 @@
+version: '2'
+template:
+  name: Continuous Delivery Toolchain
+  description: "This toolchain includes tools to develop and deploy your app. Depending on your app, when you create the toolchain, the GitHub repository will either be empty or will contain source code from your app.\n\nThis toolchain uses tools that are part of the Continuous Delivery service. If an instance of that service isn't already in your organization, when you click **Create**, it is automatically added at no cost to you. For more information and terms, see the [IBM Cloud catalog](/catalog/services/continuous-delivery/).\n\nTo get started, click **Create**."
+  required:
+    - repo
+    - build
+
+toolchain:
+  name: "{{form.pipeline.parameters.toolchain-name}}"
+
+services:
+  # Github repos
+  repo:
+    service_id: hostedgit
+    parameters:
+      repo_url: "{{#zip_url}}{{zip_url}}{{/zip_url}}{{^zip_url}}{{repository}}{{/zip_url}}"
+      repo_name: "{{toolchain.name}}"
+      type: link
+      has_issues: true
+      enable_traceability: true
+
+  # Pipelines
+  build:
+    service_id: pipeline
+    parameters:
+      services:
+        - repo
+      name: "{{form.pipeline.parameters.app-name}}"
+      ui-pipeline: true
+      configuration:
+        content:
+          $text: pipeline.yml
+        env:
+          REPO: repo
+          CF_APP: "{{form.pipeline.parameters.app-name}}"
+          API_KEY: "{{form.pipeline.parameters.api-key}}"
+          CF_SPACE: "{{form.pipeline.parameters.dev-space}}"
+          CF_ORGANIZATION: "{{form.pipeline.parameters.dev-organization}}"
+          CF_HOSTNAME: "{{form.pipeline.parameters.cf-host}}"
+          CF_DOMAIN: "{{form.pipeline.parameters.cf-domain}}"
+          REGION_ID: "{{form.pipeline.parameters.dev-region}}"
+        execute: true
+
+  #Web IDE
+  webide:
+    service_id: orion
+
+#Deployment
+form:
+  pipeline:
+    schema:
+      $ref: deploy.json
+    parameters:
+      app-name: "{{app-name}}"
+      toolchain-name: "{{toolchain-name}}"
+      dev-region: "{{region}}"
+      api-key: "{{api-key}}"
+      dev-space: "{{space}}"
+      dev-organization: "{{organization}}"
+      cf-host: "{{cf-host}}"
+      cf-domain: "{{cf-domain}}"

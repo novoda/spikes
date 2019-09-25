@@ -1,0 +1,92 @@
+---
+stages:
+- name: Build Stage
+  inputs:
+  - type: git
+    branch: master
+    service: ${REPO}
+  properties:
+  - name: CF_HOSTNAME
+    value: "${CF_HOSTNAME}"
+    type: text
+  - name: CF_DOMAIN
+    value: "${CF_DOMAIN}"
+    type: text
+  triggers:
+  - type: commit
+  jobs:
+  - name: Build
+    type: builder
+    artifact_dir: ''
+    build_type: shell
+    script: |-
+      #!/bin/bash
+      if  [[ -f post_build.sh ]]; then
+        chmod +x post_build.sh;
+        echo "executing the post_build script";
+        sh post_build.sh;
+      else
+        echo "the post_build script does not exist";
+      fi
+- name: Deploy Stage
+  inputs:
+  - type: job
+    stage: Build Stage
+    job: Build
+  properties:
+  - name: CF_HOSTNAME
+    value: "${CF_HOSTNAME}"
+    type: text
+  - name: CF_DOMAIN
+    value: "${CF_DOMAIN}"
+    type: text
+  triggers:
+  - type: stage
+  jobs:
+  - name: Deploy
+    type: deployer
+    target:
+      region_id: ${REGION_ID}
+      organization: ${CF_ORGANIZATION}
+      space: ${CF_SPACE}
+      application: ${CF_APP}
+      api_key: ${API_KEY}
+    script: |-
+      #!/bin/bash
+      cf push "${CF_APP}" --hostname "${CF_HOSTNAME}" -d "${CF_DOMAIN}"
+      # cf logs "${CF_APP}" --recent
+- name: Health Stage
+  inputs:
+  - type: job
+    stage: Build Stage
+    job: Build
+  triggers:
+  - type: stage
+  permission:
+    execute: TOOLCHAIN_ADMINS
+  properties:
+  - name: CF_HOSTNAME
+    value: "${CF_HOSTNAME}"
+    type: text
+  - name: CF_DOMAIN
+    value: "${CF_DOMAIN}"
+    type: text
+  jobs:
+  - name: Deploy
+    type: deployer
+    deploy_type: cf
+    target:
+      region_id: ${REGION_ID}
+      organization: ${CF_ORGANIZATION}
+      space: ${CF_SPACE}
+      application: ${CF_APP}
+      api_key: ${API_KEY}
+    script: |-
+      export CF_ENDPOINT=$(cf app $CF_APP | grep running)
+      if [[ "$CF_ENDPOINT" != "" ]]; then
+        echo "Your application is up anding running"
+        echo "====================================================================="
+      else
+        echo "There was a problem with starting your application"
+        exit 1;
+      fi

@@ -1,0 +1,9 @@
+---
+applications:
+- instances: 1
+  timeout: 180
+  name: microservices-swift
+  buildpack: swift_buildpack
+  command: "'microservices-swift'"
+  memory: 128M
+  random-route: true

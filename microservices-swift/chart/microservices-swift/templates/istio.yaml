@@ -1,0 +1,19 @@
+{{ if .Values.istio.enabled }}
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: "{{  .Chart.Name }}-default"
+spec:
+  destination:
+    name: "{{  .Chart.Name }}-service"
+  precedence: 1
+  route:
+  - labels:
+      version: "current"
+    weight: {{ .Values.istio.weight }}
+{{ if .Values.base.enabled }}
+  - labels:
+      version: "base"
+    weight: {{ .Values.base.weight }}
+{{ end }}
+{{ end }}
