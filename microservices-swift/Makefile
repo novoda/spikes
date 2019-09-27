@@ -1,11 +1,14 @@
-# BUILD FOR DEPLOYMENT
-create_docker_images: create_build_image create_run_image
+# CONSTANTS
+PORT=8080
+BUILD_IMAGE_TAG=boardgame-build
+RUN_IMAGE_TAG=boardgame-run
 
-build_on_docker: create_build_image
-	docker run --volume $$PWD:/swift-project --workdir /swift-project myapp-build /swift-utils/tools-utils.sh build release
+# BUILD FOR DEPLOYMENT
 run_on_docker: build_on_docker create_run_image
-	docker run -it --publish 8080:8080 myapp-run
+	docker run -it --publish $(PORT):$(PORT) $(RUN_IMAGE_TAG)
+build_on_docker: create_build_image
+	docker run --volume $$PWD:/swift-project --workdir /swift-project $(BUILD_IMAGE_TAG) /swift-utils/tools-utils.sh build release
 create_build_image:
-	docker build --tag myapp-build --file Dockerfile-tools .
+	docker build --tag $(BUILD_IMAGE_TAG) --file Dockerfile-tools .
 create_run_image:
-	docker build --tag myapp-run .
+	docker build --tag $(RUN_IMAGE_TAG) .
