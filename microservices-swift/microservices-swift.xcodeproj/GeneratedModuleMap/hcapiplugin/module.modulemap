@@ -1,0 +1,4 @@
+module hcapiplugin {
+    umbrella "/Users/gbasile/src/spikes/microservices-swift/.build/checkouts/omr-agentcore/src/hcapiplugin/include"
+    export *
+}
