@@ -3,6 +3,9 @@ PORT=8080
 BUILD_IMAGE_TAG=boardgame-build
 RUN_IMAGE_TAG=boardgame-run
 
+# UTILITY
+xcode:
+	swift package generate-xcodeproj
 # BUILD FOR DEPLOYMENT
 run_on_docker: build_on_docker create_run_image
 	docker run -it --publish $(PORT):$(PORT) $(RUN_IMAGE_TAG)
