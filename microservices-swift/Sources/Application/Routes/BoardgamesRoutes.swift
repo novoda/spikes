@@ -3,7 +3,8 @@ import Health
 import KituraContracts
 
 func initializeBoardgamesRoutes(app: App) {
-    var boardgames: [Boardgame] = [Boardgame(id: 1, name: "Risk", emoji: "💣"), Boardgame(id: 2, name: "Uno", emoji: "1️⃣")]
+    let seed = [Boardgame(id: 1, name: "Risk", emoji: "💣"), Boardgame(id: 2, name: "Uno", emoji: "1️⃣")]
+    var boardgames: [Boardgame] = seed
     
     app.router.get("/boardgames") { (respondWith: ([Boardgame]?, RequestError?) -> Void) -> Void in
         respondWith(boardgames, nil)
