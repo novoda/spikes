@@ -3,6 +3,8 @@ import Health
 import KituraContracts
 
 func initializeHealthRoutes(app: App) {
+
+    var boardgames: [Boardgame] = [Boardgame(id: 1, name: "Risk", emoji: "💣"), Boardgame(id: 2, name: "Uno", emoji: "1️⃣")]
     
     app.router.get("/health") { (respondWith: (Status?, RequestError?) -> Void) -> Void in
         if health.status.state == .UP {
@@ -13,10 +15,13 @@ func initializeHealthRoutes(app: App) {
     }
     
     app.router.get("/boardgames") { (respondWith: ([Boardgame]?, RequestError?) -> Void) -> Void in
-        let boardgame1 = Boardgame(id: 1, name: "Risk", emoji: "💣")
-        let boardgame2 = Boardgame(id: 2, name: "Uno", emoji: "1️⃣")
+        respondWith(boardgames, nil)
+    }
+
+    app.router.post("/boardgames") { (boardgame: Boardgame, respondWith: (Boardgame?, RequestError?) -> Void) -> Void in
+        boardgames.append(boardgame)
         
-        respondWith([boardgame1, boardgame2], nil)
+        respondWith(boardgame, nil)
     }
     
 }
