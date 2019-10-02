@@ -23,5 +23,14 @@ func initializeHealthRoutes(app: App) {
         
         respondWith(boardgame, nil)
     }
+
+    app.router.delete("/boardgames") { (boardgameId: Int, respondWith: (RequestError?) -> Void) -> Void in
+        guard let index = boardgames.firstIndex(where: { $0.id == boardgameId }) else {
+            respondWith(RequestError.notFound)
+            return
+        }
+        boardgames.remove(at: index)
+        respondWith(nil)
+    }
     
 }
