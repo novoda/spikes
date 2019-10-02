@@ -20,8 +20,8 @@ public class App {
 
     func postInit() throws {
         // Endpoints
-        initializeHealthRoutes(app: self)
-        initializeBoardgamesRoutes(app: self)
+        HealthRoutes().initialise(app: self)
+        BoardgameRoutes().initialise(app: self)
     }
 
     public func run() throws {
