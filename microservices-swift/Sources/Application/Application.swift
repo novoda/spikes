@@ -21,6 +21,7 @@ public class App {
     func postInit() throws {
         // Endpoints
         initializeHealthRoutes(app: self)
+        initializeBoardgamesRoutes(app: self)
     }
 
     public func run() throws {
