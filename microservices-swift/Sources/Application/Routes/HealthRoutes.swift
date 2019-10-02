@@ -13,7 +13,7 @@ func initializeHealthRoutes(app: App) {
             respondWith(nil, RequestError(.serviceUnavailable, body: health.status))
         }
     }
-    
+
     app.router.get("/boardgames") { (respondWith: ([Boardgame]?, RequestError?) -> Void) -> Void in
         respondWith(boardgames, nil)
     }
@@ -32,5 +32,14 @@ func initializeHealthRoutes(app: App) {
         boardgames.remove(at: index)
         respondWith(nil)
     }
+
+    // PUT?
+    // UPDATE?
+    // error for inserting boardgame with existing id
+    // update swagger
+
+    // Next Up!
+    // database?
+    // deploy?
     
 }
