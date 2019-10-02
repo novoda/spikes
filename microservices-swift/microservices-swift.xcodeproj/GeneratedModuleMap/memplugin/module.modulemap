@@ -1,4 +1,0 @@
-module memplugin {
-    umbrella "/Users/florianmierzejewski/Code/spikes/microservices-swift/.build/checkouts/omr-agentcore/src/memplugin/include"
-    export *
-}
