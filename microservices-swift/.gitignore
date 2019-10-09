@@ -22,4 +22,4 @@ DerivedData/
 *.xcuserstate
 
 ## Generated project 
-*.pbxproj
+*.xcodeproj
