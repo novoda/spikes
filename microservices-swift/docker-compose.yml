@@ -1,0 +1,25 @@
+version: "3.7"
+
+networks:
+  app-net:
+    driver: bridge
+    
+services:
+  app:
+    image: boardgame-run
+    ports:
+      - "8080:8080"
+    networks:
+      - app-net
+    links:
+      - db:db
+
+  db:
+    image: couchdb
+    ports:
+      - "5984:5984"
+    environment:
+      COUCHDB_USER: Test
+      COUCHDB_PASSWORD: test
+    networks:
+      - app-net
