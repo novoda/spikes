@@ -1,0 +1,6 @@
+FROM couchdb
+
+EXPOSE 5984
+
+ENV COUCHDB_USER="foo"
+ENV COUCHDB_PASSWORD="password"

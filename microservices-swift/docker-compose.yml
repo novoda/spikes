@@ -15,11 +15,20 @@ services:
       - db:db
 
   db:
-    image: couchdb
+    image: boardgame-db
     ports:
       - "5984:5984"
-    environment:
-      COUCHDB_USER: Test
-      COUCHDB_PASSWORD: test
+    networks:
+      - app-net
+
+  setup-db:
+    depends_on:
+      - db
+    volumes:
+      - ./db:/db
+    image: byrnedo/alpine-curl
+    command: ./db/setup.sh
+    links:
+      - db:db
     networks:
       - app-net
