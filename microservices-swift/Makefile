@@ -1,8 +1,9 @@
 # CONSTANTS
-PORT=8080
 BUILD_IMAGE_TAG=boardgame-build
 RUN_IMAGE_TAG=boardgame-run
 DB_IMAGE_TAG=boardgame-db
+DB_PATH=db
+DB_PORT=5984
 
 # UTILITY
 xcode:
@@ -19,3 +20,5 @@ create_run_image:
 	docker build --tag $(RUN_IMAGE_TAG) .
 create_db_image:
 	docker build --tag $(DB_IMAGE_TAG) --file Dockerfile-db .
+run_db_image:
+	docker run --volume $$PWD/$(DB_PATH):/opt/couchdb/data -p $(DB_PORT):$(DB_PORT) $(DB_IMAGE_TAG)
