@@ -1,0 +1,11 @@
+Source: microservices-swift-0.0
+Section: x11
+Priority: optional
+Maintainer: John Doe <replacethiswithyourem@il.com>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.8
+
+Package: microservices-swift-0.0
+Architecture: all
+Depends: ${misc:Depends}
+Description: This package transfers app code to VSI for deployment

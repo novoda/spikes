@@ -1,0 +1,16 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/hello"
+    },
+    "response": {
+        "status": 200,
+        "jsonBody": {
+            "status": "Everything is fine",
+            "message": "Hello Novoda!"
+        },
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+}
