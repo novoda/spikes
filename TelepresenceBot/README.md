@@ -8,7 +8,9 @@ The project includes the following units:
 ## Using the Server Unit
 Grab Node and install the required modules with `npm install`.
 
-Open `server-unit` directory in command line and run `node server.js`
+Open `server-unit` directory in command line and run `node server.js`.
+We use `npm debug` for logging, this can be enabled with `env DEBUG=$, node server.js` where the `$` can be replaced with tags to filter the logs.
+For Server only logs use `env DEBUG="server", node server.js`
 
 ## Movement unit development
 1. Download the official Arduino IDE from https://www.arduino.cc/en/Main/Software
