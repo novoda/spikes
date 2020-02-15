@@ -1,0 +1,3 @@
+.build/							usr/src/microservices-swift
+terraform/scripts/install.sh	usr/src/microservices-swift
+terraform/scripts/start.sh		usr/src/microservices-swift
