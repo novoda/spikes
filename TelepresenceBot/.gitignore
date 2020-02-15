@@ -1,11 +1,14 @@
-*.iml
 .gradle
 /local.properties
-/.idea/workspace.xml
-/.idea/libraries
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-node_modules/
-npm-debug.log
+
+# IDEA/Android Studio ignores
+*.iml
+*.ipr
+*.iws
+**/.idea/*
+
+# IDEA/Android Studio Ignore exceptions
+!/.idea/compiler.xml
+!/.idea/encodings.xml
+!/.idea/vcs.xml
+!/.idea/codeStyles

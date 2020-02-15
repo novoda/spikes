@@ -13,26 +13,27 @@ import com.novoda.notils.logger.toast.Toaster;
 import com.novoda.tpbot.FeaturePersistenceFactory;
 import com.novoda.tpbot.LastServerPersistence;
 import com.novoda.tpbot.LastServerPreferences;
-import com.novoda.tpbot.bot.BotSubcomponent;
-import com.novoda.tpbot.human.HumanSubcomponent;
-import com.novoda.tpbot.landing.LandingSubcomponent;
 
-import javax.inject.Singleton;
-
+import androidx.annotation.NonNull;
 import dagger.Module;
 import dagger.Provides;
 
-@Module(subcomponents = {LandingSubcomponent.class, HumanSubcomponent.class, BotSubcomponent.class})
+@Module()
 public class ApplicationModule {
 
-    @Provides
-    @Singleton
-    Context provideContext(Application application) {
-        return application.getApplicationContext();
+    private Context context;
+
+    public ApplicationModule(@NonNull Application application) {
+        this.context = application;
     }
 
     @Provides
-    SharedPreferences provideSharedPreferences(Context context) {
+    Context context() {
+        return context;
+    }
+
+    @Provides
+    SharedPreferences provideSharedPreferences() {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
@@ -42,32 +43,32 @@ public class ApplicationModule {
     }
 
     @Provides
-    UsbManager provideUsbManager(Context context) {
+    UsbManager provideUsbManager() {
         return (UsbManager) context.getSystemService(Context.USB_SERVICE);
     }
 
     @Provides
-    Resources provideResources(Context context) {
+    Resources provideResources() {
         return context.getResources();
     }
 
     @Provides
-    Toaster provideToaster(Context context) {
+    Toaster provideToaster() {
         return Toaster.newInstance(context);
     }
 
     @Provides
-    MenuInflater provideMenuInflater(Context context) {
+    MenuInflater provideMenuInflater() {
         return new MenuInflater(context);
     }
 
     @Provides
-    AccessibilityManager provideAccessibilityManager(Context context) {
+    AccessibilityManager provideAccessibilityManager() {
         return (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
     }
 
     @Provides
-    FeaturePersistenceFactory featurePersistenceFactory(Context context) {
+    FeaturePersistenceFactory featurePersistenceFactory() {
         return new FeaturePersistenceFactory(context);
     }
 

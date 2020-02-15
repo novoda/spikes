@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * A {@link TextView} that clears its content after a set period of time
  */
-public class SelfDestructingMessageView extends android.support.v7.widget.AppCompatTextView {
+public class SelfDestructingMessageView extends androidx.appcompat.widget.AppCompatTextView {
 
     private static final long COMMAND_FADING_DELAY = TimeUnit.MILLISECONDS.toMillis(100);
 

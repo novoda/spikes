@@ -4,13 +4,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.novoda.tpbot.controls.SelfDestructingMessageView;
-import com.novoda.tpbot.model.Direction;
 import com.novoda.tpbot.FeaturePersistence;
 import com.novoda.tpbot.FeaturePersistenceFactory;
 import com.novoda.tpbot.FeatureSelectionController;
@@ -22,11 +19,14 @@ import com.novoda.tpbot.bot.video.calling.AutomationChecker;
 import com.novoda.tpbot.controls.ActionRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
+import com.novoda.tpbot.controls.SelfDestructingMessageView;
 import com.novoda.tpbot.controls.ServerDeclarationView;
 import com.novoda.tpbot.controls.SwitchableView;
+import com.novoda.tpbot.model.Direction;
 
 import javax.inject.Inject;
 
+import androidx.appcompat.app.AppCompatActivity;
 import dagger.android.AndroidInjection;
 
 import static com.novoda.tpbot.controls.SwitchableView.View.CONTROLLER_VIEW;
@@ -45,15 +45,7 @@ public class BotActivity extends AppCompatActivity implements BotView,
     @Inject
     BotServiceBinder botServiceBinder;
     @Inject
-    SelfDestructingMessageView debugView;
-    @Inject
-    SwitchableView switchableView;
-    @Inject
     ActionRepeater actionRepeater;
-    @Inject
-    ControllerView controllerView;
-    @Inject
-    ServerDeclarationView serverDeclarationView;
     @Inject
     FeatureSelectionController<Menu, MenuItem> featureSelectionController;
     @Inject
@@ -62,12 +54,24 @@ public class BotActivity extends AppCompatActivity implements BotView,
     FeaturePersistenceFactory featurePersistenceFactory;
 
     private FeaturePersistence videoCallFeature;
+    private SelfDestructingMessageView debugView;
+    private SwitchableView switchableView;
+    private ControllerView controllerView;
+    private ServerDeclarationView serverDeclarationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bot);
-        AndroidInjection.inject(this);
+
+        debugView = findViewById(R.id.bot_controller_debug_view);
+        switchableView = findViewById(R.id.bot_switchable_view);
+        controllerView = findViewById(R.id.bot_controller_direction_view);
+        serverDeclarationView = findViewById(R.id.bot_server_declaration_view);
+
+        controllerView.setControllerListener(this);
+        serverDeclarationView.setServiceDeclarationListener(this);
 
         videoCallFeature = featurePersistenceFactory.createVideoCallPersistence();
         FeaturePersistence serviceConnectionFeature = featurePersistenceFactory.createServiceConnectionPersistence();

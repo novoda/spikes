@@ -1,7 +1,6 @@
 package com.novoda.tpbot.landing;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,8 +12,9 @@ import com.novoda.tpbot.R;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
+import dagger.android.support.DaggerAppCompatActivity;
 
-public class LandingActivity extends AppCompatActivity implements LandingView {
+public class LandingActivity extends DaggerAppCompatActivity implements LandingView {
 
     @Inject
     FeatureSelectionController<Menu, MenuItem> featureSelectionController;
@@ -26,13 +26,13 @@ public class LandingActivity extends AppCompatActivity implements LandingView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
         humanSelectionView = Views.findById(this, R.id.human_selection);
         botSelectionView = Views.findById(this, R.id.bot_selection);
 
-        AndroidInjection.inject(this);
     }
 
     @Override

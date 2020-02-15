@@ -2,12 +2,12 @@ apply plugin: 'java'
 apply plugin: 'net.ltgt.apt'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.google.dagger:dagger:2.11'
-    apt 'com.google.dagger:dagger-compiler:2.11'
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.10.19'
-    testCompile 'org.mockito:mockito-all:1.10.19'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.google.dagger:dagger:2.26'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.26'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:3.1.0'
+    testImplementation 'org.mockito:mockito-all:1.10.19'
 }
 
 sourceCompatibility = 1.7

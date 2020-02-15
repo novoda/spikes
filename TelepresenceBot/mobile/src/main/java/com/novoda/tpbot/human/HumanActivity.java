@@ -1,47 +1,52 @@
 package com.novoda.tpbot.human;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
-import com.novoda.tpbot.controls.SelfDestructingMessageView;
-import com.novoda.tpbot.model.Direction;
 import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServiceDeclarationListener;
 import com.novoda.tpbot.controls.ActionRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
+import com.novoda.tpbot.controls.SelfDestructingMessageView;
 import com.novoda.tpbot.controls.ServerDeclarationView;
 import com.novoda.tpbot.controls.SwitchableView;
+import com.novoda.tpbot.model.Direction;
 
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
+import dagger.android.support.DaggerAppCompatActivity;
 
 import static com.novoda.tpbot.controls.SwitchableView.View.CONTROLLER_VIEW;
 import static com.novoda.tpbot.controls.SwitchableView.View.SERVER_DECLARATION_VIEW;
 
-public class HumanActivity extends AppCompatActivity implements HumanView, ControllerListener, ServiceDeclarationListener, ActionRepeater.Listener {
+public class HumanActivity extends DaggerAppCompatActivity implements HumanView, ControllerListener, ServiceDeclarationListener, ActionRepeater.Listener {
 
     private static final String LAZERS = String.valueOf(Character.toChars(0x1F4A5));
 
-    @Inject
-    SelfDestructingMessageView debugView;
-    @Inject
-    SwitchableView switchableView;
-    @Inject
-    ServerDeclarationView serverDeclarationView;
-    @Inject
-    ControllerView controllerView;
     @Inject
     ActionRepeater actionRepeater;
     @Inject
     HumanPresenter presenter;
 
+    private SelfDestructingMessageView debugView;
+    private SwitchableView switchableView;
+    private ControllerView controllerView;
+    private ServerDeclarationView serverDeclarationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_human);
-        AndroidInjection.inject(this);
+
+        debugView = findViewById(R.id.bot_controller_debug_view);
+        switchableView = findViewById(R.id.bot_switchable_view);
+        controllerView = findViewById(R.id.bot_controller_direction_view);
+        serverDeclarationView = findViewById(R.id.bot_server_declaration_view);
+
+        controllerView.setControllerListener(this);
+        serverDeclarationView.setServiceDeclarationListener(this);
     }
 
     @Override
