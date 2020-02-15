@@ -6,6 +6,7 @@
 *.ipr
 *.iws
 **/.idea/*
+**/node_modules/
 
 # IDEA/Android Studio Ignore exceptions
 !/.idea/compiler.xml

@@ -5,6 +5,10 @@ The project includes the following units:
 * **HW-SW bridge unit**: a serial channel between the receiver Android app and the movement unit. It will be included in the receiver App, once finished.
 * **Movement unit**: Arduino-controlled motors connected to a frame holding the Adroid device
 
+## Using the Server Unit
+Grab Node and install the required modules with `npm install`.
+
+Open `server-unit` directory in command line and run `node server.js`
 
 ## Movement unit development
 1. Download the official Arduino IDE from https://www.arduino.cc/en/Main/Software
