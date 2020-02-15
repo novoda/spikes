@@ -1,37 +1,34 @@
 package com.novoda.tpbot;
 
-import android.app.Activity;
 import android.app.Application;
 
 import com.novoda.notils.logger.simple.Log;
-import com.novoda.tpbot.injection.DaggerTelepresenceBotApplicationComponent;
+import com.novoda.tpbot.injection.ApplicationModule;
 
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasActivityInjector;
+import dagger.android.HasAndroidInjector;
 
-public class TelepresenceBotApplication extends Application implements HasActivityInjector {
+public class TelepresenceBotApplication extends Application implements HasAndroidInjector {
 
     @Inject
-    DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
+    DispatchingAndroidInjector<Object> dispatchingAndroidInjector;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Log.setShowLogs(BuildConfig.DEBUG);
-
-        DaggerTelepresenceBotApplicationComponent
-                .builder()
+        DaggerAppComponent.builder()
                 .application(this)
+                .applicationModule(new ApplicationModule(this))
                 .build()
                 .inject(this);
     }
 
     @Override
-    public AndroidInjector<Activity> activityInjector() {
+    public AndroidInjector<Object> androidInjector() {
         return dispatchingAndroidInjector;
     }
-
 }
