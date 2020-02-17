@@ -7,15 +7,15 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.novoda.tpbot.R;
 
-public class TextViewWithForeground extends android.support.v7.widget.AppCompatTextView {
+public class TextViewWithForeground extends androidx.appcompat.widget.AppCompatTextView {
 
     private static final int INVALID_RESOURCE_ID = 0;
     private Drawable foreground;

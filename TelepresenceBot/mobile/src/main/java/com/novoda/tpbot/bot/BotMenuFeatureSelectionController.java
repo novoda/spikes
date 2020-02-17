@@ -1,6 +1,6 @@
 package com.novoda.tpbot.bot;
 
-import android.support.annotation.MenuRes;
+import androidx.annotation.MenuRes;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
