@@ -1,6 +1,7 @@
 package com.novoda.tpbot.threading;
 
 import android.os.Handler;
+import android.os.Looper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +12,7 @@ public class MyLooperDelayedExecutor implements Executor.DelayedExecutor {
     private final Map<Action, Runnable> runnables;
 
     public static MyLooperDelayedExecutor newInstance() {
-        Handler handler = new Handler();
+        Handler handler = new Handler(Looper.myLooper());
         return new MyLooperDelayedExecutor(handler, new HashMap<Action, Runnable>());
     }
 
