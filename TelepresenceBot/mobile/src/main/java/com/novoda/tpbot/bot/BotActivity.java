@@ -209,6 +209,7 @@ public class BotActivity extends AppCompatActivity implements BotView,
 
     @Override
     public void onActionRepeated(String command) {
+        movementServiceBinder.sendCommand(command);
         debugView.showTimed(command);
     }
 }
