@@ -1,8 +1,8 @@
 package com.novoda.tpbot.bot;
 
-import com.novoda.tpbot.Direction;
+import com.novoda.tpbot.model.Direction;
 
-public interface BotView {
+interface BotView {
 
     void onConnect(String room, String serverAddress);
 

@@ -1,6 +1,6 @@
 package com.novoda.tpbot.controls;
 
-import com.novoda.tpbot.Direction;
+import com.novoda.tpbot.model.Direction;
 
 public interface ControllerListener {
 

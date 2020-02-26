@@ -33,6 +33,7 @@ module.exports = function Disconnector(rooms, connectedClients) {
     const disconnectClient = function () {
         return function (connectedClient) {
             connectedClient.disconnect();
+            return true;
         }
     }
 

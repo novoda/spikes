@@ -1,6 +1,4 @@
-package com.novoda.tpbot;
-
-import com.novoda.support.Optional;
+package com.novoda.tpbot.model;
 
 public class Result {
 
@@ -15,7 +13,7 @@ public class Result {
         return new Result(Optional.<String>absent(), Optional.of(exception));
     }
 
-    Result(Optional<String> message, Optional<Exception> exception) {
+    private Result(Optional<String> message, Optional<Exception> exception) {
         this.message = message;
         this.exception = exception;
     }

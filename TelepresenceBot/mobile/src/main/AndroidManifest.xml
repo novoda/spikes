@@ -48,7 +48,7 @@
       android:label="@string/bot" />
 
     <service
-      android:name="com.novoda.tpbot.bot.service.BoundAndroidBotService"
+      android:name="com.novoda.tpbot.bot.BoundAndroidBotService"
       android:exported="false" />
 
     <service

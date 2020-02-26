@@ -1,4 +1,4 @@
-package com.novoda.support;
+package com.novoda.tpbot.controls;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -7,33 +7,34 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import androidx.annotation.DrawableRes;
-import androidx.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.novoda.tpbot.R;
 
-public class TextViewWithForeground extends androidx.appcompat.widget.AppCompatTextView {
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+
+public class ForegroundTextView extends androidx.appcompat.widget.AppCompatTextView {
 
     private static final int INVALID_RESOURCE_ID = 0;
     private Drawable foreground;
 
-    public TextViewWithForeground(Context context, AttributeSet attrs) {
+    public ForegroundTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         extractForegroundFrom(context, attrs);
     }
 
     private void extractForegroundFrom(Context context, AttributeSet attrs) {
-        TypedArray styledAttributes = context.obtainStyledAttributes(attrs, R.styleable.TextViewWithForeground);
+        TypedArray styledAttributes = context.obtainStyledAttributes(attrs, R.styleable.ForegroundTextView);
 
         if (styledAttributes == null) {
             return;
         }
 
         try {
-            int resourceId = styledAttributes.getResourceId(R.styleable.TextViewWithForeground_foreground, INVALID_RESOURCE_ID);
+            int resourceId = styledAttributes.getResourceId(R.styleable.ForegroundTextView_foreground, INVALID_RESOURCE_ID);
 
             if (resourceId == INVALID_RESOURCE_ID) {
                 return;

@@ -8,6 +8,7 @@ import com.felhr.usbserial.UsbSerialDevice;
 import com.felhr.usbserial.UsbSerialInterface;
 import com.novoda.notils.exception.DeveloperError;
 import com.novoda.notils.logger.simple.Log;
+import com.novoda.tpbot.threading.Executor;
 
 import java.io.UnsupportedEncodingException;
 
@@ -15,13 +16,15 @@ class SerialPortMonitor {
 
     private final UsbManager usbManager;
     private final SerialPortCreator serialPortCreator;
+    private final Executor executor;
 
     private UsbSerialDevice serialPort;
     private UsbDeviceConnection deviceConnection;
 
-    SerialPortMonitor(UsbManager usbManager, SerialPortCreator serialPortCreator) {
+    SerialPortMonitor(UsbManager usbManager, SerialPortCreator serialPortCreator, Executor executor) {
         this.usbManager = usbManager;
         this.serialPortCreator = serialPortCreator;
+        this.executor = executor;
     }
 
     boolean tryToMonitorSerialPortFor(UsbDevice usbDevice, DataReceiver dataReceiver) {
@@ -80,10 +83,15 @@ class SerialPortMonitor {
 
         @Override
         public void onReceivedData(byte[] bytes) {
-            String data;
+            final String data;
             try {
                 data = new String(bytes, "UTF-8");
-                dataReceiver.onReceive(data);
+                executor.execute(new Executor.Action() {
+                    @Override
+                    public void perform() {
+                        dataReceiver.onReceive(data);
+                    }
+                });
             } catch (UnsupportedEncodingException e) {
                 throw new DeveloperError("Error receiving data from USB serial.");
             }

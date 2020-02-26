@@ -1,7 +1,6 @@
 package com.novoda.tpbot.bot;
 
 import android.content.Context;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,9 +11,9 @@ import com.novoda.tpbot.FeatureSelectionController;
 import com.novoda.tpbot.bot.device.ConnectedDevicesFetcher;
 import com.novoda.tpbot.bot.device.DeviceConnection;
 import com.novoda.tpbot.bot.movement.MovementServiceBinder;
-import com.novoda.tpbot.bot.service.BotServiceBinder;
 import com.novoda.tpbot.bot.video.calling.AutomationChecker;
-import com.novoda.tpbot.controls.CommandRepeater;
+import com.novoda.tpbot.controls.ActionRepeater;
+import com.novoda.tpbot.threading.MyLooperDelayedExecutor;
 
 import dagger.Binds;
 import dagger.Module;
@@ -27,11 +26,11 @@ public abstract class BotModule {
     abstract DeviceConnection.DeviceConnectionListener provideDeviceConnectionListener(BotActivity botActivity);
 
     @Binds
-    abstract CommandRepeater.Listener provideCommandRepeaterListener(BotActivity botActivity);
+    abstract ActionRepeater.Listener provideCommandRepeaterListener(BotActivity botActivity);
 
     @Provides
-    static CommandRepeater provideCommandRepeater(CommandRepeater.Listener listener) {
-        return new CommandRepeater(listener, new Handler());
+    static ActionRepeater provideCommandRepeater(ActionRepeater.Listener listener) {
+        return new ActionRepeater(listener, MyLooperDelayedExecutor.newInstance());
     }
 
     @Provides

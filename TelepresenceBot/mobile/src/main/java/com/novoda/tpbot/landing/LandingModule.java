@@ -8,8 +8,8 @@ import android.view.MenuItem;
 import com.novoda.tpbot.FeaturePersistence;
 import com.novoda.tpbot.FeaturePersistenceFactory;
 import com.novoda.tpbot.FeatureSelectionController;
-import com.novoda.tpbot.Features;
 import com.novoda.tpbot.R;
+import com.novoda.tpbot.model.Features;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +41,7 @@ public abstract class LandingModule {
 
     @Provides
     static Navigator provideNavigator(LandingActivity activity) {
-        return new IntentNavigator(activity);
+        return new LandingIntentNavigator(activity);
     }
 
     @Provides

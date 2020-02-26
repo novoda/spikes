@@ -1,4 +1,4 @@
-package com.novoda.tpbot.bot.service;
+package com.novoda.tpbot.bot;
 
 import android.app.Service;
 import android.content.Intent;

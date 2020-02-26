@@ -1,4 +1,4 @@
-package com.novoda.tpbot.bot.service;
+package com.novoda.tpbot.bot;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,7 +10,6 @@ import android.preference.PreferenceManager;
 
 import com.novoda.tpbot.LastServerPersistence;
 import com.novoda.tpbot.LastServerPreferences;
-import com.novoda.tpbot.bot.BotView;
 
 public class BotServiceBinder {
 
@@ -18,11 +17,11 @@ public class BotServiceBinder {
 
     private BotServiceConnection botServiceConnection;
 
-    public BotServiceBinder(Context context) {
+    BotServiceBinder(Context context) {
         this.context = context;
     }
 
-    public void bind(BotView botView, String serverAddress) {
+    void bind(BotView botView, String serverAddress) {
         if (botServiceConnection == null) {
             botServiceConnection = new BotServiceConnection(botView, serverAddress);
         }
@@ -61,7 +60,7 @@ public class BotServiceBinder {
         }
     }
 
-    public void unbind() {
+    void unbind() {
         if (BoundAndroidBotService.isBound()) {
             context.unbindService(botServiceConnection);
             context.stopService(new Intent(context, BoundAndroidBotService.class));

@@ -3,7 +3,7 @@ package com.novoda.tpbot.bot.device.usb;
 import android.hardware.usb.UsbDevice;
 
 import com.novoda.notils.logger.simple.Log;
-import com.novoda.support.Optional;
+import com.novoda.tpbot.model.Optional;
 import com.novoda.tpbot.bot.device.DeviceConnection;
 
 class UsbDeviceConnection extends DeviceConnection implements UsbChangesListener {
@@ -30,6 +30,7 @@ class UsbDeviceConnection extends DeviceConnection implements UsbChangesListener
     @Override
     public void connect() {
         usbChangesRegister.register(this);
+        openConnection();
     }
 
     @Override
@@ -71,7 +72,7 @@ class UsbDeviceConnection extends DeviceConnection implements UsbChangesListener
 
     @Override
     public void send(String data) {
-        // TODO: send data to serial port.
+        serialPortMonitor.tryToSendCommand(data);
     }
 
     @Override

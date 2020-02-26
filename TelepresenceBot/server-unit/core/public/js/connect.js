@@ -1,4 +1,4 @@
-const intervalId;
+var intervalId;
 
 const socketOptions ={
     transports: ['websocket'],
@@ -19,7 +19,7 @@ $(document).ready(function(){
     });
 
     function sendMessage(message) {
-        socket.emit('chat message', message);
+        socket.emit('move_in', message);
         $('#messages').append($('<li>').text(message));
     }
 

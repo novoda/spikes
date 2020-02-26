@@ -1,8 +1,8 @@
-package com.novoda.tpbot.bot.service;
+package com.novoda.tpbot.bot;
 
-import com.novoda.support.Observable;
-import com.novoda.tpbot.Direction;
-import com.novoda.tpbot.Result;
+import com.novoda.tpbot.observe.Observable;
+import com.novoda.tpbot.model.Direction;
+import com.novoda.tpbot.model.Result;
 
 interface BotTelepresenceService {
 

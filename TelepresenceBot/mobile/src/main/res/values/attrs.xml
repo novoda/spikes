@@ -3,7 +3,7 @@
 
   <attr name="foreground" format="reference" />
 
-  <declare-styleable name="TextViewWithForeground">
+  <declare-styleable name="ForegroundTextView">
     <attr name="foreground" />
   </declare-styleable>
 

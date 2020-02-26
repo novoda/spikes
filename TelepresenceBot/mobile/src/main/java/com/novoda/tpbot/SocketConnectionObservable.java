@@ -1,8 +1,9 @@
 package com.novoda.tpbot;
 
-import android.os.Handler;
-
-import com.novoda.support.Observable;
+import com.novoda.tpbot.model.Result;
+import com.novoda.tpbot.model.Room;
+import com.novoda.tpbot.observe.Observable;
+import com.novoda.tpbot.threading.Executor;
 
 import io.socket.client.Socket;
 import io.socket.client.SocketIOException;
@@ -13,11 +14,11 @@ import static io.socket.client.Socket.*;
 public class SocketConnectionObservable extends Observable<Result> {
 
     private final Socket socket;
-    private final Handler handler;
+    private final Executor executor;
 
-    public SocketConnectionObservable(Socket socket, Handler handler) {
+    public SocketConnectionObservable(Socket socket, Executor executor) {
         this.socket = socket;
-        this.handler = handler;
+        this.executor = executor;
     }
 
     @Override
@@ -33,9 +34,9 @@ public class SocketConnectionObservable extends Observable<Result> {
     private final Emitter.Listener connectionTimeoutListener = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            handler.post(new Runnable() {
+            executor.execute(new Executor.Action() {
                 @Override
-                public void run() {
+                public void perform() {
                     notifyOf(Result.from(new SocketIOException("connection timeout")));
                 }
             });
@@ -45,13 +46,14 @@ public class SocketConnectionObservable extends Observable<Result> {
     private final Emitter.Listener connectionErrorListener = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            handler.post(new Runnable() {
+            executor.execute(new Executor.Action() {
                 @Override
-                public void run() {
+                public void perform() {
                     if (args[0] != null && args[0] instanceof String) {
                         String errorMessage = String.valueOf(args[0]);
                         notifyOf(Result.from(new SocketIOException(errorMessage)));
                     }
+
                 }
             });
         }
@@ -60,9 +62,9 @@ public class SocketConnectionObservable extends Observable<Result> {
     private final Emitter.Listener connectionEstablishedListener = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            handler.post(new Runnable() {
+            executor.execute(new Executor.Action() {
                 @Override
-                public void run() {
+                public void perform() {
                     notifyOf(Result.from(Room.LONDON.name().toLowerCase()));
                 }
             });
@@ -72,10 +74,11 @@ public class SocketConnectionObservable extends Observable<Result> {
     private final Emitter.Listener disconnectionListener = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            handler.post(new Runnable() {
+            executor.execute(new Executor.Action() {
                 @Override
-                public void run() {
+                public void perform() {
                     notifyOf(Result.from(new SocketIOException("Disconnected")));
+
                 }
             });
         }

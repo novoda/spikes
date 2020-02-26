@@ -1,9 +1,8 @@
 package com.novoda.tpbot.human;
 
-import android.os.Handler;
-
 import com.novoda.tpbot.LastServerPersistence;
-import com.novoda.tpbot.controls.CommandRepeater;
+import com.novoda.tpbot.controls.ActionRepeater;
+import com.novoda.tpbot.threading.MyLooperDelayedExecutor;
 
 import dagger.Binds;
 import dagger.Module;
@@ -13,11 +12,11 @@ import dagger.Provides;
 public abstract class HumanModule {
 
     @Binds
-    abstract CommandRepeater.Listener provideCommandRepeaterListener(HumanActivity humanActivity);
+    abstract ActionRepeater.Listener provideCommandRepeaterListener(HumanActivity humanActivity);
 
     @Provides
-    static CommandRepeater provideCommandRepeater(CommandRepeater.Listener listener) {
-        return new CommandRepeater(listener, new Handler());
+    static ActionRepeater provideCommandRepeater(ActionRepeater.Listener listener) {
+        return new ActionRepeater(listener, MyLooperDelayedExecutor.newInstance());
     }
 
     @Binds

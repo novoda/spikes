@@ -6,11 +6,11 @@ import android.content.Intent;
 import com.novoda.tpbot.bot.BotActivity;
 import com.novoda.tpbot.human.HumanActivity;
 
-public class IntentNavigator implements Navigator {
+class LandingIntentNavigator implements Navigator {
 
     private Activity activity;
 
-    IntentNavigator(Activity activity) {
+    LandingIntentNavigator(Activity activity) {
         this.activity = activity;
     }
 

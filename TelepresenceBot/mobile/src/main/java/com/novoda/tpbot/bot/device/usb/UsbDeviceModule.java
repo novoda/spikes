@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.hardware.usb.UsbManager;
 
+import com.novoda.tpbot.threading.MainLooperExecutor;
 import com.novoda.tpbot.bot.device.ConnectedDevicesFetcher;
 import com.novoda.tpbot.bot.device.DeviceConnection;
 
@@ -19,7 +20,7 @@ public class UsbDeviceModule {
         UsbManager usbManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
         SupportedDeviceRetriever supportedDeviceRetriever = new SupportedDeviceRetriever(usbManager);
         SerialPortCreator serialPortCreator = new SerialPortCreator();
-        SerialPortMonitor serialPortMonitor = new SerialPortMonitor(usbManager, serialPortCreator);
+        SerialPortMonitor serialPortMonitor = new SerialPortMonitor(usbManager, serialPortCreator, MainLooperExecutor.newInstance());
         UsbPermissionRequester usbPermissionRequester = new UsbPermissionRequester(context, usbManager);
 
         return new UsbDeviceConnection(

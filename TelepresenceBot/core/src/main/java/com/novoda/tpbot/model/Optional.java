@@ -1,4 +1,4 @@
-package com.novoda.support;
+package com.novoda.tpbot.model;
 
 public final class Optional<T> {
 

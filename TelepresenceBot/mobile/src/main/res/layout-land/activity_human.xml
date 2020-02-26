@@ -7,7 +7,7 @@
   android:orientation="horizontal"
   tools:context="com.novoda.tpbot.human.HumanActivity">
 
-  <com.novoda.support.SelfDestructingMessageView
+  <com.novoda.tpbot.controls.SelfDestructingMessageView
     android:id="@+id/bot_controller_debug_view"
     style="@style/Controller.DebugText"
     android:layout_width="0dp"

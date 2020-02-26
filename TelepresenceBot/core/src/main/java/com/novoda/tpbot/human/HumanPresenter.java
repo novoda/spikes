@@ -1,12 +1,12 @@
 package com.novoda.tpbot.human;
 
-import com.novoda.tpbot.Direction;
-import com.novoda.tpbot.Result;
-import com.novoda.support.Observable;
-import com.novoda.support.Observer;
+import com.novoda.tpbot.model.Direction;
+import com.novoda.tpbot.model.Result;
+import com.novoda.tpbot.observe.Observable;
+import com.novoda.tpbot.observe.Observer;
 import com.novoda.tpbot.LastServerPersistence;
 
-import static com.novoda.support.Observable.unsubscribe;
+import static com.novoda.tpbot.observe.Observable.unsubscribe;
 
 class HumanPresenter {
 

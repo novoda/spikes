@@ -1,4 +1,6 @@
-package com.novoda.tpbot;
+package com.novoda.tpbot.model;
+
+import com.novoda.tpbot.FeaturePersistence;
 
 import java.util.Map;
 import java.util.Set;

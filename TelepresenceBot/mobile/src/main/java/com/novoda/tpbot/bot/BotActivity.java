@@ -8,8 +8,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.novoda.support.SelfDestructingMessageView;
-import com.novoda.tpbot.Direction;
 import com.novoda.tpbot.FeaturePersistence;
 import com.novoda.tpbot.FeaturePersistenceFactory;
 import com.novoda.tpbot.FeatureSelectionController;
@@ -17,13 +15,14 @@ import com.novoda.tpbot.R;
 import com.novoda.tpbot.ServiceDeclarationListener;
 import com.novoda.tpbot.bot.device.DeviceConnection;
 import com.novoda.tpbot.bot.movement.MovementServiceBinder;
-import com.novoda.tpbot.bot.service.BotServiceBinder;
 import com.novoda.tpbot.bot.video.calling.AutomationChecker;
-import com.novoda.tpbot.controls.CommandRepeater;
+import com.novoda.tpbot.controls.ActionRepeater;
 import com.novoda.tpbot.controls.ControllerListener;
 import com.novoda.tpbot.controls.ControllerView;
+import com.novoda.tpbot.controls.SelfDestructingMessageView;
 import com.novoda.tpbot.controls.ServerDeclarationView;
 import com.novoda.tpbot.controls.SwitchableView;
+import com.novoda.tpbot.model.Direction;
 
 import javax.inject.Inject;
 
@@ -37,7 +36,7 @@ public class BotActivity extends AppCompatActivity implements BotView,
         DeviceConnection.DeviceConnectionListener,
         ControllerListener,
         ServiceDeclarationListener,
-        CommandRepeater.Listener {
+        ActionRepeater.Listener {
 
     private static final String HANGOUTS_BASE_URL = "https://hangouts.google.com/hangouts/_/novoda.com/";
 
@@ -46,7 +45,7 @@ public class BotActivity extends AppCompatActivity implements BotView,
     @Inject
     BotServiceBinder botServiceBinder;
     @Inject
-    CommandRepeater commandRepeater;
+    ActionRepeater actionRepeater;
     @Inject
     FeatureSelectionController<Menu, MenuItem> featureSelectionController;
     @Inject
@@ -92,12 +91,12 @@ public class BotActivity extends AppCompatActivity implements BotView,
 
     @Override
     public void onDirectionPressed(Direction direction) {
-        commandRepeater.startRepeatingCommand(direction.rawDirection());
+        actionRepeater.startRepeatingCommand(direction.rawDirection());
     }
 
     @Override
     public void onDirectionReleased(Direction direction) {
-        commandRepeater.stopRepeatingCommand(direction.rawDirection());
+        actionRepeater.stopRepeatingCommand(direction.rawDirection());
     }
 
     @Override
@@ -140,7 +139,7 @@ public class BotActivity extends AppCompatActivity implements BotView,
 
     @Override
     protected void onPause() {
-        commandRepeater.stopCurrentRepeatingCommand();
+        actionRepeater.stopCurrentRepeatingCommand();
         super.onPause();
     }
 
@@ -190,6 +189,7 @@ public class BotActivity extends AppCompatActivity implements BotView,
     @Override
     public void moveIn(Direction direction) {
         debugView.showTimed(direction.visualRepresentation());
+        movementServiceBinder.sendCommand(direction.rawDirection());
     }
 
     @Override
@@ -204,12 +204,12 @@ public class BotActivity extends AppCompatActivity implements BotView,
 
     @Override
     public void onDataReceived(String data) {
-        Log.d(getClass().getSimpleName(), "onDataReceived");
+        Log.d(getClass().getSimpleName(), "onDataReceived: " + data);
     }
 
     @Override
-    public void onCommandRepeated(String command) {
+    public void onActionRepeated(String command) {
+        movementServiceBinder.sendCommand(command);
         debugView.showTimed(command);
-        // TODO: Send command to the DeviceConnection.
     }
 }

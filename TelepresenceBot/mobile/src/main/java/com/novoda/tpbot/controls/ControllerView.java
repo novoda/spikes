@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.novoda.notils.caster.Views;
-import com.novoda.tpbot.Direction;
+import com.novoda.tpbot.model.Direction;
 import com.novoda.tpbot.R;
 
 public class ControllerView extends RelativeLayout {
