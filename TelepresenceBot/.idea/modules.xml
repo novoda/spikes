@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TelepresenceBot.iml" filepath="$PROJECT_DIR$/TelepresenceBot.iml" />
-      <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/mobile/mobile.iml" filepath="$PROJECT_DIR$/mobile/mobile.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/TelepresenceBot.core.iml" filepath="$PROJECT_DIR$/.idea/modules/core/TelepresenceBot.core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mobile/TelepresenceBot.mobile.iml" filepath="$PROJECT_DIR$/.idea/modules/mobile/TelepresenceBot.mobile.iml" />
     </modules>
   </component>
 </project>
