@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">InAppUpgradeDemo</string>
+    <string name="start_update">Start Update</string>
+</resources>
