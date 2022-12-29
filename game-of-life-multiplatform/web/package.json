@@ -4,8 +4,8 @@
     "react": "15.6.1",
     "react-dom": "15.6.1",
     "react-router-dom": "^4.2.2",
-    "source-map-loader": "0.2.1",
-    "webpack": "3.4.1",
+    "source-map-loader": "4.0.1",
+    "webpack": "5.75.0",
     "webpack-merge": "4.1.0",
     "websocket": "1.0.24"
   },
